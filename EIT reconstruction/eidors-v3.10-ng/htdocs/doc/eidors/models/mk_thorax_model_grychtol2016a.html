@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_thorax_model_grychtol2016a</title>
+  <meta name="keywords" content="mk_thorax_model_grychtol2016a">
+  <meta name="description" content="Builds the male thorax models from Grychtol, M�ler and Adler (2016)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_thorax_model_grychtol2016a.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_thorax_model_grychtol2016a
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Builds the male thorax models from Grychtol, M�ler and Adler (2016)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function img = mk_thorax_model_grychtol2016a(stimpat) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Builds the male thorax models from Grychtol, M�ler and Adler (2016)
+ Accepts a string parameter:
+    '2x16_planar'   - 2 rings of 16 electrodes, planar stimulation
+    '2x16_odd-even' - 2 rings, each stimulation is cross-plane 
+    '2x16_square'   - 2 rings, every second stimulation is cross-plane
+    '2x16_adjacent' - like square, but with adjacent stimulation
+    '1x32_ring'     - single ring of 32 electrodes
+
+ CITATION_REQUEST:
+ AUTHOR: Bartlomiej Grychtol, Beat M�ler and Andy Adler
+ TITLE: 3D EIT image reconstruction with GREIT
+ JOURNAL: Physiological Measurement
+ VOL: 37
+ YEAR: 2016</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>	MK_LUNG_IMAGE create an image with lung and heart contrasts from a model</li><li><a href="mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>	MK_STIM_PATTERNS: create an EIDORS stimulation pattern structure</li><li><a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li><li><a href="../../eidors/tools/citeme.html" class="code" title="function citeme(fname)">citeme</a>	CITEME Display citation requests</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function  opt = organ_options</a></li><li><a href="#_sub2" class="code">function stim = get_stim_pattern(str)</a></li><li><a href="#_sub3" class="code">function ls = pattern_list</a></li><li><a href="#_sub4" class="code">function map = get_elec_map(str)</a></li><li><a href="#_sub5" class="code">function m = square32</a></li><li><a href="#_sub6" class="code">function m = oddeven32</a></li><li><a href="#_sub7" class="code">function m = ring32</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function img = mk_thorax_model_grychtol2016a(stimpat)</a>
+0002 <span class="comment">% Builds the male thorax models from Grychtol, M�ler and Adler (2016)</span>
+0003 <span class="comment">% Accepts a string parameter:</span>
+0004 <span class="comment">%    '2x16_planar'   - 2 rings of 16 electrodes, planar stimulation</span>
+0005 <span class="comment">%    '2x16_odd-even' - 2 rings, each stimulation is cross-plane</span>
+0006 <span class="comment">%    '2x16_square'   - 2 rings, every second stimulation is cross-plane</span>
+0007 <span class="comment">%    '2x16_adjacent' - like square, but with adjacent stimulation</span>
+0008 <span class="comment">%    '1x32_ring'     - single ring of 32 electrodes</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% CITATION_REQUEST:</span>
+0011 <span class="comment">% AUTHOR: Bartlomiej Grychtol, Beat M�ler and Andy Adler</span>
+0012 <span class="comment">% TITLE: 3D EIT image reconstruction with GREIT</span>
+0013 <span class="comment">% JOURNAL: Physiological Measurement</span>
+0014 <span class="comment">% VOL: 37</span>
+0015 <span class="comment">% YEAR: 2016</span>
+0016 
+0017 <span class="comment">% (C) 2016 Bartlomiej Grychtol. License: GPL version 2 or 3</span>
+0018 <span class="comment">% $Id: mk_thorax_model_grychtol2016a.m 5424 2017-04-25 17:45:19Z aadler $</span>
+0019 
+0020 <a href="../../eidors/tools/citeme.html" class="code" title="function citeme(fname)">citeme</a>(mfilename);
+0021 
+0022 <span class="keyword">if</span> nargin&lt;1 || isempty(stimpat)
+0023    stimpat = <span class="string">'1x32_ring'</span>;
+0024 <span class="keyword">end</span>
+0025    
+0026 
+0027 eth16 = 360*cumsum([0.2 0.4*ones(1,7) 0.5 0.4*ones(1,7)])/6.5 - 90; eth16 = eth16';
+0028 eth32 = 360*cumsum([0.1 0.2*ones(1,15) 0.25 0.2*ones(1,15)])/6.45 - 90; eth32 = eth32';
+0029 ep = eth16; ep(:,2) = 150;
+0030 ep(17:48,1) = eth32; ep(17:48,2) = 175;
+0031 ep(49:64,1) = eth16; ep(49:64,2) = 200;
+0032 mdl = <a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>(<span class="string">'male'</span>,ep,[5 0 .5],10);
+0033 mdl.name = sprintf([<span class="string">'Thorax mesh from Grychtol, M�ler and Adler (2016) '</span><span class="keyword">...</span><span class="comment"> </span>
+0034                      <span class="string">'- %s electrode config'</span>],stimpat);
+0035 
+0036 emap = <a href="#_sub4" class="code" title="subfunction map = get_elec_map(str)">get_elec_map</a>(stimpat);
+0037 mdl.electrode = mdl.electrode(emap);
+0038 mdl.stimulation = <a href="#_sub2" class="code" title="subfunction stim = get_stim_pattern(str)">get_stim_pattern</a>(stimpat);
+0039 
+0040 
+0041 opt = <a href="#_sub1" class="code" title="subfunction  opt = organ_options">organ_options</a>;
+0042 img = <a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>(mdl,opt);
+0043 img.fwd_model.normalize_measurements = false;
+0044 
+0045 img.name = sprintf([<span class="string">'Thorax model from Grychtol, M�ler and Adler (2016) '</span><span class="keyword">...</span><span class="comment"> </span>
+0046                      <span class="string">'- %s electrode config'</span>],stimpat);
+0047 
+0048 <span class="keyword">end</span>
+0049 
+0050 
+0051 <a name="_sub1" href="#_subfunctions" class="code">function  opt = organ_options</a>
+0052    opt.bkgnd_val = 1  ;
+0053    opt.lung_val =  .2;
+0054    opt.heart_val = 1.5;
+0055    opt.left_lung_center =  [ 75 25 100];
+0056    opt.right_lung_center = [-75 25 100];
+0057    opt.left_lung_axes = [80 100 250];
+0058    opt.right_lung_axes = [80 100 250];
+0059    opt.heart_center = [20 -25 200];
+0060    opt.heart_axes = [50 60 75];
+0061    opt.diaphragm_center = [0 -50 0];
+0062    opt.diaphragm_axes = [220 190 120];
+0063 <span class="keyword">end</span>
+0064 
+0065 <a name="_sub2" href="#_subfunctions" class="code">function stim = get_stim_pattern(str)</a>
+0066    <span class="keyword">switch</span>(str)
+0067       <span class="keyword">case</span> <span class="string">'2x16_planar'</span>
+0068          stim = <a href="mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(32,1,[0 6],[0 6],{<span class="string">'no_meas_current'</span>,<span class="string">'no_rotate_meas'</span>},1);
+0069       <span class="keyword">case</span> {<span class="string">'2x16_odd-even'</span>, <span class="string">'2x16_square'</span>, <span class="string">'1x32_ring'</span>}
+0070          stim = <a href="mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(32,1,[0 5],[0 5],{<span class="string">'no_meas_current'</span>,<span class="string">'no_rotate_meas'</span>},1);
+0071       <span class="keyword">case</span> <span class="string">'2x16_adjacent'</span>
+0072          stim = <a href="mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(32,1,[0 1],[0 1],{<span class="string">'no_meas_current'</span>,<span class="string">'no_rotate_meas'</span>},1);  
+0073       <span class="keyword">otherwise</span>
+0074          error(<span class="string">'Stim pattern string not understood. Available strings are: \n%s'</span>, <span class="keyword">...</span>
+0075             sprintf(<span class="string">'%s\n'</span>, <a href="#_sub3" class="code" title="subfunction ls = pattern_list">pattern_list</a>));
+0076    <span class="keyword">end</span>
+0077 <span class="keyword">end</span>
+0078 
+0079 <a name="_sub3" href="#_subfunctions" class="code">function ls = pattern_list</a>
+0080    ls = {
+0081       <span class="string">'2x16_planar'</span>
+0082       <span class="string">'2x16_odd-even'</span>
+0083       <span class="string">'2x16_square'</span>
+0084       <span class="string">'2x16_adjacent'</span>
+0085       <span class="string">'1x32_ring'</span>
+0086       };
+0087 <span class="keyword">end</span>
+0088 
+0089 <a name="_sub4" href="#_subfunctions" class="code">function map = get_elec_map(str)</a>
+0090 
+0091    <span class="keyword">switch</span> str
+0092       <span class="keyword">case</span> {<span class="string">'2x16_odd-even'</span>, <span class="string">'2x16_planar'</span>}
+0093          map = <a href="#_sub6" class="code" title="subfunction m = oddeven32">oddeven32</a>;
+0094       <span class="keyword">case</span> {<span class="string">'2x16_square'</span>, <span class="string">'2x16_adjacent'</span>}
+0095          map = <a href="#_sub5" class="code" title="subfunction m = square32">square32</a>;
+0096       <span class="keyword">case</span> <span class="string">'1x32_ring'</span>
+0097          map = <a href="#_sub7" class="code" title="subfunction m = ring32">ring32</a>;
+0098       <span class="keyword">otherwise</span>
+0099          error(<span class="string">'No such electrode map'</span>);
+0100    <span class="keyword">end</span>
+0101 <span class="keyword">end</span>
+0102 
+0103 <a name="_sub5" href="#_subfunctions" class="code">function m = square32</a>
+0104    o = [48 1 -48 1];
+0105    o = repmat(o,1,8);
+0106    m = zeros(1,32);
+0107    m(1) = 1;
+0108    <span class="keyword">for</span> i = 2:32
+0109       m(i) = m(i-1) + o(i-1);
+0110    <span class="keyword">end</span>
+0111 <span class="keyword">end</span>
+0112 
+0113 
+0114 <a name="_sub6" href="#_subfunctions" class="code">function m = oddeven32</a>
+0115    odd = 49:64; <span class="comment">% top layer</span>
+0116    even = 1:16; <span class="comment">% bottom layer</span>
+0117    m = [odd; even];
+0118    m = m(:)';
+0119 <span class="keyword">end</span>
+0120 
+0121 <a name="_sub7" href="#_subfunctions" class="code">function m = ring32</a>
+0122    m = 17:48;
+0123 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

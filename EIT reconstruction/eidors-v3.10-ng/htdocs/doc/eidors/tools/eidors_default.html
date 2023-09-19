@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of eidors_default</title>
+  <meta name="keywords" content="eidors_default">
+  <meta name="description" content="EIDORS_DEFAULT Default function handler.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">tools</a> &gt; eidors_default.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/tools&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>eidors_default
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>EIDORS_DEFAULT Default function handler.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function varargout = eidors_default(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EIDORS_DEFAULT Default function handler.
+  EIDORS_DEFAULT redirects calls to the default implementation of the 
+  calling function's functionality, e.g. if called from CALC_JACOBIAN it 
+  will call JACOBIAN_ADJOINT. The default implementations are set at 
+  startup in EIDORS_STARTUP, and can be manipulated as follows:
+
+  eidors_default('set','caller','implementation')  - set the default
+  implementation of 'caller' function to 'implementation'.
+
+  eidors_default('get','caller') - get the current default implementation
+  for 'caller'
+ 
+  eidors_default('list') - list all stored defaults
+
+  NOTE: This is an internal function not meant to be called directly other
+  than as indicated above. Rather, where the algorithm to be used by a 
+  certain function is passed to it as a field on an eidors model
+  structure, that field can be set to 'eidors_default'. For example, 
+  the inverse solver to be used is in inv_solve is specified in 
+  imdl.solve. If imdl.solve = 'eidors_default', a call to inv_solve(imdl)
+  will use the default implementation.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>	EIDORS_DEFAULT Default function handler.</li><li><a href="unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_startup.html" class="code" title="function eidors_startup( path_array )">eidors_startup</a>	Script to start EIDORS</li><li><a href="../../eidors/meshing/netgen/call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>	CALL_NETGEN: call netgen to create a vol_file from a geo_file</li><li><a href="../../eidors/models/mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>	MDL_NORMALIZE Check or set the normalize_measurements flag on a model.</li><li><a href="../../eidors/models/mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>	MK_COARSE_FINE_MAPPING: create a mapping matrix from coarse to fine FEM</li><li><a href="../../eidors/models/mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="../../eidors/solvers/forward/fwd_solve_apparent_resistivity.html" class="code" title="function data =fwd_solve_apparent_resistivity(fwd_model, img)">fwd_solve_apparent_resistivity</a>	fwd_solve_apparent_resistivity: fwd_solve output as apparent resistivity</li><li><a href="../../eidors/solvers/forward/jacobian_apparent_resistivity.html" class="code" title="function J =jacobian_apparent_resistivity(fwd_model, img)">jacobian_apparent_resistivity</a>	jacobian_apparent_resistivity: Jacobian output as apparent resistivity</li><li><a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../eidors/solvers/inverse/calc_GREIT_RM.html" class="code" title="function [RM, PJt, M] = calc_GREIT_RM(vh,vi, xyc, radius, weight, options)">calc_GREIT_RM</a>	CALCULATE GREIT reconstruction matrix</li><li><a href="../../eidors/solvers/inverse/calc_noise_figure.html" class="code" title="function [NF,SE] = calc_noise_figure( inv_model, hp, iterations)">calc_noise_figure</a>	CALC_NOISE_FIGURE: calculate the noise amplification (NF) of an algorithm</li><li><a href="../../eidors/solvers/inverse/inv_solve_core.html" class="code" title="function img= inv_solve_core( inv_model, data0, data1);">inv_solve_core</a>	INV_SOLVE_CORE Solver using a generic iterative algorithm</li><li><a href="eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>	EIDORS_DEFAULT Default function handler.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function list = list_defaults</a></li><li><a href="#_sub2" class="code">function caller = get_caller(s)</a></li><li><a href="#_sub3" class="code">function caller = octave_caller(caller)</a></li><li><a href="#_sub4" class="code">function set_default(caller, default)</a></li><li><a href="#_sub5" class="code">function default = get_default(caller)</a></li><li><a href="#_sub6" class="code">function varargout = call_default(caller,varargin);</a></li><li><a href="#_sub7" class="code">function output = mk_varargout_str(N)</a></li><li><a href="#_sub8" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = eidors_default(varargin)</a>
+0002 <span class="comment">%EIDORS_DEFAULT Default function handler.</span>
+0003 <span class="comment">%  EIDORS_DEFAULT redirects calls to the default implementation of the</span>
+0004 <span class="comment">%  calling function's functionality, e.g. if called from CALC_JACOBIAN it</span>
+0005 <span class="comment">%  will call JACOBIAN_ADJOINT. The default implementations are set at</span>
+0006 <span class="comment">%  startup in EIDORS_STARTUP, and can be manipulated as follows:</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  eidors_default('set','caller','implementation')  - set the default</span>
+0009 <span class="comment">%  implementation of 'caller' function to 'implementation'.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%  eidors_default('get','caller') - get the current default implementation</span>
+0012 <span class="comment">%  for 'caller'</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%  eidors_default('list') - list all stored defaults</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%  NOTE: This is an internal function not meant to be called directly other</span>
+0017 <span class="comment">%  than as indicated above. Rather, where the algorithm to be used by a</span>
+0018 <span class="comment">%  certain function is passed to it as a field on an eidors model</span>
+0019 <span class="comment">%  structure, that field can be set to 'eidors_default'. For example,</span>
+0020 <span class="comment">%  the inverse solver to be used is in inv_solve is specified in</span>
+0021 <span class="comment">%  imdl.solve. If imdl.solve = 'eidors_default', a call to inv_solve(imdl)</span>
+0022 <span class="comment">%  will use the default implementation.</span>
+0023 
+0024 <span class="comment">% (C) Bartlomiej Grychtol, 2012. License: GPL v. 2 or 3.</span>
+0025 <span class="comment">% $Id: eidors_default.m 5415 2017-04-24 12:49:48Z aadler $</span>
+0026 
+0027    optargin = size(varargin,2);
+0028    s = dbstack;
+0029    
+0030    <span class="comment">% unit test</span>
+0031    <span class="keyword">if</span> numel(s) == 1 &amp;&amp; optargin == 1 &amp;&amp; ischar(varargin{1}) &amp;&amp; strcmp(varargin{1},<span class="string">'UNIT_TEST'</span>)
+0032        <a href="#_sub8" class="code" title="subfunction do_unit_test">do_unit_test</a>;
+0033        <span class="keyword">return</span>;
+0034    <span class="keyword">end</span>
+0035 
+0036    <span class="comment">% setters and getters</span>
+0037    <span class="keyword">if</span> optargin &gt; 0 &amp;&amp; ischar(varargin{1})
+0038        <span class="keyword">switch</span> varargin{1}
+0039            <span class="keyword">case</span> <span class="string">'get'</span>
+0040                varargout{1} = <a href="#_sub5" class="code" title="subfunction default = get_default(caller)">get_default</a>(varargin{2});
+0041                <span class="keyword">return</span>
+0042            <span class="keyword">case</span> <span class="string">'set'</span>
+0043                <span class="keyword">if</span> optargin ~= 3
+0044                    error(<span class="string">'Wrong number of inputs'</span>);
+0045                <span class="keyword">end</span>
+0046                <a href="#_sub4" class="code" title="subfunction set_default(caller, default)">set_default</a>(varargin{2},varargin{3});
+0047                <span class="keyword">return</span>
+0048            <span class="keyword">case</span> <span class="string">'list'</span>
+0049                varargout{1} = <a href="#_sub1" class="code" title="subfunction list = list_defaults">list_defaults</a>;
+0050                <span class="keyword">return</span>
+0051        <span class="keyword">end</span>
+0052    <span class="keyword">end</span>
+0053    
+0054    caller  = <a href="#_sub2" class="code" title="subfunction caller = get_caller(s)">get_caller</a>( s );
+0055    <span class="comment">% This works on a specific version of matlab, and not octave</span>
+0056    <span class="comment">%varargout{1:nargout} = call_default(caller,varargin{:});</span>
+0057    <span class="keyword">if</span> nargout&gt;0
+0058       output = <a href="#_sub7" class="code" title="subfunction output = mk_varargout_str(N)">mk_varargout_str</a>(nargout);
+0059       cmd= sprintf(<span class="string">'%s = %s'</span>, output, <span class="string">'call_default(caller,varargin{:});'</span>);
+0060       eval(cmd)
+0061    <span class="keyword">else</span>
+0062       <a href="#_sub6" class="code" title="subfunction varargout = call_default(caller,varargin);">call_default</a>(caller,varargin{:});
+0063    <span class="keyword">end</span>
+0064 
+0065 <a name="_sub1" href="#_subfunctions" class="code">function list = list_defaults</a>
+0066     <span class="keyword">global</span> eidors_objects
+0067     <span class="keyword">try</span>
+0068         list = eidors_objects.defaults;
+0069     <span class="keyword">catch</span>
+0070         list = [];
+0071     <span class="keyword">end</span>
+0072 
+0073 <a name="_sub2" href="#_subfunctions" class="code">function caller = get_caller(s)</a>
+0074     caller = s(2).name;
+0075     <span class="keyword">if</span> length(caller) &gt;= 15 &amp;&amp; strcmp(caller(end-14:end),<span class="string">'cache_shorthand'</span>)
+0076         caller = s(4).name;
+0077     <span class="keyword">end</span>
+0078 <span class="comment">%   caller = octave_caller(caller);</span>
+0079     
+0080 <a name="_sub3" href="#_subfunctions" class="code">function caller = octave_caller(caller)</a>
+0081     <span class="keyword">if</span> exist(<span class="string">'OCTAVE_VERSION'</span>)
+0082     <span class="comment">% octave gives caller = eidors_default&gt;do_unit_test</span>
+0083        ff= find(caller == <span class="string">'&gt;'</span>); 
+0084        <span class="keyword">if</span> length(ff)&gt;=1; ff= ff(end); <span class="keyword">else</span> ff=0; <span class="keyword">end</span>
+0085        caller = caller(ff+1:end);
+0086     <span class="keyword">end</span>
+0087 
+0088 
+0089 <a name="_sub4" href="#_subfunctions" class="code">function set_default(caller, default)</a>
+0090     <span class="keyword">global</span> eidors_objects
+0091     caller = <a href="#_sub3" class="code" title="subfunction caller = octave_caller(caller)">octave_caller</a>( caller );
+0092     eidors_objects.defaults.(caller) = default;
+0093 
+0094 
+0095 <a name="_sub5" href="#_subfunctions" class="code">function default = get_default(caller)</a>
+0096     <span class="keyword">if</span> exist(<span class="string">'OCTAVE_VERSION'</span>)
+0097     <span class="comment">% octave gives caller = eidors_default&gt;do_unit_test</span>
+0098        ff= find(caller == <span class="string">'&gt;'</span>); 
+0099        <span class="keyword">if</span> length(ff)&gt;=1; ff= ff(end); <span class="keyword">else</span> ff=0; <span class="keyword">end</span>
+0100        caller = caller(ff+1:end);
+0101     <span class="keyword">end</span>
+0102     <span class="keyword">global</span> eidors_objects
+0103     <span class="keyword">try</span>
+0104         default = eidors_objects.defaults.(caller);
+0105     <span class="keyword">catch</span>
+0106         error([<span class="string">'No default implementation of '</span> caller <span class="string">'.'</span>]);
+0107     <span class="keyword">end</span>
+0108 
+0109 <a name="_sub6" href="#_subfunctions" class="code">function varargout = call_default(caller,varargin);</a>
+0110    default = <a href="#_sub5" class="code" title="subfunction default = get_default(caller)">get_default</a>(caller);
+0111    <span class="comment">% Octave can't do this, and we don't think matlab can properly either</span>
+0112    <span class="comment">%  varargout{1:nargout} = feval(default,varargin{:});</span>
+0113    <span class="keyword">if</span> nargout&gt;0
+0114       output = <a href="#_sub7" class="code" title="subfunction output = mk_varargout_str(N)">mk_varargout_str</a>(nargout);
+0115       cmd= sprintf(<span class="string">'%s = %s'</span>, output, <span class="string">'feval(default,varargin{:});'</span>);
+0116       eval(cmd)
+0117    <span class="keyword">else</span>
+0118       feval(default,varargin{:});
+0119    <span class="keyword">end</span>
+0120 
+0121 <a name="_sub7" href="#_subfunctions" class="code">function output = mk_varargout_str(N)</a>
+0122    output = <span class="string">'['</span>;
+0123    <span class="keyword">for</span> i = 1:N
+0124       output = [ output sprintf(<span class="string">'varargout{%d} '</span>,i)];
+0125    <span class="keyword">end</span>
+0126    output = [ output <span class="string">']'</span> ];
+0127 
+0128 
+0129 <a name="_sub8" href="#_subfunctions" class="code">function do_unit_test</a>
+0130 fid = fopen(<span class="string">'test_def.m'</span>,<span class="string">'w'</span>);
+0131 fprintf(fid, <span class="string">'function out = test_def(in);'</span>);
+0132 fprintf(fid, <span class="string">'disp(''test_def'');'</span>);
+0133 fprintf(fid, <span class="string">'disp(in);'</span>);
+0134 fprintf(fid, <span class="string">'out = in;'</span>);
+0135 fclose(fid);
+0136 <a href="eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>(<span class="string">'set'</span>,<span class="string">'do_unit_test'</span>,<span class="string">'test_def'</span>);
+0137 name = <a href="eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>(5);
+0138 <a href="unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'dut1'</span>, name, 5);
+0139 
+0140 val = <a href="eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>(6);
+0141 <a href="unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'dut2'</span>, val, 6);
+0142 
+0143 name = <a href="eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>(<span class="string">'get'</span>,<span class="string">'do_unit_test'</span>);
+0144 <a href="unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'dut3'</span>, name, <span class="string">'test_def'</span>);
+0145 delete(<span class="string">'test_def.m'</span>);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

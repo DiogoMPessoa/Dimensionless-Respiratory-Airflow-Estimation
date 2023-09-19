@@ -1,0 +1,843 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of show_fem</title>
+  <meta name="keywords" content="show_fem">
+  <meta name="description" content="SHOW_FEM: show the EIDORS3D finite element model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; show_fem.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>show_fem
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>SHOW_FEM: show the EIDORS3D finite element model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function hh=show_fem( mdl, options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SHOW_FEM: show the EIDORS3D finite element model
+ hh=show_fem( mdl, options )
+ mdl is a EIDORS3D 'model' or 'image' structure
+ hh= handle to the plotted model
+
+ options may be specified by a list
+
+ options specifies a set of options
+   options(1) =&gt; show colourbar
+   options(2) =&gt; show numbering on electrodes (fontsize can be controlled by
+      the fractional part, ie [0,1.012] =&gt; 12pt font)
+   options(3) =&gt; number elements (==1) or nodes (==2);
+
+ for detailed control of colours, use
+    img.calc_colours.&quot;parameter&quot; = value
+ see help for calc_colours.
+
+ for control of colourbar, use img.calc_colours.cb_shrink_move
+
+ parameters
+  img.fwd_model.show_fem.alpha_inhomogeneities
+      1 is opaque. A value like 0.02 is transparent     
+
+ to change line properties:
+      hh=show_fem(...); set(hh,'EdgeColor',[0,0,1];</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>	[colours,scl_data]= calc_colours(img, set_value, do_colourbar)</li><li><a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../../eidors/meshing/mat_idx_to_electrode.html" class="code" title="function [fmdl,rm_elems] = mat_idx_to_electrode(fmdl, mat_idxes)">mat_idx_to_electrode</a>	MAT_IDX_TO_ELECTRODE: create electrodes from mat_idx values</li><li><a href="../../../eidors/meshing/order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>	ORDER_LOOP Order a list of points on a loop</li><li><a href="../../../eidors/models/interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>	INTERP_MESH: calculate interpolation points onto mdl elements</li><li><a href="../../../eidors/models/mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>	MDL_DIM: dimension of model space (are nodes in 2D or 3D space)</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>	NUM_ELEMS: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>	NUM_NODES: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>	CALC_JACOBIAN_BKGND: calculate background image around</li><li><a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="../../../eidors/solvers/get_img_data.html" class="code" title="function [img_data, n_images]= get_img_data(img)">get_img_data</a>	GET_IMG_DATA: get parameter data from eidors image object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/deprecated/iso_f_smooth.html" class="code" title="function [Reg] = iso_f_smooth(simp,vtx,deg,w);">iso_f_smooth</a>	function [Reg] = iso_f_smooth(simp,vtx,deg,w);</li><li><a href="../../../eidors/deprecated/manchester_tomography.html" class="code" title="function manchester_tomography( example_no)">manchester_tomography</a>	Example to show reconstructions from</li><li><a href="../../../eidors/examples/cheating_2d.html" class="code" title="function out=cheating_2d( figno, rand_seed )">cheating_2d</a>	code to simulate inverse crimes in EIT</li><li><a href="../../../eidors/examples/demo_2d_simdata.html" class="code" title="">demo_2d_simdata</a>	Example of using EIDORS to simulate 2D data and to</li><li><a href="../../../eidors/examples/demo_3d_simdata.html" class="code" title="">demo_3d_simdata</a>	How to make simulation data using EIDORS3D</li><li><a href="../../../eidors/examples/demo_real.html" class="code" title="function [inhomg_img, demo_img] = demo_real;">demo_real</a>	[inhomg_img, demo_img] = demo_real;</li><li><a href="../../../eidors/examples/eidors2d_demo1.html" class="code" title="">eidors2d_demo1</a>	EidorsDemo1 Demonstrates the use of 2D EIT Package with linear basis</li><li><a href="../../../eidors/examples/ex_fwd2d_high_order.html" class="code" title="">ex_fwd2d_high_order</a>	ensure dev/m_crabb/forward_problem is on the path</li><li><a href="../../../eidors/examples/image_2d_algs.html" class="code" title="">image_2d_algs</a>	Based on the 'bubble' data from Eidors2D, use several</li><li><a href="eidors_colourbar.html" class="code" title="function hh= eidors_colourbar(max_scale,ref_lev, cb_shrink_move, greyscale)">eidors_colourbar</a>	EIDORS_COLOURBAR - create an eidors colourbar with scaling to image</li><li><a href="emphasize_electrode_text.html" class="code" title="function emphasize_electrode_text(elecs);">emphasize_electrode_text</a>	EMPHASIZE_ELECTRODE_TEXT: ephazise the electrode</li><li><a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>	MDL_SLICE_MAPPER: map pixels to FEM elements or nodes</li><li><a href="mdl_slice_mesher.html" class="code" title="function [nimg out] = mdl_slice_mesher(fmdl,level,varargin)">mdl_slice_mesher</a>	MDL_SLICE_MESHER A slice of a 3D FEM as a 2D FEM</li><li><a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>	PRINT_CONVERT: print figures with anti-aliasing and trim them</li><li><a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>	show_3d_slices(img, z_cuts, x_cuts, y_cuts, any_cuts)</li><li><a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="show_fem_enhanced.html" class="code" title="function hh = show_fem_enhanced(mdl, options)">show_fem_enhanced</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="show_fem_move.html" class="code" title="function [hf,hh] = show_fem_move( img, move, scale, options )">show_fem_move</a>	SHOW_FEM_MOVE   Plot EIT finite element model (FEM) and movement</li><li><a href="../../../eidors/meshing/crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>	CROP_MODEL: Crop away parts of a fem model</li><li><a href="../../../eidors/meshing/distmesh/dm_2d_circ_pt_elecs.html" class="code" title="function fmdl = dm_2d_circ_pt_elecs( elec_pts, pfix, spacing);">dm_2d_circ_pt_elecs</a>	DM_2D_CIRC_PT_ELECS: Create circle mesh (or radius 1) refined with electrodes</li><li><a href="../../../eidors/meshing/gmsh/create_circle_mesh_gmsh.html" class="code" title="function mdl = create_circle_mesh_gmsh(basename, center, rad, elem_size )">create_circle_mesh_gmsh</a>	Create a 2D Circular FEM using GMSH</li><li><a href="../../../eidors/meshing/join_models.html" class="code" title="function [fmdlo]= join_models(fmdl1, fmdl2, tol)">join_models</a>	JOIN_MODELS: Join two fmdl structures to create one</li><li><a href="../../../eidors/meshing/mat_idx_to_electrode.html" class="code" title="function [fmdl,rm_elems] = mat_idx_to_electrode(fmdl, mat_idxes)">mat_idx_to_electrode</a>	MAT_IDX_TO_ELECTRODE: create electrodes from mat_idx values</li><li><a href="../../../eidors/meshing/netgen/ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>	NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface</li><li><a href="../../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="../../../eidors/meshing/netgen/ng_mk_ellip_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_ellip_models(ellip_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_ellip_models</a>	NG_MAKE_ELLIP_MODELS: create elliptical models using netgen</li><li><a href="../../../eidors/meshing/netgen/ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>	NG_MAKE_EXTRUDED_MODEL: create extruded models using netgen</li><li><a href="../../../eidors/meshing/netgen/ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>	NG_MK_GEN_MODELS: create generic models using netgen</li><li><a href="../../../eidors/meshing/netgen/ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>	NG_MK_GEOMETRIC_MODELS: create geometric mesh models using Netgen. Body</li><li><a href="../../../eidors/meshing/ng_mk_common_model.html" class="code" title="function fmdl = ng_mk_common_model(mdl_type,mdl_shape, elec_pos, elec_shape);">ng_mk_common_model</a>	NG_MK_COMMON_MODEL: utility to create common models</li><li><a href="../../../eidors/meshing/stl/stl_read.html" class="code" title="function mdl = stl_read(fname)">stl_read</a>	STL_READ  Read in an stl file and output an EIDORS model struct</li><li><a href="../../../eidors/models/GREIT3D_distribution.html" class="code" title="function [imdl,distr] = GREIT3D_distribution(fmdl, vopt)">GREIT3D_distribution</a>	GREIT3D_distribution: create target distributions for 3D GREIT</li><li><a href="../../../eidors/models/check_c2f_quality.html" class="code" title="function [ f_frac, c_frac ] = check_c2f_quality( f_mdl, c_mdl, c2f )">check_c2f_quality</a>	CHECK_C2F_QUALITY Check the coarse2fine mapping between two models</li><li><a href="../../../eidors/models/convhulln_clean.html" class="code" title="function [K,V] = convhulln_clean(pts,p);">convhulln_clean</a>	CONVHULLN_CLEAN: run convhulln and catch errors</li><li><a href="../../../eidors/models/deform_cylinder.html" class="code" title="function fwd_mdl = deform_cylinder( fwd_mdl, geo);">deform_cylinder</a>	fwd_mdl = deform_cylinder( fwd_mdl, niv);</li><li><a href="../../../eidors/models/merge_meshes.html" class="code" title="function out = merge_meshes(M1,varargin)">merge_meshes</a>	MERGE_MESHES - merges two meshes based on common nodes</li><li><a href="../../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="../../../eidors/models/mk_c2f_circ_mapping.html" class="code" title="function [mapping failed] = mk_c2f_circ_mapping( mdl, xyzr );">mk_c2f_circ_mapping</a>	MK_C2F_CIRC_MAPPING: create a mapping matrix from circles/spheres to FEM</li><li><a href="../../../eidors/models/mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>	MK_CIRC_TANK: make a cylindrical tank FEM geometry in 2D or 3D</li><li><a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="../../../eidors/models/mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="../../../eidors/models/mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="../../../eidors/models/mk_hollow_electrode.html" class="code" title="function fmdl = mk_hollow_electrode(fmdl, elec_idx)">mk_hollow_electrode</a>	MK_HOLLOW_ELECTRODE: remove nodes with indicated electrdoes</li><li><a href="../../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="../../../eidors/models/mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>	MK_LUNG_IMAGE create an image with lung and heart contrasts from a model</li><li><a href="../../../eidors/models/mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>	MK_PIXEL_SLICE create a pixel model to reconstruct on</li><li><a href="../../../eidors/models/mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a>	MK_TET_C2F - calculate a coarse2fine mapping for two tet-based models.</li><li><a href="../../../eidors/models/mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li><li><a href="../../../eidors/models/mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li><li><a href="../../../eidors/models/mk_tri_c2f.html" class="code" title="function c2f = mk_tri_c2f(fmdl,rmdl,opt)">mk_tri_c2f</a>	MK_TRI_C2F - calculate a coarse2fine mapping for triangle-based models.</li><li><a href="../../../eidors/models/mk_voxel_volume.html" class="code" title="function [imdl, fmdl] = mk_voxel_volume(varargin)">mk_voxel_volume</a>	MK_VOXEL_VOLUME create a voxel model to reconstruct on</li><li><a href="../../../eidors/models/place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li><li><a href="../../../eidors/models/solve_RM_2Dslice.html" class="code" title="function imdl = solve_RM_2Dslice(imdl, sel_fcn)">solve_RM_2Dslice</a>	SOLVE_RM_2DSLICE: cut slices out of a 3D model</li><li><a href="../../../eidors/models/test_GREIT_model.html" class="code" title="">test_GREIT_model</a>	</li><li><a href="../../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>	FWD_SOLVE_1ST_ORDER: data= fwd_solve_1st_order( img)</li><li><a href="../../../eidors/solvers/forward/jacobian_adjoint_2p5d_1st_order.html" class="code" title="function J= jacobian_adjoint_2p5d_1st_order( fwd_model, img)">jacobian_adjoint_2p5d_1st_order</a>	JACOBIAN_ADJOINT_2P5D: J= jacobian_adjoint_2p5d_1st_order( img )</li><li><a href="../../../eidors/solvers/forward/jacobian_movement_2p5d_1st_order.html" class="code" title="function J = jacobian_movement_2p5d_1st_order( fwd_model, img)">jacobian_movement_2p5d_1st_order</a>	JACOBIAN_MOVEMENT_2P5D: J = jacobian_movement_2p5d_1st_order( img )</li><li><a href="../../../eidors/solvers/forward/system_mat_1st_order.html" class="code" title="function s_mat= system_mat_1st_order( fwd_model, img)">system_mat_1st_order</a>	SYSTEM_MAT_1ST_ORDER: SS= system_mat_1st_order( fwd_model, img)</li><li><a href="../../../eidors/solvers/inverse/GREIT_desired_img_FEMmesh.html" class="code" title="function PSF= GREIT_desired_img_FEMmesh(xyc, radius, opt)">GREIT_desired_img_FEMmesh</a>	GREIT_DESIRED_IMG_FEMmesh  GREIT onto a FEM mesh</li><li><a href="../../../eidors/solvers/inverse/calc_image_SNR.html" class="code" title="function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)">calc_image_SNR</a>	% CALC_IMAGE_SNR: Calculates the signal-to-noise ratio (SNR) in the image</li><li><a href="../../../eidors/solvers/inverse/inv_solve_cg.html" class="code" title="function img= inv_solve_cg( inv_model, data1, data2);">inv_solve_cg</a>	function img= inv_solve_cg( inv_model, data1);</li><li><a href="../../../eidors/solvers/inverse/inv_solve_conj_grad.html" class="code" title="function img= inv_solve_conj_grad( inv_model, data1, data2)">inv_solve_conj_grad</a>	INV_SOLVE_CONJ_GRAD inverse solver based on the CG</li><li><a href="../../../eidors/solvers/inverse/inv_solve_core.html" class="code" title="function img= inv_solve_core( inv_model, data0, data1);">inv_solve_core</a>	INV_SOLVE_CORE Solver using a generic iterative algorithm</li><li><a href="../../../eidors/solvers/inverse/inv_solve_gn.html" class="code" title="function img= inv_solve_gn( inv_model, data1, data2);">inv_solve_gn</a>	function img= inv_solve_gn( inv_model, data1);</li><li><a href="../../../eidors/solvers/inverse/inv_solve_time_prior.html" class="code" title="function img= inv_solve_time_prior( inv_model, data1, data2)">inv_solve_time_prior</a>	INV_SOLVE_TIME_PRIOR inverse solver to account for time differences</li><li><a href="../../../eidors/tests/test_2d_resistor.html" class="code" title="function test_2d_resistor(opt)">test_2d_resistor</a>	Create 2D model of a cylindrical resistor</li><li><a href="../../../eidors/tests/test_3d_resistor.html" class="code" title="">test_3d_resistor</a>	Create 3D model of a Rectangular resistor</li><li><a href="../../../eidors/tests/test_colour_direction.html" class="code" title="">test_colour_direction</a>	Test colour mapping</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fix_axis</a></li><li><a href="#_sub2" class="code">function placenumbers(xyzc, fontsize, colour, bgcolour)</a></li><li><a href="#_sub3" class="code">function [img,mdl,opts] = proc_params( mdl, options );</a></li><li><a href="#_sub4" class="code">function hh= show_2d(img,mdl,opts)</a></li><li><a href="#_sub5" class="code">function hh= show_3d(img,mdl,opts)</a></li><li><a href="#_sub6" class="code">function show_electrodes_2d(mdl, number_electrodes)</a></li><li><a href="#_sub7" class="code">function show_electrodes_surf(mdl, number_electrodes)</a></li><li><a href="#_sub8" class="code">function fontsize= getfontsizefromnumber_electrodes(number_electrodes)</a></li><li><a href="#_sub9" class="code">function show_electrodes_3d(mdl, number_electrodes)</a></li><li><a href="#_sub10" class="code">function number_elecs_3d(number_electrodes, e, mdl, el_nodes )</a></li><li><a href="#_sub11" class="code">function show_inhomogeneities( elem_data, mdl, img, opt)</a></li><li><a href="#_sub12" class="code">function paint_electrodes(sel,srf,vtx, colour, show_num);</a></li><li><a href="#_sub13" class="code">function hh= show_3d_fem( mdl, options )</a></li><li><a href="#_sub14" class="code">function hh=show_2d_fem( mdl, colours, imgno )</a></li><li><a href="#_sub15" class="code">function hh=show_2d_fem_oldmatlab( mdl, colours, imgno )</a></li><li><a href="#_sub16" class="code">function old_code_3d_plot</a></li><li><a href="#_sub17" class="code">function plot_2d_mesh(NODE,ELEM,el_pos, S, options)</a></li><li><a href="#_sub18" class="code">function  mes= avg_electrode_posn( mdl )</a></li><li><a href="#_sub19" class="code">function colour= electr_colour( e);</a></li><li><a href="#_sub20" class="code">function ee= get_boundary( mdl )</a></li><li><a href="#_sub21" class="code">function hh_=repaint_inho(mat,mat_ref,vtx,simp, thresh, clr_def);</a></li><li><a href="#_sub22" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function hh=show_fem( mdl, options)</a>
+0002 <span class="comment">% SHOW_FEM: show the EIDORS3D finite element model</span>
+0003 <span class="comment">% hh=show_fem( mdl, options )</span>
+0004 <span class="comment">% mdl is a EIDORS3D 'model' or 'image' structure</span>
+0005 <span class="comment">% hh= handle to the plotted model</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% options may be specified by a list</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% options specifies a set of options</span>
+0010 <span class="comment">%   options(1) =&gt; show colourbar</span>
+0011 <span class="comment">%   options(2) =&gt; show numbering on electrodes (fontsize can be controlled by</span>
+0012 <span class="comment">%      the fractional part, ie [0,1.012] =&gt; 12pt font)</span>
+0013 <span class="comment">%   options(3) =&gt; number elements (==1) or nodes (==2);</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% for detailed control of colours, use</span>
+0016 <span class="comment">%    img.calc_colours.&quot;parameter&quot; = value</span>
+0017 <span class="comment">% see help for calc_colours.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% for control of colourbar, use img.calc_colours.cb_shrink_move</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% parameters</span>
+0022 <span class="comment">%  img.fwd_model.show_fem.alpha_inhomogeneities</span>
+0023 <span class="comment">%      1 is opaque. A value like 0.02 is transparent</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% to change line properties:</span>
+0026 <span class="comment">%      hh=show_fem(...); set(hh,'EdgeColor',[0,0,1];</span>
+0027 
+0028 <span class="comment">% (C) 2005-2011 Andy Adler. License: GPL version 2 or version 3</span>
+0029 <span class="comment">% $Id: show_fem.m 5981 2019-06-23 12:28:07Z aadler $</span>
+0030 
+0031 <span class="comment">% TESTS</span>
+0032 <span class="keyword">switch</span> nargin
+0033    <span class="keyword">case</span> 0;
+0034      error(<span class="string">'Insufficient parameters for show_fem'</span>);
+0035    <span class="keyword">case</span> 1;
+0036      <span class="keyword">if</span> ischar(mdl) &amp;&amp; strcmp(mdl,<span class="string">'UNIT_TEST'</span>); <a href="#_sub22" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0037      options = [];
+0038 <span class="keyword">end</span>
+0039 [img,mdl,opts] = <a href="#_sub3" class="code" title="subfunction [img,mdl,opts] = proc_params( mdl, options );">proc_params</a>( mdl, options );
+0040 
+0041 <span class="keyword">if</span> ~ishold
+0042     cla;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">switch</span> opts.dims
+0046    <span class="keyword">case</span> 2;    hh= <a href="#_sub4" class="code" title="subfunction hh= show_2d(img,mdl,opts)">show_2d</a>(img,mdl,opts); <span class="comment">% 2D nodes</span>
+0047    <span class="keyword">case</span> 3;    hh= <a href="#_sub5" class="code" title="subfunction hh= show_3d(img,mdl,opts)">show_3d</a>(img,mdl,opts); <span class="comment">% 3D nodes</span>
+0048    <span class="keyword">otherwise</span>; error(<span class="string">'model is not 2D or 3D'</span>);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="keyword">if</span> opts.show_elem_numbering
+0052    xyzc= <a href="../../../eidors/models/interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>(mdl);
+0053    <a href="#_sub2" class="code" title="subfunction placenumbers(xyzc, fontsize, colour, bgcolour)">placenumbers</a>(xyzc, 7, [0,0,0],<span class="string">'none'</span>);
+0054 <span class="keyword">end</span>
+0055 <span class="keyword">if</span> opts.show_node_numbering
+0056    xyzc= mdl.nodes;
+0057    <a href="#_sub2" class="code" title="subfunction placenumbers(xyzc, fontsize, colour, bgcolour)">placenumbers</a>(xyzc, 7, [0.0,0,0.5],[1,1,1]);
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="keyword">if</span> nargout == 0; clear hh; <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% this is moved to show_2d and show_3d</span>
+0063 <span class="comment">% if ~ishold</span>
+0064 <span class="comment">%    fix_axis</span>
+0065 <span class="comment">% end</span>
+0066 
+0067 <a name="_sub1" href="#_subfunctions" class="code">function fix_axis</a>
+0068    ax = gca;
+0069    axis tight
+0070    set(ax,<span class="string">'DataAspectRatio'</span>,[1 1 1]);
+0071    <span class="comment">% expand the axis limits slightly</span>
+0072    [az el] = view;
+0073    <span class="keyword">if</span> el==90
+0074       <span class="comment">% for 2d plots we need x and y</span>
+0075       xl=get(ax,<span class="string">'XLim'</span>); yl=get(ax,<span class="string">'Ylim'</span>);
+0076       dx = diff(xl); dy = diff(yl);
+0077       <span class="comment">% make sure to expand away from the origin</span>
+0078       xb = strcmp(get(ax,<span class="string">'XAxisLocation'</span>),<span class="string">'bottom'</span>);
+0079       yn = strcmp(get(ax,<span class="string">'YDir'</span>),<span class="string">'normal'</span>);
+0080       <span class="keyword">if</span> xb == yn
+0081          set(ax,<span class="string">'YLim'</span>,yl + [0 1]*1e-3*dy);
+0082       <span class="keyword">else</span>
+0083          set(ax,<span class="string">'YLim'</span>,yl + [-1 0]*1e-3*dy);
+0084       <span class="keyword">end</span>
+0085       yl = strcmp(get(ax,<span class="string">'XAxisLocation'</span>),<span class="string">'bottom'</span>);
+0086       xn = strcmp(get(ax,<span class="string">'XDir'</span>),<span class="string">'normal'</span>);
+0087       <span class="keyword">if</span> yl == xn
+0088          set(ax,<span class="string">'XLim'</span>,xl + [0 1]*1e-3*dx);
+0089       <span class="keyword">else</span>
+0090          set(ax,<span class="string">'XLim'</span>,xl + [-1 0]*1e-3*dx);
+0091       <span class="keyword">end</span>
+0092    <span class="keyword">else</span>
+0093       <span class="comment">% for 3d plots it's enough to adjust z</span>
+0094       zl = get(ax,<span class="string">'Zlim'</span>); dz = diff(zl);
+0095       <span class="keyword">if</span> strcmp(get(ax,<span class="string">'Zdir'</span>),<span class="string">'normal'</span>)
+0096          set(ax,<span class="string">'ZLim'</span>,zl + [0 1]*1e-3*dz);
+0097       <span class="keyword">else</span>
+0098          set(ax,<span class="string">'ZLim'</span>,zl + [-1 0]*1e-3*dz);
+0099       <span class="keyword">end</span>
+0100    <span class="keyword">end</span>
+0101    
+0102 
+0103 <a name="_sub2" href="#_subfunctions" class="code">function placenumbers(xyzc, fontsize, colour, bgcolour)</a>
+0104    xyzc= xyzc * eye(size(xyzc,2),3); <span class="comment">%convert to 3D</span>
+0105    <span class="keyword">for</span> i= 1:size(xyzc,1)
+0106       text(xyzc(i,1),xyzc(i,2), xyzc(i,3), num2str(i), <span class="keyword">...</span>
+0107             <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>, <span class="keyword">...</span>
+0108             <span class="string">'FontSize'</span>,fontsize,<span class="string">'Color'</span>,colour,<span class="string">'BackgroundColor'</span>,bgcolour);
+0109    <span class="keyword">end</span>
+0110 
+0111 <a name="_sub3" href="#_subfunctions" class="code">function [img,mdl,opts] = proc_params( mdl, options );</a>
+0112 
+0113    opts.do_colourbar=0;
+0114    opts.number_electrodes=0;
+0115    opts.show_numbering  =0;
+0116    opts.show_elem_numbering = 0;
+0117    opts.show_node_numbering = 0;
+0118    <span class="keyword">if</span> nargin &gt;=2
+0119        <span class="comment">% fill in default options</span>
+0120        optionstr= zeros(1,100);
+0121        optionstr(1:length(options)) = options;
+0122 
+0123        opts.do_colourbar=      optionstr(1);
+0124        opts.number_electrodes= optionstr(2);
+0125        <span class="keyword">switch</span> optionstr(3)
+0126           <span class="keyword">case</span> 1; opts.show_elem_numbering = 1;
+0127           <span class="keyword">case</span> 2; opts.show_node_numbering = 1;
+0128           <span class="keyword">case</span> 3; opts.show_elem_numbering = 1;
+0129                   opts.show_node_numbering = 1;
+0130        <span class="keyword">end</span>
+0131    <span class="keyword">end</span>
+0132 
+0133    
+0134    <span class="comment">% if we have an only img input, then define mdl</span>
+0135    <span class="keyword">if</span> strcmp( mdl(1).type , <span class="string">'image'</span> )
+0136       img= mdl;
+0137       mdl= img(1).fwd_model;
+0138    <span class="keyword">else</span> 
+0139       img = [];
+0140    <span class="keyword">end</span>
+0141    
+0142    opts.transparency_thresh = <a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>(<span class="string">'transparency_thresh'</span>);
+0143    <span class="keyword">try</span>
+0144        opts.transparency_thresh = img.calc_colours.transparency_thresh;
+0145    <span class="keyword">end</span>
+0146    
+0147    opts.dims = size(mdl.nodes,2);
+0148 
+0149 <span class="comment">% 2D Case</span>
+0150 <a name="_sub4" href="#_subfunctions" class="code">function hh= show_2d(img,mdl,opts)</a>
+0151    hax= gca;
+0152    pax= get(hax,<span class="string">'position'</span>);
+0153    <span class="keyword">if</span> ~isempty(img)
+0154       colours= <a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>(img, [] );
+0155    <span class="keyword">else</span>
+0156       colours= [1,1,1]; <span class="comment">% white elements if no image</span>
+0157    <span class="keyword">end</span>
+0158    hh= <a href="#_sub14" class="code" title="subfunction hh=show_2d_fem( mdl, colours, imgno )">show_2d_fem</a>( mdl, colours );
+0159    <a href="#_sub6" class="code" title="subfunction show_electrodes_2d(mdl, number_electrodes)">show_electrodes_2d</a>(mdl, opts.number_electrodes) 
+0160    set(hax,<span class="string">'position'</span>, pax);
+0161    view(0, 90); axis(<span class="string">'xy'</span>); grid(<span class="string">'off'</span>);
+0162 
+0163 <span class="comment">% IN MATLAB 7 WE NEED TO RERUN THIS BECAUSE STUPID STUPID</span>
+0164 <span class="comment">% MATLAB WILL RESET THE COLOURBAR EVERY TIME WE RUN PATCH!!!</span>
+0165    <span class="keyword">if</span> exist(<span class="string">'img'</span>,<span class="string">'var'</span>) &amp;&amp; opts.do_colourbar;
+0166       colours= <a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>(img, [], opts.do_colourbar);
+0167       <span class="comment">% Matlab is so weird. It puts the first colorbar in the wrong place</span>
+0168       <span class="comment">%   sometimes ...  (tested with 6.5 and with 7.8)</span>
+0169       <span class="comment">%   The trick is to never try to move it on the first go</span>
+0170       <span class="comment">%   OR we reset it and then replace it. STUPID STUPID</span>
+0171 
+0172      <span class="comment">% Here's the magic trick I found. Force a drawnow,</span>
+0173      <span class="comment">%     then delete and recreate</span>
+0174 
+0175      <span class="comment">% Because of a change in matlab colorbar somewhere around</span>
+0176      <span class="comment">% 2012, none of this compensation code works any more. We</span>
+0177      <span class="comment">% don't really understand what to do anymore, but this</span>
+0178      <span class="comment">% seems best, for now ...</span>
+0179    <span class="keyword">end</span>
+0180    <span class="keyword">if</span> ~ishold
+0181       <a href="#_sub1" class="code" title="subfunction fix_axis">fix_axis</a>
+0182    <span class="keyword">end</span>
+0183 
+0184    
+0185 
+0186 <span class="comment">% 3D Case</span>
+0187 <a name="_sub5" href="#_subfunctions" class="code">function hh= show_3d(img,mdl,opts)</a>
+0188    hh= <a href="#_sub13" class="code" title="subfunction hh= show_3d_fem( mdl, options )">show_3d_fem</a>( mdl );
+0189 
+0190    <span class="keyword">if</span> ~isempty(img)
+0191        elem_data = <a href="../../../eidors/solvers/get_img_data.html" class="code" title="function [img_data, n_images]= get_img_data(img)">get_img_data</a>(img);
+0192        <a href="#_sub11" class="code" title="subfunction show_inhomogeneities( elem_data, mdl, img, opt)">show_inhomogeneities</a>( elem_data , mdl, img, opts);
+0193        <span class="keyword">if</span> opts.do_colourbar
+0194            <a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>(img, [], opts.do_colourbar);
+0195        <span class="keyword">end</span>
+0196    <span class="keyword">end</span>
+0197    <span class="comment">% need to adjust the axis limits before we plot electrodes</span>
+0198    <span class="comment">% who have thickness in all dimensions and thus cause 'axis tight' to</span>
+0199    <span class="comment">% mess up the z limits</span>
+0200    <span class="keyword">if</span> ~ishold
+0201       <a href="#_sub1" class="code" title="subfunction fix_axis">fix_axis</a>
+0202    <span class="keyword">end</span>
+0203    <span class="keyword">if</span> size(mdl.elems,2) == 3
+0204       <a href="#_sub7" class="code" title="subfunction show_electrodes_surf(mdl, number_electrodes)">show_electrodes_surf</a>(mdl, opts.number_electrodes);
+0205    <span class="keyword">else</span>
+0206       <a href="#_sub9" class="code" title="subfunction show_electrodes_3d(mdl, number_electrodes)">show_electrodes_3d</a>(mdl, opts.number_electrodes);
+0207    <span class="keyword">end</span>
+0208 
+0209 
+0210 <a name="_sub6" href="#_subfunctions" class="code">function show_electrodes_2d(mdl, number_electrodes)</a>
+0211     <span class="keyword">if</span> ~isfield(mdl,<span class="string">'electrode'</span>); <span class="keyword">return</span>; <span class="keyword">end</span>
+0212 
+0213     ee= <a href="#_sub20" class="code" title="subfunction ee= get_boundary( mdl )">get_boundary</a>( mdl );
+0214     ctr_x= mean(mdl.nodes(:,1));
+0215     ctr_y= mean(mdl.nodes(:,2));
+0216 
+0217 <span class="comment">% scale away from model</span>
+0218 
+0219 <span class="keyword">for</span> e=1:length(mdl.electrode)
+0220     elece = mdl.electrode(e);
+0221     <span class="keyword">if</span> isfield(elece,<span class="string">'faces'</span>) &amp;&amp; isfield(elece,<span class="string">'nodes'</span>) &amp;&amp; isempty(elece.nodes);
+0222         faces= elece.faces;
+0223         
+0224         S= 1.00;
+0225         vx= (reshape(mdl.nodes(faces,1),size(faces))' - ctr_x)*S;
+0226         vy= (reshape(mdl.nodes(faces,2),size(faces))' - ctr_y)*S;
+0227 
+0228     <span class="keyword">elseif</span> isfield(mdl.electrode(e),<span class="string">'nodes'</span>)
+0229         elec_nodes= elece.nodes;
+0230         
+0231         S= 1.00;
+0232         vx= (mdl.nodes(elec_nodes,1) - ctr_x)*S;
+0233         vy= (mdl.nodes(elec_nodes,2) - ctr_y)*S;
+0234         <span class="comment">% sort nodes around the model (to avoid crossed lines)</span>
+0235         [jnk,idx] = <a href="../../../eidors/meshing/order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>( [vx,vy] );
+0236         vx = vx(idx);
+0237         vy = vy(idx);
+0238     <span class="keyword">elseif</span> isfield(elece,<span class="string">'pos'</span>)
+0239         vx = elece.pos(:,1) - ctr_x;
+0240         vy = elece.pos(:,2) - ctr_y;
+0241     <span class="keyword">else</span>
+0242        <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'show_fem: WARNING: electrode %d has no nodes/faces/pos. Not showing.'</span>,e,2);
+0243        <span class="keyword">continue</span>;
+0244     <span class="keyword">end</span>
+0245         
+0246     ecolour = <a href="#_sub19" class="code" title="subfunction colour= electr_colour( e);">electr_colour</a>( e );
+0247     <span class="keyword">if</span> numel(vx) == 1
+0248        <span class="comment">% Point Electrode Models: put a circle around the node</span>
+0249        line(vx+ctr_x,vy+ctr_y,  <span class="keyword">...</span>
+0250             <span class="string">'LineWidth'</span>, 2, <span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="string">'Color'</span>, ecolour, <span class="keyword">...</span>
+0251             <span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="string">'MarkerSize'</span>, 6,<span class="string">'MarkerEdgeColor'</span>,ecolour);
+0252     <span class="keyword">else</span>
+0253        <span class="comment">% Complete/Shunt Electrode Models (multiple nodes per electrode)</span>
+0254        <span class="comment">%  put a line along the edges that form the electrode</span>
+0255        line(vx+ctr_x,vy+ctr_y,  <span class="keyword">...</span>
+0256             <span class="string">'LineWidth'</span>, 3, <span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="string">'Color'</span>, ecolour, <span class="keyword">...</span>
+0257             <span class="string">'Marker'</span>,<span class="string">'none'</span>,<span class="string">'MarkerSize'</span>, 6,<span class="string">'MarkerEdgeColor'</span>,ecolour);
+0258     <span class="keyword">end</span>
+0259     <span class="keyword">if</span> number_electrodes
+0260        S= 1.05;
+0261        vx= vx*S;
+0262        vy= vy*S;
+0263        <span class="keyword">switch</span> floor(number_electrodes)
+0264           <span class="keyword">case</span> {1 true}
+0265              txt = num2str(e);
+0266           <span class="keyword">case</span> 2
+0267              <span class="keyword">try</span>, txt = mdl.electrode(e).label; <span class="keyword">end</span>
+0268           <span class="keyword">otherwise</span>; error(<span class="string">'value of number_electrodes not understood'</span>);
+0269        <span class="keyword">end</span>
+0270        hh= text(mean(vx)+ctr_x, mean(vy)+ctr_y, txt);
+0271        fontsize= <a href="#_sub8" class="code" title="subfunction fontsize= getfontsizefromnumber_electrodes(number_electrodes)">getfontsizefromnumber_electrodes</a>(number_electrodes);
+0272        set(hh, <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>, <span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,fontsize);
+0273     <span class="keyword">end</span>
+0274 <span class="keyword">end</span>
+0275 
+0276 <a name="_sub7" href="#_subfunctions" class="code">function show_electrodes_surf(mdl, number_electrodes)</a>
+0277     <span class="keyword">if</span> ~isfield(mdl,<span class="string">'electrode'</span>); <span class="keyword">return</span>; <span class="keyword">end</span>
+0278 
+0279     ee= <a href="#_sub20" class="code" title="subfunction ee= get_boundary( mdl )">get_boundary</a>( mdl );
+0280     ctr_x= mean(mdl.nodes(:,1));
+0281     ctr_y= mean(mdl.nodes(:,2));
+0282     ctr_z= mean(mdl.nodes(:,3));
+0283 <span class="comment">% scale away from model</span>
+0284 
+0285 <span class="keyword">for</span> e=1:length(mdl.electrode)
+0286     <span class="keyword">if</span> isfield(mdl.electrode(e),<span class="string">'pos'</span>) &amp;&amp; ~isfield(mdl.electrode(e),<span class="string">'nodes'</span>)
+0287         vx = mdl.electrode(e).pos(:,1) - ctr_x;
+0288         vy = mdl.electrode(e).pos(:,2) - ctr_y;
+0289         vz = mdl.electrode(e).pos(:,3) - ctr_z;
+0290         idx = 1:length(vx);
+0291         S = 1.00;
+0292     <span class="keyword">else</span>
+0293         elec_nodes= mdl.electrode(e).nodes;
+0294         
+0295         S= 1.00;
+0296         vx= (mdl.nodes(elec_nodes,1) - ctr_x);
+0297         vy= (mdl.nodes(elec_nodes,2) - ctr_y);
+0298         vz= (mdl.nodes(elec_nodes,3) - ctr_z);
+0299     <span class="keyword">end</span>
+0300     
+0301     <span class="comment">% sort nodes around the model (to avoid crossed lines)</span>
+0302     <span class="comment">% TODO: figure out what to do in different directions</span>
+0303     [jnk,idx] = sort(unwrap(atan2( vy, vx )));
+0304     
+0305     ecolour = <a href="#_sub19" class="code" title="subfunction colour= electr_colour( e);">electr_colour</a>( e );
+0306     <span class="keyword">if</span> numel(vx) == 1
+0307        <span class="comment">% Point Electrode Models: put a circle around the node</span>
+0308        line(S*vx(idx)+ctr_x,S*vy(idx)+ctr_y, S*vz(idx)+ctr_z,  <span class="keyword">...</span>
+0309             <span class="string">'LineWidth'</span>, 2, <span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="string">'Color'</span>, ecolour, <span class="keyword">...</span>
+0310             <span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="string">'MarkerSize'</span>, 6,<span class="string">'MarkerEdgeColor'</span>,ecolour);
+0311     <span class="keyword">else</span>
+0312        <span class="comment">% Complete/Shunt Electrode Models (multiple nodes per electrode)</span>
+0313        <span class="comment">%  put a line along the edges that form the electrode</span>
+0314        line(vx(idx)+ctr_x,vy(idx)+ctr_y, vz(idx)+ctr_z, <span class="keyword">...</span>
+0315             <span class="string">'LineWidth'</span>, 3, <span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="string">'Color'</span>, ecolour, <span class="keyword">...</span>
+0316             <span class="string">'Marker'</span>,<span class="string">'none'</span>,<span class="string">'MarkerSize'</span>, 6,<span class="string">'MarkerEdgeColor'</span>,ecolour);
+0317     <span class="keyword">end</span>
+0318     <span class="keyword">if</span> number_electrodes
+0319        S= 1.05;
+0320 <span class="comment">%        vx= (mdl.nodes(elec_nodes,1) - ctr_x)*S;</span>
+0321 <span class="comment">%        vy= (mdl.nodes(elec_nodes,2) - ctr_y)*S;</span>
+0322 <span class="comment">%        vz= (mdl.nodes(elec_nodes,3) - ctr_z)*S;</span>
+0323        <span class="keyword">switch</span> floor(number_electrodes)
+0324           <span class="keyword">case</span> {1 true}
+0325             txt = num2str(e);
+0326           <span class="keyword">case</span> 2
+0327              <span class="keyword">try</span>, txt = mdl.electrode(e).label; <span class="keyword">end</span>
+0328           <span class="keyword">otherwise</span>; error(<span class="string">'value of number_electrodes not understood'</span>);
+0329        <span class="keyword">end</span>
+0330        hh= text(S*mean(vx)+ctr_x, S*mean(vy)+ctr_y,S*mean(vz)+ctr_z,txt);
+0331        fontsize= <a href="#_sub8" class="code" title="subfunction fontsize= getfontsizefromnumber_electrodes(number_electrodes)">getfontsizefromnumber_electrodes</a>(number_electrodes);
+0332        set(hh, <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>, <span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,fontsize);
+0333     <span class="keyword">end</span>
+0334 <span class="keyword">end</span>
+0335 
+0336 <span class="comment">% Fontsize is 8, unless number_electrodes = 1.012 =&gt; 12 etc</span>
+0337 <a name="_sub8" href="#_subfunctions" class="code">function fontsize= getfontsizefromnumber_electrodes(number_electrodes)</a>
+0338    ne = rem(number_electrodes,1);
+0339    <span class="keyword">if</span> ne==0; 
+0340      fontsize = 8;
+0341    <span class="keyword">else</span>
+0342      fontsize = round(ne*1000);
+0343    <span class="keyword">end</span>
+0344 
+0345 <a name="_sub9" href="#_subfunctions" class="code">function show_electrodes_3d(mdl, number_electrodes)</a>
+0346 <span class="comment">% show electrode positions on model</span>
+0347 <span class="keyword">if</span> ~isfield(mdl,<span class="string">'electrode'</span>); <span class="keyword">return</span>; <span class="keyword">end</span>
+0348 
+0349 ee= <a href="#_sub20" class="code" title="subfunction ee= get_boundary( mdl )">get_boundary</a>( mdl );
+0350 <span class="keyword">for</span> e=1:length(mdl.electrode)
+0351     colour= <a href="#_sub19" class="code" title="subfunction colour= electr_colour( e);">electr_colour</a>( e);
+0352     elece = mdl.electrode(e);
+0353     
+0354     <span class="keyword">if</span> isfield(elece,<span class="string">'pos'</span>) &amp;&amp; ~isfield(mdl.electrode(e),<span class="string">'nodes'</span>)
+0355         <a href="#_sub7" class="code" title="subfunction show_electrodes_surf(mdl, number_electrodes)">show_electrodes_surf</a>(mdl, number_electrodes);
+0356         <span class="keyword">return</span>
+0357     <span class="keyword">end</span>
+0358     elec_nodes= elece.nodes;
+0359     
+0360     
+0361     <span class="keyword">if</span> isfield(elece,<span class="string">'faces'</span>) &amp;&amp; isempty(elec_nodes);
+0362         faces= elece.faces;
+0363         hh= patch(struct(<span class="string">'vertices'</span>,mdl.nodes,<span class="string">'faces'</span>,faces));
+0364         <span class="comment">% need 'direct' otherwise colourmap is screwed up</span>
+0365         set(hh,<span class="string">'FaceColor'</span>,colour, <span class="string">'FaceLighting'</span>,<span class="string">'none'</span>, <span class="string">'CDataMapping'</span>, <span class="string">'direct'</span> );
+0366         el_nodes = mdl.nodes(unique(faces),:);
+0367         <a href="#_sub10" class="code" title="subfunction number_elecs_3d(number_electrodes, e, mdl, el_nodes )">number_elecs_3d</a>(number_electrodes, e, mdl, el_nodes )
+0368     <span class="keyword">elseif</span> length(elec_nodes) == 1  <span class="comment">% point electrode model</span>
+0369         vtx= mdl.nodes(elec_nodes,:);
+0370         line(vtx(1),vtx(2),vtx(3), <span class="keyword">...</span>
+0371             <span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="string">'MarkerSize'</span>,12, <span class="keyword">...</span>
+0372             <span class="string">'MarkerFaceColor'</span>,colour, <span class="string">'MarkerEdgeColor'</span>, colour);
+0373         <span class="keyword">if</span> number_electrodes
+0374             hh= text(vtx(1),vtx(2),vtx(3), num2str(e));
+0375             set(hh, <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>, <span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0376         <span class="keyword">end</span>
+0377     <span class="keyword">else</span>
+0378         <span class="comment">% find elems on boundary attached to this electrode</span>
+0379         map = zeros(length(mdl.nodes),1);
+0380         map(elece.nodes) = 1;
+0381         ec = map(ee);
+0382         sels= find(all(ec'));
+0383         
+0384         ee= <a href="#_sub20" class="code" title="subfunction ee= get_boundary( mdl )">get_boundary</a>( mdl );
+0385         <a href="#_sub12" class="code" title="subfunction paint_electrodes(sel,srf,vtx, colour, show_num);">paint_electrodes</a>(sels,ee,mdl.nodes,colour,number_electrodes);
+0386         
+0387         el_nodes= mdl.nodes(unique(mdl.boundary(sels,:)),:);
+0388         <a href="#_sub10" class="code" title="subfunction number_elecs_3d(number_electrodes, e, mdl, el_nodes )">number_elecs_3d</a>(number_electrodes, e, mdl, el_nodes );
+0389     <span class="keyword">end</span>
+0390 <span class="keyword">end</span>
+0391 
+0392 <a name="_sub10" href="#_subfunctions" class="code">function number_elecs_3d(number_electrodes, e, mdl, el_nodes )</a>
+0393    <span class="keyword">switch</span> floor(number_electrodes)
+0394       <span class="keyword">case</span> {0,false}
+0395          <span class="keyword">return</span>
+0396       <span class="keyword">case</span> {1 true}
+0397          txt = num2str(e);
+0398       <span class="keyword">case</span> 2
+0399          <span class="keyword">try</span>, txt = mdl.electrode(e).label; <span class="keyword">end</span>
+0400       <span class="keyword">otherwise</span>; error(<span class="string">'value of number_electrodes not understood'</span>);
+0401    <span class="keyword">end</span>
+0402    hh=text( mean(el_nodes(:,1)), <span class="keyword">...</span>
+0403             mean(el_nodes(:,2)), <span class="keyword">...</span>
+0404             mean(el_nodes(:,3)), txt );
+0405    fontsize= <a href="#_sub8" class="code" title="subfunction fontsize= getfontsizefromnumber_electrodes(number_electrodes)">getfontsizefromnumber_electrodes</a>(number_electrodes);
+0406    set(hh,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'Color'</span>,[.8,.2,0],<span class="string">'FontSize'</span>,fontsize);
+0407 
+0408 <a name="_sub11" href="#_subfunctions" class="code">function show_inhomogeneities( elem_data, mdl, img, opt)</a>
+0409 <span class="comment">% show</span>
+0410 <span class="keyword">if</span> size(elem_data,2)&gt;1
+0411    q = warning(<span class="string">'query'</span>,<span class="string">'backtrace'</span>);
+0412    warning(<span class="string">'backtrace'</span>,<span class="string">'off'</span>);
+0413    warning(<span class="string">'EIDORS:FirstImageOnly'</span>,<span class="string">'show_fem only shows first image'</span>);
+0414    warning(<span class="string">'backtrace'</span>,q.state);
+0415 <span class="comment">%    eidors_msg('warning: show_fem only shows first image',1);</span>
+0416 <span class="keyword">end</span>
+0417 hh= <a href="#_sub21" class="code" title="subfunction hh_=repaint_inho(mat,mat_ref,vtx,simp, thresh, clr_def);">repaint_inho</a>(elem_data(:,1), <span class="string">'use_global'</span> , <span class="keyword">...</span>
+0418       mdl.nodes, mdl.elems, <span class="keyword">...</span>
+0419       opt.transparency_thresh, img); 
+0420 <span class="keyword">try</span>;
+0421     set(hh,<span class="string">'FaceAlpha'</span>,mdl.show_fem.alpha_inhomogeneities);
+0422 <span class="keyword">end</span>
+0423 <span class="keyword">if</span> ~exist(<span class="string">'OCTAVE_VERSION'</span>);
+0424 camlight(<span class="string">'left'</span>);
+0425 lighting(<span class="string">'none'</span>); <span class="comment">% lighting doesn't help much</span>
+0426 <span class="keyword">end</span>
+0427 
+0428 
+0429 <a name="_sub12" href="#_subfunctions" class="code">function paint_electrodes(sel,srf,vtx, colour, show_num);</a>
+0430    <span class="keyword">if</span> isempty(sel); <span class="keyword">return</span>; <span class="keyword">end</span>  <span class="comment">% Not required after matlab 2014</span>
+0431 
+0432    [u n m] = unique(srf(sel,:));
+0433    fv.vertices = vtx(u,:);
+0434    fv.faces = reshape(m,[],3);
+0435    h = patch(fv,<span class="string">'FaceColor'</span>,colour);
+0436    <span class="comment">% need 'direct' otherwise colourmap is screwed up</span>
+0437    set(h, <span class="string">'FaceLighting'</span>,<span class="string">'none'</span>, <span class="string">'CDataMapping'</span>, <span class="string">'direct'</span> );
+0438 
+0439 <a name="_sub13" href="#_subfunctions" class="code">function hh= show_3d_fem( mdl, options )</a>
+0440    <span class="keyword">if</span> <a href="../../../eidors/models/mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>(mdl) == 3  <span class="comment">% volume simplices</span>
+0441       ee= <a href="#_sub20" class="code" title="subfunction ee= get_boundary( mdl )">get_boundary</a>( mdl );
+0442    <span class="keyword">elseif</span> <a href="../../../eidors/models/mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>(mdl) == 2  <span class="comment">% volume simplices</span>
+0443       ee= mdl.elems;
+0444    <span class="keyword">elseif</span> <a href="../../../eidors/models/mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>(mdl) == 1  <span class="comment">% just lines between elements. Resistors?</span>
+0445       ee= mdl.elems;
+0446    <span class="keyword">else</span>
+0447       error(<span class="string">'Simplices are not 2D or 3D in mdl. Unsure how to display'</span>);
+0448    <span class="keyword">end</span>
+0449    hh= trimesh(ee, mdl.nodes(:,1), <span class="keyword">...</span>
+0450                    mdl.nodes(:,2), <span class="keyword">...</span>
+0451                    mdl.nodes(:,3));
+0452    set(hh, <span class="string">'EdgeColor'</span>, [0,0,0]);
+0453    axis(<span class="string">'image'</span>);
+0454    hidden(<span class="string">'off'</span>);
+0455 
+0456 <a name="_sub14" href="#_subfunctions" class="code">function hh=show_2d_fem( mdl, colours, imgno )</a>
+0457   szcolr = size(colours);
+0458   <span class="keyword">if</span> nargin&lt;3;
+0459       imgno = 1;
+0460       <span class="keyword">if</span> szcolr(1:2)&gt;1; 
+0461           <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'warning: show_fem only shows first image'</span>,1);
+0462       <span class="keyword">end</span>
+0463   <span class="keyword">end</span>
+0464 
+0465   <span class="keyword">if</span> szcolr(1:2) == [1,3]  <span class="comment">% no reconstruction  - just use white</span>
+0466      hh= patch(<span class="string">'Faces'</span>,mdl.elems,<span class="string">'Vertices'</span>,mdl.nodes, <span class="string">'facecolor'</span>,colours);
+0467   <span class="keyword">elseif</span> size(colours,1) == <a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(mdl);
+0468      colours = squeeze(colours(:,imgno,:));
+0469 
+0470      hh= patch(<span class="string">'Faces'</span>,mdl.elems,<span class="string">'Vertices'</span>,mdl.nodes, <span class="string">'facecolor'</span>,<span class="string">'flat'</span>, <span class="keyword">...</span>
+0471                <span class="string">'facevertexcdata'</span>,colours,<span class="string">'CDataMapping'</span>,<span class="string">'direct'</span>); 
+0472   <span class="keyword">elseif</span> size(colours,1) == <a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(mdl);
+0473      colours = squeeze(colours(:,imgno,:));
+0474      <span class="comment">% 'interp' not supported in octave</span>
+0475      hh= patch(<span class="string">'Faces'</span>,mdl.elems,<span class="string">'Vertices'</span>,mdl.nodes, <span class="string">'facecolor'</span>,<span class="string">'interp'</span>, <span class="keyword">...</span>
+0476                <span class="string">'facevertexcdata'</span>,colours,<span class="string">'CDataMapping'</span>,<span class="string">'direct'</span>); 
+0477   <span class="keyword">else</span>
+0478     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'warning: image elements and mesh do not match. Showing grey'</span>,1);
+0479     colours= [1,1,1]/2; <span class="comment">% Grey to show we're not sure</span>
+0480     hh= patch(<span class="string">'Faces'</span>,mdl.elems,<span class="string">'Vertices'</span>,mdl.nodes, <span class="string">'facecolor'</span>,colours);
+0481   <span class="keyword">end</span>
+0482 
+0483   set(hh, <span class="string">'FaceLighting'</span>,<span class="string">'none'</span>, <span class="string">'CDataMapping'</span>, <span class="string">'direct'</span> );
+0484 
+0485 <a name="_sub15" href="#_subfunctions" class="code">function hh=show_2d_fem_oldmatlab( mdl, colours, imgno )</a>
+0486   szcolr = size(colours);
+0487   <span class="keyword">if</span> nargin&lt;3;
+0488       imgno = 1;
+0489       <span class="keyword">if</span> szcolr(1:2)&gt;1;  <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'warning: show_fem only shows first image'</span>,1); <span class="keyword">end</span>
+0490   <span class="keyword">end</span>
+0491   
+0492 <span class="comment">% el_pos= avg_electrode_posn( mdl );</span>
+0493 <span class="comment">% plot_2d_mesh(mdl.nodes', mdl.elems', el_pos', .95, [0,0,0]);</span>
+0494 
+0495   S= 1; <span class="comment">%.95; % shrink factor</span>
+0496   elem= mdl.elems'; e= size(elem,2);
+0497   node= mdl.nodes'; n= size(node,2);
+0498   Xs=zeros(3,e);
+0499   Xs(:)=mdl.nodes(elem(:),1);
+0500   Xs= S*Xs+ (1-S)*ones(3,1)*mean(Xs);
+0501   Ys=zeros(3,e); Ys(:)=mdl.nodes(elem(:),2);
+0502   Ys= S*Ys+ (1-S)*ones(3,1)*mean(Ys);
+0503   Zs = zeros(size(Xs));
+0504   <span class="keyword">if</span> szcolr(1:2) == [1,3]  <span class="comment">% no reconstruction  - just use white</span>
+0505      hh= patch(Xs,Ys,zeros(3,e),colours);
+0506   <span class="keyword">elseif</span> size(colours,1) == e <span class="comment">% defined on elems</span>
+0507 <span class="comment">% THE STUPID MATLAB 7 WILL RESET THE COLOURBAR WHENEVER YOU DO A PATCH. DAMN.</span>
+0508      colours = permute(colours(:,imgno,:),[2,1,3]);
+0509   <span class="keyword">elseif</span> size(colours,1) == n  <span class="comment">% multiple images</span>
+0510      colours = colours(elem(:), imgno, :);
+0511      colours = reshape( colours, size(elem,1), size(elem,2), []);
+0512   <span class="keyword">else</span>
+0513     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'warning: image elements and mesh do not match. Showing grey'</span>,1);
+0514     colours= [1,1,1]/2; <span class="comment">% Grey to show we're not sure</span>
+0515   <span class="keyword">end</span>
+0516 
+0517   hh= patch(Xs,Ys,Zs,colours);
+0518   set(hh, <span class="string">'FaceLighting'</span>,<span class="string">'none'</span>, <span class="string">'CDataMapping'</span>, <span class="string">'direct'</span> );
+0519   <span class="comment">% FOR NODE RGB MATLAB SCREWS UP THE COLOURS FOR US (ONCE AGAIN). THERE MUST</span>
+0520   <span class="comment">% BE SOME KIND OF SECRET FLAG@@@</span>
+0521 
+0522   max_x= max(mdl.nodes(:,1)); min_x= min(mdl.nodes(:,1));
+0523   max_y= max(mdl.nodes(:,2)); min_y= min(mdl.nodes(:,2));
+0524   axis([ mean([max_x,min_x]) + 0.55*[-1,1]*(max_x-min_x), <span class="keyword">...</span>
+0525          mean([max_y,min_y]) + 0.55*[-1,1]*(max_y-min_y) ]);
+0526 
+0527 
+0528 
+0529 <a name="_sub16" href="#_subfunctions" class="code">function old_code_3d_plot</a>
+0530   domesnum= 0;
+0531   donodenum= 0;
+0532   dotext=0;
+0533 
+0534   xxx=zeros(4,e); xxx(:)=NODE(1,ELEM(:));
+0535   xxx= S*xxx+ (1-S)*ones(4,1)*mean(xxx);
+0536   yyy=zeros(4,e); yyy(:)=NODE(2,ELEM(:));
+0537   yyy= S*yyy+ (1-S)*ones(4,1)*mean(yyy);
+0538   zzz=zeros(4,e); zzz(:)=NODE(3,ELEM(:));
+0539   zzz= S*zzz+ (1-S)*ones(4,1)*mean(zzz);
+0540   plot3( xxx([1 2 3 1 4 2 3 4],:), <span class="keyword">...</span>
+0541          yyy([1 2 3 1 4 2 3 4],:), <span class="keyword">...</span>
+0542          zzz([1 2 3 1 4 2 3 4],:),<span class="string">'k'</span> );
+0543   hold on;
+0544   xy=NODE(1:2,MES(1,:));
+0545   plot3(arrow*xy,arrow*[0 1;-1 0]*xy,ones(8,1)*NODE(3,MES(1,:)),<span class="string">'b'</span>) 
+0546   hold off;
+0547   axis([ [-1.1 1.1]*max(NODE(1,:)) [-1.1 1.1]*max(NODE(2,:)) <span class="keyword">...</span>
+0548          [-1.1 1.1]*max(NODE(3,:))  ])
+0549 
+0550 
+0551 <a name="_sub17" href="#_subfunctions" class="code">function plot_2d_mesh(NODE,ELEM,el_pos, S, options)</a>
+0552 <span class="comment">%  if options(1) -&gt; do mesh num</span>
+0553 <span class="comment">%  if options(2) -&gt; do node num</span>
+0554 <span class="comment">%  if options(3) -&gt; do text</span>
+0555 <span class="comment">%  S=.95; % shrink simplices by this factor</span>
+0556 
+0557   e=size(ELEM,2);
+0558   d=size(ELEM,1);
+0559   R= zeros(1,e);
+0560 
+0561 
+0562   arrow= [1.02 0;1.06 .05;1.06 .02;1.1 .02; <span class="keyword">...</span>
+0563           1.1 -.02; 1.06 -.02;1.06 -.05;1.02 0];
+0564   <span class="comment">% arrow= [1.06 0;1.18 .15;1.18 .06;1.3 .06; ...</span>
+0565   <span class="comment">%          1.3 -.06; 1.18 -.06;1.18 -.15;1.06 0];</span>
+0566   xxx=zeros(3,e); xxx(:)=NODE(1,ELEM(:));
+0567   xxx= S*xxx+ (1-S)*ones(3,1)*mean(xxx);
+0568   xxx= [xxx;xxx(1,:)];
+0569 
+0570   yyy=zeros(3,e); yyy(:)=NODE(2,ELEM(:));
+0571   yyy= S*yyy+ (1-S)*ones(3,1)*mean(yyy);
+0572   yyy= [yyy;yyy(1,:)];
+0573 
+0574   <span class="keyword">if</span> isempty(el_pos)
+0575       plot(xxx,yyy,<span class="string">'b'</span>);
+0576   <span class="keyword">else</span>
+0577       xy= el_pos;
+0578       hh=plot([xxx;xxx(1,:)],[yyy;yyy(1,:)],<span class="string">'b'</span>, <span class="keyword">...</span>
+0579               arrow*xy,arrow*[0 1;-1 0]*xy,<span class="string">'r'</span>);
+0580       set(hh(find(R&gt;0)),<span class="string">'Color'</span>,[1 0 0],<span class="string">'LineWidth'</span>,2);
+0581       set(hh(find(R&lt;0)),<span class="string">'Color'</span>,[0 0 1],<span class="string">'LineWidth'</span>,2);
+0582   <span class="keyword">end</span>
+0583 
+0584   <span class="keyword">if</span> options(1) <span class="comment">%domesnum</span>
+0585     mesnum= reshape(sprintf(<span class="string">' %-2d'</span>,[0:15]),3,16)';
+0586     text(NODE(1,MES(1,:))*1.08,NODE(2,MES(1,:))*1.08,mesnum, <span class="keyword">...</span>
+0587          <span class="string">'Color'</span>,<span class="string">'green'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>);
+0588   <span class="keyword">end</span> <span class="comment">%if domesnum</span>
+0589 
+0590   <span class="keyword">if</span> options(2) <span class="comment">%donodenum</span>
+0591     nodenum= reshape(sprintf(<span class="string">'%3d'</span>,1:length(NODE)),3,length(NODE))';
+0592     text(NODE(1,:),NODE(2,:),nodenum, <span class="keyword">...</span>
+0593          <span class="string">'Color'</span>,<span class="string">'yellow'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>,<span class="string">'FontSize'</span>,8);
+0594   <span class="keyword">end</span> <span class="comment">%if domesnum</span>
+0595 
+0596   <span class="keyword">if</span> options(3) <span class="comment">%dotext</span>
+0597     numeros= reshape(sprintf(<span class="string">'%4d'</span>,[1:e]),4,e)';
+0598 <span class="comment">%   decal= ( 2-0.2*floor(log10([1:e]')))*sqrt(axis*axis'/4)/100;</span>
+0599     decal= .02;
+0600     xcoor=mean(NODE(2*ELEM-1))';
+0601     ycoor=mean(NODE(2*ELEM))';
+0602     text(xcoor-decal,ycoor,numeros,<span class="string">'FontSize'</span>,8, <span class="keyword">...</span>
+0603          <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>);
+0604 
+0605   <span class="keyword">end</span>  <span class="comment">% if nargin~=0</span>
+0606   axis([ [-1.1 1.1]*max(NODE(1,:)) [-1.1 1.1]*max(NODE(2,:)) ])
+0607 
+0608 <a name="_sub18" href="#_subfunctions" class="code">function  mes= avg_electrode_posn( mdl )</a>
+0609    <span class="keyword">if</span> ~isfield(mdl,<span class="string">'electrode'</span>); mes=[]; <span class="keyword">return</span>; <span class="keyword">end</span>
+0610    n_elec= length( mdl.electrode );
+0611    nodes = mdl.nodes;
+0612    mes= zeros( n_elec, <a href="../../../eidors/models/mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>(mdl) )
+0613    <span class="keyword">for</span> i= 1:n_elec
+0614       e_nodes=  mdl.electrode(i).nodes;
+0615       mes(i,:)= mean( nodes(e_nodes,:) , 1 );
+0616    <span class="keyword">end</span>
+0617 
+0618 <a name="_sub19" href="#_subfunctions" class="code">function colour= electr_colour( e);</a>
+0619     <span class="keyword">if</span> e==1;
+0620        colour = [0,.7,0]; <span class="comment">% light green electrode #1</span>
+0621     <span class="keyword">elseif</span> e==2
+0622        colour = [0,.5,0]; <span class="comment">% mid-green electrode #2</span>
+0623     <span class="keyword">else</span>
+0624        colour = [0,.3,0]; <span class="comment">% dark green</span>
+0625     <span class="keyword">end</span>
+0626 
+0627 <a name="_sub20" href="#_subfunctions" class="code">function ee= get_boundary( mdl )</a>
+0628    <span class="keyword">if</span> isfield(mdl,<span class="string">'boundary'</span>)
+0629        ee= mdl.boundary;
+0630    <span class="keyword">else</span>
+0631        <span class="comment">% calc and cache boundary</span>
+0632        ee = <a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>( mdl.elems );
+0633    <span class="keyword">end</span>
+0634 
+0635 <span class="comment">% Function copied from dev/n_polydorides/</span>
+0636 <a name="_sub21" href="#_subfunctions" class="code">function hh_=repaint_inho(mat,mat_ref,vtx,simp, thresh, clr_def);</a>
+0637 <span class="comment">%function repaint_inho(mat,mat_ref,vtx,simp, thresh);</span>
+0638 <span class="comment">%</span>
+0639 <span class="comment">%Repaints the simulated inhomogeneity according to the reference</span>
+0640 <span class="comment">%distribution. (Increase -&gt; Red, Decrease -&gt; Blue)</span>
+0641 <span class="comment">%</span>
+0642 <span class="comment">%mat     = The simulated (targeted) distribution.</span>
+0643 <span class="comment">%mat_ref = The known initial (homogeneous) distribution.</span>
+0644 <span class="comment">%        = Override default unless 'use_global'</span>
+0645 <span class="comment">%vtx     = The vertices matrix.</span>
+0646 <span class="comment">%simp    = The simplices matrix.</span>
+0647 <span class="comment">%thresh  = Threshold to show imaged region (or [] for default)</span>
+0648 <span class="comment">%clr_def = Colour definitions val.calc_colours.field etc</span>
+0649 
+0650 
+0651 <span class="keyword">if</span> nargin&lt;5
+0652     thresh = [];
+0653 <span class="keyword">end</span>
+0654 <span class="keyword">if</span> nargin&lt;6
+0655     clr_def = [];
+0656 <span class="keyword">end</span>
+0657 <span class="keyword">if</span> strcmp(mat_ref, <span class="string">'use_global'</span>)
+0658    img.calc_colours.ref_level = mat_ref;
+0659 <span class="keyword">end</span>
+0660 
+0661 <span class="keyword">if</span> isempty(thresh)
+0662     thresh = 1/4;
+0663 <span class="keyword">end</span>
+0664 
+0665 <span class="comment">% looks best if eidors_colours.greylev &lt; 0</span>
+0666 [colours,scl_data] = <a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>( mat, clr_def, 0);
+0667 ii=find( abs(scl_data) &gt; thresh);
+0668 this_x = simp(ii,:);
+0669 
+0670 colours= permute(colours(ii,:,:),[2,1,3]);
+0671 ELEM= vtx';
+0672 
+0673 Xs=   zeros(3,length(ii));
+0674 Ys=   zeros(3,length(ii));
+0675 Zs=   zeros(3,length(ii));
+0676 <span class="keyword">switch</span>(size(this_x,2))
+0677     <span class="keyword">case</span> 3
+0678         idx_ = [1;2;3];
+0679     <span class="keyword">case</span> 4
+0680         idx_ = [[1;2;3], <span class="keyword">...</span>
+0681                 [1;2;4], <span class="keyword">...</span>
+0682                 [1;3;4], <span class="keyword">...</span>
+0683                 [2;3;4]];
+0684 <span class="keyword">end</span>
+0685 hh_=[];
+0686 <span class="keyword">for</span> idx=idx_
+0687    Xs(:)=vtx(this_x(:,idx)',1);
+0688    Ys(:)=vtx(this_x(:,idx)',2);
+0689    Zs(:)=vtx(this_x(:,idx)',3);
+0690 
+0691    <span class="keyword">if</span> size(colours,1)==1 &amp;&amp; size(colours,2)==3
+0692       <span class="comment">% need to work around ^%$#%$# matlab bug which</span>
+0693       <span class="comment">% forces an incorrect interpretation is colours of this size</span>
+0694       hh= patch(Xs(:,[1:3,1]), <span class="keyword">...</span>
+0695                 Ys(:,[1:3,1]), <span class="keyword">...</span>
+0696                 Zs(:,[1:3,1]), <span class="keyword">...</span>
+0697                 colours(:,[1:3,1]), <span class="keyword">...</span>
+0698             <span class="string">'EdgeColor'</span>,<span class="string">'none'</span>,<span class="string">'CDataMapping'</span>,<span class="string">'direct'</span>);
+0699    <span class="keyword">else</span>
+0700       hh= patch(Xs,Ys,Zs,colours, <span class="keyword">...</span>
+0701             <span class="string">'EdgeColor'</span>,<span class="string">'none'</span>,<span class="string">'CDataMapping'</span>,<span class="string">'direct'</span>);
+0702    <span class="keyword">end</span>
+0703    hh_ = [hh_,hh];
+0704 <span class="keyword">end</span>
+0705 
+0706 
+0707 <span class="comment">% TESTS:</span>
+0708 <a name="_sub22" href="#_subfunctions" class="code">function do_unit_test</a>
+0709    clf
+0710 
+0711    img=<a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c0'</span>,8)); 
+0712    img.elem_data=rand(size(img.fwd_model.elems,1),1);
+0713    subplot(4,4,1); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img.fwd_model,[0,0,1]) 
+0714    title(<span class="string">'regular mesh numbered'</span>);
+0715 
+0716 <span class="keyword">if</span> ~exist(<span class="string">'OCTAVE_VERSION'</span>)
+0717    imgn = rmfield(img,<span class="string">'elem_data'</span>);
+0718    imgn.node_data=rand(size(img.fwd_model.nodes,1),1);
+0719    subplot(4,4,9); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imgn) 
+0720    title(<span class="string">'interpolated node colours'</span>);
+0721 <span class="keyword">end</span>
+0722 
+0723    img2(1) = img; img2(2) = img;
+0724    subplot(4,4,2); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img,[1]);
+0725    title(<span class="string">'colours with legend'</span>);
+0726    subplot(4,4,3); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img2,[0,1]);
+0727    title(<span class="string">'colours with legend'</span>);
+0728    img.calc_colours.mapped_colour = 0; <span class="comment">% USE RGB colours</span>
+0729    subplot(4,4,4); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img,[0,1,1]);
+0730    title(<span class="string">'RGB colours'</span>);
+0731    subplot(4,4,4); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0732    title(<span class="string">'RGB colours'</span>);
+0733 
+0734    img.elem_data = [1:10];
+0735    subplot(4,4,12);<a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img); <span class="comment">%Should show grey</span>
+0736    title(<span class="string">'error -&gt; show grey'</span>);
+0737 
+0738 <span class="keyword">if</span> ~exist(<span class="string">'OCTAVE_VERSION'</span>)
+0739    imgn.calc_colours.mapped_colour = 0; <span class="comment">% USE RGB colours</span>
+0740    subplot(4,4,10);<a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imgn,[0,1]) 
+0741    title(<span class="string">'interpolated node colours'</span>);
+0742 
+0743 
+0744    subplot(4,4,11);hh=<a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imgn); set(hh,<span class="string">'EdgeColor'</span>,[0,0,1]);
+0745    title(<span class="string">'with edge colours'</span>);
+0746 <span class="keyword">end</span>
+0747 
+0748    img3=<a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]));
+0749    img3.elem_data= randn(828,1);                       
+0750    subplot(4,4,5); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img3.fwd_model) 
+0751    subplot(4,4,6); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img3,[1])
+0752    subplot(4,4,7); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img3,[1,1])
+0753    subplot(4,4,8); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img3,[1,1,1])
+0754 
+0755    fmdl=getfield(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c0'</span>,8),<span class="string">'fwd_model'</span>); 
+0756    fmdl.mat_idx{1} = [3,7,13,14]; fmdl.mat_idx{2} = [14,23];
+0757    fmdlA= <a href="../../../eidors/meshing/mat_idx_to_electrode.html" class="code" title="function [fmdl,rm_elems] = mat_idx_to_electrode(fmdl, mat_idxes)">mat_idx_to_electrode</a>(fmdl,{1,2});
+0758    subplot(4,4,13); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdlA,[0,0,1]); title <span class="string">'elec faces'</span>; 
+0759 
+0760    fmdl.mat_idx_to_electrode.nodes_electrode= true;
+0761    fmdlB= <a href="../../../eidors/meshing/mat_idx_to_electrode.html" class="code" title="function [fmdl,rm_elems] = mat_idx_to_electrode(fmdl, mat_idxes)">mat_idx_to_electrode</a>(fmdl,{1,2});
+0762    subplot(4,4,14); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdlB,[0,0,1]); title <span class="string">'elec nodes'</span>;
+0763 
+0764    fmdl3=getfield(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]),<span class="string">'fwd_model'</span>);
+0765    fmdl3.electrode(1:16)= [];
+0766    fmdl3.mat_idx{1}= [543;546;549;552];
+0767    fmdl3.mat_idx{2}= [817;818;819;820;821;822;823;824;825;826;827;828];
+0768    fmdlA= <a href="../../../eidors/meshing/mat_idx_to_electrode.html" class="code" title="function [fmdl,rm_elems] = mat_idx_to_electrode(fmdl, mat_idxes)">mat_idx_to_electrode</a>(fmdl3,{1:2});
+0769 
+0770    subplot(4,4,15); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdlA,[0,1]); view(0,20);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

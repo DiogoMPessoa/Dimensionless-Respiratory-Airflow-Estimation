@@ -1,0 +1,297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of inv_solve_abs_annealingMetropolis_params</title>
+  <meta name="keywords" content="inv_solve_abs_annealingMetropolis_params">
+  <meta name="description" content="INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; inv_solve_abs_annealingMetropolis_params.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>inv_solve_abs_annealingMetropolis_params
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [img]= inv_solve_abs_annealingMetropolis_params(inv_model, data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method. 
+ This function operates with a mapping function linking the inverse
+ parameters linking the inverse parameters to the forward elements.
+ The mapping function is defined in the inv_model.params_mapping structure.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../../eidors/graphics/matlab/show_pseudosection.html" class="code" title="function fwd_model= show_pseudosection( fwd_model, data, orientation)">show_pseudosection</a>	SHOW_PSEUDOSECTION: show a pseudo-section image of data</li><li><a href="../../../eidors/meshing/netgen/ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>	NG_MK_GEN_MODELS: create generic models using netgen</li><li><a href="../../../eidors/models/interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>	INTERP_MESH: calculate interpolation points onto mdl elements</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>	STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="inv_solve_abs_annealingSimplex_params.html" class="code" title="function [img]= inv_solve_abs_annealingSimplex_params(inv_model, data)">inv_solve_abs_annealingSimplex_params</a>	INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function cost= objectiveFunction(img,data,alpha)</a></li><li><a href="#_sub2" class="code">function do_unit_test</a></li><li><a href="#_sub3" class="code">function img = border_mapping(img)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [img]= inv_solve_abs_annealingMetropolis_params(inv_model, data)</a>
+0002 <span class="comment">% INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method.</span>
+0003 <span class="comment">% This function operates with a mapping function linking the inverse</span>
+0004 <span class="comment">% parameters linking the inverse parameters to the forward elements.</span>
+0005 <span class="comment">% The mapping function is defined in the inv_model.params_mapping structure.</span>
+0006 
+0007 <span class="comment">% img= annealingSimplex( inv_model, data)</span>
+0008 <span class="comment">% img        =&gt; output image (or vector of images)</span>
+0009 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0010 <span class="comment">% data      =&gt; EIT data</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Parameters:</span>
+0013 <span class="comment">%     inv_model.parameters.tempInit = Initial temperature</span>
+0014 <span class="comment">%     inv_model.parameters.tempfinale = Final temperature</span>
+0015 <span class="comment">%     inv_model.parameters.cooldown = Temperature decrease</span>
+0016 <span class="comment">%     inv_model.parameters.normalisation</span>
+0017 
+0018 <span class="comment">% (C) 2012 Nolwenn Lesparre. License: GPL version 2 or version 3</span>
+0019 <span class="comment">% $Id: inv_solve_abs_annealingMetropolis_params.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0020 
+0021 
+0022 <span class="comment">% Necessity to define a different parameterisation of the inverse problem</span>
+0023 <span class="comment">% by respect to the forward problem one. In that case, a mapping function</span>
+0024 <span class="comment">% rely the elements to reconstruct the medium conductivity</span>
+0025 
+0026 <span class="keyword">if</span> ischar(inv_model) &amp;&amp; strcmp(inv_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub2" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0027 
+0028 <span class="keyword">if</span> isfield(inv_model,<span class="string">'params_mapping'</span>) &amp;&amp;  isfield(inv_model.params_mapping,<span class="string">'function'</span>)
+0029     mapping_function= inv_model.params_mapping.function;
+0030     img= feval(mapping_function,inv_model);
+0031 <span class="keyword">else</span>
+0032     error(<span class="string">'The inverse model must contain a field &quot;params_mapping&quot; where a mapping function links the forward and inverse parameters'</span>);
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% Estimate the number of parameters to adjust</span>
+0036 n_parameters= size(img.params_mapping.params,1);
+0037 
+0038 <span class="keyword">if</span> isfield(inv_model.parameters,<span class="string">'temp'</span>)
+0039     tempInit = inv_model.parameters.temp;
+0040     tempfinale= inv_model.parameters.tempfinale;
+0041     cooldown= inv_model.parameters.cooldown;
+0042     nMetro= inv_model.parameters.nMetro;
+0043 <span class="keyword">else</span>
+0044     tempInit = 1000;
+0045     tempfinale= 0.01;
+0046     cooldown= 0.95;
+0047     nMetro= 300;
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="keyword">if</span> ~isfield(inv_model.parameters,<span class="string">'normalisation'</span>)
+0051     img.parameters.normalisation= 1;
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="keyword">if</span> ~isfield(inv_model.params_mapping,<span class="string">'rangeParams'</span>)
+0055     rangeParams= zeros(n_parameters,2);
+0056     rangeParams(:,1)= -6; rangeParams(:,2)= 6;
+0057 <span class="keyword">else</span>
+0058     rangeParams= inv_model.params_mapping.rangeParams;
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="keyword">if</span> ~isfield(inv_model.params_mapping,<span class="string">'alpha'</span>)
+0062     alpha= 1;
+0063 <span class="keyword">else</span>
+0064     alpha= inv_model.params_mapping.alpha;
+0065 <span class="keyword">end</span>
+0066 
+0067 temp= tempInit; k= 1;
+0068 <span class="keyword">while</span> temp&gt;=tempfinale
+0069     temp= temp*cooldown;
+0070     k=k+1;
+0071 <span class="keyword">end</span>
+0072 
+0073 disp([<span class="string">'Number of iteration '</span> num2str(k)])
+0074 
+0075 
+0076 
+0077 <span class="comment">% Generates np+1 models with a Gaussian law with a mean equals to</span>
+0078 <span class="comment">% inv_model.params_mapping.params and a standard deviation of</span>
+0079 <span class="comment">% inv_model.params_mapping.perturb</span>
+0080 <span class="keyword">if</span> isfield(inv_model.params_mapping,<span class="string">'inital_model'</span>)
+0081     model= inv_model.params_mapping.inital_model;
+0082 <span class="keyword">else</span>
+0083     np= numel(inv_model.params_mapping.params);
+0084     model= 10.^((rangeParams(np,1).*(rangeParams(:,2)-rangeParams(:,1))+rangeParams(:,1)));    
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="comment">% Estimate the cost of the initial model</span>
+0088 img.params_mapping.params= model;
+0089 cost= <a href="#_sub1" class="code" title="subfunction cost= objectiveFunction(img,data,alpha)">objectiveFunction</a>(img,data,alpha);
+0090 costRef= cost;
+0091 
+0092 <span class="comment">% Proceed to the Metropolis regression while reducing the temperature</span>
+0093 <span class="comment">%% Run over the Simulated annealing loops</span>
+0094 
+0095 temp= tempInit;
+0096 n_temp= 1;
+0097 <span class="keyword">while</span> temp &gt;= tempfinale <span class="comment">% Loop over temperature</span>
+0098     <span class="keyword">for</span> n= 1:nMetro <span class="comment">% Metropolis loop</span>
+0099         model_try= model;
+0100         idx_parametr= randi(n_parameters,1,1);
+0101         model_try(idx_parametr)= (rand(1,1)*(rangeParams(idx_parametr,1))+rangeParams(idx_parametr,2));
+0102         img.params_mapping.params= model_try;
+0103         cost_try= <a href="#_sub1" class="code" title="subfunction cost= objectiveFunction(img,data,alpha)">objectiveFunction</a>(img,data,alpha);
+0104         <span class="keyword">if</span> rand &lt;= (exp(-cost_try/costRef)/exp(-cost/costRef))^(1/temp) <span class="comment">% Metropolis test for acceptance of trial model</span>
+0105             likelihood= exp(-cost_try/costRef);
+0106             cost= cost_try;
+0107             model= model_try;
+0108         <span class="keyword">end</span>
+0109     <span class="keyword">end</span> <span class="comment">% End of Metropolis loop</span>
+0110     resRec(n_temp)= cost;
+0111     res_parRec(n_temp,:)= model';
+0112     tempRec(n_temp)= temp;
+0113     likelihoodRec(n_temp)= likelihood;
+0114         
+0115     n_temp= n_temp+1;
+0116     temp = temp*cooldown;    <span class="comment">% Decrease the temperature</span>
+0117 <span class="keyword">end</span> <span class="comment">% End of temperature loop</span>
+0118 res_parRec(:,3:4)= 10.^res_parRec(:,3:4);
+0119 
+0120 screenSize = get(0,<span class="string">'ScreenSize'</span>);
+0121 h = figure;
+0122 set(h,<span class="string">'Position'</span>,[0 0 screenSize(3)/2 screenSize(4)]);
+0123 subplot(4,1,1)
+0124 plot(tempRec,res_parRec(:,1),tempRec,res_parRec(:,2),<span class="string">'linewidth'</span>,2)
+0125 set(gca,<span class="string">'fontsize'</span>,16,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'xDir'</span>,<span class="string">'reverse'</span>,<span class="string">'xScale'</span>,<span class="string">'log'</span>)
+0126 subplot(4,1,2)
+0127 plot(tempRec,res_parRec(:,3),tempRec,res_parRec(:,4),<span class="string">'linewidth'</span>,2)
+0128 set(gca,<span class="string">'fontsize'</span>,16,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'xDir'</span>,<span class="string">'reverse'</span>,<span class="string">'xScale'</span>,<span class="string">'log'</span>,<span class="string">'yScale'</span>,<span class="string">'log'</span>)
+0129 subplot(4,1,3)
+0130 plot(tempRec,resRec,<span class="string">'linewidth'</span>,2)
+0131 set(gca,<span class="string">'fontsize'</span>,16,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'xDir'</span>,<span class="string">'reverse'</span>,<span class="string">'xScale'</span>,<span class="string">'log'</span>,<span class="string">'yScale'</span>,<span class="string">'log'</span>)
+0132 subplot(4,1,4)
+0133 plot(tempRec,likelihoodRec,<span class="string">'linewidth'</span>,2)
+0134 set(gca,<span class="string">'fontsize'</span>,16,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'xDir'</span>,<span class="string">'reverse'</span>,<span class="string">'xScale'</span>,<span class="string">'log'</span>)
+0135 
+0136 [res_parRec(<span class="keyword">end</span>,1) res_parRec(<span class="keyword">end</span>,2)]
+0137 [res_parRec(<span class="keyword">end</span>,3) res_parRec(<span class="keyword">end</span>,4)]
+0138 
+0139 <span class="keyword">end</span>
+0140 
+0141 <a name="_sub1" href="#_subfunctions" class="code">function cost= objectiveFunction(img,data,alpha)</a>
+0142 vsim=  <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0143 residuals= img.parameters.normalisation*(vsim.meas-data);
+0144 cost= sqrt(sum(residuals.^2))/alpha;
+0145 <span class="keyword">end</span>
+0146 
+0147 
+0148 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test</a>
+0149 shape_str = [<span class="string">'solid top    = plane(0,0,0;0,1,0);\n'</span> <span class="keyword">...</span>
+0150              <span class="string">'solid mainobj= top and orthobrick(-100,-200,-100;410,10,100) -maxh=20.0;\n'</span>];
+0151 e0 = linspace(0,310,64)';
+0152 elec_pos = [e0,0*e0,0*e0,1+0*e0,0*e0,0*e0];
+0153 elec_shape= [0.1,0.1,1];
+0154 elec_obj = <span class="string">'top'</span>;
+0155 fmdl = <a href="../../../eidors/meshing/netgen/ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>(shape_str, elec_pos, elec_shape, elec_obj);
+0156 fmdl.stimulation= <a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 64, <span class="string">'Wenner'</span>, {<span class="string">'spacings'</span>, 1:32} );
+0157 
+0158 img= <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1/20);
+0159 fm_pts= <a href="../../../eidors/models/interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>(fmdl);
+0160 x_bary= fm_pts(:,1); z_bary= fm_pts(:,2);
+0161 
+0162 z_params= (min(fmdl.nodes(:,2)):max(fmdl.nodes(:,2)))';
+0163 a = 0.36; b = 130;
+0164 x_params= a*z_params+b;
+0165 xlim=interp1(z_params,x_params,z_bary);
+0166 img.elem_data(x_bary&gt;xlim)= 1/120;
+0167 
+0168 dd  = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0169 sig= sqrt(norm(dd.meas)); m= size(dd.meas,1);
+0170 noise= .05;
+0171 ddn= dd;
+0172 ddn.meas = dd.meas + noise*sig*randn(m,1);
+0173 
+0174 img1= <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1);
+0175 vh1= <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img1);
+0176 normalisation= 1./vh1.meas;
+0177 I= speye(length(normalisation));
+0178 I(1:size(I,1)+1:size(I,1)*size(I,1))= normalisation;
+0179 
+0180 a = 0.3; b = 150;
+0181 res_params= log([10 100]');
+0182 
+0183 z_params= (min(fmdl.nodes(:,2)):max(fmdl.nodes(:,2)))';
+0184 x_params= a*z_params+b;
+0185 
+0186 imdl = <a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'inv_model'</span>,<span class="string">'testNoisy'</span>);
+0187 imdl.fwd_model= fmdl;
+0188 imdl.params_mapping.params= [a; b ; res_params];
+0189 imdl.params_mapping.perturb= [0.1; 50; 2 ; 2];
+0190 
+0191 imdl.params_mapping.function = @<a href="#_sub3" class="code" title="subfunction img = border_mapping(img)">border_mapping</a>;
+0192 imdl.params_mapping.data.x_bary = x_bary;
+0193 imdl.params_mapping.data.z_bary = z_bary;
+0194 imdl.params_mapping.data.res_params = res_params;
+0195 imdl.params_mapping.data.x_params = x_params;
+0196 imdl.params_mapping.data.z_params = z_params;
+0197 imdl.params_mapping.data.a = a;
+0198 imdl.params_mapping.data.b = b;
+0199 imdl.reconst_type= <span class="string">'absolute'</span>;
+0200 imdl.solve = @<a href="inv_solve_abs_annealingSimplex_params.html" class="code" title="function [img]= inv_solve_abs_annealingSimplex_params(inv_model, data)">inv_solve_abs_annealingSimplex_params</a>;
+0201 imdl.normalize_measurements= 1;
+0202 imdl.parameters.normalisation= I;
+0203 
+0204 imdl.parameters.temp= 1000;
+0205 imdl.parameters.tempfinale= 1;
+0206 imdl.parameters.cooldown= 0.97;<span class="comment">% 0.95;</span>
+0207 imdl.parameters.nMetro= 1;
+0208 imdl.jacobian_bkgnd.value = 1;
+0209 <span class="comment">% imgr= inv_solve(imdl, dd);</span>
+0210 imgr= <a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, ddn);
+0211 img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>( imdl );
+0212 img.elem_data= imgr.elem_data;
+0213 vAS= <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img); vAS = vAS.meas;
+0214 
+0215 figure; hist(I*(dd.meas-vAS),50)
+0216 <a href="../../../eidors/graphics/matlab/show_pseudosection.html" class="code" title="function fwd_model= show_pseudosection( fwd_model, data, orientation)">show_pseudosection</a>( fmdl, I*dd.meas, <span class="string">'HorizontalDownward'</span>)
+0217 <a href="../../../eidors/graphics/matlab/show_pseudosection.html" class="code" title="function fwd_model= show_pseudosection( fwd_model, data, orientation)">show_pseudosection</a>( fmdl, I*vAS, <span class="string">'HorizontalDownward'</span>)
+0218 <a href="../../../eidors/graphics/matlab/show_pseudosection.html" class="code" title="function fwd_model= show_pseudosection( fwd_model, data, orientation)">show_pseudosection</a>( fmdl, (vAS-dd.meas)./dd.meas*100,<span class="string">'HorizontalDownward'</span>)
+0219 
+0220 <span class="keyword">end</span>
+0221 
+0222 
+0223 <a name="_sub3" href="#_subfunctions" class="code">function img = border_mapping(img)</a>
+0224 <span class="comment">%% Function to be called to perform the mapping in the forward problem</span>
+0225 z= img.params_mapping.data.z_params;
+0226 res= img.params_mapping.params(end-1:end);
+0227 
+0228 a= img.params_mapping.params(1);
+0229 b= img.params_mapping.params(2);
+0230 x= z*a+b; 
+0231 
+0232 xi= img.params_mapping.data.x_bary;
+0233 zi= img.params_mapping.data.z_bary;
+0234 xlim=interp1(z,x,zi);
+0235 
+0236 vi= zeros(size(img.fwd_model.elems,1),1) + res(1);
+0237 vi(xi&gt;xlim)= res(2);
+0238 
+0239 img.elem_data= exp(-vi);
+0240 
+0241 img.params_mapping.data.x_params = x;
+0242 img.params_mapping.params= [a ; b ;  res];
+0243 
+0244 <span class="keyword">end</span>
+0245</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

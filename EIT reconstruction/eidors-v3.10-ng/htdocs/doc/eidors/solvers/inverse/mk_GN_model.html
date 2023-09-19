@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_GN_model</title>
+  <meta name="keywords" content="mk_GN_model">
+  <meta name="description" content="MK_GN_MODEL: make EIDORS inverse models using the GREIT approach">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; mk_GN_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>mk_GN_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>MK_GN_MODEL: make EIDORS inverse models using the GREIT approach</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function imdl = mk_GN_model(img, opt, lambda) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> MK_GN_MODEL: make EIDORS inverse models using the GREIT approach
+   imdl = mk_GN_model(img,  opt, lambda)
+
+ Output: 
+   imdl      - GREIT inverse model
+
+ Parameters:
+   img       - image of the forward model including stimulation pattern, etc.
+   options   - structure with fields:
+     imgsz         - [xsz ysz] reconstructed image size in pixels 
+                     (default: [32 32])
+     square_pixels - forces square pixels if 1 (default: 0)
+     RtRprior      - desired regularization prior:
+                     'laplace' (default), 'noser' or 'tikhonov'
+     noise_figure - the noise figure (NF) to achieve. 
+     meas_icov    - the inverse of the noise covariance matrix.
+   lambda    - set a fixed hyperparameter, if empty (default value) 
+               the hyperparameter is chosen acording to the desired noise figure
+
+ See also MK_GREIT_MODEL (from which this script was adapted)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../../eidors/models/interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>	INTERP_MESH: calculate interpolation points onto mdl elements</li><li><a href="../../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="../../../eidors/models/mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>	MK_COARSE_FINE_MAPPING: create a mapping matrix from coarse to fine FEM</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="../../../eidors/models/mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>	MK_PIXEL_SLICE create a pixel model to reconstruct on</li><li><a href="../../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>	MK_STIM_PATTERNS: create an EIDORS stimulation pattern structure</li><li><a href="../../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>	SELECT_IMDL: select pre-packaged inverse model features</li><li><a href="choose_image_SNR.html" class="code" title="function HP = choose_image_SNR(imdl)">choose_image_SNR</a>	% CHOOSE_IMAGE_SNR: choose hyperparameter based on image SNR calculation</li><li><a href="choose_noise_figure.html" class="code" title="function HP= choose_noise_figure( inv_model );">choose_noise_figure</a>	CHOOSE_NOISE_FIGURE: choose hyperparameter based on NF calculation</li><li><a href="mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>	MK_GN_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="prior_laplace.html" class="code" title="function Reg= prior_laplace( inv_model )">prior_laplace</a>	PRIOR_LAPLACE calculate image prior</li><li><a href="prior_noser.html" class="code" title="function Reg= prior_noser( inv_model );">prior_noser</a>	PRIOR_NOSER calculate image prior</li><li><a href="prior_tikhonov.html" class="code" title="function Reg= prior_tikhonov( inv_model );">prior_tikhonov</a>	PRIOR_TIKHONOV calculate image prior</li><li><a href="../../../eidors/tools/test_performance.html" class="code" title="function [r, params] =  test_performance( imdls, fmdl );">test_performance</a>	TEST_PERFORMANCE: test of difference reconstruction algorithms</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="calc_lambda_regtools.html" class="code" title="function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)">calc_lambda_regtools</a>	% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)</li><li><a href="mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>	MK_GN_MODEL: make EIDORS inverse models using the GREIT approach</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function opt = parse_options(opt,fmdl,imdl)</a></li><li><a href="#_sub2" class="code">function do_unit_test()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function imdl = mk_GN_model(img, opt, lambda)</a>
+0002 <span class="comment">% MK_GN_MODEL: make EIDORS inverse models using the GREIT approach</span>
+0003 <span class="comment">%   imdl = mk_GN_model(img,  opt, lambda)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Output:</span>
+0006 <span class="comment">%   imdl      - GREIT inverse model</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Parameters:</span>
+0009 <span class="comment">%   img       - image of the forward model including stimulation pattern, etc.</span>
+0010 <span class="comment">%   options   - structure with fields:</span>
+0011 <span class="comment">%     imgsz         - [xsz ysz] reconstructed image size in pixels</span>
+0012 <span class="comment">%                     (default: [32 32])</span>
+0013 <span class="comment">%     square_pixels - forces square pixels if 1 (default: 0)</span>
+0014 <span class="comment">%     RtRprior      - desired regularization prior:</span>
+0015 <span class="comment">%                     'laplace' (default), 'noser' or 'tikhonov'</span>
+0016 <span class="comment">%     noise_figure - the noise figure (NF) to achieve.</span>
+0017 <span class="comment">%     meas_icov    - the inverse of the noise covariance matrix.</span>
+0018 <span class="comment">%   lambda    - set a fixed hyperparameter, if empty (default value)</span>
+0019 <span class="comment">%               the hyperparameter is chosen acording to the desired noise figure</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% See also MK_GREIT_MODEL (from which this script was adapted)</span>
+0022 <span class="comment">%</span>
+0023 
+0024 <span class="comment">% (C) 2016 Fabian Braun. License: GPL version 2 or version 3</span>
+0025 <span class="comment">% $Id: mk_GN_model.m 5424 2017-04-25 17:45:19Z aadler $</span>
+0026 
+0027     <span class="comment">%% do unit testing?</span>
+0028     <span class="keyword">if</span> ischar(img) &amp;&amp; strcmpi(img, <span class="string">'unit_test'</span>)
+0029         <a href="#_sub2" class="code" title="subfunction do_unit_test()">do_unit_test</a>();
+0030         <span class="keyword">return</span>;
+0031     <span class="keyword">end</span>    
+0032 
+0033     <span class="comment">%% parse and prepare inputs</span>
+0034     <span class="keyword">if</span> ~exist(<span class="string">'lambda'</span>, <span class="string">'var'</span>)
+0035       lambda = [];
+0036     <span class="keyword">end</span>
+0037     <span class="keyword">if</span> strcmp(img.type, <span class="string">'fwd_model'</span>)
+0038         img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(img, 1);
+0039     <span class="keyword">end</span>
+0040     fmdl = img.fwd_model;
+0041     imdl = <a href="../../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>( fmdl,{<span class="string">'Basic GN dif'</span>});
+0042    
+0043     <span class="comment">%% parse and default options</span>
+0044     opt = <a href="#_sub1" class="code" title="subfunction opt = parse_options(opt,fmdl,imdl)">parse_options</a>(opt,fmdl,imdl);
+0045 
+0046     <span class="comment">%% Calculate rec_model (if absent)</span>
+0047     <span class="keyword">if</span> ~isfield(img,<span class="string">'rec_model'</span>);
+0048         opt.do_coarse2fine = 0;  
+0049         [imdl.rec_model, imdl.fwd_model] = <a href="../../../eidors/models/mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>(fmdl, opt.target_plane, opt);
+0050         imdl.rec_model.nodes(:,3) = []; <span class="comment">% the third dimension complicated display</span>
+0051         <span class="comment">% medical orientation: NO, DO flip the x-axis of the model beforehand</span>
+0052         imdl.rec_model.mdl_slice_mapper.y_pts = fliplr(imdl.rec_model.mdl_slice_mapper.y_pts);
+0053     <span class="keyword">else</span>
+0054         imdl.rec_model = img.rec_model;
+0055     <span class="keyword">end</span>
+0056 
+0057 
+0058     <span class="comment">%% create GaussNewton reconstruction matrix</span>
+0059     imdl = <a href="../../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>(imdl, {<span class="string">'Basic GN dif'</span>});
+0060     
+0061     imdl.fwd_model.coarse2fine = <a href="../../../eidors/models/mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>(imdl.fwd_model, imdl.rec_model);
+0062     
+0063     imdl.inv_solve.calc_solution_error = 0 ;
+0064     
+0065     <span class="keyword">if</span> isfield(img, <span class="string">'elem_data'</span>) 
+0066       <span class="comment">% non-homogenous</span>
+0067       imdl.jacobian_bkgnd.value = img.elem_data;        
+0068     <span class="keyword">else</span>
+0069       imdl.jacobian_bkgnd.value = 1;
+0070     <span class="keyword">end</span>
+0071     
+0072     <span class="comment">% assign the desired prior</span>
+0073     <span class="keyword">if</span> strcmpi(opt.RtRprior, <span class="string">'laplace'</span>);
+0074         imdl.RtR_prior = @<a href="prior_laplace.html" class="code" title="function Reg= prior_laplace( inv_model )">prior_laplace</a>;  
+0075     <span class="keyword">elseif</span> strcmpi(opt.RtRprior, <span class="string">'noser'</span>);
+0076         imdl.RtR_prior = @<a href="prior_noser.html" class="code" title="function Reg= prior_noser( inv_model );">prior_noser</a>;  
+0077         imdl.prior_use_fwd_not_rec = true;    <span class="comment">% else we have issues with c2f mapping</span>
+0078     <span class="keyword">elseif</span> strcmpi(opt.RtRprior, <span class="string">'tikhonov'</span>);
+0079         imdl.RtR_prior = @<a href="prior_tikhonov.html" class="code" title="function Reg= prior_tikhonov( inv_model );">prior_tikhonov</a>;  
+0080     <span class="keyword">else</span>
+0081         error([<span class="string">'undefined prior: '</span>, opt.RtRprior]);
+0082     <span class="keyword">end</span> 
+0083     
+0084     <span class="comment">% assign inverse noise covariance matrix</span>
+0085     <span class="keyword">if</span> ~isempty(opt.meas_icov)
+0086         imdl.meas_icov = opt.meas_icov;
+0087     <span class="keyword">end</span>
+0088     
+0089     <span class="comment">%% determine hyperparameter (either via noise figure or set manually)</span>
+0090     <span class="keyword">if</span> ~isempty(opt.noise_figure)        
+0091         <span class="comment">%% take the four elements closest to the center (taken from select_imdl)</span>
+0092         <span class="comment">% BUT: take the elements at height of the BELT!</span>
+0093         xyz_elems = <a href="../../../eidors/models/interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>( imdl.fwd_model );
+0094         ctr_elems = mean(xyz_elems, 1);
+0095         ctr_elems(3) = opt.target_plane;  <span class="comment">% at belt height!</span>
+0096         xyz_elems = xyz_elems - ones(size(xyz_elems,1),1)*ctr_elems;
+0097         d_elems   = sqrt( sum( xyz_elems.^2, 2 ));
+0098         [~, e_idx] = sort(d_elems);
+0099 
+0100         imdl.hyperparameter.tgt_elems = e_idx(1:4);
+0101         imdl.hyperparameter.noise_figure = opt.noise_figure;
+0102 
+0103         sv_log = <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>); <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>, 2);
+0104         imdl.hyperparameter.value = <a href="choose_noise_figure.html" class="code" title="function HP= choose_noise_figure( inv_model );">choose_noise_figure</a>( imdl );
+0105         <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>, sv_log);
+0106     <span class="keyword">elseif</span> ~isempty(opt.image_SNR)       
+0107         imdl.hyperparameter.image_SNR = opt.image_SNR;
+0108         imdl.hyperparameter.value = <a href="choose_image_SNR.html" class="code" title="function HP = choose_image_SNR(imdl)">choose_image_SNR</a>(imdl);
+0109     <span class="keyword">else</span>
+0110         imdl.hyperparameter.value = lambda;
+0111     <span class="keyword">end</span>
+0112 
+0113 <span class="keyword">end</span>
+0114 
+0115 
+0116 <a name="_sub1" href="#_subfunctions" class="code">function opt = parse_options(opt,fmdl,imdl)</a>
+0117 
+0118     <span class="keyword">if</span> ~isfield(opt, <span class="string">'imgsz'</span>),     opt.imgsz = [32 32]; <span class="keyword">end</span>
+0119     <span class="keyword">if</span> ~isfield(opt, <span class="string">'square_pixels'</span>)
+0120         opt.square_pixels = 0;
+0121     <span class="keyword">end</span>
+0122     <span class="comment">% Allow imdl.rec_model to overwrite options.imgsz</span>
+0123     <span class="keyword">if</span> isfield(imdl,<span class="string">'rec_model'</span>) &amp;&amp; ~isempty(imdl.rec_model)
+0124         <span class="comment">% this assumes rec_model is a rectangular grid, as it should</span>
+0125         opt.imgsz(1) = numel(unique(imdl.rec_model.nodes(:,1)))-1;
+0126         opt.imgsz(2) = numel(unique(imdl.rec_model.nodes(:,2)))-1;
+0127     <span class="keyword">end</span>
+0128     
+0129     <span class="keyword">if</span> ~isfield(opt, <span class="string">'noise_figure'</span>), opt.noise_figure = []; <span class="keyword">end</span>
+0130     
+0131     <span class="keyword">if</span> ~isfield(opt, <span class="string">'meas_icov'</span>), opt.meas_icov = []; <span class="keyword">end</span>
+0132     
+0133     <span class="keyword">if</span> ~isfield(opt, <span class="string">'image_SNR'</span>), opt.image_SNR = []; <span class="keyword">end</span>
+0134     
+0135     <span class="comment">% prior type for regularization</span>
+0136     <span class="keyword">if</span> ~isfield(opt, <span class="string">'RtRprior'</span>)
+0137         opt.RtRprior = <span class="string">'laplace'</span>; 
+0138     <span class="keyword">end</span>
+0139         
+0140     <span class="comment">% Calculate the position of the electrodes</span>
+0141     Nelecs = length(fmdl.electrode);
+0142     <span class="keyword">for</span> i=1:Nelecs
+0143        enodesi = fmdl.electrode(i).nodes;
+0144        elec_loc(i,:) = mean( fmdl.nodes( enodesi,:),1 );
+0145     <span class="keyword">end</span>
+0146     opt.elec_loc = elec_loc;
+0147     
+0148     <span class="keyword">try</span>
+0149         opt.normalize = fmdl.normalize_measurements;
+0150     <span class="keyword">catch</span> 
+0151         opt.normalize = 0;
+0152         <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'mk_GN_model: fmdl.normalize_measurements not specified, assuming 0'</span>);
+0153     <span class="keyword">end</span>
+0154     
+0155     <span class="comment">% electrode target planes</span>
+0156     <span class="keyword">if</span> ~isfield(opt, <span class="string">'target_plane'</span>)
+0157           opt.target_plane = mean(elec_loc(:,3));
+0158     <span class="keyword">else</span>
+0159         t = opt.target_plane;
+0160         minnode = min(fmdl.nodes);
+0161         maxnode = max(fmdl.nodes);
+0162         <span class="keyword">if</span> t&lt;minnode(3) || t&gt;maxnode(3)
+0163             warning(<span class="string">'options.target_plane is outside the model!'</span>);
+0164             <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'mk_GN_model: Resorting to default target_plane'</span>);
+0165             opt.target_plane = mean(elec_loc(:,3));
+0166         <span class="keyword">end</span>
+0167     <span class="keyword">end</span>
+0168     
+0169 <span class="keyword">end</span>
+0170 
+0171 
+0172 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test()</a>
+0173 
+0174     <span class="comment">% Recosntruct with GREIT</span>
+0175     fmdl = <a href="../../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>(<span class="string">'cylinder_16x1el_fine'</span>);
+0176     fmdl.nodes = fmdl.nodes/15; <span class="comment">% make radius 1;</span>
+0177     fmdl.stimulation = <a href="../../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(16,1,[0,1],[0,1],{<span class="string">'no_meas_current'</span>}, 1);
+0178     opt.noise_figure = 1.0;
+0179     imdl_gr = <a href="../../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>(fmdl, 0.2, [], opt);
+0180 
+0181     opt = struct();
+0182     opt.noise_figure = 1.0; 
+0183     imdl_gn_lap = <a href="mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>(fmdl, opt);
+0184 
+0185     opt = struct();
+0186     opt.noise_figure = 1.0; 
+0187     opt.RtRprior = <span class="string">'tikhonov'</span>;
+0188     imdl_gn_tik = <a href="mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>(fmdl, opt);
+0189 
+0190     <a href="../../../eidors/tools/test_performance.html" class="code" title="function [r, params] =  test_performance( imdls, fmdl );">test_performance</a>( { imdl_gr, imdl_gn_lap, imdl_gn_tik}, fmdl );
+0191 
+0192 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

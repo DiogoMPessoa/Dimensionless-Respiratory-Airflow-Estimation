@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of inv_kalman_diff</title>
+  <meta name="keywords" content="inv_kalman_diff">
+  <meta name="description" content="INV_KALMAN_DIFF inverse solver for difference EIT">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; inv_kalman_diff.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>inv_kalman_diff
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>INV_KALMAN_DIFF inverse solver for difference EIT</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function img= inv_kalman_diff( inv_model, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> INV_KALMAN_DIFF inverse solver for difference EIT
+ img= inv_kalman_diff( inv_model, data1, data2)
+
+ img        =&gt; output image
+ inv_model  =&gt; inverse model struct
+ data1      =&gt; differential data at earlier time
+ data2      =&gt; differential data at later time
+
+ if inv_model.fwd_model.stimulation(:).delta_time
+   exists and is non_zero, then the kalman filter will
+   be applied to each data measurement separately
+
+ Note that the classic Kalman filter assumes that the
+   time step between each measurement is constant
+   (ie as part of the state update eqn). inv_kalman_diff
+   cannot work with non-constant time steps
+
+ if inv_model.inv_kalman_diff.keep_K_k1 = 1
+  then img outputs img.inv_kalman_diff.K_k1 = K_k1
+  this can be used to estimate noise properties</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/solvers/inverse/inv_solve_diff_kalman.html" class="code" title="function img= inv_solve_diff_kalman( inv_model, data1, data2)">inv_solve_diff_kalman</a>	INV_SOLVE_DIFF_KALMAN inverse solver for difference EIT</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function img= inv_kalman_diff( inv_model, varargin)</a>
+0002 <span class="comment">% INV_KALMAN_DIFF inverse solver for difference EIT</span>
+0003 <span class="comment">% img= inv_kalman_diff( inv_model, data1, data2)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% img        =&gt; output image</span>
+0006 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0007 <span class="comment">% data1      =&gt; differential data at earlier time</span>
+0008 <span class="comment">% data2      =&gt; differential data at later time</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% if inv_model.fwd_model.stimulation(:).delta_time</span>
+0011 <span class="comment">%   exists and is non_zero, then the kalman filter will</span>
+0012 <span class="comment">%   be applied to each data measurement separately</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Note that the classic Kalman filter assumes that the</span>
+0015 <span class="comment">%   time step between each measurement is constant</span>
+0016 <span class="comment">%   (ie as part of the state update eqn). inv_kalman_diff</span>
+0017 <span class="comment">%   cannot work with non-constant time steps</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% if inv_model.inv_kalman_diff.keep_K_k1 = 1</span>
+0020 <span class="comment">%  then img outputs img.inv_kalman_diff.K_k1 = K_k1</span>
+0021 <span class="comment">%  this can be used to estimate noise properties</span>
+0022 
+0023 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0024 <span class="comment">% $Id: inv_kalman_diff.m 5701 2018-03-19 15:39:36Z aadler $</span>
+0025 
+0026 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'INV_KALMAN_DIFF is deprecated as of 08-Jun-2012. Use INV_SOLVE_DIFF_KALMAN instead.'</span>);
+0027 <span class="keyword">if</span> isfield(inv_model,<span class="string">'inv_kalman_diff'</span>);
+0028   inv_model.inv_solve_diff_kalman = inv_model.inv_kalman_diff;
+0029 <span class="keyword">end</span>
+0030 img = <a href="../../eidors/solvers/inverse/inv_solve_diff_kalman.html" class="code" title="function img= inv_solve_diff_kalman( inv_model, data1, data2)">inv_solve_diff_kalman</a>(inv_model, varargin{:});</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

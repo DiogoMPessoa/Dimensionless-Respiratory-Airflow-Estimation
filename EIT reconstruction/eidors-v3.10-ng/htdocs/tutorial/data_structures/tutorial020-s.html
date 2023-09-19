@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Basic EIDORS data structures</h2>
+
+<h3> 
+Basic EIDORS data structures: the fwd_model
+</h3>
+
+To understand a the basic EIDORS data structures, we
+define an electrical resistor, with ground at one end,
+and a single electrode (with contact resistance
+of 20&Omega;) at the other.
+
+<pre>
+% tutorial1_create_fwd_model
+% $Id: tutorial020a.m 4092 2013-05-27 22:17:28Z bgrychtol $
+
+r_mdl= eidors_obj('fwd_model','demo resistor model');
+r_mdl = mdl_normalize( r_mdl, 0);
+
+% Geometry
+r_mdl.nodes= [1,1,1;  2,2,2];
+r_mdl.elems= [1,2];
+r_mdl.boundary= [1,2]; 
+
+% Define Electrodes (there is only one)
+r_mdl.electrode(1).z_contact= 10; % ohms
+r_mdl.electrode(1).nodes=     1;
+r_mdl.gnd_node= 2;
+
+show_fem(r_mdl); view(-12,24);
+print_convert tutorial020a.png '-density 50';
+
+</pre>
+
+<center>
+<img src="tutorial020a.png">
+<br><i>Figure:</i>
+this shows a single line representing the resistor
+in 3D. Not very interesting, but this <i>is</i> a
+simple example.
+</center>
+
+<h3> 
+Defining stimulation patterns
+</h3>
+
+In order to simulate the voltages, 
+define an electrical resistor, with ground at one end,
+and a single electrode at the other.
+
+<pre>
+% Create stimulation patterns and solve fwd_model
+% $Id: tutorial020b.m 3850 2013-04-16 18:13:39Z aadler $
+
+% Define stimulation patterns
+for i=1:3
+    r_mdl.stimulation(i).stimulation= 'Amps';
+    r_mdl.stimulation(i).stim_pattern= ( 0.001*i );
+    r_mdl.stimulation(i).meas_pattern= 1; % measure electrode 1
+end
+
+r_mdl.solve=      @tutorial020_f_solve;
+
+% Define an 'image'
+resistor = eidors_obj('image', 'resistor');
+resistor.elem_data= 1000;
+resistor.fwd_model= r_mdl;
+
+% Calculate data for 1k resistor
+data_1k0 =fwd_solve( resistor );
+
+% Now change resistor to be 1.2k
+resistor.elem_data= 1200;
+data_1k2 =fwd_solve( resistor );
+
+</pre>
+
+Output data is given by:
+<pre width="50">
+&gt;&gt; disp(data_1k0)
+    name: 'resistor model data'
+    meas: [3x1 double]
+    type: 'data'
+
+&gt;&gt; disp(data_1k0.meas')
+    1.0200    2.0400    3.0600
+</pre>
+
+<h3> 
+Forward solver function
+</h3>
+
+This calculation depends on a forward solver
+function, which calculates measurements from
+a given image. This function
+ normally needs to be custom written
+for the physics of the problem. EIDORS provides
+several fuctions for EIT.
+<p>
+The forward solver used here is
+<a href="tutorial020_f_solve.m">tutorial020_f_solve</a>,
+shown below:
+
+<pre>
+function data =tutorial020_f_solve( img )
+% Forward Model for a resistor
+% For each stimulation there is I1 into Node1
+%  Node2 is connected to gnd with Zcontact
+%
+% each stim has one measurement pattern where
+%  Vmeas= Meas_pat * Node1
+%       = Meas_pat * I1 * ( Zcontact*2 + R )
+%
+% Thus
+%  V= IR    => [V1;V2;V3] = [I1;I2*I3]*(R + 2*Zcontact)
+
+  R= img.elem_data;
+  stim = img.fwd_model.stimulation;
+
+  n_stim= length( stim );
+  V= zeros(n_stim, 1);
+
+  for i=1:n_stim
+    I        = stim(i).stim_pattern;
+    meas_pat = stim(i).meas_pattern;
+
+    zc       = img.fwd_model.electrode( find(I) ).z_contact;
+
+    V(i)     = meas_pat * I * ( R + 2*zc);
+  end
+
+  data.name='resistor model data';
+  data.meas= V;
+
+</pre>
+
+<h3> 
+Image reconstruction
+</h3>
+
+Image reconstruction can be handled via a standard
+EIDORS image functions.
+<pre>
+% Solve resistor model
+% $Id: tutorial020c.m 3127 2012-06-08 16:19:25Z bgrychtol $
+
+% Now we complete the fwd_model
+r_mdl.jacobian= @jacobian_perturb;
+
+% Now create an inverse model
+i_mdl= eidors_obj('inv_model','resistor inverse');
+i_mdl.fwd_model= r_mdl;
+i_mdl.jacobian_bkgnd.value= 1000;
+
+% regulatization not needed for this problem
+i_mdl.RtR_prior= @prior_tikhonov;
+i_mdl.hyperparameter.value= 0;
+
+i_mdl.reconst_type= 'difference';
+i_mdl.solve= @inv_solve_diff_GN_one_step;
+
+% Reconstruct resistor change
+reconst= inv_solve(i_mdl, data_1k0, data_1k2);
+
+</pre>
+
+Thus the output is, giving a resistance change of 200&Omega;
+<pre width="50">
+&gt;&gt;reconst = 
+         name: 'solved by aa_inv_solve'
+    elem_data: 200.0000
+    inv_model: [1x1 struct]
+    fwd_model: [1x1 struct]
+         type: 'image'
+</pre>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

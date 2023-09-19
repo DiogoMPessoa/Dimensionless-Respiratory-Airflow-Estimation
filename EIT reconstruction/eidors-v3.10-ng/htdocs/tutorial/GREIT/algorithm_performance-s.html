@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Algorithm Performance</h2>
+
+EIDORS provides an interface to test algorithm performance
+against the 
+<a href = "http://eidors3d.sourceforge.net/tutorial/GREIT-evaluation/reconstruction_parameters.png"
+>parameters defined for the GREIT algorithm:</a>
+Amplitude (AR),
+Position Error (PE),
+Resolution (RES),
+Shape Deformation (SD), and
+Ringing (RNG)
+
+<pre>
+% Test algorithm performance $Id: algorithm_performance01.m 2240 2010-07-04 14:41:32Z aadler $
+
+% Reconstruct GREIT Images
+imdl_gr = mk_common_gridmdl('GREITc1');
+
+% Reconstruct backprojection Images
+imdl_bp = mk_common_gridmdl('backproj');
+
+% Reconstruct GN Images
+imdl_gn = select_imdl( mk_common_model('d2c2', 16), {'Basic GN dif','Choose NF=0.5'});
+
+test_performance( { imdl_gr, imdl_bp, imdl_gn } );
+
+print_convert 'algorithm_performance01a.png' '-density 100'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/algorithm_performance01a.png">
+<br><i>Figure:</i>
+Performance of algorithms:
+<i>blue:</i> GREIT (v1)
+<i>green:</i> Sheffield backprojection 
+<i>red:</i> One step Gauss Newton
+</center>
+
+<h2>GREIT Test Parameters for different algorithms</h2>
+
+The GREIT figure of merit parameters to evaluate the
+performace of other algorithms.
+
+
+<h3> 
+Simulate 3D object
+</h3>
+
+<pre>
+% create 3D forward model
+fmdl = ng_mk_cyl_models([2,1,0.08],[8,0.8,1.2],[0.05]); 
+fmdl.stimulation = mk_stim_patterns(16,1,[0,1],[0,1],{},1);
+imgs= mk_image( fmdl, 1);
+
+show_fem(imgs);
+print_convert test_params01a.png '-density 50'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/GREIT_test_params01a.png">
+<br><i>Figure:</i>
+Simulation mesh
+</center>
+
+<h3> 
+Simulate target positions
+</h3>
+
+<pre>
+r = 0.05; % target radius
+Npos = 20; % number of positions
+Xpos =  linspace(0,0.9,Npos); % positions to simulated along x-axis
+Ypos = zeros(1,Npos); 
+Zpos = ones(1,Npos);  %% for off-plane, adjust the level (*1.5)
+xyzr = [Xpos; Ypos; Zpos; r*ones(1,Npos)];
+
+[vh,vi] = simulate_movement(imgs, xyzr);
+
+</pre>
+
+<h3> 
+Gauss-Newton Reconstruction Matrix
+</h3>
+
+<pre>
+% 3D inverse model
+imdl= mk_common_model('n3r2',[16,2]);
+mdl= ng_mk_cyl_models([2,1,0.1],[8,0.8,1.2],[0.05]); 
+mdl.stimulation = mk_stim_patterns(16,1,[0,1],[0,1],{},1);
+imdl.fwd_model = mdl; 
+
+img= mk_image( mdl, 1); J = calc_jacobian(img);
+
+%% inverse solution (faster solution)
+hp  = 0.015;
+RtR = prior_noser( imdl ); P= inv(RtR);
+Rn = speye( size(J,1) );
+imdl.solve = @solve_use_matrix;
+imdl.solve_use_matrix.RM = P*J'/(J*P*J' + hp^2*Rn);
+imgr= inv_solve(imdl,vh,vi);
+
+</pre>
+
+<h3> 
+Calculate and show GREIT parameters
+</h3>
+
+<pre>
+%% calculate the GREIT parameters
+levels =[inf,inf,Zpos];
+show_slices(imgr, levels);
+imgr.calc_colours.npoints = 128;
+imgr.calc_slices.levels=levels;
+params = eval_GREIT_fig_merit(imgr, xyzr);
+
+p_names = {'AR','PE','RES','SD','RNG'};
+for i=1:5; subplot(5,1,i);
+    plot(params(i,:)); ylabel(p_names{i});
+end
+print_convert test_params04a.png '-density 100'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/test_params04a.png">
+<br><i>Figure:</i>
+GREIT figure of merit parameters for
+GN algorithm
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

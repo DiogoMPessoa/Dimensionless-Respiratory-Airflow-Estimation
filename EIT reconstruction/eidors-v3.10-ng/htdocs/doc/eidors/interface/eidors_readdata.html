@@ -1,0 +1,1364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of eidors_readdata</title>
+  <meta name="keywords" content="eidors_readdata">
+  <meta name="description" content="EIDORS readdata - read data files from various EIT equipment">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">interface</a> &gt; eidors_readdata.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/interface&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>eidors_readdata
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>EIDORS readdata - read data files from various EIT equipment</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [vv, auxdata, stim ]= eidors_readdata( fname, format, frame_range, extra ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> EIDORS readdata - read data files from various EIT equipment
+    manufacturers
+
+ [vv, auxdata, stim ]= eidors_readdata( fname, format, frame_range, extra )
+    frame_range is the list of frames to load from the file (ie. 1:100).
+    if the frames are beyond the number in the file, no data is returned
+    to get all frames, use frame_range= []
+
+ Currently the list of supported file formats is:
+    - &quot;EIT&quot; Files, may be one of 
+          - Draeger Pulmovista (2008+)
+          - GoeIIMF/Carefusion (2010+)
+          - Swisstom BB2/Pioneer (2010+)
+       The function will attempt to autodetect the format
+       
+    - MCEIT (GoeIIMF / Viasys) &quot;get&quot; file format 
+        format = &quot;GET&quot; or &quot;MCEIT&quot;
+        Note that the data is &quot;untwisted&quot; to correspond to a &quot;no_rotate_meas&quot; stim pattern
+    - MCEIT (GoeIIMF) &quot;get&quot; file format
+        format = &quot;GET-RAW&quot;
+        Data in original order, corresponds to &quot;rotate_meas&quot; stim pattern
+
+    - Draeger (Pulmovista) &quot;EIT&quot; file format (2008+)
+        format = &quot;DRAEGER-EIT&quot;
+
+    - Draeger &quot;get&quot; file format (- 2007 - format for Draeger equipment)
+        format = &quot;DRAEGER-GET&quot;
+
+    - Swisstom EIT equipment &quot;EIT&quot; (Pioneer set and BB2):
+           'LQ1' (2010 - 2011)
+           'LQ2' (2013 - 2014)
+           'LQ4' (2015+)
+
+    - Dixtal file format, from Dixtal inc, Brazil
+        format = 'DIXTAL_encode' extract encoder from provided Dll
+           - Output: [encodepage] = eidors_readdata( path,'DIXTAL_encode');
+              where path= '/path/to/Criptografa_New.dll' (provided with system)
+        format = 'DIXTAL'
+           - output: [vv] = eidors_readdata( fname, 'DIXTAL', [], encodepage );
+    - New Carefusion &quot;EIT&quot; file format
+        format = &quot;GOEIIMF-EIT&quot; or &quot;carefusion&quot;</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>	MK_STIM_PATTERNS: create an EIDORS stimulation pattern structure</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function stim = basic_stim(N_el);</a></li><li><a href="#_sub2" class="code">function fmt = pre_proc_spec_fmt( format, fname );</a></li><li><a href="#_sub3" class="code">function df= is_get_file_a_draeger_file( fname)</a></li><li><a href="#_sub4" class="code">function df= is_eit_file_a_draeger_file( fname );</a></li><li><a href="#_sub5" class="code">function df= is_eit_file_a_swisstom_file( fname );</a></li><li><a href="#_sub6" class="code">function df = is_eit_file_a_carefusion_file( fname )</a></li><li><a href="#_sub7" class="code">function [vv, auxdata, auxtime] = carefusion_eit_readdata( fname );</a></li><li><a href="#_sub8" class="code">function [vv,curr,volt,auxdata] = draeger_get_readdata( fname );</a></li><li><a href="#_sub9" class="code">function jnk</a></li><li><a href="#_sub10" class="code">function vv = sheffield_readdata( fname );</a></li><li><a href="#_sub11" class="code">function [vv,curr,volt,auxdata,auxtime,rawdata] = mceit_readdata( fname );</a></li><li><a href="#_sub12" class="code">function array208=transfer104_208(array104),</a></li><li><a href="#_sub13" class="code">function vv= untwist(dd);</a></li><li><a href="#_sub14" class="code">function  vv = its_readdata( fname )</a></li><li><a href="#_sub15" class="code">function idx= ptr104_208;</a></li><li><a href="#_sub16" class="code">function vv = iirc_readdata( fname );</a></li><li><a href="#_sub17" class="code">function [stimulations,meas_select] = UCT_sequence_file( fname );</a></li><li><a href="#_sub18" class="code">function [cur_data,no_cur_data] = UCT_calibration_file( fname );</a></li><li><a href="#_sub19" class="code">function [v_raw] = UCT_LoadDataFrame(infilename)</a></li><li><a href="#_sub20" class="code">function [vv] = landquart1_readdata( fname );</a></li><li><a href="#_sub21" class="code">function [vv, elecImps, tStampsAbs, tStampsRel] = landquart2_readdata( fname )</a></li><li><a href="#_sub22" class="code">function [vv, evtlist, elecImps, tStampsAbs, tStampsRel] = landquart4_readdata( fname )</a></li><li><a href="#_sub23" class="code">function [vv] = landquart4pre_readdata( fname )</a></li><li><a href="#_sub24" class="code">function [vv] = dixtal_read_codepage( fname );</a></li><li><a href="#_sub25" class="code">function [vv] = dixtal_read_data( file_name, frame_range, encodepage1 );</a></li><li><a href="#_sub26" class="code">function  data = proc_dixtal_data( b, encodepage );</a></li><li><a href="#_sub27" class="code">function [fr] = read_draeger_header( filename );</a></li><li><a href="#_sub28" class="code">function vd = read_draeger_file(filename)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [vv, auxdata, stim ]= eidors_readdata( fname, format, frame_range, extra )</a>
+0002 <span class="comment">% EIDORS readdata - read data files from various EIT equipment</span>
+0003 <span class="comment">%    manufacturers</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% [vv, auxdata, stim ]= eidors_readdata( fname, format, frame_range, extra )</span>
+0006 <span class="comment">%    frame_range is the list of frames to load from the file (ie. 1:100).</span>
+0007 <span class="comment">%    if the frames are beyond the number in the file, no data is returned</span>
+0008 <span class="comment">%    to get all frames, use frame_range= []</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Currently the list of supported file formats is:</span>
+0011 <span class="comment">%    - &quot;EIT&quot; Files, may be one of</span>
+0012 <span class="comment">%          - Draeger Pulmovista (2008+)</span>
+0013 <span class="comment">%          - GoeIIMF/Carefusion (2010+)</span>
+0014 <span class="comment">%          - Swisstom BB2/Pioneer (2010+)</span>
+0015 <span class="comment">%       The function will attempt to autodetect the format</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    - MCEIT (GoeIIMF / Viasys) &quot;get&quot; file format</span>
+0018 <span class="comment">%        format = &quot;GET&quot; or &quot;MCEIT&quot;</span>
+0019 <span class="comment">%        Note that the data is &quot;untwisted&quot; to correspond to a &quot;no_rotate_meas&quot; stim pattern</span>
+0020 <span class="comment">%    - MCEIT (GoeIIMF) &quot;get&quot; file format</span>
+0021 <span class="comment">%        format = &quot;GET-RAW&quot;</span>
+0022 <span class="comment">%        Data in original order, corresponds to &quot;rotate_meas&quot; stim pattern</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%    - Draeger (Pulmovista) &quot;EIT&quot; file format (2008+)</span>
+0025 <span class="comment">%        format = &quot;DRAEGER-EIT&quot;</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    - Draeger &quot;get&quot; file format (- 2007 - format for Draeger equipment)</span>
+0028 <span class="comment">%        format = &quot;DRAEGER-GET&quot;</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%    - Swisstom EIT equipment &quot;EIT&quot; (Pioneer set and BB2):</span>
+0031 <span class="comment">%           'LQ1' (2010 - 2011)</span>
+0032 <span class="comment">%           'LQ2' (2013 - 2014)</span>
+0033 <span class="comment">%           'LQ4' (2015+)</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%    - Dixtal file format, from Dixtal inc, Brazil</span>
+0036 <span class="comment">%        format = 'DIXTAL_encode' extract encoder from provided Dll</span>
+0037 <span class="comment">%           - Output: [encodepage] = eidors_readdata( path,'DIXTAL_encode');</span>
+0038 <span class="comment">%              where path= '/path/to/Criptografa_New.dll' (provided with system)</span>
+0039 <span class="comment">%        format = 'DIXTAL'</span>
+0040 <span class="comment">%           - output: [vv] = eidors_readdata( fname, 'DIXTAL', [], encodepage );</span>
+0041 <span class="comment">%    - New Carefusion &quot;EIT&quot; file format</span>
+0042 <span class="comment">%        format = &quot;GOEIIMF-EIT&quot; or &quot;carefusion&quot;</span>
+0043 
+0044 <span class="comment">%    - Sheffield MK I &quot;RAW&quot; file format</span>
+0045 <span class="comment">%        format = &quot;RAW&quot; or &quot;sheffield&quot;</span>
+0046 <span class="comment">%    - ITS (International Tomography Systems)</span>
+0047 <span class="comment">%        format = &quot;ITS&quot; or &quot;p2k&quot;</span>
+0048 <span class="comment">%    - IIRC (Impedance Imaging Research Center, Korea)</span>
+0049 <span class="comment">%        format = &quot;txt&quot; or &quot;IIRC&quot;</span>
+0050 <span class="comment">%    - University of Cape Town formats</span>
+0051 <span class="comment">%        format = &quot;UCT_SEQ&quot;  UCT sequence file</span>
+0052 <span class="comment">%           - Output: [ stimulation, meas_select]= eidors_readdata(fname, 'UCT_SEQ')</span>
+0053 <span class="comment">%        format = &quot;UCT_CAL&quot;  UCT calibration file</span>
+0054 <span class="comment">%           - Output: [vv, no_cur_caldata_raw ]= eidors_readdata( fname, 'UCT_CAL' )</span>
+0055 <span class="comment">%                 where no_cur_caldata_raw is data captured with no current</span>
+0056 <span class="comment">%        format = &quot;UCT_DATA&quot;  UCT data frame file</span>
+0057 <span class="comment">%           - Output: [vv]= eidors_readdata( fname, 'UCT_DATA' )</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">% Usage</span>
+0060 <span class="comment">% [vv, auxdata, stim ]= eidors_readdata( fname, format )</span>
+0061 <span class="comment">%     vv      = measurements - data frames in each column</span>
+0062 <span class="comment">%     auxdata = auxillary data - if provided by system</span>
+0063 <span class="comment">%     stim    = stimulation structure, to be used with</span>
+0064 <span class="comment">%                fwd_model.stimulation.</span>
+0065 <span class="comment">%     fname = file name</span>
+0066 <span class="comment">%     stim.framerate = acquisition rate (frames/sec) if available</span>
+0067 <span class="comment">%</span>
+0068 <span class="comment">%  if format is unspecified, an attempt to autodetect is made</span>
+0069 
+0070 <span class="comment">% (C) 2005-09 Andy Adler. License: GPL version 2 or version 3</span>
+0071 <span class="comment">% $Id: eidors_readdata.m 5945 2019-05-24 20:16:47Z aadler $</span>
+0072 
+0073 <span class="comment">% TODO:</span>
+0074 <span class="comment">%   - output an eidors data object</span>
+0075 <span class="comment">%   - test whether file format matches specified stimulation pattern</span>
+0076 <span class="comment">%   - todo MCEIT provides curr and volt on driven electrodes.</span>
+0077 <span class="comment">%       how can this be provided to system?</span>
+0078 
+0079 <span class="keyword">if</span> ~exist(fname,<span class="string">'file'</span>)
+0080    error([fname,<span class="string">' does not exist'</span>]);
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="keyword">if</span> nargin &lt; 2
+0084 <span class="comment">% unspecified file format, autodetect</span>
+0085    dotpos = find(fname == <span class="string">'.'</span>);
+0086    <span class="keyword">if</span> isempty( dotpos ) 
+0087       error(<span class="string">'file format unspecified, can`t autodetect'</span>);
+0088    <span class="keyword">else</span>
+0089       dotpos= dotpos(end);
+0090       format= fname( dotpos+1:end );
+0091    <span class="keyword">end</span>
+0092 <span class="keyword">end</span>
+0093 
+0094 
+0095 auxdata = []; <span class="comment">% default, can be overriden if the format has it</span>
+0096 fmt = <a href="#_sub2" class="code" title="subfunction fmt = pre_proc_spec_fmt( format, fname );">pre_proc_spec_fmt</a>( format, fname );
+0097 <span class="keyword">switch</span> fmt
+0098    <span class="keyword">case</span> <span class="string">'mceit'</span>;
+0099       [vv,curr,volt,auxdata_out,auxtime,rawdata] = <a href="#_sub11" class="code" title="subfunction [vv,curr,volt,auxdata,auxtime,rawdata] = mceit_readdata( fname );">mceit_readdata</a>( fname );
+0100       auxdata.auxdata = auxdata_out;
+0101       auxdata.auxtime = auxtime;
+0102       auxdata.curr    = curr;
+0103       auxdata.volt    = volt;
+0104 
+0105 
+0106       <span class="keyword">if</span> strcmp(lower(format),<span class="string">'get-raw'</span>)
+0107           vv= rawdata(1:208,:);
+0108           stim = <a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(16,1,[0,1],[0,1], {<span class="string">'no_meas_current'</span>,<span class="string">'rotate_meas'</span>}, 1);
+0109       <span class="keyword">else</span>
+0110           stim = <a href="#_sub1" class="code" title="subfunction stim = basic_stim(N_el);">basic_stim</a>(16);
+0111       <span class="keyword">end</span>
+0112    <span class="keyword">case</span> <span class="string">'draeger-get'</span>
+0113       vv = <a href="#_sub8" class="code" title="subfunction [vv,curr,volt,auxdata] = draeger_get_readdata( fname );">draeger_get_readdata</a>( fname );
+0114 
+0115       stim = <a href="#_sub1" class="code" title="subfunction stim = basic_stim(N_el);">basic_stim</a>(16);
+0116 
+0117    <span class="keyword">case</span> <span class="string">'draeger-eit'</span>
+0118      [fr] = <a href="#_sub27" class="code" title="subfunction [fr] = read_draeger_header( filename );">read_draeger_header</a>( fname );
+0119      <span class="comment">% Currently Draeger equipment uses this pattern with 5mA injection</span>
+0120      stim = <a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(16,1,[0,1],[0,1],{<span class="string">'rotate_meas'</span>,<span class="string">'no_meas_current'</span>},.005);
+0121      [stim(:).framerate] = deal(fr);
+0122      [vv] = <a href="#_sub28" class="code" title="subfunction vd = read_draeger_file(filename)">read_draeger_file</a>( fname );
+0123      auxdata = vv; <span class="comment">% the actual voltages</span>
+0124      <span class="comment">% Based on the draeger *get file converter</span>
+0125      ft = [.00098242, .00019607];<span class="comment">% estimated AA: 2016-04-07</span>
+0126      vv = ft(1)*vv(1:208,:) - ft(2)*vv(322+(1:208),:);
+0127 
+0128    <span class="keyword">case</span> {<span class="string">'raw'</span>, <span class="string">'sheffield'</span>}
+0129       vv = <a href="#_sub10" class="code" title="subfunction vv = sheffield_readdata( fname );">sheffield_readdata</a>( fname );
+0130 
+0131       stim = <a href="#_sub1" class="code" title="subfunction stim = basic_stim(N_el);">basic_stim</a>(16);
+0132    <span class="keyword">case</span> {<span class="string">'p2k'</span>, <span class="string">'its'</span>}
+0133       vv = <a href="#_sub14" class="code" title="subfunction  vv = its_readdata( fname )">its_readdata</a>( fname );
+0134 
+0135       stim = <span class="string">'UNKNOWN'</span>;
+0136    <span class="keyword">case</span> {<span class="string">'txt'</span>,<span class="string">'iirc'</span>}
+0137       vv = <a href="#_sub16" class="code" title="subfunction vv = iirc_readdata( fname );">iirc_readdata</a>( fname );
+0138 
+0139       stim = <a href="#_sub1" class="code" title="subfunction stim = basic_stim(N_el);">basic_stim</a>(16);
+0140    <span class="keyword">case</span> <span class="string">'uct_seq'</span>
+0141       [vv,auxdata] = <a href="#_sub17" class="code" title="subfunction [stimulations,meas_select] = UCT_sequence_file( fname );">UCT_sequence_file</a>( fname );
+0142 
+0143       stim = <span class="string">'UNKNOWN'</span>;
+0144    <span class="keyword">case</span> <span class="string">'uct_cal'</span>
+0145       [vv,auxdata] = <a href="#_sub18" class="code" title="subfunction [cur_data,no_cur_data] = UCT_calibration_file( fname );">UCT_calibration_file</a>( fname );
+0146 
+0147       stim = <span class="string">'UNKNOWN'</span>;
+0148    <span class="keyword">case</span> <span class="string">'uct_data'</span>
+0149       [vv] = <a href="#_sub19" class="code" title="subfunction [v_raw] = UCT_LoadDataFrame(infilename)">UCT_LoadDataFrame</a>( fname );
+0150 
+0151       stim = <span class="string">'UNKNOWN'</span>;
+0152    <span class="keyword">case</span> {<span class="string">'carefusion'</span>,<span class="string">'goeiimf-eit'</span>}
+0153       [vv, auxdata_out, auxtime] = <a href="#_sub7" class="code" title="subfunction [vv, auxdata, auxtime] = carefusion_eit_readdata( fname );">carefusion_eit_readdata</a>( fname );
+0154       auxdata.auxdata = auxdata_out;
+0155       auxdata.auxtime = auxtime;
+0156   
+0157       stim = <a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(16,1,[0,1],[0,1], {<span class="string">'no_meas_current'</span>,<span class="string">'rotate_meas'</span>}, .005);
+0158 
+0159    <span class="keyword">case</span> <span class="string">'lq1'</span>
+0160       [vv] = <a href="#_sub20" class="code" title="subfunction [vv] = landquart1_readdata( fname );">landquart1_readdata</a>( fname );
+0161 
+0162       stim = <a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(32,1,[0,5],[0,5],{<span class="string">'no_rotate_meas'</span>,<span class="string">'no_meas_current'</span>},.005);
+0163       
+0164    <span class="keyword">case</span> {<span class="string">'lq2'</span>,<span class="string">'lq3'</span>}
+0165       [vv, elecImps, tStampsAbs, tStampsRel] = <a href="#_sub21" class="code" title="subfunction [vv, elecImps, tStampsAbs, tStampsRel] = landquart2_readdata( fname )">landquart2_readdata</a>( fname );
+0166       auxdata.elec_impedance = elecImps;
+0167       auxdata.t_abs = tStampsAbs;
+0168       auxdata.t_rel = tStampsRel;
+0169 
+0170       stim = <a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(32,1,[0,5],[0,5],{<span class="string">'no_rotate_meas'</span>,<span class="string">'no_meas_current'</span>},.005);
+0171      
+0172    <span class="keyword">case</span> <span class="string">'lq4pre'</span>
+0173       [vv] = <a href="#_sub23" class="code" title="subfunction [vv] = landquart4pre_readdata( fname )">landquart4pre_readdata</a>( fname );
+0174 
+0175       stim = <a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(32,1,[0,5],[0,5],{<span class="string">'no_rotate_meas'</span>,<span class="string">'no_meas_current'</span>},.005);
+0176 
+0177    <span class="keyword">case</span> <span class="string">'lq4'</span>
+0178       [vv, evtlist, elecImps, tStampsAbs, tStampsRel] = <a href="#_sub22" class="code" title="subfunction [vv, evtlist, elecImps, tStampsAbs, tStampsRel] = landquart4_readdata( fname )">landquart4_readdata</a>( fname );
+0179       auxdata.event = evtlist;
+0180       auxdata.elec_impedance = elecImps;
+0181       auxdata.t_abs = tStampsAbs;
+0182       auxdata.t_rel = tStampsRel;
+0183 
+0184       stim = <a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(32,1,[0,5],[0,5],{<span class="string">'no_rotate_meas'</span>,<span class="string">'no_meas_current'</span>},.005);
+0185       
+0186    <span class="keyword">case</span> <span class="string">'dixtal_encode'</span>
+0187       [vv] = <a href="#_sub24" class="code" title="subfunction [vv] = dixtal_read_codepage( fname );">dixtal_read_codepage</a>( fname );
+0188       stim = <span class="string">'N/A'</span>;
+0189 
+0190    <span class="keyword">case</span> <span class="string">'dixtal'</span>
+0191       [vv] = <a href="#_sub25" class="code" title="subfunction [vv] = dixtal_read_data( file_name, frame_range, encodepage1 );">dixtal_read_data</a>( fname, frame_range, extra );
+0192       auxdata = vv(1025:<span class="keyword">end</span>,:);
+0193       vv      = vv([1:1024],:);
+0194       stim= <a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(32,1,[0,4],[0,4], <span class="keyword">...</span><span class="comment"> </span>
+0195               {<span class="string">'meas_current'</span>,<span class="string">'no_rotate_meas'</span>}, 1);
+0196 
+0197    <span class="keyword">otherwise</span>
+0198       error(<span class="string">'eidors_readdata: file &quot;%s&quot; format unknown'</span>, format);
+0199 <span class="keyword">end</span>
+0200 
+0201 <a name="_sub1" href="#_subfunctions" class="code">function stim = basic_stim(N_el);</a>
+0202    stim= <a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(16,1,[0,1],[0,1], <span class="keyword">...</span><span class="comment"> \</span>
+0203           {<span class="string">'no_meas_current'</span>,<span class="string">'no_rotate_meas'</span>}, 1);
+0204 
+0205 <a name="_sub2" href="#_subfunctions" class="code">function fmt = pre_proc_spec_fmt( format, fname );</a>
+0206    fmt= lower(format);
+0207    <span class="keyword">if</span> strcmp(fmt,<span class="string">'get'</span>)
+0208       <span class="keyword">if</span> <a href="#_sub3" class="code" title="subfunction df= is_get_file_a_draeger_file( fname)">is_get_file_a_draeger_file</a>( fname)
+0209          fmt= <span class="string">'draeger-get'</span>;
+0210       <span class="keyword">else</span>
+0211          fmt= <span class="string">'mceit'</span>;
+0212       <span class="keyword">end</span>
+0213    <span class="keyword">end</span>
+0214 
+0215    <span class="keyword">if</span> strcmp(fmt,<span class="string">'get-raw'</span>)
+0216       fmt= <span class="string">'mceit'</span>;
+0217    <span class="keyword">end</span>
+0218    
+0219 
+0220    <span class="keyword">if</span> strcmp(fmt,<span class="string">'eit'</span>)
+0221       draeger =   <a href="#_sub4" class="code" title="subfunction df= is_eit_file_a_draeger_file( fname );">is_eit_file_a_draeger_file</a>( fname );
+0222       swisstom=   <a href="#_sub5" class="code" title="subfunction df= is_eit_file_a_swisstom_file( fname );">is_eit_file_a_swisstom_file</a>( fname );
+0223       carefusion= <a href="#_sub6" class="code" title="subfunction df = is_eit_file_a_carefusion_file( fname )">is_eit_file_a_carefusion_file</a>( fname );
+0224       <span class="keyword">if</span> carefusion
+0225          <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'&quot;%s&quot; appears to be in GOEIIMF/Carefusion format'</span>,fname,3);
+0226          fmt= <span class="string">'carefusion'</span>;
+0227       <span class="keyword">elseif</span> draeger
+0228          <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'&quot;%s&quot; appears to be in Draeger format'</span>,fname,3);
+0229          fmt= <span class="string">'draeger-eit'</span>;
+0230       <span class="keyword">elseif</span> swisstom
+0231          fmt= sprintf(<span class="string">'lq%d'</span>,swisstom);
+0232          <span class="keyword">if</span> swisstom == 3.5
+0233             fmt= <span class="string">'lq4pre'</span>;
+0234          <span class="keyword">end</span>
+0235          <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'&quot;%s&quot; appears to be in %s format'</span>,fname,upper(fmt),3);
+0236       <span class="keyword">else</span>
+0237          error(<span class="string">'EIT file specified, but it doesn''t seem to be a Carefusion file'</span>)
+0238       <span class="keyword">end</span>
+0239    <span class="keyword">end</span>
+0240 
+0241 <a name="_sub3" href="#_subfunctions" class="code">function df= is_get_file_a_draeger_file( fname)</a>
+0242    fid= fopen(fname,<span class="string">'rb'</span>);
+0243    d= fread(fid,[1 26],<span class="string">'uchar'</span>);
+0244    fclose(fid);
+0245    df = all(d == <span class="string">'---Draeger EIT-Software---'</span>);
+0246 
+0247 <a name="_sub4" href="#_subfunctions" class="code">function df= is_eit_file_a_draeger_file( fname );</a>
+0248    fid= fopen(fname,<span class="string">'rb'</span>);
+0249    d= fread(fid,[1 80],<span class="string">'uchar'</span>);
+0250    fclose(fid);
+0251    ff = findstr(d, <span class="string">'---Draeger EIT-Software'</span>);
+0252    <span class="keyword">if</span> ff;
+0253       df = 1;
+0254       <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'Draeger format: %s'</span>, d(ff(1)+(0:30)),4);
+0255    <span class="keyword">else</span> 
+0256       df = 0;
+0257    <span class="keyword">end</span>
+0258 
+0259 <a name="_sub5" href="#_subfunctions" class="code">function df= is_eit_file_a_swisstom_file( fname );</a>
+0260    fid= fopen(fname,<span class="string">'rb'</span>);
+0261    d= fread(fid,[1 4],<span class="string">'uchar'</span>);
+0262    fclose(fid);
+0263    
+0264 <span class="comment">% Note that there are two possible LQ4 formats, either with</span>
+0265 <span class="comment">%     d=[0,0,0,4] or with d = [4,0,0,0]</span>
+0266 <span class="comment">%  we call the first one version 3.5</span>
+0267    <span class="keyword">if</span> any(d(4)==[2,3,4]) &amp;&amp; all(d([1,2,3]) == 0);
+0268       df = d(4);
+0269       <span class="keyword">if</span> d(4)==4; df = 3.5; <span class="keyword">end</span>
+0270 <span class="comment">%     eidors_msg('Swisstom format: LQ%d', df, 4);</span>
+0271    <span class="keyword">elseif</span> any(d(1:4) == [4,0,0,0])
+0272       df = 4;
+0273    <span class="keyword">else</span> 
+0274       df = 0;
+0275    <span class="keyword">end</span>
+0276 
+0277 <a name="_sub6" href="#_subfunctions" class="code">function df = is_eit_file_a_carefusion_file( fname )</a>
+0278    fid= fopen(fname,<span class="string">'rb'</span>);
+0279    d= fread(fid,[1 80],<span class="string">'uchar'</span>);
+0280    fclose(fid);
+0281    df = 0;
+0282    <span class="keyword">if</span> d(1:2) ~= [255,254]; <span class="keyword">return</span>; <span class="keyword">end</span>
+0283    <span class="keyword">if</span> d(4:2:end) ~= 0; <span class="keyword">return</span>; <span class="keyword">end</span>
+0284    str= setstr(d(3:2:end));
+0285    tests1= <span class="string">'&lt;?xml version=&quot;1.0&quot; ?&gt;'</span>;
+0286    tests2= <span class="string">'&lt;EIT_File&gt;'</span>;
+0287    <span class="keyword">if</span> ~any(findstr(str,tests1)); <span class="keyword">return</span>; <span class="keyword">end</span>
+0288    <span class="keyword">if</span> ~any(findstr(str,tests2)); <span class="keyword">return</span>; <span class="keyword">end</span>
+0289    
+0290    df= 1;
+0291    <span class="keyword">return</span>
+0292 
+0293 <a name="_sub7" href="#_subfunctions" class="code">function [vv, auxdata, auxtime] = carefusion_eit_readdata( fname );</a>
+0294    fid= fopen(fname,<span class="string">'rb'</span>);
+0295    d= fread(fid,[1 180],<span class="string">'uchar'</span>);
+0296    str= setstr(d(3:2:end));
+0297    outv = regexp(str,<span class="string">'&lt;Header&gt;(\d+) bytes&lt;/Header&gt;'</span>,<span class="string">'tokens'</span>);
+0298    <span class="keyword">if</span> length(outv) ~=1; 
+0299       error(<span class="string">'format problem reading carefusion eit files'</span>);
+0300    <span class="keyword">end</span>
+0301    header = str2num(outv{1}{1});
+0302 
+0303 <span class="comment">% NOTE: we're throwing away the header completely. This isn't</span>
+0304 <span class="comment">% the 'right' way to read a file.</span>
+0305 
+0306    fseek(fid, header, -1); <span class="comment">% From the beginning</span>
+0307    d_EIT= fread(fid,[inf],<span class="string">'float32'</span>);
+0308 
+0309    fseek(fid, header, -1); <span class="comment">% From the beginning</span>
+0310    d_struct= fread(fid,[inf],<span class="string">'int32'</span>);  <span class="comment">% In the struct, meaning of every int: 1 Type, 2 Waveform channel No., 3 sequence No., 4 size in byte, 5 count</span>
+0311    fclose(fid);
+0312    pt_EIT=1;               <span class="comment">% pointer of the EIT data</span>
+0313    vv=[];
+0314    auxdata=[];
+0315    
+0316    <span class="keyword">while</span> (pt_EIT&lt;=length(d_struct))
+0317       <span class="keyword">switch</span> d_struct(pt_EIT)
+0318          <span class="keyword">case</span> 3, <span class="comment">% type=3,  EIT transimpedance measurement</span>
+0319            <span class="comment">% d_struct(pt_EIT+2), Sequence No., start from 0</span>
+0320            vv(1:256,1+d_struct(pt_EIT+2))= d_EIT(pt_EIT+6:pt_EIT+6+255);
+0321            pt_EIT=pt_EIT+6+256;
+0322          <span class="keyword">case</span> 7, <span class="comment">%type=7, EIT image vector</span>
+0323            pt_EIT=pt_EIT+912+6;        <span class="comment">% drop the image</span>
+0324          <span class="keyword">case</span> 8, <span class="comment">%type=8, Waveform data</span>
+0325             aux_seg_len = d_struct(pt_EIT+3)/4*d_struct(pt_EIT+4);
+0326            <span class="keyword">if</span> (d_struct(pt_EIT+1) == 0)     <span class="comment">% waveform channel 0 is the analog input</span>
+0327                aux_segment = d_EIT(pt_EIT+6 : pt_EIT+6+aux_seg_len-1);
+0328                auxdata = [auxdata; aux_segment];
+0329            <span class="keyword">else</span>
+0330                <span class="comment">% drop all other waveform channels (see Waves/Waveform in header file for what they are)</span>
+0331            <span class="keyword">end</span>  
+0332            pt_EIT=pt_EIT+6+aux_seg_len;           
+0333          <span class="keyword">case</span> 10,<span class="comment">% type = 10, unknown type</span>
+0334            <span class="comment">%drop</span>
+0335            pt_EIT=pt_EIT+6+d_struct(pt_EIT+3)/4*d_struct(pt_EIT+4);
+0336          <span class="keyword">otherwise</span>,
+0337            <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'WARNING: unknown type in carefusion file type'</span>);
+0338            pt_EIT=pt_EIT+6+d_struct(pt_EIT+3)/4*d_struct(pt_EIT+4);
+0339        <span class="keyword">end</span>
+0340    <span class="keyword">end</span>
+0341    vv=vv(47+[1:208],:);
+0342    auxtime = (cumsum([1 13*ones(1,15)])-1)/208;             <span class="comment">% relative time as fractions of the EIT frame: assuming uniform sampling - not sure this is 100% correct(!)</span>
+0343    auxtime = reshape(repmat(1:size(vv,2), length(auxtime), 1),[],1) + repmat(auxtime, 1, size(vv,2))';
+0344    
+0345 
+0346 <span class="comment">% Read the old &lt;2006 Draeger &quot;get&quot; file format</span>
+0347 <a name="_sub8" href="#_subfunctions" class="code">function [vv,curr,volt,auxdata] = draeger_get_readdata( fname );</a>
+0348    fid= fopen(fname,<span class="string">'rb'</span>);
+0349    emptyctr=0;
+0350    <span class="keyword">while</span> emptyctr&lt;2
+0351      line= fgetl(fid);
+0352      <span class="keyword">if</span> isempty(line)
+0353         emptyctr= emptyctr+1;
+0354      <span class="keyword">else</span>
+0355         <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'data not understood'</span>,0);
+0356         emptyctr=0;
+0357      <span class="keyword">end</span>
+0358    <span class="keyword">end</span>
+0359    d= fread(fid,inf,<span class="string">'float'</span>,0,<span class="string">'ieee-le'</span>);
+0360    fclose(fid);
+0361 pause
+0362 
+0363    <span class="keyword">if</span> rem( length(d), 256) ~=0
+0364       <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'File length strange - cropping file'</span>,0);
+0365       d=d(1:floor(length(d)/256)*256);
+0366    <span class="keyword">end</span>
+0367 
+0368    dd= reshape( d, 256, length(d)/256);
+0369    vv= <a href="#_sub13" class="code" title="subfunction vv= untwist(dd);">untwist</a>(dd);
+0370 
+0371    curr=0.00512*dd(209:224,:);  <span class="comment">% Amps</span>
+0372    volt=12*dd(225:240,:); <span class="comment">%Vrms</span>
+0373    auxdata= dd(241:255,:);
+0374    auxdata= auxdata(:);
+0375     
+0376 <a name="_sub9" href="#_subfunctions" class="code">function jnk</a>
+0377 <span class="comment">%[adler@adler01 sept07]$ xxd Sch_Pneumoperitoneum_01_001.get | head -30</span>
+0378 <span class="comment">%0000000: 2d2d 2d44 7261 6567 6572 2045 4954 2d53  ---Draeger EIT-S</span>
+0379 <span class="comment">%0000010: 6f66 7477 6172 652d 2d2d 0d0a 2d2d 2d50  oftware---..---P</span>
+0380 <span class="comment">%0000020: 726f 746f 636f 6c20 4461 7461 2d2d 2d2d  rotocol Data----</span>
+0381 <span class="comment">%0000030: 2d0d 0a0d 0a44 6174 653a 2020 3138 2d30  -....Date:  18-0</span>
+0382 <span class="comment">%0000040: 322d 3230 3034 0d0a 5469 6d65 3a20 2031  2-2004..Time:  1</span>
+0383 <span class="comment">%0000050: 333a 3138 2050 4d0d 0a0d 0a46 696c 656e  3:18 PM....Filen</span>
+0384 <span class="comment">%0000060: 616d 653a 2020 2020 2020 2020 2053 6368  ame:         Sch</span>
+0385 <span class="comment">%0000070: 5f50 6e65 756d 6f70 6572 6974 6f6e 6575  _Pneumoperitoneu</span>
+0386 <span class="comment">%0000080: 6d5f 3031 5f30 3031 2e67 6574 0d0a 4453  m_01_001.get..DS</span>
+0387 <span class="comment">%0000090: 5020 5365 7269 616c 204e 722e 3a20 2020  P Serial Nr.:</span>
+0388 <span class="comment">%00000a0: 4549 5430 322f 3035 2f30 3030 360d 0a0d  EIT02/05/0006...</span>
+0389 <span class="comment">%00000b0: 0a46 7265 7175 656e 6379 205b 487a 5d3a  .Frequency [Hz]:</span>
+0390 <span class="comment">%00000c0: 2020 2020 3937 3635 362e 330d 0a47 6169      97656.3..Gai</span>
+0391 <span class="comment">%00000d0: 6e3a 2020 2020 2020 2020 2020 2020 2020  n:</span>
+0392 <span class="comment">%00000e0: 2020 2031 3134 350d 0a41 6d70 6c69 7475     1145..Amplitu</span>
+0393 <span class="comment">%00000f0: 6465 3a20 2020 2020 2020 2020 2020 2031  de:            1</span>
+0394 <span class="comment">%0000100: 3030 300d 0a53 616d 706c 6520 5261 7465  000..Sample Rate</span>
+0395 <span class="comment">%0000110: 205b 6b48 7a5d 3a20 2020 2035 3030 300d   [kHz]:    5000.</span>
+0396 <span class="comment">%0000120: 0a50 6572 696f 6473 3a20 2020 2020 2020  .Periods:</span>
+0397 <span class="comment">%0000130: 2020 2020 2020 2020 2032 300d 0a46 7261           20..Fra</span>
+0398 <span class="comment">%0000140: 6d65 733a 2020 2020 2020 2020 2020 2020  mes:</span>
+0399 <span class="comment">%0000150: 2020 2020 2031 300d 0a0d 0a0d 0a</span>
+0400 <span class="comment">%                                       8bc33e       10........&gt;</span>
+0401 <span class="comment">%0000160: 3f 0548633e bf20933d e192393d a568ea  ?.Hc&gt;. .=..9=.h.</span>
+0402 <span class="comment">%0000170: 3c 2530f63c 27e6043d 2043ad3c 25ce93  &lt;%0.&lt;'..= C.&lt;%..</span>
+0403 <span class="comment">%0000180: 3c aebcce3c 8714643d e3533d3e 65b6e1  &lt;...&lt;..d=.S=&gt;e..</span>
+0404 <span class="comment">%0000190: 3e 7a62103f 81c4143e 8c99813d 35921d  &gt;zb.?...&gt;...=5..</span>
+0405 <span class="comment">%00001a0: 3d 8e6b0d3d 690cf93c 9910713c 3c9289  =.k.=i..&lt;..q&lt;&lt;..</span>
+0406 <span class="comment">%00001b0: 3c f6736f3c 2291453d ad1cab3d 386f15  &lt;.so&lt;&quot;.E=...=8o.</span>
+0407 <span class="comment">%00001c0: 3e e82a143f 2a952e3f f568493e f08a8c  &gt;.*.?*..?.hI&gt;...</span>
+0408 <span class="comment">%00001d0: 3d e43e0e3d 7040253d 19f4af3c 67fd93  =.&gt;.=p@%=...&lt;g..</span>
+0409 
+0410 <a name="_sub10" href="#_subfunctions" class="code">function vv = sheffield_readdata( fname );</a>
+0411    fid=fopen(fname,<span class="string">'rb'</span>,<span class="string">'ieee-le'</span>);
+0412    draw=fread(fid,[104,inf],<span class="string">'float32'</span>);
+0413    fclose(fid);
+0414    ldat = size(draw,2);
+0415 
+0416    [x,y]= meshgrid( 1:16, 1:16);
+0417    idxm= y-x;
+0418  <span class="comment">% HW gain table</span>
+0419    gtbl = [0,849,213,87,45,28,21,19,21,28,45,87,213,849,0];
+0420    idxm(idxm&lt;=0)= 1;
+0421    idxm= gtbl(idxm);
+0422 
+0423  <span class="comment">% Multiply by gains</span>
+0424    draw = draw .* (idxm(idxm&gt;0) * ones(1,ldat)); 
+0425 
+0426    vv= zeros(16*16, size(draw,2));
+0427    vv(find(idxm),:) = draw;
+0428 
+0429  <span class="comment">% Add reciprocal measurements</span>
+0430    vv= reshape(vv,[16,16,ldat]);
+0431    vv= vv + permute( vv, [2,1,3]);
+0432    vv= reshape(vv,[16*16,ldat]);
+0433 
+0434    
+0435 
+0436 <a name="_sub11" href="#_subfunctions" class="code">function [vv,curr,volt,auxdata,auxtime,rawdata] = mceit_readdata( fname );</a>
+0437 
+0438    fid= fopen(fname,<span class="string">'rb'</span>);
+0439    d= fread(fid,inf,<span class="string">'float'</span>);
+0440    fclose(fid);
+0441 
+0442    <span class="keyword">if</span> rem( length(d), 256) ~=0
+0443       <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'File length strange - cropping file'</span>,0);
+0444       d=d(1:floor(length(d)/256)*256);
+0445    <span class="keyword">end</span>
+0446 
+0447    dd= reshape( d, 256, length(d)/256);
+0448    rawdata = dd;
+0449    no_reciprocity = (dd(39,1)==0);      <span class="comment">%104 measurements per frame</span>
+0450    <span class="keyword">if</span> no_reciprocity
+0451        dd=<a href="#_sub12" class="code" title="subfunction array208=transfer104_208(array104),">transfer104_208</a>(dd);
+0452    <span class="keyword">end</span>
+0453    vv= <a href="#_sub13" class="code" title="subfunction vv= untwist(dd);">untwist</a>(dd);
+0454 
+0455    curr=0.00512*dd(209:224,:);  <span class="comment">% Amps</span>
+0456    volt=12*dd(225:240,:); <span class="comment">%Vrms</span>
+0457    auxdata= dd(241:256,:);
+0458    auxdata= auxdata(:);
+0459    <span class="comment">%input impedance=voltage./current-440;        Ohm</span>
+0460    
+0461    <span class="keyword">if</span> no_reciprocity
+0462      <span class="comment">% remove every 14th, 15th and 16th sample as they are always zero</span>
+0463      auxdata(14:16:end) = []; auxdata(14:15:end) = []; auxdata(14:14:end) = [];
+0464      <span class="comment">% only 104 measurements were performed with NON-UNIFORM sampling of AUX in between EIT samples</span>
+0465      <span class="comment">% Sampling procedure was thought to be: 13 AUX1 13 AUX2 12 AUX3 11 AUX4 10 AUX5 9 ... 2 AUX13 1 [END OF FRAME]</span>
+0466 <span class="comment">%      auxtime = (cumsum([1 13 12:-1:2]) - 1) / 104;</span>
+0467      <span class="comment">% However, this seems to be a little different, finally the sampling points were determined</span>
+0468      <span class="comment">% empirically by measuring a sawtooth signal (linear ramp) and fitting the timings</span>
+0469      auxtime = [0.0000,0.1390,0.2535,0.3617,0.4642,0.5486,0.6367,0.7110,0.7780,0.8354,0.8865,0.9304,0.9711];  <span class="comment">% mean fit at 25 Hz</span>
+0470 <span class="comment">%      auxtime = [0.0000,0.1460,0.2789,0.3895,0.4875,0.5788,0.6608,0.7356,0.7986,0.8569,0.9045,0.9454,0.9824,]; % mean fit at 44 Hz</span>
+0471    <span class="keyword">else</span>
+0472      <span class="comment">% all 208 measurements were performed</span>
+0473      auxtime = (cumsum([1 13*ones(1,15)])-1)/208;             <span class="comment">% relative time as fractions of the EIT frame</span>
+0474    <span class="keyword">end</span>
+0475    <span class="comment">% time of AUX signal relative to frame number (starting with 1 - Matlab style)</span>
+0476    auxtime = reshape(repmat(1:size(dd,2), length(auxtime), 1),[],1) + repmat(auxtime, 1, size(dd,2))';
+0477    
+0478 
+0479 <a name="_sub12" href="#_subfunctions" class="code">function array208=transfer104_208(array104),</a>
+0480 <span class="comment">% The order in the 208-vector is</span>
+0481 <span class="comment">% Index   Inject    Measure Pair</span>
+0482 <span class="comment">% 1         1-2        3-4        (alternate pair is 3-4, 1-2, at location 39)</span>
+0483 <span class="comment">% 2         1-2        4-5</span>
+0484 <span class="comment">% 3         1-2        5-6</span>
+0485 <span class="comment">% ¡­</span>
+0486 <span class="comment">% 13        1-2        15-16</span>
+0487 <span class="comment">% 14        2-3        4-5</span>
+0488 <span class="comment">% 15        2-3        5-6</span>
+0489 <span class="comment">% ¡­</span>
+0490 <span class="comment">% 26        2-3        16-1</span>
+0491 <span class="comment">% 27        3-4        5-6</span>
+0492 <span class="comment">% ¡­</span>
+0493 <span class="comment">% 39        3-4        1-2</span>
+0494 <span class="comment">% 40        4-5        6-7</span>
+0495 <span class="comment">% ¡­</span>
+0496 
+0497 ind=[39,51,63,75,87,99,111,123,135,147,159,171,183,52,64,76, <span class="keyword">...</span>
+0498      88,100,112,124,136,148,160,172,184,196,65,77,89,101,113, <span class="keyword">...</span>
+0499      125,137,149,161,173,185,197,78,90,102,114,126,138,150,162, <span class="keyword">...</span>
+0500      174,186,198,91,103,115,127,139,151,163,175,187,199,104,116, <span class="keyword">...</span>
+0501      128,140,152,164,176,188,200,117,129,141,153,165,177,189, <span class="keyword">...</span>
+0502      201,130,142,154,166,178,190,202,143,155,167,179,191,203, <span class="keyword">...</span>
+0503      156,168,180,192,204,169,181,193,205,182,194,206,195,207,208];
+0504 ro=[1:13, 14:26, 27:38, 40:50, 53:62, 66:74, 79:86, 92:98, <span class="keyword">...</span>
+0505     105:110,118:122,131:134,144:146,157:158,170:170];
+0506 
+0507 [x,y]=size(array104);
+0508 <span class="keyword">if</span> x~=256 &amp;&amp; y~=256,
+0509     <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>([<span class="string">'eidors_readdata: expectingin an input array '</span>, <span class="keyword">...</span>
+0510                 <span class="string">'of size 208*n'</span>]);
+0511     <span class="keyword">return</span>;
+0512 <span class="keyword">elseif</span> y==256,
+0513     array104=array104';
+0514     y=x;
+0515 <span class="keyword">end</span>
+0516 array208=array104;
+0517 <span class="keyword">for</span> i=1:y,
+0518     array208(ind,i)=array104(ro,i);    
+0519 <span class="keyword">end</span>
+0520    
+0521 
+0522 <span class="comment">% measurements rotate with stimulation, we untwist them</span>
+0523 <a name="_sub13" href="#_subfunctions" class="code">function vv= untwist(dd);</a>
+0524    elec=16;
+0525    pos_i= [0,1];
+0526    ELS= rem(rem(0:elec^2-1,elec) - <span class="keyword">...</span>
+0527         floor((0:elec^2-1)/elec)+elec,elec)';
+0528    ELS=~any(rem( elec+[-1 0 [-1 0]+pos_i*[-1;1] ] ,elec)' <span class="keyword">...</span>
+0529         *ones(1,elec^2)==ones(4,1)*ELS')';
+0530    twist= [               0+(1:13), <span class="keyword">...</span>
+0531                          13+(1:13), <span class="keyword">...</span>
+0532            39-(0:-1:0),  26+(1:12), <span class="keyword">...</span>
+0533            52-(1:-1:0),  39+(1:11), <span class="keyword">...</span>
+0534            65-(2:-1:0),  52+(1:10), <span class="keyword">...</span>
+0535            78-(3:-1:0),  65+(1: 9), <span class="keyword">...</span>
+0536            91-(4:-1:0),  78+(1: 8), <span class="keyword">...</span>
+0537           104-(5:-1:0),  91+(1: 7), <span class="keyword">...</span>
+0538           117-(6:-1:0), 104+(1: 6), <span class="keyword">...</span>
+0539           130-(7:-1:0), 117+(1: 5), <span class="keyword">...</span>
+0540           143-(8:-1:0), 130+(1: 4), <span class="keyword">...</span>
+0541           156-(9:-1:0), 143+(1: 3), <span class="keyword">...</span>
+0542           169-(10:-1:0),156+(1: 2), <span class="keyword">...</span>
+0543           182-(11:-1:0),169+(1: 1), <span class="keyword">...</span>
+0544           195-(12:-1:0), <span class="keyword">...</span>
+0545           208-(12:-1:0) ];
+0546     vv= zeros(256,size(dd,2));
+0547     vv(ELS,:)= dd(twist,:);
+0548    <span class="comment">%vv= dd(1:208,:);</span>
+0549 
+0550 <span class="comment">% Read data from p2k files (I T S system)</span>
+0551 <span class="comment">% FIXME: this code is very rough, it works for</span>
+0552 <span class="comment">%   only eight ring data records</span>
+0553 <a name="_sub14" href="#_subfunctions" class="code">function  vv = its_readdata( fname ) </a>
+0554    fid= fopen( fname, <span class="string">'rb'</span>, <span class="string">'ieee-le'</span>);
+0555    vv=[];
+0556 
+0557    <span class="comment">% don't know how to interpret header</span>
+0558    header= fread(fid, 880, <span class="string">'uchar'</span>);
+0559    frameno= 0;
+0560    rings= 8;
+0561    <span class="keyword">while</span>( ~feof(fid) )
+0562        frameno= frameno+1;
+0563        <span class="comment">% don't know how to interpret frame header</span>
+0564        framehdr= fread(fid, 40);
+0565        data= fread(fid, 104*rings, <span class="string">'double'</span>);
+0566        vv= [vv, data];
+0567    <span class="keyword">end</span>
+0568 
+0569    <span class="keyword">if</span> 0 <span class="comment">% convert a ring to 208</span>
+0570       ringno= 1;
+0571       ld= size(vv,2);
+0572       vx= [zeros(1,ld);vv( ringno*104 + (-103:0) ,: )];
+0573       idx= ptr104_208;
+0574       vv= vx(idx+1,:);
+0575    <span class="keyword">end</span>
+0576 
+0577 <span class="comment">% pointer to convert from 104 to 208 meas patterns</span>
+0578 <a name="_sub15" href="#_subfunctions" class="code">function idx= ptr104_208;</a>
+0579     idx= zeros(16);
+0580     idx(1,:)= [0,0,1:13,0];
+0581     ofs= 13;
+0582     <span class="keyword">for</span> i= 2:14
+0583         mm= 15-i;
+0584         idx(i,:) = [zeros(1,i+1), (1:mm)+ofs ];
+0585         ofs= ofs+ mm;
+0586     <span class="keyword">end</span>
+0587 
+0588     idx= idx + idx';
+0589     
+0590 <a name="_sub16" href="#_subfunctions" class="code">function vv = iirc_readdata( fname );</a>
+0591     fid= fopen( fname, <span class="string">'r'</span>);
+0592     <span class="keyword">while</span> ~feof(fid)
+0593        line = fgetl(fid);
+0594        <span class="keyword">if</span> isempty(line)
+0595            <span class="keyword">continue</span>;
+0596        <span class="keyword">end</span>
+0597        
+0598        num= regexp(line,<span class="string">'Channel : (\d+)'</span>);
+0599        <span class="keyword">if</span> ~isempty(num)
+0600            channels= str2num( line(num(1):end ) );
+0601            <span class="keyword">continue</span>;
+0602        <span class="keyword">end</span>
+0603        
+0604        num= regexp(line,<span class="string">'Frequency : (\d+)kHz'</span>);
+0605        <span class="keyword">if</span> ~isempty(num)
+0606            freqency= str2num( line(num(1):end ) );
+0607            <span class="keyword">continue</span>;
+0608        <span class="keyword">end</span>
+0609 
+0610        num= regexp(line,<span class="string">'Scan Method : (\w+)'</span>);
+0611        <span class="keyword">if</span> ~isempty(num)
+0612            scan_method=  line(num(1):end );
+0613            <span class="keyword">continue</span>;
+0614        <span class="keyword">end</span>
+0615 
+0616        num= regexp(line,<span class="string">'Study : (\w+)'</span>);
+0617        <span class="keyword">if</span> ~isempty(num)
+0618            study=  line(num(1):end);
+0619            <span class="keyword">continue</span>;
+0620        <span class="keyword">end</span>
+0621            
+0622        <span class="keyword">if</span> strcmp(line,<span class="string">'Data'</span>);
+0623            data= fscanf(fid,<span class="string">'%f'</span>,[4,inf])';
+0624            <span class="keyword">continue</span>;
+0625        <span class="keyword">end</span>
+0626     <span class="keyword">end</span>
+0627     vv= data(:,1) + 1i*data(:,2);
+0628     <span class="keyword">if</span> length(vv) ~= channels^2
+0629         error(<span class="string">'eidors_readdata: data length wrong'</span>)
+0630     <span class="keyword">end</span>
+0631 
+0632 <span class="comment">% stimulation is the fwd_model stimulation data structure</span>
+0633 <span class="comment">% meas_select indicates if data is NOT measures on current electrode</span>
+0634 <a name="_sub17" href="#_subfunctions" class="code">function [stimulations,meas_select] = UCT_sequence_file( fname );</a>
+0635    <span class="comment">% (c) Tim Long</span>
+0636    <span class="comment">% 21 January 2005</span>
+0637    <span class="comment">% University of Cape Town</span>
+0638 
+0639 
+0640    <span class="comment">% open the file</span>
+0641    fid = fopen(fname, <span class="string">'rt'</span>);
+0642 
+0643    <span class="comment">% check to see if file opened ok</span>
+0644    <span class="keyword">if</span> fid == -1
+0645          errordlg(<span class="string">'File not found'</span>,<span class="string">'ERROR'</span>)  
+0646          <span class="keyword">return</span>;
+0647    <span class="keyword">end</span>
+0648 
+0649 
+0650    tline = fgetl(fid);             <span class="comment">% get the spacer at top of text file</span>
+0651 
+0652    <span class="comment">% the measurement and injection pattern is stored as follows:</span>
+0653    <span class="comment">% I1V1:  db #$00,#$0F,#$00,#$00,#$10,#$00,#$00,#$21,#$00 ...</span>
+0654    <span class="comment">% I2V2:  db #$11,#$0F,#$11,#$11,#$10,#$11,#$11,#$21,#$11 ...</span>
+0655    <span class="comment">% etc</span>
+0656    <span class="comment">% need to put all the bytes in a vector</span>
+0657 
+0658    <span class="comment">% tokenlist will store the list of bytes as strings</span>
+0659    tokenlist = [];
+0660 
+0661 
+0662    tline = fgetl(fid);             <span class="comment">% get first line of data</span>
+0663 
+0664    <span class="keyword">while</span> length(tline) ~= 0
+0665        
+0666        <span class="comment">% the first few characters in the line are junk</span>
+0667        rem = tline(11:end);            <span class="comment">% extract only useful data</span>
+0668        
+0669        <span class="comment">% extract each byte</span>
+0670        <span class="keyword">while</span> length(rem) ~=0
+0671            [token, rem] = strtok(rem, <span class="string">','</span>);
+0672            tokenlist = [tokenlist; token];
+0673        <span class="keyword">end</span>
+0674        
+0675        <span class="comment">% get the next line in sequence file</span>
+0676        tline = fgetl(fid);
+0677    <span class="keyword">end</span>
+0678 
+0679    fclose(fid);
+0680 
+0681    <span class="comment">% got everything in string form... need to covert to number format</span>
+0682 
+0683    drive_lay = [];
+0684    drive_elec = [];
+0685    sense_lay = [];
+0686 
+0687    injection_no = 1;
+0688    <span class="comment">% for each injection</span>
+0689    <span class="keyword">for</span> i=1:3:length(tokenlist)
+0690        
+0691        <span class="comment">% get injection layer</span>
+0692        tsource_layer = tokenlist(i,3);
+0693        tsink_layer = tokenlist(i,4);
+0694        source_layer = sscanf(tsource_layer, <span class="string">'%x'</span>);
+0695        sink_layer = sscanf(tsink_layer, <span class="string">'%x'</span>);
+0696        
+0697        drive_lay = [drive_lay; [source_layer sink_layer]];
+0698          
+0699        
+0700        <span class="comment">% get drive pair</span>
+0701        tsource_elec = tokenlist(i+1,3);
+0702        tsink_elec = tokenlist(i+1,4);
+0703        source_elec = sscanf(tsource_elec, <span class="string">'%x'</span>);
+0704        sink_elec = sscanf(tsink_elec, <span class="string">'%x'</span>);
+0705        
+0706        drive_elec = [drive_elec; [source_elec sink_elec]];
+0707        
+0708        
+0709        <span class="comment">% get sense layer pair</span>
+0710        tpos_layer = tokenlist(i+2,3);
+0711        tneg_layer = tokenlist(i+2,4);
+0712        pos_sense_layer = sscanf(tpos_layer, <span class="string">'%x'</span>);
+0713        neg_sense_layer = sscanf(tneg_layer, <span class="string">'%x'</span>);
+0714        
+0715        sense_lay = [sense_lay; [pos_sense_layer neg_sense_layer]];
+0716    <span class="keyword">end</span>
+0717 
+0718    n_elec = size(sense_lay,1);
+0719    n_inj  = size(drive_lay,1);       <span class="comment">% every injection</span>
+0720    elecs_per_plane = 16; <span class="comment">% FIXED FOR THE UCT DEVICE</span>
+0721    raw_index = 0;
+0722    meas_select = [];
+0723 
+0724    <span class="keyword">for</span> i=1:n_inj      <span class="comment">% for every injection</span>
+0725        stimulations(i).stimulation= <span class="string">'mA'</span>;
+0726        
+0727        <span class="comment">% find the injection electrodes</span>
+0728        e_inj_p = drive_lay(i, 1) * elecs_per_plane + drive_elec(i,1) + 1;
+0729        e_inj_n = drive_lay(i, 2) * elecs_per_plane + drive_elec(i,2) + 1;
+0730 
+0731        <span class="comment">% create the stimulation pattern for this injection</span>
+0732        inj = zeros(n_elec, 1);
+0733        inj(e_inj_p) = 1;
+0734        inj(e_inj_n) = -1;
+0735        stimulations(i).stim_pattern = inj;
+0736      
+0737        <span class="comment">% the UCT instrument always makes 16 measurements per injection.</span>
+0738        <span class="comment">% the +ve and -ve electrodes are always adjacent, but might be on</span>
+0739        <span class="comment">% different planes</span>
+0740        meas_pat = [];
+0741        <span class="keyword">for</span> e = 0:15
+0742            raw_index = raw_index + 1;
+0743            meas = zeros(1, n_elec);   <span class="comment">% the measurement electrodes for this sample</span>
+0744 
+0745            <span class="comment">% find the measurement electrodes for this measurement (+ve elec is</span>
+0746            <span class="comment">% next to -ve electrode)</span>
+0747            e_meas_p = sense_lay(i,1) * elecs_per_plane + mod(e+1,elecs_per_plane) + 1;
+0748            e_meas_n = sense_lay(i,2) * elecs_per_plane + e + 1;
+0749 
+0750            <span class="comment">% if either of the drive electrodes are equal to any of the sense</span>
+0751            <span class="comment">% electrodes, we must not include this sample</span>
+0752            <span class="keyword">if</span> any( e_meas_p == [e_inj_p, e_inj_n] ) | <span class="keyword">...</span>
+0753               any( e_meas_n == [e_inj_p, e_inj_n] ) 
+0754                <span class="keyword">continue</span>;
+0755            <span class="keyword">end</span>
+0756 
+0757            meas(e_meas_p) = -1;
+0758            meas(e_meas_n) = 1;
+0759            meas_select = [meas_select;raw_index];
+0760            
+0761            <span class="comment">% add this measurement to the measurement pattern</span>
+0762            meas_pat = [meas_pat; meas];
+0763 
+0764        <span class="keyword">end</span>     <span class="comment">% for each injection there are actually only 13-16 measurements</span>
+0765        stimulations(i).meas_pattern = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(meas_pat);
+0766    <span class="keyword">end</span>
+0767 
+0768 <a name="_sub18" href="#_subfunctions" class="code">function [cur_data,no_cur_data] = UCT_calibration_file( fname );</a>
+0769    fid = fopen(fname, <span class="string">'rb'</span>);
+0770    mag_num = fread(fid, 1, <span class="string">'int32'</span>);
+0771    version = fread(fid, 1, <span class="string">'int32'</span>);
+0772 <span class="comment">%  comments = fread(fid, 2048, 'char'); MATLAB CHANGED CHAR to 2 bytes</span>
+0773    comments = fread(fid, 2048, <span class="string">'uint8'</span>);
+0774    comments = setstr(comments');
+0775    no_of_layers = fread(fid, 1, <span class="string">'int32'</span>);
+0776    uppa_dac = fread(fid, 1, <span class="string">'float64'</span>);
+0777    lowa_dac = fread(fid, 1, <span class="string">'float64'</span>);
+0778    raw_frame_size = fread(fid, 1, <span class="string">'int32'</span>);
+0779 
+0780    no_cur_data = [];
+0781    cur_data = [];
+0782 
+0783    <span class="keyword">for</span> i=1:no_of_layers
+0784        no_cur_data = [no_cur_data;fread(fid, raw_frame_size, <span class="string">'float64'</span>)];
+0785        cur_data = [cur_data;fread(fid, raw_frame_size, <span class="string">'float64'</span>)];
+0786    <span class="keyword">end</span>
+0787    fclose(fid);
+0788 
+0789 <span class="comment">%  no_cur_data = UCT_ShuffleData( no_cur_data);</span>
+0790 <span class="comment">%  cur_data =    UCT_ShuffleData( cur_data);</span>
+0791 
+0792 <a name="_sub19" href="#_subfunctions" class="code">function [v_raw] = UCT_LoadDataFrame(infilename)</a>
+0793 <span class="comment">% [v_raw] = LoadDataFrame(infilename)</span>
+0794 <span class="comment">%</span>
+0795 <span class="comment">% Loads the data from the tomography file</span>
+0796 <span class="comment">%</span>
+0797 <span class="comment">% (c) Tim Long</span>
+0798 <span class="comment">% 21 January 2005</span>
+0799 <span class="comment">% University of Cape Town</span>
+0800 
+0801 
+0802 <span class="comment">% Open the file</span>
+0803 fid = fopen(infilename, <span class="string">'rb'</span>);
+0804 
+0805 <span class="keyword">if</span> fid == -1
+0806       errordlg(<span class="string">'File not found'</span>,<span class="string">'ERROR'</span>)  
+0807       <span class="keyword">return</span>;
+0808 <span class="keyword">end</span>
+0809 
+0810 <span class="comment">%%% new file changes</span>
+0811 magic_number = fread(fid, 1, <span class="string">'uint32'</span>);
+0812 
+0813 <span class="keyword">if</span> magic_number ~= 2290649224
+0814    disp(<span class="string">'UCT File: wrong file type'</span>); 
+0815 <span class="keyword">end</span>
+0816 version = fread(fid, 1, <span class="string">'uint32'</span>);
+0817 foffset = fread(fid, 1, <span class="string">'uint32'</span>);
+0818 no_of_layers = fread(fid, 1, <span class="string">'uint32'</span>);
+0819 frame_size = fread(fid, 1, <span class="string">'uint32'</span>);
+0820 fseek(fid, foffset-8, <span class="string">'cof'</span>);
+0821 
+0822 <span class="comment">%%% end of new file changes</span>
+0823 <span class="comment">%%% old file stuff</span>
+0824 <span class="comment">% no_of_layers = fread(fid, 1, 'uint32');</span>
+0825 <span class="comment">% frame_size = fread(fid, 1, 'uint32');</span>
+0826 
+0827 frame_no = fread(fid, 1, <span class="string">'uint32'</span>);
+0828 
+0829 v_raw = [];
+0830 <span class="keyword">while</span> feof(fid)==0
+0831     v_raw = [v_raw, fread(fid, frame_size*no_of_layers, <span class="string">'float64'</span>)];
+0832     frame_no = fread(fid, 1, <span class="string">'uint32'</span>);
+0833 <span class="keyword">end</span>
+0834 
+0835 fclose(fid);
+0836 <span class="comment">% UCT_ShuffleData??</span>
+0837 
+0838 <span class="comment">% Read data from the file format develped by Pascal</span>
+0839 <span class="comment">% Gaggero at CSEM Landquart in Switzerland.</span>
+0840 <a name="_sub20" href="#_subfunctions" class="code">function [vv] = landquart1_readdata( fname );</a>
+0841    FrameSize = 1024;
+0842 
+0843    enableCounter=1;
+0844    counter=0;
+0845 
+0846    fid=fopen(fname);
+0847 
+0848    codec=fread(fid,1,<span class="string">'int'</span>); <span class="comment">%read codec</span>
+0849    <span class="keyword">if</span> codec~=1; error(<span class="string">'Codec unexpected value'</span>); <span class="keyword">end</span>
+0850 
+0851    nbFileInHeader=fread(fid,1,<span class="string">'int'</span>); <span class="comment">%read codec</span>
+0852    
+0853    <span class="keyword">for</span> i=1:nbFileInHeader
+0854        lenghtFile = fread(fid,1,<span class="string">'int64'</span>); 
+0855        <a href="#_sub9" class="code" title="subfunction jnk">jnk</a>= fread(fid,lenghtFile,<span class="string">'int8'</span>);<span class="comment">% discard the file</span>
+0856    <span class="keyword">end</span>
+0857    
+0858    
+0859    vv= []; 
+0860    <span class="keyword">while</span> 1; 
+0861        type=fread(fid,1,<span class="string">'int'</span>); <span class="comment">%check if not End of file</span>
+0862        <span class="keyword">if</span> type == -1; <span class="keyword">break</span> ; <span class="keyword">end</span>
+0863        
+0864        nel= fread(fid,1,<span class="string">'int'</span>);
+0865        sz= fread(fid,1,<span class="string">'int'</span>);
+0866        iq=fread(fid,[2,sz/8],<span class="string">'int'</span>)';
+0867 
+0868        vv = [vv, iq*[1;1j]]; <span class="comment">%I+ 1j*Q vectors</span>
+0869        
+0870        <span class="keyword">for</span> j=1:nel-1
+0871            sz= fread(fid,1,<span class="string">'int'</span>);
+0872            <a href="#_sub9" class="code" title="subfunction jnk">jnk</a> = fread(fid,sz/4,<span class="string">'int'</span>);
+0873        <span class="keyword">end</span>
+0874        
+0875    <span class="keyword">end</span>
+0876    
+0877 <span class="comment">% Read data from the file format develped by Swisstom, Landquart, Switzerland.</span>
+0878 <a name="_sub21" href="#_subfunctions" class="code">function [vv, elecImps, tStampsAbs, tStampsRel] = landquart2_readdata( fname )</a>
+0879    <span class="keyword">if</span> ~exist(<span class="string">'OCTAVE_VERSION'</span>)
+0880    [fid msg]= fopen(fname,<span class="string">'r'</span>,<span class="string">'ieee-be'</span>,<span class="string">'UTF-8'</span>);
+0881    <span class="keyword">else</span>
+0882    [fid msg]= fopen(fname,<span class="string">'r'</span>,<span class="string">'ieee-be'</span>);
+0883    <span class="keyword">end</span>
+0884    <span class="keyword">try</span>
+0885       format_version = fread(fid,1,<span class="string">'int32'</span>,<span class="string">'ieee-be'</span>);
+0886       <span class="keyword">if</span> format_version ~= 3
+0887          error(<span class="string">'unsupported file format version'</span>);
+0888       <span class="keyword">else</span>
+0889          <span class="comment">% get expected number of frames and preallocate variables</span>
+0890          fseek(fid,16,<span class="string">'cof'</span>);
+0891          nFrames = fread(fid, 1, <span class="string">'int32'</span>, <span class="string">'ieee-be'</span>);
+0892          tStampsAbs = nan(1, nFrames);
+0893          tStampsRel = nan(1, nFrames);
+0894          viPayload = nan(64, nFrames);
+0895          iqPayload = nan(2048, nFrames);
+0896          
+0897          header_size = 2264; 
+0898          fseek(fid,header_size + 8,<span class="string">'bof'</span>);
+0899          
+0900          <span class="comment">%%% get frame size and length of payload at end of frame</span>
+0901          frame_length = fread(fid, 1, <span class="string">'int32'</span>, <span class="string">'ieee-be'</span>) + 12;
+0902          <span class="comment">%%% move back to start of 1. frame</span>
+0903          fseek(fid,header_size,<span class="string">'bof'</span>);
+0904          
+0905          <span class="comment">%%% Read frames</span>
+0906          i = 1;
+0907          <span class="keyword">while</span> fseek(fid, 1,<span class="string">'cof'</span>) ~= -1
+0908             fseek(fid, -1,<span class="string">'cof'</span>);
+0909             <span class="comment">% read absolute timestamp (milliseconds resolution)</span>
+0910             tStampsAbs(i) = fread(fid,1,<span class="string">'int64'</span>,<span class="string">'ieee-be'</span>);
+0911             pl = fread(fid,1,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>);    <span class="comment">% payload length (i.e. frame length)</span>
+0912             frame_header = fread(fid,15,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>); 
+0913             <span class="comment">% read relative timestamp (microseconds resolution)</span>
+0914             tStampsRel(i) = frame_header(5);    
+0915             
+0916             <span class="comment">% drop some unintersting parts</span>
+0917             fseek(fid,12, <span class="string">'cof'</span>);
+0918             
+0919             <span class="comment">% get electrode impedance measurement</span>
+0920             viPayload(:,i) = fread(fid,64,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>);
+0921             <span class="comment">% get effective payload (voltage measurements)</span>
+0922             iqPayload(:,i) = fread(fid,2048,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>);
+0923             fseek(fid,header_size + i*frame_length,<span class="string">'bof'</span>);
+0924             i = i +1;
+0925          <span class="keyword">end</span>
+0926 
+0927       <span class="keyword">end</span>
+0928    <span class="keyword">catch</span> err
+0929       fclose(fid);
+0930       rethrow(err);
+0931    <span class="keyword">end</span>
+0932    fclose(fid);
+0933    
+0934    i = i-1;
+0935    <span class="keyword">if</span> i ~= nFrames       
+0936       <span class="comment">% remove data which were preallocated but not read</span>
+0937       <span class="keyword">if</span> i &lt; nFrames       
+0938          tStampsAbs(i+1:end) = [];
+0939          tStampsRel(i+1:end) = [];
+0940          viPayload(:,i+1:end) = [];
+0941          iqPayload(:,i+1:end) = [];
+0942       <span class="keyword">end</span>
+0943       <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'&quot;%s&quot;: expected %.0f frames but read %.0f'</span>,fname, nFrames, i ,3);
+0944    <span class="keyword">end</span>
+0945    
+0946    <span class="comment">% convert into matlab date format, e.g. read via datestr(tStampAbs(1))</span>
+0947    tStampsAbs = tStampsAbs/(24*3600*1E3) + datenum(1970, 1, 1, 1, 0, 0);
+0948    <span class="comment">% strictly speaking we would need to correct for DST, but as this is only</span>
+0949    <span class="comment">% supported by ML R2014b or higher we avoid it to be backwards compatible</span>
+0950 <span class="comment">%    tStampsAbs = tStampsAbs + isdst(datetime(datevec(tStampsAbs(1)), 'TimeZone', 'local'))/24;   % add one hour if DST</span>
+0951    
+0952    <span class="comment">% this is just a simple guess</span>
+0953    amplitudeFactor = 2.048 / (2^20 * 360 * 1000);
+0954    vv = amplitudeFactor * (iqPayload(1:2:<span class="keyword">end</span>,:) + 1i*iqPayload(2:2:<span class="keyword">end</span>,:));
+0955    
+0956    elecImps = viPayload(1:2:<span class="keyword">end</span>,:) + 1i*viPayload(2:2:<span class="keyword">end</span>,:);
+0957 
+0958 <span class="comment">% Read data from the file format develped by Swisstom, Landquart, Switzerland.</span>
+0959 <a name="_sub22" href="#_subfunctions" class="code">function [vv, evtlist, elecImps, tStampsAbs, tStampsRel] = landquart4_readdata( fname )</a>
+0960    evtlist = [];
+0961    <span class="keyword">if</span> ~exist(<span class="string">'OCTAVE_VERSION'</span>)
+0962    [fid msg]= fopen(fname,<span class="string">'r'</span>,<span class="string">'ieee-le'</span>,<span class="string">'UTF-8'</span>);
+0963    <span class="keyword">else</span>
+0964    [fid msg]= fopen(fname,<span class="string">'r'</span>,<span class="string">'ieee-le'</span>);
+0965    <span class="keyword">end</span>
+0966    <span class="keyword">try</span>
+0967       format_version = fread(fid,1,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>);
+0968       <span class="keyword">if</span> format_version ~= 4
+0969          error(<span class="string">'unsupported file format version'</span>);
+0970       <span class="keyword">else</span>          
+0971          header_size = fread(fid,1,<span class="string">'int32'</span>, <span class="string">'ieee-le'</span>);   
+0972          eit_frame_offset = 328; <span class="comment">% 60 + 12 + 256 = 328</span>
+0973          iq_payload = 2048;
+0974          vi_payload = 64;
+0975          
+0976          <span class="comment">% get expected number of frames and preallocate variables</span>
+0977          fseek(fid,16,<span class="string">'cof'</span>);
+0978          nFrames = fread(fid, 1, <span class="string">'int32'</span>, <span class="string">'ieee-le'</span>);
+0979          tStampsAbs = nan(1, nFrames);
+0980          tStampsRel = nan(1, nFrames);
+0981          viPayload = nan(vi_payload, nFrames);
+0982          iqPayload = nan(iq_payload, nFrames);
+0983 
+0984          fseek(fid,header_size,<span class="string">'bof'</span>);
+0985          
+0986          <span class="comment">%%% Read frames</span>
+0987          i = 1;
+0988          evti = 1;
+0989          <span class="keyword">while</span> fseek(fid, 1,<span class="string">'cof'</span>) ~= -1
+0990             fseek(fid, -1,<span class="string">'cof'</span>);
+0991             <span class="comment">% drop frame header and some payload:</span>
+0992             <span class="comment">% read absolute timestamp (milliseconds resolution)</span>
+0993             tStampsAbs(i) = fread(fid,1,<span class="string">'int64'</span>,<span class="string">'ieee-le'</span>); 
+0994             ft = fread(fid,1,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>); 
+0995             pl = fread(fid,1,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>);
+0996             <span class="keyword">if</span> ft == 1
+0997                <span class="comment">% event</span>
+0998                evtlist(evti).timestamp = tStampsAbs(i) ;
+0999                evtlist(evti).frame = i ;
+1000                evti = evti + 1;
+1001                <span class="keyword">if</span> pl &gt; 0
+1002                   evtlist(evti).eventId = fread(fid, 1, <span class="string">'int32'</span>, <span class="string">'ieee-le'</span>);
+1003                 <span class="keyword">end</span>
+1004             <span class="keyword">elseif</span> ft == 0
+1005                 frame_header = fread(fid,15,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>); 
+1006                 <span class="comment">% read relative timestamp (microseconds resolution)</span>
+1007                 tStampsRel(i) = frame_header(5);   
+1008                 
+1009                 <span class="comment">% drop some unintersting parts</span>
+1010                 fseek(fid,12, <span class="string">'cof'</span>);
+1011                
+1012                 <span class="comment">% get electrode impedance measurement</span>
+1013                 viPayload(:,i) = fread(fid,vi_payload,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>);
+1014                 <span class="comment">% get effective payload (voltage measurements)</span>
+1015                 iqPayload(:,i) = fread(fid,iq_payload,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>);
+1016                 fseek(fid,pl-4*iq_payload-eit_frame_offset,<span class="string">'cof'</span>);
+1017                 i = i+1;
+1018             <span class="keyword">elseif</span> pl &gt; 0
+1019                fseek(fid,pl,<span class="string">'cof'</span>); 
+1020             <span class="keyword">else</span>
+1021                <span class="comment">% nothing to do</span>
+1022             <span class="keyword">end</span>
+1023          <span class="keyword">end</span>         
+1024       <span class="keyword">end</span>
+1025    <span class="keyword">catch</span> err
+1026       fclose(fid);
+1027       rethrow(err);
+1028    <span class="keyword">end</span>
+1029    fclose(fid);
+1030    
+1031    i = i-1;
+1032    <span class="keyword">if</span> i ~= nFrames       
+1033       <span class="comment">% remove data which were preallocated but not read</span>
+1034       <span class="keyword">if</span> i &lt; nFrames       
+1035          tStampsAbs(i+1:end) = [];
+1036          tStampsRel(i+1:end) = [];
+1037          viPayload(:,i+1:end) = [];
+1038          iqPayload(:,i+1:end) = [];
+1039       <span class="keyword">end</span>
+1040       <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'&quot;%s&quot;: expected %.0f frames but read %.0f'</span>,fname, nFrames, i ,3);
+1041    <span class="keyword">end</span>
+1042    
+1043    <span class="comment">% convert into matlab date format, e.g. read via datestr(tStampAbs(1))</span>
+1044    tStampsAbs = tStampsAbs/(24*3600*1E3) + datenum(1, 1, 1, 0, 0, 0);
+1045    <span class="comment">% strictly speaking we would need to correct for DST, but as this is only</span>
+1046    <span class="comment">% supported by ML R2014b or higher we avoid it to be backwards compatible</span>
+1047 <span class="comment">%    tStampsAbs = tStampsAbs + isdst(datetime(datevec(tStampsAbs(1)), 'TimeZone', 'local'))/24;   % add one hour if DST</span>
+1048 
+1049    <span class="comment">% this is just a simple guess</span>
+1050    amplitudeFactor = 2.048 / (2^20 * 360 * 1000);
+1051    vv = amplitudeFactor * (iqPayload(1:2:<span class="keyword">end</span>,:) + 1i*iqPayload(2:2:<span class="keyword">end</span>,:));
+1052    
+1053    <span class="comment">%% elecImps depends on a factor which varies with the SBC version,</span>
+1054    <span class="comment">%%   however the following value is close for most versions</span>
+1055    impedanceFactor =  2.048 / (2^12 * 0.173 * 0.003) / 2^15; <span class="comment">% = 0.9633 / 2^15;</span>
+1056    elecImps = impedanceFactor * (viPayload(1:2:<span class="keyword">end</span>,:) + 1i*viPayload(2:2:<span class="keyword">end</span>,:));
+1057 
+1058 <a name="_sub23" href="#_subfunctions" class="code">function [vv] = landquart4pre_readdata( fname )</a>
+1059    <span class="keyword">if</span> ~exist(<span class="string">'OCTAVE_VERSION'</span>)
+1060    [fid msg]= fopen(fname,<span class="string">'r'</span>,<span class="string">'ieee-le'</span>,<span class="string">'UTF-8'</span>);
+1061    <span class="keyword">else</span>
+1062    [fid msg]= fopen(fname,<span class="string">'r'</span>,<span class="string">'ieee-le'</span>);
+1063    <span class="keyword">end</span>
+1064    <span class="keyword">try</span>
+1065       format_version = fread(fid,1,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>);
+1066       <span class="keyword">if</span> format_version ~= 4
+1067          error(<span class="string">'unsupported file format version'</span>);
+1068       <span class="keyword">else</span>
+1069          header_size = fread(fid,1,<span class="string">'int32'</span>, <span class="string">'ieee-le'</span>); 
+1070          
+1071          fseek(fid,header_size + 12,<span class="string">'bof'</span>);
+1072          <span class="comment">%%% get frame size and length of payload at end of frame</span>
+1073          frame_length = fread(fid, 1, <span class="string">'int32'</span>, <span class="string">'ieee-le'</span>) + 16;
+1074          <span class="comment">%%% move back to start of 1. frame</span>
+1075          fseek(fid,header_size,<span class="string">'bof'</span>);
+1076          
+1077          <span class="comment">%%% Read frames</span>
+1078          i = 1;
+1079          <span class="keyword">while</span> fseek(fid, 1,<span class="string">'cof'</span>) ~= -1
+1080             fseek(fid, -1,<span class="string">'cof'</span>);
+1081             <span class="comment">% drop frame header and some payload:</span>
+1082             <span class="comment">% (16 + 60) + 12 + 256 = 344</span>
+1083             fseek(fid,344, <span class="string">'cof'</span>);
+1084             iqPayload(:,i) = fread(fid,2048,<span class="string">'int32'</span>,<span class="string">'ieee-le'</span>);
+1085             fseek(fid,header_size + i*frame_length,<span class="string">'bof'</span>);
+1086             i = i +1;
+1087          <span class="keyword">end</span>
+1088 
+1089       <span class="keyword">end</span>
+1090    <span class="keyword">catch</span> err
+1091       fclose(fid);
+1092       rethrow(err);
+1093    <span class="keyword">end</span>
+1094    fclose(fid);
+1095 
+1096    <span class="comment">% this is just a simple guess</span>
+1097    amplitudeFactor = 2.048 / (2^20 * 360 * 1000);
+1098    vv = amplitudeFactor * (iqPayload(1:2:<span class="keyword">end</span>,:) + 1i*iqPayload(2:2:<span class="keyword">end</span>,:));
+1099    
+1100 <span class="comment">%  Output: [encodepage] = eidors_readdata( path,'DIX_encode');</span>
+1101 <span class="comment">%   where path= '/path/to/Criptografa_New.dll' (provided with system)</span>
+1102 <a name="_sub24" href="#_subfunctions" class="code">function [vv] = dixtal_read_codepage( fname );</a>
+1103    <span class="comment">%Fname must be the Criptografa_New dll</span>
+1104    fid = fopen(fname,<span class="string">'rb'</span>);
+1105    b1234= fread(fid, [1,4], <span class="string">'uint8'</span>);
+1106    <span class="keyword">if</span> b1234~= [77, 90, 144, 0];
+1107       error(<span class="string">'This does not appear to be the correct Dll'</span>);
+1108    <span class="keyword">end</span>
+1109    fseek(fid, hex2dec(<span class="string">'e00'</span>), <span class="string">'bof'</span>);
+1110    encodepage1 = fread(fid, hex2dec(<span class="string">'1000'</span>), <span class="string">'uint8'</span>);
+1111    fclose(fid);
+1112    encodepage1 = flipud(reshape(encodepage1,4,[]));
+1113    vv = encodepage1(:);
+1114 
+1115 <span class="comment">%        format = 'DIXTAL'</span>
+1116 <span class="comment">%           - output: [vv] = eidors_readdata( fname, 'DIXTAL', encodepage );</span>
+1117 <a name="_sub25" href="#_subfunctions" class="code">function [vv] = dixtal_read_data( file_name, frame_range, encodepage1 );</a>
+1118 
+1119    <span class="comment">% Get encodepage from the file</span>
+1120    fid=fopen(file_name,<span class="string">'rb'</span>);
+1121    n1 = fgetl(fid);
+1122    n2 = fgetl(fid);
+1123    n3 = fgetl(fid); 
+1124    nframes = str2num( n3 );
+1125    
+1126    fseek(fid, hex2dec(<span class="string">'800'</span>), <span class="string">'bof'</span>);
+1127    encodepage2 = fread(fid, hex2dec(<span class="string">'1000'</span>), <span class="string">'uint8'</span>);
+1128    fclose(fid);
+1129 
+1130    encodepage = bitxor(encodepage1, encodepage2);
+1131 
+1132    <span class="comment">% Read the file</span>
+1133    dplen = hex2dec(<span class="string">'1090'</span>);
+1134    start = hex2dec(<span class="string">'2800'</span>);
+1135    fid=fopen(file_name,<span class="string">'rb'</span>);
+1136    <span class="keyword">if</span> isempty(frame_range)
+1137       frame_range = 0:nframes;
+1138    <span class="keyword">else</span>
+1139       frame_range = frame_range - 1;
+1140       frame_range(frame_range&gt;nframes) = [];
+1141    <span class="keyword">end</span>      
+1142    vv= zeros(dplen/4, length(frame_range));
+1143    k= 1;
+1144    <span class="keyword">for</span> i = frame_range
+1145       status= fseek(fid, start + i*dplen, <span class="string">'bof'</span>);
+1146       <span class="keyword">if</span> status~=0; <span class="keyword">break</span>; <span class="keyword">end</span>
+1147       datapage = fread(fid, dplen, <span class="string">'uint8'</span>);
+1148       <span class="keyword">if</span> length(datapage)== 0; 
+1149          vv= vv(:,1:k-1); <span class="keyword">break</span>; <span class="comment">% frame number inside file is wrong</span>
+1150       <span class="keyword">end</span>
+1151       vv(:,k) = <a href="#_sub26" class="code" title="subfunction  data = proc_dixtal_data( b, encodepage );">proc_dixtal_data</a>( datapage, encodepage );
+1152       k=k+1;
+1153    <span class="keyword">end</span>
+1154    fclose(fid);
+1155 
+1156 
+1157 <a name="_sub26" href="#_subfunctions" class="code">function  data = proc_dixtal_data( b, encodepage );</a>
+1158 
+1159    cryptolen = 1024*4;
+1160    b(1:cryptolen) = bitxor(b(1:cryptolen), encodepage);
+1161 
+1162    b1 = b(1:4:<span class="keyword">end</span>,:); <span class="comment">%b1 = bitand(b1,127);</span>
+1163    b2 = b(2:4:<span class="keyword">end</span>,:);
+1164    b3 = b(3:4:<span class="keyword">end</span>,:);
+1165    b4 = b(4:4:<span class="keyword">end</span>,:);
+1166    bb  = [b1,b2,b3,b4]*(256.^[3;2;1;0]);
+1167 
+1168    sgnbit = bitand( bb,  2^31);
+1169    sgnbit = +1*(sgnbit == 0) - 1*(sgnbit == 2^31);
+1170 
+1171    expbit = bitand( bb, 255*2^23 ) /2^23; 
+1172    expbit = 2.^(expbit - 127);
+1173 
+1174    fracbt = bitand( bb, 2^23-1)/2^23 + 1;
+1175    data = sgnbit .* expbit .* fracbt;
+1176 
+1177 <a name="_sub27" href="#_subfunctions" class="code">function [fr] = read_draeger_header( filename );</a>
+1178 <span class="comment">%READ_DRAEGER_HEADER   Opens and reads the header portion of the Draeger .eit</span>
+1179 <span class="comment">%file. Current parameter returned is frame rate.</span>
+1180 <span class="comment">%</span>
+1181 <span class="comment">% function [fr,s] = ReadDraegerHeader(filename)</span>
+1182 <span class="comment">% fr        double      scalar      frame rate in hertz</span>
+1183 
+1184 <span class="comment">% Determine file version</span>
+1185 K0 = 2048;   <span class="comment">% bytes to read in char class</span>
+1186 K1=<span class="string">'Framerate [Hz]:'</span>; <span class="comment">% Draeger frame rate line in header</span>
+1187 K2=15;                <span class="comment">% Length of K1 string</span>
+1188 K3=13;                <span class="comment">% Following F1 Field for delimiter (look for ^M)</span>
+1189 
+1190 <span class="comment">% Open file for reading in little-endian form</span>
+1191 fid = fopen(filename,<span class="string">'r'</span>,<span class="string">'l'</span>);
+1192 <span class="keyword">if</span> fid == -1
+1193     error(<span class="string">'Error read_draeger_header: can''t open file'</span>);
+1194 <span class="keyword">end</span>
+1195 header = fread(fid,K0,<span class="string">'*char'</span>)';
+1196 index = strfind(header,K1);
+1197 <span class="keyword">if</span> ~isempty(index)
+1198     [tok,rem]= strtok(header(index+K2:end),K3);
+1199     fr = str2num(tok); 
+1200 <span class="keyword">else</span>
+1201     error(<span class="string">'Error read_draeger_header: frame rate unspecified'</span>);
+1202 <span class="keyword">end</span>
+1203 
+1204 <span class="keyword">if</span> isempty(fr)
+1205     error(<span class="string">'Error read_draeger_header: Frame rate could not be read'</span>);
+1206 <span class="keyword">end</span>
+1207 
+1208 fclose(fid);
+1209 
+1210 
+1211 <a name="_sub28" href="#_subfunctions" class="code">function vd = read_draeger_file(filename)</a>
+1212 <span class="comment">%READDRAEGERFILE   Opens and reads a Draeger .eit file. Returns an array</span>
+1213 <span class="comment">%containing the voltage data arranged per frame.</span>
+1214 <span class="comment">%</span>
+1215 <span class="comment">% Input:</span>
+1216 <span class="comment">% filename  char        1xN</span>
+1217 <span class="comment">%</span>
+1218 <span class="comment">% Output:</span>
+1219 <span class="comment">% vd        double      MxN         M = volt measurements per frame (mV)</span>
+1220 <span class="comment">%                                   N = number of frames</span>
+1221 
+1222 
+1223    ff = dir(filename);
+1224    filelen = ff.bytes;
+1225 
+1226    <span class="comment">% Open file for reading in little-endian form</span>
+1227    fid = fopen(filename,<span class="string">'r'</span>,<span class="string">'l'</span>);
+1228    <span class="keyword">if</span> fid == -1
+1229        error(<span class="string">'Error read_draeger_file: file could not be opened'</span>);
+1230    <span class="keyword">end</span>
+1231 
+1232    <span class="comment">% Determine file version</span>
+1233    K0 = 128;   <span class="comment">% bytes to read in char class</span>
+1234 
+1235    header = fread(fid,K0,<span class="string">'*char'</span>)';
+1236 <span class="keyword">if</span> 0 <span class="comment">% THis analysis doesn't seem useful</span>
+1237    <span class="keyword">if</span> ~isempty(strfind(header,<span class="string">'V3.2'</span>))
+1238        version = <span class="string">'3.2'</span>;
+1239    <span class="keyword">elseif</span> ~isempty(strfind(header,<span class="string">'V4.01'</span>))
+1240        version = <span class="string">'4.01'</span>; 
+1241    <span class="keyword">elseif</span> ~isempty(strfind(header,<span class="string">'V1.10'</span>)) <span class="comment">% 2014!!</span>
+1242        version = <span class="string">'1.10'</span>; 
+1243    <span class="keyword">else</span>
+1244        error(<span class="string">'Error read_draeger_file: unknown file version'</span>);
+1245    <span class="keyword">end</span>
+1246 <span class="keyword">end</span>
+1247 
+1248    <span class="comment">% Read Format version</span>
+1249    fseek(fid,0,-1); <span class="comment">% beginning of file</span>
+1250    hdr = fread(fid, 8, <span class="string">'uint8'</span>);
+1251    offset1 =  (256.^(0:3))*hdr(5:8) + 16; <span class="comment">% &quot;good&quot; data starts at offset #2</span>
+1252    <span class="keyword">switch</span> sprintf(<span class="string">'%02X-'</span>,header(1:4));
+1253       <span class="keyword">case</span> <span class="string">'1F-00-00-00-'</span>;
+1254          type=<span class="string">'Draeger v31'</span>;  SPC = 4112;
+1255       <span class="keyword">case</span> <span class="string">'20-00-00-00-'</span>;
+1256          type=<span class="string">'Draeger v32'</span>;  SPC = 5200;
+1257       <span class="keyword">case</span> <span class="string">'33-00-00-00-'</span>;
+1258          type=<span class="string">'Draeger v51'</span>;  SPC = 5495;
+1259       <span class="keyword">otherwise</span>;
+1260          error(<span class="string">'File &quot;%s&quot; is format version %d, which we don''t know how to read'</span>, <span class="keyword">...</span>
+1261                hdr(1))
+1262    <span class="keyword">end</span>
+1263 
+1264    len = floor( (filelen-offset1)/SPC );
+1265    vd= zeros(600,len);
+1266    ss= offset1 + (0:len)*SPC;
+1267 
+1268    <span class="keyword">for</span> k= 1:length(ss);
+1269       <span class="keyword">if</span> fseek(fid,ss(k),-1)&lt;0; <span class="keyword">break</span>; <span class="keyword">end</span>
+1270       vd(:,k)=fread(fid,600,<span class="string">'double'</span>, 0, <span class="string">'ieee-le'</span>);
+1271    <span class="keyword">end</span>
+1272 
+1273    <span class="comment">% End of function</span>
+1274    fclose(fid);
+1275</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

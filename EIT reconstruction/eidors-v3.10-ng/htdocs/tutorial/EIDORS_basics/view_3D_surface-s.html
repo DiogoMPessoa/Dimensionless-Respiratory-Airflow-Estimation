@@ -1,0 +1,240 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Viewing surface and depth voltages</h2>
+
+<h3> 
+Create a simple 3D model (electrodes at 170&deg; and 190&deg;
+</h3>
+
+<pre>
+% Create fwd model
+el_pos = [190,0.5;170,0.5];
+fmdl= ng_mk_cyl_models(1,el_pos,[0.05,0,0.05]); 
+
+% Solve fwd model
+fmdl.stimulation(1).stim_pattern = [1;-1];
+fmdl.stimulation(1).meas_pattern = [1,-1]; % dummy
+img = mk_image(fmdl,1);
+img.fwd_solve.get_all_meas = 1;
+vh=fwd_solve(img);
+
+clf;show_fem(fmdl);
+print_convert view_3D_surf01a.png '-density 75'
+
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/view_3D_surf01a.png">
+<br><i>Figure:</i>
+Cylinder with electrodes at 170&deg; and 190&deg;
+</center>
+
+<h3> 
+Show voltage on surface
+</h3>
+
+<pre>
+imgv = rmfield(img,'elem_data');
+imgv.node_data = vh.volt(:,1);
+
+colours = calc_colours(imgv,[]);
+patch('Faces',fmdl.boundary,'Vertices',fmdl.nodes, 'facecolor','interp', ...
+      'facevertexcdata',colours,'CDataMapping','direct'); 
+
+print_convert view_3D_surf02a.jpg '-density 75'
+view(0,0)
+print_convert view_3D_surf02b.jpg '-density 75'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/view_3D_surf02a.jpg"> <img src="view_3D_surf02b.jpg">
+<br><i>Figure:</i>
+Two views of surface voltage on cylinder
+</center>
+
+<h3> 
+Show vertical slices (internal)
+</h3>
+
+<pre>
+% Four cut planes
+cut_planes = -[0.6;0.7;0.8;0.9];
+imgv.calc_colours.backgnd = 0.9*[1,1,1];
+show_slices(imgv,cut_planes*[inf,1,inf]);
+print_convert view_3D_surf03a.png '-density 150'
+
+</pre>
+
+<center>
+<img src="view_3D_surf03a.png">
+<br><i>Figure:</i>
+Vertical slices of internal voltage at 0.6, 0.7, 0.8, 0.9
+</center>
+
+<h3> 
+Adding contrasts to adjust surface voltages
+</h3>
+
+<pre>
+% Create fwd model
+el_pos = [190,0.5;170,0.5];
+extra = {'cube',['solid cube = orthobrick(-0.2 ,-0.97,0.6;0.2,0,0.7) or ' ...
+                              'orthobrick( 0.15,-0.97,0.4;0.2,0,0.7) ;']};
+fmdl= ng_mk_cyl_models([1,1,.05],el_pos,[0.05,0,0.05],extra); 
+
+% Solve fwd model
+fmdl.stimulation(1).stim_pattern = [1;-1];
+fmdl.stimulation(1).meas_pattern = [1,-1]; % dummy
+img = mk_image(fmdl,1);
+img.elem_data(fmdl.mat_idx{2}) = 10000;
+img.fwd_solve.get_all_meas = 1;
+vh=fwd_solve(img);
+
+clf;show_fem(img);
+print_convert view_3D_surf04a.jpg '-density 75'
+view(0,0);
+print_convert view_3D_surf04b.jpg '-density 75'
+
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/view_3D_surf04a.jpg"> <img src="view_3D_surf04b.jpg">
+<br><i>Figure:</i>
+Cylinder model with contrasting region (higher
+mesh density to see details)
+</center>
+
+<pre>
+imgv = rmfield(img,'elem_data');
+imgv.node_data = vh.volt(:,1);
+
+imgv.calc_colours.clim = 0.3; % Colour limits
+colours = calc_colours(imgv,[]);
+show_fem(fmdl);
+patch('Faces',fmdl.boundary,'Vertices',fmdl.nodes, 'facecolor','interp', ...
+      'facevertexcdata',colours,'CDataMapping','direct'); 
+
+view(0,0)
+print_convert view_3D_surf05b.jpg
+
+</pre>
+
+<center>
+ <img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/view_3D_surf05b.jpg">
+<br><i>Figure:</i>
+Two views of surface voltage on cylinder
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+GREIT algorithm: NOSER
+</h2>
+
+This algorithm implements a NOSER-type (Newton's one-step
+error reconstructor) Gauss-Newton normalized difference inverse.
+This follows the reference:
+<ul>
+M Cheney, D Isaacson, JC Newell, S Simske, J. Goble
+<a href="http://doi.wiley.com/10.1002/ima.1850020203"
+    >NOSER: An algorithm for solving the inverse
+     conductivity problem</a>
+Int. J. Imaging Systems and Technology, 
+2:66&minus;75, 1990
+</ul>
+
+<H3>GREIT NOSER algorithm for time difference</H3>
+
+<pre>
+function [img,map]= GREIT_NOSER_diff( ref_meas, reconst_meas )
+% Reconstruct GREIT images using NOSER algorithm
+%
+% (C) 2008 Andy Adler. Licenced under GPL v2 or v3
+% $Id: GREIT_NOSER_diff.m 1561 2008-07-27 03:43:12Z aadler $
+
+   [RM,map] = calc_NOSER_RM;
+
+   % Expand ref_meas to the full size of reconst_meas
+   num_meas = size(reconst_meas,2);
+   ref_meas = ref_meas * ones(1,num_meas);
+   dv =  reconst_meas - ref_meas;
+
+   % reconst image
+   ds = RM*dv;
+
+   img= reshape(ds, 32,32,num_meas);
+
+function [RM,map] = calc_NOSER_RM
+   [J,map] = GREIT_Jacobian_cyl;
+   RM = zeros(size(J'));
+ 
+   % Remove space outside FEM model
+   J= J(:,map);
+   % inefficient code - but for clarity
+   diagJtJ = diag(J'*J);
+   R= spdiags( diagJtJ,0, length(diagJtJ), length(diagJtJ));
+
+   hp = 2.0;
+   RM(map,:)= (J'*J + hp^2*R)\J';
+
+</pre>
+
+<H3>GREIT NOSER algorithm for normalized time difference</H3>
+
+<pre>
+function [img,map]= GREIT_NOSER_ndiff( ref_meas, reconst_meas )
+% Reconstruct GREIT images using NOSER algorithm
+%
+% (C) 2008 Andy Adler. Licenced under GPL v2 or v3
+% $Id: GREIT_NOSER_ndiff.m 1561 2008-07-27 03:43:12Z aadler $
+
+   [RM,map] = calc_NOSER_RM;
+
+   % Expand ref_meas to the full size of reconst_meas
+   num_meas = size(reconst_meas,2);
+   ref_meas = ref_meas * ones(1,num_meas);
+   dv = ( reconst_meas - ref_meas ) ./ ref_meas; % CHANGE IS HERE:
+
+   % reconst image
+   ds = RM*dv;
+
+   img= reshape(ds, 32,32,num_meas);
+
+function [RM,map] = calc_NOSER_RM
+   [J,map,vbkgnd] = GREIT_Jacobian_cyl;
+   J = J ./ (vbkgnd*ones(1,size(J,2))); % Normalized Jacobian
+   RM = zeros(size(J'));
+ 
+   % Remove space outside FEM model
+   J= J(:,map);
+   % inefficient code - but for clarity
+   diagJtJ = diag(J'*J);
+   R= spdiags( diagJtJ,0, length(diagJtJ), length(diagJtJ));
+
+   hp = 2.0;
+   RM(map,:)= (J'*J + hp^2*R)\J';
+
+</pre>
+
+<H3>Jacobian Calculation</H3>
+
+The previous code depends on this function to
+calculate and cache the Jacobian matrix.
+
+<pre>
+function [J,map,vbkgnd] = GREIT_Jacobian_cyl;
+% Calculate the GREIT 32x32 Jacobian for a cylinder
+% The FEM Model ng_mdl_16x1_fine must be available
+%
+% (C) 2008 Andy Adler. Licenced under GPL v2 or v3
+% $Id: GREIT_Jacobian_cyl.m 3273 2012-06-30 18:00:35Z aadler $
+
+if exist('GREIT_Jacobian_cyl.mat','file');
+   load GREIT_Jacobian_cyl.mat J map vbkgnd
+else
+   [J,vbkgnd,map] = Jacobian_calc;
+   save GREIT_Jacobian_cyl.mat J map vbkgnd
+end
+
+
+function [J,vbkgnd,map] = Jacobian_calc;
+use_3d_model = 1;
+if use_3d_model % This 3D model has some problems
+   fmdl = ng_mk_cyl_models([10,15,1.2],[16,5],[.5,0,.15]);
+   fmdl.solve =    @fwd_solve_1st_order;
+   fmdl.jacobian = @jacobian_adjoint;
+   fmdl.system_mat=@system_mat_1st_order;
+   fmdl.elems = double(fmdl.elems);
+else
+   imdl = mk_common_model('f2d3c',16); fmdl= imdl.fwd_model;
+   fmdl.nodes = fmdl.nodes(:,[2,1]);
+end
+
+   fmdl.nodes(:,1) = -fmdl.nodes(:,1); % yvec is reversed because image yaxis is reversed
+
+   pixel_grid= 32;
+   nodes= fmdl.nodes;
+   xyzmin= min(nodes,[],1);  xyzmax= max(nodes,[],1);
+   xvec= linspace( xyzmin(1), xyzmax(1), pixel_grid+1);
+   yvec= linspace( xyzmin(2), xyzmax(2), pixel_grid+1);
+
+   % CALCULATE MODEL CORRESPONDENCES
+if use_3d_model
+   zvec= [0.6*xyzmin(3)+0.4*xyzmax(3), 0.4*xyzmin(3)+0.6*xyzmax(3)];
+   [rmdl,c2f] = mk_grid_model(fmdl, xvec, yvec, zvec);
+else
+   [rmdl,c2f] = mk_grid_model(fmdl, xvec, yvec);
+end
+
+   img= mk_image(fmdl, 1);
+   img.fwd_model.coarse2fine = c2f;
+   img.rec_model= rmdl;
+
+   % ADJACENT STIMULATION PATTERNS
+   img.fwd_model.stimulation= mk_stim_patterns(16, 1, ...
+                [0,1],[0,1], {'do_redundant', 'no_meas_current'}, 1);
+
+   % SOLVERS
+   img.fwd_model.system_mat= @system_mat_1st_order;
+   img.fwd_model.solve=      @fwd_solve_1st_order;
+   img.fwd_model.jacobian=   @jacobian_adjoint;
+
+   vbkgnd = fwd_solve(img);
+   vbkgnd = vbkgnd.meas;
+   J= calc_jacobian(img);
+
+%  map = reshape(sum(c2f,1),pixel_grid,pixel_grid)>0;
+   [x,y]= meshgrid(linspace(-1,1,32),linspace(-1,1,32));
+   map = x.^2 + y.^2 < 1.1;
+
+</pre>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

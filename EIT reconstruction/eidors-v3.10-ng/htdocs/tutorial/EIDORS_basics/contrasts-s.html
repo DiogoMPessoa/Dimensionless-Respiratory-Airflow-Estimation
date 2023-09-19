@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Contrasts in EIT</h2>
+
+In EIT the contrast (signal change for a target) is not a uniform
+function of the conductivity. The effect is subtle and it is
+explored in this tutorial. 
+
+<h3> 
+Overview of EIT contrast signal
+</h3>
+
+Here we introduce a cylindrical contrast of various height/diameter
+axis ratios
+
+<pre>
+% $Id: contrasts_06.m 5755 2018-05-19 11:03:13Z aadler $
+[stim,msel] = mk_stim_patterns(16,1,[0,1],[0,1],{},1);
+space= logspace(-3,3,37);
+diam = 0.10;
+i=1; vv=[]; for rat = [.3,1,2,5];
+   extra={'targ',sprintf(['solid targ = ', ...
+          'cylinder(0,0,0;0,0,1;%f) and ', ...
+          'plane(0,0,%f;0,0,-1) and plane(0,0,%f;0,0,1);'], ...
+           diam,diam*[-1,+1]*rat+1)};
+   fmdl= ng_mk_cyl_models([2,1,.1],[16,1.0],[0.05],extra); 
+   fmdl.stimulation = stim; fmdl.meas_select = msel;
+   img= mk_image(fmdl,1);
+   vh = fwd_solve(img); vh = vh.meas;
+   img.elem_data(fmdl.mat_idx{2}) = 2; show_fem(img);
+
+   j=1;for k=space;
+      img.elem_data(fmdl.mat_idx{2}) = k;
+      vi = fwd_solve(img); vi = vi.meas;
+      vv(j,i)= norm(vi-vh);
+   j=j+1;end
+i=i+1;end
+vv = vv ./ (ones(size(vv,1),1)*max(vv,[],1));
+clf; subplot(211);
+
+opt.viewpoint = struct('az',-6,'el',13); show_fem_enhanced(img,opt);
+print_convert contrasts_06a.jpg
+
+%subplot(212);
+semilogx(space,vv,'LineWidth',2);
+legend('0.3','1.0','2.0','5.0','Location','SouthEast')
+xlim([min(space), max(space)])
+set(gca,'xtick',[1e-3,1e-2,1e-1,1,1e1,1e2,1e3]);
+print_convert contrasts_06b.png
+
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_06a.jpg">
+<img src="contrasts_06b.jpg">
+<br><i> Figure:</i>
+<i>Left:</i> 3D FEM with an ellipsoidal target region:
+<i>Right:</i> 3D FEM with an ellipsoidal target region:
+</center>
+
+<h3> 
+Creating an FEM and solving the forward problem
+</h3>
+
+
+<pre>
+sz = 5;
+ellipse_x = 2;
+
+shape_str = [ ...
+ sprintf('solid ec = ellipticcylinder(0,0,0;%f,0,0;0,%f,0);\n', ...
+     0.5*ellipse_x, 0.5/ellipse_x ) ...
+ sprintf('solid left  = plane(-%f,0,0;-1,0,0);\n',sz) ...
+ sprintf('solid right = plane( %f,0,0; 1,0,0);\n',sz) ...
+ sprintf('solid brick = orthobrick(-%f,-2,-0.2;%f,2,0);\n',sz+1,sz+1) ...
+ 'solid cyl = ec and brick; tlo cyl;\n' ...
+ 'solid mainobj= left and right and (not cyl) and brick;\n'];
+elec_pos = [ sz,  0,  0,   0,  0,  1;
+            -sz,  0,  0,   0,  0, -1];
+elec_shape=[2.0];
+elec_obj = {'left','right'};
+fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+fmdl = mdl2d_from3d(fmdl);
+
+fmdl.stimulation = stim_meas_list([1,2,1,2]);
+img = mk_image(fmdl,1);
+img.elem_data( fmdl.mat_idx{1} ) = 2;
+
+img.calc_colours.ref_level = 1;
+
+show_fem( img );
+print_convert contrasts_01a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_01a.png">
+<br><i> Figure:</i>
+A 2D finite element model with an
+elliptical conductivity contrasting inclusion
+</center>
+
+<pre>
+img.fwd_model.solve =      @fwd_solve_1st_order;
+img.fwd_model.system_mat = @system_mat_1st_order;
+[img.fwd_model.electrode(:).z_contact] = deal(1000); % Large
+
+img.fwd_solve.get_all_meas = 1;
+vv = fwd_solve(img);
+imgv= rmfield(img,'elem_data');
+imgv.node_data = vv.volt;
+imgv.calc_colours.ref_level = mean(vv.volt);
+show_fem(imgv);
+
+print_convert contrasts_02a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_02a.png">
+<br><i> Figure:</i>
+Voltage distribution around an
+elliptical conductivity with a conductive contrast
+</center>
+
+<pre>
+   imgc = img;
+   imgc.fwd_model.mdl_slice_mapper.npx = 128;
+   imgc.fwd_model.mdl_slice_mapper.npy = 200;
+   imgc.fwd_model.mdl_slice_mapper.level = [inf,inf,0];
+   imgc.calc_colours.ref_level = 1;
+   q = show_current(imgc,vv.volt);
+
+   fm1 = img.fwd_model;
+   fm1.elems = fm1.elems(fm1.mat_idx{1},:);
+   bdy= find_boundary(fm1);
+
+   hh=show_fem(img.fwd_model);
+   set(hh,'EdgeColor',[1,1,1]*.75);
+   hold on;
+   plot( reshape(fm1.nodes(bdy,1),size(bdy))', ...
+         reshape(fm1.nodes(bdy,2),size(bdy))','k','LineWidth',2);
+
+   sy = linspace(-2,2,20); sx= 0*sy - sz;
+   hh=streamline(q.xp,q.yp, q.xc, q.yc,-sx,sy); set(hh,'Linewidth',2);
+
+   hold off;
+
+if ~exist('img_name'); img_name = '03a'; end
+print_convert(sprintf('contrasts_%s.png',img_name));
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_03a.png">
+<br><i> Figure:</i>
+Streamlines around a conductive contrasting target
+</td></tr></table>
+
+<h4>Create table with effect of elliptical shape and conductivity contrast</h4>
+
+Function to calculate the model
+<pre>
+function img = ellipse_in_plane( sz, ellipse_x);
+   shape_str = [ ...
+    sprintf('solid ec = ellipticcylinder(0,0,0;%f,0,0;0,%f,0);\n', ...
+        0.5*ellipse_x, 0.5/ellipse_x ) ...
+    sprintf('solid left  = plane(-%f,0,0;-1,0,0);\n',sz) ...
+    sprintf('solid right = plane( %f,0,0; 1,0,0);\n',sz) ...
+    sprintf('solid brick = orthobrick(-%f,-2,-0.2;%f,2,0) -maxh=0.2;\n',sz+1,sz+1) ...
+    'solid cyl = ec and brick; tlo cyl;\n' ...
+    'solid mainobj= left and right and (not cyl) and brick;\n'];
+   elec_pos = [ sz,  0,  0,   0,  0,  1;
+               -sz,  0,  0,   0,  0, -1];
+   elec_shape=[2.0];
+   elec_obj = {'left','right'};
+   fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+   fmdl = mdl2d_from3d(fmdl);
+
+   fmdl.stimulation = stim_meas_list([1,2,1,2]);
+   img = mk_image(fmdl,1);
+   img.fwd_model.solve =      @fwd_solve_1st_order;
+   img.fwd_model.system_mat = @system_mat_1st_order;
+   [img.fwd_model.electrode(:).z_contact] = deal(1000); % Large
+   img.fwd_solve.get_all_meas = 1;
+
+</pre>
+
+
+Iterate over model shapes 
+<pre>
+sz = 5; img_idx = 'b';
+for ellipse_x = [0.5,1,2];
+   img = contrasts_04_modeller( sz, ellipse_x); 
+   targ = img.fwd_model.mat_idx{1};
+   for contrast = linspace( -3,3,7);
+      img.elem_data( targ ) = exp(contrast);
+      vv = fwd_solve(img);
+      img_name = sprintf('04%c',img_idx); img_idx= img_idx+1;
+      contrasts_03;
+   end
+end
+
+
+</pre>
+
+<center>
+<table>
+<tr>
+<th>&sigma; =
+<th>x/y = 2
+<th>x/y = 1
+<th>x/y = &frac12;
+<tr>
+<th> e<sup>&minus;3</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04b.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04i.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04p.png">
+<tr>
+<th> e<sup>&minus;2</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04c.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04j.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04q.png">
+<tr>
+<th> e<sup>&minus;1</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04d.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04k.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04r.png">
+<tr>
+<th> e<sup>0</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04e.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04l.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04s.png">
+<tr>
+<th> e<sup>+1</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04f.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04m.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04t.png">
+<tr>
+<th> e<sup>+2</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04g.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04n.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04u.png">
+<tr>
+<th> e<sup>+3</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04h.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04o.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_04v.png">
+</table>
+<br><i> Figure:</i>
+Table showing  streamlines surrounding a 2D finite element model with
+a elliptical conductivity contrasting inclusion. 
+</center>
+
+<center>
+<table>
+<tr>
+<th>&sigma; =
+<th>x/y = 2
+<th>x/y = 1
+<th>x/y = &frac12;
+<tr>
+<th> e<sup>&minus;2</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05b.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05g.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05l.png">
+<tr>
+<th> e<sup>&minus;1</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05c.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05h.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05m.png">
+<tr>
+<th> e<sup>0</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05d.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05i.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05n.png">
+<tr>
+<th> e<sup>+1</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05e.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05j.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05o.png">
+<tr>
+<th> e<sup>+2</sup>
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05f.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05k.png">
+<td><img width="400" src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contrasts_05p.png">
+</table>
+<br><i> Figure:</i>
+Table showing perturbation streamlines surrounding a 2D finite element model with
+a elliptical conductivity contrasting inclusion. 
+</center>
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2018-03-19 18:54:58 -0400 (Mon, 19 Mar 2018) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

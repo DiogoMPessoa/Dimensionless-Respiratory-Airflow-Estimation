@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of exponential_covar_prior</title>
+  <meta name="keywords" content="exponential_covar_prior">
+  <meta name="description" content="EXPONENTIAL_COVAR_PRIOR image prior with exponential">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; exponential_covar_prior.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>exponential_covar_prior
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>EXPONENTIAL_COVAR_PRIOR image prior with exponential</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function Reg= exponential_covar_prior( inv_model ); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> EXPONENTIAL_COVAR_PRIOR image prior with exponential
+      inter-element covariance, multiplied by a NOSER
+      type weighting, if desired.
+ Reg= exponential_covar_prior( inv_model )
+ Reg        =&gt; output regularization term
+ inv_model  =&gt; inverse model struct
+ Parameters: exponential rate
+   gamma= inv_model.exponential_covar_prior.gamma
+ Parameters: NOSER exponent: diag(J'*J)^exponent )
+   gamma= inv_model.exponential_covar_prior.noser_exp
+       DEFAULT is 0 (ie. no NOSER exponent)
+
+ FIXME: this code does an inv or the reg matrix. This
+        is very inefficient.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>	FWD_MODEL_PARAMETERS: data= fwd_solve_1st_order( fwd_model, image)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function Reg= calc_exponential_covar_prior( fwd_model, gamma)</a></li><li><a href="#_sub2" class="code">function [rad,elem_ctr]= get_elem_rad_ctr( fwd_model );</a></li><li><a href="#_sub3" class="code">function fi= integ_fn(x1i,x2i,y1i,y2i, gamma)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Reg= exponential_covar_prior( inv_model );</a>
+0002 <span class="comment">% EXPONENTIAL_COVAR_PRIOR image prior with exponential</span>
+0003 <span class="comment">%      inter-element covariance, multiplied by a NOSER</span>
+0004 <span class="comment">%      type weighting, if desired.</span>
+0005 <span class="comment">% Reg= exponential_covar_prior( inv_model )</span>
+0006 <span class="comment">% Reg        =&gt; output regularization term</span>
+0007 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0008 <span class="comment">% Parameters: exponential rate</span>
+0009 <span class="comment">%   gamma= inv_model.exponential_covar_prior.gamma</span>
+0010 <span class="comment">% Parameters: NOSER exponent: diag(J'*J)^exponent )</span>
+0011 <span class="comment">%   gamma= inv_model.exponential_covar_prior.noser_exp</span>
+0012 <span class="comment">%       DEFAULT is 0 (ie. no NOSER exponent)</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% FIXME: this code does an inv or the reg matrix. This</span>
+0015 <span class="comment">%        is very inefficient.</span>
+0016 
+0017 <span class="comment">% (C) 2007 Andy Adler. License: GPL version 2 or version 3</span>
+0018 <span class="comment">% $Id: exponential_covar_prior.m 3109 2012-06-08 15:04:12Z bgrychtol $</span>
+0019 
+0020 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'EXPONENTIAL_COVAR_PRIOR is deprecated as of 08-Jun-2012. Use PRIOR_EXPONENTIAL_COVAR instead.'</span>);
+0021 
+0022 fwd_model= inv_model.fwd_model;
+0023 
+0024 <span class="keyword">try</span> 
+0025     gamma= inv_model.exponential_covar_prior.gamma;
+0026 <span class="keyword">catch</span>
+0027     xy_diam = max( max(fwd_model.nodes(:,1:2)) -  <span class="keyword">...</span>
+0028                    min(fwd_model.nodes(:,1:2)));
+0029     gamma= 0.05*xy_diam;
+0030 <span class="keyword">end</span>
+0031 
+0032 Reg = <a href="#_sub1" class="code" title="subfunction Reg= calc_exponential_covar_prior( fwd_model, gamma)">calc_exponential_covar_prior</a>( fwd_model, gamma);
+0033 Reg= 0.5*(Reg+Reg'); <span class="comment">% calculation should be symmetric, but is slightly off.</span>
+0034 
+0035 Reg= inv(Reg); <span class="comment">% FIXME - not part of inverse</span>
+0036 
+0037 <span class="keyword">try</span> 
+0038     noser_exp= inv_model.exponential_covar_prior.noser_exp;
+0039 <span class="keyword">catch</span>
+0040     noser_exp= 0;
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">if</span> noser_exp&gt;0
+0044     
+0045     J = <a href="../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>( <a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>( inv_model ));
+0046 <span class="comment">% If J is too big, then the jacobian includes other terms (like movement) remove them</span>
+0047 <span class="comment">% TODO: cruft code</span>
+0048     n_elem = size(inv_model.fwd_model.elems,1);
+0049     <span class="keyword">if</span> size(J,2) &gt; n_elem; J = J(:,1:n_elem); <span class="keyword">end</span>
+0050     l_prior= size(J,2);
+0051 
+0052     <span class="comment">% Reg is spdiags(diag(J'*J),0, l_prior, l_prior);</span>
+0053     diag_col= sum(J.^2,1)';
+0054     RegN = spdiags( diag_col.^noser_exp/2, 0, l_prior, l_prior);
+0055 
+0056     Reg= RegN * Reg * RegN;
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="comment">% Calculate exponential LPF Filter</span>
+0060 <span class="comment">% parameter is gamma (normally 0.1)</span>
+0061 <a name="_sub1" href="#_subfunctions" class="code">function Reg= calc_exponential_covar_prior( fwd_model, gamma)</a>
+0062    [rad,ctr]= <a href="#_sub2" class="code" title="subfunction [rad,elem_ctr]= get_elem_rad_ctr( fwd_model );">get_elem_rad_ctr</a>( fwd_model );
+0063 
+0064    n_elem= size(ctr,1);
+0065    oo= ones(n_elem,1);
+0066    radh = rad/2;
+0067    Reg=zeros(n_elem,n_elem);
+0068    <span class="keyword">for</span> i=1:size(ctr,1)
+0069       ctr_i = sqrt( sum( (ctr - oo*ctr(i,:)).^2 , 2));
+0070       Reg_i= <a href="#_sub3" class="code" title="subfunction fi= integ_fn(x1i,x2i,y1i,y2i, gamma)">integ_fn</a>(-radh,radh,ctr_i-radh(i),ctr_i+radh(i), gamma);
+0071       Reg(:,i)= Reg_i .*(Reg_i&gt;1e-4);
+0072    <span class="keyword">end</span>
+0073    Reg=<a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(Reg);
+0074 
+0075 <a name="_sub2" href="#_subfunctions" class="code">function [rad,elem_ctr]= get_elem_rad_ctr( fwd_model );</a>
+0076    pp= <a href="../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>( fwd_model);
+0077    <span class="keyword">if</span>     pp.n_dims==2 <span class="comment">% in 2d A=pi*r^2</span>
+0078       rad= sqrt(pp.VOLUME/pi);
+0079    <span class="keyword">elseif</span> pp.n_dims ==3 <span class="comment">% in 3D V=4/3*pi*r^3</span>
+0080       rad= (pp.VOLUME*3/4/pi).^(1/3);
+0081    <span class="keyword">elseif</span> pp.n_dims ==1 <span class="comment">% in 1D V=2*r</span>
+0082       rad= pp.VOLUME/2;
+0083    <span class="keyword">else</span> 
+0084       error(<span class="string">'dont know what to do with n_dims ==%d'</span>,pp.n_dims);
+0085    <span class="keyword">end</span>
+0086 <span class="comment">%  rad =   rad* ones(1,pp.n_elem); % copy to matrix</span>
+0087 
+0088    node_map = fwd_model.nodes(pp.ELEM,:);
+0089    elem_ctr = mean( reshape( node_map, pp.n_dims+1, [], pp.n_dims), 1);
+0090    elem_ctr = squeeze( elem_ctr);
+0091 <span class="comment">% show_fem(fwd_model); hold on; plot(elem_ctr(:,1),elem_ctr(:,2),'*'); hold off</span>
+0092 
+0093 <span class="comment">%  ctr= zeros(pp.n_elem);</span>
+0094 <span class="comment">%  for i=1:pp.n_dims</span>
+0095 <span class="comment">%     v= elem_ctr(:,i)*ones(1,pp.n_elem); % make square</span>
+0096 <span class="comment">%     ctr = ctr + (v - v').^2;</span>
+0097 <span class="comment">%  end</span>
+0098 <span class="comment">%  ctr = sqrt(ctr);</span>
+0099 
+0100 <span class="comment">% calculate the exponential integral over a space x1,x2</span>
+0101 <span class="comment">%  given gamma, x1, x2, y1, y2</span>
+0102 <a name="_sub3" href="#_subfunctions" class="code">function fi= integ_fn(x1i,x2i,y1i,y2i, gamma)</a>
+0103    i_gam = 1/gamma;
+0104 
+0105    x1= min(x1i,x2i); x2= max(x1i,x2i);
+0106    y1= min(y1i,y2i); y2= max(y1i,y2i);
+0107 
+0108    Dx= abs(x1-x2); Dy= abs(y1-y2);
+0109 
+0110    xa1= x1; 
+0111    xa2= max(x1,min(x2,y1)); xb1= xa2;
+0112    xb2= max(x1,min(x2,y2)); xc1= xb2;
+0113    xc2= x2;
+0114 
+0115    RA= exp(-i_gam*y1).*(1-exp(-i_gam*Dy));
+0116    RC= exp( i_gam*y2).*(1-exp(-i_gam*Dy));
+0117    fi = 1./Dx./Dy/i_gam^2 .* ( <span class="keyword">...</span><span class="comment"> </span>
+0118             RA.*(exp( i_gam*xa2) - exp( i_gam*xa1)) - <span class="keyword">...</span>
+0119             RC.*(exp(-i_gam*xc2) - exp(-i_gam*xc1)) + <span class="keyword">...</span>
+0120             2*i_gam*(xb2-xb1) - <span class="keyword">...</span>
+0121             exp(-i_gam*y2).*(exp( i_gam*xb2) - exp( i_gam*xb1)) + <span class="keyword">...</span>
+0122             exp( i_gam*y1).*(exp(-i_gam*xb2) - exp(-i_gam*xb1))<span class="keyword">...</span>
+0123            );
+0124    
+0125</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

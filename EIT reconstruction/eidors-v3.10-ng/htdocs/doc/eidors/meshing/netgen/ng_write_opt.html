@@ -1,0 +1,323 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ng_write_opt</title>
+  <meta name="keywords" content="ng_write_opt">
+  <meta name="description" content="NG_WRITE_OPT Write an ng.opt file in current directory">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">netgen</a> &gt; ng_write_opt.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/netgen&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>ng_write_opt
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>NG_WRITE_OPT Write an ng.opt file in current directory</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function opt = ng_write_opt(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">NG_WRITE_OPT Write an ng.opt file in current directory
+  NG_WRITE_OPT, without inputs, creates a default ng.opt
+
+  NG_WRITE_OPT(OPTSTRUCT) creates uses options as specified in OPTSTRUCT
+
+  NG_WRITE_OPT(PATH) copies the file specified in PATH as ng.opt to the
+  current directory.
+
+  NG_WRITE_OPT('sec.option',val,...) offers an alternative interface to
+  modify specific options
+
+  OPTSTRUCT = NG_WRITE_OPT(...) returns a struct with the options.
+  No file is written.
+ 
+  Note: some options only take effect when meshoptions.fineness is 6
+  (custom).
+
+  BEWARE: NG_WRITE_OPT will overwrite any existing ng.opt file in the current
+  directory. 
+ 
+  Example:
+  ng_write_opt('meshoptions.fineness',6,'options.minmeshsize',20);
+  call_netgen(...)
+  delete('ng.opt'); % clean up
+
+  Caveat: Currently it seems that Netgen on Windows ignores the ng.opt
+  file
+
+  See also <a href="call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">CALL_NETGEN</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>	NG_WRITE_OPT Write an ng.opt file in current directory</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>	NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface</li><li><a href="ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>	NG_WRITE_OPT Write an ng.opt file in current directory</li><li><a href="../../../eidors/models/mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li><li><a href="../../../eidors/models/place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function opt = process_input(varargin)</a></li><li><a href="#_sub2" class="code">function opt = copy_field(opt,usr)</a></li><li><a href="#_sub3" class="code">function write_ng_file(opt)</a></li><li><a href="#_sub4" class="code">function write_field(fid,s,str)</a></li><li><a href="#_sub5" class="code">function opt = default_opt</a></li><li><a href="#_sub6" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function opt = ng_write_opt(varargin)</a>
+0002 <span class="comment">%NG_WRITE_OPT Write an ng.opt file in current directory</span>
+0003 <span class="comment">%  NG_WRITE_OPT, without inputs, creates a default ng.opt</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%  NG_WRITE_OPT(OPTSTRUCT) creates uses options as specified in OPTSTRUCT</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%  NG_WRITE_OPT(PATH) copies the file specified in PATH as ng.opt to the</span>
+0008 <span class="comment">%  current directory.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%  NG_WRITE_OPT('sec.option',val,...) offers an alternative interface to</span>
+0011 <span class="comment">%  modify specific options</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%  OPTSTRUCT = NG_WRITE_OPT(...) returns a struct with the options.</span>
+0014 <span class="comment">%  No file is written.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%  Note: some options only take effect when meshoptions.fineness is 6</span>
+0017 <span class="comment">%  (custom).</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%  BEWARE: NG_WRITE_OPT will overwrite any existing ng.opt file in the current</span>
+0020 <span class="comment">%  directory.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%  Example:</span>
+0023 <span class="comment">%  ng_write_opt('meshoptions.fineness',6,'options.minmeshsize',20);</span>
+0024 <span class="comment">%  call_netgen(...)</span>
+0025 <span class="comment">%  delete('ng.opt'); % clean up</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%  Caveat: Currently it seems that Netgen on Windows ignores the ng.opt</span>
+0028 <span class="comment">%  file</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%  See also CALL_NETGEN</span>
+0031 
+0032 <span class="comment">% (C) 2012 Bartlomiej Grychtol. License: GPL version 2 or version 3</span>
+0033 <span class="comment">% $Id: ng_write_opt.m 4946 2015-05-09 11:28:19Z aadler $</span>
+0034 
+0035 <span class="comment">%TODO:</span>
+0036 <span class="comment">% 1. Check which options require meshoptions.fineness = 6 and enforce it</span>
+0037 
+0038 <span class="comment">% if input is 'UNIT_TEST', run tests</span>
+0039 <span class="keyword">if</span> nargin == 1 &amp;&amp; ischar(varargin{1}) &amp;&amp; strcmp(varargin{1},<span class="string">'UNIT_TEST'</span>) 
+0040    <a href="#_sub6" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">if</span> nargin == 1 &amp;&amp; ischar(varargin{1}) <span class="comment">% a path</span>
+0043    copyfile(varargin{1},<span class="string">'ng.opt'</span>);
+0044    <span class="keyword">return</span>
+0045 <span class="keyword">end</span>
+0046 <span class="comment">% get default options</span>
+0047 opt = <a href="#_sub5" class="code" title="subfunction opt = default_opt">default_opt</a>;
+0048 <span class="keyword">if</span> nargin == 0
+0049     usr = struct;
+0050 <span class="keyword">end</span>
+0051 <span class="comment">% modify as per user input</span>
+0052 <span class="keyword">if</span> nargin == 1 &amp;&amp; isstruct(varargin{1})
+0053    usr = varargin{1};
+0054 <span class="keyword">end</span>
+0055 <span class="keyword">if</span> nargin &gt; 1 <span class="comment">% string value pairs</span>
+0056    usr = <a href="#_sub1" class="code" title="subfunction opt = process_input(varargin)">process_input</a>(varargin{:}); 
+0057 <span class="keyword">end</span>
+0058 opt = <a href="#_sub2" class="code" title="subfunction opt = copy_field(opt,usr)">copy_field</a>(opt,usr);
+0059 
+0060 <span class="keyword">if</span> nargout == 1 <span class="comment">% do not write a file if output was requested</span>
+0061    <span class="keyword">return</span>
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="comment">% write the file</span>
+0065 <a href="#_sub3" class="code" title="subfunction write_ng_file(opt)">write_ng_file</a>(opt);
+0066 
+0067 <a name="_sub1" href="#_subfunctions" class="code">function opt = process_input(varargin)</a>
+0068 <span class="keyword">if</span> mod(nargin,2)~=0
+0069    error(<span class="string">'EIDORS:WrongInput'</span>,<span class="string">'Even number of inputs expected'</span>);
+0070 <span class="keyword">end</span>
+0071 <span class="keyword">for</span> i = 1:nargin/2
+0072    idx = (i-1)*2 +1;
+0073    val = varargin{idx+1};
+0074    eval(sprintf(<span class="string">'opt.%s = val;'</span>,varargin{idx}));
+0075 <span class="keyword">end</span>
+0076 
+0077 
+0078 <span class="comment">% copy all fields from usr to opt</span>
+0079 <span class="comment">% check that the fields exist in opt</span>
+0080 <a name="_sub2" href="#_subfunctions" class="code">function opt = copy_field(opt,usr)</a>
+0081 optnms = fieldnames(opt);
+0082 usrnms = fieldnames(usr);
+0083 <span class="keyword">for</span> i = 1:length(usrnms)
+0084    <span class="comment">% check if field exist</span>
+0085    <span class="keyword">if</span> ~ismember(usrnms{i},optnms)
+0086      error(<span class="string">'Unsupported option %s'</span>,usrnms{i});
+0087    <span class="keyword">end</span>
+0088    <span class="keyword">if</span> isstruct(usr.(usrnms{i})) <span class="comment">% recurse</span>
+0089       opt.(usrnms{i}) = <a href="#_sub2" class="code" title="subfunction opt = copy_field(opt,usr)">copy_field</a>(opt.(usrnms{i}), usr.(usrnms{i}) );
+0090    <span class="keyword">else</span>
+0091       opt.(usrnms{i}) = usr.(usrnms{i});
+0092    <span class="keyword">end</span>
+0093 <span class="keyword">end</span>
+0094 
+0095 
+0096 <span class="comment">% write the ng.opt file</span>
+0097 <a name="_sub3" href="#_subfunctions" class="code">function write_ng_file(opt)</a>
+0098 fid = fopen(<span class="string">'ng.opt'</span>,<span class="string">'w'</span>);
+0099 flds = fieldnames(opt);
+0100 <a href="#_sub4" class="code" title="subfunction write_field(fid,s,str)">write_field</a>(fid,opt,[]);
+0101 fclose(fid);
+0102 
+0103 
+0104 <span class="comment">% recurses over fields and prints to file</span>
+0105 <a name="_sub4" href="#_subfunctions" class="code">function write_field(fid,s,str)</a>
+0106 <span class="keyword">if</span> isstruct(s)
+0107    <span class="keyword">if</span> ~isempty(str)
+0108       str = [str <span class="string">'.'</span>];
+0109    <span class="keyword">end</span>
+0110    flds = fieldnames(s);
+0111    <span class="keyword">for</span> i = 1:length(flds)
+0112       <a href="#_sub4" class="code" title="subfunction write_field(fid,s,str)">write_field</a>(fid,s.(flds{i}),[str flds{i}]);
+0113    <span class="keyword">end</span>
+0114 <span class="keyword">elseif</span> ischar(s)
+0115    fprintf(fid,<span class="string">'%s  %s\n'</span>, str, s);
+0116 <span class="keyword">elseif</span> round(s) == s
+0117    fprintf(fid,<span class="string">'%s  %d\n'</span>, str, s);
+0118 <span class="keyword">else</span>
+0119    fprintf(fid,<span class="string">'%s  %f\n'</span>, str, s);
+0120 <span class="keyword">end</span>
+0121 
+0122 
+0123 <a name="_sub5" href="#_subfunctions" class="code">function opt = default_opt</a>
+0124 opt.dirname = <span class="string">'.'</span>;
+0125 opt.loadgeomtypevar = <span class="string">'&quot;All Geometry types (*.stl,*.stlb,*.step,*.stp,...)&quot;'</span>;
+0126 opt.exportfiletype = <span class="string">'&quot;Neutral Format&quot;'</span>;
+0127 opt.meshoptions.fineness = 3;
+0128 opt.meshoptions.firststep = <span class="string">'ag'</span>;
+0129 opt.meshoptions.laststep = <span class="string">'ov'</span>;
+0130 opt.options.localh = 1;
+0131 opt.options.delaunay = 1;
+0132 opt.options.checkoverlap = 1;
+0133 opt.options.checkchartboundary = 1;
+0134 opt.options.startinsurface = 0;
+0135 opt.options.blockfill = 1;
+0136 opt.options.debugmode = 0;
+0137 opt.options.dooptimize = 1;
+0138 opt.options.parthread = 1;
+0139 opt.options.elsizeweight = 0.2;
+0140 opt.options.secondorder = 0;
+0141 opt.options.elementorder = 1;
+0142 opt.options.quad = 0;
+0143 opt.options.inverttets = 0;
+0144 opt.options.inverttrigs = 0;
+0145 opt.options.autozrefine = 0;
+0146 opt.options.meshsize = 1000;
+0147 opt.options.minmeshsize = 0;
+0148 opt.options.curvaturesafety = 0.2;
+0149 opt.options.segmentsperedge = 1;
+0150 opt.options.meshsizefilename = <span class="string">''</span>;
+0151 opt.options.badellimit = 175;
+0152 opt.options.optsteps2d = 3;
+0153 opt.options.optsteps3d = 5;
+0154 opt.options.opterrpow = 2;
+0155 opt.options.grading = 0.3;
+0156 opt.options.printmsg = 2;
+0157 opt.geooptions.drawcsg = 1;
+0158 opt.geooptions.detail = 0.001;
+0159 opt.geooptions.accuracy = 1e-6;
+0160 opt.geooptions.facets = 20;
+0161 opt.geooptions.minx = -1000;
+0162 opt.geooptions.miny = -1000;
+0163 opt.geooptions.minz = -1000;
+0164 opt.geooptions.maxx = 1000;
+0165 opt.geooptions.maxy = 1000;
+0166 opt.geooptions.maxz = 1000;
+0167 opt.viewoptions.specpointvlen = 0.3;
+0168 opt.viewoptions.light.amb = 0.3;
+0169 opt.viewoptions.light.diff = 0.7;
+0170 opt.viewoptions.light.spec = 1;
+0171 opt.viewoptions.light.locviewer = 0;
+0172 opt.viewoptions.mat.shininess = 50;
+0173 opt.viewoptions.mat.transp = 0.3;
+0174 opt.viewoptions.colormeshsize = 0;
+0175 opt.viewoptions.whitebackground = 1;
+0176 opt.viewoptions.drawcolorbar = 1;
+0177 opt.viewoptions.drawcoordinatecross = 1;
+0178 opt.viewoptions.drawnetgenlogo = 1;
+0179 opt.viewoptions.stereo = 0;
+0180 opt.viewoptions.drawfilledtrigs = 1;
+0181 opt.viewoptions.drawedges = 0;
+0182 opt.viewoptions.drawbadels = 0;
+0183 opt.viewoptions.centerpoint = 0;
+0184 opt.viewoptions.drawelement = 0;
+0185 opt.viewoptions.drawoutline = 1;
+0186 opt.viewoptions.drawtets = 0;
+0187 opt.viewoptions.drawprisms = 0;
+0188 opt.viewoptions.drawpyramids = 0;
+0189 opt.viewoptions.drawhexes = 0;
+0190 opt.viewoptions.drawidentified = 0;
+0191 opt.viewoptions.drawpointnumbers = 0;
+0192 opt.viewoptions.drawededges = 1;
+0193 opt.viewoptions.drawedpoints = 1;
+0194 opt.viewoptions.drawedpointnrs = 0;
+0195 opt.viewoptions.drawedtangents = 0;
+0196 opt.viewoptions.shrink = 1;
+0197 opt.stloptions.showtrias = 0;
+0198 opt.stloptions.showfilledtrias = 1;
+0199 opt.stloptions.showedges = 1;
+0200 opt.stloptions.showmarktrias = 0;
+0201 opt.stloptions.showactivechart = 0;
+0202 opt.stloptions.yangle = 10;
+0203 opt.stloptions.contyangle = 20;
+0204 opt.stloptions.edgecornerangle = 0;
+0205 opt.stloptions.chartangle = 0;
+0206 opt.stloptions.outerchartangle = 120;
+0207 opt.stloptions.usesearchtree = 0;
+0208 opt.stloptions.chartnumber = 1;
+0209 opt.stloptions.charttrignumber = 1;
+0210 opt.stloptions.chartnumberoffset = 0;
+0211 opt.stloptions.atlasminh = 0.1;
+0212 opt.stloptions.resthsurfcurvfac = 1;
+0213 opt.stloptions.resthsurfcurvenable = 0;
+0214 opt.stloptions.resthatlasfac = 2;
+0215 opt.stloptions.resthatlasenable = 1;
+0216 opt.stloptions.resthchartdistfac = 1.5;
+0217 opt.stloptions.resthchartdistenable = 0;
+0218 opt.stloptions.resthlinelengthfac = 0.5;
+0219 opt.stloptions.resthlinelengthenable = 1;
+0220 opt.stloptions.resthcloseedgefac = 2;
+0221 opt.stloptions.resthcloseedgeenable = 1;
+0222 opt.stloptions.resthedgeanglefac = 1;
+0223 opt.stloptions.resthedgeangleenable = 0;
+0224 opt.stloptions.resthsurfmeshcurvfac = 2;
+0225 opt.stloptions.resthsurfmeshcurvenable = 0;
+0226 opt.stloptions.recalchopt = 1;
+0227 opt.visoptions.subdivisions = 1;
+0228 
+0229 
+0230 <a name="_sub6" href="#_subfunctions" class="code">function do_unit_test</a>
+0231 opt.meshoptions.fineness = 6;
+0232 <a href="ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>(opt);
+0233 fid = fopen(<span class="string">'ng.opt'</span>,<span class="string">'r'</span>); str= fread(fid,[1,inf],<span class="string">'uint8=&gt;char'</span>); fclose(fid);
+0234 <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'fineness=6'</span>,isempty( <span class="keyword">...</span>
+0235     strfind(str, <span class="string">'meshoptions.fineness  6'</span>)), 0);
+0236 
+0237 <a href="ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>(<span class="string">'meshoptions.fineness'</span>,4,<span class="string">'meshoptions.firststep'</span>,<span class="string">'aaa'</span>);
+0238 fid = fopen(<span class="string">'ng.opt'</span>,<span class="string">'r'</span>); str= fread(fid,[1,inf],<span class="string">'uint8=&gt;char'</span>); fclose(fid);
+0239 <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'firststep=aaa'</span>,isempty( <span class="keyword">...</span>
+0240     strfind(str, <span class="string">'meshoptions.firststep  aaa'</span>)), 0);
+0241 
+0242 <span class="comment">% the last one will not be written since output was requested</span>
+0243 opt = <a href="ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>(<span class="string">'meshoptions.fineness'</span>,4,<span class="string">'meshoptions.firststep'</span>,<span class="string">'bbb'</span>);
+0244 fid = fopen(<span class="string">'ng.opt'</span>,<span class="string">'r'</span>); str= fread(fid,[1,inf],<span class="string">'uint8=&gt;char'</span>); fclose(fid);
+0245 <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'firststep=bbb'</span>,isempty( <span class="keyword">...</span>
+0246     strfind(str, <span class="string">'meshoptions.firststep  bbb'</span>)), 1);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

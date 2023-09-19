@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Compare 3D image reconstructions</h2>
+
+EIDORS is able to easily compare different
+image reconstruction algorithms by changing
+the parameters of the <tt>inv_model</tt>
+structure.
+
+<p>
+The first step is to create a simulation model
+
+<pre>
+% Compare 3D algorithms
+% $Id: tutorial130a.m 4051 2013-05-24 09:27:02Z bgrychtol $
+
+imb=  mk_common_model('n3r2',[16 2]);
+bkgnd= 1;
+
+% Homogenous Data
+img= mk_image(imb.fwd_model, bkgnd);
+vh= fwd_solve( img );
+
+% Inhomogenous Data - Load from file 'datacom'
+load datacom A B;
+img.elem_data(A)= bkgnd*1.2;
+img.elem_data(B)= bkgnd*0.8;
+clear A B;
+vi= fwd_solve( img );
+
+% Add 15dB noise
+vi_n= vi; 
+vi_n.meas = vi.meas + std(vi.meas - vh.meas)/10^(10/20) ...
+                     *randn(size(vi.meas));
+sig= sqrt(norm(vi.meas - vh.meas));
+
+subplot(121);
+show_fem(img); axis square;
+
+subplot(122);
+show_fem(img); axis square;
+crop_model([],  inline('y<0','x','y','z'))
+view(-51,14);
+print_convert('tutorial130a.png', '-density 100')
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/tutorial130a.png">
+<br><i>Figure:</i>
+Simulation image for sample data (two different views)
+</center>
+
+Images are reconstructed using the following
+three different algorithms, using different
+paramters.
+
+<pre>
+% Compare 3D algorithms
+% $Id: tutorial130b.m 4839 2015-03-30 07:44:50Z aadler $
+clear imgr imgn
+
+% Create Inverse Model
+inv3d= eidors_obj('inv_model', 'EIT inverse');
+inv3d.reconst_type= 'difference';
+inv3d.jacobian_bkgnd.value = 1;
+inv3d.fwd_model= imb.fwd_model;
+inv3d.hyperparameter.value = 0.03; 
+
+
+% Gauss-Newton Solver
+inv3d.solve=       @inv_solve_diff_GN_one_step;
+
+% Tikhonov prior
+inv3d.R_prior=     @prior_tikhonov;
+imgr(1)= inv_solve( inv3d, vh, vi);
+imgn(1)= inv_solve( inv3d, vh, vi_n);
+
+% Laplace prior
+inv3d.R_prior=     @prior_laplace;
+% inv3d.np_calc_image_prior.parameters= [3 1]; %  deg=1, w=1
+imgr(2)= inv_solve( inv3d, vh, vi);
+imgn(2)= inv_solve( inv3d, vh, vi_n);
+
+% Andrea Borsic's PDIPM TV solver
+inv3d.prior_TV.alpha2 = 1e-5;
+inv3d.parameters.max_iterations= 20;
+inv3d.parameters.term_tolerance= 1e-3;
+inv3d.R_prior=     @prior_TV;
+inv3d.solve=       @inv_solve_TV_pdipm;
+
+imgr(3)= inv_solve( inv3d, vh, vi);
+imgn(3)= inv_solve( inv3d, vh, vi_n);
+
+% Output image
+posn= [inf,inf,2.5,1,1;inf,inf,1.5,1,2;inf,inf,0.5,1,3];
+clf;
+imgr(1).calc_colours.npoints= 128;
+show_slices(imgr, posn);
+print_convert('tutorial130b.png', '-density 100')
+
+imgn(1).calc_colours.npoints= 128;
+show_slices(imgn, posn);
+print_convert('tutorial130c.png', '-density 100')
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/tutorial130b.png">
+<br><i>Figure:</i>
+Images reconstructed with 
+data without noise. Slices are shown
+at heights of (top to bottom):
+<i>1)</i> 2.5,
+<i>2)</i> 1.5,
+<i>3)</i> 0.5.
+
+
+<i>From Left to Right:</i>
+<i>1)</i> One step Gauss-Newton reconstruction
+(Tikhonov prior)
+<i>2)</i> One step Gauss-Newton reconstruction
+(Laplace filter prior)
+<i>3):</i> Total Variation reconstruction
+</center>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/tutorial130c.png">
+<br><i>Figure:</i>
+Images reconstructed with 
+data with 15dB SNR. Slices are shown
+at heights of (top to bottom):
+<i>1)</i> 2.5,
+<i>2)</i> 1.5,
+<i>3)</i> 0.5.
+
+
+<i>From Left to Right:</i>
+<i>1)</i> One step Gauss-Newton reconstruction
+(Tikhonov prior)
+<i>2)</i> One step Gauss-Newton reconstruction
+(Laplace filter prior)
+<i>3):</i> Total Variation reconstruction
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-03-01 08:44:21 -0500 (Wed, 01 Mar 2017) $
+</small>
+</BODY></HTML>
+<!--
+      -->

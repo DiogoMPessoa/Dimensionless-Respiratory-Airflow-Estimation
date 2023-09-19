@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of inv_solve_TSVD</title>
+  <meta name="keywords" content="inv_solve_TSVD">
+  <meta name="description" content="INV_SOLVE_TSVD: inverse solver based on truncatated SVD">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; inv_solve_TSVD.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>inv_solve_TSVD
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>INV_SOLVE_TSVD: inverse solver based on truncatated SVD</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function sol = inv_solve_TSVD(inv_model, data1, data2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> INV_SOLVE_TSVD: inverse solver based on truncatated SVD
+   img= inv_solve_TSVD(inv_model, data1, data2)
+ 
+   img        =&gt; output image (or vector of images)
+   data1      =&gt; differential data at earlier time
+   data2      =&gt; differential data at later time
+   inv_model  =&gt; inverse model struct. Requires:
+                 inv_model.hyperparameter.value OR
+                 inv_model.hyperparameter.func (and possibly others)
+   hp    =&gt; hyperparameter. Ratio between the last kept and the first SV
+            in percent (default: .1)
+
+ SEE ALSO: <a href="calc_TSVD_RM.html" class="code" title="function RM= calc_TSVD_RM(mdl,hp)">calc_TSVD_RM</a>, calc_hyperpameter, <a href="solve_use_matrix.html" class="code" title="function img= solve_use_matrix( inv_model, data1, data2)">solve_use_matrix</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="../../../eidors/models/elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>	ELEM_SELECT: select element fractions inside a function</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>	CALC_HYPERPARAMETER: calculate hyperparameter value</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="calc_TSVD_RM.html" class="code" title="function RM= calc_TSVD_RM(mdl,hp)">calc_TSVD_RM</a>	CALC_TSVD_RM: Calculated truncated Jacobian SVD reconstruction matrix</li><li><a href="inv_solve_TSVD.html" class="code" title="function sol = inv_solve_TSVD(inv_model, data1, data2)">inv_solve_TSVD</a>	INV_SOLVE_TSVD: inverse solver based on truncatated SVD</li><li><a href="solve_use_matrix.html" class="code" title="function img= solve_use_matrix( inv_model, data1, data2)">solve_use_matrix</a>	SOLVE_USE_MATRIX solve using reconstruction matrix</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="inv_solve_TSVD.html" class="code" title="function sol = inv_solve_TSVD(inv_model, data1, data2)">inv_solve_TSVD</a>	INV_SOLVE_TSVD: inverse solver based on truncatated SVD</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function sol = inv_solve_TSVD(inv_model, data1, data2)</a>
+0002 <span class="comment">% INV_SOLVE_TSVD: inverse solver based on truncatated SVD</span>
+0003 <span class="comment">%   img= inv_solve_TSVD(inv_model, data1, data2)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   img        =&gt; output image (or vector of images)</span>
+0006 <span class="comment">%   data1      =&gt; differential data at earlier time</span>
+0007 <span class="comment">%   data2      =&gt; differential data at later time</span>
+0008 <span class="comment">%   inv_model  =&gt; inverse model struct. Requires:</span>
+0009 <span class="comment">%                 inv_model.hyperparameter.value OR</span>
+0010 <span class="comment">%                 inv_model.hyperparameter.func (and possibly others)</span>
+0011 <span class="comment">%   hp    =&gt; hyperparameter. Ratio between the last kept and the first SV</span>
+0012 <span class="comment">%            in percent (default: .1)</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% SEE ALSO: calc_TSVD_RM, calc_hyperpameter, solve_use_matrix</span>
+0015 
+0016 <span class="comment">% (C) 2011 Bartlomiej Grychtol. Licenced under GPL v2 or v3</span>
+0017 <span class="comment">% $Id: inv_solve_TSVD.m 5431 2017-04-27 15:29:35Z aadler $</span>
+0018 
+0019 <span class="keyword">if</span> ischar(inv_model) &amp;&amp; strcmp(inv_model,<span class="string">'UNIT_TEST'</span>), <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>, <span class="keyword">return</span>, <span class="keyword">end</span>;
+0020 
+0021 hp = <a href="../../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>(inv_model);
+0022 inv_model.solve_use_matrix.RM = <a href="calc_TSVD_RM.html" class="code" title="function RM= calc_TSVD_RM(mdl,hp)">calc_TSVD_RM</a>(inv_model, hp);
+0023 sol = <a href="solve_use_matrix.html" class="code" title="function img= solve_use_matrix( inv_model, data1, data2)">solve_use_matrix</a>(inv_model,data1,data2);
+0024 
+0025 
+0026 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0027     <span class="comment">% get a fwd_model</span>
+0028     mdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'c3cr'</span>,16);fmdl = mdl.fwd_model; clear mdl;
+0029     <span class="comment">% homogenous measurement</span>
+0030     img  = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1);
+0031     vh = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0032     <span class="comment">% inhomogeneous measurement</span>
+0033     str = sprintf(<span class="string">'(x - %f).^2+(y - %f).^2+(z - %f).^2&lt;%f^2'</span>,[-0.3 0.2 0 0.1]);
+0034     select_fcn = inline(str,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>);
+0035     e = <a href="../../../eidors/models/elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>(img.fwd_model, select_fcn);
+0036     ind = find(e);
+0037     img.elem_data(ind) = img.elem_data(ind) - 0.25*e(ind);
+0038     vi = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0039 
+0040     <span class="comment">% build an inverse model</span>
+0041     imdl.name= <span class="string">'Test TSVD model'</span>;
+0042     imdl.type= <span class="string">'inv_model'</span>;
+0043     imdl.solve= @<a href="inv_solve_TSVD.html" class="code" title="function sol = inv_solve_TSVD(inv_model, data1, data2)">inv_solve_TSVD</a>;
+0044     imdl.hyperparameter.value = 1;
+0045     imdl.jacobian_bkgnd.value = 1;
+0046     imdl.reconst_type= <span class="string">'difference'</span>;
+0047     imdl.fwd_model = fmdl;
+0048     
+0049     <span class="comment">% solve</span>
+0050 subplot(221);
+0051     <a href="../../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img,[inf,inf,0]);
+0052 subplot(222);
+0053     rimg = <a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0054     <a href="../../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(rimg,[inf,inf,0]);
+0055 
+0056 subplot(223);
+0057     imdl.hyperparameter.value = .1;
+0058     rimg = <a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0059     <a href="../../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(rimg,[inf,inf,0]);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

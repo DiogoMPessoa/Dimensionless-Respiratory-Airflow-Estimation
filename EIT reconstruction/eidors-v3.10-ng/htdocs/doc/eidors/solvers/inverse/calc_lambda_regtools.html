@@ -1,0 +1,410 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calc_lambda_regtools</title>
+  <meta name="keywords" content="calc_lambda_regtools">
+  <meta name="description" content="% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; calc_lambda_regtools.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>calc_lambda_regtools
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC) 
+ criterion or the generalized cross-validation (GCV).
+   lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot);
+
+ Output:
+   lambdas   - &quot;optimal&quot; hyperparameter(s) determined using LCC or GCV
+
+ Input:
+   imdl      - inverse model (EIDORS struct)
+   vh        - homogenous voltage matrix (of size nVtg x 1)
+   vi        - inhomogenous voltage matrix (of size nVtg x nFrames) including noise(!)
+   type      - type of approach used, either:
+               'LCC' (default), the L-curve criterion
+               'GCV', generalized cross-validation
+   doPlot    - will enable plotting if set to true (default = false)
+
+ Example:
+   calc_lambda_regtools('unit_test');  
+
+ NOTE
+   if vi contains multiple frames the returned values will contain an
+   &quot;optimal&quot; hyperparameter for each frame. An appropriate lambda can then 
+   be determined from the average (e.g. median) of these values.
+
+ See also: RTv4manual.pdf (please note that all page numbers listed
+ correspond to the ones written in the upper right corner, the effective
+ PDF page number will be += 2).
+
+ Nomenclature: Jacobian J is A; Prior R (not RtR) is L; Voltage v is b
+
+ Fabian Braun, December 2016
+
+ CITATION_REQUEST:
+ AUTHOR: P C Hansen
+ TITLE: Regularization tools version 4.0 for Matlab 7.3.
+ JOURNAL: Numerical algorithms
+ YEAR: 2007
+ VOL: 46
+ NUM: 2
+ PAGE: S189-194
+ DOI: 10.1007/s11075-007-9136-9</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="../../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>	MK_STIM_PATTERNS: create an EIDORS stimulation pattern structure</li><li><a href="../../../eidors/solvers/calc_R_prior.html" class="code" title="function R_prior = calc_R_prior( inv_model, varargin )">calc_R_prior</a>	R = calc_R_prior( inv_model, varargin )</li><li><a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>	RtR = calc_RtR_prior( inv_model )</li><li><a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>	CALC_JACOBIAN_BKGND: calculate background image around</li><li><a href="../../../eidors/solvers/calc_meas_icov.html" class="code" title="function meas_icov = calc_meas_icov( inv_model )">calc_meas_icov</a>	meas_icov = calc_meas_icov( inv_model )</li><li><a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="calc_lambda_regtools.html" class="code" title="function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)">calc_lambda_regtools</a>	% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)</li><li><a href="get_RM.html" class="code" title="function [RM, J, RtR, W, Jfine] = get_RM(inv_model)">get_RM</a>	% GET_RM: obtains the reconstruction matrix from a given inverse model</li><li><a href="mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>	MK_GN_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="prior_tikhonov.html" class="code" title="function Reg= prior_tikhonov( inv_model );">prior_tikhonov</a>	PRIOR_TIKHONOV calculate image prior</li><li><a href="../../../eidors/tools/citeme.html" class="code" title="function citeme(fname)">citeme</a>	CITEME Display citation requests</li><li><a href="../../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>	PROGRESS_MSG Progress messages and timing.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="calc_lambda_regtools.html" class="code" title="function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)">calc_lambda_regtools</a>	% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function nf= num_frames(d0)</a></li><li><a href="#_sub2" class="code">function d2= filt_data(inv_model, d0, data_width )</a></li><li><a href="#_sub3" class="code">function doUnitTest()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)</a>
+0002 <span class="comment">%% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)</span>
+0003 <span class="comment">% criterion or the generalized cross-validation (GCV).</span>
+0004 <span class="comment">%   lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Output:</span>
+0007 <span class="comment">%   lambdas   - &quot;optimal&quot; hyperparameter(s) determined using LCC or GCV</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Input:</span>
+0010 <span class="comment">%   imdl      - inverse model (EIDORS struct)</span>
+0011 <span class="comment">%   vh        - homogenous voltage matrix (of size nVtg x 1)</span>
+0012 <span class="comment">%   vi        - inhomogenous voltage matrix (of size nVtg x nFrames) including noise(!)</span>
+0013 <span class="comment">%   type      - type of approach used, either:</span>
+0014 <span class="comment">%               'LCC' (default), the L-curve criterion</span>
+0015 <span class="comment">%               'GCV', generalized cross-validation</span>
+0016 <span class="comment">%   doPlot    - will enable plotting if set to true (default = false)</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Example:</span>
+0019 <span class="comment">%   calc_lambda_regtools('unit_test');</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% NOTE</span>
+0022 <span class="comment">%   if vi contains multiple frames the returned values will contain an</span>
+0023 <span class="comment">%   &quot;optimal&quot; hyperparameter for each frame. An appropriate lambda can then</span>
+0024 <span class="comment">%   be determined from the average (e.g. median) of these values.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% See also: RTv4manual.pdf (please note that all page numbers listed</span>
+0027 <span class="comment">% correspond to the ones written in the upper right corner, the effective</span>
+0028 <span class="comment">% PDF page number will be += 2).</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Nomenclature: Jacobian J is A; Prior R (not RtR) is L; Voltage v is b</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% Fabian Braun, December 2016</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% CITATION_REQUEST:</span>
+0035 <span class="comment">% AUTHOR: P C Hansen</span>
+0036 <span class="comment">% TITLE: Regularization tools version 4.0 for Matlab 7.3.</span>
+0037 <span class="comment">% JOURNAL: Numerical algorithms</span>
+0038 <span class="comment">% YEAR: 2007</span>
+0039 <span class="comment">% VOL: 46</span>
+0040 <span class="comment">% NUM: 2</span>
+0041 <span class="comment">% PAGE: S189-194</span>
+0042 <span class="comment">% DOI: 10.1007/s11075-007-9136-9</span>
+0043 <span class="comment">%</span>
+0044 
+0045 <span class="comment">% (C) 2016 Fabian Braun. License: GPL version 2 or version 3</span>
+0046 <span class="comment">% $Id: calc_lambda_regtools.m 5930 2019-04-13 04:55:41Z alistair_boyle $</span>
+0047 
+0048 <a href="../../../eidors/tools/citeme.html" class="code" title="function citeme(fname)">citeme</a>(mfilename);
+0049 
+0050 <span class="comment">%% unit testing?</span>
+0051 <span class="keyword">if</span> ischar(imdl) &amp;&amp; strcmpi(imdl, <span class="string">'unit_test'</span>)
+0052    <a href="#_sub3" class="code" title="subfunction doUnitTest()">doUnitTest</a>();
+0053    <span class="keyword">return</span>;
+0054 <span class="keyword">end</span>
+0055 
+0056 
+0057 <span class="comment">%% set default inputs</span>
+0058 <span class="keyword">if</span> ~exist(<span class="string">'type'</span>, <span class="string">'var'</span>) || isempty(type)
+0059     type = <span class="string">'LCC'</span>;
+0060 <span class="keyword">end</span>
+0061 <span class="keyword">if</span> ~exist(<span class="string">'doPlot'</span>, <span class="string">'var'</span>) || isempty(doPlot)
+0062     doPlot = false;
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="comment">%% check for existence of the regtools package</span>
+0066 <span class="keyword">if</span> exist(<span class="string">'regudemo.m'</span>)==2  <span class="comment">% file is already on path</span>
+0067 <span class="comment">% Do nothing. We're OK</span>
+0068 <span class="keyword">elseif</span> exist(<span class="string">'./regtools'</span>, <span class="string">'dir'</span>) <span class="comment">%check if in current folder</span>
+0069    addpath(<span class="string">'./regtools'</span>);
+0070 <span class="comment">%%% What should this do?</span>
+0071 <span class="keyword">elseif</span> exist([fileparts(mfilename(<span class="string">'fullpath'</span>)), filesep, <span class="string">'regtools'</span>])
+0072    addpath([fileparts(mfilename(<span class="string">'fullpath'</span>)), filesep, <span class="string">'regtools'</span>])
+0073 <span class="keyword">else</span>
+0074    error(<span class="string">'Regtools are required but are not available, please download them from &lt;a href=&quot;matlab: web http://www.mathworks.com/matlabcentral/fileexchange/52-regtools -browser&quot;&gt;File Exchange&lt;/a&gt; or &lt;a href=&quot;matlab: web http://www2.compute.dtu.dk/~pcha/Regutools/ -browser&quot;&gt;P.C. Hansen''s website&lt;/a&gt; and store them in the subfolder called ''regtools''. In order to allow for a fast execution it is recommended to disable (uncomment) all plotting functions in l_cuve.m and gcv.m.'</span>);
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="comment">% AA: 3feb2017: Please make changes so</span>
+0078 <span class="comment">% 1. we don't call get_RM</span>
+0079 <span class="comment">% 2. we call calc_R_prior</span>
+0080 <span class="comment">%     fix calc_R_prior so it does what you want</span>
+0081 <span class="comment">% 3. rename to calc_lambda_regtools</span>
+0082 <span class="comment">% 4. change tutorial to call new name</span>
+0083 <span class="comment">% 5. Make changes to mk_GREIT_model</span>
+0084 <span class="comment">% 6. Merge these changes into mainline (if it works)</span>
+0085 <span class="comment">%    OR: delete mainline and svn mv</span>
+0086 
+0087 <span class="comment">%% prepare imdl</span>
+0088 imdlTmp = imdl;
+0089 imdlTmp.prior_use_fwd_not_rec = 0;  
+0090 <span class="comment">% if isfield(imdl.fwd_model,'coarse2fine')</span>
+0091 <span class="comment">%     imdlTmp.fwd_model = rmfield(imdlTmp.fwd_model,'coarse2fine');</span>
+0092 <span class="comment">% end</span>
+0093 <span class="comment">% if isfield(imdl, 'rec_model') &amp;&amp; isfield(imdl.rec_model,'coarse2fine')</span>
+0094 <span class="comment">%     imdlTmp.rec_model = rmfield(imdlTmp.rec_model,'coarse2fine');</span>
+0095 <span class="comment">% end</span>
+0096 img_bkgnd = <a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>(imdlTmp);
+0097 A = <a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>(img_bkgnd);
+0098 W = <a href="../../../eidors/solvers/calc_meas_icov.html" class="code" title="function meas_icov = calc_meas_icov( inv_model )">calc_meas_icov</a>(imdlTmp);
+0099 L = <a href="../../../eidors/solvers/calc_R_prior.html" class="code" title="function R_prior = calc_R_prior( inv_model, varargin )">calc_R_prior</a>(imdlTmp);   
+0100 
+0101 LtL = <a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>(imdlTmp);
+0102 LtL_ = L'*L;    
+0103 <span class="comment">% assert(all(LtL_(:) - LtL(:) &lt; 100*eps), 'Prior differs too much!');</span>
+0104 
+0105 <span class="comment">% check that measurement covariance matrix W is identity</span>
+0106 assert(isequal(W, speye(size(W))));
+0107 
+0108 
+0109 <span class="comment">%% (IMPORTANT!) bring generalized to standart form (section 2.6 p.21 of RTv4manual.pdf)</span>
+0110 <span class="comment">% L-curves and of generalized and standard form are equal this is</span>
+0111 <span class="comment">% because they have identical norms see (section 2.6.3 p.24 of RTv4manual.pdf)</span>
+0112 [A_s, ~, ~] = std_form(A, L, nan(size(vh,1),1));  <span class="comment">% as L is square b won't be affected, only A</span>
+0113 <span class="comment">% [A_s,b_s,L_p,K,M] = std_form(A,L,b);</span>
+0114 <span class="comment">% NOTE: We need it in standard form as l_curve and gcv routines only accept this</span>
+0115 [U_s, s_s] = csvd(A_s);
+0116 
+0117 <span class="comment">%% Iterate through all frames to get a range of lambdas</span>
+0118 nFrames = size(vi,2);
+0119 lambdas = nan(nFrames,1);
+0120 
+0121 <a href="../../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Calculating lambda for each frame:'</span>, 0, nFrames);
+0122 
+0123 <span class="keyword">if</span> doPlot
+0124     figure(); 
+0125 <span class="keyword">end</span>
+0126 
+0127 data_width= max(<a href="#_sub1" class="code" title="subfunction nf= num_frames(d0)">num_frames</a>(vi), <a href="#_sub1" class="code" title="subfunction nf= num_frames(d0)">num_frames</a>(vh));
+0128 vi = <a href="#_sub2" class="code" title="subfunction d2= filt_data(inv_model, d0, data_width )">filt_data</a>( imdl, vi, data_width );
+0129 vh = <a href="#_sub2" class="code" title="subfunction d2= filt_data(inv_model, d0, data_width )">filt_data</a>( imdl, vh, data_width );
+0130 B = vh - vi;
+0131 
+0132 <span class="keyword">for</span> iFrame = 1:nFrames
+0133     
+0134     <a href="../../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(iFrame, nFrames);
+0135     
+0136     <span class="comment">%% prepare differential data of current frame</span>
+0137     b = B(:,iFrame);
+0138     
+0139     <span class="keyword">switch</span>(lower(type))
+0140         <span class="keyword">case</span> <span class="string">'lcc'</span>
+0141             <span class="comment">%% L-curve (see section 2.5 p.20 of RTv4manual.pdf)</span>
+0142             <span class="comment">% calculate and plot continuous l-curve (documentation on p.83 of RTv4manual.pdf)</span>
+0143             lambdas(iFrame) = l_curve(U_s,s_s,b);
+0144 
+0145             <span class="comment">% add my own l-curve to plot for validation purposes</span>
+0146             <span class="keyword">if</span> doPlot &amp;&amp; (iFrame == nFrames)
+0147                 lInit = imdl.hyperparameter.value;
+0148                 lams = flip(logspace(log10(lInit*1E-3), log10(lInit*1E3), 10));
+0149                 lams = [lams lInit];
+0150 
+0151                 clear myrho myeta
+0152                 <span class="keyword">for</span> i=1:length(lams);
+0153                     imdl.hyperparameter.value = lams(i);
+0154                     RM = <a href="get_RM.html" class="code" title="function [RM, J, RtR, W, Jfine] = get_RM(inv_model)">get_RM</a>( imdl );
+0155                     myrho(i) = (norm(A*(RM*b) - b));
+0156                     myeta(i) = (norm(L*(RM*b)));
+0157                 <span class="keyword">end</span>
+0158 
+0159                 <span class="comment">% plot it</span>
+0160                 hold on;
+0161                 loglog(myrho(1:end-1), myeta(1:end-1), <span class="string">'ob'</span>);
+0162                 hold on;
+0163                 loglog(myrho(end), myeta(end), <span class="string">'og'</span>);
+0164             <span class="keyword">end</span>
+0165         <span class="keyword">case</span> <span class="string">'gcv'</span>
+0166             <span class="comment">%% gcv (see p.37 of RTv4manual.pdf)</span>
+0167             <span class="comment">% documentation on p.65 of RTv4manual.pdf</span>
+0168             lambdas(iFrame) = gcv(U_s,s_s,b);
+0169             
+0170             <span class="comment">% plot my own GCV for validation purposes</span>
+0171             <span class="keyword">if</span> doPlot &amp;&amp; (iFrame == nFrames)
+0172                 lInit = imdl.hyperparameter.value;
+0173                 lams = flip(logspace(log10(lInit*1E-3), log10(lInit*1E3), 10));
+0174                 lams = [lams lInit];
+0175 
+0176                 clear myG
+0177                 <span class="keyword">for</span> i=1:length(lams);
+0178                     imdl.hyperparameter.value = lams(i);
+0179                     RM = <a href="get_RM.html" class="code" title="function [RM, J, RtR, W, Jfine] = get_RM(inv_model)">get_RM</a>( imdl );
+0180                     rho = (norm(A*(RM*b) - b))^2;
+0181                     myG(i) = rho / (trace(eye(size(RM,2)) - A*RM)^2);
+0182                 <span class="keyword">end</span>
+0183 
+0184                 <span class="comment">% plot it</span>
+0185                 hold on;
+0186                 loglog(lams(1:end-1), myG(1:end-1), <span class="string">'ob'</span>);
+0187                 hold on;
+0188                 loglog(lams(end), myG(end), <span class="string">'og'</span>);
+0189             <span class="keyword">end</span>
+0190         <span class="keyword">otherwise</span>
+0191             error(<span class="string">'type not supported!'</span>);
+0192     <span class="keyword">end</span>
+0193 <span class="keyword">end</span>
+0194 
+0195 <a href="../../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Calculating lambda for each frame:'</span>, inf);
+0196 
+0197 <span class="keyword">end</span>
+0198 
+0199 <span class="comment">% TODO: this code really needs to be cleaned, but not before eidors 3.4</span>
+0200 <a name="_sub1" href="#_subfunctions" class="code">function nf= num_frames(d0)</a>
+0201    <span class="keyword">if</span> isnumeric( d0 )
+0202       nf= size(d0,2);
+0203    <span class="keyword">elseif</span> d0(1).type == <span class="string">'data'</span>;
+0204       nf= size( horzcat( d0(:).meas ), 2);
+0205    <span class="keyword">else</span>
+0206       error(<span class="string">'Problem calculating number of frames. Expecting numeric or data object'</span>);
+0207    <span class="keyword">end</span>
+0208 <span class="keyword">end</span>
+0209 
+0210 <span class="comment">% test for existance of meas_select and filter data</span>
+0211 <a name="_sub2" href="#_subfunctions" class="code">function d2= filt_data(inv_model, d0, data_width )</a>
+0212    <span class="keyword">if</span> ~isnumeric( d0 )
+0213        <span class="comment">% we probably have a 'data' object</span>
+0214 
+0215        d1 = [];
+0216        <span class="keyword">for</span> i=1:length(d0)
+0217           <span class="keyword">if</span> strcmp( d0(i).type, <span class="string">'data'</span> )
+0218               d1 = [d1, d0(i).meas];
+0219           <span class="keyword">else</span>
+0220               error(<span class="string">'expecting an object of type data'</span>);
+0221           <span class="keyword">end</span>
+0222        <span class="keyword">end</span>
+0223 
+0224    <span class="keyword">else</span>
+0225       <span class="comment">% we have a matrix of data. Hope for the best</span>
+0226       d1 = d0;
+0227    <span class="keyword">end</span>
+0228 
+0229    d1= double(d1); <span class="comment">% ensure we can do math on our object</span>
+0230 
+0231    <span class="keyword">if</span> isfield(inv_model.fwd_model,<span class="string">'meas_select'</span>) &amp;&amp; <span class="keyword">...</span>
+0232      ~isempty(inv_model.fwd_model.meas_select)
+0233       <span class="comment">% we have a meas_select parameter that isn []</span>
+0234 
+0235       meas_select= inv_model.fwd_model.meas_select;
+0236       <span class="keyword">if</span>     size(d1,1) == length(meas_select)
+0237          d2= d1(meas_select,:);
+0238       <span class="keyword">elseif</span> size(d1,1) == sum(meas_select==1)
+0239          d2= d1;
+0240       <span class="keyword">else</span>
+0241          error(<span class="string">'inconsistent difference data: (%d ~= %d). Maybe check fwd_model.meas_select'</span>,  <span class="keyword">...</span>
+0242                size(d1,1), length(meas_select));
+0243       <span class="keyword">end</span>
+0244    <span class="keyword">else</span>
+0245       d2= d1;
+0246    <span class="keyword">end</span>
+0247 
+0248    <span class="keyword">if</span> nargin==3 <span class="comment">% expand to data width</span>
+0249       d2_width= size(d2,2);
+0250       <span class="keyword">if</span> d2_width == data_width
+0251          <span class="comment">% ok</span>
+0252       <span class="keyword">elseif</span> d2_width == 1
+0253          d2= d2(:,ones(1,data_width));
+0254       <span class="keyword">else</span>
+0255          error(<span class="string">'inconsistent difference data: (%d ~= %d)'</span>,  <span class="keyword">...</span>
+0256                d2_width, data_width);
+0257       <span class="keyword">end</span>
+0258    <span class="keyword">end</span>
+0259 <span class="keyword">end</span>
+0260 
+0261 <a name="_sub3" href="#_subfunctions" class="code">function doUnitTest()</a>
+0262 <span class="comment">% inspired by the tutorial mentioned below:</span>
+0263 <span class="comment">% http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/tutorial110.shtml</span>
+0264 <span class="comment">%</span>
+0265 
+0266 <span class="comment">% Load some data</span>
+0267 load iirc_data_2006
+0268 
+0269 stim = <a href="../../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(16,1,[0,1],[0,1],{<span class="string">'meas_current'</span>},1);
+0270 
+0271 <span class="keyword">for</span> iRun = 1
+0272 <span class="comment">% for iRun = [0 1]</span>
+0273     <span class="comment">% Get a 2D image reconstruction model</span>
+0274     <span class="keyword">if</span> iRun 
+0275         <span class="comment">% more advanced 3D model which includes coarse2fine mapping which</span>
+0276         <span class="comment">% makes all crash</span>
+0277         fmdl = <a href="../../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>(<span class="string">'adult_male_16el'</span>);
+0278         fmdl.stimulation = stim;
+0279         opts = [];
+0280         opts.noise_figure = 0.5;
+0281         imdl = <a href="mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>(fmdl, opts, []);
+0282     <span class="keyword">else</span>
+0283         <span class="comment">% simple one</span>
+0284         imdl= <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'c2c'</span>);
+0285         imdl.fwd_model.stimulation = stim;
+0286         imdl.fwd_model = rmfield( imdl.fwd_model, <span class="string">'meas_select'</span>);
+0287         imdl.RtR_prior = @<a href="prior_tikhonov.html" class="code" title="function Reg= prior_tikhonov( inv_model );">prior_tikhonov</a>;
+0288     <span class="keyword">end</span>
+0289 
+0290     <span class="comment">% load the real data</span>
+0291     vi = real(v_rotate)/1e4; vh = real(v_reference)/1e4;
+0292     <span class="comment">% allow double precision, else we run into (unexplainable) problems</span>
+0293     vi = double(vi); vh = double(vh);   
+0294 
+0295     <span class="comment">% get the hyperparameter value via L-curve</span>
+0296     figure
+0297     lambdas_lcc = <a href="calc_lambda_regtools.html" class="code" title="function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)">calc_lambda_regtools</a>(imdl,vh,vi,<span class="string">'LCC'</span>,true);
+0298 
+0299     <span class="comment">% get the hyperparameter value via GCV</span>
+0300     lambdas_gcv = <a href="calc_lambda_regtools.html" class="code" title="function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)">calc_lambda_regtools</a>(imdl,vh,vi,<span class="string">'GCV'</span>,true);
+0301 
+0302     <span class="comment">% visualize</span>
+0303     FramesOfInterest = [10 35 60 85];
+0304     fig = figure(1 + iRun);
+0305     subplot(121);
+0306     imdl.hyperparameter.value = median(lambdas_lcc);
+0307     imgs_lcc = <a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi(:,FramesOfInterest));
+0308     imgs_lcc.show_slices.img_cols = 1;
+0309     <a href="../../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgs_lcc);
+0310     title(<span class="string">'L-curve'</span>);
+0311 
+0312     subplot(122);
+0313     imdl.hyperparameter.value = median(lambdas_gcv);
+0314     imgs_gcv = <a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi(:,FramesOfInterest));
+0315     imgs_gcv.show_slices.img_cols = 1;
+0316     <a href="../../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgs_gcv);
+0317     title(<span class="string">'GCV'</span>);
+0318 
+0319 <span class="keyword">end</span>
+0320 
+0321 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

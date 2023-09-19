@@ -1,0 +1,340 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of find_edge2edge_intersections</title>
+  <meta name="keywords" content="find_edge2edge_intersections">
+  <meta name="description" content="FIND_EDGE2EDGE_INTERSECTIONS intersections between edges of two models">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; find_edge2edge_intersections.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>find_edge2edge_intersections
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FIND_EDGE2EDGE_INTERSECTIONS intersections between edges of two models</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">FIND_EDGE2EDGE_INTERSECTIONS intersections between edges of two models
+ Edges are considered intersecting if the minimum distance between them is
+ less than epsilon and the closest point is not an endpoint.
+ [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)
+ Inputs:
+   FE      - Fine model edges [Nx2] as indices into FN
+   FN      - Fine model nodes [Nx3]
+   CE      - Coarse model edges [Mx2]
+   CN      - Coarse model nodes [Mx3]
+   epsilon - the minimum distance recognised as intersection
+ Outputs:
+   pts     - List of intersection points [Px3]
+   FE2CE   - Boolean matrix indicating if two edges interesct [NxM]
+   FE2pts  - Map between fine model edges and intersection points [NxP]
+   CE2pts  - Map between coarse model edges and intersection points [MxP]
+
+ This function is inspired by the simple Matlab conversion by Cristian Dima 
+ of the C code posted by Paul Bourke at
+ http://paulbourke.net/geometry/pointlineplane/lineline.c
+ http://paulbourke.net/geometry/pointlineplane/linelineintersect.m
+
+ See also: <a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">FIX_MODEL</a>, <a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">MK_GRID_C2F</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="find_edge2edge_intersections.html" class="code" title="function [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)">find_edge2edge_intersections</a>	FIND_EDGE2EDGE_INTERSECTIONS intersections between edges of two models</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>	PROGRESS_MSG Progress messages and timing.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="find_edge2edge_intersections.html" class="code" title="function [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)">find_edge2edge_intersections</a>	FIND_EDGE2EDGE_INTERSECTIONS intersections between edges of two models</li><li><a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a>	MK_TET_C2F - calculate a coarse2fine mapping for two tet-based models.</li><li><a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li><li><a href="mk_tri_c2f.html" class="code" title="function c2f = mk_tri_c2f(fmdl,rmdl,opt)">mk_tri_c2f</a>	MK_TRI_C2F - calculate a coarse2fine mapping for triangle-based models.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [intpts, FE2CE, FE2pts, CE2pts] = edge2edge_intersections_wrapper(FE,FN,CE,CN, epsilon)</a></li><li><a href="#_sub2" class="code">function [intpts, FE2CE, FE2pts, CE2pts] = edge2edge_intersections_serial(FE,FN,CE,CN, epsilon)</a></li><li><a href="#_sub3" class="code">function [intpts, FE2CE, FE2pts, CE2pts] = edge2edge_intersections(FE,FN,CE,CN, epsilon)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)</a>
+0002 <span class="comment">%FIND_EDGE2EDGE_INTERSECTIONS intersections between edges of two models</span>
+0003 <span class="comment">% Edges are considered intersecting if the minimum distance between them is</span>
+0004 <span class="comment">% less than epsilon and the closest point is not an endpoint.</span>
+0005 <span class="comment">% [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)</span>
+0006 <span class="comment">% Inputs:</span>
+0007 <span class="comment">%   FE      - Fine model edges [Nx2] as indices into FN</span>
+0008 <span class="comment">%   FN      - Fine model nodes [Nx3]</span>
+0009 <span class="comment">%   CE      - Coarse model edges [Mx2]</span>
+0010 <span class="comment">%   CN      - Coarse model nodes [Mx3]</span>
+0011 <span class="comment">%   epsilon - the minimum distance recognised as intersection</span>
+0012 <span class="comment">% Outputs:</span>
+0013 <span class="comment">%   pts     - List of intersection points [Px3]</span>
+0014 <span class="comment">%   FE2CE   - Boolean matrix indicating if two edges interesct [NxM]</span>
+0015 <span class="comment">%   FE2pts  - Map between fine model edges and intersection points [NxP]</span>
+0016 <span class="comment">%   CE2pts  - Map between coarse model edges and intersection points [MxP]</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% This function is inspired by the simple Matlab conversion by Cristian Dima</span>
+0019 <span class="comment">% of the C code posted by Paul Bourke at</span>
+0020 <span class="comment">% http://paulbourke.net/geometry/pointlineplane/lineline.c</span>
+0021 <span class="comment">% http://paulbourke.net/geometry/pointlineplane/linelineintersect.m</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% See also: FIX_MODEL, MK_GRID_C2F</span>
+0024 
+0025 <span class="comment">% (C) 2015 Bartlomiej Grychtol - all rights reserved by Swisstom AG</span>
+0026 <span class="comment">% License: GPL version 2 or 3</span>
+0027 <span class="comment">% $Id: find_edge2edge_intersections.m 4890 2015-04-23 14:09:55Z bgrychtol-ipa $</span>
+0028 
+0029 <span class="comment">% &gt;&gt; SWISSTOM CONTRIBUTION &lt;&lt;</span>
+0030 
+0031 <span class="keyword">if</span> size(CE,1) &gt; size(FE,1)
+0032     <span class="comment">% flip the inputs if CE is longer than FE</span>
+0033     [pts,FE2CE,CE2pts,FE2pts] = <a href="find_edge2edge_intersections.html" class="code" title="function [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)">find_edge2edge_intersections</a>(CE,CN,FE,FN, epsilon);
+0034     FE2CE = FE2CE';
+0035     <span class="keyword">return</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 epsilon = epsilon.^2; <span class="comment">% spares us doing sqrt to calculate distance</span>
+0039 
+0040 <span class="comment">% TODO: need a good heuristic to choose the faster approach</span>
+0041 <span class="keyword">try</span> 
+0042     <span class="comment">% this is usually faster, but can still, exceptionally, run out of</span>
+0043     <span class="comment">% memory</span>
+0044     [pts,FE2CE,FE2pts,CE2pts] = <a href="#_sub2" class="code" title="subfunction [intpts, FE2CE, FE2pts, CE2pts] = edge2edge_intersections_serial(FE,FN,CE,CN, epsilon)">edge2edge_intersections_serial</a>(FE,FN,CE,CN,epsilon);
+0045 <span class="keyword">catch</span> err
+0046     <span class="keyword">if</span> strcmp(err.identifier, <span class="string">'MATLAB:nomem'</span>)
+0047         <span class="comment">% this should not run out of memory</span>
+0048         [pts,FE2CE,FE2pts,CE2pts] = <a href="#_sub1" class="code" title="subfunction [intpts, FE2CE, FE2pts, CE2pts] = edge2edge_intersections_wrapper(FE,FN,CE,CN, epsilon)">edge2edge_intersections_wrapper</a>(FE,FN,CE,CN,epsilon);
+0049     <span class="keyword">else</span>
+0050         rethrow(err);
+0051     <span class="keyword">end</span>
+0052 <span class="keyword">end</span>
+0053 
+0054 
+0055 <span class="comment">%-------------------------------------------------------------------------%</span>
+0056 <span class="comment">% Wrapper to divide the calculations into smaller chunks</span>
+0057 <a name="_sub1" href="#_subfunctions" class="code">function [intpts, FE2CE, FE2pts, CE2pts] = edge2edge_intersections_wrapper(FE,FN,CE,CN, epsilon)</a>
+0058 <span class="comment">% Doing this in parallel creates potentially huge matrices</span>
+0059 <span class="comment">% Do it by parts to prevent out-of-memory errors</span>
+0060     sz = size(FE,1) * size(CE,1) * 8; <span class="comment">% result in bytes</span>
+0061     desired_mem = 2*(1024^3 ); <span class="comment">%</span>
+0062     <span class="comment">% at least 9 variables of FExCE size are needed in the main function</span>
+0063     n_chunks = ceil(10*sz / desired_mem); 
+0064 
+0065     len_chnk = ceil(size(CE,1) / n_chunks);
+0066     intpts = [];
+0067     FE2CE = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(0,0);
+0068     FE2pts = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(0,0);
+0069     CE2pts = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(0,0);
+0070     <span class="keyword">for</span> c = 1:n_chunks
+0071         <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@: chunk %d of %d'</span>,c,n_chunks,2);
+0072         start = 1 + (c-1)*len_chnk;
+0073         stop  = min(1 + c*len_chnk, size(CE,1));
+0074         rng   = start:stop;
+0075         [ip, te2ve, te2ip, ve2ip] = <a href="#_sub3" class="code" title="subfunction [intpts, FE2CE, FE2pts, CE2pts] = edge2edge_intersections(FE,FN,CE,CN, epsilon)">edge2edge_intersections</a>(FE,FN,CE(rng,:),CN, epsilon);
+0076         len    = size(intpts,1);
+0077         intpts = [intpts; ip];
+0078         idx = te2ve&gt;0;
+0079         te2ve(idx) = len + te2ve(idx);
+0080         FE2CE  = [FE2CE te2ve];
+0081         FE2pts = [FE2pts te2ip];
+0082         <span class="keyword">if</span> size(ve2ip,1) &lt; size(CE2pts,1)
+0083             ve2ip(size(CE2pts,1),1) = 0;
+0084         <span class="keyword">end</span>
+0085         CE2pts = [CE2pts ve2ip];
+0086     <span class="keyword">end</span>
+0087 
+0088     
+0089 <span class="comment">%-------------------------------------------------------------------------%</span>
+0090 <span class="comment">% Calculate intersection points between two sets of edges</span>
+0091 <a name="_sub2" href="#_subfunctions" class="code">function [intpts, FE2CE, FE2pts, CE2pts] = edge2edge_intersections_serial(FE,FN,CE,CN, epsilon)</a>
+0092 <span class="comment">% Based on the simple Matlab conversion by Cristian Dima of the C code</span>
+0093 <span class="comment">% posted by Paul Bourke at</span>
+0094 <span class="comment">% http://paulbourke.net/geometry/pointlineplane/lineline.c</span>
+0095 <span class="comment">% http://paulbourke.net/geometry/pointlineplane/linelineintersect.m</span>
+0096 
+0097     <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(0);
+0098 
+0099     P1 = FN(FE(:,1),:);
+0100     P2 = FN(FE(:,2),:);
+0101     P3 = CN(CE(:,1),:);
+0102     P4 = CN(CE(:,2),:);
+0103     
+0104     C_bb = zeros(size(P3,1),6);
+0105     C_bb(:,[1 3 5]) = min(P3,P4);
+0106     C_bb(:,[2 4 6]) = max(P3,P4);
+0107     
+0108     F_bb = zeros(size(P1,1),6);
+0109     F_bb(:,[1 3 5]) = min(P1,P2);
+0110     F_bb(:,[2 4 6]) = max(P1,P2);
+0111     
+0112     
+0113     excl =   bsxfun(@gt, F_bb(:,1), C_bb(:,2)') <span class="keyword">...</span>
+0114            | bsxfun(@lt, F_bb(:,2), C_bb(:,1)') <span class="keyword">...</span>
+0115            | bsxfun(@gt, F_bb(:,3), C_bb(:,4)') <span class="keyword">...</span>
+0116            | bsxfun(@lt, F_bb(:,4), C_bb(:,3)') <span class="keyword">...</span>
+0117            | bsxfun(@gt, F_bb(:,5), C_bb(:,6)') <span class="keyword">...</span>
+0118            | bsxfun(@lt, F_bb(:,6), C_bb(:,5)');
+0119     excl = ~excl;
+0120     
+0121     <span class="comment">% these are too big to keep around</span>
+0122 <span class="comment">%     p13.x = bsxfun(@minus, P1(:,1), P3(:,1)');</span>
+0123 <span class="comment">%     p13.y = bsxfun(@minus, P1(:,2), P3(:,2)');</span>
+0124 <span class="comment">%     p13.z = bsxfun(@minus, P1(:,3), P3(:,3)');</span>
+0125     
+0126     p43 = P4 - P3;
+0127     p21 = P2 - P1;
+0128     
+0129     d4343 = sum(p43.^2,2);
+0130     d2121 = sum(p21.^2,2);
+0131     
+0132     <span class="comment">% get rid of degenerate cases - slow, and superfluous</span>
+0133 <span class="comment">%     JNK = bsxfun(@or,sparse(all(abs(p21)&lt;eps,2)),sparse(all(abs(p43)&lt;eps,2)'));</span>
+0134     IN  = false(size(P1,1),size(P3,1));
+0135 
+0136     intpts = [];
+0137     
+0138     todo = size(CE,1);
+0139     id = 0;
+0140     step = ceil(todo/100);
+0141     
+0142     pa = zeros(size(P1));
+0143     
+0144     <span class="keyword">for</span>  v = 1:size(CE,1)
+0145         id = id+1;
+0146         <span class="keyword">if</span> mod(id,step)==0, <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(id/todo); <span class="keyword">end</span>
+0147         
+0148         fid = excl(:,v);
+0149         <span class="keyword">if</span> ~any(fid), <span class="keyword">continue</span>, <span class="keyword">end</span>;
+0150         
+0151         d1343 = 0; d4321 = 0;  d1321 = 0;
+0152         <span class="keyword">for</span> i = 1:3
+0153             p13 = P1(fid,i) - P3(v,i);
+0154             d1343 = d1343 + p13*p43(v,i);
+0155             d4321 = d4321 + p21(fid,i)*p43(v,i);
+0156             d1321 = d1321 + p13 .* p21(fid,i);
+0157         <span class="keyword">end</span>
+0158         
+0159         
+0160         
+0161         denom = d2121(fid) * d4343(v) - d4321.^2;
+0162         <span class="comment">% this is slow, and should be taken care of by mua &lt; 1</span>
+0163 <span class="comment">%         JNK(:,v) = JNK(:,v) | abs(denom)&lt;eps;</span>
+0164         numer = d1343 .* d4321 - d1321 * d4343(v);
+0165         
+0166         mua = numer./denom;
+0167         mub = (d1343 + d4321.*mua) / d4343(v);
+0168 
+0169 
+0170         D = 0; <span class="comment">% distance</span>
+0171         <span class="keyword">for</span> i = 1:3
+0172             pa(fid,i) = P1(fid,i) + p21(fid,i).*mua;
+0173             pb = P3(v,i) + p43(v,i) * mub;
+0174             D = D + (pa(fid,i) - pb).^2;
+0175         <span class="keyword">end</span>
+0176 <span class="comment">%         D = sqrt(D);</span>
+0177 <span class="comment">%         D(JNK(:,v)) = Inf;</span>
+0178         IN(fid,v) = ((mua&gt;0) + (mua&lt;1) + (mub&gt;0) + (mub&lt;1) + (D&lt;=epsilon)) == 5;
+0179         <span class="keyword">if</span> any(IN(fid,v))
+0180             intpts = [intpts; pa(IN(:,v),:)];
+0181         <span class="keyword">end</span>
+0182     <span class="keyword">end</span>
+0183     [T, V] = find(IN);
+0184     I = (1:size(intpts,1))';
+0185     FE2CE = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(P1,1),size(P3,1));
+0186     FE2CE(sub2ind(size(FE2CE),T,V)) = I;
+0187     FE2pts = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(T,I,ones(size(I)),size(P1,1),size(I,1));
+0188     CE2pts  = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(V,I,ones(size(I)),size(P3,1),size(I,1));
+0189     
+0190     <span class="keyword">if</span> <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>)&gt;1
+0191         <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(Inf);
+0192     <span class="keyword">end</span>
+0193     
+0194     
+0195 <span class="comment">%-------------------------------------------------------------------------%</span>
+0196 <span class="comment">% Calculate intersection points between two sets of edges</span>
+0197 <a name="_sub3" href="#_subfunctions" class="code">function [intpts, FE2CE, FE2pts, CE2pts] = edge2edge_intersections(FE,FN,CE,CN, epsilon)</a>
+0198 <span class="comment">% Based on the simple Matlab conversion by Cristian Dima of the C code</span>
+0199 <span class="comment">% posted by Paul Bourke at</span>
+0200 <span class="comment">% http://paulbourke.net/geometry/pointlineplane/lineline.c</span>
+0201 <span class="comment">% http://paulbourke.net/geometry/pointlineplane/linelineintersect.m</span>
+0202 
+0203 
+0204 
+0205     P1 = FN(FE(:,1),:);
+0206     P2 = FN(FE(:,2),:);
+0207     P3 = CN(CE(:,1),:);
+0208     P4 = CN(CE(:,2),:);
+0209     
+0210     <span class="comment">% these are too big to keep around</span>
+0211 <span class="comment">%     p13.x = bsxfun(@minus, P1(:,1), P3(:,1)');</span>
+0212 <span class="comment">%     p13.y = bsxfun(@minus, P1(:,2), P3(:,2)');</span>
+0213 <span class="comment">%     p13.z = bsxfun(@minus, P1(:,3), P3(:,3)');</span>
+0214     
+0215     p43 = P4 - P3;
+0216     p21 = P2 - P1;
+0217     
+0218     <span class="comment">% get rid of degenerate cases</span>
+0219     JNK = bsxfun(@or,<a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(all(abs(p21)&lt;eps,2)),<a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(all(abs(p43)&lt;eps,2)'));
+0220     
+0221     f = {<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>};
+0222     d1343 = 0; d4321 = 0;  d1321 = 0;
+0223 
+0224     <span class="keyword">for</span> i = 1:3;
+0225         p13 = bsxfun(@minus, P1(:,i), P3(:,i)');
+0226         d1343 = d1343 + bsxfun(@times,p13,p43(:,i)');
+0227         d4321 = d4321 + bsxfun(@times,p21(:,i),p43(:,i)');
+0228         d1321 = d1321 + bsxfun(@times,p13,p21(:,i));
+0229     <span class="keyword">end</span>
+0230 
+0231     clear p13
+0232     d4343 = sum(p43.^2,2);
+0233     d2121 = sum(p21.^2,2);
+0234     
+0235     denom = bsxfun(@times,d2121,d4343') - d4321.^2;
+0236     JNK = JNK | abs(denom)&lt;eps;
+0237     numer = d1343 .* d4321 - bsxfun(@times,d1321,d4343');
+0238     
+0239     mua = numer./denom;
+0240     mub = bsxfun(@rdivide, d1343 + d4321.*mua , d4343');
+0241     
+0242     clear d1343 d4321 d1321 d4343 d2121
+0243     
+0244     pa = struct; pb = struct;
+0245     D = 0; <span class="comment">% distance</span>
+0246     <span class="keyword">for</span> i = 1:3
+0247         pa.(f{i}) = bsxfun(@plus,P1(:,i),bsxfun(@times,p21(:,i),mua));
+0248         pb = bsxfun(@plus,P3(:,i)',bsxfun(@times,p43(:,i)',mub));
+0249         D = D + (pa.(f{i}) - pb).^2;
+0250     <span class="keyword">end</span>
+0251 <span class="comment">%     D = sqrt(D);</span>
+0252     D(JNK) = Inf;
+0253     
+0254 
+0255     
+0256     IN = mua&gt;0 &amp; mua &lt;1 &amp; mub&gt;0 &amp; mub&lt;1 &amp; D&lt;=epsilon;
+0257     nPts = nnz(IN);
+0258     intpts = zeros(nPts,3);
+0259     <span class="keyword">for</span> i = 1:3
+0260         intpts(:,i) = pa.(f{i})(IN);
+0261     <span class="keyword">end</span>
+0262  
+0263     [T, V] = find(IN);
+0264     I = (1:nPts)';
+0265     FE2CE = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(P1,1),size(P3,1));
+0266     FE2CE(IN) = I;
+0267    
+0268     FE2pts = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(T,I,ones(size(I)),size(P1,1),size(I,1));
+0269     CE2pts  = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(V,I,ones(size(I)),size(P3,1),size(I,1));
+0270</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

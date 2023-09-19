@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fem_1st_to_higher_order</title>
+  <meta name="keywords" content="fem_1st_to_higher_order">
+  <meta name="description" content="FEM_1ST_TO_HIGH_ORDER:  Modify the FEM for high order FEM called as">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; fem_1st_to_higher_order.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>fem_1st_to_higher_order
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>FEM_1ST_TO_HIGH_ORDER:  Modify the FEM for high order FEM called as</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FEM_1ST_TO_HIGH_ORDER:  Modify the FEM for high order FEM called as
+    [bound,elem,nodes] = fem_1st_to_higher_order( fwd_model )
+ where field fwd_model.approx_type = 'tri3'  - 2D linear
+                                   = 'tri6'  - 2D quadratic
+                                   = 'tri10' - 2D cubic
+                                   = 'tet4'  - 3D linear
+                                   = 'tet10' - 3D quadratic
+ fwd_model : is a fwd_model structure
+ boundary/elems : new boundary and element numbers in connectivity matrix
+ nodes : fem nodes including extra nodes added in refinement
+
+M Crabb - 29.06.2012</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="../../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>	MK_STIM_PATTERNS: create an EIDORS stimulation pattern structure</li><li><a href="fem_1st_to_higher_order.html" class="code" title="function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)">fem_1st_to_higher_order</a>	FEM_1ST_TO_HIGH_ORDER:  Modify the FEM for high order FEM called as</li><li><a href="find_electrode_bdy.html" class="code" title="function [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, elec_nodes)">find_electrode_bdy</a>	FIND_ELECTRODE_BDY: find the boundary index area for electrode</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="fem_1st_to_higher_order.html" class="code" title="function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)">fem_1st_to_higher_order</a>	FEM_1ST_TO_HIGH_ORDER:  Modify the FEM for high order FEM called as</li><li><a href="fwd_solve_higher_order.html" class="code" title="function[data] = fwd_solve_higher_order(fwd_model,img)">fwd_solve_higher_order</a>	Solve for voltages (nodes/electrodes) for a forward model.</li><li><a href="jacobian_adjoint_higher_order.html" class="code" title="function J = jacobian_adjoint_higher_order(fwd_model,img)">jacobian_adjoint_higher_order</a>	Find the Jacobian associated with an image (and forward model)</li><li><a href="../../../eidors/solvers/forward/tools-beta/calc_error_norms_for_square_domain.html" class="code" title="function [L2_tot_error,H1semi_tot_error,H1_tot_error,I_err,U_errS,U_errM,U_errSM,timing_solver,DOF]=error_2D_squ_CEM(img,eletype,plot_on)">calc_error_norms_for_square_domain</a>	Get forward model of the img and the conductivity per element</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [boundary,elems,nodes]=mc_fem_modify(mdl)</a></li><li><a href="#_sub2" class="code">function [mdl] = linear_elem_reorder(mdl,ccw)</a></li><li><a href="#_sub3" class="code">function [mdl]=linear_bound_reorder(mdl,ccw)</a></li><li><a href="#_sub4" class="code">function do_unit_test</a></li><li><a href="#_sub5" class="code">function do_unit_test_2D</a></li><li><a href="#_sub6" class="code">function do_unit_test_3D</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)</a>
+0002 <span class="comment">% FEM_1ST_TO_HIGH_ORDER:  Modify the FEM for high order FEM called as</span>
+0003 <span class="comment">%    [bound,elem,nodes] = fem_1st_to_higher_order( fwd_model )</span>
+0004 <span class="comment">% where field fwd_model.approx_type = 'tri3'  - 2D linear</span>
+0005 <span class="comment">%                                   = 'tri6'  - 2D quadratic</span>
+0006 <span class="comment">%                                   = 'tri10' - 2D cubic</span>
+0007 <span class="comment">%                                   = 'tet4'  - 3D linear</span>
+0008 <span class="comment">%                                   = 'tet10' - 3D quadratic</span>
+0009 <span class="comment">% fwd_model : is a fwd_model structure</span>
+0010 <span class="comment">% boundary/elems : new boundary and element numbers in connectivity matrix</span>
+0011 <span class="comment">% nodes : fem nodes including extra nodes added in refinement</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%M Crabb - 29.06.2012</span>
+0014 
+0015 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub4" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span> ; <span class="keyword">end</span>
+0016 
+0017 copt.cache_obj = {fwd_model.nodes, fwd_model.elems, <span class="keyword">...</span>
+0018              fwd_model.approx_type, fwd_model.boundary};
+0019 copt.fstr = <span class="string">'boundaryN_elemsN_nodes'</span>;
+0020 
+0021 [boundary,elems,nodes]= <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction [boundary,elems,nodes]=mc_fem_modify(mdl)">mc_fem_modify</a>,fwd_model,copt);
+0022 <span class="keyword">end</span>
+0023 
+0024 <a name="_sub1" href="#_subfunctions" class="code">function [boundary,elems,nodes]=mc_fem_modify(mdl)</a>
+0025 <span class="comment">%Function  that takes a fwd_model structure (with at least fwd_model.boundary,</span>
+0026 <span class="comment">%fwd_model.elems, fwd_model.nodes), reorders these to form anti-clockwise sets, and</span>
+0027 <span class="comment">%then adds extra nodes for p-refinement.</span>
+0028 
+0029 <span class="comment">%Reorder element nodes anti-clockwise relative to first node</span>
+0030 mdl = <a href="#_sub2" class="code" title="subfunction [mdl] = linear_elem_reorder(mdl,ccw)">linear_elem_reorder</a>(mdl,-1);
+0031 
+0032 <span class="comment">%Reorder boundary nodes anti-clockwise relative to interior node</span>
+0033 mdl = <a href="#_sub3" class="code" title="subfunction [mdl]=linear_bound_reorder(mdl,ccw)">linear_bound_reorder</a>(mdl,-1);
+0034 
+0035 <span class="comment">%Find nodes, elems, boundary and problem dimensions</span>
+0036 n_nodes = size(mdl.nodes,1); n_elems = size(mdl.elems,1); n_bounds=size(mdl.boundary,1);
+0037 nodedim = size(mdl.nodes,2);
+0038 
+0039 <span class="comment">%Copy nodes, elems and boundaries</span>
+0040 nodes_n=mdl.nodes; boundary_n=mdl.boundary; elems_n=mdl.elems;
+0041 
+0042 <span class="comment">%Compare strings</span>
+0043 <span class="keyword">if</span>(strcmp(mdl.approx_type,<span class="string">'tri6'</span>))    
+0044   <span class="comment">%No nodes (really vertices) per element and boundary</span>
+0045   n_nodes_per_elem = 3; 
+0046   n_nodes_per_boundary=1;
+0047 <span class="keyword">elseif</span>(strcmp(mdl.approx_type,<span class="string">'tri10'</span>))
+0048   <span class="comment">%No nodes (really vertices) per element and boundary</span>
+0049   n_nodes_per_elem = 7; 
+0050   n_nodes_per_boundary=2;
+0051 <span class="keyword">elseif</span>(strcmp(mdl.approx_type,<span class="string">'tet10'</span>));
+0052   <span class="comment">%No nodes (really vertices) per element and boundary</span>
+0053   n_nodes_per_elem = 6; 
+0054   n_nodes_per_boundary=3;
+0055 <span class="keyword">else</span>
+0056     error(<span class="string">'mc_fem_modify: Element type (&quot;%s&quot;) not recognised'</span>,mdl.approx_type);
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="comment">%Maximum number of new nodes i.e. unconnected elemets and boundaries</span>
+0060 n_nodes_e = n_nodes + n_nodes_per_elem*n_elems;
+0061 n_nodes_e_b = n_nodes_e + n_nodes_per_boundary*n_bounds;
+0062 
+0063 <span class="comment">%Now reshape the nodes, elems and boundary for extra FEM nodes</span>
+0064 nodes_n(n_nodes+1:n_nodes_e_b,:) = 0;
+0065 elems_n(:,nodedim+2:nodedim+1+n_nodes_per_elem) = reshape((n_nodes+1):n_nodes_e,n_nodes_per_elem,n_elems)';
+0066 boundary_n(:,nodedim+1:nodedim+n_nodes_per_boundary) = reshape((n_nodes_e+1):n_nodes_e_b,n_nodes_per_boundary,n_bounds)';
+0067 
+0068 <span class="comment">%Calculate positions of now nodes dependent on approx_type</span>
+0069 <span class="keyword">if</span>(strcmp(mdl.approx_type,<span class="string">'tri6'</span>))    
+0070   nodes_n(elems_n(:,4),:)  = 0.5*(nodes_n(elems_n(:,1),:) + nodes_n(elems_n(:,2),:));
+0071   nodes_n(elems_n(:,5),:)  = 0.5*(nodes_n(elems_n(:,2),:) + nodes_n(elems_n(:,3),:));
+0072   nodes_n(elems_n(:,6),:)  = 0.5*(nodes_n(elems_n(:,3),:) + nodes_n(elems_n(:,1),:));
+0073   nodes_n(boundary_n(:,3),:) = 0.5*(nodes_n(boundary_n(:,1),:) + nodes_n(boundary_n(:,2),:));
+0074 <span class="keyword">elseif</span>(strcmp(mdl.approx_type,<span class="string">'tri10'</span>))
+0075   nodes_n(elems_n(:,4),:) = 2.0/3.0*nodes_n(elems_n(:,1),:) + 1.0/3.0*nodes_n(elems_n(:,2),:);
+0076   nodes_n(elems_n(:,5),:) = 1.0/3.0*nodes_n(elems_n(:,1),:) + 2.0/3.0*nodes_n(elems_n(:,2),:);
+0077   nodes_n(elems_n(:,6),:) = 2.0/3.0*nodes_n(elems_n(:,2),:) + 1.0/3.0*nodes_n(elems_n(:,3),:);
+0078   nodes_n(elems_n(:,7),:) = 1.0/3.0*nodes_n(elems_n(:,2),:) + 2.0/3.0*nodes_n(elems_n(:,3),:);
+0079   nodes_n(elems_n(:,8),:) = 2.0/3.0*nodes_n(elems_n(:,3),:) + 1.0/3.0*nodes_n(elems_n(:,1),:);
+0080   nodes_n(elems_n(:,9),:) = 1.0/3.0*nodes_n(elems_n(:,3),:) + 2.0/3.0*nodes_n(elems_n(:,1),:);
+0081   nodes_n(elems_n(:,10),:) = 1.0/3.0*nodes_n(elems_n(:,1),:) + 1.0/3.0*nodes_n(elems_n(:,2),:) + 1.0/3.0*nodes_n(elems_n(:,3),:);
+0082   nodes_n(boundary_n(:,3),:) = 2.0/3.0*nodes_n(boundary_n(:,1),:) + 1.0/3.0*nodes_n(boundary_n(:,2),:);
+0083   nodes_n(boundary_n(:,4),:) = 1.0/3.0*nodes_n(boundary_n(:,1),:) + 2.0/3.0*nodes_n(boundary_n(:,2),:);
+0084 <span class="keyword">elseif</span>(strcmp(mdl.approx_type,<span class="string">'tet10'</span>))
+0085   nodes_n(elems_n(:,5),:) = 0.5*nodes_n(elems_n(:,1),:) + 0.5*nodes_n(elems_n(:,2),:);
+0086   nodes_n(elems_n(:,6),:) = 0.5*nodes_n(elems_n(:,1),:) + 0.5*nodes_n(elems_n(:,3),:);
+0087   nodes_n(elems_n(:,7),:) = 0.5*nodes_n(elems_n(:,1),:) + 0.5*nodes_n(elems_n(:,4),:);
+0088   nodes_n(elems_n(:,8),:) = 0.5*nodes_n(elems_n(:,2),:) + 0.5*nodes_n(elems_n(:,3),:);
+0089   nodes_n(elems_n(:,9),:) = 0.5*nodes_n(elems_n(:,3),:) + 0.5*nodes_n(elems_n(:,4),:);
+0090   nodes_n(elems_n(:,10),:) = 0.5*nodes_n(elems_n(:,2),:) + 0.5*nodes_n(elems_n(:,4),:);
+0091   nodes_n(boundary_n(:,4),:) = 0.5*nodes_n(boundary_n(:,1),:) + 0.5*nodes_n(boundary_n(:,2),:);
+0092   nodes_n(boundary_n(:,5),:) = 0.5*nodes_n(boundary_n(:,1),:) + 0.5*nodes_n(boundary_n(:,3),:);
+0093   nodes_n(boundary_n(:,6),:) = 0.5*nodes_n(boundary_n(:,2),:) + 0.5*nodes_n(boundary_n(:,3),:);
+0094 <span class="keyword">else</span>
+0095     error(<span class="string">'mc_fem_modify: Element type (&quot;%s&quot;) not recognised'</span>,mdl.approx_type);
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="comment">%Find the unique nodes by row</span>
+0099 [nodes, a, b] = unique(nodes_n(n_nodes+1:<span class="keyword">end</span>,:),<span class="string">'rows'</span>);
+0100 
+0101 <span class="comment">%Add the unique nodes to the model</span>
+0102 nodes_n = [mdl.nodes; nodes];
+0103 
+0104 <span class="comment">%Now find unique nodes</span>
+0105 c = [1:n_nodes n_nodes+b']; 
+0106 elems_n = c(elems_n);
+0107 boundary_n = c(boundary_n);
+0108 
+0109 <span class="comment">%Reassign matrices</span>
+0110 nodes=nodes_n; elems=elems_n; boundary=boundary_n;
+0111 
+0112 <span class="keyword">end</span>
+0113 
+0114 <span class="comment">%Function to reorder nodes consistently within element/boundary</span>
+0115 <span class="comment">%Elem Default : Arrange nodes locally in mdl.elems so that:</span>
+0116 <span class="comment">%2D: Counter-clockwise looking down onto element</span>
+0117 <span class="comment">%3D: Counter-clockwise looking into element from first node</span>
+0118 <span class="comment">%    (clockwise looking down from ouside element opposite first node)</span>
+0119 <span class="comment">%Boundary Default: Arrange nodes locally in mdl.boundary so that:</span>
+0120 <span class="comment">%2D: Counter-clockwise looking down relative to interior node</span>
+0121 <span class="comment">%3D: Clockwise relative looking into element from interior node</span>
+0122 <span class="comment">%    (counter-clockwise looking down from outside element opposite interior node)</span>
+0123 <span class="comment">%Conventions MUST match reference element geometry in system_mat_higher_order</span>
+0124 <a name="_sub2" href="#_subfunctions" class="code">function [mdl] = linear_elem_reorder(mdl,ccw)</a>
+0125     <span class="comment">%Find elements, nodes and no. of elements</span>
+0126     elemstruc=mdl.elems;  nodestruc=mdl.nodes; nelems=size(elemstruc,1);
+0127     <span class="keyword">for</span> e=1:nelems;
+0128         <span class="comment">%Row vector of the node numbers and the no. of vertices</span>
+0129         enodes = elemstruc(e,:); elenode = size(enodes,2);
+0130     
+0131         <span class="comment">%Matrix of nodal positions [elenodexdim] (Linear dimension==elenode-1)</span>
+0132         nd = nodestruc(enodes,:);
+0133     
+0134        <span class="comment">%Calculate area(2D)/volume(3D) defined by the vertices</span>
+0135         area= det([ones(elenode,1),nd]); areasign=sign(area);
+0136     
+0137         <span class="comment">%If sign is (pos) neg swap two nodes (last two will suffice..)</span>
+0138         <span class="keyword">if</span>(areasign == ccw) <span class="comment">%Swap last two entries of enodes</span>
+0139             temp=enodes(elenode-1);
+0140             enodes(elenode-1)=enodes(elenode);
+0141             enodes(elenode) = temp;
+0142         <span class="keyword">end</span>
+0143         elemstruc(e,:)=enodes; <span class="comment">%Put enodes back into elementnodes matrix</span>
+0144     <span class="keyword">end</span>
+0145     <span class="comment">%Reassign the elements</span>
+0146     mdl.elems=elemstruc;
+0147 <span class="keyword">end</span>
+0148 
+0149 <a name="_sub3" href="#_subfunctions" class="code">function [mdl]=linear_bound_reorder(mdl,ccw)</a>
+0150     <span class="comment">%Reorder nodes on each electrode's boundary</span>
+0151     <span class="comment">%SPEED UP</span>
+0152     <span class="comment">%1fix_model with option opt.bound_elec2elem=1</span>
+0153     
+0154     <span class="comment">%Find boundary, elems, nodes, elecs</span>
+0155     boundstruc=mdl.boundary; elemstruc=mdl.elems; nodestruc=mdl.nodes; elecstruc=mdl.electrode;
+0156     <span class="comment">%Find no. elecs and node dimension</span>
+0157     nelecs=size(elecstruc,2); nodedim=size(nodestruc,2);
+0158 
+0159     <span class="comment">%Reorder boundaries belonging to electrodes</span>
+0160     <span class="keyword">for</span> ke=1:nelecs
+0161         <span class="comment">%The boundary numbers and areas, outputs rows of mdl.boundary of electrode</span>
+0162         bdy_idx=<a href="find_electrode_bdy.html" class="code" title="function [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, elec_nodes)">find_electrode_bdy</a>(boundstruc(:,1:nodedim),nodestruc,elecstruc(ke).nodes);                 
+0163             
+0164         <span class="keyword">for</span> ii=1:length(bdy_idx);  
+0165             <span class="comment">%Get bdy idx</span>
+0166             bb=bdy_idx(ii);
+0167                                     
+0168             <span class="comment">%Vector of vertes numbers of this boundary</span>
+0169             bbnodes=boundstruc(bb,:);
+0170             <span class="keyword">if</span>(nodedim==2) <span class="comment">%2D problem</span>
+0171                 <span class="comment">%Find row(s) of elems for which each boundary vertex belongs</span>
+0172                 [rownode1,blah]=find(elemstruc==bbnodes(1));
+0173                 [rownode2,blah]=find(elemstruc==bbnodes(2));
+0174         
+0175                 <span class="comment">%Intersection of rownode1 and rownode2 is the unique element</span>
+0176                 boundiielem=intersect(rownode1,rownode2);
+0177             <span class="keyword">elseif</span>(nodedim==3) <span class="comment">%3D problem</span>
+0178                 <span class="comment">%Find row(s) of elems for which each node belongs</span>
+0179                 [rownode1,blah]=find(elemstruc==bbnodes(1));
+0180                 [rownode2,blah]=find(elemstruc==bbnodes(2));
+0181                 [rownode3,blah]=find(elemstruc==bbnodes(3));
+0182 
+0183                 <span class="comment">%Intersection of rownode1 and rownode2 gives a choic</span>
+0184                 rownode1node2=intersect(rownode1,rownode2);
+0185 
+0186                 <span class="comment">%Intersection of rownode3 with vector above is unique element</span>
+0187                 boundiielem=intersect(rownode3,rownode1node2);  
+0188             <span class="keyword">end</span>
+0189             <span class="comment">%Store this unique number in a vecto</span>
+0190             <span class="comment">%FIXME!!! 3D Inclusion models seem to include the boundaries of the</span>
+0191             <span class="comment">%inclusions as boundaries. In this case there may be multiple</span>
+0192             <span class="comment">%boundaries. Just choose first one for time being, and if this</span>
+0193             <span class="comment">%is ACTUAL boundary, then should be unique.....</span>
+0194             beleind=boundiielem(1);     
+0195             
+0196             <span class="comment">%Coordinate of nodes of boundaries element</span>
+0197             belenodes=elemstruc(beleind,:);
+0198   
+0199             <span class="comment">%Find unique internal node and order element node so internal is first</span>
+0200             intnode=setdiff(belenodes,bbnodes); elemboundnode=[intnode,bbnodes];
+0201     
+0202             <span class="comment">%List by row coordinates of the element</span>
+0203             nodepos=nodestruc(elemboundnode,:); nvertices=size(belenodes,2);     
+0204 
+0205             <span class="comment">%Calculate area(2D)/volume(3D) defined by the vertices</span>
+0206             area= det([ones(nvertices,1),nodepos]); areasign=sign(area);
+0207     
+0208             <span class="comment">%If positive area, swap the last two nodes</span>
+0209             <span class="keyword">if</span>(areasign == -ccw) <span class="comment">%Swap last two entries of enodes</span>
+0210                 temp=elemboundnode(end-1);
+0211                 elemboundnode(end-1)=elemboundnode(end);
+0212                 elemboundnode(end) = temp;
+0213             <span class="keyword">end</span>
+0214     
+0215             <span class="comment">%Put the node numbers back into mdl.bound(bb) (excluding internal node)</span>
+0216             boundstruc(bb,:)=elemboundnode(2:end);
+0217         <span class="keyword">end</span>              
+0218     <span class="keyword">end</span>
+0219     <span class="comment">%Reassign the boundary</span>
+0220     mdl.boundary=boundstruc;
+0221 <span class="keyword">end</span>
+0222 
+0223 <a name="_sub4" href="#_subfunctions" class="code">function do_unit_test</a>
+0224      <a href="#_sub5" class="code" title="subfunction do_unit_test_2D">do_unit_test_2D</a>;
+0225      <a href="#_sub6" class="code" title="subfunction do_unit_test_3D">do_unit_test_3D</a>;
+0226 <span class="keyword">end</span>
+0227 
+0228 <a name="_sub5" href="#_subfunctions" class="code">function do_unit_test_2D</a>
+0229     imdl=<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'c2C'</span>,16);
+0230     fmdl=imdl.fwd_model;
+0231     fmdl.approx_type=<span class="string">'tri6'</span>;
+0232     [bou,ele,nod]=<a href="fem_1st_to_higher_order.html" class="code" title="function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)">fem_1st_to_higher_order</a>(fmdl);
+0233 
+0234     <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'NOD'</span>,nod(1:5,:), <span class="keyword">...</span>
+0235 [                  0                   0
+0236   -0.005450260769179   0.083154910269884
+0237    0.083154910269884   0.005450260769179
+0238    0.005450260769179  -0.083154910269884
+0239   -0.083154910269884  -0.005450260769179],1e-8);
+0240     <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'ELE'</span>,ele(1:5,1:6), <span class="keyword">...</span>
+0241 [1, 3, 2, 783, 780, 755
+0242  1, 4, 3, 760, 785, 783
+0243  1, 5, 4, 732, 735, 760
+0244  1, 2, 5, 755, 730, 732
+0245  7, 2, 3, 792, 780, 810]);
+0246 
+0247 <span class="keyword">end</span>
+0248 
+0249 <a name="_sub6" href="#_subfunctions" class="code">function do_unit_test_3D</a>
+0250     fmdl=<a href="../../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>(<span class="string">'adult_male_16el'</span>);
+0251     fmdl.stimulation = <a href="../../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(16,1,<span class="string">'{ad}'</span>,<span class="string">'{ad}'</span>);
+0252     fmdl.approx_type=<span class="string">'tet10'</span>;
+0253     [bou,ele,nod]=<a href="fem_1st_to_higher_order.html" class="code" title="function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)">fem_1st_to_higher_order</a>(fmdl);
+0254 
+0255     <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'NOD'</span>,nod(1:5,:), <span class="keyword">...</span>
+0256 [ -0.812999999999999, -0.439800000000001, 0
+0257   -0.720700000000001, -0.494600000000000, 0
+0258   -0.886900000000000, -0.361400000000000, 0
+0259   -0.616600000000001, -0.523199999999999, 0
+0260   -0.516400000000002, -0.562899999999999, 0],1e-8 );
+0261 
+0262 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

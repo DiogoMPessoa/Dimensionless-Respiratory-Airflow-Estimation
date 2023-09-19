@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of demo_complex</title>
+  <meta name="keywords" content="demo_complex">
+  <meta name="description" content="This demo function shows how the EIT problem can be formulated in a complex">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">examples</a> &gt; demo_complex.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/examples&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>demo_complex
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This demo function shows how the EIT problem can be formulated in a complex</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">This demo function shows how the EIT problem can be formulated in a complex
+form. The complex measurements along with a single complex Jacobian are then 
+fed into the reconstruction process. This is a different forulation from the 
+demo_comp.m function.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>	[V] = LEFT_DIVIDE(E,I,tol,pp,V);</li><li><a href="../../eidors/deprecated/fem_master_full.html" class="code" title="function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);">fem_master_full</a>	function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);</li><li><a href="../../eidors/deprecated/get_3d_meas.html" class="code" title="function [voltageH,voltageV,indH,indV,df] = get_3d_meas(elec,vtx,V,Ib,no_pl);">get_3d_meas</a>	GET_3D_MEAS: extracts multiplane voltage measurements from a calculated</li><li><a href="../../eidors/deprecated/iso_f_smooth.html" class="code" title="function [Reg] = iso_f_smooth(simp,vtx,deg,w);">iso_f_smooth</a>	function [Reg] = iso_f_smooth(simp,vtx,deg,w);</li><li><a href="../../eidors/deprecated/jacobian_3d.html" class="code" title="function [J] = jacobian_3d(I,elec,vtx,simp,gnd_ind,mat_ref,zc,v_f,df,tol,perm_sym);">jacobian_3d</a>	function [J] = jacobian_3d(I,elec,vtx,simp,gnd_ind,mat_ref,zc,v_f,df,tol,perm_sym);</li><li><a href="../../eidors/deprecated/m_3d_fields.html" class="code" title="function [v_f] = m_3d_fields(vtx,el_no,m_ind,E,tol,gnd_ind,v_f);">m_3d_fields</a>	function [v_f] = m_3d_fields(vtx,el_no,m_ind,E,tol,gnd_ind,v_f);</li><li><a href="../../eidors/deprecated/set_3d_currents.html" class="code" title="function [I,Ib] = set_3d_currents(protocol,elec,vtx,gnd_ind,no_pl);">set_3d_currents</a>	function [I,Ib]=set_3d_currents(protocol,elec,vtx,gnd_ind,no_pl);</li><li><a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>	function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%This demo function shows how the EIT problem can be formulated in a complex</span>
+0002 <span class="comment">%form. The complex measurements along with a single complex Jacobian are then</span>
+0003 <span class="comment">%fed into the reconstruction process. This is a different forulation from the</span>
+0004 <span class="comment">%demo_comp.m function.</span>
+0005 
+0006 warning off;
+0007 disp(<span class="string">'This is a demo for reconstructing admittivity changes of the form a + bi'</span>)
+0008 
+0009 load datacom srf vtx simp;
+0010 <span class="comment">%srf : the boundary surfaces (triangles)</span>
+0011 <span class="comment">%vtx : the vertices of the model (co-ordinates of the nodes)</span>
+0012 <span class="comment">%simp: the simplices of the model (connectivity in tetrahedral)</span>
+0013 
+0014 trimesh(srf,vtx(:,1),vtx(:,2),vtx(:,3));
+0015 axis image;
+0016 set(gcf,<span class="string">'Colormap'</span>,[0 0 0]);
+0017 hold on;
+0018 
+0019 disp(<span class="string">'This is a cylindrical mesh with homogeneous distribution 1 + 0.5i'</span>)
+0020 disp(<span class="string">'Wait to attach the electrodes'</span>)
+0021 disp(sprintf(<span class="string">'\n'</span>))
+0022 
+0023 pause(2);
+0024 
+0025 load datacom sels;
+0026 <span class="comment">% FIXME: this needs to use the new show_fem functions</span>
+0027 <span class="comment">%sels :Index in srf matrix denoting the faces to be assigned as electrodes</span>
+0028 <span class="comment">% for u=1:size(sels)</span>
+0029 <span class="comment">%     paint_electrodes(sels(u),srf,vtx);</span>
+0030 <span class="comment">% end</span>
+0031 hidden off;
+0032   
+0033 load datacom gnd_ind elec no_pl protocol zc sym;
+0034 <span class="comment">%gnd_ind : The ground index here a node, can also be an electrode</span>
+0035 <span class="comment">%elec : The electrodes matrix.</span>
+0036 <span class="comment">%np_pl : Number of electrode planes (in planar arrangements)</span>
+0037 <span class="comment">%protocol : Adjacent or Opposite or Customized.</span>
+0038 <span class="comment">%zc : Contact impedances of the electrodes</span>
+0039 <span class="comment">%sym : Boolean entry for efficient forward computations</span>
+0040 <span class="comment">%Direct solvers :'{y}' / Iterative : '{n}'</span>
+0041 <span class="comment">%sym='{y}';</span>
+0042 
+0043 [I,Ib] = <a href="../../eidors/deprecated/set_3d_currents.html" class="code" title="function [I,Ib] = set_3d_currents(protocol,elec,vtx,gnd_ind,no_pl);">set_3d_currents</a>(protocol,elec,vtx,gnd_ind,no_pl);
+0044 
+0045 disp(<span class="string">'Adjacent current patterns selected'</span>)
+0046 disp(<span class="string">'Calculating reference measurements'</span>)
+0047 disp(sprintf(<span class="string">'\n'</span>))
+0048 
+0049 <span class="comment">%Set the tolerance for the forward solver</span>
+0050 tol = 1e-5;
+0051 
+0052 pause(2);
+0053 
+0054 mat_ref = (1+0.5i)*ones(828,1); <span class="comment">%%%%%%</span>
+0055 <span class="comment">%Jacobians will be calculated based on this</span>
+0056 
+0057 [Eref,D,Ela,ppr] = <a href="../../eidors/deprecated/fem_master_full.html" class="code" title="function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);">fem_master_full</a>(vtx,simp,mat_ref,gnd_ind,elec,zc,sym);
+0058 [Vref] = <a href="../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>(Eref,I,tol,ppr);
+0059 [refH,refV,indH,indV,dfr]=<a href="../../eidors/deprecated/get_3d_meas.html" class="code" title="function [voltageH,voltageV,indH,indV,df] = get_3d_meas(elec,vtx,V,Ib,no_pl);">get_3d_meas</a>(elec,vtx,Vref,Ib,no_pl);
+0060 dfr = dfr(1:2:end); <span class="comment">%Taking just the horrizontal measurements</span>
+0061 
+0062 close;
+0063 disp(<span class="string">'Allow a couple of complex changes ...'</span>)
+0064 disp(sprintf(<span class="string">'\n'</span>))
+0065 pause(2);
+0066 
+0067 
+0068 mat=mat_ref;
+0069 
+0070 load datacom A B <span class="comment">%Indices of the elements to represent the inhomogeneities</span>
+0071 <span class="comment">%figure; [mat,grp] = set_inho(srf,simp,vtx,mat_ref,1.2-0.4i);</span>
+0072 sA = 1.2 + 0.4i; <span class="comment">% A local complex change or</span>
+0073 <span class="comment">%sA = 1.2 + 0.5i; %just a local conductivity change</span>
+0074 sprintf (<span class="string">'This one  at %f + %f i'</span>,real(sA), imag(sA))
+0075 mat(A) = sA;
+0076 
+0077 figure; 
+0078 subplot(1,2,1);
+0079 trimesh(srf,vtx(:,1),vtx(:,2),vtx(:,3));
+0080 axis image;
+0081 set(gcf,<span class="string">'Colormap'</span>,[0 0 0]);
+0082 hidden off;
+0083 hold on;
+0084 repaint_inho(real(mat),real(mat_ref),vtx,simp); title(<span class="string">'REAL'</span>);
+0085 camlight left;
+0086 lighting flat;
+0087 
+0088 subplot(1,2,2);
+0089 trimesh(srf,vtx(:,1),vtx(:,2),vtx(:,3));
+0090 axis image;
+0091 set(gcf,<span class="string">'Colormap'</span>,[0 0 0]);
+0092 hidden off;
+0093 hold on;
+0094 repaint_inho(imag(mat),imag(mat_ref),vtx,simp); title(<span class="string">'IMAGINARY'</span>);
+0095 camlight left;
+0096 lighting flat;
+0097 
+0098 pause(2);
+0099 close;
+0100         
+0101 <span class="comment">%figure; [mat,grp] = set_inho(srf,simp,vtx,mat_ref,0.8-0.6i);</span>
+0102 <span class="comment">%sB = 0.8 - 0.6i; % A local complex change</span>
+0103 sB = 1 + 0.75i; <span class="comment">% or a local permittivity change</span>
+0104 sprintf(<span class="string">'and this one at  %f + %f i'</span>,real(sB), imag(sB))
+0105 mat(B) = sB;
+0106 
+0107 figure; subplot(1,2,1); 
+0108 trimesh(srf,vtx(:,1),vtx(:,2),vtx(:,3));
+0109 axis image;
+0110 set(gcf,<span class="string">'Colormap'</span>,[0 0 0]);
+0111 hidden off;
+0112 hold on;
+0113 repaint_inho(real(mat),real(mat_ref),vtx,simp); title(<span class="string">'REAL'</span>);
+0114 camlight left;
+0115 lighting flat;
+0116 
+0117 subplot(1,2,2); 
+0118 trimesh(srf,vtx(:,1),vtx(:,2),vtx(:,3));
+0119 axis image;
+0120 set(gcf,<span class="string">'Colormap'</span>,[0 0 0]);
+0121 hidden off;
+0122 hold on;
+0123 repaint_inho(imag(mat),imag(mat_ref),vtx,simp); title(<span class="string">'IMAGINARY'</span>);
+0124 camlight left;
+0125 lighting flat;
+0126 
+0127 pause(2);
+0128 close;
+0129         
+0130 <span class="comment">%[mat,grp] = set_inho(srf,simp,vtx,mat,0.9+0.41i);</span>
+0131 disp(sprintf(<span class="string">'\n'</span>))
+0132 
+0133 [En,D,Ela,ppn] = <a href="../../eidors/deprecated/fem_master_full.html" class="code" title="function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);">fem_master_full</a>(vtx,simp,mat,gnd_ind,elec,zc,sym);
+0134 [Vn] = <a href="../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>(En,I,tol,ppn);
+0135 [voltageH,voltageV,indH,indV,dfv]=<a href="../../eidors/deprecated/get_3d_meas.html" class="code" title="function [voltageH,voltageV,indH,indV,df] = get_3d_meas(elec,vtx,V,Ib,no_pl);">get_3d_meas</a>(elec,vtx,Vn,Ib,no_pl);
+0136 dfv = dfv(1:2:end);
+0137 
+0138 <span class="keyword">if</span> size(dfr)~= size(dfv)
+0139    error(<span class="string">'Mismatched measurements'</span>)
+0140 <span class="keyword">end</span>
+0141 
+0142 disp(<span class="string">'Measurements calculated'</span>)
+0143 disp(sprintf(<span class="string">'\n'</span>))
+0144 
+0145 dva = voltageH-refH;
+0146 
+0147 disp(<span class="string">'Measurements blended with Gaussian noise ...'</span>)
+0148 dc = mean(real(dva)); <span class="comment">%DC component of the noise</span>
+0149 dvrG = dc./7 * ones(length(dva),1) + dc * randn(length(dva),1); <span class="comment">%Add the AC component</span>
+0150 
+0151 dc = mean(imag(dva)); <span class="comment">%DC component of the noise</span>
+0152 dviG = dc./7 * ones(length(dva),1) + dc * randn(length(dva),1); <span class="comment">%Add the AC component</span>
+0153 
+0154 dat = (real(dva) + dvrG) + (imag(dva) + dviG)*i;
+0155 <span class="comment">%dat = dva;</span>
+0156 
+0157 disp(<span class="string">'Calculating measurement fields'</span>)
+0158 [v_f] = <a href="../../eidors/deprecated/m_3d_fields.html" class="code" title="function [v_f] = m_3d_fields(vtx,el_no,m_ind,E,tol,gnd_ind,v_f);">m_3d_fields</a>(vtx,size(elec,1),indH,Eref,tol,gnd_ind);
+0159 
+0160 disp(<span class="string">'Calculating a single complex jacobian'</span>)
+0161 [J] = <a href="../../eidors/deprecated/jacobian_3d.html" class="code" title="function [J] = jacobian_3d(I,elec,vtx,simp,gnd_ind,mat_ref,zc,v_f,df,tol,perm_sym);">jacobian_3d</a>(I,elec,vtx,simp,gnd_ind,mat_ref,zc,v_f,dfv,tol,sym);
+0162 
+0163 
+0164 disp(<span class="string">'Computing a smooting prior'</span>)
+0165 [Reg] = <a href="../../eidors/deprecated/iso_f_smooth.html" class="code" title="function [Reg] = iso_f_smooth(simp,vtx,deg,w);">iso_f_smooth</a>(simp,vtx,1,2);
+0166 
+0167 disp(<span class="string">'Calculating a linearised step inverse solution'</span>)
+0168 disp(sprintf(<span class="string">'\n'</span>))
+0169 tfac = 1e-7;
+0170 sol = (J.'*J +  tfac*Reg'*Reg)\J.' * dat;
+0171 sreal = real(sol);
+0172 simag = imag(sol);
+0173 
+0174 truereal = real(mat-mat_ref);
+0175 trueimag = imag(mat-mat_ref);
+0176 
+0177 v = version;
+0178 
+0179 <span class="keyword">if</span> str2num(v(1)) &gt; 5
+0180 
+0181 h01 = figure;
+0182 set(h01,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0183 set(h01,<span class="string">'Name'</span>,<span class="string">'True conductivity distribution'</span>);
+0184 subplot(2,3,1); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(2.63,truereal,vtx,simp); view(2); grid; colorbar; axis off; title(<span class="string">'z=2.63'</span>); 
+0185 <span class="comment">%Calculates also fc. Just once!</span>
+0186 subplot(2,3,2); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(2.10,truereal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=2.10'</span>); 
+0187 subplot(2,3,3); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(1.72,truereal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=1.72'</span>); 
+0188 subplot(2,3,4); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(1.10,truereal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=1.10'</span>); 
+0189 subplot(2,3,5); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(0.83,truereal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=0.83'</span>);
+0190 subplot(2,3,6); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(0.10,truereal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=0.10'</span>);
+0191 
+0192 
+0193 h02 = figure;
+0194 set(h02,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0195 set(h02,<span class="string">'Name'</span>,<span class="string">'True scaled permittivity distribution'</span>);
+0196 subplot(2,3,1); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(2.63,trueimag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=2.60'</span>); 
+0197 subplot(2,3,2); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(2.10,trueimag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=2.10'</span>); 
+0198 subplot(2,3,3); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(1.72,trueimag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=1.70'</span>); 
+0199 subplot(2,3,4); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(1.10,trueimag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=1.10'</span>); 
+0200 subplot(2,3,5); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(0.83,trueimag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=0.80'</span>);
+0201 subplot(2,3,6); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(0.10,trueimag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=0.10'</span>);
+0202 
+0203 
+0204 
+0205 h2 = figure;
+0206 set(h2,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0207 set(h2,<span class="string">'Name'</span>,<span class="string">'Reconstructed conductivity distribution'</span>);
+0208 subplot(2,3,1); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(2.63,sreal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=2.63'</span>); 
+0209 subplot(2,3,2); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(2.10,sreal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=2.10'</span>); 
+0210 subplot(2,3,3); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(1.72,sreal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=1.72'</span>); 
+0211 subplot(2,3,4); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(1.10,sreal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=1.10'</span>); 
+0212 subplot(2,3,5); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(0.83,sreal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=0.83'</span>);
+0213 subplot(2,3,6); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(0.10,sreal,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=0.10'</span>);
+0214 
+0215 h3 = figure;
+0216 set(h3,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0217 set(h3,<span class="string">'Name'</span>,<span class="string">'Reconstructed scaled permittivity distribution'</span>);
+0218 subplot(2,3,1); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(2.63,simag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=2.60'</span>); 
+0219 subplot(2,3,2); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(2.10,simag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=2.10'</span>); 
+0220 subplot(2,3,3); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(1.72,simag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=1.70'</span>); 
+0221 subplot(2,3,4); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(1.10,simag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=1.10'</span>); 
+0222 subplot(2,3,5); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(0.83,simag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=0.80'</span>);
+0223 subplot(2,3,6); [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(0.10,simag,vtx,simp,fc); view(2); grid; colorbar; axis off; title(<span class="string">'z=0.10'</span>);
+0224 
+0225 <span class="keyword">else</span>
+0226    
+0227    disp(<span class="string">'Change the plotting command above to slicer_plot or upgrate to MATLAB 6'</span>)
+0228    disp(<span class="string">'See demo_real for more details'</span>)
+0229    
+0230 <span class="keyword">end</span>
+0231 
+0232 disp(<span class="string">'Done'</span>)
+0233 
+0234 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0235 <span class="comment">% This is part of the EIDORS suite.</span>
+0236 <span class="comment">% Copyright (c) N. Polydorides 2003</span>
+0237 <span class="comment">% Copying permitted under terms of GNU GPL</span>
+0238 <span class="comment">% See enclosed file gpl.html for details.</span>
+0239 <span class="comment">% EIDORS 3D version 2.0</span>
+0240 <span class="comment">% MATLAB version 6.1 R12</span>
+0241 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of system_mat_higher_order</title>
+  <meta name="keywords" content="system_mat_higher_order">
+  <meta name="description" content="Assemble the total stiffness matrix : s_mat.E=At;">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; system_mat_higher_order.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>system_mat_higher_order
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Assemble the total stiffness matrix : s_mat.E=At;</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [s_mat]=system_mat_higher_order(fwd_model,img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">Assemble the total stiffness matrix : s_mat.E=At;
+M Crabb - 29.06.2012
+TODO - Sparse assignment of the matrices</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="boundary_shape_function.html" class="code" title="function shape=boundary_shape_function(type,x,y)">boundary_shape_function</a>	BOUNDSHAPEFUNC  Shape functions on the boundary in local coordiantes</li><li><a href="element_d_shape_function.html" class="code" title="function dshape = element_d_shape_function(type,x,y,z)">element_d_shape_function</a>	DELEMSHAPEFUNC</li><li><a href="find_electrode_bdy.html" class="code" title="function [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, elec_nodes)">find_electrode_bdy</a>	FIND_ELECTRODE_BDY: find the boundary index area for electrode</li><li><a href="gauss_points.html" class="code" title="function [w,x,y,z]=gauss_points(dim,order)">gauss_points</a>	GAUSS_POINTS</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="fwd_solve_higher_order.html" class="code" title="function[data] = fwd_solve_higher_order(fwd_model,img)">fwd_solve_higher_order</a>	Solve for voltages (nodes/electrodes) for a forward model.</li><li><a href="jacobian_adjoint_higher_order.html" class="code" title="function J = jacobian_adjoint_higher_order(fwd_model,img)">jacobian_adjoint_higher_order</a>	Find the Jacobian associated with an image (and forward model)</li><li><a href="../../../eidors/solvers/forward/tools-beta/calc_error_norms_for_square_domain.html" class="code" title="function [L2_tot_error,H1semi_tot_error,H1_tot_error,I_err,U_errS,U_errM,U_errSM,timing_solver,DOF]=error_2D_squ_CEM(img,eletype,plot_on)">calc_error_norms_for_square_domain</a>	Get forward model of the img and the conductivity per element</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [Agal,elemstiff]=mc_calc_stiffness(fwd_model,img)</a></li><li><a href="#_sub2" class="code">function [Aw,Az,Ad]=mc_calc_complete(fwd_model)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [s_mat]=system_mat_higher_order(fwd_model,img)</a>
+0002 <span class="comment">%Assemble the total stiffness matrix : s_mat.E=At;</span>
+0003 <span class="comment">%M Crabb - 29.06.2012</span>
+0004 <span class="comment">%TODO - Sparse assignment of the matrices</span>
+0005 <span class="keyword">if</span> nargin == 1
+0006    img= fwd_model;
+0007 <span class="keyword">elseif</span>  strcmp(getfield(warning(<span class="string">'query'</span>,<span class="string">'EIDORS:DeprecatedInterface'</span>),<span class="string">'state'</span>),<span class="string">'on'</span>)
+0008    warning(<span class="string">'EIDORS:DeprecatedInterface'</span>, <span class="keyword">...</span>
+0009       [<span class="string">'Calling SYSTEM_MAT_HIGHER_ORDER with two arguments is deprecated and will cause'</span> <span class="keyword">...</span>
+0010        <span class="string">' an error in a future version. First argument ignored.'</span>]);
+0011 <span class="keyword">end</span>
+0012 fwd_model= img.fwd_model;
+0013 
+0014 <span class="comment">%Find no. of electrodes and no. of ndoes</span>
+0015 elecstruc=fwd_model.electrode; nelecs=size(elecstruc,2);
+0016 nodestruc=fwd_model.nodes; nnodes=size(nodestruc,1); 
+0017 
+0018 <span class="comment">%Test - Point/Complete electrodes. Assume no mixed model so test first elect</span>
+0019 <span class="keyword">if</span>(size(elecstruc(1).nodes,2)==1 &amp;&amp; size(elecstruc(1).nodes,1)==1) <span class="comment">%POINT ELECTRODE</span>
+0020     <span class="comment">%IF POINT ELECTRODE</span>
+0021     [At,elemstiff]=<a href="#_sub1" class="code" title="subfunction [Agal,elemstiff]=mc_calc_stiffness(fwd_model,img)">mc_calc_stiffness</a>(fwd_model,img);
+0022 <span class="keyword">else</span> <span class="comment">%COMPLETE ELECTRODE</span>
+0023     [Am,elemstiff]=<a href="#_sub1" class="code" title="subfunction [Agal,elemstiff]=mc_calc_stiffness(fwd_model,img)">mc_calc_stiffness</a>(fwd_model,img);
+0024     
+0025      [Aw,Az,Ad]=<a href="#_sub2" class="code" title="subfunction [Aw,Az,Ad]=mc_calc_complete(fwd_model)">mc_calc_complete</a>(fwd_model);
+0026      At=zeros(nnodes+nelecs,nnodes+nelecs);     
+0027 <span class="comment">%     [i,j,s] = find(Am);</span>
+0028 <span class="comment">%     At=At+sparse(i,j,s,nnodes+nelecs,nnodes+nelecs);</span>
+0029 <span class="comment">%     [i,j,s] = find(Az);</span>
+0030 <span class="comment">%     At=At+sparse(i,j,s,nnodes+nelecs,nnodes+nelecs);</span>
+0031 <span class="comment">%     [i,j,s] = find(Aw);</span>
+0032 <span class="comment">%     At=At+sparse(i,j+nnodes,s,nnodes+nelecs,nnodes+nelecs);</span>
+0033 <span class="comment">%     At=At+sparse(j+nnodes,i,s,nnodes+nelecs,nnodes+nelecs);</span>
+0034 <span class="comment">%     [i,j,s] = find(Ad);</span>
+0035 <span class="comment">%     At=At+sparse(i+nnodes,j+nnodes,s,nnodes+nelecs,nnodes+nelecs);</span>
+0036     At(1:nnodes,1:nnodes) = Am+Az;
+0037     At(1:nnodes,nnodes+1:nnodes+nelecs) = Aw;
+0038     At(nnodes+1:nnodes+nelecs,1:nnodes)=Aw';
+0039     At(nnodes+1:nnodes+nelecs,nnodes+1:nnodes+nelecs)=Ad;
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="comment">%Put in structure to be compatibile with eidors</span>
+0043 s_mat.E=<a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(At);
+0044 
+0045 <span class="comment">%Store individual stiffness matrices for Jacobian</span>
+0046 s_mat.elemstiff=elemstiff;
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="comment">%STIFFNESS MATRIX PART</span>
+0050 <a name="_sub1" href="#_subfunctions" class="code">function [Agal,elemstiff]=mc_calc_stiffness(fwd_model,img)</a>
+0051 <span class="comment">%Stiffness matrix, including piecewise conductivity, for EIT. The second</span>
+0052 <span class="comment">%argument is for Jacobian, it gives discretied gradients in element.</span>
+0053 
+0054 <span class="comment">%If function called only with image, extract forward model</span>
+0055 <span class="keyword">if</span>(nargin==1)
+0056     img=fwd_model; fwd_model=img.fwd_model;
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="comment">%Cache node structure and find no. of spatial dimensions and nodes</span>
+0060 <span class="comment">%Cache element structure and find no. of elements</span>
+0061 nodestruc=fwd_model.nodes; nodedim=size(nodestruc,2); nnodes=size(nodestruc,1); 
+0062 elemstruc=fwd_model.elems; nelems=size(elemstruc,1);
+0063 
+0064 <span class="comment">%Find quadrature points/weights for integration by switching between cases</span>
+0065 eletype=fwd_model.approx_type; 
+0066 <span class="keyword">if</span>(strcmp(eletype,<span class="string">'tri3'</span>))
+0067     dim=2; order=0;
+0068 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tri6'</span>))
+0069     dim=2; order=2;
+0070 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tri10'</span>))
+0071     dim=2; order=4;
+0072 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tet4'</span>))
+0073     dim=3; order=0;
+0074 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tet10'</span>))
+0075     dim=3; order=2;
+0076 <span class="keyword">else</span>  
+0077     error(<span class="string">'Element type not recognised for integration rules'</span>);
+0078 <span class="keyword">end</span>
+0079 [weight,xcoord,ycoord,zcoord]=<a href="gauss_points.html" class="code" title="function [w,x,y,z]=gauss_points(dim,order)">gauss_points</a>(dim,order);
+0080 
+0081 <span class="comment">%Find derivative of shape function on domain element</span>
+0082 <span class="keyword">for</span> kk=size(weight,2):-1:1
+0083     dphi(:,:,kk) = <a href="element_d_shape_function.html" class="code" title="function dshape = element_d_shape_function(type,x,y,z)">element_d_shape_function</a>(eletype,xcoord(kk),ycoord(kk),zcoord(kk));
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="comment">%Initialise global stiffness matrix</span>
+0087 Agal=zeros(nnodes,nnodes); <span class="comment">%sparse updating non zero slow</span>
+0088 
+0089 <span class="comment">%Initialise structure</span>
+0090 
+0091 <span class="comment">%Loop over the elements and calculate local Am matrix</span>
+0092 <span class="keyword">for</span> i=nelems:-1:1
+0093     <span class="comment">%Find the list of node numbers for each element</span>
+0094     eleminodelist=elemstruc(i,:);
+0095     
+0096     <span class="comment">%List by row of coordinate on the element</span>
+0097     thise = nodestruc(eleminodelist,:);
+0098     
+0099     <span class="comment">%Find the Jacobian of the mapping in 2D and 3D</span>
+0100     <span class="keyword">if</span>(nodedim==2); jacobianelem = <span class="keyword">...</span><span class="comment"> %2D Jacobian of mapping</span>
+0101             [thise(2,1)-thise(1,1),thise(2,2)-thise(1,2); <span class="keyword">...</span>
+0102             thise(3,1)-thise(1,1),thise(3,2)-thise(1,2)];  
+0103     <span class="keyword">elseif</span>(nodedim==3); jacobianelem = <span class="keyword">...</span><span class="comment"> %3D Jacobian of mapping</span>
+0104             [thise(2,1)-thise(1,1),thise(2,2)-thise(1,2),thise(2,3)-thise(1,3); <span class="keyword">...</span>
+0105             thise(3,1)-thise(1,1),thise(3,2)-thise(1,2),thise(3,3)-thise(1,3); <span class="keyword">...</span>
+0106             thise(4,1)-thise(1,1),thise(4,2)-thise(1,2),thise(4,3)-thise(1,3)];
+0107     <span class="keyword">end</span>
+0108     
+0109     <span class="comment">%Find the magnitude of the Jacobian of the mapping</span>
+0110     <span class="comment">% magjacelem=det(jacobianelem);</span>
+0111     magjacelem=abs(det(jacobianelem));
+0112            
+0113     <span class="comment">%Initialise and find elemental stiffness matrices</span>
+0114     Ammat=0;
+0115     <span class="keyword">for</span> kk=1:size(weight,2)
+0116 <span class="comment">%         Ammat = Ammat + weight(kk)* ...</span>
+0117 <span class="comment">%             (jacobianelem\dphi(:,:,kk))'* ...</span>
+0118 <span class="comment">%             (jacobianelem\dphi(:,:,kk))*magjacelem;</span>
+0119         jdphitemp=jacobianelem\dphi(:,:,kk);
+0120         Ammat = Ammat + weight(kk)* <span class="keyword">...</span>
+0121             (jdphitemp'*jdphitemp)*magjacelem;
+0122     <span class="keyword">end</span>
+0123 
+0124     <span class="comment">%SPEED UP</span>
+0125     <span class="comment">%Can we get system_mat_fields here to speed Jacobian?</span>
+0126     
+0127     <span class="comment">%Store the Ammat without multiplication of conductivity for Jacobian</span>
+0128     elemstiff(i).elemstiff=Ammat;
+0129    
+0130     <span class="comment">%This is element stiffness matrix (and multiply by its conductivity)</span>
+0131 
+0132     stiff=Ammat*img.elem_data(i); 
+0133     
+0134     <span class="comment">%Assemble global stiffness matrix (Silvester's book!!)</span>
+0135     Agal(elemstruc(i,:), elemstruc(i,:)) = Agal(elemstruc(i,:), elemstruc(i,:)) + stiff;
+0136 
+0137 <span class="keyword">end</span>
+0138  
+0139 <span class="keyword">end</span>
+0140 
+0141 <span class="comment">%COMPLETE ELECTRODE MATRICES</span>
+0142 <a name="_sub2" href="#_subfunctions" class="code">function [Aw,Az,Ad]=mc_calc_complete(fwd_model)</a>
+0143 <span class="comment">%Takes a forward model and calculates Az, Aw, Ad for complete electrode</span>
+0144 
+0145 <span class="comment">%Get the electrode structure, find number of electrodes</span>
+0146 <span class="comment">%Get the boundary strucutre, find number of boundaries</span>
+0147 <span class="comment">%Get the node structrue, find number of nodes and problem dim</span>
+0148 elecstruc=fwd_model.electrode; nelecs=size(elecstruc,2);boundstruc=fwd_model.boundary; nodestruc=fwd_model.nodes; 
+0149 nnodes=size(nodestruc,1); nodedim=size(nodestruc,2);
+0150 
+0151 <span class="comment">%Connect boundary/electrode -Put boundary into old matrix strucutre</span>
+0152 <span class="comment">%for i=nbounds:-1:1</span>
+0153 <span class="comment">%    boundstrucold(i,:)=boundstruc(i).nodes;</span>
+0154 <span class="comment">%end</span>
+0155 
+0156 <span class="comment">%Find quadrature points/weights for integration by switching between cases</span>
+0157 eletype=fwd_model.approx_type; 
+0158 <span class="keyword">if</span>(strcmp(eletype,<span class="string">'tri3'</span>))
+0159     dim=1; order=2;
+0160 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tri6'</span>))
+0161     dim=1; order=4;
+0162 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tri10'</span>))
+0163     dim=1; order=6;
+0164 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tet4'</span>))
+0165     dim=2; order=2;
+0166 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tet10'</span>))
+0167     dim=2; order=4;
+0168 <span class="keyword">else</span>  
+0169     error(<span class="string">'Element type not recognised for integration rules'</span>);
+0170 <span class="keyword">end</span>
+0171 [weight,xcoord,ycoord]=<a href="gauss_points.html" class="code" title="function [w,x,y,z]=gauss_points(dim,order)">gauss_points</a>(dim,order);
+0172 
+0173 <span class="comment">%Find shape function on boundary element</span>
+0174 <span class="keyword">for</span> kk=size(weight,2):-1:1
+0175     phi(:,kk) = <a href="boundary_shape_function.html" class="code" title="function shape=boundary_shape_function(type,x,y)">boundary_shape_function</a>(eletype,xcoord(kk),ycoord(kk))';
+0176 <span class="keyword">end</span>
+0177 
+0178 <span class="comment">%1. Initialise global Az/Aw/Ad matrices and assemble a la Silvester</span>
+0179 Az=zeros(nnodes,nnodes); Aw=zeros(nnodes,nelecs); Ad=zeros(nelecs,nelecs); <span class="comment">%sparse updating non zero slow</span>
+0180 
+0181 <span class="comment">%Loop over the electrodes</span>
+0182 <span class="keyword">for</span> ke=1:nelecs    
+0183     <span class="comment">%The boundary numbers and areas, outputs rows of mdl.boundary of electrode</span>
+0184     [bdy_idx,bdy_area]=<a href="find_electrode_bdy.html" class="code" title="function [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, elec_nodes)">find_electrode_bdy</a>(boundstruc(:,1:nodedim),nodestruc,elecstruc(ke).nodes);
+0185     
+0186     <span class="comment">%Store boundary numbers, and corresponding areas</span>
+0187     boundidx_ke=bdy_idx; area_ke=bdy_area;
+0188     
+0189     <span class="comment">%Find contact impedance of electrode</span>
+0190     elecimped=elecstruc(ke).z_contact;   
+0191            
+0192     <span class="comment">%Find total electrode area (absolute values)</span>
+0193     elecarea=0;
+0194     <span class="keyword">for</span> i=1:size(area_ke,2)
+0195         elecarea = elecarea + abs(area_ke(i));
+0196     <span class="keyword">end</span>
+0197     
+0198     <span class="comment">%Form the matrix Ad</span>
+0199     Ad(ke,ke)=elecarea/elecimped; 
+0200     
+0201     
+0202     <span class="comment">%Loop over boundarys and calculate Aw/Az matrices</span>
+0203     <span class="keyword">for</span> ii=1:length(boundidx_ke)
+0204         <span class="comment">%List by row of coordinates of on the boundaryNodal coordinates on the boundary</span>
+0205         thisb=nodestruc(boundstruc(boundidx_ke(ii),:),:);
+0206     
+0207         <span class="comment">%Find the magnitude Jacobian of the mapping in 2D/3D</span>
+0208         <span class="comment">%NB:Scalings are consistent with reference element shape</span>
+0209         <span class="keyword">if</span>(nodedim==2)
+0210             <span class="comment">%Jacobian = 0.5*|(x2-x1)| (x1,x2 vector of coords)</span>
+0211             diff21=thisb(2,:)-thisb(1,:);
+0212             magjacbound=0.5*sqrt(diff21(1)^2+diff21(2)^2);
+0213         <span class="keyword">elseif</span>(nodedim==3)
+0214             <span class="comment">%Jacobian = |(x3-x1)x(x3-x2)| (x1,x2,x3 vector of coords)</span>
+0215             diffprod=cross(thisb(3,:)-thisb(1,:),thisb(3,:)-thisb(2,:));
+0216             magjacbound=sqrt(diffprod(1)^2+diffprod(2)^2+diffprod(3)^2);
+0217         <span class="keyword">end</span>
+0218 
+0219         <span class="comment">%Initialise Azlocmat/Awlocmat and find local matrices</span>
+0220         Azmat=0; Awmat=0;
+0221         <span class="keyword">for</span> kk=1:size(weight,2)            
+0222             temphikk = phi(:,kk);
+0223             Azmat = Azmat + weight(kk)* <span class="keyword">...</span>
+0224                 (temphikk*temphikk')*magjacbound;
+0225             Awmat = Awmat + weight(kk)* <span class="keyword">...</span>
+0226                 (phi(:,kk))'*magjacbound;            
+0227             <span class="comment">%Azmat = Azmat + weight(kk)* ...</span>
+0228             <span class="comment">%    (phi(:,kk))* ...</span>
+0229             <span class="comment">%    (phi(:,kk))'*magjacbound;</span>
+0230             <span class="comment">%Awmat = Awmat + weight(kk)* ...</span>
+0231             <span class="comment">%    (phi(:,kk))'*magjacbound;</span>
+0232         <span class="keyword">end</span>         
+0233         
+0234         <span class="comment">%Node numbers for this boundary</span>
+0235         boundnodes=boundstruc(boundidx_ke(ii),:);
+0236         
+0237         <span class="comment">%Assemble the matrices</span>
+0238         Az(boundnodes,boundnodes) = Az(boundnodes,boundnodes)+Azmat/elecimped;
+0239         Aw(boundnodes,ke) = Aw(boundnodes,ke) - Awmat'/elecimped;
+0240     <span class="keyword">end</span>
+0241        
+0242 <span class="keyword">end</span>
+0243 
+0244 <span class="keyword">end</span>
+0245</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_coarse_fine_mapping</title>
+  <meta name="keywords" content="mk_coarse_fine_mapping">
+  <meta name="description" content="MK_COARSE_FINE_MAPPING: create a mapping matrix from coarse to fine FEM">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_coarse_fine_mapping.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_coarse_fine_mapping
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_COARSE_FINE_MAPPING: create a mapping matrix from coarse to fine FEM</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [mapping, outside] = mk_coarse_fine_mapping(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MK_COARSE_FINE_MAPPING: create a mapping matrix from coarse to fine FEM
+ [c2f,out]= mk_coarse_fine_mapping( f_mdl, c_mdl, opt );
+
+ C2F_ij is the fraction of f_mdl element i which is
+   contained in c_mdl element j. This is used to map
+   from data on the reconstruction model (c_mdl) to
+   the forward model f_mdl as 
+      elem_data_fine = Mapping*elem_data_coase
+ OUT_i is the fraction of f_mdl element i which is not
+   contained in any c_mdl element.
+  
+ Parameters:
+    c_mdl is coarse fwd_model
+    f_mdl is fine fwd_model
+    opt   is option structure (optional, see below)
+
+ This function is a compatibility wrapper. The actual calculations are
+ carried out by either MK_ANALYTIC_C2F or MK_APPROX_C2F (the older
+ method). 
+
+ To set a specific implementation use
+    eidors_default('set','mk_coarse_fine_mapping','mk_approx_c2f');
+
+ To query current implementation use
+    eidors_default('get','mk_coarse_fine_mapping');
+
+ NOTE that MK_ANALYTIC_C2F accepts an optional third argument whereas
+ MK_APPROXIMATE_C2F does not.
+
+ See also: EIDORS_DEFAULT, <a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">MK_ANALYTIC_C2F</a>, <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">MK_APPROX_C2F</a>, <a href="check_c2f_quality.html" class="code" title="function [ f_frac, c_frac ] = check_c2f_quality( f_mdl, c_mdl, c2f )">CHECK_C2F_QUALITY</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>	EIDORS_DEFAULT Default function handler.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>	MK_APPROX_C2F: create a mapping matrix from coarse to fine FEM</li><li><a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li><li><a href="../../eidors/solvers/forward/jacobian_movement.html" class="code" title="function J = jacobian_movement(fwd_model, img)">jacobian_movement</a>	JACOBIAN_MOVEMENT   Computes the Jacobian matrix for conductivity and</li><li><a href="../../eidors/solvers/forward/system_mat_1st_order.html" class="code" title="function s_mat= system_mat_1st_order( fwd_model, img)">system_mat_1st_order</a>	SYSTEM_MAT_1ST_ORDER: SS= system_mat_1st_order( fwd_model, img)</li><li><a href="../../eidors/solvers/get_img_data.html" class="code" title="function [img_data, n_images]= get_img_data(img)">get_img_data</a>	GET_IMG_DATA: get parameter data from eidors image object</li><li><a href="../../eidors/solvers/inverse/calc_image_SNR.html" class="code" title="function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)">calc_image_SNR</a>	% CALC_IMAGE_SNR: Calculates the signal-to-noise ratio (SNR) in the image</li><li><a href="../../eidors/solvers/inverse/mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>	MK_GN_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="../../eidors/tests/test_c2f_jacobian.html" class="code" title="function test_c2f_jacobian">test_c2f_jacobian</a>	Test calc of jacobian given coarse to fine mapping</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mapping, outside] = mk_coarse_fine_mapping(varargin)</a>
+0002 <span class="comment">%MK_COARSE_FINE_MAPPING: create a mapping matrix from coarse to fine FEM</span>
+0003 <span class="comment">% [c2f,out]= mk_coarse_fine_mapping( f_mdl, c_mdl, opt );</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% C2F_ij is the fraction of f_mdl element i which is</span>
+0006 <span class="comment">%   contained in c_mdl element j. This is used to map</span>
+0007 <span class="comment">%   from data on the reconstruction model (c_mdl) to</span>
+0008 <span class="comment">%   the forward model f_mdl as</span>
+0009 <span class="comment">%      elem_data_fine = Mapping*elem_data_coase</span>
+0010 <span class="comment">% OUT_i is the fraction of f_mdl element i which is not</span>
+0011 <span class="comment">%   contained in any c_mdl element.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Parameters:</span>
+0014 <span class="comment">%    c_mdl is coarse fwd_model</span>
+0015 <span class="comment">%    f_mdl is fine fwd_model</span>
+0016 <span class="comment">%    opt   is option structure (optional, see below)</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% This function is a compatibility wrapper. The actual calculations are</span>
+0019 <span class="comment">% carried out by either MK_ANALYTIC_C2F or MK_APPROX_C2F (the older</span>
+0020 <span class="comment">% method).</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% To set a specific implementation use</span>
+0023 <span class="comment">%    eidors_default('set','mk_coarse_fine_mapping','mk_approx_c2f');</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% To query current implementation use</span>
+0026 <span class="comment">%    eidors_default('get','mk_coarse_fine_mapping');</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% NOTE that MK_ANALYTIC_C2F accepts an optional third argument whereas</span>
+0029 <span class="comment">% MK_APPROXIMATE_C2F does not.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% See also: EIDORS_DEFAULT, MK_ANALYTIC_C2F, MK_APPROX_C2F, CHECK_C2F_QUALITY</span>
+0032 
+0033 <span class="comment">% (C) 2015 Bartlomiej Grychtol</span>
+0034 <span class="comment">% License: GPL version 2 or version 3</span>
+0035 <span class="comment">% $Id: mk_coarse_fine_mapping.m 5932 2019-04-18 14:24:16Z aadler $</span>
+0036 
+0037 
+0038 [mapping, outside] = <a href="../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>(varargin{:});</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

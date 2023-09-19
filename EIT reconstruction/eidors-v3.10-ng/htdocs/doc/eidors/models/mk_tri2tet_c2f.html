@@ -1,0 +1,1025 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_tri2tet_c2f</title>
+  <meta name="keywords" content="mk_tri2tet_c2f">
+  <meta name="description" content="MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_tri2tet_c2f.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_tri2tet_c2f
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models
+ C2F = MK_TRI2TET_C2F(FMDL,RMDL) returns in C2F the fraction of volume of
+ each element of the fine (tet-based) model contained in each element of
+ the coarse (tri-based) model. Each triangle is extruded along the z-axis
+ to form a prism.
+ Uses CONVHULLN to calculate the volume defined by a set of intersection
+ points between individual tet and vox elements.
+
+ C2F = MK_TRI2TET_C2F(FMDL,RMDL,OPT) allows specifying options.
+ 
+ Inputs:
+   FMDL - an EIDORS (tet-based) 3D forward model
+   RMDL - an EIDORS (tri-based) 2D forward model
+   OPT  - an option structure with the following fields and defaults:
+      .z_depth
+      .do_not_scale  - set to true to prevent scaling the models to unit
+                       cube before any calculations, including thresholds.
+                       Default: false
+      .tol_node2tri  - minimum value of a barycentric coordinate to 
+                       decide a tet node is lying inside a triangle and 
+                       not on its edge. Default: eps
+      .tol_node2tet  - tolerance for determinant &lt;= 0 in testing for
+                       points inside tets. Default: eps
+      .tol_edge2edge - maximum distance between &quot;intersecting&quot; edges
+                       Default: 6*sqrt(3)*eps(a), where a is
+                       min(max(abs(fmdl.nodes(:))),max(abs(rmdl.nodes(:)))
+      .tol_edge2tri  - minimum value of a barycentric coordinate to 
+                       decide an edge-plane intersection point is lying 
+                       inside a triangle. Default: eps
+                       
+ NOTE that for grid-based models, such as returned by MK_GRID_MODEL or
+ MK_VOXEL_VOLUME, MK_GRID_C2F is much faster.
+
+ Set eidors_msg 'log level' &lt; 2 to supress output to command line.
+ 
+ See also <a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">MK_GRID_C2F</a>, <a href="mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">MK_TET_C2F</a>, <a href="mk_tri_c2f.html" class="code" title="function c2f = mk_tri_c2f(fmdl,rmdl,opt)">MK_TRI_C2F</a>, <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">MK_COARSE_FINE_MAPPING</a>,
+          <a href="find_edge2edge_intersections.html" class="code" title="function [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)">FIND_EDGE2EDGE_INTERSECTIONS</a>, CONVHULLN, <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">MK_APPROX_C2F</a>,
+          <a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">POINT_IN_TRIANGLE</a>, EIDORS_MSG</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="convhulln_clean.html" class="code" title="function [K,V] = convhulln_clean(pts,p);">convhulln_clean</a>	CONVHULLN_CLEAN: run convhulln and catch errors</li><li><a href="find_edge2edge_intersections.html" class="code" title="function [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)">find_edge2edge_intersections</a>	FIND_EDGE2EDGE_INTERSECTIONS intersections between edges of two models</li><li><a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>	FIX_MODEL: Add useful fields to a model</li><li><a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>	GET_ELEM_VOLUME: VOL = get_elem_volume(fwd_model, map_node )</li><li><a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>	MK_APPROX_C2F: create a mapping matrix from coarse to fine FEM</li><li><a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>	MK_COARSE_FINE_MAPPING: create a mapping matrix from coarse to fine FEM</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li><li><a href="point_in_tet.html" class="code" title="function point2tet = point_in_tet(fmdl,points, epsilon)">point_in_tet</a>	POINT_IN_TET test for points contained in elements</li><li><a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>	POINT_IN_TRIANGLE tests points for membership in triangles</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>	EIDORS_DEBUG Global managment of debug flags</li><li><a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>	PROGRESS_MSG Progress messages and timing.</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>	MK_ANALYTIC_C2F: create a mapping matrix from coarse to fine FEM</li><li><a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function c2f = do_mk_tri2tet_c2f(fmdl,rmdl,opt)</a></li><li><a href="#_sub2" class="code">function [intpts, tri2edge, tri2pts, edge2pts] = get_tet_intersection_pts(fmdl,rmdl,top,bot, epsilon)</a></li><li><a href="#_sub3" class="code">function [intpts, FE2CE, FE2pts, CE2pts] =</a></li><li><a href="#_sub4" class="code">function [top_node2tet, top_nodes, nodes_above, nodes_below] =</a></li><li><a href="#_sub5" class="code">function [intpts, edge2tri, edge2pts, tri2pts] =</a></li><li><a href="#_sub6" class="code">function   [intpts, tri2edge,tri2intpt,edge2intpt] =</a></li><li><a href="#_sub7" class="code">function [fmdl,rmdl, opt] = center_scale_models(fmdl,rmdl, opt)</a></li><li><a href="#_sub8" class="code">function [fmdl,rmdl,fmdl_idx,rmdl_idx] = crop_models(fmdl,rmdl, opt)</a></li><li><a href="#_sub9" class="code">function fmdl = prepare_tet_mdl(fmdl)</a></li><li><a href="#_sub10" class="code">function fmdl = prepare_tri_mdl(fmdl)</a></li><li><a href="#_sub11" class="code">function debug_plot(fmdl,rmdl,v,t, bot, top, pts)</a></li><li><a href="#_sub12" class="code">function opt = parse_opts(fmdl,rmdl, opt)</a></li><li><a href="#_sub13" class="code">function do_unit_test</a></li><li><a href="#_sub14" class="code">function do_inf_test</a></li><li><a href="#_sub15" class="code">function do_small_test</a></li><li><a href="#_sub16" class="code">function do_realistic_test</a></li><li><a href="#_sub17" class="code">function do_centre_slice;</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)</a>
+0002 <span class="comment">%MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</span>
+0003 <span class="comment">% C2F = MK_TRI2TET_C2F(FMDL,RMDL) returns in C2F the fraction of volume of</span>
+0004 <span class="comment">% each element of the fine (tet-based) model contained in each element of</span>
+0005 <span class="comment">% the coarse (tri-based) model. Each triangle is extruded along the z-axis</span>
+0006 <span class="comment">% to form a prism.</span>
+0007 <span class="comment">% Uses CONVHULLN to calculate the volume defined by a set of intersection</span>
+0008 <span class="comment">% points between individual tet and vox elements.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% C2F = MK_TRI2TET_C2F(FMDL,RMDL,OPT) allows specifying options.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Inputs:</span>
+0013 <span class="comment">%   FMDL - an EIDORS (tet-based) 3D forward model</span>
+0014 <span class="comment">%   RMDL - an EIDORS (tri-based) 2D forward model</span>
+0015 <span class="comment">%   OPT  - an option structure with the following fields and defaults:</span>
+0016 <span class="comment">%      .z_depth</span>
+0017 <span class="comment">%      .do_not_scale  - set to true to prevent scaling the models to unit</span>
+0018 <span class="comment">%                       cube before any calculations, including thresholds.</span>
+0019 <span class="comment">%                       Default: false</span>
+0020 <span class="comment">%      .tol_node2tri  - minimum value of a barycentric coordinate to</span>
+0021 <span class="comment">%                       decide a tet node is lying inside a triangle and</span>
+0022 <span class="comment">%                       not on its edge. Default: eps</span>
+0023 <span class="comment">%      .tol_node2tet  - tolerance for determinant &lt;= 0 in testing for</span>
+0024 <span class="comment">%                       points inside tets. Default: eps</span>
+0025 <span class="comment">%      .tol_edge2edge - maximum distance between &quot;intersecting&quot; edges</span>
+0026 <span class="comment">%                       Default: 6*sqrt(3)*eps(a), where a is</span>
+0027 <span class="comment">%                       min(max(abs(fmdl.nodes(:))),max(abs(rmdl.nodes(:)))</span>
+0028 <span class="comment">%      .tol_edge2tri  - minimum value of a barycentric coordinate to</span>
+0029 <span class="comment">%                       decide an edge-plane intersection point is lying</span>
+0030 <span class="comment">%                       inside a triangle. Default: eps</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% NOTE that for grid-based models, such as returned by MK_GRID_MODEL or</span>
+0033 <span class="comment">% MK_VOXEL_VOLUME, MK_GRID_C2F is much faster.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% Set eidors_msg 'log level' &lt; 2 to supress output to command line.</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% See also MK_GRID_C2F, MK_TET_C2F, MK_TRI_C2F, MK_COARSE_FINE_MAPPING,</span>
+0038 <span class="comment">%          FIND_EDGE2EDGE_INTERSECTIONS, CONVHULLN, MK_APPROX_C2F,</span>
+0039 <span class="comment">%          POINT_IN_TRIANGLE, EIDORS_MSG</span>
+0040 
+0041 <span class="comment">% (C) 2015 Bartlomiej Grychtol</span>
+0042 <span class="comment">% License: GPL version 2 or 3</span>
+0043 <span class="comment">% $Id: mk_tri2tet_c2f.m 5889 2018-12-23 19:57:54Z aadler $</span>
+0044 
+0045 
+0046 <span class="keyword">if</span> nargin == 0 || (ischar(fmdl) &amp;&amp; strcmp(fmdl,<span class="string">'UNIT_TEST'</span>)) 
+0047    <a href="#_sub13" class="code" title="subfunction do_unit_test">do_unit_test</a>; 
+0048    <span class="keyword">return</span>; 
+0049 <span class="keyword">end</span>
+0050 <span class="keyword">if</span> nargin &lt; 3
+0051    opt = struct();
+0052 <span class="keyword">end</span>
+0053 
+0054 f_elems = size(fmdl.elems,1);
+0055 r_elems = size(rmdl.elems,1);
+0056 c2f = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(f_elems,r_elems);
+0057 
+0058 <span class="keyword">if</span> size(rmdl.nodes,2) == 2
+0059    rmdl.nodes(:,3) = max(fmdl.nodes(:,3))/2 + min(fmdl.nodes(:,3))/2;
+0060 <span class="keyword">end</span>
+0061 
+0062 [fmdl,rmdl,fmdl_idx,rmdl_idx] = <a href="#_sub8" class="code" title="subfunction [fmdl,rmdl,fmdl_idx,rmdl_idx] = crop_models(fmdl,rmdl, opt)">crop_models</a>(fmdl,rmdl, opt);
+0063 
+0064 <span class="keyword">if</span> ~(any(fmdl_idx) &amp;&amp; any(rmdl_idx))
+0065    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@: models do not overlap, returning all-zeros'</span>);
+0066    <span class="keyword">return</span>
+0067 <span class="keyword">end</span>
+0068 
+0069 opt = <a href="#_sub12" class="code" title="subfunction opt = parse_opts(fmdl,rmdl, opt)">parse_opts</a>(fmdl,rmdl, opt);
+0070 
+0071 [fmdl,rmdl, opt] = <a href="#_sub7" class="code" title="subfunction [fmdl,rmdl, opt] = center_scale_models(fmdl,rmdl, opt)">center_scale_models</a>(fmdl,rmdl, opt);
+0072 
+0073 copt.fstr = <span class="string">'mk_tri2tet_c2f'</span>;
+0074 c2f(fmdl_idx,rmdl_idx) = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction c2f = do_mk_tri2tet_c2f(fmdl,rmdl,opt)">do_mk_tri2tet_c2f</a>,{fmdl,rmdl,opt},copt);
+0075 <span class="comment">% c2f = eidors_cache(@do_mk_tri2tet_c2f,{fmdl,rmdl,opt},copt);</span>
+0076 
+0077 <span class="keyword">end</span>
+0078 
+0079 <a name="_sub1" href="#_subfunctions" class="code">function c2f = do_mk_tri2tet_c2f(fmdl,rmdl,opt)</a>
+0080    p=struct();
+0081    p.debug = <a href="../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>(<span class="string">'query'</span>,<span class="string">'mk_tri2tet_c2f:convhulln'</span>);
+0082 
+0083    r_elems = size(rmdl.elems,1);
+0084    f_elems = size(fmdl.elems,1);
+0085  
+0086    c2f = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(f_elems, r_elems);
+0087    
+0088    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Prepare tet model...'</span>);
+0089    fmdl = <a href="#_sub9" class="code" title="subfunction fmdl = prepare_tet_mdl(fmdl)">prepare_tet_mdl</a>(fmdl);
+0090    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(Inf);
+0091    
+0092    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Prepare tri model...'</span>);
+0093    rmdl = <a href="#_sub10" class="code" title="subfunction fmdl = prepare_tri_mdl(fmdl)">prepare_tri_mdl</a>(rmdl);
+0094    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(Inf);
+0095 
+0096    pmopt.final_msg = <span class="string">'none'</span>;
+0097    <span class="keyword">if</span> ~isinf(opt.z_depth)
+0098       <span class="comment">% tri nodes on top and bot planes inside tets</span>
+0099       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find top cap nodes in tets...'</span>,-1,pmopt);
+0100       [top_node2tet, top_nodes, top_nodes_above, top_nodes_below] = <span class="keyword">...</span>
+0101          get_cap_nodes_in_tets(fmdl,rmdl,opt.top,opt.tol_node2tet);
+0102       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>, nnz(top_node2tet)), Inf);
+0103       
+0104       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find bottom cap nodes in tets...'</span>,-1,pmopt);
+0105       [bot_node2tet, bot_nodes, bot_nodes_above, bot_nodes_below] = <span class="keyword">...</span>
+0106          get_cap_nodes_in_tets(fmdl,rmdl,opt.bot,opt.tol_node2tet);
+0107       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>, nnz(bot_node2tet)), Inf);
+0108       
+0109       
+0110       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tet_face2tri_edge intersections (top) ...'</span>);
+0111       [intpts4, top_tet_face2tri_edge,top_tet_face2intpt4,top_tri_edge2intpt4] = <span class="keyword">...</span>
+0112          get_cap_tet_face2tri_edge_intersections( fmdl,rmdl,opt.top, <span class="keyword">...</span>
+0113          top_nodes_above,top_nodes_below, opt.tol_edge2tri);
+0114       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>, size(intpts4,1)),Inf);
+0115       
+0116       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tet_face2tri_edge intersections (bot) ...'</span>);
+0117       [intpts5, bot_tet_face2tri_edge,bot_tet_face2intpt5,bot_tri_edge2intpt5] = <span class="keyword">...</span>
+0118          get_cap_tet_face2tri_edge_intersections( fmdl,rmdl,opt.bot, <span class="keyword">...</span>
+0119          bot_nodes_above,bot_nodes_below, opt.tol_edge2tri);
+0120       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>, size(intpts5,1)),Inf);
+0121       
+0122       <span class="comment">% find tet_edge2tri_face intersections</span>
+0123       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tet_edge2tri_face intersections (top) ...'</span>);
+0124       [intpts6, top_tet_edge2tri_face, top_tet_edge2intpt6, tri2intpt6] = <span class="keyword">...</span>
+0125          get_cap_tet_edge2tri_face_intersections(fmdl,rmdl,opt.top, <span class="keyword">...</span>
+0126          top_nodes_above, top_nodes_below, opt.tol_edge2tri);
+0127       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>, size(intpts6,1)),Inf);
+0128       
+0129       
+0130       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tet_edge2tri_face intersections (bot) ...'</span>);
+0131       [intpts7, bot_tet_edge2tri_face, bot_tet_edge2intpt7, tri2intpt7] = <span class="keyword">...</span>
+0132          get_cap_tet_edge2tri_face_intersections(fmdl,rmdl,opt.bot, <span class="keyword">...</span>
+0133          bot_nodes_above, bot_nodes_below, opt.tol_edge2tri);
+0134       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>, size(intpts6,1)),Inf);
+0135       
+0136       
+0137       
+0138       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tet_edge2tri_edge intersections (top) ...'</span>,-1,pmopt);
+0139       edgeidx = any(top_nodes_above(fmdl.edges),2) &amp; any(top_nodes_below(fmdl.edges),2);
+0140       nodes = rmdl.nodes;
+0141       nodes(:,3) = opt.top;
+0142       top_tet_edge2tri_edge = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(fmdl.edges,1),size(rmdl.edges,1));
+0143       [intpts8, top_tet_edge2tri_edge(edgeidx,:), top_tet_edge2intpt8(edgeidx,:), top_tri_edge2intpt8] = <span class="keyword">...</span>
+0144          <a href="find_edge2edge_intersections.html" class="code" title="function [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)">find_edge2edge_intersections</a>(fmdl.edges(edgeidx,:),fmdl.nodes, <span class="keyword">...</span>
+0145          rmdl.edges,nodes, opt.tol_edge2edge);
+0146       <span class="keyword">if</span> size(top_tet_edge2intpt8,1)~=size(fmdl.edges,1)
+0147          <span class="keyword">if</span> ~isempty(intpts8)
+0148             top_tet_edge2intpt8(size(fmdl.edges,1),1) = 0;
+0149          <span class="keyword">else</span>
+0150             top_tet_edge2intpt8 = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(fmdl.edges,1),0);
+0151          <span class="keyword">end</span>
+0152       <span class="keyword">end</span>
+0153       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>, size(intpts8,1)),Inf);
+0154       
+0155       
+0156       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tet_edge2tri_edge intersections (bot) ...'</span>,-1,pmopt);
+0157       edgeidx = any(bot_nodes_above(fmdl.edges),2) &amp; any(bot_nodes_below(fmdl.edges),2);
+0158       nodes = rmdl.nodes;
+0159       nodes(:,3) = opt.bot;
+0160       bot_tet_edge2tri_edge = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(fmdl.edges,1),size(rmdl.edges,1));
+0161       [intpts9, bot_tet_edge2tri_edge(edgeidx,:), <span class="keyword">...</span>
+0162          bot_tet_edge2intpt9(edgeidx,:), bot_tri_edge2intpt9] = <span class="keyword">...</span>
+0163          <a href="find_edge2edge_intersections.html" class="code" title="function [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)">find_edge2edge_intersections</a>(fmdl.edges(edgeidx,:),fmdl.nodes, <span class="keyword">...</span>
+0164          rmdl.edges,nodes, opt.tol_edge2edge);
+0165       <span class="keyword">if</span> size(bot_tet_edge2intpt9,1)~=size(fmdl.edges,1)
+0166          <span class="keyword">if</span> ~isempty(intpts9)
+0167             bot_tet_edge2intpt9(size(fmdl.edges,1),1) = 0;
+0168          <span class="keyword">else</span>
+0169             bot_tet_edge2intpt9 = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(fmdl.edges,1),0);
+0170          <span class="keyword">end</span>
+0171       <span class="keyword">end</span>
+0172       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>, size(intpts9,1)),Inf);
+0173       
+0174       <span class="comment">% tri contained in tet</span>
+0175       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tris contained in tet...'</span>)
+0176       tri_in_tet = rmdl.node2elem' * (bot_node2tet + top_node2tet) == 6;
+0177       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>,nnz(tri_in_tet)), Inf);
+0178    <span class="keyword">end</span>
+0179 
+0180    <span class="comment">% tet nodes inside triangles</span>
+0181    <span class="comment">% positive tolerance to catch also points on the edges.</span>
+0182    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tet_nodes in tri_elems...'</span>);
+0183    in = (fmdl.nodes(:,3) &gt;= opt.bot) &amp; (fmdl.nodes(:,3) &lt;= opt.top);
+0184    tet_node2tri = spalloc(size(fmdl.nodes,1),size(rmdl.elems,1),nnz(in));
+0185    tet_node2tri(in,:) = <a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>(fmdl.nodes(in,1:2), <span class="keyword">...</span>
+0186                                     rmdl.elems, <span class="keyword">...</span>
+0187                                     rmdl.nodes(:,1:2), <span class="keyword">...</span>
+0188                                     opt.tol_node2tri);      
+0189    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>, nnz(tet_node2tri)), Inf);
+0190   
+0191    n_nodes = size(rmdl.nodes,1);
+0192    vert_edges(:,1) = 1:n_nodes;
+0193    vert_edges(:,2) = vert_edges(:,1) + n_nodes;
+0194    
+0195    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tet_edge2vert_edge intersections...'</span>,-1,pmopt);
+0196    <span class="keyword">if</span> isinf(opt.z_depth)
+0197       bot_nodes = rmdl.nodes; bot_nodes(:,3) = opt.bot - 1;
+0198       top_nodes = rmdl.nodes; top_nodes(:,3) = opt.top + 1;
+0199    <span class="keyword">end</span>
+0200    [intpts1,tet_edge2vert_edge,tet_edge2intpt1,vert_edge2intpt1] = <span class="keyword">...</span>
+0201       <a href="find_edge2edge_intersections.html" class="code" title="function [pts,FE2CE,FE2pts,CE2pts] = find_edge2edge_intersections(FE,FN,CE,CN, epsilon)">find_edge2edge_intersections</a>( fmdl.edges, fmdl.nodes,<span class="keyword">...</span>
+0202                                     vert_edges, [bot_nodes; top_nodes], <span class="keyword">...</span>
+0203                                     opt.tol_edge2edge);
+0204    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>,size(intpts1,1)),Inf);
+0205    
+0206    <span class="comment">% find tet_edges that cross the ractangular faces between the top and</span>
+0207    <span class="comment">% bottom caps</span>
+0208    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tet_edge2vert_face intersections...'</span>);
+0209    <span class="keyword">if</span> isinf(opt.z_depth)
+0210       top = opt.top + 1;
+0211       bot = opt.bot - 1;
+0212    <span class="keyword">else</span>
+0213       top = opt.top;
+0214       bot = opt.bot;
+0215    <span class="keyword">end</span>
+0216    [intpts2,tet_edge2tri_edge,tet_edge2intpt2,tri_edge2intpt2] = <span class="keyword">...</span>
+0217       find_edge2edge_intersections_2d( fmdl.edges, fmdl.nodes(:,1:3), <span class="keyword">...</span>
+0218                                        rmdl.edges, rmdl.nodes(:,1:2), <span class="keyword">...</span>
+0219                                        top, bot);
+0220    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>,size(intpts2,1)),Inf);
+0221 
+0222    
+0223    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tet_face2vert_edge intersections...'</span>);
+0224    [intpts3, tet_face2vert_edge, tet_face2intpt3, vert_edge2intpt3] = <span class="keyword">...</span>
+0225       <a href="#_sub2" class="code" title="subfunction [intpts, tri2edge, tri2pts, edge2pts] = get_tet_intersection_pts(fmdl,rmdl,top,bot, epsilon)">get_tet_intersection_pts</a>(fmdl,rmdl,top,bot,opt.tol_edge2tri);
+0226    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>,size(intpts3,1)),Inf);
+0227    
+0228       
+0229    <span class="comment">% tet contained in tri</span>
+0230    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find tets contained in tri...'</span>);
+0231    tet_in_tri = (double(fmdl.node2elem') * tet_node2tri) == 4;
+0232    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>,nnz(tet_in_tri)), Inf);
+0233    
+0234    <span class="comment">% tets and tris that intersect</span>
+0235    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Find total tri v. tet intersections...'</span>);
+0236    tri2intTet = double(rmdl.edge2elem') * tet_edge2tri_edge' * fmdl.edge2elem <span class="keyword">...</span>
+0237       |double(rmdl.node2elem') * (tet_face2vert_edge&gt;0)' * fmdl.elem2face';
+0238    <span class="keyword">if</span> ~isinf(opt.z_depth)
+0239       tri2intTet = tri2intTet <span class="keyword">...</span>
+0240       | double(rmdl.edge2elem') * (top_tet_face2tri_edge + bot_tet_face2tri_edge)' * fmdl.elem2face' <span class="keyword">...</span>
+0241       | (top_tet_edge2tri_face + bot_tet_edge2tri_face)' * fmdl.edge2elem;
+0242    <span class="keyword">end</span>
+0243    <span class="comment">% exclude complete inclusion</span>
+0244    tri2intTet = tri2intTet &amp; ~tet_in_tri';
+0245    <span class="keyword">if</span> ~isinf(opt.z_depth)
+0246       tri2intTet = tri2intTet &amp; ~tri_in_tet;
+0247    <span class="keyword">end</span>
+0248    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(sprintf(<span class="string">'Found %d'</span>,nnz(tri2intTet)), Inf);
+0249    
+0250    
+0251    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Calculate intersection volumes...'</span>);
+0252    <span class="comment">% sparse logical multiplication doesn't exist</span>
+0253    tri2intpt1 = logical(rmdl.node2elem'*vert_edge2intpt1)';
+0254    tet2intpt1 = logical(fmdl.edge2elem'* tet_edge2intpt1)';
+0255    
+0256    tet2intpt2 = logical(fmdl.edge2elem'*tet_edge2intpt2)';
+0257    tri2intpt2 = logical(rmdl.edge2elem'*tri_edge2intpt2)';
+0258    
+0259    tet2intpt3 = logical(double(fmdl.elem2face)*tet_face2intpt3)';
+0260    tri2intpt3 = logical(rmdl.node2elem'*vert_edge2intpt3)';
+0261    <span class="keyword">if</span> ~isinf(opt.z_depth)
+0262       tet2intpt4  = logical(double(fmdl.elem2face)*top_tet_face2intpt4)';
+0263       tri2intpt4  = logical(rmdl.edge2elem'*top_tri_edge2intpt4)';
+0264       
+0265       tet2intpt5  = logical(double(fmdl.elem2face)*bot_tet_face2intpt5)';
+0266       tri2intpt5  = logical(rmdl.edge2elem'*bot_tri_edge2intpt5)';
+0267       
+0268       tet2intpt6  = logical(fmdl.edge2elem'*top_tet_edge2intpt6)';
+0269       tri2intpt6  = tri2intpt6';
+0270       
+0271       tet2intpt7  = logical(fmdl.edge2elem'*bot_tet_edge2intpt7)';
+0272       tri2intpt7  = tri2intpt7';
+0273    
+0274       tet2intpt8  = logical(fmdl.edge2elem'*top_tet_edge2intpt8)';
+0275       tri2intpt8  = logical(rmdl.edge2elem'*top_tri_edge2intpt8)';
+0276       
+0277       tet2intpt9  = logical(fmdl.edge2elem'*bot_tet_edge2intpt9)';
+0278       tri2intpt9  = logical(rmdl.edge2elem'*bot_tri_edge2intpt9)';
+0279    <span class="keyword">end</span>
+0280    tri_todo = find(sum(tri2intTet,2)&gt;0);
+0281    C = []; F = []; V = [];
+0282    
+0283    id = 0; lvox = length(tri_todo);
+0284    mint = ceil(lvox/100);
+0285    
+0286    <span class="keyword">for</span> v = tri_todo'
+0287       id = id+1;
+0288       <span class="keyword">if</span> mod(id,mint)==0, <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(id/lvox); <span class="keyword">end</span>
+0289       tet_todo = find(tri2intTet(v,:));
+0290       common_intpts1 = bsxfun(@and,tri2intpt1(:,v), tet2intpt1(:,tet_todo));
+0291       common_intpts2 = bsxfun(@and,tri2intpt2(:,v), tet2intpt2(:,tet_todo));
+0292       common_intpts3 = bsxfun(@and,tri2intpt3(:,v), tet2intpt3(:,tet_todo));
+0293       <span class="keyword">if</span> ~isinf(opt.z_depth)
+0294          common_intpts4 = bsxfun(@and,tri2intpt4(:,v), tet2intpt4(:,tet_todo));
+0295          common_intpts5 = bsxfun(@and,tri2intpt5(:,v), tet2intpt5(:,tet_todo));
+0296          common_intpts6 = bsxfun(@and,tri2intpt6(:,v), tet2intpt6(:,tet_todo));
+0297          common_intpts7 = bsxfun(@and,tri2intpt7(:,v), tet2intpt7(:,tet_todo));
+0298          common_intpts8 = bsxfun(@and,tri2intpt8(:,v), tet2intpt8(:,tet_todo));
+0299          common_intpts9 = bsxfun(@and,tri2intpt9(:,v), tet2intpt9(:,tet_todo));
+0300          top_nodes_tet = bsxfun(@and,top_node2tet(:,tet_todo), rmdl.node2elem(:,v));
+0301          bot_nodes_tet = bsxfun(@and,bot_node2tet(:,tet_todo), rmdl.node2elem(:,v));
+0302       <span class="keyword">end</span>
+0303       tet_nodes     = bsxfun(@and,tet_node2tri(:,v), fmdl.node2elem(:,tet_todo));
+0304 
+0305       C = [C; v*ones(numel(tet_todo),1)];
+0306       F = [F; tet_todo'];
+0307       last_v = numel(V);
+0308       V = [V; zeros(numel(tet_todo),1)]; <span class="comment">% pre-allocate</span>
+0309       <span class="keyword">for</span> t = 1:numel(tet_todo)
+0310          pts = [  intpts1(common_intpts1(:,t),:);
+0311                   intpts2(common_intpts2(:,t),:);
+0312                   intpts3(common_intpts3(:,t),:);
+0313                   fmdl.nodes(tet_nodes(:,t),:);];
+0314          <span class="keyword">if</span> ~isinf(opt.z_depth) 
+0315             pts = [ pts;
+0316                   intpts4(common_intpts4(:,t),:);
+0317                   intpts5(common_intpts5(:,t),:);
+0318                   intpts6(common_intpts6(:,t),:);
+0319                   intpts7(common_intpts7(:,t),:);
+0320                   intpts8(common_intpts8(:,t),:);
+0321                   intpts9(common_intpts9(:,t),:);
+0322                   top_nodes(top_nodes_tet(:,t),:);
+0323                   bot_nodes(bot_nodes_tet(:,t),:)];
+0324          <span class="keyword">end</span>
+0325          last_v = last_v + 1;
+0326          <span class="keyword">if</span> p.debug
+0327            p.fmdl = fmdl; p.rmdl = rmdl;
+0328            p.v    = v;   p.t    = t;
+0329            p.bot  = bot; p.top  = top; p.pts  = pts;
+0330          <span class="keyword">end</span>
+0331          [~,V(last_v)] = <a href="convhulln_clean.html" class="code" title="function [K,V] = convhulln_clean(pts,p);">convhulln_clean</a>(pts,p);
+0332       <span class="keyword">end</span>
+0333    <span class="keyword">end</span>
+0334    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(Inf);
+0335    c2f = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(F,C,V,size(fmdl.elems,1),size(rmdl.elems,1));
+0336    
+0337    <span class="comment">% add rtri contained in ftet</span>
+0338    <span class="keyword">if</span> ~isinf(opt.z_depth)
+0339       <span class="keyword">try</span> rmdl = rmfield(rmdl,<span class="string">'coarse2fine'</span>); <span class="keyword">end</span> <span class="comment">% messes with volume</span>
+0340       c2f = c2f + bsxfun(@times, <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(tri_in_tet), opt.height * <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(rmdl))';
+0341    <span class="keyword">end</span>
+0342    <span class="comment">% normalize to tet volume</span>
+0343    vol = <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(fmdl);
+0344    c2f = bsxfun(@rdivide,c2f,vol);
+0345    
+0346    <span class="comment">% add tets contained in vox</span>
+0347    
+0348    c2f = c2f + tet_in_tri;
+0349    
+0350 <span class="keyword">end</span>
+0351 
+0352 <a name="_sub2" href="#_subfunctions" class="code">function [intpts, tri2edge, tri2pts, edge2pts] = get_tet_intersection_pts(fmdl,rmdl,top,bot, epsilon)</a>
+0353    intpts = [];
+0354    pt_idx = unique(rmdl.elems);
+0355    pts = rmdl.nodes(pt_idx,1:2);
+0356    
+0357    bb_min = min(<span class="keyword">...</span>
+0358                 min(fmdl.nodes(fmdl.faces(:,1),1:2),<span class="keyword">...</span>
+0359                     fmdl.nodes(fmdl.faces(:,2),1:2)),<span class="keyword">...</span>
+0360                 fmdl.nodes(fmdl.faces(:,3),1:2));
+0361    bb_max = max(<span class="keyword">...</span>
+0362                 max(fmdl.nodes(fmdl.faces(:,1),1:2),<span class="keyword">...</span>
+0363                     fmdl.nodes(fmdl.faces(:,2),1:2)),<span class="keyword">...</span>
+0364                 fmdl.nodes(fmdl.faces(:,3),1:2));
+0365    todo = ~(  bsxfun(@gt,bb_min(:,1),pts(:,1)') <span class="keyword">...</span>
+0366             | bsxfun(@gt,bb_min(:,2),pts(:,2)') <span class="keyword">...</span>
+0367             | bsxfun(@lt,bb_max(:,1),pts(:,1)') <span class="keyword">...</span>
+0368             | bsxfun(@lt,bb_max(:,2),pts(:,2)')); 
+0369    [F,P] = find(todo);
+0370    P = unique(P);
+0371    in = false(size(fmdl.faces,1),size(pts,1));
+0372    in(F,P) = <a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>(pts(P,:),fmdl.faces(F,:),fmdl.nodes(:,1:2),epsilon)';
+0373    
+0374    [F,P] = find(in);
+0375 
+0376    <span class="comment">% remove &quot;vertical&quot; faces</span>
+0377    vf = fmdl.normals(F,3) == 0;
+0378    F(vf) = [];
+0379    P(vf) = [];
+0380    
+0381    <span class="comment">% project on faces</span>
+0382    <span class="comment">% plane equation is ax+by+cz+d = 0, where d = -(ax0 + by0 + cz0)</span>
+0383    z = sum(fmdl.normals(F,:) .* fmdl.nodes(fmdl.faces(F,1),:),2);
+0384 <span class="comment">%    z = repmat(d,1,length(P));</span>
+0385    <span class="keyword">for</span> j = 1:2
+0386       z = z - fmdl.normals(F,j) .* pts(P,j);
+0387    <span class="keyword">end</span>
+0388    z = z ./ fmdl.normals(F,3);
+0389    out = z&gt;top | z &lt; bot;
+0390    F(out) = [];
+0391    P(out) = [];
+0392    z(out) = [];
+0393    
+0394    intpts = [pts(P,:) z];
+0395    I = (1:size(intpts,1))';
+0396    tri2edge = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(F,pt_idx(P),I,size(fmdl.faces,1),size(rmdl.nodes,1));
+0397    tri2pts = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(F,I,ones(size(I,1),1),size(fmdl.faces,1),size(intpts,1));
+0398    edge2pts = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(pt_idx(P),I,ones(size(I,1),1),size(rmdl.nodes,1),size(intpts,1));
+0399    
+0400 <span class="keyword">end</span>
+0401 
+0402 <a name="_sub3" href="#_subfunctions" class="code">function [intpts, FE2CE, FE2pts, CE2pts] = </a><span class="keyword">...</span>
+0403    find_edge2edge_intersections_2d(FE, FN, CE, CN, top, bot)
+0404 
+0405    P1 = FN(FE(:,1),:);
+0406    P2 = FN(FE(:,2),:);
+0407    P3 = CN(CE(:,1),:);
+0408    P4 = CN(CE(:,2),:);
+0409 
+0410    C_bb = zeros(size(P3,1),4);
+0411    C_bb(:,[1 3]) = min(P3(:,1:2),P4(:,1:2));
+0412    C_bb(:,[2 4]) = max(P3(:,1:2),P4(:,1:2));
+0413 
+0414    F_bb = zeros(size(P1,1),4);
+0415    F_bb(:,[1 3]) = min(P1(:,1:2),P2(:,1:2));
+0416    F_bb(:,[2 4]) = max(P1(:,1:2),P2(:,1:2));
+0417 
+0418 
+0419    todo =   bsxfun(@gt, F_bb(:,1), C_bb(:,2)') <span class="keyword">...</span>
+0420           | bsxfun(@lt, F_bb(:,2), C_bb(:,1)') <span class="keyword">...</span>
+0421           | bsxfun(@gt, F_bb(:,3), C_bb(:,4)') <span class="keyword">...</span>
+0422           | bsxfun(@lt, F_bb(:,4), C_bb(:,3)');
+0423    todo = ~todo;
+0424 
+0425    [T, V] = find(todo);
+0426    
+0427    S1 = P2(T,:) - P1(T,:);
+0428    S2 = P4(V,:) - P3(V,:);
+0429    
+0430    denom =    S2(:,2) .* S1(:,1) - S2(:,1) .* S1(:,2);
+0431 
+0432    P13 = P1(T,1:2) - P3(V,1:2);
+0433 
+0434    num_a =    S2(:,1) .* P13(:,2) <span class="keyword">...</span>
+0435             - S2(:,2) .* P13(:,1);
+0436    num_b =    S1(:,1) .* P13(:,2) <span class="keyword">...</span>
+0437             - S1(:,2) .* P13(:,1);
+0438    
+0439    mua = num_a ./ denom;
+0440    mub = num_b ./ denom;
+0441    
+0442    IN = mua&gt;0 &amp; mua&lt;1 &amp; mub&gt;0 &amp; mub&lt;1;
+0443    T = T(IN);
+0444    V = V(IN);
+0445    intpts = P1(T,:) + bsxfun(@times, mua(IN), S1(IN,:));
+0446    in = ~(intpts(:,3) &gt; top | intpts(:,3) &lt; bot);
+0447    intpts = intpts(in,:);
+0448    I = (1:size(intpts,1))';
+0449    T = T(in);
+0450    V = V(in);
+0451    FE2CE = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(P1,1),size(P3,1));
+0452    FE2CE(sub2ind(size(FE2CE),T,V)) = I;
+0453    FE2pts = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(T,I,ones(size(I)),size(P1,1),size(I,1));
+0454    CE2pts  = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(V,I,ones(size(I)),size(P3,1),size(I,1));
+0455    
+0456 <span class="keyword">end</span>
+0457 
+0458 <a name="_sub4" href="#_subfunctions" class="code">function [top_node2tet, top_nodes, nodes_above, nodes_below] = </a><span class="keyword">...</span>
+0459    get_cap_nodes_in_tets(fmdl,rmdl,top,epsilon)
+0460 
+0461    top_nodes = rmdl.nodes;
+0462    top_nodes(:,3) = top;
+0463    nodes_above = fmdl.nodes(:,3) &gt;= top;
+0464    nodes_below = fmdl.nodes(:,3) &lt;= top;
+0465    
+0466    <span class="comment">% nodes in tets</span>
+0467    elidx = any(nodes_above(fmdl.elems),2) &amp; any(nodes_below(fmdl.elems),2);
+0468    top_node2tet = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(rmdl.nodes,1),size(fmdl.elems,1));
+0469    <span class="keyword">if</span> any(elidx)
+0470       mdl = struct;
+0471       mdl.nodes = fmdl.nodes;
+0472       mdl.elems = fmdl.elems(elidx,:);
+0473       top_node2tet(:,elidx) = <a href="point_in_tet.html" class="code" title="function point2tet = point_in_tet(fmdl,points, epsilon)">point_in_tet</a>(mdl,top_nodes,epsilon);
+0474    <span class="keyword">end</span>
+0475 <span class="keyword">end</span>
+0476 
+0477 <span class="comment">%-------------------------------------------------------------------------%</span>
+0478 <span class="comment">% Intersections between tet edges and tri faces</span>
+0479 <a name="_sub5" href="#_subfunctions" class="code">function [intpts, edge2tri, edge2pts, tri2pts] = </a><span class="keyword">...</span>
+0480          get_cap_tet_edge2tri_face_intersections(fmdl,rmdl,top,<span class="keyword">...</span>
+0481                                           nodes_above,nodes_below, epsilon)
+0482    
+0483    intpts = [];
+0484    edge2tri = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(fmdl.edges,1),size(rmdl.elems,1));
+0485    edge2pts = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(fmdl.edges,1),0);
+0486    tri2pts  = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(rmdl.elems,1),0);
+0487    
+0488 
+0489    <span class="comment">% tet_edge2tri_face</span>
+0490    edgeidx = any(nodes_above(fmdl.edges),2) &amp; any(nodes_below(fmdl.edges),2);
+0491    <span class="comment">% discard nodes on the plane</span>
+0492    edgeidx(edgeidx) = fmdl.nodes(fmdl.edges(edgeidx,1),3) ~= <span class="keyword">...</span>
+0493                       fmdl.nodes(fmdl.edges(edgeidx,2),3);
+0494    
+0495    v = fmdl.nodes(fmdl.edges(edgeidx,2),:) - <span class="keyword">...</span>
+0496        fmdl.nodes(fmdl.edges(edgeidx,1),:);
+0497    u = (top - fmdl.nodes(fmdl.edges(edgeidx,1),3))  ./ v(:,3);
+0498    pts = fmdl.nodes(fmdl.edges(edgeidx,1),:) + bsxfun(@times,u, v);
+0499    t = <a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>(pts(:,1:2),rmdl.elems,rmdl.nodes(:,1:2),-epsilon);
+0500    <span class="comment">% remove any edges that cross multiple faces -- they will be cought by</span>
+0501    <span class="comment">% edge2edge intersections elsewhere</span>
+0502    t(sum(t,2)&gt;1,:) = false;
+0503    [E,T] = find(t);
+0504    
+0505    <span class="keyword">if</span> any(t(:))
+0506       intpts = pts(E,:);
+0507       N = size(intpts,1);
+0508       I = (1:N)';
+0509       emap = find(edgeidx);
+0510       E = emap(E);
+0511       edge2tri = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(E,T,I,size(fmdl.edges,1), size(rmdl.elems,1));
+0512       edge2pts = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(E,I,ones(size(I)),size(fmdl.edges,1), N);
+0513       tri2pts  = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(T,I,ones(size(I)),size(rmdl.elems,1), N);
+0514    <span class="keyword">end</span>
+0515    
+0516 <span class="keyword">end</span>
+0517 <span class="comment">%-------------------------------------------------------------------------%</span>
+0518 <span class="comment">% Intersections between tet faces and tri edges</span>
+0519 <a name="_sub6" href="#_subfunctions" class="code">function   [intpts, tri2edge,tri2intpt,edge2intpt] = </a><span class="keyword">...</span>
+0520                            get_cap_tet_face2tri_edge_intersections( <span class="keyword">...</span>
+0521                             fmdl,rmdl,top,nodes_above,nodes_below, epsilon)
+0522    
+0523    USE_POINT_IN_TRIANGLE = 0;
+0524    
+0525    intpts = [];
+0526    tri2edge = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(fmdl.faces,1),size(rmdl.edges,1));
+0527    tri2intpt = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(fmdl.faces,1),0);
+0528    edge2intpt  = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(rmdl.edges,1),0);
+0529 
+0530                               
+0531    <span class="comment">%faces that cross the cap</span>
+0532    faceidx = any(nodes_above(fmdl.faces),2) &amp; any(nodes_below(fmdl.faces),2);
+0533  
+0534    faces = fmdl.faces(faceidx,:);
+0535    normals = fmdl.normals(faceidx,:);
+0536    
+0537    N_edges = size(rmdl.edges,1);
+0538    N_faces = size(faces,1);
+0539    
+0540   
+0541    face_bb = zeros(N_faces,6);
+0542    face_bb(:,1) = min(reshape(fmdl.nodes(faces,1),N_faces,3),[],2);
+0543    face_bb(:,2) = max(reshape(fmdl.nodes(faces,1),N_faces,3),[],2);
+0544    face_bb(:,3) = min(reshape(fmdl.nodes(faces,2),N_faces,3),[],2);
+0545    face_bb(:,4) = max(reshape(fmdl.nodes(faces,2),N_faces,3),[],2);
+0546    
+0547    edge_bb = zeros(N_edges,6);
+0548    edge_bb(:,1) = min(reshape(rmdl.nodes(rmdl.edges,1),N_edges,2),[],2);
+0549    edge_bb(:,2) = max(reshape(rmdl.nodes(rmdl.edges,1),N_edges,2),[],2);
+0550    edge_bb(:,3) = min(reshape(rmdl.nodes(rmdl.edges,2),N_edges,2),[],2);
+0551    edge_bb(:,4) = max(reshape(rmdl.nodes(rmdl.edges,2),N_edges,2),[],2);
+0552    
+0553    todo =   bsxfun(@gt, face_bb(:,1), edge_bb(:,2)') <span class="keyword">...</span>
+0554           | bsxfun(@lt, face_bb(:,2), edge_bb(:,1)') <span class="keyword">...</span>
+0555           | bsxfun(@gt, face_bb(:,3), edge_bb(:,4)') <span class="keyword">...</span>
+0556           | bsxfun(@lt, face_bb(:,4), edge_bb(:,3)');
+0557    todo = ~todo;
+0558    e_todo = any(todo,1);
+0559    f_todo = any(todo,2);
+0560    faceidx(faceidx) = f_todo;
+0561    faces = faces(f_todo,:);
+0562    normals = normals(f_todo,:);
+0563    [F,E] = find(todo);
+0564    emap = zeros(size(e_todo,2),1);
+0565    emap(e_todo) = 1:nnz(e_todo);
+0566    E = emap(E);
+0567    fmap = zeros(size(f_todo,1),1);
+0568    fmap(f_todo) = 1:nnz(f_todo);
+0569    F = fmap(F);
+0570    
+0571    P1 = rmdl.nodes(rmdl.edges(e_todo,1),:);
+0572    P12 = P1 - rmdl.nodes(rmdl.edges(e_todo,2),:);
+0573    P1(:,3) = top;
+0574    P12(:,3) = 0;
+0575 
+0576    d = sum(fmdl.normals(faceidx,:) .* fmdl.nodes(fmdl.faces(faceidx,1),:),2);
+0577    
+0578    <span class="keyword">if</span> ~USE_POINT_IN_TRIANGLE
+0579       <span class="comment">% for point_in_triangle</span>
+0580       nodes1 = fmdl.nodes(faces(:,1),:);
+0581       v0 = fmdl.nodes(faces(:,3),:) - nodes1;
+0582       v1 = fmdl.nodes(faces(:,2),:) - nodes1;
+0583       dot00 = dot(v0, v0, 2);
+0584       dot01 = dot(v0, v1, 2);
+0585       <span class="comment">% dot02 = dot(v0, v2, 2);</span>
+0586       dot11 = dot(v1, v1, 2);
+0587       <span class="comment">% dot12 = dot(v1, v2, 2);</span>
+0588       invDenom = 1 ./ (dot00 .* dot11 - dot01 .* dot01);
+0589    <span class="keyword">end</span>
+0590    
+0591    <span class="comment">% find points of intersection between edges and face planes</span>
+0592    num = -d(F) + sum(normals(F,:).*P1(E,:),2);
+0593    den = sum(normals(F,:) .* P12(E,:),2);
+0594    u = num ./ den;
+0595    <span class="comment">% den == 0 =&gt; normal perpendicular to line</span>
+0596    idx = u &gt;= 0 &amp; u &lt;= 1 &amp; abs(den) &gt;= eps;
+0597    
+0598    <span class="keyword">if</span> any(idx)      
+0599       F = F(idx);
+0600       E = E(idx);
+0601       ipts = P1(E,:) - bsxfun(@times, u(idx), P12(E,:));
+0602       <span class="keyword">if</span> USE_POINT_IN_TRIANGLE
+0603          t = <a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>(ipts,faces(F,:),fmdl.nodes,epsilon,<span class="string">'match'</span>);
+0604       <span class="keyword">else</span>
+0605          v2 = ipts - fmdl.nodes(faces(F,1),:);
+0606          dot02 = dot(v0(F,:),v2,2);
+0607          dot12 = dot(v1(F,:),v2,2);
+0608          <span class="comment">% barycentric coordinates</span>
+0609          dot01 = dot01(F);
+0610          invDenom = invDenom(F);
+0611          u = (dot11(F) .* dot02 - dot01 .* dot12) .* invDenom;
+0612          v = (dot00(F) .* dot12 - dot01 .* dot02) .* invDenom;
+0613          t = u &gt;= -epsilon &amp; v &gt;= -epsilon &amp; (u+v-epsilon) &lt;= 1;
+0614       <span class="keyword">end</span>
+0615       
+0616       <span class="keyword">if</span> any(t)
+0617          N = nnz(t);
+0618          idv = (1:N)';
+0619          intpts = ipts(t,:);
+0620          I = idv;
+0621          idx = find(faceidx); idx = idx(F);
+0622          F = idx(t);
+0623          eimap = find(emap); 
+0624          E = eimap(E(t));
+0625          
+0626          tri2edge = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(F,E,I,size(fmdl.faces,1),size(rmdl.edges,1));
+0627          tri2intpt = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(F,I,ones(size(I)),size(fmdl.faces,1),size(I,1));
+0628          edge2intpt  = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(E,I,ones(size(I)),size(rmdl.edges,1),size(I,1));
+0629       <span class="keyword">end</span>
+0630    <span class="keyword">end</span>
+0631 <span class="keyword">end</span>
+0632 
+0633 <span class="comment">%-------------------------------------------------------------------------%</span>
+0634 <span class="comment">% Center scale models</span>
+0635 <a name="_sub7" href="#_subfunctions" class="code">function [fmdl,rmdl, opt] = center_scale_models(fmdl,rmdl, opt)</a>
+0636    ctr = mean([min(rmdl.nodes);max(rmdl.nodes)]);
+0637    rmdl.nodes = bsxfun(@minus,rmdl.nodes,ctr);
+0638    fmdl.nodes = bsxfun(@minus,fmdl.nodes,ctr);
+0639    opt.top = opt.top - ctr(3);
+0640    opt.bot = opt.bot - ctr(3);
+0641    <span class="keyword">if</span> isfield(opt,<span class="string">'do_not_scale'</span>) &amp;&amp; opt.do_not_scale
+0642       <span class="keyword">return</span>
+0643    <span class="keyword">end</span>
+0644    maxnode = min( max(abs(rmdl.nodes(:))), max(abs(fmdl.nodes(:))));
+0645    scale = 1/maxnode;
+0646    rmdl.nodes = scale*rmdl.nodes;
+0647    fmdl.nodes = scale*fmdl.nodes;
+0648    opt.top    = scale*opt.top;
+0649    opt.bot    = scale*opt.bot;
+0650    opt.height = scale*opt.height;
+0651    opt.z_depth= scale*opt.z_depth;
+0652    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@ models scaled by %g'</span>, scale,2);
+0653 <span class="keyword">end</span>
+0654 
+0655 <span class="comment">%-------------------------------------------------------------------------%</span>
+0656 <span class="comment">% Remove obviously non-overlapping parts of the models</span>
+0657 <a name="_sub8" href="#_subfunctions" class="code">function [fmdl,rmdl,fmdl_idx,rmdl_idx] = crop_models(fmdl,rmdl, opt)</a>
+0658    f_min = min(fmdl.nodes);
+0659    f_max = max(fmdl.nodes);
+0660    r_min = min(rmdl.nodes);
+0661    r_max = max(rmdl.nodes);
+0662    
+0663    <span class="keyword">if</span> isfield(opt, <span class="string">'z_depth'</span>) &amp;&amp; ~isinf(opt.z_depth)
+0664       lvl = mean(rmdl.nodes(:,3));
+0665       r_max(3) = lvl + opt.z_depth;
+0666       r_min(3) = lvl - opt.z_depth;
+0667    <span class="keyword">else</span>
+0668       r_max(3) = f_max(3);
+0669       r_min(3) = f_min(3);
+0670    <span class="keyword">end</span>
+0671    
+0672    <span class="comment">% nodes outside the bounding box of the other model</span>
+0673    f_gt  = bsxfun(@gt, fmdl.nodes, r_max);
+0674    f_lt  = bsxfun(@lt, fmdl.nodes, r_min);
+0675    r_gt  = bsxfun(@gt, rmdl.nodes, f_max);
+0676    r_lt  = bsxfun(@lt, rmdl.nodes, f_min);
+0677    
+0678    <span class="comment">% elems outside the bounding box of the other model</span>
+0679    re_gt = any(reshape(all(reshape(r_gt(rmdl.elems',:),3,[])),[],3),2);
+0680    re_lt = any(reshape(all(reshape(r_lt(rmdl.elems',:),3,[])),[],3),2);
+0681    fe_gt = any(reshape(all(reshape(f_gt(fmdl.elems',:),4,[])),[],3),2);
+0682    fe_lt = any(reshape(all(reshape(f_lt(fmdl.elems',:),4,[])),[],3),2);
+0683    
+0684    <span class="comment">% elems to keep</span>
+0685    rmdl_idx = ~(re_gt | re_lt);
+0686    fmdl_idx = ~(fe_gt | fe_lt);
+0687    
+0688    <span class="comment">% remove non-overlapping elems</span>
+0689    rmdl.elems = rmdl.elems(rmdl_idx,:);
+0690    fmdl.elems = fmdl.elems(fmdl_idx,:);
+0691    
+0692    <span class="comment">% remove unused nodes</span>
+0693    [r_used_nodes,jnk,r_n] = unique(rmdl.elems(:));
+0694    [f_used_nodes,jnk,f_n] = unique(fmdl.elems(:));
+0695    
+0696    r_idx = 1:numel(r_used_nodes);
+0697    f_idx = 1:numel(f_used_nodes);
+0698    
+0699    rmdl.elems = reshape(r_idx(r_n),[],3);
+0700    fmdl.elems = reshape(f_idx(f_n),[],4);
+0701    
+0702    rmdl.nodes = rmdl.nodes(r_used_nodes,:);
+0703    fmdl.nodes = fmdl.nodes(f_used_nodes,:);
+0704    
+0705    <span class="comment">% for the benefit of any (debug) plots later on</span>
+0706    <span class="keyword">try</span>, rmdl = rmfield(rmdl,<span class="string">'boundary'</span>); <span class="keyword">end</span>
+0707    <span class="keyword">try</span>, fmdl = rmfield(fmdl,<span class="string">'boundary'</span>); <span class="keyword">end</span>
+0708 <span class="keyword">end</span>
+0709 
+0710 <span class="comment">%-------------------------------------------------------------------------%</span>
+0711 <span class="comment">% Prepare model</span>
+0712 <a name="_sub9" href="#_subfunctions" class="code">function fmdl = prepare_tet_mdl(fmdl)</a>
+0713    fmopt.elem2edge = true;
+0714    fmopt.edge2elem = true;
+0715    fmopt.face2elem = true;
+0716    fmopt.node2elem = true;
+0717    fmopt.normals   = true;
+0718    ll = <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,1);
+0719    fmopt.linear_reorder = false; <span class="comment">% this is slow and not needed</span>
+0720    fmdl = <a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>(fmdl,fmopt);
+0721    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,ll);
+0722    fmdl.node2elem = logical(fmdl.node2elem);
+0723    nElem = size(fmdl.elems,1);
+0724    nFace = size(fmdl.faces,1);
+0725    fmdl.elem2face = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(repmat((1:nElem)',1,4),double(fmdl.elem2face),true,nElem,nFace);
+0726 <span class="keyword">end</span>
+0727 
+0728 <span class="comment">%-------------------------------------------------------------------------%</span>
+0729 <span class="comment">% Prepare model</span>
+0730 <a name="_sub10" href="#_subfunctions" class="code">function fmdl = prepare_tri_mdl(fmdl)</a>
+0731    fmopt.elem2edge = true;
+0732    fmopt.edge2elem = true;
+0733 <span class="comment">%    fmopt.face2elem = true;</span>
+0734    fmopt.node2elem = true;
+0735 <span class="comment">%    fmopt.normals   = true;</span>
+0736    fmopt.linear_reorder = false; <span class="comment">% this is slow and not needed</span>
+0737    ll = <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,1);
+0738    fmdl = <a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>(fmdl,fmopt);
+0739    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,ll);
+0740    fmdl.node2elem = logical(fmdl.node2elem);
+0741 
+0742 <span class="keyword">end</span>
+0743 
+0744 <span class="comment">%-------------------------------------------------------------------------%</span>
+0745 <span class="comment">% Debug plot</span>
+0746 <a name="_sub11" href="#_subfunctions" class="code">function debug_plot(fmdl,rmdl,v,t, bot, top, pts)</a>
+0747    tet.nodes = fmdl.nodes;
+0748    tri.nodes = repmat(rmdl.nodes(rmdl.elems(v,:),:),2,1);
+0749    tri.nodes(:,3) = [repmat(bot,3,1); repmat(top,3,1)];
+0750    tri.elems = [ 1 2 5 4
+0751                  2 3 6 5
+0752                  3 1 4 6];
+0753    tri.boundary = tri.elems;
+0754    tet.type = <span class="string">'fwd_model'</span>;
+0755    tri.type = <span class="string">'fwd_model'</span>;
+0756    tet.elems = fmdl.elems(t,:);
+0757    clf
+0758    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(tri)
+0759    hold on
+0760    h = <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(tet);
+0761    set(h,<span class="string">'EdgeColor'</span>,<span class="string">'b'</span>)
+0762 <span class="comment">%    pts = bsxfun(@plus,pts*scale,ctr);</span>
+0763    plot3(pts(:,1),pts(:,2),pts(:,3),<span class="string">'o'</span>);
+0764    hold off
+0765    axis auto
+0766 <span class="keyword">end</span>
+0767 
+0768 <span class="comment">%-------------------------------------------------------------------------%</span>
+0769 <span class="comment">% Parse option struct</span>
+0770 <a name="_sub12" href="#_subfunctions" class="code">function opt = parse_opts(fmdl,rmdl, opt)</a>
+0771 
+0772    lvl = mean(rmdl.nodes(:,3));
+0773    
+0774    <span class="keyword">if</span> ~isfield(opt, <span class="string">'z_depth'</span>)
+0775       opt.z_depth = Inf;
+0776    <span class="keyword">end</span>
+0777    <span class="keyword">if</span> isinf(opt.z_depth)
+0778       opt.top = max(fmdl.nodes(:,3));
+0779       opt.bot = min(fmdl.nodes(:,3));
+0780       opt.height = opt.top - opt.bot;
+0781    <span class="keyword">else</span>
+0782       opt.top = lvl + opt.z_depth;
+0783       opt.bot = lvl - opt.z_depth;
+0784       opt.height = 2 * opt.z_depth;
+0785    <span class="keyword">end</span>
+0786    <span class="keyword">if</span> ~isfield(opt, <span class="string">'tol_node2tri'</span>);
+0787       opt.tol_node2tri = eps; <span class="comment">% * max(rmdl_rng,fmdl_rng)^3;</span>
+0788    <span class="keyword">end</span>
+0789    <span class="keyword">if</span> ~isfield(opt, <span class="string">'tol_node2tet'</span>);
+0790       opt.tol_node2tet = eps; <span class="comment">% * max(rmdl_rng,fmdl_rng)^3;</span>
+0791    <span class="keyword">end</span>
+0792    <span class="keyword">if</span> ~isfield(opt, <span class="string">'tol_edge2edge'</span>)
+0793       opt.tol_edge2edge = 6*eps(min(max(abs(fmdl.nodes(:))),max(abs(rmdl.nodes(:)))));
+0794    <span class="keyword">end</span>
+0795    <span class="keyword">if</span> ~isfield(opt, <span class="string">'tol_edge2tri'</span>)
+0796       opt.tol_edge2tri = eps; <span class="comment">%1e-10</span>
+0797    <span class="keyword">end</span>
+0798    <span class="comment">%     if ~isfield(opt, 'save_memory')</span>
+0799    <span class="comment">%        opt.save_memory = 0;</span>
+0800    <span class="comment">%     end</span>
+0801    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@ node2tet  tolerance = %g'</span>, opt.tol_node2tet,2);
+0802    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@ edge2edge tolerance = %g'</span>, opt.tol_edge2edge,2);
+0803    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@ edge2tri  tolerance = %g'</span>, opt.tol_edge2tri,2);
+0804  <span class="keyword">end</span>
+0805  
+0806  
+0807 <a name="_sub13" href="#_subfunctions" class="code">function do_unit_test</a>
+0808    <a href="#_sub15" class="code" title="subfunction do_small_test">do_small_test</a>
+0809    <a href="#_sub14" class="code" title="subfunction do_inf_test">do_inf_test</a>
+0810    <a href="#_sub16" class="code" title="subfunction do_realistic_test">do_realistic_test</a>
+0811    do_centre_slice; <span class="comment">% failing code from tutorial</span>
+0812 <span class="keyword">end</span>
+0813 
+0814 <a name="_sub14" href="#_subfunctions" class="code">function do_inf_test</a>
+0815    jnk = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c'</span>,16);
+0816    tri = jnk.fwd_model;
+0817    tri.nodes = 1.1*tri.nodes;
+0818    jnk = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'c3cr'</span>,16);
+0819    tet = jnk.fwd_model;
+0820 
+0821    c2f_a = <a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>(tet,tri);
+0822    c2f_n = <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>(tet,tri);
+0823    
+0824    prob = c2f_n ~= 0 &amp; c2f_a == 0;
+0825    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Assert no missing intersections'</span>, nnz(prob),0);
+0826    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'mk_tri2tet_c2f v approximate'</span>, c2f_n,c2f_a, .5);
+0827 <span class="keyword">end</span>
+0828 
+0829 
+0830 <a name="_sub15" href="#_subfunctions" class="code">function do_small_test</a>
+0831    jnk = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c'</span>,16);
+0832    tri = jnk.fwd_model;
+0833    tri.nodes = 1.1*tri.nodes;
+0834    jnk = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'c3cr'</span>,16);
+0835    tet = jnk.fwd_model;
+0836 <span class="comment">%    tet.elems = tet.elems(8081,:);</span>
+0837 <span class="comment">%    tri.elems = tri.elems(1,:);</span>
+0838    opt.z_depth = 0.5;
+0839    c2f = <a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>(tet,tri,opt);
+0840  
+0841    clf
+0842    subplot(131)
+0843    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(tet);
+0844    hold on
+0845    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(tri);
+0846    view(2)
+0847    subplot(132)
+0848    img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(tet,1);
+0849    img.elem_data = sum(c2f,2);
+0850    img.calc_colours.clim = 1;
+0851    img.calc_colours.ref_level = 0;
+0852    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0853    subplot(133)
+0854    img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(tri,1);
+0855    img.elem_data = sum(bsxfun(@times,c2f,<a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(tet)),1) ./ <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(tri)';
+0856    img.calc_colours.clim = 1;
+0857    img.calc_colours.ref_level = 0;
+0858    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img)
+0859    
+0860    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Check C2F size  '</span>, size(c2f),[length(tet.elems), length(tri.elems)]);
+0861    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Check C2F max==1'</span>, max(c2f(:)), 1);
+0862    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Check C2F min==0'</span>, min(c2f(:)), 0);
+0863    
+0864    f2c = bsxfun(@rdivide, bsxfun(@times, c2f, <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(tet))', <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(tri));
+0865    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Check F2C max==1'</span>, max(sum(f2c,2)), 1, 1e-14);
+0866    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Check F2C min==0'</span>, min(f2c(:)), 0);
+0867 <span class="keyword">end</span>
+0868  
+0869 
+0870 <a name="_sub16" href="#_subfunctions" class="code">function do_realistic_test</a>
+0871       
+0872    fmdl= <a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>([2,2,.1],[16,1],[.1,0,.025]);
+0873    xvec = -2:.5:2; <span class="comment">%[-1.5 -.5:.2:.5 1.5];</span>
+0874    yvec = -2:.5:2; <span class="comment">%[-1.6 -1:.2:1 1.6];</span>
+0875    zvec = [.5 1.5];
+0876    grid2d = <a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>([],xvec,yvec);
+0877    grid3d = <a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>([],xvec,yvec,zvec);
+0878    <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a> clear
+0879    tic
+0880    opt.save_memory = 0;
+0881    c2f_a = <a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>(fmdl, grid3d,opt);
+0882    t = toc;
+0883    fprintf(<span class="string">'Voxel:\tt=%f s\n'</span>,t);
+0884 
+0885    opt.z_depth = .5;
+0886    grid2d.nodes(:,3) = 1;
+0887    <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a> clear
+0888    tic
+0889 <span class="comment">%    fmdl.elems = fmdl.elems(2764,:);</span>
+0890 <span class="comment">%    grid2d.elems = grid2d.elems(4,:);</span>
+0891    c2f_b = <a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>(fmdl, grid2d, opt);
+0892    t = toc;
+0893    fprintf(<span class="string">'tri2tet:\tt=%f \n'</span>,t);
+0894    c2f_c = c2f_b * grid2d.coarse2fine;
+0895    
+0896    <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a> clear
+0897 
+0898    grid2d.mk_coarse_fine_mapping.z_depth = .5;
+0899    grid2d.mk_coarse_fine_mapping.f2c_offset(3) = 1;
+0900    grid2d = rmfield(grid2d,<span class="string">'coarse2fine'</span>);
+0901    tic
+0902    c2f_n = <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>(fmdl,grid2d);
+0903    t = toc;
+0904    fprintf(<span class="string">'Approximate: t=%f s\n'</span>,t);
+0905    
+0906    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'mk_tri2tet_c2f v mk_grid_c2f'</span>, c2f_c,c2f_a, 1e-5);
+0907    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'mk_tri2tet_c2f v approximate'</span>, c2f_n,c2f_b, .5);
+0908    prob = c2f_n ~= 0 &amp; c2f_b == 0;
+0909    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Assert no missing intersections'</span>, nnz(prob),0);
+0910 <span class="comment">%    keyboard</span>
+0911 <span class="comment">%    subplot(132)</span>
+0912 <span class="comment">%    imagesc(c2f_c, [0 1]);</span>
+0913 <span class="comment">%    subplot(133)</span>
+0914 <span class="comment">%    imagesc(c2f_a, [0 1]);</span>
+0915 <span class="comment">%    figure</span>
+0916 <span class="comment">%    subplot(131)</span>
+0917 <span class="comment">% show_fem(mk_image(fmdl,sum(c2f_a,2)));</span>
+0918 <span class="comment">% img_a = mk_image(fmdl,sum(c2f_a,2));</span>
+0919 <span class="comment">% img_a.calc_colours.ref_level = 0;</span>
+0920 <span class="comment">% show_fem(img_a)</span>
+0921 <span class="comment">% subplot(132)</span>
+0922 <span class="comment">% img_c = mk_image(fmdl,sum(c2f_c,2));</span>
+0923 <span class="comment">% img_c.calc_colours.ref_level = 0;</span>
+0924 <span class="comment">% show_fem(img_c)</span>
+0925 <span class="comment">% subplot(133)</span>
+0926 <span class="comment">% img_n = mk_image(fmdl,sum(c2f_n,2));</span>
+0927 <span class="comment">% img_n.calc_colours.ref_level = 0;</span>
+0928 <span class="comment">% show_fem(img_n)</span>
+0929 <span class="comment">%    keyboard</span>
+0930 <span class="keyword">end</span>
+0931  
+0932  
+0933 <a name="_sub17" href="#_subfunctions" class="code">function do_centre_slice; </a><span class="comment">% failing code from tutorial</span>
+0934    imdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'b3cr'</span>,[16,2]);
+0935    f_mdl= imdl.fwd_model;
+0936    imdl2d= <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'b2c2'</span>,16);
+0937    c_mdl= imdl2d.fwd_model;
+0938    c2f= <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>( f_mdl, c_mdl);
+0939 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

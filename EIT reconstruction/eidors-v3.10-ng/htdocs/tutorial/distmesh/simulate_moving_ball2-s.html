@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Simulate a moving 2D target on a fixed mesh
+</h2>
+
+Another way to simulate a moving target is to
+remesh around each new target. Doing this with
+<i>distmesh</i> involves directly accessing the
+mesh creation functions.
+
+<h3>Step 1: Create fine mesh (300 nodes)</h3>
+
+<pre>
+% create model $Id: simulate_move2_01.m 2796 2011-07-14 23:14:21Z bgrychtol $
+
+% Model parameters
+n_elec= 16;
+n_nodes= 300;
+
+% Create electrodes
+refine_level=4; %electrode refinement level
+elec_width= .1;
+z_contact = 0.01;
+% elect positions
+th=linspace(0,2*pi,n_elec(1)+1)';th(end)=[];
+elec_posn= [sin(th),cos(th)];
+[elec_nodes, refine_nodes] = dm_mk_elec_nodes( elec_posn, ...
+       elec_width, refine_level);
+
+% Define circular medium
+fd=inline('sum(p.^2,2)-1','p');
+bbox = [-1,-1;1,1];
+smdl= dm_mk_fwd_model( fd, [], n_nodes, bbox, ...
+                          elec_nodes, refine_nodes, z_contact);
+
+</pre>
+
+<h3>Step 2: Simulate movement</h3>
+
+To simulate a target, we insert fixed note positions
+surrounding the target. Then using <tt>interp_mesh.m</tt>,
+we find the elements that are in the target position.
+
+<pre>
+% create model $Id: simulate_move2_02.m 2781 2011-07-14 21:06:54Z bgrychtol $
+
+% Create an object within the model
+trg_ctr= [.7,.1];
+trg_rad= 0.1;
+th=linspace(0,2*pi,20)';th(end)=[];
+trg_refine_nodes= [refine_nodes; ...
+             trg_rad*sin(th)+trg_ctr(1), ...
+             trg_rad*cos(th)+trg_ctr(2) ];
+
+tmdl= dm_mk_fwd_model( fd, [], n_nodes, bbox, elec_nodes, ...
+                       trg_refine_nodes, z_contact);
+
+% find elements in size target
+mdl_pts = interp_mesh( tmdl );
+ctr_pts = mdl_pts - ones(size(mdl_pts,1),1)*trg_ctr;
+in_trg  =(sum(ctr_pts.^2,2) < trg_rad^2);
+
+
+timg= eidors_obj('image','','fwd_model',tmdl,...
+                 'elem_data',1 + in_trg*.5);
+
+% Show output - full size
+subplot(121); show_fem( smdl ); axis equal; axis([-1.1 1.1 -1.1 1.1]);  
+subplot(122); show_fem( timg ); axis equal; axis([-1.1 1.1 -1.1 1.1]);
+print_convert simulate_move2_02a.png '-density 125'
+
+% Show output - full size
+subplot(121); show_fem( smdl ); axis equal; axis([.5,1.05,-.1,.3]);
+subplot(122); show_fem( timg ); axis equal; axis([.5,1.05,-.1,.3]); 
+print_convert simulate_move2_02b.png '-density 125'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/distmesh/simulate_move2_02a.png">
+<br><i>Figure:</i>
+<i>Left</i> Simulation mesh homogeneous mesh
+<i>Right</i> Simulation mesh with target at (0.1,0.7)
+</center>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/distmesh/simulate_move2_02b.png">
+<br><i>Figure:</i>
+Magnification of areas of interest in the previous figure.
+<i>Left</i> Simulation mesh homogeneous mesh
+<i>Right</i> Simulation mesh with target at (0.1,0.7)
+</center>
+
+<h3>Step 3: Simulate Homogeneous measurements</h3>
+<pre>
+% simulate homogeneous $Id: simulate_move2_03.m 3273 2012-06-30 18:00:35Z aadler $
+
+% stimulation pattern: adjacent
+stim_pat= mk_stim_patterns(n_elec,1,'{ad}','{ad}',{},1);
+
+smdl.stimulation= stim_pat;
+himg= mk_image(smdl, 1);
+
+vh= fwd_solve(himg);
+
+</pre>
+
+<h3>Step 4: Simulate moving target and simulate measurements</h3>
+<pre>
+% moving target $Id: simulate_move2_04.m 3273 2012-06-30 18:00:35Z aadler $
+
+% Create a moving object within the model
+trg_rad= 0.1;
+radius= 0.75;
+n_sims= 20;
+contrast= 0.1;
+
+clear vi;
+for i= 1:n_sims;
+   thc= 2*pi*(i-1)/n_sims;
+   trg_ctr= radius*[cos(thc),sin(thc)];
+
+   trg_refine_nodes= [refine_nodes; ...
+                trg_rad*sin(th)+trg_ctr(1), ...
+                trg_rad*cos(th)+trg_ctr(2) ];
+
+   tmdl= dm_mk_fwd_model( fd, [], n_nodes, bbox, elec_nodes, ...
+                          trg_refine_nodes, z_contact);
+   tmdl.stimulation = stim_pat;
+
+   % find elements in size target
+   mdl_pts = interp_mesh( tmdl );
+   ctr_pts = mdl_pts - ones(size(mdl_pts,1),1)*trg_ctr;
+   in_trg  =(sum(ctr_pts.^2,2) < trg_rad^2);
+
+   % Create target image object
+   timg= mk_image(tmdl,1 + in_trg*contrast);
+
+   clf; show_fem(timg); axis equal
+   print_convert(sprintf('simulate_move2_04a%02d.png',i),'-density 50');
+   vi(i)= fwd_solve(timg);
+end
+
+</pre>
+
+In order to animate these meshes, we call the 
+<a href="http://www.imagemagick.org">imagemagick</a>
+<tt>convert</tt> function to create the animations
+
+<pre>
+% Create animated graphics $Id: simulate_move2_05.m 1535 2008-07-26 15:36:27Z aadler $
+
+% Trim images
+!find -name 'simulate_move2_04a*.png' -exec convert  -trim '{}' PNG8:'{}' ';'
+
+% Convert to animated Gif
+!convert -delay 50 simulate_move2_04a*.png -loop 0 simulate_move2_05a.gif
+
+</pre>
+
+<center>
+<img src="simulate_move2_05a.gif">
+<br><i>Figure:</i>
+Animation of the simulation mesh surrounding a moving target
+</center>
+
+<h3>Step 5: Reconstruct images</h3>
+<pre>
+% Reconstruct images $Id: simulate_move2_06.m 2781 2011-07-14 21:06:54Z bgrychtol $
+
+imdl= mk_common_model('c2c2',16);
+img= inv_solve(imdl, vh, vi);
+subplot(121); show_fem(img); axis image
+subplot(122); show_slices(img)
+
+print_convert simulate_move2_06a.png '-density 125'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/distmesh/simulate_move2_06a.png">
+<br><i>Figure:</i>
+Reconstructed images of targets moving in the mesh
+<i>Left</i> Reconstruction mesh with first image
+<i>Right</i> Reconstructed images of all targets
+</center>
+
+<h3>Exploring the effect of mesh density</h3>
+
+This image shows a large amount of what looks like
+noise. In order to explore the effect of mesh density
+and electrode refinement, we modify the parameters
+<tt>n_nodes</tt> and <tt>refine_level</tt> (electrode
+refinement.
+
+<h3>Mesh with <tt>n_nodes=500</tt> and <tt>refine_level=2</tt></H3>
+<center>
+<img src="simulate_move2_05b.gif">
+<br><i>Figure:</i>
+Animation of the simulation mesh surrounding a moving target
+</center>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/distmesh/simulate_move2_06b.png">
+<br><i>Figure:</i>
+Reconstructed images of targets moving in the mesh
+<i>Left</i> Reconstruction mesh with first image
+<i>Right</i> Reconstructed images of all targets
+</center>
+
+<h3>Mesh with <tt>n_nodes=1000</tt> and <tt>refine_level=4</tt></H3>
+<center>
+<img src="simulate_move2_05c.gif">
+<br><i>Figure:</i>
+Animation of the simulation mesh surrounding a moving target
+</center>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/distmesh/simulate_move2_06c.png">
+<br><i>Figure:</i>
+Reconstructed images of targets moving in the mesh
+<i>Left</i> Reconstruction mesh with first image
+<i>Right</i> Reconstructed images of all targets
+</center>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->
+

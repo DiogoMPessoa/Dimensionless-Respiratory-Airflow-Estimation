@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_eidors_var_id</title>
+  <meta name="keywords" content="test_eidors_var_id">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">arch</a> &gt; <a href="index.html">matlab</a> &gt; test_eidors_var_id.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/arch/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>test_eidors_var_id
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 d = dir;
+0002 idx = cell2mat({d(:).isdir});
+0003 d = d(idx);
+0004 
+0005 ver
+0006 
+0007 <span class="keyword">for</span> i = 1:numel(d)
+0008    <span class="keyword">if</span> strcmp(d(i).name,<span class="string">'..'</span>)
+0009       <span class="keyword">continue</span>
+0010    <span class="keyword">end</span>
+0011 <span class="comment">%    fprintf('%s\n', d(i).name);</span>
+0012    cd(d(i).name);
+0013    p = which(<span class="string">'eidors_var_id'</span>);
+0014    <span class="keyword">try</span>
+0015       id = eidors_var_id([]);
+0016       <span class="keyword">if</span> strcmp(id,<span class="string">'id_DA39A3EE5E6B4B0D3255BFEF95601890AFD80709'</span>);
+0017          fprintf(<span class="string">'%s: CORRECT\n'</span>, p);
+0018       <span class="keyword">else</span>
+0019          fprintf(<span class="string">'%s: WRONG\n'</span>, p);
+0020       <span class="keyword">end</span>
+0021    <span class="keyword">catch</span> err
+0022       msg = textscan(err.message,<span class="string">'%s'</span>,1,<span class="string">'delimiter'</span>,<span class="string">'\r\n'</span>);
+0023       fprintf(<span class="string">'%s: ERROR: %s\n'</span>, p, msg{1}{1});
+0024    <span class="keyword">end</span>
+0025    <span class="keyword">if</span> ~strcmp(d(i).name,<span class="string">'.'</span>)
+0026       cd ..
+0027    <span class="keyword">end</span>
+0028 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

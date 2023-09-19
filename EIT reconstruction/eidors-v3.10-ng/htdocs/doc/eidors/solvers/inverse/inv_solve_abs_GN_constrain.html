@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of inv_solve_abs_GN_constrain</title>
+  <meta name="keywords" content="inv_solve_abs_GN_constrain">
+  <meta name="description" content="Do Gauss Netwon Method with barrier to ensure positvity of the con">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; inv_solve_abs_GN_constrain.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>inv_solve_abs_GN_constrain
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Do Gauss Netwon Method with barrier to ensure positvity of the con</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [img,img_iteration] = inv_solve_abs_GN_constrain(inv_model,meas_data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">Do Gauss Netwon Method with barrier to ensure positvity of the con
+ductivity elements
+INPUT v_h,v_i - simulated/measured voltages
+      inv_model - inverse model structure
+      tol - term tolerance (about 1e-5-1e-3 - default 1e-3)
+      min_s - the minimal sigma per element (size(J,2))
+      max_s - the maximal   &quot;&quot;        &quot;&quot;        &quot;&quot;   
+      max_its - maximum iterations (default 1)
+
+% PARAMETERS - MAKE AUTOMATIC
+
+M Crabb and N Polydorides- 29.06.2012
+TODO - Figure a nice interface to 
+       (i) Allow a best fitting homogeneous (user may not want this)
+       (ii) Allow a reference conductivity at each iteration
+       (iii) Allow a global reference conductivity</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>	RtR = calc_RtR_prior( inv_model )</li><li><a href="../../../eidors/solvers/calc_difference_data.html" class="code" title="function dva = calc_difference_data( data1, data2, fwd_model)">calc_difference_data</a>	CALC_DIFFERENCE_DATA: calculate difference data between</li><li><a href="../../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>	CALC_HYPERPARAMETER: calculate hyperparameter value</li><li><a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>	CALC_JACOBIAN_BKGND: calculate background image around</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [beta]=beta_f(diff_volt)</a></li><li><a href="#_sub2" class="code">function [logistic]=logistic_f(m_cur,min__s,max__s,relax_param)</a></li><li><a href="#_sub3" class="code">function [d_logistic]=d_logistic_f(m_cur,min__s,max__s,relax_param)</a></li><li><a href="#_sub4" class="code">function [inv_logistic]=inv_logistic_f(cond_cur,min__s,max__s,relax_param)</a></li><li><a href="#_sub5" class="code">function [maxiter, tol,min_s,max_s,rel_par,show_iter,bls,best_homog,best_homog_ref] = get_parameters(inv_model)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [img,img_iteration] = inv_solve_abs_GN_constrain(inv_model,meas_data)</a>
+0002 <span class="comment">%Do Gauss Netwon Method with barrier to ensure positvity of the con</span>
+0003 <span class="comment">%ductivity elements</span>
+0004 <span class="comment">%INPUT v_h,v_i - simulated/measured voltages</span>
+0005 <span class="comment">%      inv_model - inverse model structure</span>
+0006 <span class="comment">%      tol - term tolerance (about 1e-5-1e-3 - default 1e-3)</span>
+0007 <span class="comment">%      min_s - the minimal sigma per element (size(J,2))</span>
+0008 <span class="comment">%      max_s - the maximal   &quot;&quot;        &quot;&quot;        &quot;&quot;</span>
+0009 <span class="comment">%      max_its - maximum iterations (default 1)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%% PARAMETERS - MAKE AUTOMATIC</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%M Crabb and N Polydorides- 29.06.2012</span>
+0014 <span class="comment">%TODO - Figure a nice interface to</span>
+0015 <span class="comment">%       (i) Allow a best fitting homogeneous (user may not want this)</span>
+0016 <span class="comment">%       (ii) Allow a reference conductivity at each iteration</span>
+0017 <span class="comment">%       (iii) Allow a global reference conductivity</span>
+0018 warning off backtrace
+0019 warning(<span class="string">'EIDORS:experimental'</span>,<span class="string">'%s is experimental, handle with care!'</span>,<span class="keyword">...</span>
+0020                 upper(<span class="string">'inv_solve_abs_GN_constrain'</span>));
+0021 warning on backtrace
+0022 
+0023 <span class="comment">%Convergence tolerance</span>
+0024 [maxiter, tol, min_s,max_s,rel_par,show_iter,bls,best_homog,best_homog_ref] = <a href="#_sub5" class="code" title="subfunction [maxiter, tol,min_s,max_s,rel_par,show_iter,bls,best_homog,best_homog_ref] = get_parameters(inv_model)">get_parameters</a>(inv_model);
+0025 
+0026 <span class="comment">%Do not show iterations</span>
+0027 <span class="keyword">if</span>(show_iter==1); img_iteration=0; <span class="keyword">end</span>
+0028 
+0029 <span class="comment">%Background image and simulate some data</span>
+0030 img_bkgnd= <a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>( inv_model );
+0031 img_cur=img_bkgnd.elem_data; 
+0032 sim_data=<a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img_bkgnd);
+0033 
+0034 <span class="comment">%&quot;Best&quot; fitting homogeneous?</span>
+0035 <span class="keyword">if</span>(best_homog==2) <span class="comment">%BEST FIT</span>
+0036     sigma_opt=1/((sim_data.meas'*meas_data)/(sim_data.meas'*sim_data.meas));
+0037     img_cur=img_cur*sigma_opt;
+0038     img_bkgnd.elem_data=img_cur;
+0039     sim_data=<a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img_bkgnd);
+0040 <span class="keyword">end</span>
+0041 <span class="comment">%TODO - Generalise this</span>
+0042 img_ref=img_cur;
+0043 
+0044 <span class="comment">%Current image and the logistic equivalent</span>
+0045 n_cond=length(img_cur);
+0046 log_img_cur=zeros(n_cond,1);
+0047 <span class="keyword">for</span> i=1:n_cond
+0048     log_img_cur(i)=<a href="#_sub4" class="code" title="subfunction [inv_logistic]=inv_logistic_f(cond_cur,min__s,max__s,relax_param)">inv_logistic_f</a>(img_cur(i),min_s,max_s,rel_par);
+0049 <span class="keyword">end</span>
+0050                      
+0051 <span class="comment">%Calculate the Jacobian, prior matrix and hyperparameter</span>
+0052 RtR = <a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>( inv_model );
+0053 hp= <a href="../../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>( inv_model );
+0054 
+0055 <span class="comment">%Calculate the voltage difference data (meas-sim)</span>
+0056 volt_diff_meas_sim = <a href="../../../eidors/solvers/calc_difference_data.html" class="code" title="function dva = calc_difference_data( data1, data2, fwd_model)">calc_difference_data</a>( sim_data, meas_data, inv_model.fwd_model);
+0057 
+0058 <span class="comment">%Start the Gauss Newton iteration</span>
+0059 <span class="keyword">for</span> i=1:maxiter
+0060     <span class="comment">%Print to screen if we want error</span>
+0061     <span class="keyword">if</span>(show_iter==2);<span class="comment">% &amp;&amp; mod(i,ceil(maxiter/10))==0)</span>
+0062         fprintf(1,<span class="string">'Error at iteration %i is %f\n'</span>,i,norm(volt_diff_meas_sim));
+0063     <span class="keyword">end</span>
+0064     
+0065     <span class="comment">%Calculate the Jacobian</span>
+0066     J = <a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>( img_bkgnd);
+0067                 
+0068     <span class="comment">%Compute the different vectors for method  (Polydorides 2012 Pg.10)</span>
+0069     d_s_d_m=zeros(n_cond,n_cond);
+0070     <span class="keyword">for</span> ii=1:length(log_img_cur)
+0071         d_s_d_m(ii,ii)=<a href="#_sub3" class="code" title="subfunction [d_logistic]=d_logistic_f(m_cur,min__s,max__s,relax_param)">d_logistic_f</a>(log_img_cur(ii),min_s,max_s,rel_par);
+0072     <span class="keyword">end</span>
+0073     
+0074     <span class="comment">%Multiply the partial derivative with Jacobian</span>
+0075     J=J*d_s_d_m;
+0076     
+0077     <span class="comment">%Gradient of objective function (regularization term not needed)</span>
+0078     grad_obj = J'*(-volt_diff_meas_sim);
+0079     
+0080     <span class="comment">%%TODO Implement with generic conductivity (see above)</span>
+0081     <span class="keyword">if</span>(best_homog_ref==2)
+0082         grad_obj=grad_obj - hp^2*RtR*(img_ref-img_cur);
+0083     <span class="keyword">end</span>
+0084 
+0085     <span class="comment">%Hessian of objective function</span>
+0086     hess_obj = J'*J + hp^2*RtR;        
+0087     
+0088     <span class="comment">%Compute search direction - negate gradient and do search</span>
+0089     grad_obj=-grad_obj; p_search = hess_obj \ grad_obj;
+0090     
+0091     <span class="comment">%% Backtracking line search??</span>
+0092     <span class="keyword">if</span>(bls==2) <span class="comment">%No linesearch</span>
+0093         <span class="comment">%Update the constrained conductivity</span>
+0094         log_img_cur = log_img_cur + p_search; 
+0095         <span class="comment">%Change variables to normal conductivity</span>
+0096         <span class="keyword">for</span> iii=1:n_cond
+0097             img_cur(iii)=<a href="#_sub2" class="code" title="subfunction [logistic]=logistic_f(m_cur,min__s,max__s,relax_param)">logistic_f</a>(log_img_cur(iii),min_s,max_s,rel_par);
+0098         <span class="keyword">end</span>        
+0099         img_bkgnd.elem_data=img_cur;
+0100     <span class="keyword">else</span>
+0101        <span class="comment">%Line search parameters</span>
+0102        alpha=1.0; alpha_bls=0.1; beta_bls=0.5;
+0103        
+0104        <span class="comment">%Create new candidate, forward solve and difference with measurements</span>
+0105        log_img_new = log_img_cur + alpha*p_search; 
+0106        
+0107        <span class="comment">%Change variables to normal conductivity</span>
+0108        <span class="keyword">for</span> iii=1:n_cond
+0109            img_new(iii)=<a href="#_sub2" class="code" title="subfunction [logistic]=logistic_f(m_cur,min__s,max__s,relax_param)">logistic_f</a>(log_img_new(iii),min_s,max_s,rel_par);
+0110        <span class="keyword">end</span>               
+0111        img_bkgnd.elem_data=img_new'; 
+0112        sim_data_new=<a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img_bkgnd);
+0113        volt_diff_meas_sim_new = <a href="../../../eidors/solvers/calc_difference_data.html" class="code" title="function dva = calc_difference_data( data1, data2, fwd_model)">calc_difference_data</a>( sim_data_new, meas_data, inv_model.fwd_model);   
+0114 
+0115        <span class="comment">%Calculate the functions for BLS</span>
+0116        beta_u_x_n_1 = <a href="#_sub1" class="code" title="subfunction [beta]=beta_f(diff_volt)">beta_f</a>(volt_diff_meas_sim_new);
+0117        beta_u_x_n   = <a href="#_sub1" class="code" title="subfunction [beta]=beta_f(diff_volt)">beta_f</a>(volt_diff_meas_sim);
+0118        grad_u_x_n   = p_search'*grad_obj;
+0119        <span class="keyword">while</span>(beta_u_x_n_1 &gt; beta_u_x_n + alpha_bls*alpha*grad_u_x_n)
+0120            <span class="comment">%Shrink the linesearch parameter and create new candidate</span>
+0121            alpha=alpha*beta_bls;
+0122            
+0123            <span class="comment">%Create new candidate, forward solve and difference with measurements</span>
+0124            log_img_new = log_img_cur + alpha*p_search;
+0125        
+0126            <span class="comment">%Change variables to normal conductivity</span>
+0127            <span class="keyword">for</span> iii=1:n_cond
+0128                img_new(iii)=<a href="#_sub2" class="code" title="subfunction [logistic]=logistic_f(m_cur,min__s,max__s,relax_param)">logistic_f</a>(log_img_new(iii),min_s,max_s,rel_par);
+0129            <span class="keyword">end</span>               
+0130            img_bkgnd.elem_data=img_new; 
+0131            sim_data_new=<a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img_bkgnd);
+0132            volt_diff_meas_sim_new = <a href="../../../eidors/solvers/calc_difference_data.html" class="code" title="function dva = calc_difference_data( data1, data2, fwd_model)">calc_difference_data</a>( sim_data_new, meas_data, inv_model.fwd_model);   
+0133            
+0134            <span class="comment">%Calculate the functions for BLS</span>
+0135            beta_u_x_n_1 = <a href="#_sub1" class="code" title="subfunction [beta]=beta_f(diff_volt)">beta_f</a>(volt_diff_meas_sim_new);               
+0136            <span class="keyword">if</span>(alpha &lt; 1e-16)
+0137                 error(<span class="string">'Line Search failed'</span>);
+0138            <span class="keyword">end</span>
+0139        <span class="keyword">end</span>
+0140        
+0141        <span class="comment">%Update the solution from the descent, decrease barrier and assign</span>
+0142        log_img_cur=log_img_new; img_cur = img_new'; img_bkgnd.elem_data=img_cur;
+0143     <span class="keyword">end</span>
+0144        
+0145     <span class="comment">%Resolve model, find difference data and test convergence</span>
+0146     sim_data_new=<a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img_bkgnd);
+0147     volt_diff_meas_sim = <a href="../../../eidors/solvers/calc_difference_data.html" class="code" title="function dva = calc_difference_data( data1, data2, fwd_model)">calc_difference_data</a>( sim_data_new, meas_data, inv_model.fwd_model);   
+0148     
+0149     <span class="keyword">if</span> norm(volt_diff_meas_sim)&lt;tol; <span class="keyword">break</span>; <span class="keyword">end</span>  <span class="comment">% test tolerance</span>
+0150 <span class="keyword">end</span>
+0151 
+0152 <span class="comment">%Create a data structure to return</span>
+0153 img.name= <span class="string">'solved by mc_GN_box_solve'</span>;
+0154 img.elem_data = img_cur;
+0155 img.fwd_model= inv_model.fwd_model;
+0156 img.type=<span class="string">'image'</span>;
+0157 
+0158 
+0159 
+0160 <span class="comment">%Objective function - voltage 2-norm (for linesearch)</span>
+0161 <a name="_sub1" href="#_subfunctions" class="code">function [beta]=beta_f(diff_volt)</a>
+0162     <span class="comment">%Objective function</span>
+0163     beta = 0.5*norm(diff_volt,2)^2;
+0164 <span class="keyword">end</span>
+0165 
+0166 <span class="comment">%Logistic function, its inverse and partial derivatives</span>
+0167 <a name="_sub2" href="#_subfunctions" class="code">function [logistic]=logistic_f(m_cur,min__s,max__s,relax_param)</a>
+0168     logistic = min__s + (max__s-min__s)/( 1 + exp(-m_cur/relax_param) );
+0169 <span class="keyword">end</span>
+0170 
+0171 <a name="_sub3" href="#_subfunctions" class="code">function [d_logistic]=d_logistic_f(m_cur,min__s,max__s,relax_param)</a>
+0172     d_logistic = (max__s-min__s)/(   (1+exp(-m_cur/relax_param)) * ( (1+exp(m_cur/relax_param)) * relax_param));
+0173 <span class="keyword">end</span>
+0174 
+0175 <a name="_sub4" href="#_subfunctions" class="code">function [inv_logistic]=inv_logistic_f(cond_cur,min__s,max__s,relax_param)</a>
+0176     inv_logistic = -relax_param*log( (cond_cur-max__s)/(min__s-cond_cur));
+0177 <span class="keyword">end</span>
+0178 
+0179 
+0180 <span class="comment">%Default parameters for the GN solver</span>
+0181 <a name="_sub5" href="#_subfunctions" class="code">function [maxiter, tol,min_s,max_s,rel_par,show_iter,bls,best_homog,best_homog_ref] = get_parameters(inv_model)</a>
+0182    <span class="keyword">try</span>
+0183      maxiter= inv_model.parameters.max_iterations;
+0184    <span class="keyword">catch</span>
+0185      maxiter= 1;
+0186    <span class="keyword">end</span>
+0187 
+0188    <span class="keyword">try</span>
+0189      tol = inv_model.parameters.term_tolerance;
+0190    <span class="keyword">catch</span>
+0191      tol= 1e-3;
+0192    <span class="keyword">end</span>
+0193    
+0194    <span class="keyword">try</span>
+0195      min_s = inv_model.parameters.min_s;
+0196    <span class="keyword">catch</span>
+0197      min_s= 1e-3;
+0198    <span class="keyword">end</span>
+0199    
+0200    <span class="keyword">try</span>
+0201      max_s = inv_model.parameters.max_s;
+0202    <span class="keyword">catch</span>
+0203      tol= 1e3;
+0204    <span class="keyword">end</span>
+0205    
+0206    <span class="keyword">try</span>
+0207      rel_par = inv_model.parameters.rel_par;
+0208    <span class="keyword">catch</span>
+0209      rel_par= 1.0;
+0210    <span class="keyword">end</span>
+0211    
+0212    <span class="keyword">try</span>
+0213      show_iter = inv_model.parameters.show_iterations;
+0214    <span class="keyword">catch</span>
+0215      show_iter= 1;
+0216    <span class="keyword">end</span>
+0217    
+0218    <span class="keyword">try</span>
+0219       bls = inv_model.parameters.bls; 
+0220    <span class="keyword">catch</span>
+0221       bls=1;
+0222    <span class="keyword">end</span>
+0223    
+0224    <span class="keyword">try</span>
+0225       best_homog = inv_model.parameters.best_homog; 
+0226    <span class="keyword">catch</span>
+0227       best_homog=1;
+0228    <span class="keyword">end</span>
+0229    
+0230    <span class="keyword">try</span>
+0231       best_homog_ref = inv_model.parameters.best_homog_ref; 
+0232    <span class="keyword">catch</span>
+0233       best_homog_ref=1;
+0234    <span class="keyword">end</span>
+0235      
+0236 <span class="keyword">end</span>
+0237 
+0238 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

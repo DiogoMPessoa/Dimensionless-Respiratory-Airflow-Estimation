@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of check_c2f_quality</title>
+  <meta name="keywords" content="check_c2f_quality">
+  <meta name="description" content="CHECK_C2F_QUALITY Check the coarse2fine mapping between two models">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; check_c2f_quality.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>check_c2f_quality
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CHECK_C2F_QUALITY Check the coarse2fine mapping between two models</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [ f_frac, c_frac ] = check_c2f_quality( f_mdl, c_mdl, c2f ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CHECK_C2F_QUALITY Check the coarse2fine mapping between two models
+   CHECK_C2F_QUALITY(F_MDL, C_MDL, C2F) creates a plot for assessing the
+   quality of a coars2fine mapping.
+   A coarse2fine mapping matrix C2F between a fine model F_MDL and a 
+   coarse model C_MDL contains in each element C2F(i,j) the fraction of 
+   F_MDL element i contained in C_MDL element j. CHECK_C2F_QUALITY 
+   calculates the fraction of the volume of each element of both models
+   that is covered by the C2F mapping. Ideally, the result is always 1,
+   other than in places where models don't overlap.
+
+   [ f_frac, c_frac ] = CHECK_C2F_QUALITY(...) returns the calculated
+   volumes for further analysis.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/eidors_colourbar.html" class="code" title="function hh= eidors_colourbar(max_scale,ref_lev, cb_shrink_move, greyscale)">eidors_colourbar</a>	EIDORS_COLOURBAR - create an eidors colourbar with scaling to image</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>	GET_ELEM_VOLUME: VOL = get_elem_volume(fwd_model, map_node )</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ f_frac, c_frac ] = check_c2f_quality( f_mdl, c_mdl, c2f )</a>
+0002 <span class="comment">%CHECK_C2F_QUALITY Check the coarse2fine mapping between two models</span>
+0003 <span class="comment">%   CHECK_C2F_QUALITY(F_MDL, C_MDL, C2F) creates a plot for assessing the</span>
+0004 <span class="comment">%   quality of a coars2fine mapping.</span>
+0005 <span class="comment">%   A coarse2fine mapping matrix C2F between a fine model F_MDL and a</span>
+0006 <span class="comment">%   coarse model C_MDL contains in each element C2F(i,j) the fraction of</span>
+0007 <span class="comment">%   F_MDL element i contained in C_MDL element j. CHECK_C2F_QUALITY</span>
+0008 <span class="comment">%   calculates the fraction of the volume of each element of both models</span>
+0009 <span class="comment">%   that is covered by the C2F mapping. Ideally, the result is always 1,</span>
+0010 <span class="comment">%   other than in places where models don't overlap.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   [ f_frac, c_frac ] = CHECK_C2F_QUALITY(...) returns the calculated</span>
+0013 <span class="comment">%   volumes for further analysis.</span>
+0014 
+0015 <span class="comment">% (C) 2017 Bartlomiej Grychtol</span>
+0016 <span class="comment">% License: GPL version 2 or 3</span>
+0017 <span class="comment">% $Id: check_c2f_quality.m 5802 2018-06-01 19:39:08Z bgrychtol $</span>
+0018 
+0019 c_vol = <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(c_mdl, -2);
+0020 f_vol = <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(f_mdl, -2);
+0021 
+0022 <span class="comment">% C2F(i,j) is the fraction of f_mdl element i contained in c_mdl element j</span>
+0023 
+0024 <span class="comment">% Fraction of f_mdl covered by c2f:</span>
+0025 f_frac = full(sum(c2f,2));
+0026 f_img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(f_mdl, f_frac);
+0027 
+0028 <span class="comment">% Fraction of c_mdl elements covered by c2f</span>
+0029 c_frac = (c2f'*f_vol) ./ c_vol;
+0030 c_img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(c_mdl, c_frac);
+0031 
+0032 subplot(221)
+0033 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(f_img)
+0034 title(<span class="string">'Fine model coverage'</span>)
+0035 <span class="comment">% hold on</span>
+0036 <span class="comment">% h = show_fem(c_mdl);</span>
+0037 <span class="comment">% set(h,'EdgeColor','b')</span>
+0038 <a href="../../eidors/graphics/matlab/eidors_colourbar.html" class="code" title="function hh= eidors_colourbar(max_scale,ref_lev, cb_shrink_move, greyscale)">eidors_colourbar</a>(f_img);
+0039 hold off
+0040 
+0041 subplot(222)
+0042 hist(f_frac,1000);
+0043 title(<span class="string">'Fine model coverage'</span>)
+0044 
+0045 subplot(223)
+0046 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(c_img)
+0047 <span class="comment">% hold on</span>
+0048 <span class="comment">% h = show_fem(f_mdl);</span>
+0049 <span class="comment">% set(h,'EdgeColor','b')</span>
+0050 <a href="../../eidors/graphics/matlab/eidors_colourbar.html" class="code" title="function hh= eidors_colourbar(max_scale,ref_lev, cb_shrink_move, greyscale)">eidors_colourbar</a>(c_img);
+0051 hold off
+0052 title(<span class="string">'Coarse model coverage'</span>)
+0053 
+0054 
+0055 subplot(224)
+0056 hist(c_frac,1000);
+0057 title(<span class="string">'Coarse model coverage'</span>);
+0058 <span class="keyword">end</span>
+0059</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

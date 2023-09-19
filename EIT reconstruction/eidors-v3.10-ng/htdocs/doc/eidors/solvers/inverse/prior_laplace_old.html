@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of prior_laplace_old</title>
+  <meta name="keywords" content="prior_laplace_old">
+  <meta name="description" content="PRIOR_LAPLACE calculate image prior">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; prior_laplace_old.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>prior_laplace_old
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PRIOR_LAPLACE calculate image prior</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Reg= prior_laplace_old( inv_model ); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PRIOR_LAPLACE calculate image prior
+ Reg= prior_laplace( inv_model )
+ Reg        =&gt; output regularization term
+ inv_model  =&gt; inverse model struct
+  or
+ Reg= prior_laplace( fwd_model )
+
+ This image prior is intended to be used as
+  R'*R, but may be used as R for as well.
+
+ The Laplace prior is a 2nd order high pass filter.
+ On a rectangular mesh, it is a convolution with
+   [-1,-1,-1;      [ 0;-1; 0
+    -1, 8,-1    or  -1; 4;-1
+    -1,-1,-1]        0;-1; 0]
+
+ On a finite element mesh, we define the it as 
+ -1 for each adjacent element, and 3 (in 2D) or 4 (in 3D)
+ for the element itself
+
+ previous implementation requires searching for faces in the mesh</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>	MK_CIRC_TANK: make a cylindrical tank FEM geometry in 2D or 3D</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>	FWD_MODEL_PARAMETERS: data= fwd_solve_1st_order( fwd_model, image)</li><li><a href="prior_laplace_old.html" class="code" title="function Reg= prior_laplace_old( inv_model );">prior_laplace_old</a>	PRIOR_LAPLACE calculate image prior</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="prior_laplace.html" class="code" title="function Reg= prior_laplace( inv_model )">prior_laplace</a>	PRIOR_LAPLACE calculate image prior</li><li><a href="prior_laplace_old.html" class="code" title="function Reg= prior_laplace_old( inv_model );">prior_laplace_old</a>	PRIOR_LAPLACE calculate image prior</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function Reg = build_laplace(fwd_model)</a></li><li><a href="#_sub2" class="code">function elems= find_adjoin(ee, ELEM)</a></li><li><a href="#_sub3" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Reg= prior_laplace_old( inv_model );</a>
+0002 <span class="comment">% PRIOR_LAPLACE calculate image prior</span>
+0003 <span class="comment">% Reg= prior_laplace( inv_model )</span>
+0004 <span class="comment">% Reg        =&gt; output regularization term</span>
+0005 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0006 <span class="comment">%  or</span>
+0007 <span class="comment">% Reg= prior_laplace( fwd_model )</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% This image prior is intended to be used as</span>
+0010 <span class="comment">%  R'*R, but may be used as R for as well.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% The Laplace prior is a 2nd order high pass filter.</span>
+0013 <span class="comment">% On a rectangular mesh, it is a convolution with</span>
+0014 <span class="comment">%   [-1,-1,-1;      [ 0;-1; 0</span>
+0015 <span class="comment">%    -1, 8,-1    or  -1; 4;-1</span>
+0016 <span class="comment">%    -1,-1,-1]        0;-1; 0]</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% On a finite element mesh, we define the it as</span>
+0019 <span class="comment">% -1 for each adjacent element, and 3 (in 2D) or 4 (in 3D)</span>
+0020 <span class="comment">% for the element itself</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% previous implementation requires searching for faces in the mesh</span>
+0023 
+0024 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0025 <span class="comment">% $Id: prior_laplace_old.m 5720 2018-03-28 11:57:45Z aadler $</span>
+0026 
+0027 <span class="keyword">if</span> ischar(inv_model) &amp;&amp; strcmp(inv_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub3" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0028 
+0029 <span class="keyword">switch</span> inv_model.type
+0030   <span class="keyword">case</span> <span class="string">'inv_model'</span>; fwd_model = inv_model.fwd_model;
+0031   <span class="keyword">case</span> <span class="string">'fwd_model'</span>; fwd_model = inv_model;
+0032   <span class="keyword">otherwise</span>; error(<span class="string">'PRIOR_LAPLACE requires input type of inv_model or fwd_model'</span>);
+0033 <span class="keyword">end</span>
+0034 
+0035 Reg = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction Reg = build_laplace(fwd_model)">build_laplace</a>, fwd_model, <span class="string">'prior_laplace'</span>);
+0036 
+0037 <a name="_sub1" href="#_subfunctions" class="code">function Reg = build_laplace(fwd_model)</a>
+0038 
+0039    pp= <a href="../../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>( fwd_model );
+0040    Reg = speye( pp.n_elem );
+0041 
+0042    Iidx= [];
+0043    Jidx= [];
+0044    Vidx= [];
+0045    <span class="keyword">for</span> ii=1:pp.n_elem
+0046       el_adj = <a href="#_sub2" class="code" title="subfunction elems= find_adjoin(ee, ELEM)">find_adjoin</a>( ii, pp.ELEM );
+0047       <span class="keyword">for</span> jj=el_adj(:)'
+0048          Iidx= [Iidx, ii, ii, jj, jj];
+0049          Jidx= [Jidx, ii, jj, ii, jj];
+0050          Vidx= [Vidx,  1, -1, -1,  1];
+0051       <span class="keyword">end</span>
+0052    <span class="keyword">end</span>
+0053 
+0054    Reg = <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(Iidx,Jidx, Vidx, pp.n_elem, pp.n_elem );
+0055    
+0056    
+0057 <span class="comment">% find elems which are connected to elems ee</span>
+0058 <a name="_sub2" href="#_subfunctions" class="code">function elems= find_adjoin(ee, ELEM)</a>
+0059    nn= ELEM(:,ee);
+0060    [d,e]= size(ELEM);
+0061    ss = false(size(ELEM));
+0062    <span class="keyword">for</span> i=1:d
+0063      ss= ss | ELEM==nn(i);
+0064    <span class="keyword">end</span>
+0065    elems= find(sum(ss,1)==d-1);
+0066 
+0067 <a name="_sub3" href="#_subfunctions" class="code">function do_unit_test</a>
+0068 
+0069    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,16);
+0070    RtR = <a href="prior_laplace_old.html" class="code" title="function Reg= prior_laplace_old( inv_model );">prior_laplace_old</a>( imdl );
+0071    subplot(221); spy(RtR);
+0072    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'a2c2'</span>, nnz(RtR), 240);
+0073 
+0074    fmdl = <a href="../../../eidors/models/mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(2,[],4);
+0075    RtR = <a href="prior_laplace_old.html" class="code" title="function Reg= prior_laplace_old( inv_model );">prior_laplace_old</a>( fmdl );
+0076    subplot(222); spy(RtR);
+0077    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2-4'</span>,RtR(1:4,1:8), [ <span class="keyword">...</span>
+0078       6, -2,  0, -2, -2,  0,  0,  0; -2,  6, -2,  0,  0, -2,  0,  0;
+0079       0, -2,  6, -2,  0,  0, -2,  0; -2,  0, -2,  6,  0,  0,  0, -2]);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

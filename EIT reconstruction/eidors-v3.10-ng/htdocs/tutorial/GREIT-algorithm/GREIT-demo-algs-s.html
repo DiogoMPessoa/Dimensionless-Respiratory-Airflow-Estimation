@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+GREIT algorithms: Example images
+</h2>
+
+This tutorial uses the various GREIT algorithm candidates to
+generate a set of example images. This is primarily
+a sanity check that the algorithms work.
+
+This tutorial documents work in progress during the development of the 
+GREIT framework, it is now of mostly historical interest.
+
+<H3>Prepare data: phantom data</H3>
+
+<pre>
+% Tank Data $Id: demo_algs01.m 3839 2013-04-16 14:53:12Z aadler $
+
+% exclude measures at electrodes
+[x,y]= meshgrid(1:16,1:16); idx= abs(x-y)>1 & abs(x-y)<15;
+
+load iirc_data_2006; clear v
+v(1).vh= - real(v_reference(idx,1));
+v(1).vi= - real(v_rotate(idx,1));
+
+</pre>
+
+<H3>Prepare data: simulated FEM</H3>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr><td>
+<pre>
+% Simulated objects
+imb=  mk_common_model('c2c',16);
+
+img= mk_image( imb );
+vv= fwd_solve( img ); v(2).vh= vv.meas;
+img.elem_data([25,37,49:50,65:66,81:83,101:103,121:124])= 1.1;
+img.elem_data([95,98:100,79,80,76,63,64,60,48,45,36,33,22])= 1.1;
+vv= fwd_solve( img ); v(2).vi= vv.meas;
+
+% Noise
+sig = norm(v(2).vi - v(2).vh);
+randn('seed',50);noise = randn(size(v(2).vh));
+v(3).vi = v(2).vi + noise/norm(noise)*sig * 10^(-6/20);
+v(3).vh = v(2).vh;
+
+subplot(221);show_fem(img);
+axis square; axis off
+print_convert demo_algs02a.png;
+
+</pre>
+</td>
+<td valign="top" align="right" width="150">
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT-algorithm/demo_algs02a.png">
+</td>
+</table>
+
+<H3>Prepare data: human tidal breathing</H3>
+
+
+<pre>
+% Human breathing $Id: demo_algs03.m 1559 2008-07-27 03:19:58Z aadler $
+
+% Electrodes on back
+load montreal_data_1995
+v(4).vh = double( zc_resp(idx,1) );
+v(4).vi = double( zc_resp(idx,22) );
+
+</pre>
+
+<H2>Algorithm results</H2>
+
+Using the function <a href="get_list_of_algs.m"><tt
+   >get_list_of_algs.m</tt></a>:
+<ul>
+<pre>
+% Algorithm list $Id: get_list_of_algs.m 1619 2008-09-22 16:32:56Z aadler $
+function algs= get_list_of_algs;
+
+algs = {'GREIT_Sheffield_backproj', ...
+        'GREIT_NOSER_ndiff', ...
+        'GREIT_NOSER_diff', ...
+        'GREIT_test_ndiff', ...
+       };
+
+</pre>
+</ul>
+we can run the following demo script:
+<pre>
+% Demo algorithms $Id: demo_algs04.m 1576 2008-07-28 09:19:55Z aadler $
+
+algs= get_list_of_algs;
+
+imb.calc_colours.ref_level = 0; % select colour output
+imb.calc_colours.greylev   = 0.01; % black backgnd
+imb.calc_colours.backgnd   = [.5,.5,.5]; %grey
+
+for i= 1:length(algs)
+   for k= 1:4
+      [img,map] = feval(algs{i}, v(k).vh, v(k).vi );
+
+      imc= calc_colours(img, imb);
+      imc(~map) = 1; % background
+
+      imwrite(imc,colormap, sprintf('demo_algs04_%d%d.png',i,k),'png')
+    end
+end
+
+</pre>
+
+<center>
+<table border="0">
+<tr>
+   <th>
+   <th> Insulating <br> target in <br> tank
+   <th> Simulated <br> target <br> (No noise)
+   <th> Simulated <br> target <br> (6dB SNR)
+   <th> Shallow<br> breathing <br> &nbsp;
+<tr>
+   <th> Sheffield <br>Backproj
+   <td> <img src="demo_algs04_11.png" width="96">
+   <td> <img src="demo_algs04_12.png" width="96">
+   <td> <img src="demo_algs04_13.png" width="96">
+   <td> <img src="demo_algs04_14.png" width="96">
+<tr>
+   <th> NOSER <br>Norm Diff
+   <td> <img src="demo_algs04_21.png" width="96">
+   <td> <img src="demo_algs04_22.png" width="96">
+   <td> <img src="demo_algs04_23.png" width="96">
+   <td> <img src="demo_algs04_24.png" width="96">
+<tr>
+   <th> NOSER <br>Diff
+   <td> <img src="demo_algs04_31.png" width="96">
+   <td> <img src="demo_algs04_32.png" width="96">
+   <td> <img src="demo_algs04_33.png" width="96">
+   <td> <img src="demo_algs04_34.png" width="96">
+<tr>
+   <th> GREIT <br>Test
+   <td> <img src="demo_algs04_41.png" width="96">
+   <td> <img src="demo_algs04_42.png" width="96">
+   <td> <img src="demo_algs04_43.png" width="96">
+   <td> <img src="demo_algs04_44.png" width="96">
+</table>
+</center>
+
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

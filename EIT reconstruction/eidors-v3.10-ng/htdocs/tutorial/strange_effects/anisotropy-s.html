@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<H2>Anisotroic deformations of medium shape</H2>
+
+
+<H3>
+   Create a simple resistor model and calculate current streamlines
+</H3>
+
+<pre>
+% $Id: anisotropy1_01.m 4214 2013-06-17 12:39:48Z aadler $
+xl=-3; xr= 3; yb=-15; yt= 15;
+np= 35;
+[x,y] = meshgrid( linspace(xr,xl,np), linspace(yb,yt,61) );
+vtx= [y(:),x(:)];
+
+for i=1:np
+   elec_nodes{i   }= [y(1,i);x(1,i)]';
+   elec_nodes{i+np}= [y(end,i);x(end,i)]';
+end
+
+z_contact= 1e5;
+fmdl= mk_fmdl_from_nodes( vtx, elec_nodes, z_contact, 'sq_m1');
+fmdl.stimulation(1).stimulation='Amp';
+fmdl.stimulation(1).stim_pattern=[ones(np,1);-ones(np,1)];
+fmdl.stimulation(1).meas_pattern=zeros(1,2*np); % don't care
+
+% Add non-conductive target
+ctr = interp_mesh( fmdl,0); xctr= ctr(:,1); yctr= ctr(:,2);
+img = mk_image( fmdl,  ones(length(xctr),1) );
+
+
+
+% Solve and add streamlines
+img.fwd_solve.get_all_meas = 1;
+vh = fwd_solve(img);
+
+img.fwd_model.mdl_slice_mapper.npx = 200;
+img.fwd_model.mdl_slice_mapper.npy = 100;
+q = show_current(img,vh.volt);
+hh=show_fem(img);
+set(hh,'EdgeColor',[1,1,1]*.75);
+hold on;
+sy = linspace(-3,3,10); sx =  15+0*sy;
+hh=streamline(q.xp,q.yp, q.xc, q.yc, sx,sy); set(hh,'Linewidth',2);
+hold off;
+
+axis image
+axis([-16,16,-5,5]);
+print_convert anisotropy1_01a.png '-density 125'
+
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/anisotropy1_01a.png">
+<br><i> Figure:</i>
+Rectangular model with current streamlines
+</center>
+
+
+<H3>
+   Deform the model and recalculate streamlines
+</H3>
+
+<pre>
+% Deformation $Id: anisotropy1_02.m 4214 2013-06-17 12:39:48Z aadler $
+th = fmdl.nodes(:,1)/yt*(pi);
+y = fmdl.nodes(:,2); y = y.*(th<=0) - y.*(th>0);
+th = (th-pi/2).*(th<=0) + (pi/2-th).*(th>0);
+[x,y] = pol2cart(th, y+4);
+y = y+8.*(fmdl.nodes(:,1)<=0);
+img2 = img; img2.fwd_model.nodes = [1.5*x, y];
+
+img2.fwd_solve.get_all_meas = 1;
+vh = fwd_solve(img2);
+
+img_v = rmfield(img2,'elem_data');
+img_v.node_data = vh.volt;
+hh=show_fem(img_v);
+set(hh,'EdgeColor',[1,1,1]*.75);
+
+q=  show_current(img2,vh.volt);
+hold on;
+sy = -linspace(1.2,6.8,10); sx =  0*sy;
+hh=streamline(q.xp,q.yp, q.xc, q.yc, sx,sy); set(hh,'Linewidth',2);
+hold off;
+
+axis image
+print_convert anisotropy1_02a.png '-density 125'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/anisotropy1_02a.png">
+<br><i> Figure:</i>
+Deformed model with current streamlines
+</center>
+
+<H3>
+   Create isotropic conductivity patterns and recalulate streamlines
+</H3>
+
+<pre>
+% Deformation $Id: anisotropy1_03.m 4215 2013-06-17 12:55:18Z aadler $
+
+xy = interp_mesh(img2.fwd_model);
+
+% Create anisotropic conductivity.
+clear conduct
+   conduct(:,1,2,2) = abs(xy(:,1));
+   conduct(:,1,1,1) = 1;
+   conduct(:,1,1,2) = 0;
+   conduct(:,1,2,1) = 0;
+img2.elem_data = conduct;
+
+
+img2.fwd_solve.get_all_meas = 1;
+vh = fwd_solve(img2);
+
+img_v.node_data = vh.volt;
+hh=show_fem(img_v);
+set(hh,'EdgeColor',[1,1,1]*.75);
+
+q=  show_current(img2,vh.volt);
+hold on;
+sy =  linspace(1.2,6.8,10); sx =  0*sy;
+hh=streamline(q.xp,q.yp, q.xc, q.yc, sx,sy); set(hh,'Linewidth',2);
+hh=streamline(q.xp,q.yp,-q.xc,-q.yc, sx,sy); set(hh,'Linewidth',2);
+hold off;
+
+axis image
+print_convert anisotropy1_03a.png '-density 125'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/anisotropy1_03a.png">
+<br><i> Figure:</i>
+Deformed model with current streamlines
+</center>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of system_mat_2p5d_1st_order</title>
+  <meta name="keywords" content="system_mat_2p5d_1st_order">
+  <meta name="description" content="SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; system_mat_2p5d_1st_order.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>system_mat_2p5d_1st_order
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function s_mat= system_mat_2p5d_1st_order( fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix
+ SS= SYSTEM_MAT_2P5D_1ST_ORDER( FWD_MODEL, IMG)
+ fwd_model = forward model
+ img       = image background for system matrix calc
+ s_mat = CC' * (SS + k^2 * TT) * conductivites * CC;
+ where:
+   SS  = Unconnected system Matrix
+   TT  = Unconnected Fourier correction
+   CC  = Connectivity Matrix
+
+ Parameters
+   fwd_model.system_mat_2_5D_1st_order.k
+        the k-th harmonic 0..inf [default 0]
+   fwd_model.system_mat_2_5D_1st_order.factory
+        return a factory in s_mat.assemble(s_mat, k) to build
+        the system matrix based on argument k [default 0]
+
+ NOTE: This code is adapted from dev/a_adler/system_mat_2_5D_1st_order.m</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>	ELEM_DIM: dimension of elements in space (are elements in 2D or 3D space)</li><li><a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>	NUM_ELEMS: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>	STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns</li><li><a href="fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>	FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)</li><li><a href="system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>	SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix</li><li><a href="system_mat_2p5d_fields.html" class="code" title="function FT= system_mat_2p5d_fields( fwd_model )">system_mat_2p5d_fields</a>	SYSTEM_MAT_2P5D_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>	SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>	FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</li><li><a href="jacobian_adjoint_2p5d_1st_order.html" class="code" title="function J= jacobian_adjoint_2p5d_1st_order( fwd_model, img)">jacobian_adjoint_2p5d_1st_order</a>	JACOBIAN_ADJOINT_2P5D: J= jacobian_adjoint_2p5d_1st_order( img )</li><li><a href="jacobian_movement_2p5d_1st_order.html" class="code" title="function J = jacobian_movement_2p5d_1st_order( fwd_model, img)">jacobian_movement_2p5d_1st_order</a>	JACOBIAN_MOVEMENT_2P5D: J = jacobian_movement_2p5d_1st_order( img )</li><li><a href="system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>	SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function SS = assemble(k,FS,FT,ES,ET)</a></li><li><a href="#_sub2" class="code">function [ES,ET] = calc_sigma(img, FS, FT)</a></li><li><a href="#_sub3" class="code">function check_2d(img)</a></li><li><a href="#_sub4" class="code">function elem_data = check_elem_data(fwd_model, img);</a></li><li><a href="#_sub5" class="code">function do_unit_test()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s_mat= system_mat_2p5d_1st_order( fwd_model, img)</a>
+0002 <span class="comment">% SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix</span>
+0003 <span class="comment">% SS= SYSTEM_MAT_2P5D_1ST_ORDER( FWD_MODEL, IMG)</span>
+0004 <span class="comment">% fwd_model = forward model</span>
+0005 <span class="comment">% img       = image background for system matrix calc</span>
+0006 <span class="comment">% s_mat = CC' * (SS + k^2 * TT) * conductivites * CC;</span>
+0007 <span class="comment">% where:</span>
+0008 <span class="comment">%   SS  = Unconnected system Matrix</span>
+0009 <span class="comment">%   TT  = Unconnected Fourier correction</span>
+0010 <span class="comment">%   CC  = Connectivity Matrix</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Parameters</span>
+0013 <span class="comment">%   fwd_model.system_mat_2_5D_1st_order.k</span>
+0014 <span class="comment">%        the k-th harmonic 0..inf [default 0]</span>
+0015 <span class="comment">%   fwd_model.system_mat_2_5D_1st_order.factory</span>
+0016 <span class="comment">%        return a factory in s_mat.assemble(s_mat, k) to build</span>
+0017 <span class="comment">%        the system matrix based on argument k [default 0]</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% NOTE: This code is adapted from dev/a_adler/system_mat_2_5D_1st_order.m</span>
+0020 
+0021 <span class="comment">% (C) 2005, 2013, 2016 A. Adler, A. Boyle. Licensed under the GPL Version 2</span>
+0022 
+0023 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub5" class="code" title="subfunction do_unit_test()">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0024 
+0025 <span class="keyword">if</span> nargin == 1
+0026    img= fwd_model;
+0027 <span class="keyword">elseif</span>  strcmp(getfield(warning(<span class="string">'query'</span>,<span class="string">'EIDORS:DeprecatedInterface'</span>),<span class="string">'state'</span>),<span class="string">'on'</span>)
+0028    warning(<span class="string">'EIDORS:DeprecatedInterface'</span>, <span class="keyword">...</span>
+0029       [<span class="string">'Calling SYSTEM_MAT_1ST_ORDER with two arguments is deprecated and will cause'</span> <span class="keyword">...</span>
+0030        <span class="string">' an error in a future version. First argument ignored.'</span>]);
+0031 <span class="keyword">end</span>
+0032 fwd_model= img.fwd_model;
+0033 
+0034 <span class="comment">% check parametrizations</span>
+0035 <span class="keyword">if</span> isfield(img,<span class="string">'current_params'</span>) &amp;&amp; <span class="keyword">...</span>
+0036      (~ischar(img.current_params) || ~strcmp(img.current_params,<span class="string">'conductivity'</span>))
+0037     <span class="keyword">if</span> ischar(img.current_params)
+0038        error(<span class="string">'system_mat_2p5d_1st_order does not work for %s'</span>,img.current_params);
+0039     <span class="keyword">else</span>
+0040        img.current_params
+0041        error(<span class="string">'system_mat_2p5d_1st_order does not work for the above'</span>);
+0042     <span class="keyword">end</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 factory = 0; <span class="keyword">try</span> factory = fwd_model.system_mat_2p5d_1st_order.factory; <span class="keyword">end</span>
+0046 k = 0; <span class="keyword">try</span> k = fwd_model.system_mat_2p5d_1st_order.k; <span class="keyword">end</span>
+0047 
+0048 FS = <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>(img.fwd_model);      <span class="comment">% 2D solution</span>
+0049 FT = <a href="system_mat_2p5d_fields.html" class="code" title="function FT= system_mat_2p5d_fields( fwd_model )">system_mat_2p5d_fields</a>(img.fwd_model); <span class="comment">% Fourier domain correction</span>
+0050 [ES, ET] = <a href="#_sub2" class="code" title="subfunction [ES,ET] = calc_sigma(img, FS, FT)">calc_sigma</a>(img, FS, FT); <span class="comment">% conductivity</span>
+0051 
+0052 <span class="keyword">if</span> factory
+0053    s_mat = @(k) <a href="#_sub1" class="code" title="subfunction SS = assemble(k,FS,FT,ES,ET)">assemble</a>(k,FS,FT,ES,ET);
+0054 <span class="keyword">else</span>
+0055    s_mat.E = <a href="#_sub1" class="code" title="subfunction SS = assemble(k,FS,FT,ES,ET)">assemble</a>(k,FS,FT,ES,ET);
+0056 <span class="keyword">end</span>
+0057 
+0058 
+0059 <a name="_sub1" href="#_subfunctions" class="code">function SS = assemble(k,FS,FT,ES,ET)</a>
+0060    assert(all(size(k) == [1 1]), <span class="string">'expected scalar k'</span>);
+0061    SS = FS'*ES*FS + k^2*FT'*ET*FT;
+0062 
+0063 <a name="_sub2" href="#_subfunctions" class="code">function [ES,ET] = calc_sigma(img, FS, FT)</a>
+0064    lFS= size(FS,1);
+0065    lFT= size(FT,1);
+0066    ED = <a href="../../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>(img.fwd_model);
+0067    lNE= ED*<a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(img.fwd_model);
+0068    elem_data = <a href="#_sub4" class="code" title="subfunction elem_data = check_elem_data(fwd_model, img);">check_elem_data</a>(img.fwd_model, img);
+0069    <span class="keyword">if</span> size(elem_data,3) == 1
+0070    <span class="comment">% Scalar conductivity == isotropic</span>
+0071       elem_sigma = kron( elem_data, ones(ED,1) );
+0072       elem_sigma(end+1:lFS) = 1; <span class="comment">% add ones for CEM</span>
+0073       ES= spdiags(elem_sigma,0,lFS,lFS);
+0074 
+0075       elem_sigma = kron( elem_data, ones(ED+1,1) );
+0076       elem_sigma(end+1:lFT) = 1; <span class="comment">% add ones for CEM</span>
+0077       ET= spdiags(elem_sigma,0,lFT,lFT);
+0078    <span class="keyword">else</span>
+0079 <span class="comment">%      switch elem_dim(img.fwd_model)</span>
+0080 <span class="comment">%        case 2;</span>
+0081 <span class="comment">%          idx = 1:2:lNE;</span>
+0082 <span class="comment">%          ES= sparse([idx,idx+1,idx,idx+1]', ...</span>
+0083 <span class="comment">%                     [idx,idx,idx+1,idx+1]', elem_data(:), lFS,lFS);</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">%          ES(lNE+1:lFS,lNE+1:lFS) = speye(lFS-lNE);</span>
+0086 <span class="comment">%        case 3;</span>
+0087 <span class="comment">%          idx = 1:3:lNE;</span>
+0088 <span class="comment">%          ES= sparse([idx,idx+1,idx+2,idx,idx+1,idx+2,idx,idx+1,idx+2]', ...</span>
+0089 <span class="comment">%                     [idx,idx,idx,idx+1,idx+1,idx+1,idx+2,idx+2,idx+2]', ...</span>
+0090 <span class="comment">%                      elem_data(:), lFS,lFS);</span>
+0091 <span class="comment">%</span>
+0092 <span class="comment">%          ES(lNE+1:lFS,lNE+1:lFS) = speye(lFS-lNE);</span>
+0093 <span class="comment">%        otherwise;</span>
+0094           error(<span class="string">'%d D anisotropic elements not implemented'</span>, <a href="../../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>(fwd_model));
+0095 <span class="comment">%      end</span>
+0096    <span class="keyword">end</span>
+0097 
+0098 <a name="_sub3" href="#_subfunctions" class="code">function check_2d(img)</a>
+0099    assert(size(img.fwd_model.nodes,2) == 2, <span class="string">'expecting 2D model for 2.5D reconstruction'</span>);
+0100    <span class="comment">% check that all electrodes are actually part of the mesh</span>
+0101    nn = unique(img.fwd_model.elems);
+0102    <span class="keyword">for</span> i=1:length(img.fwd_model.electrode)
+0103       ne = img.fwd_model.electrode(i).nodes;
+0104       <span class="keyword">for</span> j=1:length(ne)
+0105          assert(length(find(ne(j) == nn))&gt;0, sprintf(<span class="string">'elec#%d, node#%d: not connected to mesh'</span>,i,j));
+0106       <span class="keyword">end</span>
+0107    <span class="keyword">end</span>
+0108 
+0109 <a name="_sub4" href="#_subfunctions" class="code">function elem_data = check_elem_data(fwd_model, img);</a>
+0110    elem_data = img.elem_data;
+0111    <span class="keyword">if</span> any(size(elem_data) == [1 1])
+0112       elem_data = elem_data(:);
+0113    <span class="keyword">end</span>
+0114    sz_elem_data = size(elem_data);
+0115    <span class="keyword">if</span> sz_elem_data(2) ~= 1;
+0116       error(<span class="string">'system_mat_2p5d_1st_order: can only solve one image (sz_elem_data=%)'</span>, <span class="keyword">...</span>
+0117             sz_elem_data);
+0118    <span class="keyword">end</span>
+0119 
+0120    <span class="keyword">if</span> isfield(fwd_model, <span class="string">'coarse2fine'</span>);
+0121      c2f = fwd_model.coarse2fine;
+0122      sz_c2f = size(c2f);
+0123      <span class="keyword">switch</span> sz_elem_data(1)
+0124        <span class="keyword">case</span> sz_c2f(1); <span class="comment">% Ok</span>
+0125        <span class="keyword">case</span> sz_c2f(2); elem_data = c2f * elem_data;
+0126           <span class="keyword">if</span> isfield(fwd_model, <span class="string">'background'</span>)
+0127               elem_data = elem_data + fwd_model.background;
+0128           <span class="keyword">end</span>
+0129 
+0130        <span class="keyword">otherwise</span>; error([<span class="string">'system_mat_2p5d_1st_order: provided elem_data '</span> <span class="keyword">...</span>
+0131             <span class="string">' (sz=%d) does not match c2f (sz=%d %d)'</span>], sz_elem_data(1), sz_c2f);
+0132      <span class="keyword">end</span>
+0133    <span class="keyword">else</span>
+0134      <span class="keyword">if</span> sz_elem_data(1) ~= <a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(fwd_model)
+0135        error([<span class="string">'system_mat_2p5d_1st_order: provided elem_data (sz=%d) does '</span> <span class="keyword">...</span>
+0136           <span class="string">' not match fwd_model (sz=%d)'</span>], sz_elem_data(1), <a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(fwd_model));
+0137      <span class="keyword">end</span>
+0138    <span class="keyword">end</span>
+0139 
+0140 <a name="_sub5" href="#_subfunctions" class="code">function do_unit_test()</a>
+0141    ne = 16;
+0142    k=0; <span class="comment">% for k=0, the result is a 2D reconstruction</span>
+0143    <span class="comment">% 2D</span>
+0144    imdl2 = <a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2a'</span>, ne);
+0145    imdl2.fwd_model.stimulation = <a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>(ne, <span class="string">'Wenner'</span>);
+0146    img2 = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl2.fwd_model, 1);
+0147    <a href="#_sub3" class="code" title="subfunction check_2d(img)">check_2d</a>(img2);
+0148    v2 = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img2);
+0149    <span class="comment">% 2.5D</span>
+0150    img2.fwd_model.system_mat = @<a href="system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>;
+0151    img2.fwd_model.system_mat_2p5d_1st_order.k = k;
+0152    v2p5 = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img2);
+0153    <span class="comment">% 3D</span>
+0154    imdl3 = <a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h3a'</span>, ne);
+0155    imdl3.fwd_model.stimulation = <a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>(ne, <span class="string">'Wenner'</span>);
+0156    img3 = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl3.fwd_model, 1);
+0157    v3 = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img3);
+0158    <span class="comment">% analytic half-space (dipole)</span>
+0159    vh = <a href="fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>(img2);
+0160    scale=1e3; uvh=unique(round(vh.meas*scale)/scale);
+0161    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'h2a 2p5d values TEST'</span>, uvh, <span class="keyword">...</span>
+0162    [ 0.0060; 0.0080; 0.0110; 0.0160; 0.0320 ], 1/scale);
+0163    tol = norm(vh.meas)*0.050; <span class="comment">% 5% error tolerance</span>
+0164    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2D   (h2a)                vs analytic TEST'</span>, norm(vh.meas - v2.meas),   0, -tol);
+0165    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2.5D (h2a + 2.5D sys_mat) vs 2D       TEST'</span>, norm(v2.meas - v2p5.meas), 0, tol);
+0166    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3D   (h3a)                vs analytic TEST'</span>, norm(vh.meas - v3.meas),   0, tol);
+0167 clf; h=plot([vh.meas, v2.meas, v2p5.meas, v3.meas],<span class="string">':'</span>);
+0168      legend(<span class="string">'analytic'</span>,<span class="string">'FEM 2D'</span>, sprintf(<span class="string">'FEM 2.5D k=%0.1g'</span>,k), <span class="string">'FEM 3D'</span>,<span class="string">'Location'</span>,<span class="string">'Best'</span>);
+0169      set(gca,<span class="string">'box'</span>,<span class="string">'off'</span>);
+0170      set(h,<span class="string">'LineWidth'</span>,2);
+0171      set(h(1),<span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="string">'MarkerSize'</span>,7);
+0172      set(h(2),<span class="string">'Marker'</span>,<span class="string">'+'</span>);
+0173      set(h(3),<span class="string">'Marker'</span>,<span class="string">'square'</span>,<span class="string">'MarkerSize'</span>,7);
+0174      set(h(4),<span class="string">'Marker'</span>,<span class="string">'diamond'</span>,<span class="string">'MarkerSize'</span>,3);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

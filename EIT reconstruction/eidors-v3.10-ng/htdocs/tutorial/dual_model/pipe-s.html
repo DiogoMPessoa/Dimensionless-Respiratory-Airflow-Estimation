@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Model of a 2&frac12;D cross-section of a pipe
+</h2>
+
+2&frac12;D models of a cylidrical cross section are 
+<p>
+
+Using netgen, we simulate a cylindrical pipe with one row of 12 electrodes.
+<pre>
+% Create pipe model $Id: pipe01.m 2195 2010-06-19 08:49:47Z aadler $
+
+n_elec = 12;
+stim= mk_stim_patterns( n_elec, 1, [0,3],[0,1],{},1);
+
+fmdl= ng_mk_cyl_models(4,[n_elec,2],[0.2,0.5,0.04]);
+fmdl.stimulation = stim;
+
+clf; subplot(121);
+show_fem(fmdl)
+print_convert('pipe01a.png','-density 100')
+
+show_fem(fmdl); view([0,0]);
+print_convert('pipe01b.png','-density 90')
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/pipe01a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/pipe01b.png">
+<br><i> Figure:</i>
+Netgen model of a pipe with a row of electrodes around the centre from two 
+view points.
+</center>
+
+<h3>Simulate an elliptical fluid moves in the pipe</h3>
+
+We simulate a small elliptic object in the pipe, just below the
+electrode plane.
+<pre>
+% Create pipe model $Id: pipe02.m 3266 2012-06-30 16:01:06Z aadler $
+
+el= 'ellipsoid(0.3,0.2,1.5; 0,0,0.25; 0.1,0,0; 0,0.1,0)';
+extra={'obj',['solid obj = ',el,';']};
+
+fmdl= ng_mk_cyl_models(4,[n_elec,2],[0.2,0.5,0.04], extra);
+fmdl.stimulation = stim;
+
+img= mk_image(fmdl, 1);
+vh = fwd_solve( img );
+img.elem_data(fmdl.mat_idx{2}) = 2;
+vi = fwd_solve( img );
+
+clf; subplot(121);
+show_fem(img); view([0,0]);
+print_convert('pipe02a.png','-density 100')
+
+clf; plot( [vh.meas, 100*(vi.meas - vh.meas)] )
+print_convert('pipe02b.png','-density 75')
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/pipe02a.png">
+<img src="pipe02b.png">
+<br><i> Figure:</i>
+<i>Left:</i> elliptic conductive object in pipe
+<i>Right:</i> homogeneous and difference voltages due to object
+</center>
+
+
+<h3> Create reconstruction model </h3>
+
+In order to reconstruct the image, we use a dual
+model where the 2D coarse model is mapped to only
+a layer of elements in the fine model.
+<p>
+First, we create a coarse model which represents
+the entire depth in <i>z</i> (ie. like the 2&frac12;D model).
+
+<pre>
+% Create coarse model
+imdl= mk_common_model('b2c2',16);
+cmdl= imdl.fwd_model;
+
+scl = 1;
+cmdl.mk_coarse_fine_mapping.f2c_offset = [0,0,1];
+cmdl.mk_coarse_fine_mapping.f2c_project = (1/scl)*speye(3);
+cmdl.mk_coarse_fine_mapping.z_depth = inf;
+c2f= mk_coarse_fine_mapping( fmdl, cmdl);
+
+% Create reconstruction model
+imdl.rec_model= cmdl;
+imdl.fwd_model= fmdl;
+imdl.fwd_model.coarse2fine = c2f;
+imdl.RtR_prior = @prior_gaussian_HPF;
+imdl.solve = @inv_solve_diff_GN_one_step;
+imdl.hyperparameter.value= .01;
+
+imgc= inv_solve(imdl, vh, vi);
+
+show_fem(imgc);
+print_convert pipe03a.png '-density 75';
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/pipe03a.png">
+<br><i> Figure:</i>
+</center>
+
+Next, we create coarse models which represent
+the a thin <i>0.1&times;scale</i> slice in <i>z</i>.
+These images display a targets in the space
+from the original volume.
+
+<pre>
+cmdl.mk_coarse_fine_mapping.z_depth = 0.1;
+c2f= mk_coarse_fine_mapping( fmdl, cmdl);
+
+% modify
+imdl.fwd_model.coarse2fine = c2f;
+imdl.hyperparameter.value = .01;
+
+imgc= inv_solve(imdl, vh, vi);
+imgc.calc_colours.ref_level= 0;
+
+show_fem(imgc);
+print_convert pipe04a.png '-density 75';
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/pipe04a.png">
+<br><i> Figure:</i>
+</center>
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

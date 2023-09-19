@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fwd_solve_halfspace</title>
+  <meta name="keywords" content="fwd_solve_halfspace">
+  <meta name="description" content="FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; fwd_solve_halfspace.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>fwd_solve_halfspace
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function data = fwd_solve_halfspace(fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)
+ Fwd solver for an analytic halfspace
+ Input:
+    img       = image struct
+ Output:
+    data = measurements struct
+ Options: (to return internal node information)
+    img.fwd_solve.get_all_meas = 1 (data.volt = all FEM nodes, but not CEM)
+    img.fwd_solve.get_all_nodes= 1 (data.volt = all nodes, including CEM)
+
+ *** Only supports point electrode models (PEM), a CEM will be approximated as
+     a PEM at the center of the electrode geometry.
+
+ *** Surface topology is NOT modelled. It is assumed that the electrodes are
+     approximately coplanar and on the surface.
+
+ *** The domain is assumed to be homogeneous. The mean conductivity will be used.
+
+ *** Contact impedances z_c are ignored. (TODO)
+
+ (C) 2016 A. Boyle. License: GPL version 2 or version 3
+ dipole model: [Loke , &quot;Tutorial: 2-D and 3-D electrical imaging surveys&quot;, 2004]
+ Ref: TODO</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/convert_img_units.html" class="code" title="function y = convert_img_units(img,arg1,arg2)">convert_img_units</a>	CONVERT_IMG_UNITS change image data units</li><li><a href="../../../eidors/models/data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>	DATA_MAPPER maps img.params data to elem or node data</li><li><a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>	STIM_MEAS_LIST: mk stimulation pattern from list of electrodes</li><li><a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>	STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns</li><li><a href="../../../eidors/models/supported_params.html" class="code" title="function list = supported_params">supported_params</a>	</li><li><a href="fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>	FWD_MODEL_PARAMETERS: data= fwd_solve_1st_order( fwd_model, image)</li><li><a href="fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>	FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>	FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</li><li><a href="fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>	FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)</li><li><a href="jacobian_movement_halfspace.html" class="code" title="function J= jacobian_movement_perturb( fwd_model, img)">jacobian_movement_halfspace</a>	JACOBIAN_MOVEMENT_PERTURB: J= jacobian_movement_perturb( img )</li><li><a href="system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>	SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li><li><a href="#_sub2" class="code">function dv = analytic_meas(mdl, rho)</a></li><li><a href="#_sub3" class="code">function v = analytic_nodal(mdl, rho)</a></li><li><a href="#_sub4" class="code">function [I, a, b] = stim_current(mdl)</a></li><li><a href="#_sub5" class="code">function assert_sane_stim(stim)</a></li><li><a href="#_sub6" class="code">function AB = dist(A, B)</a></li><li><a href="#_sub7" class="code">function k = geometric_factor(AM, BM, AN, BN)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data = fwd_solve_halfspace(fwd_model, img)</a>
+0002 <span class="comment">% FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)</span>
+0003 <span class="comment">% Fwd solver for an analytic halfspace</span>
+0004 <span class="comment">% Input:</span>
+0005 <span class="comment">%    img       = image struct</span>
+0006 <span class="comment">% Output:</span>
+0007 <span class="comment">%    data = measurements struct</span>
+0008 <span class="comment">% Options: (to return internal node information)</span>
+0009 <span class="comment">%    img.fwd_solve.get_all_meas = 1 (data.volt = all FEM nodes, but not CEM)</span>
+0010 <span class="comment">%    img.fwd_solve.get_all_nodes= 1 (data.volt = all nodes, including CEM)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% *** Only supports point electrode models (PEM), a CEM will be approximated as</span>
+0013 <span class="comment">%     a PEM at the center of the electrode geometry.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% *** Surface topology is NOT modelled. It is assumed that the electrodes are</span>
+0016 <span class="comment">%     approximately coplanar and on the surface.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% *** The domain is assumed to be homogeneous. The mean conductivity will be used.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% *** Contact impedances z_c are ignored. (TODO)</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% (C) 2016 A. Boyle. License: GPL version 2 or version 3</span>
+0023 <span class="comment">% dipole model: [Loke , &quot;Tutorial: 2-D and 3-D electrical imaging surveys&quot;, 2004]</span>
+0024 <span class="comment">% Ref: TODO</span>
+0025 
+0026 <span class="comment">% correct input paralemeters if function was called with only img</span>
+0027 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0028 
+0029 <span class="keyword">if</span> nargin == 1
+0030    img= fwd_model;
+0031 <span class="keyword">elseif</span>  strcmp(getfield(warning(<span class="string">'query'</span>,<span class="string">'EIDORS:DeprecatedInterface'</span>),<span class="string">'state'</span>),<span class="string">'on'</span>)
+0032    error(<span class="string">'EIDORS:DeprecatedInterface'</span>, <span class="keyword">...</span>
+0033       <span class="string">'Calling FWD_SOLVE_HALFSPACE with two arguments is deprecated'</span>);
+0034 <span class="keyword">end</span>
+0035 fwd_model= img.fwd_model;
+0036 
+0037 img = <a href="../../../eidors/models/data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>(img);
+0038 <span class="keyword">if</span> ~ismember(img.current_params, <a href="../../../eidors/models/supported_params.html" class="code" title="function list = supported_params">supported_params</a>)
+0039     error(<span class="string">'EIDORS:PhysicsNotSupported'</span>, <span class="string">'%s does not support %s'</span>, <span class="keyword">...</span>
+0040     <span class="string">'FWD_SOLVE_HALFSPACE'</span>,img.current_params);
+0041 <span class="keyword">end</span>
+0042 pp= <a href="fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>( fwd_model, <span class="string">'skip_VOLUME'</span> );
+0043 
+0044 <span class="comment">% all calcs use resistivity</span>
+0045 img = <a href="../../../eidors/models/convert_img_units.html" class="code" title="function y = convert_img_units(img,arg1,arg2)">convert_img_units</a>(img, <span class="string">'conductivity'</span>);
+0046 rho = 1/mean(img.elem_data);
+0047 
+0048 <span class="comment">% create a data structure to return</span>
+0049 data.meas= <a href="#_sub2" class="code" title="subfunction dv = analytic_meas(mdl, rho)">analytic_meas</a>(fwd_model, rho);
+0050 data.time= NaN; <span class="comment">% unknown</span>
+0051 data.name= <span class="string">'solved by fwd_solve_halfspace'</span>;
+0052 <span class="keyword">if</span> isfield(img, <span class="string">'fwd_solve'</span>) &amp;&amp; isfield(img.fwd_solve, <span class="string">'get_all_meas'</span>) &amp;&amp; img.fwd_solve.get_all_meas
+0053    v = <a href="#_sub3" class="code" title="subfunction v = analytic_nodal(mdl, rho)">analytic_nodal</a>(fwd_model, rho);
+0054    data.volt = v(1:pp.n_node,:); <span class="comment">% but not on CEM nodes</span>
+0055 <span class="keyword">end</span>
+0056 <span class="keyword">try</span>; <span class="keyword">if</span> img.fwd_solve.get_all_nodes
+0057    error(<span class="string">'does not support CEM: can''t get_all_nodes; try get_all_meas'</span>);
+0058 <span class="keyword">end</span>; <span class="keyword">end</span>
+0059 
+0060 
+0061 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0062    ne = 16;
+0063    imdl = <a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2p5a'</span>, ne);
+0064    imdl.fwd_model.stimulation = <a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>(ne, <span class="string">'Wenner'</span>);
+0065    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl.fwd_model, 1);
+0066    img.fwd_solve.get_all_meas = 1;
+0067    vh = <a href="fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>(img);
+0068    vd = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0069    scale=1e3; uvh=unique(round(vh.meas*scale)/scale);
+0070    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'h2a halfspace values TEST'</span>, uvh, <span class="keyword">...</span>
+0071   [ 0.0060; 0.0080; 0.0110; 0.0160; 0.0320 ], 1/scale);
+0072    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'h2a halfspace vs default TEST'</span>, norm(vh.meas - vd.meas), 0, 4e-3);
+0073 clf; h=plot([vh.meas vd.meas],<span class="string">'o--'</span>); legend(<span class="string">'analytic'</span>,<span class="string">'FEM'</span>); set(gca,<span class="string">'box'</span>,<span class="string">'off'</span>); set(h,<span class="string">'LineWidth'</span>,2);
+0074 <span class="comment">%   img.fwd_solve.get_all_meas = 1;</span>
+0075 <span class="comment">%   vh = fwd_solve_halfspace(img);</span>
+0076 <span class="comment">%   gnd_node = img.fwd_model.nodes(img.fwd_model.gnd_node,:);</span>
+0077 <span class="comment">%clf; show_fem(img); hold on; plot3(gnd_node(1),gnd_node(2),gnd_node(3),'o');</span>
+0078 <span class="comment">%clf; plot(vh.volt);</span>
+0079 
+0080 <span class="comment">% returns the potential difference</span>
+0081 <span class="comment">% half-space with PEM electrodes</span>
+0082 <span class="comment">% [Loke , &quot;Tutorial: 2-D and 3-D electrical imaging surveys&quot;, 2004]</span>
+0083 <a name="_sub2" href="#_subfunctions" class="code">function dv = analytic_meas(mdl, rho)</a>
+0084    ne = length(mdl.electrode); <span class="comment">% number of electrodes</span>
+0085    nd = size(mdl.nodes, 2); <span class="comment">% dimensions in model</span>
+0086    ep = zeros(ne,nd); <span class="comment">% init electrode position</span>
+0087    <span class="keyword">for</span> i = 1:ne
+0088       en = mdl.electrode(i).nodes;
+0089       ep(i,:) = mean(mdl.nodes(en), 2);
+0090    <span class="keyword">end</span>
+0091    list = <a href="../../../eidors/models/stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>(mdl.stimulation);
+0092    a = list(:,1); <span class="comment">% s+</span>
+0093    b = list(:,2); <span class="comment">% s-</span>
+0094    m = list(:,3); <span class="comment">% m+</span>
+0095    n = list(:,4); <span class="comment">% m-</span>
+0096    AM = <a href="#_sub6" class="code" title="subfunction AB = dist(A, B)">dist</a>(ep(a), ep(m));
+0097    BM = <a href="#_sub6" class="code" title="subfunction AB = dist(A, B)">dist</a>(ep(b), ep(m));
+0098    AN = <a href="#_sub6" class="code" title="subfunction AB = dist(A, B)">dist</a>(ep(a), ep(n));
+0099    BN = <a href="#_sub6" class="code" title="subfunction AB = dist(A, B)">dist</a>(ep(b), ep(n));
+0100 <span class="comment">% TODO  zc = [mdl.electrode(:).z_contact]';</span>
+0101 <span class="comment">% TODO  MNzc = zc(m) + zc(n);</span>
+0102 
+0103    k = <a href="#_sub7" class="code" title="subfunction k = geometric_factor(AM, BM, AN, BN)">geometric_factor</a>(AM, BM, AN, BN);
+0104    I = <a href="#_sub4" class="code" title="subfunction [I, a, b] = stim_current(mdl)">stim_current</a>(mdl);
+0105    dv = (rho*I)./k; <span class="comment">% TODO AB missing zc</span>
+0106 
+0107 <span class="comment">% returns the potential everywhere relative to the ground node</span>
+0108 <span class="comment">% half-space with PEM electrodes</span>
+0109 <span class="comment">% [Loke , &quot;Tutorial: 2-D and 3-D electrical imaging surveys&quot;, 2004]</span>
+0110 <a name="_sub3" href="#_subfunctions" class="code">function v = analytic_nodal(mdl, rho)</a>
+0111    ne = length(mdl.electrode); <span class="comment">% number of electrodes</span>
+0112    ns = length(mdl.stimulation); <span class="comment">% number of stim patterns</span>
+0113    nn = size(mdl.nodes, 1); <span class="comment">% nodes in the model</span>
+0114    nd = size(mdl.nodes, 2); <span class="comment">% dimensions in model</span>
+0115    ep = zeros(ne,nd); <span class="comment">% init electrode position</span>
+0116    <span class="keyword">for</span> i = 1:ne
+0117       en = mdl.electrode(i).nodes;
+0118       ep(i,:) = mean(mdl.nodes(en), 2);
+0119    <span class="keyword">end</span>
+0120    a = ones(ns,1)*nan; b = a; I = a;
+0121    <span class="keyword">for</span> i=1:ns <span class="comment">% same order as pp.QQ</span>
+0122       s = mdl.stimulation(i).stim_pattern;
+0123       <a href="#_sub5" class="code" title="subfunction assert_sane_stim(stim)">assert_sane_stim</a>(mdl.stimulation(i));
+0124       a(i) = find(s &gt; 0);
+0125       b(i) = find(s &lt; 0);
+0126       I(i) = sum(s(s &gt; 0));
+0127    <span class="keyword">end</span>
+0128    epm = mdl.nodes(mdl.gnd_node); <span class="comment">% ground node</span>
+0129    epn = mdl.nodes; <span class="comment">% all nodes</span>
+0130    AM = <a href="#_sub6" class="code" title="subfunction AB = dist(A, B)">dist</a>(ep(a), epm);
+0131    BM = <a href="#_sub6" class="code" title="subfunction AB = dist(A, B)">dist</a>(ep(b), epm);
+0132    abN = <a href="#_sub6" class="code" title="subfunction AB = dist(A, B)">dist</a>(kron(ep,ones(nn,1)), repmat(epn,ne,1)); <span class="comment">% every electrode to every node</span>
+0133    abN = reshape(abN, nn, ne); <span class="comment">% cols = electrode#, rows = node#</span>
+0134 <span class="comment">% TODO  zc = [mdl.electrode(:).z_contact]';</span>
+0135 <span class="comment">% TODO  MNzc = zc(m) + zc(n);</span>
+0136 
+0137    v = ones(nn,length(I));
+0138    <span class="keyword">for</span> i=1:ne
+0139       ai = a(i); bi = b(i);
+0140       k = <a href="#_sub7" class="code" title="subfunction k = geometric_factor(AM, BM, AN, BN)">geometric_factor</a>(AM(ai), BM(bi), abN(:,ai), abN(:,bi));
+0141       v(:,i) = rho*I(i)./k; <span class="comment">% TODO AB missing zc</span>
+0142    <span class="keyword">end</span>
+0143 
+0144 <span class="comment">% transfer resistance:&quot; stimulus current over measured voltage</span>
+0145 <a name="_sub4" href="#_subfunctions" class="code">function [I, a, b] = stim_current(mdl)</a>
+0146    stim = mdl.stimulation;
+0147    I = [];
+0148    N = 0;
+0149    <span class="keyword">for</span> i = 1:length(stim)
+0150       s = stim(i).stim_pattern;
+0151       <a href="#_sub5" class="code" title="subfunction assert_sane_stim(stim)">assert_sane_stim</a>(stim(i));
+0152       n = size(stim(i).meas_pattern, 1);
+0153       I(N+[1:n]) = sum(s(s &gt; 0));
+0154       N = N + n;
+0155    <span class="keyword">end</span>
+0156    I=I';
+0157 
+0158 <a name="_sub5" href="#_subfunctions" class="code">function assert_sane_stim(stim)</a>
+0159    assert(length(stim) == 1); <span class="comment">% only one stim pattern per &quot;assert_sane&quot; check</span>
+0160    s = stim.stim_pattern;
+0161    assert(strcmp(stim.stimulation, <span class="string">'Amp'</span>)); <span class="comment">% scaling?</span>
+0162    assert(length(find(abs(s) &gt; 0)) == 2); <span class="comment">% pairwise stimulus only</span>
+0163    assert(sum(s) == 0); <span class="comment">% dipole</span>
+0164    assert(size(s,2) == 1); <span class="comment">% single dipole per stimulation(i)</span>
+0165 
+0166 <span class="comment">% distance from A to B</span>
+0167 <a name="_sub6" href="#_subfunctions" class="code">function AB = dist(A, B)</a>
+0168    AB = sqrt(sum((B - A).^2,2));
+0169 
+0170 <span class="comment">% analytic model, for half-space with point electrodes (PEM)</span>
+0171 <a name="_sub7" href="#_subfunctions" class="code">function k = geometric_factor(AM, BM, AN, BN)</a>
+0172    k = 2*pi./(1./AM-1./BM-1./AN+1./BN);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

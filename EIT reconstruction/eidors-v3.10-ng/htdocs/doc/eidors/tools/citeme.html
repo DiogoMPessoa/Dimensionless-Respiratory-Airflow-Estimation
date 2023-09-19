@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of citeme</title>
+  <meta name="keywords" content="citeme">
+  <meta name="description" content="CITEME Display citation requests">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">tools</a> &gt; citeme.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/tools&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>citeme
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CITEME Display citation requests</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function citeme(fname) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CITEME Display citation requests
+ Processes CITATION_REQUEST blocks in the first comment block of a
+ function. Must be called at citeme(mfilename). 
+ Citation requests are displayed only once per session, and look like
+ this:
+
+ CITATION_REQUEST:
+ AUTHOR: Author Name, Author Name, Author Name, Author Name, Author Name, 
+ Author Name and Author Name
+ TITLE: A very long and complicated title that necessarily goes over 
+ several lines
+ JOURNAL: A renowned international journal that is so full of itself that 
+ its name is very long
+ VOL: V
+ NUM: N
+ YEAR: 2013
+ PAGE: 1-10
+ LINK: http://www.journal-website.com/dir/dir/some_strange_numbers_and_
+       letters_that_goes_over_several_lines
+ PDF: ftp://myserver.com/paper1.pdf
+ DOI: 1234/qwre/123
+ PUBMED: 12321345
+ ARXIV:  0706.0001
+
+ A CITATION_REQUEST block is terminated by an empty line. 
+ The order of fields is irrelevant. All fields are optional.
+ At the moment, only one CITATION_REQUEST block per file is supported.
+
+ See also STARTUP</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="citeme.html" class="code" title="function citeme(fname)">citeme</a>	CITEME Display citation requests</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/meshing/netgen/ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>	NG_MAKE_EXTRUDED_MODEL: create extruded models using netgen</li><li><a href="../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="../../eidors/models/mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>	MK_LUNG_IMAGE create an image with lung and heart contrasts from a model</li><li><a href="../../eidors/models/mk_thorax_model_grychtol2016a.html" class="code" title="function img = mk_thorax_model_grychtol2016a(stimpat)">mk_thorax_model_grychtol2016a</a>	Builds the male thorax models from Grychtol, M�ler and Adler (2016)</li><li><a href="../../eidors/models/place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li><li><a href="../../eidors/solvers/inverse/calc_image_SNR.html" class="code" title="function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)">calc_image_SNR</a>	% CALC_IMAGE_SNR: Calculates the signal-to-noise ratio (SNR) in the image</li><li><a href="../../eidors/solvers/inverse/calc_lambda_regtools.html" class="code" title="function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)">calc_lambda_regtools</a>	% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)</li><li><a href="citeme.html" class="code" title="function citeme(fname)">citeme</a>	CITEME Display citation requests</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function str = pretty_print(cite, fname)</a></li><li><a href="#_sub2" class="code">function cite = empty_cite</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function citeme(fname)</a>
+0002 <span class="comment">%CITEME Display citation requests</span>
+0003 <span class="comment">% Processes CITATION_REQUEST blocks in the first comment block of a</span>
+0004 <span class="comment">% function. Must be called at citeme(mfilename).</span>
+0005 <span class="comment">% Citation requests are displayed only once per session, and look like</span>
+0006 <span class="comment">% this:</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% CITATION_REQUEST:</span>
+0009 <span class="comment">% AUTHOR: Author Name, Author Name, Author Name, Author Name, Author Name,</span>
+0010 <span class="comment">% Author Name and Author Name</span>
+0011 <span class="comment">% TITLE: A very long and complicated title that necessarily goes over</span>
+0012 <span class="comment">% several lines</span>
+0013 <span class="comment">% JOURNAL: A renowned international journal that is so full of itself that</span>
+0014 <span class="comment">% its name is very long</span>
+0015 <span class="comment">% VOL: V</span>
+0016 <span class="comment">% NUM: N</span>
+0017 <span class="comment">% YEAR: 2013</span>
+0018 <span class="comment">% PAGE: 1-10</span>
+0019 <span class="comment">% LINK: http://www.journal-website.com/dir/dir/some_strange_numbers_and_</span>
+0020 <span class="comment">%       letters_that_goes_over_several_lines</span>
+0021 <span class="comment">% PDF: ftp://myserver.com/paper1.pdf</span>
+0022 <span class="comment">% DOI: 1234/qwre/123</span>
+0023 <span class="comment">% PUBMED: 12321345</span>
+0024 <span class="comment">% ARXIV:  0706.0001</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% A CITATION_REQUEST block is terminated by an empty line.</span>
+0027 <span class="comment">% The order of fields is irrelevant. All fields are optional.</span>
+0028 <span class="comment">% At the moment, only one CITATION_REQUEST block per file is supported.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% See also STARTUP</span>
+0031 <span class="keyword">if</span> ischar(fname) &amp;&amp; strcmp(fname, <span class="string">'UNIT_TEST'</span>)
+0032     <a href="citeme.html" class="code" title="function citeme(fname)">citeme</a>(mfilename);
+0033     <span class="keyword">return</span>;
+0034 <span class="keyword">end</span>
+0035 cm = warning(<span class="string">'query'</span>,<span class="string">'EIDORS:CITEME'</span>); <span class="comment">% one would think this is supported</span>
+0036 cf = warning(<span class="string">'query'</span>,sprintf(<span class="string">'EIDORS:CITEME:%s'</span>,fname));
+0037 <span class="keyword">if</span> strcmp(cm.state, <span class="string">'off'</span>) || strcmp(cf.state, <span class="string">'off'</span>);
+0038     <span class="keyword">return</span>
+0039 <span class="keyword">end</span>
+0040 h = help(fname);
+0041 s = strfind(h,<span class="string">'CITATION_REQUEST:'</span>);
+0042 <span class="keyword">if</span> isempty(s), <span class="keyword">return</span>, <span class="keyword">end</span>;
+0043 T = textscan(h(s:end),<span class="string">'%s'</span>,<span class="string">'delimiter'</span>,<span class="string">'\n'</span>);
+0044 T = T{1};
+0045 line = 2;
+0046 lastfld = [];
+0047 cite = <a href="#_sub2" class="code" title="subfunction cite = empty_cite">empty_cite</a>;
+0048 <span class="keyword">while</span> line &lt;= numel(T) &amp;&amp; ~isempty(strtrim(T{line}))
+0049     [tok rest] = strtok(T{line});
+0050     <span class="keyword">if</span> strfind(tok,<span class="string">':'</span>);
+0051             fld = lower(tok(1:end-1));
+0052             cite.(fld) = strtrim(rest);
+0053             lastfld = fld;
+0054     <span class="keyword">elseif</span> ~isempty(lastfld)
+0055         cite.(lastfld) = sprintf(<span class="string">'%s %s%s'</span>, cite.(lastfld), tok, rest);
+0056     <span class="keyword">else</span>
+0057         error(<span class="string">'Error processing citation request of file %s'</span>,fname);
+0058     <span class="keyword">end</span>
+0059     line = line + 1;
+0060 <span class="keyword">end</span>
+0061 flds = {<span class="string">'link'</span>,<span class="string">'pdf'</span>,<span class="string">'pubmed'</span>,<span class="string">'arxiv'</span>,<span class="string">'doi'</span>};
+0062 <span class="keyword">for</span> i = 1:numel(flds)
+0063     cite.(flds{i})(isspace(cite.(flds{i}))) = [];
+0064 <span class="keyword">end</span>
+0065 <a href="#_sub1" class="code" title="subfunction str = pretty_print(cite, fname)">pretty_print</a>(cite,fname);
+0066  
+0067 <a name="_sub1" href="#_subfunctions" class="code">function str = pretty_print(cite, fname)</a>
+0068 str = sprintf(<span class="string">'%s (%s) &quot;%s&quot;'</span>,<span class="keyword">...</span>
+0069     cite.author,cite.year,cite.title);
+0070 
+0071 <span class="keyword">if</span> ~isempty(cite.link)
+0072     str = sprintf(<span class="string">'%s &lt;a href=&quot;matlab: web %s -browser&quot;&gt;%s&lt;/a&gt;%s'</span>, str, cite.link, cite.journal);
+0073 <span class="keyword">else</span>
+0074     str = sprintf(<span class="string">'%s %s'</span>,str, cite.journal);
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="keyword">if</span> ~isempty(cite.vol)
+0078     str = sprintf(<span class="string">'%s %s'</span>,str,cite.vol);
+0079 <span class="keyword">end</span>
+0080 <span class="keyword">if</span> ~isempty(cite.num)
+0081     <span class="keyword">if</span> ~isempty(cite.vol)
+0082         str = sprintf(<span class="string">'%s(%s)'</span>,str, cite.num);
+0083     <span class="keyword">else</span>
+0084         str = sptrinf(<span class="string">'%s %s'</span>,str, cite.num);
+0085     <span class="keyword">end</span>
+0086 <span class="keyword">end</span>
+0087 <span class="keyword">if</span> ~isempty(cite.page)
+0088     str = sprintf(<span class="string">'%s: %s'</span>,str, cite.page);
+0089 <span class="keyword">end</span>
+0090 <span class="keyword">if</span> ~isempty(cite.pdf)
+0091     str = sprintf(<span class="string">'%s &lt;a href=&quot;matlab: web %s -browser&quot;&gt;PDF&lt;/a&gt;'</span>,str, cite.pdf);
+0092 <span class="keyword">end</span>
+0093 <span class="keyword">if</span> ~isempty(cite.doi)
+0094     str = sprintf(<span class="string">'%s DOI:&lt;a href=&quot;matlab: web http://dx.doi.org/%s -browser&quot;&gt;%s&lt;/a&gt;'</span>,<span class="keyword">...</span>
+0095                     str, cite.doi,cite.doi);
+0096 <span class="keyword">end</span>
+0097 <span class="keyword">if</span> ~isempty(cite.pubmed)
+0098     str = sprintf(<span class="string">'%s PubMed:&lt;a href=&quot;matlab: web http://www.ncbi.nlm.nih.gov/pubmed/%s -browser&quot;&gt;%s&lt;/a&gt;'</span>,<span class="keyword">...</span>
+0099                     str, cite.doi,cite.doi);
+0100 <span class="keyword">end</span>
+0101 
+0102 <span class="keyword">if</span> ~isempty(cite.arxiv)
+0103     str = sprintf(<span class="string">'%s arXiv:&lt;a href=&quot;matlab: web http://arxiv.org/abs/%s -browser&quot;&gt;%s&lt;/a&gt;'</span>,<span class="keyword">...</span>
+0104                     str, cite.doi,cite.doi);
+0105 <span class="keyword">end</span>
+0106 
+0107 str = strtrim(str);                
+0108 sp = strfind(str,<span class="string">' '</span>);
+0109 tp1 = strfind(str,<span class="string">'&lt;'</span>);
+0110 tp2 = strfind(str,<span class="string">'&gt;'</span>);
+0111 sp = [sp length(str)];
+0112 
+0113 rsp = sp; <span class="comment">% real spaces</span>
+0114 idx = false(size(sp));
+0115 <span class="keyword">for</span> i = 1:length(tp1)
+0116     nidx =  rsp&gt;tp1(i) &amp; rsp&lt;tp2(i);
+0117     idx = idx | nidx;
+0118     sp(rsp&gt;tp1(i)) = sp(rsp&gt;tp1(i)) - (tp2(i) + 2- tp1(i));
+0119 <span class="keyword">end</span>
+0120 sp(idx) = [];
+0121 rsp(idx) = [];
+0122 
+0123 [jnk, nl] = unique(floor(sp/82),<span class="string">'last'</span>);
+0124 nl = rsp(nl);
+0125 nl(nl==length(str)) = [];
+0126 str(nl) = sprintf(<span class="string">'\n'</span>);
+0127 
+0128 ws = warning(<span class="string">'off'</span>, <span class="string">'backtrace'</span>);
+0129 idstr = sprintf(<span class="string">'EIDORS:CITEME:%s'</span>,fname);
+0130 stars(1:80) = <span class="string">'='</span>;
+0131 msg = sprintf(<span class="string">'\n%s\nIf you use %s in a publication, please cite:\n'</span>, stars,upper(fname));
+0132 warning(idstr,[msg str <span class="string">'\n'</span> stars]);
+0133 <span class="keyword">if</span> 0
+0134    disp(<span class="string">'Press any key to continue...'</span>);
+0135    pause
+0136 <span class="keyword">else</span>
+0137    fprintf(<span class="string">'Continuing in  '</span>);
+0138    <span class="keyword">for</span> i = 2:-1:1
+0139       fprintf(<span class="string">'\b%d'</span>,i);
+0140       pause(1);
+0141    <span class="keyword">end</span>
+0142    fprintf(<span class="string">'\b0\n'</span>);
+0143 <span class="keyword">end</span>
+0144 warning(ws.state, <span class="string">'backtrace'</span>);
+0145 <span class="keyword">if</span> ~strcmp(fname,<span class="string">'citeme'</span>)
+0146     warning(<span class="string">'off'</span>,idstr); <span class="comment">% only show once per session</span>
+0147 <span class="keyword">end</span>
+0148 
+0149 <a name="_sub2" href="#_subfunctions" class="code">function cite = empty_cite</a>
+0150 cite.author = [];
+0151 cite.year   = [];
+0152 cite.journal= [];
+0153 cite.title  = [];
+0154 cite.vol    = [];
+0155 cite.num    = [];
+0156 cite.page   = [];
+0157 cite.link   = [];
+0158 cite.pdf    = [];
+0159 cite.doi    = [];
+0160 cite.pubmed = [];
+0161 cite.arxiv  = [];</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

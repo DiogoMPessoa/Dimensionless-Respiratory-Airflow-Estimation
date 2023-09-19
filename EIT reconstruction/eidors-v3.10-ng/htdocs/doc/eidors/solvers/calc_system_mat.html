@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calc_system_mat</title>
+  <meta name="keywords" content="calc_system_mat">
+  <meta name="description" content="CALC_SYSTEM_MAT: calculate FEM system matrix from fwd_model and image">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">solvers</a> &gt; calc_system_mat.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>calc_system_mat
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CALC_SYSTEM_MAT: calculate FEM system matrix from fwd_model and image</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function system_mat = calc_system_mat( fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> CALC_SYSTEM_MAT: calculate FEM system matrix from fwd_model and image
+ 
+    system_mat= calc_system_mat( fwd_model, image)
+ OR
+    system_mat= calc_system_mat( image)
+
+ it will call the fwd_model.system_mat
+
+ if fwd_model.system_mat is a matrix, calc_system_mat will return this
+ matrix
+
+ system_mat  
+   system_mat.E    is FEM system_matrix
+   system_mat.perm is permutation of E  i.e. E(perm,perm)
+ fwd_model is a fwd_model structure
+ image     is an image structure</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/deprecated/np_calc_3d_fields.html" class="code" title="function v_f= np_calc_3d_fields( fwd_model, img)">np_calc_3d_fields</a>	NP_CALC_3D_FIELDS: J= np_calc_3d_fields( fwd_model, img)</li><li><a href="../../eidors/deprecated/np_calc_jacobian.html" class="code" title="function J= np_calc_jacobian( fwd_model, img)">np_calc_jacobian</a>	NP_CALC_JACOBIAN: J= np_calc_jacobian( fwd_model, img)</li><li><a href="../../eidors/deprecated/np_fwd_solve.html" class="code" title="function data= np_fwd_solve( fwd_model, img)">np_fwd_solve</a>	NP_FWD_SOLVE: data= np_fwd_solve( fwd_model, img)</li><li><a href="../../eidors/examples/eidors2d_demo1.html" class="code" title="">eidors2d_demo1</a>	EidorsDemo1 Demonstrates the use of 2D EIT Package with linear basis</li><li><a href="../../eidors/solvers/forward/eit_spice.html" class="code" title="function spice = eit_spice(img, name)">eit_spice</a>	function spice = eit_spice(img, [name])</li><li><a href="../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>	FWD_SOLVE_1ST_ORDER: data= fwd_solve_1st_order( img)</li><li><a href="../../eidors/solvers/forward/fwd_solve_higher_order.html" class="code" title="function[data] = fwd_solve_higher_order(fwd_model,img)">fwd_solve_higher_order</a>	Solve for voltages (nodes/electrodes) for a forward model.</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>	JACOBIAN_ADJOINT: J= jacobian_adjoint( img )</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint_higher_order.html" class="code" title="function J = jacobian_adjoint_higher_order(fwd_model,img)">jacobian_adjoint_higher_order</a>	Find the Jacobian associated with an image (and forward model)</li><li><a href="../../eidors/solvers/forward/jacobian_movement.html" class="code" title="function J = jacobian_movement(fwd_model, img)">jacobian_movement</a>	JACOBIAN_MOVEMENT   Computes the Jacobian matrix for conductivity and</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function system_mat = calc_system_mat( fwd_model, img)</a>
+0002 <span class="comment">% CALC_SYSTEM_MAT: calculate FEM system matrix from fwd_model and image</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%    system_mat= calc_system_mat( fwd_model, image)</span>
+0005 <span class="comment">% OR</span>
+0006 <span class="comment">%    system_mat= calc_system_mat( image)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% it will call the fwd_model.system_mat</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% if fwd_model.system_mat is a matrix, calc_system_mat will return this</span>
+0011 <span class="comment">% matrix</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% system_mat</span>
+0014 <span class="comment">%   system_mat.E    is FEM system_matrix</span>
+0015 <span class="comment">%   system_mat.perm is permutation of E  i.e. E(perm,perm)</span>
+0016 <span class="comment">% fwd_model is a fwd_model structure</span>
+0017 <span class="comment">% image     is an image structure</span>
+0018 
+0019 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0020 <span class="comment">% $Id: calc_system_mat.m 5980 2019-06-23 07:34:48Z aadler $</span>
+0021 <span class="comment">%system_mat= feval(fwd_model.system_mat, fwd_model, img);return</span>
+0022 
+0023 <span class="keyword">if</span> nargin == 1
+0024    img= fwd_model;
+0025 <span class="keyword">else</span>
+0026    warning(<span class="string">'EIDORS:DeprecatedInterface'</span>, <span class="keyword">...</span>
+0027       [<span class="string">'Calling CALC_SYSTEM_MAT with two arguments is deprecated and will cause'</span> <span class="keyword">...</span>
+0028        <span class="string">' an error in a future version. First argument ignored.'</span>]);
+0029    img.fwd_model = fwd_model;
+0030 <span class="keyword">end</span>
+0031 warning off EIDORS:DeprecatedInterface
+0032 fwd_model= img.fwd_model;
+0033 
+0034 <span class="keyword">if</span> isnumeric(fwd_model.system_mat)
+0035    system_mat = fwd_model.system_mat;
+0036 
+0037 <span class="keyword">else</span>
+0038    
+0039    copt.cache_obj= {fwd_model, img.elem_data};
+0040    copt.fstr = <span class="string">'system_mat'</span>;
+0041    
+0042    <span class="keyword">try</span> <span class="comment">% in case it's a string</span>
+0043        fwd_model.system_mat = str2func(fwd_model.system_mat); 
+0044    <span class="keyword">end</span>
+0045    
+0046    system_mat = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(fwd_model.system_mat,img,copt);
+0047    
+0048 <span class="keyword">end</span>
+0049 
+0050 warning on EIDORS:DeprecatedInterface</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

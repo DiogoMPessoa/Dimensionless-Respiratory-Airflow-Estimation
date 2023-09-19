@@ -1,0 +1,205 @@
+<html>
+<!-- Style file for all the nav-sidebars
+     $Id: header.html 1535 2008-07-26 15:36:27Z aadler $ -->
+<head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+</head>
+
+<body>
+
+<H2>Contributed EIT Data:</H2>
+   <table>
+   <tr><th valign="top"> Authors:
+       <td> 
+Yasheng Maimaitijiang,
+Stephan B&ouml;hm,
+Pascal O. Gaggero,
+Andy Adler
+       <hr>
+   <tr><th valign="top"> Date:
+       <td> 2011
+       <hr>
+   <tr><th valign="top"> Brief Description:
+       <td> 
+<p>We aim to produce a standard 
+test methodology to evaluate and compare the performance of an EIT hardware 
+system and image reconstruction. To be part of our collaborative project, 
+suggestions regarding efficiently evaluate system performance are all welcome. The tutorial includes overview of phantom based EIT 
+performance evaluation, code, data and image analysis. </p>
+
+       <hr>
+   <tr><th valign="top"> License:
+       <td> GNU GPL version 2 or version 3 at your choice.
+          
+       <hr>
+   <tr><th valign="top"> Attribution Requirement:
+       <td> 
+Users of this system are requested to acknowledge
+Maimaitijiang Yasheng, and reference this publication:
+<ul>
+Yasheng Maimaitijiang, Stephan B&ouml;hm, Obaydah Jaber, Andy Adler,
+ "A phantom based system to evaluate EIT performance"
+Int. Conf. Electrical Bio-Impedance &amp; Electrical Impedance Tomography Gainville, Fl, USA, 4-8 April 2010
+<!--
+     Y. Mamatjan, P.O. Gaggero, S. B&ouml;hm, and A. Adler, "Evaluation of EIT 
+		system performance," submitted for Physiol. Meas. Dec. 2010.
+-->
+</ul>
+		<hr>
+   <tr><th valign="top"> Contributed Files:
+       <td valign="top"> 
+      <table>
+            <tr><td>&nbsp;&nbsp;<th valign="top"> Files: <th> Description
+            <tr><td><td><a href="code/avar.m"            >avar.m</a>
+              <td>Calculate Allan Variance (code available from 
+                   <a href="http://www.alamath.com/index.php?option=com_content&task=view&id=19&Itemid=9">here</a>)
+            <tr><td><td><a href="code/data_analysis.m"  >data_analysis.m</a>
+              <td>Analyse data for SNR and Accuracy
+            <tr><td><td><a href="code/drift_analysis.m" >drift_analysis.m</a>
+              <td>Analyse data for drift 
+            <tr><td><td><a href="code/image_analysis.m" >image_analysis.m</a>
+              <td>Analyse data for image reconstruction performance
+            <tr><td><td><a href="code/recip_err.m"      >recip_err.m</a>
+              <td>Calculate reciprocity error
+            <tr><td><td><a href="code/U2plateau.m"      >U2plateau.m</a>
+              <td>Convert from "U-shape" to "plateau" data ordering
+            <tr><td><td><a href="code/main.m"           >main.m</a>
+              <td>Main function to call others and plot data
+            <tr><td><td><a href="code/sim_2D_params.m"  >sim_2D_params.m</a>
+              <td>Example in 2D
+            <tr><td><td><a href="code/sim_Det_3D.m"     >sim_Det_3D.m</a>
+              <td>Example in 3D
+            <tr><td><td> <a href="code/code.zip"
+                       >code.zip</a>
+                <td> Zip file (containing all above files)
+        </table>
+
+		<hr>
+   <tr><th valign="top"> Usage Examples
+       <td> 
+<ul>
+<li><a href="evaluation_components-s.html"><font size="3"> Evaluation Components</font></a>
+<li><a href="parameters_list-s.html"><font size="3"> Parameters List</font></a>
+<li><a href="simulation_demo-s.html"><font size="3"> Simulation Demo</font></a>
+<li><a href="code_guide-s.html"><font size="3"> Code Guide</font></a>
+
+
+</ul>
+      <hr>
+   <tr><th valign="top"> Related Publications:
+       <td> 
+            <ul>
+                <li>
+Yasheng Maimaitijiang, Stephan B&ouml;hm, Obaydah Jaber, Andy Adler
+<a href="http://www.sce.carleton.ca/faculty/adler/publications/2010/mamatjan-EIT10-phantom.pdf"
+  >A phantom based system to evaluate EIT performance</a>
+Int. Conf. Electrical Bio-Impedance &amp; Electrical Impedance Tomography Gainville, Fl, USA, 4-8 April 2010
+                <li>
+Yasheng Maimaitijiang, Stephan B&ouml;hm, Obaydah Jaber, Andy Adler
+<a href="http://www.sce.carleton.ca/faculty/adler/talks/2010/maimaitijiang-EIT10-phantom.pdf"
+  >A phantom based system to evaluate EIT performance (Poster)</a>
+Int. Conf. Electrical Bio-Impedance &amp; Electrical Impedance Tomography Gainville, Fl, USA, 4-8 April 2010
+
+
+<!--
+     Y. Mamatjan, P.O. Gaggero, S. B&ouml;hm, and A. Adler, "Evaluation of EIT 
+		system performance," submitted for Physiol. Meas. Dec. 2010.
+-->
+            </ul>
+    
+         <hr>
+     <tr><th valign="top"> Description
+
+      <td>
+<p>All software components are made publicly available and short tutorials are 
+provided regarding evaluation and algorithm. In order to run the code, users are 
+required to
+<a href="http://eidors3d.sourceforge.net/download.shtml">install</a> and start the EIDORS. 
+There are two separate systems namely the position controller and the EIT 
+measurement system evaluation. Position controller is placed under 
+part of contrib_data section under eidors. This section is a guide to performance evaluation algorithm.</p>
+
+1.Test requirement:
+<ul>
+<li> The test methodology and tests should be reproducible
+<li> Phantom should represent a 3D tank
+<li> Full cables to be used during the evaluation
+<li> Electrical layouts and analysis software should be publicly 
+	available
+</ul>
+	
+2.Intended users:
+<ul>
+<li> EIT system users to check EIT system degradation/improvements or compare different systems 
+<li> Hardware developers to test hardware improvement
+<li> Software developers to test their new algorithms 
+</ul>
+
+3.Test phantoms: A test phantom is essential to be able to 
+	evaluate and compare the performance of a system
+<ul>
+<li> Physical phantom (cubic conductive or non-conductive test targets) with size of (50 ml and 100 ml)
+<li> 3D tank filled with saline water
+</ul>
+
+4.Test protocol
+	
+<ul>
+<li> Empty tank measurement used for analyzing noise characteristics of an EIT system.
+<li> Single-object measurement: Horizontal movement in central and off plane,
+<li> Two-object measurement: 2 objects moving away each other from the centre of the tank - 
+	horizontal movement in central plane
+</ul>
+
+5.Performance parameters 
+<ul>
+<li> data analysis for Noise performance test
+	<ul>
+	 <li> SNR
+	 <li> Accuracy
+	 <li> Drift 
+	 <li> Errors associated with symmetric measurement electrodes
+	</ul>
+
+<li> image analysis for tests of imaging accuracy 
+
+	<ul>
+	 <li> Amplitude response (AR)
+	 <li> Position error (PE)
+	 <li> Resolution (RES)
+	 <li> Shape deformation (SD) 
+	 <li> Ringing (RNG)
+	</ul>
+<li> Tests of detectability and distinguishability 
+</ul>
+6. Image of system (including a
+   <a href="robot_controller-s.html"
+      >lego&trade; robot position controller</a>)
+<center>
+<a href = "http://eidors3d.sourceforge.net/data_contrib/evaluation-phantom/figures/Phantom.jpg" ></a>
+</center>
+
+   </table>
+
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</body></html>
+

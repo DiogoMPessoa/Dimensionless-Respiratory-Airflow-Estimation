@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Electrode movement reconstruction for simulated 2D data
+</h2>
+
+Here we create a simple 2D model and change the boundary shape between two measurments.
+
+<pre>
+% Generate simulation data without noise and standard reconstruction
+% Create circular FEM - creates a eidors_mdl type inv_model.
+mdlc = mk_common_model('c2c');
+
+f_img = mk_image( mdlc, 1);
+vh = fwd_solve( f_img );
+
+% Hard coded values here represent local inhomogeneities
+f_img.elem_data([75,93,94,113,114,136]) = 1.2;
+f_img.elem_data([105,125,126,149,150,174]) = 0.8;
+
+% Simulate node movements - shrink x, stretch y by 1% of model diameter
+% node0 before, node1 after movement
+
+movement = [1-0.01 0; 0 1+0.01];
+node0 = f_img.fwd_model.nodes;
+node1 = node0*movement;
+f_img.fwd_model.nodes = node1;
+
+% Solve inhomogeneous forward problem with movements and normal noise
+% 1% of standard deviation of signal
+vi = fwd_solve( f_img );
+move = node1 - node0;
+
+% Plot FEM with conductivities and movement vectors.
+show_fem_move( f_img, move, 20 );
+print_convert move_2d01.png '-density 75'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/move_2d01.png">
+<br><i> Figure:</i>
+Forward solution of a 2D model where the boundary was changed between measurements.  The arrows show how the electrodes were displaced (scaled 20x).
+</center>
+
+Next we solve the inverse problem in two ways: first, without correcting for electrode movements, and second, with movement correction.
+
+<pre>
+% Generate eidors planar finite element model
+mdl2dim = mk_common_model('b2c');
+mdl2dim.hyperparameter.value= 0.1;
+
+clim= .088;
+
+% Solve inverse problem for mdl2dim eidors_obj model.
+img2dim = inv_solve(mdl2dim, vh, vi);
+img2dim.calc_colours.clim= clim;
+img2dim.calc_colours.backgnd= [.9,.9,.9];
+
+% Plot results for each algorithm
+subplot(1,2,1);
+show_fem_move(img2dim);
+img2dim.calc_colours.cb_shrink_move = [0.5,1.0,.02];
+eidors_colourbar(img2dim);
+
+% Set eidors_obj hyperparameter member.
+mdlM = mdl2dim;
+
+mdlM.fwd_model.jacobian = @jacobian_movement;
+mdlM.RtR_prior =          @prior_movement;
+mdlM.prior_movement.parameters = sqrt(1e2/1); 
+
+% Solve inverse problem for mdlM eidors_obj model.
+imgM = inv_solve(mdlM, vh, vi);
+imgM.calc_colours.clim= clim;
+imgM.calc_colours.backgnd= [.9,.9,.9];
+
+% Plot results for each algorithm
+subplot(1,2,2);
+show_fem_move(imgM);
+imgM.calc_colours.cb_shrink_move = [0.5,0.9,.02];
+eidors_colourbar(imgM);
+
+print_convert move_2d02.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/move_2d02.png">
+<br><i> Figure:</i>
+Inverse solutions of the problem above.  Left image shows image reconstruction without movement correction, and right image shows reconstruction with estimated movement corrections shown by green arrows (scaled 20x).
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

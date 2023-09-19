@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of linear_reorder</title>
+  <meta name="keywords" content="linear_reorder">
+  <meta name="description" content="[fwd_model] = linear_reorder(fwd_model,ccw)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; linear_reorder.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>linear_reorder
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[fwd_model] = linear_reorder(fwd_model,ccw)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [fwd_model] = linear_reorder(fwd_model,ccw) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[fwd_model] = linear_reorder(fwd_model,ccw)
+Function to reorder local nodes (counter)clockwise per element
+Input:  - fwd_model structure
+        - ccw = -1 (default) - counter clockwise OR 1 - clockwise   
+Output: - fwd_model structure (only .elems changes)
+NOTE:Function only for linear triangles, since in this case, identity:
+         No. of nodes/element = No. spatial dimensions + 1</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>	ELEM_DIM: dimension of elements in space (are elements in 2D or 3D space)</li><li><a href="linear_reorder.html" class="code" title="function [fwd_model] = linear_reorder(fwd_model,ccw)">linear_reorder</a>	[fwd_model] = linear_reorder(fwd_model,ccw)</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>	NUM_ELEMS: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>	FIX_MODEL: Add useful fields to a model</li><li><a href="linear_reorder.html" class="code" title="function [fwd_model] = linear_reorder(fwd_model,ccw)">linear_reorder</a>	[fwd_model] = linear_reorder(fwd_model,ccw)</li><li><a href="tet_to_inequal.html" class="code" title="function [A,b]=tet_to_inequal(v,e)">tet_to_inequal</a>	[A,b]=tet_to_inequal(v)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fmdl = do_reorder(fmdl, ccw)</a></li><li><a href="#_sub2" class="code">function mdl = boundary_align( mdl );</a></li><li><a href="#_sub3" class="code">function fwd_model = old_do_reorder(fwd_model, ccw)</a></li><li><a href="#_sub4" class="code">function do_unit_test</a></li><li><a href="#_sub5" class="code">function vol = test_linear_reorder(fwd_model)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [fwd_model] = linear_reorder(fwd_model,ccw)</a>
+0002 <span class="comment">%[fwd_model] = linear_reorder(fwd_model,ccw)</span>
+0003 <span class="comment">%Function to reorder local nodes (counter)clockwise per element</span>
+0004 <span class="comment">%Input:  - fwd_model structure</span>
+0005 <span class="comment">%        - ccw = -1 (default) - counter clockwise OR 1 - clockwise</span>
+0006 <span class="comment">%Output: - fwd_model structure (only .elems changes)</span>
+0007 <span class="comment">%NOTE:Function only for linear triangles, since in this case, identity:</span>
+0008 <span class="comment">%         No. of nodes/element = No. spatial dimensions + 1</span>
+0009 
+0010 <span class="comment">% (C) 2011 Michael Crabb. License: GPL version 2 or version 3</span>
+0011 <span class="comment">% $Id: linear_reorder.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0012 
+0013 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub4" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0014 
+0015 <span class="keyword">if</span> (nargin==1) 
+0016     ccw=-1; <span class="comment">%Default specify counter-clockwise nodes</span>
+0017 <span class="keyword">end</span>
+0018 
+0019    fwd_model =     <a href="#_sub1" class="code" title="subfunction fmdl = do_reorder(fmdl, ccw)">do_reorder</a>(fwd_model, ccw);
+0020 <span class="comment">%  fwd_model = old_do_reorder(fwd_model, ccw);</span>
+0021 <span class="keyword">end</span>
+0022 
+0023 
+0024 <a name="_sub1" href="#_subfunctions" class="code">function fmdl = do_reorder(fmdl, ccw)</a>
+0025    dim=size( fmdl.nodes,2);
+0026    els=<a href="num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>( fmdl );
+0027 
+0028    <span class="keyword">if</span> dim==3 &amp;&amp; <a href="elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>( fmdl ) == 2
+0029       <span class="comment">% For a surface in 3D, we need to walk across elements</span>
+0030       fmdl = <a href="#_sub2" class="code" title="subfunction mdl = boundary_align( mdl );">boundary_align</a>( fmdl );
+0031       <span class="keyword">return</span>
+0032    <span class="keyword">end</span>
+0033 
+0034      xx= reshape( fmdl.nodes( fmdl.elems, 1 ), els, dim+1);
+0035      xx= xx - xx(:,1)*ones(1,dim+1);
+0036      yy= reshape( fmdl.nodes( fmdl.elems, 2 ), els, dim+1);
+0037      yy= yy - yy(:,1)*ones(1,dim+1);
+0038    <span class="keyword">if</span> dim==2;
+0039      vol = xx(:,2).*yy(:,3) - xx(:,3).*yy(:,2);
+0040    <span class="keyword">elseif</span> dim==3
+0041      zz= reshape( fmdl.nodes( fmdl.elems, 3 ), els, dim+1);
+0042      zz= zz - zz(:,1)*ones(1,dim+1);
+0043 
+0044      vol = zz(:,4).*( xx(:,2).*yy(:,3) - xx(:,3).*yy(:,2) ) <span class="keyword">...</span>
+0045          - zz(:,3).*( xx(:,2).*yy(:,4) - xx(:,4).*yy(:,2) ) <span class="keyword">...</span>
+0046          + zz(:,2).*( xx(:,3).*yy(:,4) - xx(:,4).*yy(:,3) );
+0047 
+0048 <span class="comment">% Looks more elegant, but slower</span>
+0049 <span class="comment">%    vol = sum(zz(:,[4,3,2]).*xx(:,[2,4,3]).*yy(:,[3,2,4]) ,2) ...</span>
+0050 <span class="comment">%        - sum(zz(:,[4,3,2]).*xx(:,[3,2,4]).*yy(:,[2,4,3]) ,2);</span>
+0051 
+0052    <span class="keyword">else</span>
+0053      error(<span class="string">'reorder for 2 or 3 dimensions'</span>);
+0054    <span class="keyword">end</span>
+0055 
+0056    ff = find( sign(vol) == ccw );
+0057    <span class="comment">% reverse first two nodes</span>
+0058    fmdl.elems(ff,1:2) = fmdl.elems(ff,[2,1]);
+0059 <span class="keyword">end</span>
+0060 
+0061 <a name="_sub2" href="#_subfunctions" class="code">function mdl = boundary_align( mdl );</a>
+0062    Ne = <a href="num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(mdl);
+0063    checked = ( 1:Ne )';
+0064    tocheck = zeros(Ne,1); tocheck(1) = 1; maxptr = 2;
+0065    edges = mdl.elem2edge;
+0066 
+0067    <span class="keyword">for</span> i=1:<a href="num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(mdl)
+0068       curr = tocheck(i);
+0069       curredges = edges(curr,:);
+0070       <span class="keyword">for</span> j=curredges(:)'
+0071          ff = any( j == edges,2 );
+0072          ff(curr) = 0;
+0073          ff = find(ff); <span class="comment">% Should only have 1</span>
+0074          <span class="keyword">if</span> length(ff)&gt;1;
+0075             error(<span class="string">'Only one elem should share this edge. unexpected error.'</span>);
+0076          <span class="keyword">end</span>
+0077          <span class="keyword">if</span> checked(ff) == 0; <span class="comment">% we've already done it</span>
+0078             <span class="keyword">continue</span>;
+0079          <span class="keyword">end</span>
+0080          nodes_j = mdl.edges(j,:); <span class="comment">% Nodes in this edge</span>
+0081          a1= find(mdl.elems(curr,:) == nodes_j(1));
+0082          a2= find(mdl.elems(curr,:) == nodes_j(2));
+0083          curr_o = rem(3+a1-a2,3);
+0084          b1= find(mdl.elems(ff  ,:) == nodes_j(1));
+0085          b2= find(mdl.elems(ff  ,:) == nodes_j(2));
+0086          ff_o = rem(3+b1-b2,3);
+0087          <span class="keyword">if</span> (ff_o ~= curr_o); 
+0088             mdl.elems(ff,[b1,b2]) = mdl.elems(ff,[b2,b1]);
+0089          <span class="keyword">end</span>
+0090          <span class="comment">% Fix orientation</span>
+0091          tocheck(maxptr) = ff; maxptr= maxptr+1;     
+0092          checked(ff)= 0; <span class="comment">% set as done</span>
+0093       <span class="keyword">end</span>
+0094    <span class="keyword">end</span>
+0095       
+0096 <span class="keyword">end</span> 
+0097 
+0098 <a name="_sub3" href="#_subfunctions" class="code">function fwd_model = old_do_reorder(fwd_model, ccw)</a>
+0099    nodecoords = fwd_model.nodes; <span class="comment">%Cache coorindates of nodes [nnodesxnodedim]</span>
+0100    elementnodes = fwd_model.elems; <span class="comment">%Cache matrix of elements [eletotalxelenode]</span>
+0101 
+0102    eletotal = size(elementnodes,1); <span class="comment">%No. of elements</span>
+0103    elenode = size(elementnodes,2); <span class="comment">%No. of nodes per element</span>
+0104    nodedim = size(fwd_model.nodes,2);
+0105    midpoint = mean(fwd_model.nodes(unique(fwd_model.elems),:));
+0106 
+0107    <span class="keyword">for</span> e=1:eletotal; <span class="comment">%Loop over all elements</span>
+0108        <span class="comment">%Row vector of global nodes [1xelenode]</span>
+0109        enodes = elementnodes(e,:); 
+0110        <span class="comment">%Matrix of nodal positions [elenodexdim] (Linear dimension==elenode-1)</span>
+0111        nd = nodecoords(enodes,:);
+0112        
+0113        <span class="comment">% surface meshes need tweaking. Use the midpoint to fit the 3D formula.</span>
+0114        <span class="comment">% This will not work for non simply-connected surfaces.</span>
+0115        <span class="keyword">if</span> elenode == 3 &amp;&amp; nodedim == 3
+0116           nd = [nd; midpoint]; 
+0117        <span class="keyword">end</span>
+0118        <span class="comment">%Calculate area of triangle/volume defined by the elements nodes</span>
+0119        <span class="comment">%In 2D this is area and in 3D this is volume</span>
+0120        area= det([ones(length(nd),1),nd]);
+0121        areasign=sign(area); 
+0122        
+0123        <span class="comment">%If sign is (pos) neg swap two nodes (last two will suffice..)</span>
+0124        <span class="keyword">if</span>(areasign == ccw) <span class="comment">%Swap last two entries of enodes</span>
+0125            temp=enodes(elenode-1);
+0126            enodes(elenode-1)=enodes(elenode);
+0127            enodes(elenode) = temp;
+0128            <span class="comment">%elementnodes(e,:)=enodes; %Put back into elementnodes matrix</span>
+0129        <span class="keyword">end</span>
+0130        elementnodes(e,:)=enodes; <span class="comment">%Put enodes back into elementnodes matrix</span>
+0131    <span class="keyword">end</span>
+0132    fwd_model.elems=elementnodes; <span class="comment">%Reassign fwd_model.elems</span>
+0133 <span class="keyword">end</span>
+0134 
+0135 <a name="_sub4" href="#_subfunctions" class="code">function do_unit_test</a>
+0136    <span class="keyword">for</span> i = 1:10
+0137      clear imdl;
+0138      <span class="keyword">switch</span> i,
+0139        <span class="keyword">case</span> 1; imdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]);
+0140        <span class="keyword">case</span> 2; imdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,8);
+0141        <span class="keyword">case</span> 3; imdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'d3cr'</span>,[16,2]);
+0142        <span class="keyword">case</span> 4; imdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'f3cr'</span>,[16,2]);
+0143      <span class="keyword">end</span>
+0144      <span class="keyword">if</span> ~exist(<span class="string">'imdl'</span>); <span class="keyword">continue</span> ; <span class="keyword">end</span>
+0145 
+0146      fmdl = imdl.fwd_model;
+0147      vol = <a href="#_sub5" class="code" title="subfunction vol = test_linear_reorder(fwd_model)">test_linear_reorder</a>( fmdl ); ok = std(sign(vol))==0; <span class="comment">% not ok before</span>
+0148      t = cputime;
+0149      fm0 = <a href="linear_reorder.html" class="code" title="function [fwd_model] = linear_reorder(fwd_model,ccw)">linear_reorder</a>(fmdl, -1);
+0150      fm1 = <a href="linear_reorder.html" class="code" title="function [fwd_model] = linear_reorder(fwd_model,ccw)">linear_reorder</a>(fmdl, 1);
+0151      t = cputime - t;
+0152      vol0= <a href="#_sub5" class="code" title="subfunction vol = test_linear_reorder(fwd_model)">test_linear_reorder</a>( fm0 );
+0153      vol1= <a href="#_sub5" class="code" title="subfunction vol = test_linear_reorder(fwd_model)">test_linear_reorder</a>( fm1 );
+0154 
+0155      str= sprintf(<span class="string">'test%02d(t=%4.2f): OK=%d=&gt;(%d,%d)'</span>,i, t, <span class="keyword">...</span>
+0156              ok, all(vol0&gt;0), all(vol1&lt;0));
+0157      <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(str, all(vol0&gt;0) &amp; all(vol1&lt;0), 1);
+0158    <span class="keyword">end</span>
+0159 <span class="keyword">end</span>
+0160    
+0161 
+0162 <a name="_sub5" href="#_subfunctions" class="code">function vol = test_linear_reorder(fwd_model)</a>
+0163 
+0164    dim=size(fwd_model.nodes,2); elee=size(fwd_model.elems,1);
+0165 
+0166    <span class="keyword">for</span> e=1:elee
+0167        b=fwd_model.elems(e,:);  [v]=fwd_model.nodes(b,:);
+0168            <span class="keyword">for</span> i=1:dim
+0169                vv1(i,:)=v(i+1,:)-v(1,:);
+0170            <span class="keyword">end</span>
+0171        vol(e)=det([vv1]);
+0172    <span class="keyword">end</span>
+0173 <span class="keyword">end</span>
+0174</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

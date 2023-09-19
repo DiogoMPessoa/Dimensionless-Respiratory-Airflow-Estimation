@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of left_divide</title>
+  <meta name="keywords" content="left_divide">
+  <meta name="description" content="[V] = LEFT_DIVIDE(E,I,tol,pp,V);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">algorithms</a> &gt; left_divide.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/algorithms&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>left_divide
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[V] = LEFT_DIVIDE(E,I,tol,pp,V);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [V] = left_divide(E,I,tol,~,V) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[V] = LEFT_DIVIDE(E,I,tol,pp,V);
+ 
+ Implements left division for symmetric positive definite system solves
+ such as the sparse forward solve and dense solve for a GN descent
+ direction. LEFT_DIVIDE is optimised for symmetric matrices and overcomes
+ small inefficiencies of matlab's mldivide. For non-symmetric solves 
+ please use mldivide.
+
+ Also uses conjugate gradients (for large problems).
+
+ E   = The full rank system matrix
+ I   = The currents matrix (RHS)
+ tol = The tolerance in the forward solution, e.g. 1e-5
+
+ pp,V are old options from previous solver. tilde used in arguments list
+ to ignore pp and keep matlab's code analyzer happy</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>	[V] = LEFT_DIVIDE(E,I,tol,pp,V);</li><li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>	RtR = calc_RtR_prior( inv_model )</li><li><a href="../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>	CALC_HYPERPARAMETER: calculate hyperparameter value</li><li><a href="../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="../../eidors/solvers/calc_meas_icov.html" class="code" title="function meas_icov = calc_meas_icov( inv_model )">calc_meas_icov</a>	meas_icov = calc_meas_icov( inv_model )</li><li><a href="../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>	FWD_SOLVE_1ST_ORDER: data= fwd_solve_1st_order( img)</li><li><a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>	[V] = LEFT_DIVIDE(E,I,tol,pp,V);</li><li><a href="../../eidors/examples/demo_complex.html" class="code" title="">demo_complex</a>	This demo function shows how the EIT problem can be formulated in a complex</li><li><a href="../../eidors/examples/eidors2d_demo1.html" class="code" title="">eidors2d_demo1</a>	EidorsDemo1 Demonstrates the use of 2D EIT Package with linear basis</li><li><a href="../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>	FWD_SOLVE_1ST_ORDER: data= fwd_solve_1st_order( img)</li><li><a href="../../eidors/solvers/forward/fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>	FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</li><li><a href="../../eidors/solvers/forward/fwd_solve_higher_order.html" class="code" title="function[data] = fwd_solve_higher_order(fwd_model,img)">fwd_solve_higher_order</a>	Solve for voltages (nodes/electrodes) for a forward model.</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>	JACOBIAN_ADJOINT: J= jacobian_adjoint( img )</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint_2p5d_1st_order.html" class="code" title="function J= jacobian_adjoint_2p5d_1st_order( fwd_model, img)">jacobian_adjoint_2p5d_1st_order</a>	JACOBIAN_ADJOINT_2P5D: J= jacobian_adjoint_2p5d_1st_order( img )</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint_higher_order.html" class="code" title="function J = jacobian_adjoint_higher_order(fwd_model,img)">jacobian_adjoint_higher_order</a>	Find the Jacobian associated with an image (and forward model)</li><li><a href="../../eidors/solvers/forward/jacobian_movement_2p5d_1st_order.html" class="code" title="function J = jacobian_movement_2p5d_1st_order( fwd_model, img)">jacobian_movement_2p5d_1st_order</a>	JACOBIAN_MOVEMENT_2P5D: J = jacobian_movement_2p5d_1st_order( img )</li><li><a href="../../eidors/solvers/forward/tools-beta/calc_error_norms_for_square_domain.html" class="code" title="function [L2_tot_error,H1semi_tot_error,H1_tot_error,I_err,U_errS,U_errM,U_errSM,timing_solver,DOF]=error_2D_squ_CEM(img,eletype,plot_on)">calc_error_norms_for_square_domain</a>	Get forward model of the img and the conductivity per element</li><li><a href="../../eidors/solvers/inverse/calc_GREIT_RM.html" class="code" title="function [RM, PJt, M] = calc_GREIT_RM(vh,vi, xyc, radius, weight, options)">calc_GREIT_RM</a>	CALCULATE GREIT reconstruction matrix</li><li><a href="../../eidors/solvers/inverse/inv_solve_core.html" class="code" title="function img= inv_solve_core( inv_model, data0, data1);">inv_solve_core</a>	INV_SOLVE_CORE Solver using a generic iterative algorithm</li><li><a href="../../eidors/solvers/inverse/inv_solve_diff_GN_one_step.html" class="code" title="function img= inv_solve_diff_GN_one_step( inv_model, data1, data2)">inv_solve_diff_GN_one_step</a>	INV_SOLVE_DIFF_GN_ONE_STEP inverse solver using approach of Adler&Guardo 1996</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [V] = left_divide(E,I,tol,~,V)</a>
+0002 <span class="comment">%[V] = LEFT_DIVIDE(E,I,tol,pp,V);</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Implements left division for symmetric positive definite system solves</span>
+0005 <span class="comment">% such as the sparse forward solve and dense solve for a GN descent</span>
+0006 <span class="comment">% direction. LEFT_DIVIDE is optimised for symmetric matrices and overcomes</span>
+0007 <span class="comment">% small inefficiencies of matlab's mldivide. For non-symmetric solves</span>
+0008 <span class="comment">% please use mldivide.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Also uses conjugate gradients (for large problems).</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% E   = The full rank system matrix</span>
+0013 <span class="comment">% I   = The currents matrix (RHS)</span>
+0014 <span class="comment">% tol = The tolerance in the forward solution, e.g. 1e-5</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% pp,V are old options from previous solver. tilde used in arguments list</span>
+0017 <span class="comment">% to ignore pp and keep matlab's code analyzer happy</span>
+0018 
+0019 <span class="comment">% (c) N. Polydorides 2003 % Copying permitted under terms of GNU GPL</span>
+0020 <span class="comment">% $Id: left_divide.m 6007 2019-06-29 13:32:48Z aadler $</span>
+0021 
+0022 <span class="keyword">if</span> ischar(E) &amp;&amp; strcmp(E,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0023 
+0024 <span class="keyword">if</span> ~exist(<span class="string">'tol'</span>,<span class="string">'var'</span>); tol = 1e-8; <span class="keyword">end</span>
+0025 
+0026 [n_nodes,n_stims] = size(I);
+0027 
+0028 <span class="keyword">try</span>
+0029     <span class="comment">% V= E\I;</span>
+0030     <span class="comment">% This takes MUCH longer when you have  more vectors in I,</span>
+0031     <span class="comment">%  even if they are repeated. There must be some way to simplify</span>
+0032     <span class="comment">%  this to speed it up. Matlab's sparse operators really should</span>
+0033     <span class="comment">%  do this for you.</span>
+0034     
+0035     <span class="comment">% TODO:</span>
+0036     <span class="comment">% 1. change from QR implementation to basis implementation</span>
+0037     <span class="comment">% 2. implement selection for required nodal values</span>
+0038     <span class="comment">% 3. cache basis solve</span>
+0039     <span class="comment">% 4. possibly change to itterative for successive solves on the same</span>
+0040     <span class="comment">%    mesh</span>
+0041     <span class="keyword">if</span> issparse(E)
+0042         
+0043 <span class="comment">% This should speed up, and help issue with octave on QR</span>
+0044         inotzeros = logical(any(I,2));
+0045       <span class="keyword">if</span> exist(<span class="string">'OCTAVE_VERSION'</span>) == 5 <span class="comment">% v 4.4 has problems with sparse qr</span>
+0046         [Qi,R] = qr(full(I(inotzeros,:)),0);
+0047       <span class="keyword">else</span>
+0048         [Qi,R] = qr(I(inotzeros,:),0);
+0049       <span class="keyword">end</span>
+0050         rnotzeros = logical(any(R,2));
+0051         R= R(rnotzeros,:);
+0052         Q = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(I,1), size(R,1));
+0053         Q(inotzeros,:) = Qi(:,rnotzeros);
+0054 <span class="comment">%        [Q,R] = qr(I,0);</span>
+0055 <span class="comment">%        rnotzeros = any(R~=0,2);</span>
+0056 <span class="comment">%        Q= Q(:,rnotzeros);</span>
+0057 <span class="comment">%        R= R(rnotzeros,:);</span>
+0058         V= (E \ Q)*R;
+0059         
+0060     <span class="keyword">else</span>
+0061         <span class="keyword">if</span> isreal(E)
+0062             <span class="keyword">try</span>
+0063                 <span class="comment">% for dense solve of tikhonov regularised least squares</span>
+0064                 <span class="comment">% matrix E is symmetric if it is of the form</span>
+0065                 <span class="comment">% (J.'*W*J + hp^2*R.'R) and is real</span>
+0066                 opts.SYM=true;
+0067                 opts.POSDEF=true;
+0068                 
+0069                 V= linsolve(E,I,opts);
+0070             <span class="keyword">catch</span> Mexcp
+0071                 
+0072                 <span class="comment">% error handling</span>
+0073                 <span class="keyword">if</span>(strcmp(Mexcp.identifier,<span class="string">'MATLAB:posdef'</span>))
+0074                     
+0075                     warning(<span class="string">'EIDORS:leftDivideSymmetry'</span>,<span class="keyword">...</span>
+0076                         [<span class="string">'left_divide is optimised for symmetric '</span>,<span class="keyword">...</span>
+0077                         <span class="string">'positive definite matrices.'</span>]);
+0078                     
+0079                 <span class="keyword">else</span> 
+0080                     warning([<span class="string">'Error with linsolve in left_divide, trying backslash.\n'</span>,<span class="keyword">...</span>
+0081                         <span class="string">'Error identifier: '</span>,Mexcp.identifier]);
+0082                 <span class="keyword">end</span>
+0083                 
+0084                 <span class="comment">% continue solve with backslash</span>
+0085                 V=E\I;
+0086             <span class="keyword">end</span>
+0087         <span class="keyword">else</span>
+0088             <span class="comment">% cholesky only works for real valued system matrices</span>
+0089             V=E\I;
+0090         <span class="keyword">end</span>
+0091     <span class="keyword">end</span>
+0092     
+0093     <span class="comment">% TODO: Iteratively refine</span>
+0094     <span class="comment">%  From GH Scott: &quot;once we have</span>
+0095     <span class="comment">%   computed the approximate solution x, we perform one step</span>
+0096     <span class="comment">%   of iterative refinement by computing the residual: r = Ax - b</span>
+0097     <span class="comment">%   and then recalling the solve routine to solve</span>
+0098     <span class="comment">%   Adx = r for the correction dx.</span>
+0099     <span class="comment">% However, we don't want to repeat the '\', so we implement</span>
+0100     <span class="comment">%   the underlying algorithm:</span>
+0101     <span class="comment">%   If A is sparse, then MATLAB software uses CHOLMOD (after 7.2) to compute X.</span>
+0102     <span class="comment">%    The computations result in  P'*A*P = R'*R</span>
+0103     <span class="comment">%   where P is a permutation matrix generated by amd, and R is</span>
+0104     <span class="comment">%   an upper triangular matrix. In this case, X = P*(R\(R'\(P'*B)))</span>
+0105     <span class="comment">%</span>
+0106     <span class="comment">% See also:</span>
+0107     <span class="comment">% http://www.cs.berkeley.edu/~wkahan/MxMulEps.pdf</span>
+0108     <span class="comment">% especially page 15 where it discusses the value of iterative refinement</span>
+0109     <span class="comment">%  without extra precision bits.  ALso, we need to enable</span>
+0110     
+0111     
+0112 <span class="keyword">catch</span> excp
+0113     <span class="comment">% TODO: check if this catch block is needed</span>
+0114     <span class="keyword">if</span> ~strcmp(excp.identifier , <span class="string">'MATLAB:nomem'</span>)
+0115         rethrow(excp); <span class="comment">% rethrow error</span>
+0116     <span class="keyword">end</span>
+0117     
+0118     <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'Memory exhausted for inverse. Trying PCG'</span>,2);
+0119     
+0120     <span class="keyword">if</span> nargin &lt; 5
+0121         sz= [size(E,1),n_stims];
+0122         V = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'get-cache'</span>, sz, <span class="string">'left_divide_V'</span>);
+0123         <span class="keyword">if</span> isempty(V); V= zeros(sz); <span class="keyword">end</span>
+0124     <span class="keyword">end</span>
+0125     
+0126     ver = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'interpreter_version'</span>); <span class="comment">% Matlab2013 renamed cholinc -&gt; ichol</span>
+0127     <span class="keyword">if</span> isreal(E)
+0128         opts.droptol = tol*100;
+0129         opts.type = <span class="string">'ict'</span>;
+0130         <span class="keyword">if</span> ver.isoctave || ver.ver &lt; 7.012
+0131             U = cholinc(E, opts.droptol);
+0132         <span class="keyword">else</span>
+0133             U = ichol(E, opts);
+0134         <span class="keyword">end</span>
+0135         L = U';
+0136         cgsolver = @pcg;
+0137     <span class="keyword">else</span> <span class="comment">%Complex</span>
+0138         opts.droptol = tol/10;
+0139         <span class="keyword">if</span> ver.isoctave || ver.ver &lt; 7.012 <span class="comment">% Matlab2007 introduced ilu, luinc has now been dropped</span>
+0140             [L,U] = luinc(E, opts.droptol);
+0141         <span class="keyword">else</span>
+0142             [L,U] = ilu(E, opts);
+0143         <span class="keyword">end</span>
+0144         cgsolver = @bicgstab;
+0145     <span class="keyword">end</span>
+0146     
+0147     <span class="keyword">for</span> i=1:n_stims
+0148         [V(:,i),~] = feval( cgsolver, E,I(:,i), <span class="keyword">...</span>
+0149             tol*norm(I(:,i)),n_nodes,L,U,V(:,i));
+0150     <span class="keyword">end</span>
+0151     <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'set-cache'</span>, sz, <span class="string">'left_divide_V'</span>, V);
+0152 <span class="keyword">end</span>
+0153 
+0154 <span class="comment">% Test code</span>
+0155 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0156 
+0157 <span class="comment">% test solvers are unaffected</span>
+0158 <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(<span class="string">'UNIT_TEST'</span>)
+0159 <a href="../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>(<span class="string">'UNIT_TEST'</span>)
+0160 
+0161 <span class="comment">% test non-symmetric handling</span>
+0162 s=warning(<span class="string">'QUERY'</span>,<span class="string">'EIDORS:leftDivideSymmetry'</span>);
+0163 warning(<span class="string">'OFF'</span>,<span class="string">'EIDORS:leftDivideSymmetry'</span>)
+0164 lastwarn(<span class="string">''</span>)
+0165 A=rand(1e3);
+0166 b=rand(1e3);
+0167 
+0168 <a href="left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>(A,b);
+0169 [~, LASTID] = lastwarn;
+0170 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sym warn'</span>,LASTID,<span class="string">'EIDORS:leftDivideSymmetry'</span>)
+0171 warning(s);
+0172 
+0173 <span class="comment">% test dense sym posdef solve</span>
+0174 imdl=<a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]);
+0175 img=<a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl,1);
+0176 img.elem_data=1+0.1*rand(size(img.elem_data));
+0177 J   = <a href="../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>(img);
+0178 RtR = <a href="../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>(imdl);
+0179 W   = <a href="../../eidors/solvers/calc_meas_icov.html" class="code" title="function meas_icov = calc_meas_icov( inv_model )">calc_meas_icov</a>(imdl);
+0180 hp  = <a href="../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>(imdl);
+0181 LHS = (J'*W*J +  hp^2*RtR);
+0182 RHS = J'*W;
+0183 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'dense chol'</span>,LHS\RHS,<a href="left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>(LHS,RHS),1e-13)</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of READ_stl</title>
+  <meta name="keywords" content="READ_stl">
+  <meta name="description" content="READ_stlascii  Read mesh data in the form of an &lt;*.stl&gt; file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">external</a> &gt; <a href="index.html">Mesh_voxelisation</a> &gt; READ_stl.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/external/Mesh_voxelisation&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>READ_stl
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>READ_stlascii  Read mesh data in the form of an &lt;*.stl&gt; file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [coordVERTICES,varargout] = READ_stl(stlFILENAME,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> READ_stlascii  Read mesh data in the form of an &lt;*.stl&gt; file
+==========================================================================
+ FILENAME:          READ_stl.m
+ AUTHOR:            Adam H. Aitkenhead
+ INSTITUTION:       The Christie NHS Foundation Trust
+ CONTACT:           adam.aitkenhead@physics.cr.man.ac.uk
+ DATE:              29th March 2010
+ PURPOSE:           Read mesh data in the form of an &lt;*.stl&gt; file.
+
+ USAGE:
+
+     [coordVERTICES,coordNORMALS,stlNAME] = READ_stl(stlFILENAME,stlFORMAT)
+
+ INPUT PARAMETERS:
+
+     stlFILENAME   - String - Mandatory - The filename of the STL file.
+
+     stlFORMAT     - String - Optional  - The format of the STL file:
+                                        'ascii' or 'binary'
+
+ OUTPUT PARAMETERS:
+
+     coordVERTICES - Nx3x3 array - Mandatory
+                                 - An array defining the vertex positions
+                                   for each of the N facets, with: 
+                                   1 row for each facet
+                                   3 cols for the x,y,z coordinates
+                                   3 pages for the three vertices
+
+     coordNORMALS  - Nx3 array   - Optional
+                                 - An array defining the normal vector for
+                                   each of the N facets, with: 
+                                   1 row for each facet
+                                   3 cols for the x,y,z components of the vector
+
+     stlNAME       - String      - Optional  - The name of the STL object.
+
+==========================================================================</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/meshing/stl/stl_read.html" class="code" title="function mdl = stl_read(fname)">stl_read</a>	STL_READ  Read in an stl file and output an EIDORS model struct</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [stlFORMAT] = IDENTIFY_stl_format(stlFILENAME)</a></li><li><a href="#_sub2" class="code">function [coordVERTICES,coordNORMALS,stlNAME] = READ_stlascii(stlFILENAME)</a></li><li><a href="#_sub3" class="code">function [coordVERTICES,coordNORMALS] = READ_stlbinary(stlFILENAME)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [coordVERTICES,varargout] = READ_stl(stlFILENAME,varargin)</a>
+0002 <span class="comment">% READ_stlascii  Read mesh data in the form of an &lt;*.stl&gt; file</span>
+0003 <span class="comment">%==========================================================================</span>
+0004 <span class="comment">% FILENAME:          READ_stl.m</span>
+0005 <span class="comment">% AUTHOR:            Adam H. Aitkenhead</span>
+0006 <span class="comment">% INSTITUTION:       The Christie NHS Foundation Trust</span>
+0007 <span class="comment">% CONTACT:           adam.aitkenhead@physics.cr.man.ac.uk</span>
+0008 <span class="comment">% DATE:              29th March 2010</span>
+0009 <span class="comment">% PURPOSE:           Read mesh data in the form of an &lt;*.stl&gt; file.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% USAGE:</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%     [coordVERTICES,coordNORMALS,stlNAME] = READ_stl(stlFILENAME,stlFORMAT)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% INPUT PARAMETERS:</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%     stlFILENAME   - String - Mandatory - The filename of the STL file.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%     stlFORMAT     - String - Optional  - The format of the STL file:</span>
+0020 <span class="comment">%                                        'ascii' or 'binary'</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% OUTPUT PARAMETERS:</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%     coordVERTICES - Nx3x3 array - Mandatory</span>
+0025 <span class="comment">%                                 - An array defining the vertex positions</span>
+0026 <span class="comment">%                                   for each of the N facets, with:</span>
+0027 <span class="comment">%                                   1 row for each facet</span>
+0028 <span class="comment">%                                   3 cols for the x,y,z coordinates</span>
+0029 <span class="comment">%                                   3 pages for the three vertices</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%     coordNORMALS  - Nx3 array   - Optional</span>
+0032 <span class="comment">%                                 - An array defining the normal vector for</span>
+0033 <span class="comment">%                                   each of the N facets, with:</span>
+0034 <span class="comment">%                                   1 row for each facet</span>
+0035 <span class="comment">%                                   3 cols for the x,y,z components of the vector</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%     stlNAME       - String      - Optional  - The name of the STL object.</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">%==========================================================================</span>
+0040 
+0041 <span class="comment">%==========================================================================</span>
+0042 <span class="comment">% VERSION  USER  CHANGES</span>
+0043 <span class="comment">% -------  ----  -------</span>
+0044 <span class="comment">% 100329   AHA   Original version</span>
+0045 <span class="comment">% 100513   AHA   Totally reworked the code.  Now use textscan to read the</span>
+0046 <span class="comment">%                file all at once, rather than one line at a time with</span>
+0047 <span class="comment">%                fgetl.  Major speed improvment.</span>
+0048 <span class="comment">% 100623   AHA   Combined code which reads ascii STLS and code which reads</span>
+0049 <span class="comment">%                binary STLs into a single function.</span>
+0050 <span class="comment">% 101126   AHA   Small change to binary read code:  Now use fread instead</span>
+0051 <span class="comment">%                of fseek.  Gives large speed increase.</span>
+0052 <span class="comment">%==========================================================================</span>
+0053 
+0054 <span class="comment">%==========================================================================</span>
+0055 <span class="comment">% STL ascii file format</span>
+0056 <span class="comment">%======================</span>
+0057 <span class="comment">% ASCII STL files have the following structure.  Technically each facet</span>
+0058 <span class="comment">% could be any 2D shape, but in practice only triangular facets tend to be</span>
+0059 <span class="comment">% used.  The present code ONLY works for meshes composed of triangular</span>
+0060 <span class="comment">% facets.</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% solid object_name</span>
+0063 <span class="comment">% facet normal x y z</span>
+0064 <span class="comment">%   outer loop</span>
+0065 <span class="comment">%     vertex x y z</span>
+0066 <span class="comment">%     vertex x y z</span>
+0067 <span class="comment">%     vertex x y z</span>
+0068 <span class="comment">%   endloop</span>
+0069 <span class="comment">% endfacet</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">% &lt;Repeat for all facets...&gt;</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">% endsolid object_name</span>
+0074 <span class="comment">%==========================================================================</span>
+0075 
+0076 <span class="comment">%==========================================================================</span>
+0077 <span class="comment">% STL binary file format</span>
+0078 <span class="comment">%=======================</span>
+0079 <span class="comment">% Binary STL files have an 84 byte header followed by 50-byte records, each</span>
+0080 <span class="comment">% describing a single facet of the mesh.  Technically each facet could be</span>
+0081 <span class="comment">% any 2D shape, but that would screw up the 50-byte-per-facet structure, so</span>
+0082 <span class="comment">% in practice only triangular facets are used.  The present code ONLY works</span>
+0083 <span class="comment">% for meshes composed of triangular facets.</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">% HEADER:</span>
+0086 <span class="comment">% 80 bytes:  Header text</span>
+0087 <span class="comment">% 4 bytes:   (int) The number of facets in the STL mesh</span>
+0088 <span class="comment">%</span>
+0089 <span class="comment">% DATA:</span>
+0090 <span class="comment">% 4 bytes:  (float) normal x</span>
+0091 <span class="comment">% 4 bytes:  (float) normal y</span>
+0092 <span class="comment">% 4 bytes:  (float) normal z</span>
+0093 <span class="comment">% 4 bytes:  (float) vertex1 x</span>
+0094 <span class="comment">% 4 bytes:  (float) vertex1 y</span>
+0095 <span class="comment">% 4 bytes:  (float) vertex1 z</span>
+0096 <span class="comment">% 4 bytes:  (float) vertex2 x</span>
+0097 <span class="comment">% 4 bytes:  (float) vertex2 y</span>
+0098 <span class="comment">% 4 bytes:  (float) vertex2 z</span>
+0099 <span class="comment">% 4 bytes:  (float) vertex3 x</span>
+0100 <span class="comment">% 4 bytes:  (float) vertex3 y</span>
+0101 <span class="comment">% 4 bytes:  (float) vertex3 z</span>
+0102 <span class="comment">% 2 bytes:  Padding to make the data for each facet 50-bytes in length</span>
+0103 <span class="comment">%   ...and repeat for next facet...</span>
+0104 <span class="comment">%==========================================================================</span>
+0105 
+0106 <span class="keyword">if</span> nargin==2
+0107   stlFORMAT = lower(varargin{1});
+0108 <span class="keyword">else</span>
+0109   stlFORMAT = <span class="string">'auto'</span>;
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">%If necessary, identify whether the STL is ascii or binary:</span>
+0113 <span class="keyword">if</span> strcmp(stlFORMAT,<span class="string">'ascii'</span>)==0 &amp;&amp; strcmp(stlFORMAT,<span class="string">'binary'</span>)==0
+0114   stlFORMAT = <a href="#_sub1" class="code" title="subfunction [stlFORMAT] = IDENTIFY_stl_format(stlFILENAME)">IDENTIFY_stl_format</a>(stlFILENAME);
+0115 <span class="keyword">end</span>
+0116 
+0117 <span class="comment">%Load the STL file:</span>
+0118 <span class="keyword">if</span> strcmp(stlFORMAT,<span class="string">'ascii'</span>)
+0119   [coordVERTICES,coordNORMALS,stlNAME] = <a href="#_sub2" class="code" title="subfunction [coordVERTICES,coordNORMALS,stlNAME] = READ_stlascii(stlFILENAME)">READ_stlascii</a>(stlFILENAME);
+0120 <span class="keyword">elseif</span> strcmp(stlFORMAT,<span class="string">'binary'</span>)
+0121   [coordVERTICES,coordNORMALS] = <a href="#_sub3" class="code" title="subfunction [coordVERTICES,coordNORMALS] = READ_stlbinary(stlFILENAME)">READ_stlbinary</a>(stlFILENAME);
+0122   stlNAME = <span class="string">'unnamed_object'</span>;
+0123 <span class="keyword">end</span> <span class="comment">%if</span>
+0124 
+0125 <span class="comment">%Prepare the output arguments</span>
+0126 <span class="keyword">if</span> nargout == 2
+0127   varargout(1) = {coordNORMALS};
+0128 <span class="keyword">elseif</span> nargout == 3
+0129   varargout(1) = {coordNORMALS};
+0130   varargout(2) = {stlNAME};
+0131 <span class="keyword">end</span>
+0132 
+0133 <span class="keyword">end</span> <span class="comment">%function</span>
+0134 
+0135 
+0136 
+0137 <span class="comment">%==========================================================================</span>
+0138 <a name="_sub1" href="#_subfunctions" class="code">function [stlFORMAT] = IDENTIFY_stl_format(stlFILENAME)</a>
+0139 <span class="comment">% IDENTIFY_stl_format  Test whether an stl file is ascii or binary</span>
+0140 
+0141 <span class="comment">% Open the file:</span>
+0142 fidIN = fopen(stlFILENAME);
+0143 
+0144 <span class="comment">% Check the file size first, since binary files MUST have a size of 84+(50*n)</span>
+0145 fseek(fidIN,0,1);         <span class="comment">% Go to the end of the file</span>
+0146 fidSIZE = ftell(fidIN);   <span class="comment">% Check the size of the file</span>
+0147 
+0148 <span class="keyword">if</span> rem(fidSIZE-84,50) &gt; 0
+0149     
+0150   stlFORMAT = <span class="string">'ascii'</span>;
+0151 
+0152 <span class="keyword">else</span>
+0153 
+0154   <span class="comment">% Files with a size of 84+(50*n), might be either ascii or binary...</span>
+0155     
+0156   <span class="comment">% Read first 80 characters of the file.</span>
+0157   <span class="comment">% For an ASCII file, the data should begin immediately (give or take a few</span>
+0158   <span class="comment">% blank lines or spaces) and the first word must be 'solid'.</span>
+0159   <span class="comment">% For a binary file, the first 80 characters contains the header.</span>
+0160   <span class="comment">% It is bad practice to begin the header of a binary file with the word</span>
+0161   <span class="comment">% 'solid', so it can be used to identify whether the file is ASCII or</span>
+0162   <span class="comment">% binary.</span>
+0163   fseek(fidIN,0,-1);        <span class="comment">% Go to the start of the file</span>
+0164   firsteighty = char(fread(fidIN,80,<span class="string">'uchar'</span>)');
+0165 
+0166   <span class="comment">% Trim leading and trailing spaces:</span>
+0167   firsteighty = strtrim(firsteighty);
+0168 
+0169   <span class="comment">% Take the first five remaining characters, and check if these are 'solid':</span>
+0170   firstfive = firsteighty(1:min(5,length(firsteighty)));
+0171 
+0172   <span class="comment">% Double check by reading the last 80 characters of the file.</span>
+0173   <span class="comment">% For an ASCII file, the data should end (give or take a few</span>
+0174   <span class="comment">% blank lines or spaces) with 'endsolid &lt;object_name&gt;'.</span>
+0175   <span class="comment">% If the last 80 characters contains the word 'endsolid' then this</span>
+0176   <span class="comment">% confirms that the file is indeed ASCII.</span>
+0177   <span class="keyword">if</span> strcmp(firstfive,<span class="string">'solid'</span>)
+0178   
+0179     fseek(fidIN,-80,1);     <span class="comment">% Go to the end of the file minus 80 characters</span>
+0180     lasteighty = char(fread(fidIN,80,<span class="string">'uchar'</span>)');
+0181   
+0182     <span class="keyword">if</span> findstr(lasteighty,<span class="string">'endsolid'</span>)
+0183       stlFORMAT = <span class="string">'ascii'</span>;
+0184     <span class="keyword">else</span>
+0185       stlFORMAT = <span class="string">'binary'</span>;
+0186     <span class="keyword">end</span>
+0187   
+0188   <span class="keyword">else</span>
+0189     stlFORMAT = <span class="string">'binary'</span>;
+0190   <span class="keyword">end</span>
+0191   
+0192 <span class="keyword">end</span>
+0193 
+0194 <span class="comment">% Close the file</span>
+0195 fclose(fidIN);
+0196 
+0197 <span class="keyword">end</span> <span class="comment">%function</span>
+0198 <span class="comment">%==========================================================================</span>
+0199 
+0200 
+0201 
+0202 <span class="comment">%==========================================================================</span>
+0203 <a name="_sub2" href="#_subfunctions" class="code">function [coordVERTICES,coordNORMALS,stlNAME] = READ_stlascii(stlFILENAME)</a>
+0204 <span class="comment">% READ_stlascii  Read mesh data in the form of an ascii &lt;*.stl&gt; file</span>
+0205 
+0206 <span class="comment">% Read the ascii STL file</span>
+0207 fidIN = fopen(stlFILENAME);
+0208 fidCONTENTcell = textscan(fidIN,<span class="string">'%s'</span>,<span class="string">'delimiter'</span>,<span class="string">'\n'</span>);                  <span class="comment">%Read all the file</span>
+0209 fidCONTENT = fidCONTENTcell{:}(logical(~strcmp(fidCONTENTcell{:},<span class="string">''</span>)));  <span class="comment">%Remove all blank lines</span>
+0210 fclose(fidIN);
+0211 
+0212 <span class="comment">% Read the STL name</span>
+0213 <span class="keyword">if</span> nargout == 3
+0214   line1 = char(fidCONTENT(1));
+0215   <span class="keyword">if</span> (size(line1,2) &gt;= 7)
+0216     stlNAME = line1(7:end);
+0217   <span class="keyword">else</span>
+0218     stlNAME = <span class="string">'unnamed_object'</span>; 
+0219   <span class="keyword">end</span>
+0220 <span class="keyword">end</span>
+0221 
+0222 <span class="comment">% Read the vector normals</span>
+0223 <span class="keyword">if</span> nargout &gt;= 2
+0224   stringNORMALS = char(fidCONTENT(logical(strncmp(fidCONTENT,<span class="string">'facet normal'</span>,12))));
+0225   coordNORMALS  = str2num(stringNORMALS(:,13:end));
+0226 <span class="keyword">end</span>
+0227 
+0228 <span class="comment">% Read the vertex coordinates</span>
+0229 facetTOTAL       = sum(strcmp(fidCONTENT,<span class="string">'endfacet'</span>));
+0230 stringVERTICES   = char(fidCONTENT(logical(strncmp(fidCONTENT,<span class="string">'vertex'</span>,6))));
+0231 coordVERTICESall = str2num(stringVERTICES(:,7:end));
+0232 cotemp           = zeros(3,facetTOTAL,3);
+0233 cotemp(:)        = coordVERTICESall;
+0234 coordVERTICES    = shiftdim(cotemp,1);
+0235 
+0236 <span class="keyword">end</span> <span class="comment">%function</span>
+0237 <span class="comment">%==========================================================================</span>
+0238 
+0239 
+0240 
+0241 <span class="comment">%==========================================================================</span>
+0242 <a name="_sub3" href="#_subfunctions" class="code">function [coordVERTICES,coordNORMALS] = READ_stlbinary(stlFILENAME)</a>
+0243 <span class="comment">% READ_stlbinary  Read mesh data in the form of an binary &lt;*.stl&gt; file</span>
+0244 
+0245 <span class="comment">% Open the binary STL file</span>
+0246 fidIN = fopen(stlFILENAME);
+0247 
+0248 <span class="comment">% Read the header</span>
+0249 fseek(fidIN,80,-1);                   <span class="comment">% Move to the last 4 bytes of the header</span>
+0250 facetcount = fread(fidIN,1,<span class="string">'int32'</span>);  <span class="comment">% Read the number of facets in the stl file</span>
+0251 
+0252 <span class="comment">% Initialise arrays into which the STL data will be loaded:</span>
+0253 coordNORMALS  = zeros(facetcount,3);
+0254 coordVERTICES = zeros(facetcount,3,3);
+0255 
+0256 <span class="comment">% Read the data for each facet:</span>
+0257 <span class="keyword">for</span> loopF = 1:facetcount
+0258   
+0259   tempIN = fread(fidIN,3*4,<span class="string">'float'</span>);
+0260   
+0261   coordNORMALS(loopF,1:3)    = tempIN(1:3);    <span class="comment">% x,y,z components of the facet's normal vector</span>
+0262   coordVERTICES(loopF,1:3,1) = tempIN(4:6);    <span class="comment">% x,y,z coordinates of vertex 1</span>
+0263   coordVERTICES(loopF,1:3,2) = tempIN(7:9);    <span class="comment">% x,y,z coordinates of vertex 2</span>
+0264   coordVERTICES(loopF,1:3,3) = tempIN(10:12);  <span class="comment">% x,y,z coordinates of vertex 3</span>
+0265   
+0266   fread(fidIN,1,<span class="string">'int16'</span>);   <span class="comment">% Move to the start of the next facet.  Using fread is much quicker than using fseek(fidIN,2,0);</span>
+0267 
+0268 <span class="keyword">end</span> <span class="comment">%for</span>
+0269 
+0270 <span class="comment">% Close the binary STL file</span>
+0271 fclose(fidIN);
+0272 
+0273 <span class="keyword">end</span> <span class="comment">%function</span>
+0274 <span class="comment">%==========================================================================</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

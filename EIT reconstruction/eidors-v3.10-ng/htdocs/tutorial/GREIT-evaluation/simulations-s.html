@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+GREIT evaluation: Evaluation using simulation data
+</h2>
+
+In order to test the performance of GREIT, we create a set
+of simulation data. Here we look at the performance for
+an object moving radially toward the side from the centre
+of the medium.
+
+<H3>Algorithms to test</H3>
+ First, run the matlab command
+<pre>
+&gt;&gt; addpath ../GREIT-algorithm
+</pre>
+to give matlab access to the algorithms folder.
+Use the function 
+<p>
+In the rest of this example, the function
+<a href="../GREIT-algorithm/get_list_of_algs.m"><tt
+                           >get_list_of_algs.m</tt></a>
+lists the provided algorithms to test.
+
+<pre>
+% Algorithm list $Id: get_list_of_algs.m 1619 2008-09-22 16:32:56Z aadler $
+function algs= get_list_of_algs;
+
+algs = {'GREIT_Sheffield_backproj', ...
+        'GREIT_NOSER_ndiff', ...
+        'GREIT_NOSER_diff', ...
+        'GREIT_test_ndiff', ...
+       };
+
+</pre>
+
+<H2>Prepare simulation data: phantom data</H2>
+
+Here we can use either:
+<ul>
+       <li><h3>
+           <a href="./make_simulations_3d-s.html"
+                   >3D FEM Simulations</a>
+          </h3>
+           or
+       <li><h3>
+           <a href="./make_simulations_2d-s.html"
+                   >2D FEM Simulations (with moving ball)</a>
+                   (currently working badly), 
+
+          </h3>
+</ul>
+
+
+<H2>Tests: position, amplitude, resolution, PSF</H2>
+
+These parameters are calculated from an image as illustrated
+in the following figure. The key calculation is the
+Half Maximum Set (HMS), which contains all pixels above
+half the maximum value.
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT-evaluation/reconstruction_parameters.png">
+<br>
+Calculation of parameters for reconstructed images:
+Amplitude, 
+Position Error,
+Resolution,
+Shape Deformation
+Ringing
+</center>
+
+<H3>Calculate Half-Maximum Set</H3>
+
+The function <a href="calc_hm_set.m"><tt>calc_hm_set.m</tt></a>
+calculates the HAS from each image
+<pre>
+function hm_img = calc_hm_set(img,frac)
+% hm_img= CALC_HA_SET(img)
+% hm_img is 32x32xNimg. It is 1 inside the Half Ampl Set
+% frac is the fraction of maximum (0.5 or 0.25)
+% hm_img expects conductive changes. Use calc_hm_set(-img,frac) for non-c
+
+% (C) 2008 Andy Adler. Licenced under GPL v2 or v3
+% $Id: calc_hm_set.m 1598 2008-07-30 10:17:24Z aadler $
+
+[x,y]=meshgrid(linspace(-1,1,32),linspace(-1,1,32)); map = x.^2+y.^2<1.1;
+
+hm_img = logical(zeros(size(img)));
+for i=1:size(img,3);
+   imi = img(:,:,i); imi= imi(map);
+
+   hmi= logical(zeros(32));
+   hmi(map) = imi >= (max(imi) * frac);
+   hm_img(:,:,i) = hmi;
+end
+
+</pre>
+
+
+<H3>Reconstruct example images</H3>
+
+First, we reconstruct an image using some of the 
+proposed algorithms.
+
+<pre>
+% Reconstruct some images $Id: simulation_test03.m 1621 2008-09-22 18:09:43Z aadler $
+load sim_radmove_homog.mat
+
+imb.calc_colours.ref_level = 0; % select colour output
+imb.calc_colours.greylev   = 0.01; % black backgnd
+bkgnd= [.1,.5,.1]; imb.calc_colours.backgnd   = bkgnd;
+
+idx= 157; dir='simulation_test_imgs';
+
+phi = linspace(0,2*pi,10);
+xc=-xyzr_pt(1,idx) + xyzr_pt(4,idx) * sin(phi); xc= round(xc*15.5 + 16.5);
+yc=-xyzr_pt(2,idx) + xyzr_pt(4,idx) * cos(phi); yc= round(yc*15.5 + 16.5);
+ind= sub2ind([32,32],yc,xc);
+
+% Use this Map for reconstruction shape
+[x,y]=meshgrid(linspace(-1,1,32),linspace(-1,1,32)); out = x.^2+y.^2>1.1;
+
+algs = get_list_of_algs;
+for i= 1:length(algs)
+   img = feval(algs{i}, vh, vi(:,idx) );
+   hmi = calc_hm_set( img, 0.5 )+1;
+   qmi = calc_hm_set( img, 0.25 )+1;
+
+   imc= calc_colours(img, imb);
+   imc(out) = 1; hmi(out) = 3; qmi(out) = 3; % background
+   imc(ind) = 1; hmi(ind) = 3; qmi(ind) = 3; % target
+
+   imwrite(imc,colormap, sprintf('%s/simulation_test03_%d.png',dir,i),'png')
+   clrmap = [0,0,0;1,1,1;bkgnd];
+   imwrite(hmi,clrmap, sprintf('%s/simulation_test03_h%d.png',dir,i),'png')
+   imwrite(qmi,clrmap, sprintf('%s/simulation_test03_q%d.png',dir,i),'png')
+end
+
+</pre>
+
+<center>
+<table border="0">
+<tr>
+   <th> 
+   <th> Sheffield <br>Backproj
+   <th> NOSER <br>Norm Diff
+   <th> NOSER <br>Diff
+<tr>
+   <th> Image<br>Output
+   <td> <img src="./simulation_test_imgs/simulation_test03_1.png" width="96">
+   <td> <img src="./simulation_test_imgs/simulation_test03_2.png" width="96">
+   <td> <img src="./simulation_test_imgs/simulation_test03_3.png" width="96">
+   <td> <img src="./simulation_test_imgs/simulation_test03_4.png" width="96">
+<tr>
+   <th> &frac12;Max<br>Set
+   <td> <img src="./simulation_test_imgs/simulation_test03_h1.png" width="96">
+   <td> <img src="./simulation_test_imgs/simulation_test03_h2.png" width="96">
+   <td> <img src="./simulation_test_imgs/simulation_test03_h3.png" width="96">
+   <td> <img src="./simulation_test_imgs/simulation_test03_h4.png" width="96">
+<tr>
+   <th> &frac14;Max<br>Set
+   <td> <img src="./simulation_test_imgs/simulation_test03_q1.png" width="96">
+   <td> <img src="./simulation_test_imgs/simulation_test03_q2.png" width="96">
+   <td> <img src="./simulation_test_imgs/simulation_test03_q3.png" width="96">
+   <td> <img src="./simulation_test_imgs/simulation_test03_q4.png" width="96">
+</table>
+Reconstructed images. The conductivity target location is
+shown in green (the target is a circle, but shows as a small
+square in this image)
+</center>
+
+
+<H3>Calculate parameters from images</H3>
+
+The parameters listed previously
+ are calculated from images using the function
+<a href="./GREIT_sim_params.m"><tt
+          >GREIT_sim_params.m</tt></a>.
+<pre>
+function params = GREIT_sim_params(imgs, xyzr_pt)
+% params = GREIT_sim_params(imgs)
+%  params(1,:) = Image Amplitude
+%  params(2,:) = Position Error => + toward centre, - toward edge
+%  params(3,:) = Resolution
+%  params(4,:) = Shape Deformation
+%  params(5,:) = Ringing
+
+% (C) 2008 Andy Adler. Licensed under GPL v2 or v3
+% $Id: GREIT_sim_params.m 1590 2008-07-29 11:23:55Z aadler $
+
+N_imgs = size(imgs,3);
+for i= 1:N_imgs
+   [xmean,ymean,equiv_circ,map,qmi,img] = calc_cofg(imgs(:,:,i));
+   params(1,i) = calc_amplitude( img );
+   params(2,i) = calc_posn_error( qmi, xmean, ymean, xyzr_pt(1:2,i) );
+   params(3,i) = calc_resolution( qmi, map );
+   params(4,i) = calc_shape_deform( qmi, equiv_circ );
+   params(5,i) = calc_ringing( img, qmi );
+end
+
+% TODO: Fix this when we start to care about units
+params(1,:) = params(1,:)/mean(params(1,1:10));
+
+function ampl = calc_amplitude(img)
+   ampl = sum(img(:));
+
+function pe   = calc_posn_error(qmi, xmean, ymean, xy)
+   pe = sqrt(sum(xy.^2)) - sqrt( xmean^2 + ymean^2);
+
+function res  = calc_resolution(qmi, map)
+   res = sqrt( sum(qmi(:)) / sum(map(:)));
+
+function sd  = calc_shape_deform(qmi, equiv_circ)
+   not_circ= qmi & ~equiv_circ;
+   sd = sum(not_circ(:))/sum(qmi(:));
+
+function rr = calc_ringing(img, qmi );
+   ring_part =  img .* ( (img<0) & ~qmi);
+   rr = -sum( ring_part(:) )/sum( img(:).*qmi(:) );
+
+function [xmean,ymean,equiv_circ,map,qmi,img] = calc_cofg(img);
+%  if abs(max(img(:))) < abs(min(img(:))); img= -img; end
+   qmi = calc_hm_set( img, 0.25 );
+   if sum(img(:) & qmi(:))<0 ; keyboard ; end
+   [x,y]=meshgrid(linspace(-1,1,32),linspace(-1,1,32)); map = x.^2+y.^2<1.1;
+   qmi = qmi.*map; img = img.*map;
+
+   ss_qmi = sum(qmi(:));
+   xmean =  sum(sum( (qmi.*x) ))/ss_qmi; % centre of gravity
+   ymean =  sum(sum( (qmi.*y) ))/ss_qmi;
+   equiv_circ = (x-xmean).^2 + (y-ymean).^2 < ss_qmi/pi/(32/2)^2;
+
+</pre>
+
+<H2>Calculate noise performance</H2>
+
+Noise parameters are based on the <i>Noise Figure</i>
+which estimates the amplification of noise through
+the reconstruction algorithm (as a function of
+radial position).
+<p>
+ The desired <i>Noise Figure</i> should be as low as possible.
+<p>
+Noise sources include: 1) Pseudo-random Gaussian
+noise, and 2) Measured phantom noise (from 
+Hahn <i>et al</i>, 2008).
+<center>
+<img src="noise_parameters.png">
+<br>
+Calculation of noise parameters for reconstructed images.
+Note that the <i>l</i>1 norm is used for clarity in the
+figure. Other norms are possible:
+</center>
+
+The parameters listed previously
+ are calculated from images using the function
+<a href="./GREIT_sim_params.m"><tt
+          >GREIT_sim_params.m</tt></a>.
+<pre>
+function params = GREIT_noise_params(imgs, alg, vh, vi )
+% params = GREIT_noise_params(imgs, homg_voltage, sig_voltage)
+%  params(1,:) = Noise Figure
+
+% (C) 2008 Andy Adler. Licensed under GPL v2 or v3
+% $Id: GREIT_noise_params.m 1622 2008-09-26 14:06:17Z aadler $
+
+% There are better ways here
+noise = 0.01*std(vh)*randn(208,1000);
+vhn= vh*ones(1,size(noise,2));
+%signal_y = vi -  (vh*ones(1,size(vi,2)));
+ signal_y = vi ./ (vh*ones(1,size(vi,2))) - 1;
+%noise_y  = mean(std(noise      ),2); 
+ noise_y  = mean(std(noise./vhn ),2); 
+snr_y = mean(abs(signal_y),1) / noise_y;
+
+im_n= feval(alg, vh, vhn + noise);
+%signal_x = mean(mean(abs(imgs),1),2);
+ signal_x = mean(mean(   (imgs),1),2);
+%noise_x  = mean(abs(im_n(:)));
+ noise_x  = mean(std(std(im_n)));
+snr_x = signal_x / noise_x;
+params= [snr_y(:)./snr_x(:)]';
+
+</pre>
+
+<H3>Parameters from example images</H3>
+
+In order to display the parameters from the example images,
+we calculate:
+<pre>
+% Calc Parameters $Id: simulation_test04.m 1726 2008-12-02 11:43:20Z aadler $
+
+subplot(421); algs = get_list_of_algs;
+
+for i= 1:length(algs)
+   img = feval(algs{i}, vh, vi );
+   param= [GREIT_noise_params(img, algs{i}, vh, vi); ... % noise parameters
+           GREIT_sim_params(  img, xyzr_pt)];            % image parameters
+
+   for j=1:size(param,1)
+      plot(param(j,:));
+      set(gca,'XTickLabel',[]); set(gca,'XLim',[1,size(param,2)])
+      if     j==1; set(gca,'YLim',[0,3.5]);      % Noise Figure
+      elseif j==2; set(gca,'YLim',[0,1.5]);      % Amplitude
+      elseif j==3; set(gca,'YLim',[-0.05,0.25]);  % Posn Error
+      elseif j==4; set(gca,'YLim',[0,0.4]);      % Resolution
+      elseif j==5; set(gca,'YLim',[0,0.5]);      % Shape Deform
+      elseif j==6; set(gca,'YLim',[0,1.5]);      % Ringing
+      end
+      print('-dpng','-r200',sprintf('simulation_test_imgs/simulation_test04_%d%d.png',i,j));
+      print('-dpng','-r100',sprintf('simulation_test_imgs/simulation_test04sm_%d%d.png',i,j));
+   end
+end
+
+!find simulation_test_imgs -name s*0*_??.png -exec convert -trim '{}' png8:'{}' ';'
+
+</pre>
+
+<center>
+<table border="0">
+<tr>
+   <th> 
+   <th> Sheffield <br>Backproj
+   <th> NOSER <br>Norm Diff
+   <th> NOSER <br>Diff
+<tr>
+   <th> Amplitude
+   <br><i>Want:<br>uniform</i>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_12.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_12.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_22.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_22.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_32.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_32.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_42.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_42.png"></a>
+<tr>
+   <th> Position<br>Error
+   <br><i>Want:<br>small,uniform</i>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_13.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_13.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_23.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_23.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_33.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_33.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_43.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_43.png"></a>
+<tr>
+   <th> Resolution
+   <br><i>Want:<br>small,uniform</i>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_14.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_14.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_24.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_24.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_34.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_34.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_44.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_44.png"></a>
+<tr>
+   <th> Shape<br>Deformation
+   <br><i>Want:<br>small,uniform</i>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_15.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_15.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_25.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_25.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_35.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_35.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_45.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_45.png"></a>
+<tr>
+   <th> Ringing
+   <br><i>Want:<br>small</i>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_16.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_16.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_26.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_26.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_36.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_36.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_46.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_46.png"></a>
+<tr>
+   <th> Noise<br>Figure
+   <br><i>Want:<br>small</i>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_11.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_11.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_21.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_21.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_31.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_31.png"></a>
+   <td><a border="0" href="./simulation_test_imgs/simulation_test04_41.png"><img border="0" src="./simulation_test_imgs/simulation_test04sm_41.png"></a>
+</table>
+Plots of parameters as a function of radial position
+(<i>left</i> is centre, <i>right</i> is the boundary)
+</center>
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->
+

@@ -1,0 +1,284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fwd_solve_higher_order</title>
+  <meta name="keywords" content="fwd_solve_higher_order">
+  <meta name="description" content="Solve for voltages (nodes/electrodes) for a forward model.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; fwd_solve_higher_order.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>fwd_solve_higher_order
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Solve for voltages (nodes/electrodes) for a forward model.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function[data] = fwd_solve_higher_order(fwd_model,img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">Solve for voltages (nodes/electrodes) for a forward model. 
+M Crabb - 29.06.2012
+ 
+ Example (2D):
+  imdl = mk_common_model('c2C',16); img=mk_image(imdl.fwd_model,1);
+  img.fwd_model.solve = @fwd_solve_higher_order;
+  img.fwd_model.system_mat = @system_mat_higher_order;
+  
+  vve=[]; JJ4=[];
+  for i= 1:3; switch i;
+     case 1; img.fwd_model.approx_type = 'tri3'; % linear
+     case 2; img.fwd_model.approx_type = 'tri6'; % quadratic
+     case 3; img.fwd_model.approx_type = 'tri10'; % cubic;
+     end %switch
+     vv=fwd_solve(img);      vve(:,i)=vv.meas;
+  end
+
+ Example (3D):
+  imdl = mk_common_model('b3cr',16);  img=mk_image(imdl.fwd_model,1);
+  img.fwd_model.solve = @fwd_solve_higher_order;
+  img.fwd_model.system_mat = @system_mat_higher_order;
+  
+  vve=[]; JJ4=[];
+  for i= 1:2; switch i;
+     case 1; img.fwd_model.approx_type = 'tet4'; % linear
+     case 2; img.fwd_model.approx_type = 'tet10'; % quadratic
+     end %switch
+     vv=fwd_solve(img);      vve(:,i)=vv.meas;
+  end</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>	[V] = LEFT_DIVIDE(E,I,tol,pp,V);</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/solvers/calc_system_mat.html" class="code" title="function system_mat = calc_system_mat( fwd_model, img)">calc_system_mat</a>	CALC_SYSTEM_MAT: calculate FEM system matrix from fwd_model and image</li><li><a href="fem_1st_to_higher_order.html" class="code" title="function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)">fem_1st_to_higher_order</a>	FEM_1ST_TO_HIGH_ORDER:  Modify the FEM for high order FEM called as</li><li><a href="fwd_solve_higher_order.html" class="code" title="function[data] = fwd_solve_higher_order(fwd_model,img)">fwd_solve_higher_order</a>	Solve for voltages (nodes/electrodes) for a forward model.</li><li><a href="system_mat_higher_order.html" class="code" title="function [s_mat]=system_mat_higher_order(fwd_model,img)">system_mat_higher_order</a>	Assemble the total stiffness matrix : s_mat.E=At;</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="fwd_solve_higher_order.html" class="code" title="function[data] = fwd_solve_higher_order(fwd_model,img)">fwd_solve_higher_order</a>	Solve for voltages (nodes/electrodes) for a forward model.</li><li><a href="jacobian_adjoint_higher_order.html" class="code" title="function J = jacobian_adjoint_higher_order(fwd_model,img)">jacobian_adjoint_higher_order</a>	Find the Jacobian associated with an image (and forward model)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li><li><a href="#_sub2" class="code">function [vve] = do_unit_test_2D</a></li><li><a href="#_sub3" class="code">function vve=do_unit_test_3D;</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function[data] = fwd_solve_higher_order(fwd_model,img)</a>
+0002 <span class="comment">%Solve for voltages (nodes/electrodes) for a forward model.</span>
+0003 <span class="comment">%M Crabb - 29.06.2012</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Example (2D):</span>
+0006 <span class="comment">%  imdl = mk_common_model('c2C',16); img=mk_image(imdl.fwd_model,1);</span>
+0007 <span class="comment">%  img.fwd_model.solve = @fwd_solve_higher_order;</span>
+0008 <span class="comment">%  img.fwd_model.system_mat = @system_mat_higher_order;</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%  vve=[]; JJ4=[];</span>
+0011 <span class="comment">%  for i= 1:3; switch i;</span>
+0012 <span class="comment">%     case 1; img.fwd_model.approx_type = 'tri3'; % linear</span>
+0013 <span class="comment">%     case 2; img.fwd_model.approx_type = 'tri6'; % quadratic</span>
+0014 <span class="comment">%     case 3; img.fwd_model.approx_type = 'tri10'; % cubic;</span>
+0015 <span class="comment">%     end %switch</span>
+0016 <span class="comment">%     vv=fwd_solve(img);      vve(:,i)=vv.meas;</span>
+0017 <span class="comment">%  end</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Example (3D):</span>
+0020 <span class="comment">%  imdl = mk_common_model('b3cr',16);  img=mk_image(imdl.fwd_model,1);</span>
+0021 <span class="comment">%  img.fwd_model.solve = @fwd_solve_higher_order;</span>
+0022 <span class="comment">%  img.fwd_model.system_mat = @system_mat_higher_order;</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%  vve=[]; JJ4=[];</span>
+0025 <span class="comment">%  for i= 1:2; switch i;</span>
+0026 <span class="comment">%     case 1; img.fwd_model.approx_type = 'tet4'; % linear</span>
+0027 <span class="comment">%     case 2; img.fwd_model.approx_type = 'tet10'; % quadratic</span>
+0028 <span class="comment">%     end %switch</span>
+0029 <span class="comment">%     vv=fwd_solve(img);      vve(:,i)=vv.meas;</span>
+0030 <span class="comment">%  end</span>
+0031 
+0032 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0033 
+0034 <span class="keyword">if</span> nargin == 1
+0035    img= fwd_model;
+0036 <span class="keyword">elseif</span>  strcmp(getfield(warning(<span class="string">'query'</span>,<span class="string">'EIDORS:DeprecatedInterface'</span>),<span class="string">'state'</span>),<span class="string">'on'</span>)
+0037    warning(<span class="string">'EIDORS:DeprecatedInterface'</span>, <span class="keyword">...</span>
+0038       [<span class="string">'Calling FWD_SOLVE_HIGHER_ORDER with two arguments is deprecated and will cause'</span> <span class="keyword">...</span>
+0039        <span class="string">' an error in a future version. First argument ignored.'</span>]);
+0040 <span class="keyword">end</span>
+0041 
+0042 fwd_model= img.fwd_model;
+0043 
+0044 <span class="comment">%Modify the forward model to be of my type</span>
+0045 <span class="keyword">if</span> ~isfield(fwd_model,<span class="string">'approx_type'</span>)    || <span class="keyword">...</span>
+0046    strcmp(fwd_model.approx_type,<span class="string">'tri3'</span>) || <span class="keyword">...</span>
+0047    strcmp(fwd_model.approx_type,<span class="string">'tet4'</span>)   
+0048     <span class="comment">%Do nothing</span>
+0049 <span class="keyword">else</span>
+0050     [bound,elem,nodes] = <a href="fem_1st_to_higher_order.html" class="code" title="function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)">fem_1st_to_higher_order</a>(fwd_model);
+0051     fwd_model.boundary=bound; fwd_model.elems=elem; fwd_model.nodes=nodes;
+0052     <span class="comment">%We need to update fwd_model of img too for system_mat</span>
+0053     img.fwd_model=fwd_model;
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="comment">%Calculate the total stiffness matrix</span>
+0057 s_mat = <a href="../../../eidors/solvers/calc_system_mat.html" class="code" title="function system_mat = calc_system_mat( fwd_model, img)">calc_system_mat</a>(img); At=s_mat.E;
+0058 
+0059 <span class="comment">%Find electrode stucture and no.of electrodes and initialize vector</span>
+0060 <span class="comment">%Find stim strucutre and no. stimulations</span>
+0061 <span class="comment">%Find node structure and find no.nodes</span>
+0062 elecstruc=fwd_model.electrode; nelecs=size(elecstruc,2);
+0063 stimstruc=fwd_model.stimulation; nstims=size(stimstruc,2); 
+0064 nodestruc=fwd_model.nodes; nnodes=size(nodestruc,1); 
+0065 
+0066 <span class="comment">%Find total number of measurements</span>
+0067 nmeass=0;
+0068 <span class="keyword">for</span> k=1:nstims
+0069     stimkmeasmatrix = stimstruc(k).meas_pattern;
+0070     nmeass=nmeass+size(stimkmeasmatrix,1);
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="comment">%Complete or Point? Check first electrode (no mized models) and this changes</span>
+0074 <span class="comment">%the index vector of what 'node' number corresponds to an electrode</span>
+0075 elecnode=zeros(1,nelecs);
+0076 <span class="keyword">if</span>(size(elecstruc(1).nodes,2)==1 &amp;&amp; size(elecstruc(1).nodes,1)==1) <span class="comment">%POINT</span>
+0077     <span class="keyword">for</span> i=1:nelecs
+0078         <span class="comment">%POINT - Assign electrode index at correct node</span>
+0079         elecnode(i)=elecstruc(i).nodes;
+0080     <span class="keyword">end</span>
+0081     <span class="comment">%Assign correct size unknowns and right hand side matrix</span>
+0082     rhsdata=zeros(nnodes,nstims); 
+0083     nodeunknowns=zeros(nnodes,nstims); 
+0084 <span class="keyword">else</span>
+0085     <span class="keyword">for</span> i=1:nelecs
+0086         <span class="comment">%COMPLETE - Assign electrode at bottom of list</span>
+0087         elecnode(i)=nnodes+i;
+0088     <span class="keyword">end</span>
+0089     <span class="comment">%Assign correct size right hand side matrix</span>
+0090     rhsdata=zeros(nnodes+nelecs,nstims); 
+0091     nodeunknowns=zeros(nnodes+nelecs,nstims); 
+0092 <span class="keyword">end</span>
+0093 
+0094 <span class="comment">%Assign currents at correct point in rhs matrix using index vector</span>
+0095 <span class="keyword">for</span> ii=1:nstims
+0096     <span class="comment">%The vector of current values for stimulation</span>
+0097     curnode=stimstruc(ii).stim_pattern;
+0098     <span class="keyword">for</span> i=1:nelecs
+0099         rhsdata(elecnode(i),ii)=curnode(i);
+0100     <span class="keyword">end</span>
+0101 <span class="keyword">end</span>
+0102 
+0103 <span class="comment">%Create index vector and eliminate ground node equation from index</span>
+0104 groundnode=fwd_model.gnd_node; idx=1:size(At,1); idx(groundnode)=[];
+0105 
+0106 <span class="comment">%Solve the simulated linear system with index</span>
+0107 nodeunknowns(idx,:)=<a href="../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>(At(idx,idx),rhsdata(idx,:));
+0108 
+0109 
+0110 <span class="comment">%Find electrode voltages and store in matrix</span>
+0111 <span class="comment">%Calculate electrode voltages using index vector elecnode(i)</span>
+0112 velec=zeros(nelecs,nstims);
+0113 <span class="keyword">for</span> i=1:nelecs
+0114     <span class="comment">%This is the indexed entries in nodeunknowns</span>
+0115     velec(i,:)=nodeunknowns(elecnode(i),:);
+0116 <span class="keyword">end</span>
+0117 
+0118 <span class="comment">%Get the measured voltages</span>
+0119 vmeaselec=zeros(nmeass,1); idx=0;
+0120 <span class="keyword">for</span> ii=1:nstims
+0121     meas_pat=stimstruc(ii).meas_pattern; <span class="comment">%Measurement patterns</span>
+0122     n_meas=size(meas_pat,1); <span class="comment">%Number of measures</span>
+0123     vmeaselec(idx + (1:n_meas) ) = meas_pat*velec(:,ii); <span class="comment">%Diff data</span>
+0124     idx=idx+n_meas; <span class="comment">%Increase counter</span>
+0125 <span class="keyword">end</span>
+0126 
+0127 <span class="comment">%Return the electrode voltages in data structure</span>
+0128 data.meas= vmeaselec;
+0129 data.time= NaN; <span class="comment">% unknown</span>
+0130 data.name= <span class="string">'solved by fwd_solve_higher_order'</span>;
+0131 data.quantity = <span class="string">'voltage'</span>;
+0132 <span class="keyword">try</span>; <span class="keyword">if</span> img.fwd_solve.get_all_meas == 1
+0133    data.volt = nodeunknowns(1:nnodes,:); <span class="comment">% but not on CEM nodes</span>
+0134 <span class="keyword">end</span>; <span class="keyword">end</span>
+0135 <span class="keyword">try</span>; <span class="keyword">if</span> img.fwd_solve.get_all_nodes== 1
+0136    data.volt = nodeunknowns;             <span class="comment">% all, including CEM nodes</span>
+0137 <span class="keyword">end</span>; <span class="keyword">end</span>
+0138 
+0139 
+0140 <span class="keyword">end</span>
+0141 
+0142 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0143    tol = 1e-13;
+0144    vve = <a href="#_sub2" class="code" title="subfunction [vve] = do_unit_test_2D">do_unit_test_2D</a>;
+0145    vve_ref = [
+0146    0.898225115241117   0.921510761628436   0.928516596253320
+0147    0.406398239528486   0.412406966923347   0.413938179536629
+0148    0.248067950415984   0.250212111398160   0.250609888163540
+0149    0.179592593985273   0.179643951982781   0.179734695991927];
+0150 
+0151    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2D: 1st order'</span>,vve(1:4,1),vve_ref(1:4,1),tol);
+0152    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2D: 2nd order'</span>,vve(1:4,2),vve_ref(1:4,2),tol);
+0153    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2D: 3rd order'</span>,vve(1:4,3),vve_ref(1:4,3),tol);
+0154    vve = do_unit_test_3D;
+0155    vve_ref = [
+0156    1.404189968566952   1.410900674463290
+0157    0.403207625837809   0.402992578774667
+0158    0.198517193844915   0.201211971071238
+0159    0.133852904079284   0.133841105904217];
+0160    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3D: 1st order'</span>,vve(1:4,1),vve_ref(1:4,1),tol);
+0161    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3D: 2nd order'</span>,vve(1:4,2),vve_ref(1:4,2),tol);
+0162 
+0163 <span class="keyword">end</span>
+0164 <a name="_sub2" href="#_subfunctions" class="code">function [vve] = do_unit_test_2D</a>
+0165    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'c2C'</span>,16); img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl.fwd_model,1);
+0166    vv=<a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);      v0e=vv.meas;
+0167 
+0168    <span class="comment">%High-order EIDORS solver %Change default eidors solvers</span>
+0169    img.fwd_model.solve = @<a href="fwd_solve_higher_order.html" class="code" title="function[data] = fwd_solve_higher_order(fwd_model,img)">fwd_solve_higher_order</a>;
+0170    img.fwd_model.system_mat = @<a href="system_mat_higher_order.html" class="code" title="function [s_mat]=system_mat_higher_order(fwd_model,img)">system_mat_higher_order</a>;
+0171 
+0172    vve=[]; JJ4=[];
+0173    <span class="keyword">for</span> i= 1:3; <span class="keyword">switch</span> i;
+0174       <span class="keyword">case</span> 1; img.fwd_model.approx_type = <span class="string">'tri3'</span>; <span class="comment">% linear</span>
+0175       <span class="keyword">case</span> 2; img.fwd_model.approx_type = <span class="string">'tri6'</span>; <span class="comment">% quadratic</span>
+0176       <span class="keyword">case</span> 3; img.fwd_model.approx_type = <span class="string">'tri10'</span>; <span class="comment">% cubic;</span>
+0177       <span class="keyword">end</span> <span class="comment">%switch</span>
+0178       vv=<a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);      vve(:,i)=vv.meas;
+0179    <span class="keyword">end</span>
+0180 
+0181    subplot(321);
+0182    plot([v0e,vve,(v0e*[1,1,1]-vve)*10]);
+0183    legend(<span class="string">'Default'</span>,<span class="string">'linear'</span>,<span class="string">'quadratic'</span>,<span class="string">'cubic'</span>,<span class="string">'(1-0)x10'</span>,<span class="string">'(2-0)x10'</span>,<span class="string">'(3-0)x10'</span>);
+0184    xlim([1,100]);
+0185 <span class="keyword">end</span>
+0186 <a name="_sub3" href="#_subfunctions" class="code">function vve=do_unit_test_3D;</a>
+0187    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'b3cr'</span>,16); img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl.fwd_model,1);
+0188    vv=<a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);      v0e=vv.meas;
+0189 
+0190    <span class="comment">%High-order EIDORS solver %Change default eidors solvers</span>
+0191    img.fwd_model.solve = @<a href="fwd_solve_higher_order.html" class="code" title="function[data] = fwd_solve_higher_order(fwd_model,img)">fwd_solve_higher_order</a>;
+0192    img.fwd_model.system_mat = @<a href="system_mat_higher_order.html" class="code" title="function [s_mat]=system_mat_higher_order(fwd_model,img)">system_mat_higher_order</a>;
+0193 
+0194    vve=[]; JJ4=[];
+0195    <span class="keyword">for</span> i= 1:2; <span class="keyword">switch</span> i;
+0196       <span class="keyword">case</span> 1; img.fwd_model.approx_type = <span class="string">'tet4'</span>; <span class="comment">% linear</span>
+0197       <span class="keyword">case</span> 2; img.fwd_model.approx_type = <span class="string">'tet10'</span>; <span class="comment">% quadratic</span>
+0198       <span class="keyword">end</span> <span class="comment">%switch</span>
+0199       vv=<a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);      vve(:,i)=vv.meas;
+0200    <span class="keyword">end</span>
+0201 
+0202    subplot(322);
+0203    plot([v0e,vve,(v0e*[1,1]-vve)*10]);
+0204    legend(<span class="string">'Default'</span>,<span class="string">'linear'</span>,<span class="string">'quadratic'</span>,<span class="string">'(1-0)x10'</span>,<span class="string">'(2-0)x10'</span>);
+0205    xlim([1,100]);
+0206 
+0207 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

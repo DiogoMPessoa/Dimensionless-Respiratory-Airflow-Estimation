@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of common_colourbar</title>
+  <meta name="keywords" content="common_colourbar">
+  <meta name="description" content="COMMON_COLOURBAR make a joint colourbar for several subplots">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; common_colourbar.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>common_colourbar
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>COMMON_COLOURBAR make a joint colourbar for several subplots</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function a = common_colourbar(ha,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">COMMON_COLOURBAR make a joint colourbar for several subplots
+ a = common_colourbar(ha,img) adds a common colourbar to the subplots
+ identified in the array of handles ha, passing the img input to
+ eidors_colourbar for actual rendering, and returning a handle to a new
+ parent axis of the colourbar (a).
+
+ a = common_colourbar(ha, ...) uses all inputs beside ha to call
+ eidors_colourbar.
+
+ common_colourbar('clear',a) removes the colourbar previously added by
+ a call to common_colourbar.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="common_colourbar.html" class="code" title="function a = common_colourbar(ha,varargin)">common_colourbar</a>	COMMON_COLOURBAR make a joint colourbar for several subplots</li><li><a href="eidors_colourbar.html" class="code" title="function hh= eidors_colourbar(max_scale,ref_lev, cb_shrink_move, greyscale)">eidors_colourbar</a>	EIDORS_COLOURBAR - create an eidors colourbar with scaling to image</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="common_colourbar.html" class="code" title="function a = common_colourbar(ha,varargin)">common_colourbar</a>	COMMON_COLOURBAR make a joint colourbar for several subplots</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function a = common_colourbar(ha,varargin)</a>
+0002 <span class="comment">%COMMON_COLOURBAR make a joint colourbar for several subplots</span>
+0003 <span class="comment">% a = common_colourbar(ha,img) adds a common colourbar to the subplots</span>
+0004 <span class="comment">% identified in the array of handles ha, passing the img input to</span>
+0005 <span class="comment">% eidors_colourbar for actual rendering, and returning a handle to a new</span>
+0006 <span class="comment">% parent axis of the colourbar (a).</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% a = common_colourbar(ha, ...) uses all inputs beside ha to call</span>
+0009 <span class="comment">% eidors_colourbar.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% common_colourbar('clear',a) removes the colourbar previously added by</span>
+0012 <span class="comment">% a call to common_colourbar.</span>
+0013 
+0014 <span class="comment">% (C) 2013 Bartlomiej Grychtol. License: GPL version 2 or 3.</span>
+0015 <span class="comment">% $Id: common_colourbar.m 4930 2015-05-08 13:01:30Z aadler $</span>
+0016 
+0017 <span class="keyword">if</span> ischar(ha)
+0018    <span class="keyword">switch</span> ha
+0019       <span class="keyword">case</span> <span class="string">'UNIT_TEST'</span>
+0020          <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>;
+0021          <span class="keyword">return</span>;
+0022       <span class="keyword">case</span> <span class="string">'clear'</span>
+0023          img = varargin{1};
+0024          delete(img);
+0025       <span class="keyword">otherwise</span>
+0026          error(<span class="string">'huh?'</span>);
+0027    <span class="keyword">end</span>
+0028 <span class="keyword">end</span>
+0029    
+0030 fig = get(ha(1),<span class="string">'Parent'</span>);
+0031 ca = get(fig,<span class="string">'CurrentAxes'</span>);
+0032 <span class="comment">%1. Figure out position limits</span>
+0033 x_min = inf; x_max = -inf;
+0034 y_min = inf; y_max = -inf;
+0035 <span class="keyword">for</span> i = 1:length(ha)
+0036    u = get(ha(i),<span class="string">'Units'</span>);
+0037    set(ha(i),<span class="string">'Units'</span>,<span class="string">'points'</span>)
+0038    pos = get(ha(i), <span class="string">'Position'</span>);
+0039    x_min = min(x_min, pos(1));
+0040    x_max = max(x_max, pos(1)+pos(3));
+0041    y_min = min(y_min, pos(2));
+0042    y_max = max(y_max, pos(2)+pos(4));
+0043    set(ha(i),<span class="string">'Units'</span>,u);
+0044 <span class="keyword">end</span>
+0045 <span class="comment">%2. Create an axis that overlaps them all</span>
+0046 pos = [x_min y_min x_max-x_min y_max-y_min];
+0047 <span class="comment">% this is how Matlab R2011a calculates space for the colorbar</span>
+0048 pp = get(gca,<span class="string">'Position'</span>);
+0049 sz = min(max(pp(3:4)*0.3,20),40);
+0050 <span class="comment">% so we pre-emptively extend the axis by this amount</span>
+0051 pos(3) = pos(3) + sz(1);
+0052 
+0053 a = axes(<span class="string">'Units'</span>,<span class="string">'points'</span>,<span class="string">'Position'</span>,pos);
+0054 axis off
+0055 
+0056 <span class="comment">%3. Add eidors colorbar</span>
+0057 <a href="eidors_colourbar.html" class="code" title="function hh= eidors_colourbar(max_scale,ref_lev, cb_shrink_move, greyscale)">eidors_colourbar</a>(varargin{:});
+0058 
+0059 <span class="comment">%4. Minimize impact on the figure from user's perspective</span>
+0060 
+0061 <span class="comment">% put the new axis behind everything else</span>
+0062 set(fig,<span class="string">'Children'</span>,circshift(get(fig,<span class="string">'Children'</span>),-1));
+0063 
+0064 <span class="comment">% return focus to the previous axes</span>
+0065 set(fig,<span class="string">'CurrentAxes'</span>,ca)
+0066 
+0067 
+0068 
+0069 
+0070 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0071 clf
+0072 <span class="keyword">for</span> i = 1:6
+0073 h(i)  = subplot(2,3,i);
+0074 <span class="keyword">end</span>
+0075 <a href="common_colourbar.html" class="code" title="function a = common_colourbar(ha,varargin)">common_colourbar</a>(h([1 2 4 5]),2,0);
+0076 <a href="common_colourbar.html" class="code" title="function a = common_colourbar(ha,varargin)">common_colourbar</a>(h(4:6),5,1);
+0077 <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'CHECK GRAPHICS'</span>,0);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

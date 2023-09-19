@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of aa_e_move_image_prior</title>
+  <meta name="keywords" content="aa_e_move_image_prior">
+  <meta name="description" content="AA_E_MOVE_IMAGE_PRIOR calculate image prior">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; aa_e_move_image_prior.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>aa_e_move_image_prior
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>AA_E_MOVE_IMAGE_PRIOR calculate image prior</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function Reg= aa_e_move_image_prior( inv_model ); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> AA_E_MOVE_IMAGE_PRIOR calculate image prior
+ Reg= aa_e_move_image_prior( inv_model )
+ Reg        =&gt; output regularization term
+ inv_model  =&gt; inverse model struct
+ Parameters:
+   inv_model.image_prior.parameters(1) -&gt; relative weighting
+     of movement vs image fraction of hyperparameter
+     =&gt; Default = 100
+   inv_model.aa_e_move_image_prior.RegC.func = Cond Reg fcn
+   inv_model.aa_e_move_image_prior.RegM.func = Move Reg fcn
+   either @laplace_movement_image_prior OR @tikhonov_movement_image_prior
+
+ For image portion, we use a Laplace prior, as 
+ -1 for each adjacent element, and 3 (in 2D) or 4 (in 3D)
+ for the element itself
+
+ For the movmenent portion, we define a smoothness
+ constraint, such that Rij = -1 for adjacent electrodes
+
+ If used with a dual model (ie coarse2fine mapping), ensure
+    imdl.prior_use_fwd_not_rec = 1;</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/solvers/inverse/prior_movement.html" class="code" title="function Reg= prior_movement( inv_model );">prior_movement</a>	PRIOR_MOVEMENT calculate image prior</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Reg= aa_e_move_image_prior( inv_model );</a>
+0002 <span class="comment">% AA_E_MOVE_IMAGE_PRIOR calculate image prior</span>
+0003 <span class="comment">% Reg= aa_e_move_image_prior( inv_model )</span>
+0004 <span class="comment">% Reg        =&gt; output regularization term</span>
+0005 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0006 <span class="comment">% Parameters:</span>
+0007 <span class="comment">%   inv_model.image_prior.parameters(1) -&gt; relative weighting</span>
+0008 <span class="comment">%     of movement vs image fraction of hyperparameter</span>
+0009 <span class="comment">%     =&gt; Default = 100</span>
+0010 <span class="comment">%   inv_model.aa_e_move_image_prior.RegC.func = Cond Reg fcn</span>
+0011 <span class="comment">%   inv_model.aa_e_move_image_prior.RegM.func = Move Reg fcn</span>
+0012 <span class="comment">%   either @laplace_movement_image_prior OR @tikhonov_movement_image_prior</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% For image portion, we use a Laplace prior, as</span>
+0015 <span class="comment">% -1 for each adjacent element, and 3 (in 2D) or 4 (in 3D)</span>
+0016 <span class="comment">% for the element itself</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% For the movmenent portion, we define a smoothness</span>
+0019 <span class="comment">% constraint, such that Rij = -1 for adjacent electrodes</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% If used with a dual model (ie coarse2fine mapping), ensure</span>
+0022 <span class="comment">%    imdl.prior_use_fwd_not_rec = 1;</span>
+0023 
+0024 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0025 <span class="comment">% $Id: aa_e_move_image_prior.m 3284 2012-07-01 10:04:17Z aadler $</span>
+0026 
+0027 <span class="comment">% relative strengths of conductivity and movement priors</span>
+0028 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'AA_E_MOVE_IMAGE_PRIOR is deprecated as of 07-Jun-2012. Use PRIOR_MOVEMENT instead.'</span>);
+0029 
+0030 <span class="keyword">if</span> isfield(inv_model,<span class="string">'aa_e_move_image_prior'</span>);
+0031   inv_model.prior_movement = inv_model.aa_e_move_image_prior;
+0032 <span class="keyword">end</span>
+0033 
+0034 Reg = <a href="../../eidors/solvers/inverse/prior_movement.html" class="code" title="function Reg= prior_movement( inv_model );">prior_movement</a>( inv_model);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

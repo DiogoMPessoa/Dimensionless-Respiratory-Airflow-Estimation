@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of h_refine_square_domain</title>
+  <meta name="keywords" content="h_refine_square_domain">
+  <meta name="description" content="Perform uniform h refinement of square CEM">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">eidors</a> &gt; <a href="../../index.html">solvers</a> &gt; <a href="../index.html">forward</a> &gt; <a href="index.html">tools-beta</a> &gt; h_refine_square_domain.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward/tools-beta&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>h_refine_square_domain
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Perform uniform h refinement of square CEM</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function mdl = h_refine(mdl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">Perform uniform h refinement of square CEM</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mdl = h_refine(mdl)</a>
+0002 <span class="comment">%Perform uniform h refinement of square CEM</span>
+0003 
+0004 <span class="comment">%Copy nodes, elems and boundaries</span>
+0005 nodes=mdl.nodes; boundary=mdl.boundary; elems=mdl.elems;
+0006 
+0007 <span class="comment">%Find nodes, elems, boundary and problem dimensions</span>
+0008 n_nodes = size(nodes,1); n_elems = size(elems,1); n_boundary=size(boundary,1);
+0009 
+0010 <span class="comment">%Maximum number of new nodes i.e. unconnected elemets and boundaries</span>
+0011 n_nodes_new = n_nodes + 3*n_elems + n_boundary; <span class="comment">%Maximum number of new nodes</span>
+0012 n_boundary_new = n_boundary*2; <span class="comment">%Number of new boundaries EXACT</span>
+0013 n_elems_new = n_elems*4; <span class="comment">%Number of new elements EXACT</span>
+0014 
+0015 <span class="comment">%Storage for these new arrays</span>
+0016 nodes_new=zeros(n_nodes_new,2);
+0017 elems_new=zeros(n_elems_new,3);
+0018 boundary_new=zeros(n_boundary_new,2);
+0019 
+0020 <span class="comment">%Keep original nodes in n_nodes_new</span>
+0021 nodes_new(1:n_nodes,:)=nodes;
+0022 
+0023 <span class="comment">%Loop through each element and fine edge midpoints.</span>
+0024 cnt=0;
+0025 <span class="keyword">for</span> i=1:n_elems
+0026 <span class="comment">%Find new nodes on midpoints</span>
+0027 nodes_new(n_nodes+(i-1)*3+1,:) = 0.5*(nodes(elems(i,1),:) + nodes(elems(i,2),:));
+0028 nodes_new(n_nodes+(i-1)*3+2,:) = 0.5*(nodes(elems(i,1),:) + nodes(elems(i,3),:));
+0029 nodes_new(n_nodes+(i-1)*3+3,:) = 0.5*(nodes(elems(i,2),:) + nodes(elems(i,3),:));
+0030 
+0031 <span class="comment">%Create the four new elements</span>
+0032 elems_new((i-1)*4+1,1) = elems(i,1); elems_new((i-1)*4+1,2) = n_nodes+3*(i-1)+1; elems_new((i-1)*4+1,3)=n_nodes+3*(i-1)+2;
+0033 elems_new((i-1)*4+2,1) = elems(i,2); elems_new((i-1)*4+2,2) = n_nodes+3*(i-1)+1; elems_new((i-1)*4+2,3)=n_nodes+3*(i-1)+3;
+0034 elems_new((i-1)*4+3,1) = elems(i,3); elems_new((i-1)*4+3,2) = n_nodes+3*(i-1)+2; elems_new((i-1)*4+3,3)=n_nodes+3*(i-1)+3;
+0035 elems_new((i-1)*4+4,1) = n_nodes+3*(i-1)+1; elems_new((i-1)*4+4,2) = n_nodes+3*(i-1)+2; elems_new((i-1)*4+4,3)= n_nodes+3*(i-1)+3;
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">%Loop through each boundary and fine edge midpoints</span>
+0039 <span class="keyword">for</span> i=1:n_boundary
+0040 <span class="comment">%Find node and add a row of</span>
+0041 nodes_new(n_nodes+3*n_elems+i,:) = 0.5*(nodes(boundary(i,1),:) + nodes(boundary(i,2),:));
+0042 
+0043 <span class="comment">%Create the two new boundarys</span>
+0044 boundary_new((i-1)*2+1,1) = boundary(i,1); boundary_new((i-1)*2+1,2) = n_nodes+3*n_elems+i; 
+0045 boundary_new((i-1)*2+2,1) = n_nodes+3*n_elems+i; boundary_new((i-1)*2+2,2) = boundary(i,2); 
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="comment">%Find the unique nodes by row</span>
+0049 [nodes, a, b] = unique(nodes_new(n_nodes+1:<span class="keyword">end</span>,:),<span class="string">'rows'</span>);
+0050 
+0051 <span class="comment">%Add the unique nodes to the model</span>
+0052 nodes_new = [mdl.nodes; nodes];
+0053 
+0054 <span class="comment">%Now find unique nodes</span>
+0055 c = [1:n_nodes n_nodes+b']; 
+0056 elems_new = c(elems_new);
+0057 boundary_new = c(boundary_new);
+0058 
+0059 <span class="comment">%Reassign matrices</span>
+0060 nodes=nodes_new; elems=elems_new; boundary=boundary_new;
+0061 
+0062 <span class="comment">%Find new CEM electrode nodes</span>
+0063 <span class="comment">%Recalculate the number of nodes</span>
+0064 n_nodes = size(nodes,1);
+0065 cntE1 = 0; cntE2 = 0;
+0066 <span class="comment">%Loop through boundary and see if electrode is in between electrodes</span>
+0067 <span class="keyword">for</span> i=1:n_nodes
+0068     <span class="keyword">if</span>(nodes(i,2)==0) <span class="comment">%We are on bottom boundary</span>
+0069         <span class="keyword">if</span>( pi/5 &lt;= nodes(i,1) &amp;&amp; nodes(i,1)  &lt;= 2*pi/5)
+0070             cntE1 = cntE1+1;
+0071             E1node(cntE1) = i;
+0072         <span class="keyword">elseif</span>(  3*pi/5 &lt;= nodes(i,1) &amp;&amp; nodes(i,1)  &lt;= 4*pi/5)
+0073             cntE2 = cntE2+1;
+0074             E2node(cntE2) = i;                
+0075         <span class="keyword">end</span>
+0076     <span class="keyword">end</span>            
+0077 <span class="keyword">end</span>
+0078 <span class="comment">%Electrode</span>
+0079 mdl.electrode(1).nodes=E1node;
+0080 mdl.electrode(2).nodes=E2node;        
+0081 
+0082 <span class="comment">%Reassign</span>
+0083 mdl.nodes=nodes; mdl.elems=elems; mdl.boundary=boundary;
+0084     
+0085 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

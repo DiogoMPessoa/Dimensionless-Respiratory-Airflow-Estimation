@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of prior_noser</title>
+  <meta name="keywords" content="prior_noser">
+  <meta name="description" content="PRIOR_NOSER calculate image prior">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; prior_noser.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>prior_noser
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PRIOR_NOSER calculate image prior</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Reg= prior_noser( inv_model ); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PRIOR_NOSER calculate image prior
+ Reg= prior_noser( inv_model )
+ Reg        =&gt; output regularization term
+ inv_model  =&gt; inverse model struct
+
+ Prior is diag( diag(J'*J)^exponent )
+ param is normally .5, this value can be changed by
+ setting inv_model.prior_noser.exponent= new_value</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>	CALC_JACOBIAN_BKGND: calculate background image around</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/deprecated/noser_image_prior.html" class="code" title="function Reg= noser_image_prior( inv_model );">noser_image_prior</a>	NOSER_IMAGE_PRIOR calculate image prior</li><li><a href="../../../eidors/examples/moving_tank_objs.html" class="code" title="function imgs= moving_tank_objs(data_sel, inv_sel, options)">moving_tank_objs</a>	MOVING_TANK_OBJS: create movies of objects moving in tanks</li><li><a href="../../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>	SELECT_IMDL: select pre-packaged inverse model features</li><li><a href="inv_solve_time_prior.html" class="code" title="function img= inv_solve_time_prior( inv_model, data1, data2)">inv_solve_time_prior</a>	INV_SOLVE_TIME_PRIOR inverse solver to account for time differences</li><li><a href="mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>	MK_GN_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="../../../eidors/tests/calc_model_prior_test.html" class="code" title="function ok= calc_model_prior_test;">calc_model_prior_test</a>	Verify model prior calcs</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Reg= prior_noser( inv_model );</a>
+0002 <span class="comment">% PRIOR_NOSER calculate image prior</span>
+0003 <span class="comment">% Reg= prior_noser( inv_model )</span>
+0004 <span class="comment">% Reg        =&gt; output regularization term</span>
+0005 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Prior is diag( diag(J'*J)^exponent )</span>
+0008 <span class="comment">% param is normally .5, this value can be changed by</span>
+0009 <span class="comment">% setting inv_model.prior_noser.exponent= new_value</span>
+0010 
+0011 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0012 <span class="comment">% $Id: prior_noser.m 5664 2017-12-12 15:14:20Z nolwenn85 $</span>
+0013 
+0014     img_bkgnd= <a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>( inv_model );
+0015     J = <a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>(img_bkgnd);
+0016     
+0017     <span class="comment">% if we deal with movement Jacobian, it will be too big, so we chop it</span>
+0018     <span class="keyword">if</span> isfield(img_bkgnd.fwd_model,<span class="string">'coarse2fine'</span>)
+0019        n_els = size(img_bkgnd.fwd_model.coarse2fine,2);
+0020     <span class="keyword">else</span>
+0021        n_els = size(img_bkgnd.fwd_model.elems,1);
+0022     <span class="keyword">end</span>
+0023     J = J(:,1:n_els);
+0024        
+0025 
+0026     exponent= 0.5;
+0027     <span class="keyword">if</span> isfield(inv_model,<span class="string">'prior_noser'</span>);
+0028        exponent= inv_model.prior_noser.exponent;
+0029     <span class="keyword">end</span>
+0030 
+0031     l_prior= size(J,2);
+0032 
+0033     <span class="comment">% Reg is spdiags(diag(J'*J),0, l_prior, l_prior);</span>
+0034     diag_col= sum(J.^2,1)';
+0035     Reg = spdiags( diag_col.^exponent, 0, l_prior, l_prior);
+0036     
+0037     
+0038</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

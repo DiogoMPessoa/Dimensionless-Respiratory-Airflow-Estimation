@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of distmat</title>
+  <meta name="keywords" content="distmat">
+  <meta name="description" content="DISTMAT Distance matrix for a set of points">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">external</a> &gt; <a href="index.html">distmat</a> &gt; distmat.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/external/distmat&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>distmat
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>DISTMAT Distance matrix for a set of points</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [dmat,opt] = distmat(xy,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DISTMAT Distance matrix for a set of points
+   Returns the point-to-point distance between all pairs of points in XY
+       (similar to PDIST in the Statistics Toolbox)
+
+   DMAT = DISTMAT(XY) Calculates the distance matrix using an automatic option
+   DMAT = DISTMAT(XY,OPT) Uses the specified option to compute the distance matrix
+   [DMAT,OPT] = DISTMAT(XY) Also returns the automatic option used by the function
+
+   Inputs:
+       XY is an NxP matrix of coordinates for N points in P dimensions
+       OPT (optional) is an integer between 1 and 4 representing the chosen
+           method for computing the distance matrix (see note below)
+
+   Outputs:
+       DMAT is an NxN matrix, where the value of DMAT(i,j) corresponds to
+           the distance from XY(i,:) to XY(j,:)
+       OPT (optional) is an integer between 1 and 4 representing the method
+           used to compute the distance matrix (see note below)
+
+   Note:
+       DISTMAT contains 4 methods for computing the distance matrix
+         OPT=1 Usually fastest for small inputs. Takes advantage of the symmetric
+               property of distance matrices to perform half as many calculations
+         OPT=2 Usually fastest for medium inputs. Uses a fully vectorized method
+         OPT=3 Usually fastest for large inputs. Uses a partially vectorized
+               method with relatively small memory requirement
+         OPT=4 Another compact calculation, but usually slower than the others
+
+   Example:
+       % Test computation times for the options
+       n = [10 100 1000];
+       dmat = distmat(10*rand(10,3),1); % First call is always really slow
+       for k=1:3
+           for opt=1:4
+               tic; [dmat,opt] = distmat(10*rand(n(k),3),opt); t=toc;
+               disp(sprintf('n=%d, opt=%d, t=%0.6f', n(k), opt, t))
+           end
+       end
+
+   Example:
+       xy = 10*rand(25,2);  % 25 points in 2D
+       dmat = distmat(xy);
+       figure; plot(xy(:,1),xy(:,2),'.');
+       for k=1:25, text(xy(k,1),xy(k,2),[' ' num2str(k)]); end
+       figure; imagesc(dmat); set(gca,'XTick',1:25,'YTick',1:25); colorbar
+
+   Example:
+       xyz = 10*rand(20,3);  % 20 points in 3D
+       dmat = distmat(xyz);
+       figure; plot3(xyz(:,1),xyz(:,2),xyz(:,3),'.');
+       for k=1:20, text(xyz(k,1),xyz(k,2),xyz(k,3),[' ' num2str(k)]); end
+       figure; imagesc(dmat); set(gca,'XTick',1:20,'YTick',1:20); colorbar
+
+ Author: Joseph Kirk
+ Email: jdkirk630 at gmail dot com
+ Release: 1.0
+ Release Date: 5/29/07</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="distmat.html" class="code" title="function [dmat,opt] = distmat(xy,varargin)">distmat</a>	DISTMAT Distance matrix for a set of points</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="distmat.html" class="code" title="function [dmat,opt] = distmat(xy,varargin)">distmat</a>	DISTMAT Distance matrix for a set of points</li><li><a href="../../../eidors/meshing/netgen/ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>	NG_MK_GEN_MODELS: create generic models using netgen</li><li><a href="../../../eidors/meshing/order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>	ORDER_LOOP Order a list of points on a loop</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [dmat,opt] = distmat(xy,varargin)</a>
+0002 <span class="comment">% DISTMAT Distance matrix for a set of points</span>
+0003 <span class="comment">%   Returns the point-to-point distance between all pairs of points in XY</span>
+0004 <span class="comment">%       (similar to PDIST in the Statistics Toolbox)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   DMAT = DISTMAT(XY) Calculates the distance matrix using an automatic option</span>
+0007 <span class="comment">%   DMAT = DISTMAT(XY,OPT) Uses the specified option to compute the distance matrix</span>
+0008 <span class="comment">%   [DMAT,OPT] = DISTMAT(XY) Also returns the automatic option used by the function</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   Inputs:</span>
+0011 <span class="comment">%       XY is an NxP matrix of coordinates for N points in P dimensions</span>
+0012 <span class="comment">%       OPT (optional) is an integer between 1 and 4 representing the chosen</span>
+0013 <span class="comment">%           method for computing the distance matrix (see note below)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Outputs:</span>
+0016 <span class="comment">%       DMAT is an NxN matrix, where the value of DMAT(i,j) corresponds to</span>
+0017 <span class="comment">%           the distance from XY(i,:) to XY(j,:)</span>
+0018 <span class="comment">%       OPT (optional) is an integer between 1 and 4 representing the method</span>
+0019 <span class="comment">%           used to compute the distance matrix (see note below)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   Note:</span>
+0022 <span class="comment">%       DISTMAT contains 4 methods for computing the distance matrix</span>
+0023 <span class="comment">%         OPT=1 Usually fastest for small inputs. Takes advantage of the symmetric</span>
+0024 <span class="comment">%               property of distance matrices to perform half as many calculations</span>
+0025 <span class="comment">%         OPT=2 Usually fastest for medium inputs. Uses a fully vectorized method</span>
+0026 <span class="comment">%         OPT=3 Usually fastest for large inputs. Uses a partially vectorized</span>
+0027 <span class="comment">%               method with relatively small memory requirement</span>
+0028 <span class="comment">%         OPT=4 Another compact calculation, but usually slower than the others</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%   Example:</span>
+0031 <span class="comment">%       % Test computation times for the options</span>
+0032 <span class="comment">%       n = [10 100 1000];</span>
+0033 <span class="comment">%       dmat = distmat(10*rand(10,3),1); % First call is always really slow</span>
+0034 <span class="comment">%       for k=1:3</span>
+0035 <span class="comment">%           for opt=1:4</span>
+0036 <span class="comment">%               tic; [dmat,opt] = distmat(10*rand(n(k),3),opt); t=toc;</span>
+0037 <span class="comment">%               disp(sprintf('n=%d, opt=%d, t=%0.6f', n(k), opt, t))</span>
+0038 <span class="comment">%           end</span>
+0039 <span class="comment">%       end</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%   Example:</span>
+0042 <span class="comment">%       xy = 10*rand(25,2);  % 25 points in 2D</span>
+0043 <span class="comment">%       dmat = distmat(xy);</span>
+0044 <span class="comment">%       figure; plot(xy(:,1),xy(:,2),'.');</span>
+0045 <span class="comment">%       for k=1:25, text(xy(k,1),xy(k,2),[' ' num2str(k)]); end</span>
+0046 <span class="comment">%       figure; imagesc(dmat); set(gca,'XTick',1:25,'YTick',1:25); colorbar</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%   Example:</span>
+0049 <span class="comment">%       xyz = 10*rand(20,3);  % 20 points in 3D</span>
+0050 <span class="comment">%       dmat = distmat(xyz);</span>
+0051 <span class="comment">%       figure; plot3(xyz(:,1),xyz(:,2),xyz(:,3),'.');</span>
+0052 <span class="comment">%       for k=1:20, text(xyz(k,1),xyz(k,2),xyz(k,3),[' ' num2str(k)]); end</span>
+0053 <span class="comment">%       figure; imagesc(dmat); set(gca,'XTick',1:20,'YTick',1:20); colorbar</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% Author: Joseph Kirk</span>
+0056 <span class="comment">% Email: jdkirk630 at gmail dot com</span>
+0057 <span class="comment">% Release: 1.0</span>
+0058 <span class="comment">% Release Date: 5/29/07</span>
+0059 
+0060 <span class="comment">% process inputs</span>
+0061 <span class="keyword">if</span> nargin&lt;1 || nargin&gt;2;
+0062    error(<span class="string">'Call distmat with 1 or 2 args'</span>);
+0063 <span class="keyword">end</span>
+0064 <span class="keyword">if</span> ischar(xy) &amp;&amp; strcmp(xy,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0065 
+0066 
+0067 [n,dims] = size(xy);
+0068 numels = n*n*dims;
+0069 opt = 2; <span class="keyword">if</span> numels &gt; 5e4, opt = 3; <span class="keyword">elseif</span> n &lt; 20, opt = 1; <span class="keyword">end</span>
+0070 <span class="keyword">for</span> var = varargin
+0071     <span class="keyword">if</span> length(var{1}) == 1
+0072         opt = max(1, min(4, round(abs(var{1}))));
+0073     <span class="keyword">else</span>
+0074         error(<span class="string">'Invalid input argument.'</span>);
+0075     <span class="keyword">end</span>
+0076 <span class="keyword">end</span>
+0077 
+0078 <span class="comment">% distance matrix calculation options</span>
+0079 <span class="keyword">switch</span> opt
+0080     <span class="keyword">case</span> 1 <span class="comment">% half as many computations (symmetric upper triangular property)</span>
+0081         [k,kk] = find(triu(ones(n),1));
+0082         dmat = zeros(n);
+0083         dmat(k+n*(kk-1)) = sqrt(sum((xy(k,:) - xy(kk,:)).^2,2));
+0084         dmat(kk+n*(k-1)) = dmat(k+n*(kk-1));
+0085     <span class="keyword">case</span> 2 <span class="comment">% fully vectorized calculation (very fast for medium inputs)</span>
+0086         a = reshape(xy,1,n,dims);
+0087         b = reshape(xy,n,1,dims);
+0088         dmat = sqrt(sum((a(ones(n,1),:,:) - b(:,ones(n,1),:)).^2,3));
+0089     <span class="keyword">case</span> 3 <span class="comment">% partially vectorized (smaller memory requirement for large inputs)</span>
+0090         dmat = zeros(n,n);
+0091         <span class="keyword">for</span> k = 1:n
+0092             dmat(k,:) = sqrt(sum((xy(k*ones(n,1),:) - xy).^2,2));
+0093         <span class="keyword">end</span>
+0094     <span class="keyword">case</span> 4 <span class="comment">% another compact method, generally slower than the others</span>
+0095         a = (1:n);
+0096         b = a(ones(n,1),:);
+0097         dmat = reshape(sqrt(sum((xy(b,:) - xy(b',:)).^2,2)),n,n);
+0098 <span class="keyword">end</span>
+0099 
+0100 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0101    a = 1:3; b=4:6;
+0102    xy= [a;b];
+0103    out = norm(a-b)*(1-eye(2));
+0104    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'distmat 0'</span>, <a href="distmat.html" class="code" title="function [dmat,opt] = distmat(xy,varargin)">distmat</a>(xy), out, 1e-14); 
+0105    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'distmat 1'</span>, <a href="distmat.html" class="code" title="function [dmat,opt] = distmat(xy,varargin)">distmat</a>(xy,1), out, 1e-14); 
+0106    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'distmat 2'</span>, <a href="distmat.html" class="code" title="function [dmat,opt] = distmat(xy,varargin)">distmat</a>(xy,2), out, 1e-14); 
+0107    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'distmat 3'</span>, <a href="distmat.html" class="code" title="function [dmat,opt] = distmat(xy,varargin)">distmat</a>(xy,3), out, 1e-14); 
+0108    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'distmat 4'</span>, <a href="distmat.html" class="code" title="function [dmat,opt] = distmat(xy,varargin)">distmat</a>(xy,4), out, 1e-14); 
+0109</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

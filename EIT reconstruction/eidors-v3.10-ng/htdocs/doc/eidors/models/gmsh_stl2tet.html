@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gmsh_stl2tet</title>
+  <meta name="keywords" content="gmsh_stl2tet">
+  <meta name="description" content="GMSH_STL2TET creates a tetrahedral mesh from an stl file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; gmsh_stl2tet.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>gmsh_stl2tet
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GMSH_STL2TET creates a tetrahedral mesh from an stl file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function mdl = gmsh_stl2tet(stlfile, maxh, extra) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">GMSH_STL2TET creates a tetrahedral mesh from an stl file
+ mdl = gmsh_stl2tet(stlfile, maxh, extra) where:
+        mdl - EIDORS fwd_model struct
+    stlfile - path to stl file
+       maxh - maximum edge length (default: coarse mesh)
+      extra - extra command line options to gmsh
+
+ NOTE: Only one surface per file is allowed.
+
+ See also CALL_GMSH</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/meshing/gmsh/call_gmsh.html" class="code" title="function status= call_gmsh(geo_file, dim,extra)">call_gmsh</a>	call_gmsh: call Gmsh to create a vol_file from a geo_file</li><li><a href="../../eidors/meshing/gmsh/gmsh_mk_fwd_model.html" class="code" title="function [fwd_mdl, mat_indices]=gmsh_mk_fwd_model( vol_filename, name, eprefix,stim_pattern, z_contact)">gmsh_mk_fwd_model</a>	GMSH_MK_FWD_MODEL: create a fwd_model object from a Gmsh file</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mdl = gmsh_stl2tet(stlfile, maxh, extra)</a>
+0002 <span class="comment">%GMSH_STL2TET creates a tetrahedral mesh from an stl file</span>
+0003 <span class="comment">% mdl = gmsh_stl2tet(stlfile, maxh, extra) where:</span>
+0004 <span class="comment">%        mdl - EIDORS fwd_model struct</span>
+0005 <span class="comment">%    stlfile - path to stl file</span>
+0006 <span class="comment">%       maxh - maximum edge length (default: coarse mesh)</span>
+0007 <span class="comment">%      extra - extra command line options to gmsh</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% NOTE: Only one surface per file is allowed.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% See also CALL_GMSH</span>
+0012 
+0013 <span class="comment">% (C) Bartlomiej Grychtol, 2012.</span>
+0014 <span class="comment">% $Id: gmsh_stl2tet.m 4132 2013-06-04 10:45:37Z bgrychtol $</span>
+0015 
+0016 <span class="keyword">if</span> nargin &lt; 3
+0017    extra = [];
+0018 <span class="keyword">end</span>
+0019 <span class="keyword">if</span> nargin &gt; 1 &amp;&amp; ~isempty(maxh)
+0020    extra = [<span class="string">' -clmax '</span> num2str(maxh), <span class="string">' '</span>, extra];
+0021 <span class="keyword">end</span>
+0022 
+0023 stem = strrep(stlfile,<span class="string">'.stl'</span>,<span class="string">''</span>);
+0024 <span class="comment">%TODO: Some of this could be exposed as options (Algorithm, Optimize, ...)</span>
+0025 fid = fopen([stem <span class="string">'.geo'</span>],<span class="string">'w'</span>);
+0026 fprintf(fid,<span class="string">'Merge &quot;%s&quot;;\n'</span>,stlfile);
+0027 fprintf(fid,<span class="string">'Surface Loop(1) = {1};\n'</span>);
+0028 fprintf(fid,<span class="string">'Volume(1) = {1};\n'</span>);
+0029 fprintf(fid,<span class="string">'Physical Volume(''object'') = {1};\n'</span>);
+0030 fprintf(fid,<span class="string">'Mesh.Algorithm3D=4;\n'</span>); <span class="comment">%1=delaunay (tetgen) and 4=frontal (netgen)</span>
+0031 fprintf(fid,<span class="string">'Mesh.OptimizeNetgen=1;\n'</span>);
+0032 fclose(fid);
+0033 
+0034 <a href="../../eidors/meshing/gmsh/call_gmsh.html" class="code" title="function status= call_gmsh(geo_file, dim,extra)">call_gmsh</a>([stem <span class="string">'.geo'</span>], 3, extra);
+0035 
+0036 mdl = <a href="../../eidors/meshing/gmsh/gmsh_mk_fwd_model.html" class="code" title="function [fwd_mdl, mat_indices]=gmsh_mk_fwd_model( vol_filename, name, eprefix,stim_pattern, z_contact)">gmsh_mk_fwd_model</a>([stem <span class="string">'.msh'</span>],[],[],[]);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

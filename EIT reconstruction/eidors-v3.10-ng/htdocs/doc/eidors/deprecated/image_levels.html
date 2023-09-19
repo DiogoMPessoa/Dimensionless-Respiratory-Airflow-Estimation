@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of image_levels</title>
+  <meta name="keywords" content="image_levels">
+  <meta name="description" content="IMAGE_LEVELS(img, levels, clim  ) show slices at levels of an image">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; image_levels.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>image_levels
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>IMAGE_LEVELS(img, levels, clim  ) show slices at levels of an image</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function image_levels(img, levels, clim ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> IMAGE_LEVELS(img, levels, clim  ) show slices at levels of an image
+ img    = EIDORS image struct
+ levels = array of vertical levels
+  OR
+ levels = [ [z_lev1 ,xpos,ypos], ...
+
+ clim   = colourmap limit (or default if not specified)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>	function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/examples/demo_real.html" class="code" title="function [inhomg_img, demo_img] = demo_real;">demo_real</a>	[inhomg_img, demo_img] = demo_real;</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function image_levels(img, levels, clim )</a>
+0002 <span class="comment">% IMAGE_LEVELS(img, levels, clim  ) show slices at levels of an image</span>
+0003 <span class="comment">% img    = EIDORS image struct</span>
+0004 <span class="comment">% levels = array of vertical levels</span>
+0005 <span class="comment">%  OR</span>
+0006 <span class="comment">% levels = [ [z_lev1 ,xpos,ypos], ...</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% clim   = colourmap limit (or default if not specified)</span>
+0009 
+0010 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0011 <span class="comment">% $Id: image_levels.m 4831 2015-03-29 21:13:25Z bgrychtol-ipa $</span>
+0012 
+0013 
+0014 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'IMAGE_LEVELS is deprecated as of 29-Mar-2015. '</span>);
+0015 
+0016 set(gcf,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0017 set(gcf,<span class="string">'Name'</span>, img.name);
+0018 fwd_mdl= img.fwd_model;
+0019 vtx=  fwd_mdl.nodes;
+0020 simp= fwd_mdl.elems;
+0021 img_data = img.elem_data;
+0022 
+0023 
+0024 <span class="keyword">if</span> size(levels,1)==3
+0025    ll = size(levels,2);
+0026    img_cols = max(levels(2,:));
+0027    img_rows = max(levels(3,:));
+0028 <span class="keyword">else</span>
+0029    ll = length( levels );
+0030    img_cols = ceil( sqrt( ll ));
+0031    img_rows = ceil( ll/ img_cols );
+0032 <span class="keyword">end</span>
+0033    subplot(img_rows,img_cols,1);
+0034 
+0035 <span class="comment">% Get geometry Fc</span>
+0036 fc = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'get-cache'</span>, fwd_mdl, <span class="string">'slicer_plot_fc'</span>);
+0037 <span class="keyword">if</span> ~isempty( fc )
+0038     <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'image_levels: using cached value'</span>, 3);
+0039 <span class="keyword">else</span>
+0040    [fc] = <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(levels(1),img_data,vtx,simp);
+0041    <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'set-cache'</span>, fwd_mdl, <span class="string">'slicer_plot_fc'</span>, fc);
+0042    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'image_levels: setting cached value'</span>, 3);
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% Set mapped colours</span>
+0046 <span class="keyword">global</span> eidors_colours;
+0047 mpc= eidors_colours.mapped_colour;
+0048 eidors_colours.mapped_colour = 128;
+0049 
+0050 <span class="keyword">for</span> idx= 1:length(levels);
+0051     subplot(img_rows,img_cols,idx);
+0052     lev= levels(idx);
+0053     <a href="../../eidors/graphics/matlab/slicer_plot_n.html" class="code" title="function [fc] = slicer_plot_n(h,sol,vtx,simp,fc);">slicer_plot_n</a>(lev,img_data,vtx,simp, fc);
+0054     view(2);
+0055     axis(<span class="string">'off'</span>);
+0056 <span class="keyword">if</span> ~exist(<span class="string">'OCTAVE_VERSION'</span>); <span class="comment">% octave gives ft_render warnings</span>
+0057     axis equal
+0058 <span class="keyword">end</span>
+0059     title(sprintf(<span class="string">'z=%4.2f'</span>,lev));
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% Reset mapped colours</span>
+0063 eidors_colours.mapped_colour = mpc;</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

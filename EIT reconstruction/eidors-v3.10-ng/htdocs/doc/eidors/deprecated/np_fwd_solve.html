@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of np_fwd_solve</title>
+  <meta name="keywords" content="np_fwd_solve">
+  <meta name="description" content="NP_FWD_SOLVE: data= np_fwd_solve( fwd_model, img)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; np_fwd_solve.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>np_fwd_solve
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>NP_FWD_SOLVE: data= np_fwd_solve( fwd_model, img)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function data= np_fwd_solve( fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> NP_FWD_SOLVE: data= np_fwd_solve( fwd_model, img)
+ Fwd solver for Nick Polydorides EIDORS3D code
+ Input:
+    fwd_model = forward model
+    img       = image struct
+ Output:
+    data = measurements struct
+ Options: (to return internal FEM information)
+    img.fwd_solve.get_all_meas = 1 (data.volt = all FEM nodes, but not CEM)
+    img.fwd_solve.get_all_nodes= 1 (data.volt = all nodes, including CEM)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="forward_solver.html" class="code" title="function [V] = forward_solver(E,I,tol,pp,V, compat_param);">forward_solver</a>	[V] = forward_solver(E,I,tol,pp,V);</li><li><a href="np_calc_system_mat.html" class="code" title="function s_mat= np_calc_system_mat( fwd_model, img)">np_calc_system_mat</a>	NP_CALC_SYSTEM_MAT: s_mat= np_calc_system_mat( fwd_model, img)</li><li><a href="np_fwd_parameters.html" class="code" title="function param = np_fwd_parameters( fwd_model )">np_fwd_parameters</a>	NP_FWD_PARAMETERS: data= np_fwd_solve( fwd_model )</li><li><a href="np_fwd_solve.html" class="code" title="function data= np_fwd_solve( fwd_model, img)">np_fwd_solve</a>	NP_FWD_SOLVE: data= np_fwd_solve( fwd_model, img)</li><li><a href="../../eidors/models/mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../eidors/solvers/calc_system_mat.html" class="code" title="function system_mat = calc_system_mat( fwd_model, img)">calc_system_mat</a>	CALC_SYSTEM_MAT: calculate FEM system matrix from fwd_model and image</li><li><a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>	FWD_SOLVE_1ST_ORDER: data= fwd_solve_1st_order( img)</li><li><a href="../../eidors/solvers/forward/system_mat_1st_order.html" class="code" title="function s_mat= system_mat_1st_order( fwd_model, img)">system_mat_1st_order</a>	SYSTEM_MAT_1ST_ORDER: SS= system_mat_1st_order( fwd_model, img)</li><li><a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../eidors/tests/test_3d_resistor.html" class="code" title="">test_3d_resistor</a>	Create 3D model of a Rectangular resistor</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="np_fwd_solve.html" class="code" title="function data= np_fwd_solve( fwd_model, img)">np_fwd_solve</a>	NP_FWD_SOLVE: data= np_fwd_solve( fwd_model, img)</li><li><a href="../../eidors/solvers/forward/system_mat_1st_order.html" class="code" title="function s_mat= system_mat_1st_order( fwd_model, img)">system_mat_1st_order</a>	SYSTEM_MAT_1ST_ORDER: SS= system_mat_1st_order( fwd_model, img)</li><li><a href="../../eidors/tests/perturb_jacobian_test.html" class="code" title="">perturb_jacobian_test</a>	Perturbation Jacobians</li><li><a href="../../eidors/tests/test_2d_resistor.html" class="code" title="function test_2d_resistor(opt)">test_2d_resistor</a>	Create 2D model of a cylindrical resistor</li><li><a href="../../eidors/tests/test_3d_resistor.html" class="code" title="">test_3d_resistor</a>	Create 3D model of a Rectangular resistor</li><li><a href="../../eidors/tests/test_c2f_jacobian.html" class="code" title="function test_c2f_jacobian">test_c2f_jacobian</a>	Test calc of jacobian given coarse to fine mapping</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li><li><a href="#_sub2" class="code">function test_3d_resistor</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data= np_fwd_solve( fwd_model, img)</a>
+0002 <span class="comment">% NP_FWD_SOLVE: data= np_fwd_solve( fwd_model, img)</span>
+0003 <span class="comment">% Fwd solver for Nick Polydorides EIDORS3D code</span>
+0004 <span class="comment">% Input:</span>
+0005 <span class="comment">%    fwd_model = forward model</span>
+0006 <span class="comment">%    img       = image struct</span>
+0007 <span class="comment">% Output:</span>
+0008 <span class="comment">%    data = measurements struct</span>
+0009 <span class="comment">% Options: (to return internal FEM information)</span>
+0010 <span class="comment">%    img.fwd_solve.get_all_meas = 1 (data.volt = all FEM nodes, but not CEM)</span>
+0011 <span class="comment">%    img.fwd_solve.get_all_nodes= 1 (data.volt = all nodes, including CEM)</span>
+0012 
+0013 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0014 <span class="comment">% $Id: np_fwd_solve.m 5394 2017-04-12 15:10:30Z aadler $</span>
+0015 
+0016 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0017 
+0018 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'NP_FWD_SOLVE is deprecated as of 07-Jun-2012. Use FWD_SOLVE_1ST_ORDER instead.'</span>);
+0019 
+0020 <span class="keyword">if</span> nargin==1 <span class="comment">%normally takes one parameter</span>
+0021    img = fwd_model;
+0022    fwd_model = img.fwd_model;
+0023 <span class="keyword">end</span>
+0024 
+0025 p= <a href="np_fwd_parameters.html" class="code" title="function param = np_fwd_parameters( fwd_model )">np_fwd_parameters</a>( fwd_model );
+0026 
+0027 <span class="comment">%Set the tolerance for the forward solver</span>
+0028 tol = 1e-5;
+0029 
+0030 s_mat= <a href="../../eidors/solvers/calc_system_mat.html" class="code" title="function system_mat = calc_system_mat( fwd_model, img)">calc_system_mat</a>( fwd_model, img );
+0031 
+0032 Vfwd = <a href="forward_solver.html" class="code" title="function [V] = forward_solver(E,I,tol,pp,V, compat_param);">forward_solver</a>(s_mat.E, p.I, tol, s_mat.perm);
+0033 
+0034 Velec=Vfwd( p.n_node+(1:p.n_elec),:);
+0035 voltH = zeros( p.n_meas, 1 );
+0036 idx=0;
+0037 <span class="keyword">for</span> i=1:p.n_stim
+0038    meas_pat= fwd_model.stimulation(i).meas_pattern;
+0039    n_meas  = size(meas_pat,1);
+0040    voltH( idx+(1:n_meas) ) = meas_pat*Velec(:,i);
+0041    idx= idx+ n_meas;
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">% create a data structure to return</span>
+0045 data.meas= voltH;
+0046 data.time= NaN; <span class="comment">% unknown</span>
+0047 data.name= <span class="string">'solved by np_fwd_solve'</span>;
+0048 <span class="keyword">try</span>; <span class="keyword">if</span> img.fwd_solve.get_all_meas == 1
+0049    data.volt = Vfwd(1:p.n_node,:); <span class="comment">% but not on CEM nodes</span>
+0050 <span class="keyword">end</span>; <span class="keyword">end</span>
+0051 <span class="keyword">try</span>; <span class="keyword">if</span> img.fwd_solve.get_all_nodes== 1
+0052    data.volt = Vfwd;               <span class="comment">% all, including CEM nodes</span>
+0053 <span class="keyword">end</span>; <span class="keyword">end</span>
+0054 
+0055 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0056    <a href="../../eidors/tests/test_3d_resistor.html" class="code" title="">test_3d_resistor</a>
+0057 
+0058 <a name="_sub2" href="#_subfunctions" class="code">function test_3d_resistor</a>
+0059    ll=5; <span class="comment">% length</span>
+0060    ww=1; <span class="comment">% width</span>
+0061    hh=1; <span class="comment">% height</span>
+0062    conduc= .13;  <span class="comment">% conductivity in Ohm-meters</span>
+0063    current= 4;  <span class="comment">% Amps</span>
+0064    z_contact= 9e-1;
+0065    scale = .46;
+0066    nn=0;
+0067    <span class="keyword">for</span> z=0:ll; <span class="keyword">for</span> x=0:ww; <span class="keyword">for</span> y=0:hh
+0068       nn=nn+1;
+0069       mdl.nodes(nn,:) = [x,y,z];
+0070    <span class="keyword">end</span>; <span class="keyword">end</span>; <span class="keyword">end</span>
+0071 
+0072    mdl= <a href="../../eidors/models/mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>([],0:ww,0:hh,0:ll);
+0073    mdl.nodes= mdl.nodes*scale;
+0074    mdl= rmfield(mdl,<span class="string">'coarse2fine'</span>);
+0075    mdl.boundary= <a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(mdl.elems);
+0076    mdl.gnd_node = 1;
+0077    mdl.normalize_measurements = 0;
+0078    elec_nodes= [1:(ww+1)*(hh+1)];
+0079    elec(1).nodes= elec_nodes;      elec(1).z_contact= z_contact;
+0080    elec(2).nodes= nn-elec_nodes+1; elec(2).z_contact= z_contact;
+0081    stim.stim_pattern= [-1;1]*current;
+0082    stim.meas_pattern= [-1,1];
+0083    mdl.stimulation= stim;
+0084    mdl.electrode= elec;
+0085 <span class="comment">%  show_fem(mdl);</span>
+0086 
+0087    <span class="comment">% analytical solution</span>
+0088    R = ll / ww / hh / scale/ conduc + 2*z_contact/scale^2;
+0089 
+0090    V= current*R;
+0091 <span class="comment">%  fprintf('Solver %s: %f\n', 'analytic', V);</span>
+0092 
+0093    mdl.solve = @<a href="np_fwd_solve.html" class="code" title="function data= np_fwd_solve( fwd_model, img)">np_fwd_solve</a>;
+0094    mdl.system_mat = @<a href="np_calc_system_mat.html" class="code" title="function s_mat= np_calc_system_mat( fwd_model, img)">np_calc_system_mat</a>;
+0095 <span class="comment">%  mdl.misc.perm_sym= '{n}'; %%% Check it works without</span>
+0096    img= <a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(mdl, conduc);
+0097 
+0098    fsol= <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0099 <span class="comment">%  fprintf('Solver %s: %f\n', fsol.name, fsol.meas);</span>
+0100    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'np_fwd_solve vs analytic'</span>, fsol.meas, V, 1e-11);
+0101 
+0102 
+0103 
+0104    mdl.solve = @<a href="../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>;
+0105    mdl.system_mat = @<a href="../../eidors/solvers/forward/system_mat_1st_order.html" class="code" title="function s_mat= system_mat_1st_order( fwd_model, img)">system_mat_1st_order</a>;
+0106 
+0107    img= <a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(mdl, conduc);
+0108 
+0109    fsol= <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0110 <span class="comment">%  fprintf('Solver %s: %f\n', fsol.name, fsol.meas);</span>
+0111    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'new solver 2d vs analytic'</span>, fsol.meas, V, 1e-11);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

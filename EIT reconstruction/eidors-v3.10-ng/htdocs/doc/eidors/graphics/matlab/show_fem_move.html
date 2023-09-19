@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of show_fem_move</title>
+  <meta name="keywords" content="show_fem_move">
+  <meta name="description" content="SHOW_FEM_MOVE   Plot EIT finite element model (FEM) and movement">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; show_fem_move.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>show_fem_move
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>SHOW_FEM_MOVE   Plot EIT finite element model (FEM) and movement</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [hf,hh] = show_fem_move( img, move, scale, options ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SHOW_FEM_MOVE   Plot EIT finite element model (FEM) and movement 
+    vectors.
+ Args: img     - eidors_obj of type 'image'
+       move    - FEM node coordinate matrix of movement vectors (optional)
+       scale   - factor to scale movement arrows (optional)
+       options - options array passed on to show_fem()</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="show_fem_move.html" class="code" title="function [hf,hh] = show_fem_move( img, move, scale, options )">show_fem_move</a>	SHOW_FEM_MOVE   Plot EIT finite element model (FEM) and movement</li><li><a href="../../../eidors/models/data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>	DATA_MAPPER maps img.params data to elem or node data</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>	NUM_NODES: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>	FWD_MODEL_PARAMETERS: data= fwd_solve_1st_order( fwd_model, image)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="show_fem_move.html" class="code" title="function [hf,hh] = show_fem_move( img, move, scale, options )">show_fem_move</a>	SHOW_FEM_MOVE   Plot EIT finite element model (FEM) and movement</li><li><a href="../../../eidors/solvers/inverse/inv_solve_core.html" class="code" title="function img= inv_solve_core( inv_model, data0, data1);">inv_solve_core</a>	INV_SOLVE_CORE Solver using a generic iterative algorithm</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function hh= working_quiver( nn,mm )</a></li><li><a href="#_sub2" class="code">function do_unit_test;</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [hf,hh] = show_fem_move( img, move, scale, options )</a>
+0002 <span class="comment">% SHOW_FEM_MOVE   Plot EIT finite element model (FEM) and movement</span>
+0003 <span class="comment">%    vectors.</span>
+0004 <span class="comment">% Args: img     - eidors_obj of type 'image'</span>
+0005 <span class="comment">%       move    - FEM node coordinate matrix of movement vectors (optional)</span>
+0006 <span class="comment">%       scale   - factor to scale movement arrows (optional)</span>
+0007 <span class="comment">%       options - options array passed on to show_fem()</span>
+0008 
+0009 <span class="comment">% (C) 2005 Andy Adler. License GPL v2 or v3</span>
+0010 <span class="comment">% $Id: show_fem_move.m 5513 2017-06-06 15:03:43Z aadler $</span>
+0011 
+0012 <span class="keyword">if</span> ischar(img) &amp;&amp; strcmp(img,<span class="string">'UNIT_TEST'</span>); do_unit_test; <span class="keyword">return</span>; <span class="keyword">end</span>
+0013 
+0014 <span class="comment">% Check for single argument call</span>
+0015 <span class="keyword">if</span> nargin == 1
+0016     move = [];
+0017     scale = 20;
+0018     options = [0,0,[]];
+0019 <span class="keyword">elseif</span> nargin == 2
+0020     scale = 20;
+0021     options = [0,0,[]];
+0022 <span class="keyword">elseif</span> nargin == 3
+0023     options = [0,0,[]];
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">% Extract forward model parameters</span>
+0027 fwdp = <a href="../../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>( img.fwd_model );
+0028 <span class="keyword">try</span>
+0029     fwdp.n_elem = size(img.fwd_model.coarse2fine,2);
+0030 <span class="keyword">end</span>
+0031 <span class="comment">% Verify if img is partitioned by conductivity and move submatrices</span>
+0032 <span class="keyword">if</span> isfield(img,<span class="string">'elem_data'</span>) <span class="comment">% pre-parametrization</span>
+0033    <span class="keyword">if</span> length(img.elem_data) &gt; fwdp.n_elem
+0034       move = reshape( <span class="keyword">...</span>
+0035          img.elem_data( fwdp.n_elem+(1:fwdp.n_elec*fwdp.n_dims) ), <span class="keyword">...</span>
+0036          fwdp.n_elec, fwdp.n_dims);
+0037       img.elem_data = img.elem_data(1:fwdp.n_elem);
+0038    <span class="keyword">end</span>
+0039 <span class="keyword">else</span>
+0040    img = <a href="../../../eidors/models/data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>(img);
+0041    move = reshape( img.movement.electrode_data, <span class="keyword">...</span>
+0042                      fwdp.n_elec, fwdp.n_dims); 
+0043 <span class="keyword">end</span>
+0044 <span class="comment">% Plot FEM with conductivity elements with or without colourbars</span>
+0045 hf = <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img, options); <span class="comment">% Show colourbar</span>
+0046 
+0047 <span class="comment">% Plot movement vectors on electrodes</span>
+0048 <span class="keyword">if</span> ~isempty(move)
+0049     <span class="comment">% e_nodes is the average position of each electrodes nodes</span>
+0050     e_nodes = [];
+0051     electr= img.fwd_model.electrode;
+0052     nodes = img.fwd_model.nodes;
+0053     <span class="keyword">switch</span> size(move,1)
+0054       <span class="keyword">case</span> length(electr)
+0055         <span class="keyword">for</span> i=1:length(electr)
+0056            <span class="keyword">if</span> isfield(electr(i), <span class="string">'pos'</span>)
+0057               e_nodes(i,:) = mean(electr(i).pos);
+0058            <span class="keyword">else</span>
+0059               e_nodes(i,:) = mean(nodes(electr(i).nodes,:),1);
+0060            <span class="keyword">end</span>
+0061         <span class="keyword">end</span>
+0062     
+0063       <span class="keyword">case</span> <a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(img)
+0064         <span class="comment">% Keep only electrode node movement coordinates</span>
+0065         e_nodes = [electr(:).nodes];
+0066         <span class="keyword">if</span> size(move,1) == fwdp.n_node;
+0067             move = move(e_nodes,:);
+0068         <span class="keyword">end</span>
+0069         e_nodes = nodes(e_nodes,:);
+0070 
+0071       <span class="keyword">otherwise</span>;
+0072         error(<span class="string">'movement vector doesn''t match model'</span>);
+0073     <span class="keyword">end</span>
+0074     move = move- ones(size(move,1),1)*mean(move);
+0075     
+0076     <span class="comment">% Render movement arrows for each electrode</span>
+0077     hold on;
+0078     <span class="keyword">if</span> nargin &lt; 3
+0079         scale = 20;
+0080     <span class="keyword">end</span>
+0081     hh = <a href="#_sub1" class="code" title="subfunction hh= working_quiver( nn,mm )">working_quiver</a>(e_nodes, scale*move);
+0082     set(hh,<span class="string">'Color'</span>, [0,.3,0], <span class="string">'LineWidth'</span>, 2, <span class="string">'Clipping'</span>, <span class="string">'off'</span>);
+0083     hold off;
+0084 <span class="keyword">end</span>
+0085 <span class="comment">% Format output figure</span>
+0086 axis(<span class="string">'off'</span>); 
+0087 axis(<span class="string">'image'</span>); 
+0088 <span class="comment">%axis(1.3*[-1,1,-1,1]); % let it take it's own space</span>
+0089 
+0090 <a name="_sub1" href="#_subfunctions" class="code">function hh= working_quiver( nn,mm )</a>
+0091 <span class="comment">% WORKING_QUIVER   Matlab has made a completely imcompatible</span>
+0092 <span class="comment">% quiver function which you can't call properly with different</span>
+0093 <span class="comment">% versions of matlab.</span>
+0094 <span class="comment">%</span>
+0095 <span class="comment">% Last I checked, the V7 version of quiver was horrible, so</span>
+0096 <span class="comment">%  we use the v6 one. But now (v8) that option is gone, too.</span>
+0097 
+0098 <span class="comment">% TODO: Write a new, fixed quiver function that can do 3D</span>
+0099 
+0100 hh = quiver( nn(:,1),nn(:,2), mm(:,1),mm(:,2),0);
+0101 
+0102 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test;</a>
+0103    subplot(231);
+0104    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,8));
+0105    img.elem_data = [img.elem_data;.01*randn(16,1)];
+0106    <a href="show_fem_move.html" class="code" title="function [hf,hh] = show_fem_move( img, move, scale, options )">show_fem_move</a>(img);
+0107    title(<span class="string">'move at electrodes'</span>);
+0108 
+0109    subplot(232);
+0110    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,8));
+0111    <a href="show_fem_move.html" class="code" title="function [hf,hh] = show_fem_move( img, move, scale, options )">show_fem_move</a>( img, img.fwd_model.nodes*[-1,0;0,1], .2);
+0112    title(<span class="string">'move at electrodes (via all move)'</span>);
+0113 
+0114    subplot(233);
+0115    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2C2'</span>,8));
+0116    img.elem_data = [img.elem_data;.01*randn(16,1)];
+0117    <a href="show_fem_move.html" class="code" title="function [hf,hh] = show_fem_move( img, move, scale, options )">show_fem_move</a>(img);
+0118    title(<span class="string">'move at electrodes ctrs'</span>);
+0119 
+0120    subplot(234);
+0121    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2C0'</span>,8));
+0122    img.elem_data(1:2) = 1.1;
+0123    <a href="show_fem_move.html" class="code" title="function [hf,hh] = show_fem_move( img, move, scale, options )">show_fem_move</a>( img, img.fwd_model.nodes*[-1,0;0,1], .2);
+0124    title(<span class="string">'move at electrodes nodes'</span>);
+0125 
+0126    subplot(235);
+0127    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]));
+0128    img.elem_data(400)= 0.9;
+0129    img.elem_data = [img.elem_data;.01*randn(3*32,1)];
+0130    <a href="show_fem_move.html" class="code" title="function [hf,hh] = show_fem_move( img, move, scale, options )">show_fem_move</a>(img); view([-14,62]);
+0131    title(<span class="string">'BUG:move at electrodes ctrs'</span>);
+0132 
+0133    subplot(236);
+0134    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]));
+0135    move = img.fwd_model.nodes*diag([-1,1,1]);
+0136    <a href="show_fem_move.html" class="code" title="function [hf,hh] = show_fem_move( img, move, scale, options )">show_fem_move</a>( img, move, .2); view([-14,62]);
+0137    title(<span class="string">'BUG:move at electrodes ctrs'</span>);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

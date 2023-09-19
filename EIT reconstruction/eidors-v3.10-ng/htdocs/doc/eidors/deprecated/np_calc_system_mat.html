@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of np_calc_system_mat</title>
+  <meta name="keywords" content="np_calc_system_mat">
+  <meta name="description" content="NP_CALC_SYSTEM_MAT: s_mat= np_calc_system_mat( fwd_model, img)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; np_calc_system_mat.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>np_calc_system_mat
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>NP_CALC_SYSTEM_MAT: s_mat= np_calc_system_mat( fwd_model, img)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function s_mat= np_calc_system_mat( fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> NP_CALC_SYSTEM_MAT: s_mat= np_calc_system_mat( fwd_model, img)
+ Fwd solver for Nick Polydorides EIDORS3D code
+ s_mat.E   = FEM system matrix
+ s_mat.Ela = Normalised volumes of the elements
+ s_mat.D   = The sgradients of the shape functions over each element.
+ s_mat.Vols= Normalised volums of the elements
+ s_mat.perm= permutation of system matrix
+ fwd_model = forward model
+ img       = image background for system matrix calc</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="fem_master_full.html" class="code" title="function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);">fem_master_full</a>	function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);</li><li><a href="np_fwd_parameters.html" class="code" title="function param = np_fwd_parameters( fwd_model )">np_fwd_parameters</a>	NP_FWD_PARAMETERS: data= np_fwd_solve( fwd_model )</li><li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="np_fwd_solve.html" class="code" title="function data= np_fwd_solve( fwd_model, img)">np_fwd_solve</a>	NP_FWD_SOLVE: data= np_fwd_solve( fwd_model, img)</li><li><a href="../../eidors/solvers/forward/system_mat_1st_order.html" class="code" title="function s_mat= system_mat_1st_order( fwd_model, img)">system_mat_1st_order</a>	SYSTEM_MAT_1ST_ORDER: SS= system_mat_1st_order( fwd_model, img)</li><li><a href="../../eidors/tests/perturb_jacobian_test.html" class="code" title="">perturb_jacobian_test</a>	Perturbation Jacobians</li><li><a href="../../eidors/tests/test_2d_resistor.html" class="code" title="function test_2d_resistor(opt)">test_2d_resistor</a>	Create 2D model of a cylindrical resistor</li><li><a href="../../eidors/tests/test_c2f_jacobian.html" class="code" title="function test_c2f_jacobian">test_c2f_jacobian</a>	Test calc of jacobian given coarse to fine mapping</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s_mat= np_calc_system_mat( fwd_model, img)</a>
+0002 <span class="comment">% NP_CALC_SYSTEM_MAT: s_mat= np_calc_system_mat( fwd_model, img)</span>
+0003 <span class="comment">% Fwd solver for Nick Polydorides EIDORS3D code</span>
+0004 <span class="comment">% s_mat.E   = FEM system matrix</span>
+0005 <span class="comment">% s_mat.Ela = Normalised volumes of the elements</span>
+0006 <span class="comment">% s_mat.D   = The sgradients of the shape functions over each element.</span>
+0007 <span class="comment">% s_mat.Vols= Normalised volums of the elements</span>
+0008 <span class="comment">% s_mat.perm= permutation of system matrix</span>
+0009 <span class="comment">% fwd_model = forward model</span>
+0010 <span class="comment">% img       = image background for system matrix calc</span>
+0011 
+0012 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0013 <span class="comment">% $Id: np_calc_system_mat.m 5394 2017-04-12 15:10:30Z aadler $</span>
+0014 
+0015 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'NP_CALC_SYSTEM_MAT is deprecated as of 07-Jun-2012. Use SYSTEM_MAT_1ST_ORDER instead.'</span>);
+0016 
+0017 <span class="keyword">if</span> nargin==1 <span class="comment">%normally takes one parameter</span>
+0018    img = fwd_model;
+0019    fwd_model = img.fwd_model;
+0020 <span class="keyword">end</span>
+0021    
+0022 
+0023 s_mat = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'get-cache'</span>, {fwd_model, img}, <span class="string">'np_calc_system_mat'</span>);
+0024 
+0025 <span class="keyword">if</span> ~isempty(s_mat)
+0026    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'np_calc_system_mat: using cached value'</span>, 3);
+0027    <span class="keyword">return</span>
+0028 <span class="keyword">end</span>
+0029 
+0030 p= <a href="np_fwd_parameters.html" class="code" title="function param = np_fwd_parameters( fwd_model )">np_fwd_parameters</a>( fwd_model );
+0031 
+0032 <span class="comment">%Set the tolerance for the forward solver</span>
+0033 tol = 1e-5;
+0034 
+0035 [Eref,D,Ela,ppr] = <a href="fem_master_full.html" class="code" title="function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);">fem_master_full</a>( p.vtx, p.simp, <span class="keyword">...</span>
+0036                 img.elem_data(:), <span class="keyword">...</span>
+0037                 p.gnd_ind, p.elec, p.zc, p.perm_sym );
+0038 
+0039 s_mat.E     = Eref;
+0040 s_mat.Ela   = Ela;
+0041 s_mat.D     = D;
+0042 s_mat.Vols  = Ela;
+0043 s_mat.perm  = ppr;
+0044 
+0045 <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'set-cache'</span>, {fwd_model, img}, <span class="string">'np_system_mat'</span>, s_mat);
+0046 <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'np_calc_system_mat: setting cached value'</span>, 3);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

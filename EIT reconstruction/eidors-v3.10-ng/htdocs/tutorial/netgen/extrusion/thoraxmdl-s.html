@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../../index-s.html"
+>Main</a><br>
+<a href="../../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../../download-s.html"
+   >Download</a><br>
+<a href="../../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../../faq-s.html">FAQ</a><br>
+<a href="../../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Modeling EIT current flow in a human thorax model
+</h2>
+
+This example shows how EIDORS can by use 
+<a href="http://sourceforge.net/projects/netgen-mesher/">
+Netgen</a> to model the body shape of a human and then
+use it to build a reconstruction algorithm and see
+the current flow in the body.
+<b>For this exmample, you need at least Netgen version 4.9.13.</b>
+These images are designed to be used on the
+<a href="http://en.wikipedia.org/wiki/Electrical_impedance_tomography"
+>Wikipedia EIT page</a>. All images on this page are licenced under the
+<a rel="license" href="http://creativecommons.org/licenses/by/3.0/"
+>Creative Commons Attribution License</a>.
+
+
+<H3>
+Load thorax shape and identify contours
+</H3>
+This image is from a human CT of a healthy man,
+provided with permission.
+Hand registered contours are available in 
+the eidors <tt>shape_library</tt>.
+The image is available 
+<a href = "http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/thorax-mdl.jpg">here [thorax-mdl.jpg]</a>
+<pre>
+% get contours
+thorax = shape_library('get','adult_male','boundary');
+rlung  = shape_library('get','adult_male','right_lung');
+llung  = shape_library('get','adult_male','left_lung');
+% one could also run:
+% shape_library('get','adult_male');
+% to get all the info at once in a struct
+
+% show the library image
+shape_library('show','adult_male');
+print_convert thoraxmdl01a.jpg '-density 100'
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/thoraxmdl01a.jpg">
+</center>
+
+
+<H3>
+Use Netgen to build a FEM model of the thorax
+</H3>
+<pre>
+shape = { 1,                      % height
+          {thorax, rlung, llung}, % contours
+          [4,50],                 % perform smoothing with 50 points
+          0.04};                  % small maxh (fine mesh)
+
+elec_pos = [ 16,                  % number of elecs per plane
+             1,                   % equidistant spacing
+             0.5]';               % a single z-plane
+         
+elec_shape = [0.05,               % radius
+              0,                  % circular electrode
+              0.01 ]';             % maxh (electrode refinement) 
+
+fmdl = ng_mk_extruded_model(shape, elec_pos, elec_shape);
+% this similar model is also available as:
+% fmdl = mk_library_model('adult_male_16el_lungs');
+
+[stim,meas_sel] = mk_stim_patterns(16,1,[0,1],[0,1],{'no_meas_current'}, 1);
+fmdl.stimulation = stim;
+
+img=mk_image(fmdl,1);
+img.elem_data(fmdl.mat_idx{2})= 0.3; % rlung
+img.elem_data(fmdl.mat_idx{3})= 0.3; % llung
+
+clf; show_fem(img); view(0,70);
+print_convert thoraxmdl02a.jpg '-density 100'
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/thoraxmdl02a.jpg">
+</center>
+
+<H3>
+Voltage and Current Distribution in a slice
+</H3>
+Voltage distribution
+<pre>
+img_v = img;
+% Stimulate between elecs 16 and 5 to get more interesting pattern
+img_v.fwd_model.stimulation(1).stim_pattern = sparse([16;5],1,[1,-1],16,1);
+img_v.fwd_solve.get_all_meas = 1;
+vh = fwd_solve(img_v);
+
+img_v = rmfield(img, 'elem_data');
+img_v.node_data = vh.volt(:,1);
+img_v.calc_colours.npoints = 128;
+
+PLANE= [inf,inf,0.35]; % show voltages on this slice
+
+subplot(221);
+show_slices(img_v,PLANE); axis off; axis equal
+print_convert thoraxmdl03a.jpg
+% 
+
+</pre>
+Current distribution
+<pre>
+img_v = img;
+img_v.fwd_model.mdl_slice_mapper.npx = 64;
+img_v.fwd_model.mdl_slice_mapper.npy = 64;
+img_v.fwd_model.mdl_slice_mapper.level = PLANE;
+q = show_current(img_v, vh.volt(:,1));
+quiver(q.xp,q.yp, q.xc,q.yc,10,'b');
+axis tight; axis image; ylim([-1 1]);axis off
+print_convert thoraxmdl04a.jpg
+
+
+</pre>
+<center>
+<img src="thoraxmdl03a.jpg"> <img src="thoraxmdl04a.jpg">
+<br>
+<i>Left</i> Voltage distribution and
+<i>Right</i> Current distribution in slices at <i>z</i>= 0.35.
+</center>
+
+
+<H3>
+Current streamlines and the original image
+</H3>
+<pre>
+img_v.fwd_model.mdl_slice_mapper.npx = 1000;
+img_v.fwd_model.mdl_slice_mapper.npy = 1000;
+img_v.fwd_model.mdl_slice_mapper.level = PLANE;
+
+% Calculate at high resolution
+q = show_current(img_v, vh.volt(:,1));
+
+pic = shape_library('get','adult_male','pic');
+imagesc(pic.X, pic.Y, pic.img);
+% imgt= flipdim(imread('thorax-mdl.jpg'),1); imagesc(imgt);
+colormap(gray(256)); set(gca,'YDir','normal');
+hold on
+
+sx = linspace(-.5,.5,15)';
+sy = 0.05 + linspace(-.5,.5,15)';
+hh=streamline(q.xp,q.yp, q.xc, q.yc,sx,sy); set(hh,'Linewidth',2, 'color','b');
+hh=streamline(q.xp,q.yp,-q.xc,-q.yc,sx,sy); set(hh,'Linewidth',2, 'color','b');
+
+axis equal; axis tight; axis off; print_convert thoraxmdl05a.jpg
+
+</pre>
+<center>
+<img src="thoraxmdl05a.jpg">
+<br>
+Stream lines through <i>z</i>= 0.35.
+
+The path of the streamslines is limited by the density of the underlying FEM.
+With a finer mesh FEM, it would be possible to calculate streamlines that
+do not display path irregularities.
+</center>
+
+
+<H3>
+Add Equipotential lines to the original image
+</H3>
+<pre>
+img_v = img;
+% Stimulate between elecs 16 and 5 to get more interesting pattern
+img_v.fwd_model.stimulation(1).stim_pattern = sparse([16;5],1,[1,-1],16,1);
+img_v.fwd_solve.get_all_meas = 1;
+vh = fwd_solve(img_v);
+
+img_v = rmfield(img, 'elem_data');
+img_v.node_data = vh.volt(:,1);
+img_v.calc_colours.npoints = 256;
+imgs = calc_slices(img_v,PLANE);
+
+
+clf
+imagesc(pic.X, pic.Y, pic.img); colormap(gray(256)); set(gca,'YDir','normal');
+hh=streamline(q.xp,q.yp, q.xc, q.yc,sx,sy); set(hh,'Linewidth',2);
+hh=streamline(q.xp,q.yp,-q.xc,-q.yc,sx,sy); set(hh,'Linewidth',2);
+
+[x y] = meshgrid( linspace(pic.X(1), pic.X(2),size(imgs,1)), ...
+                  linspace(pic.Y(2), pic.Y(1),size(imgs,2)));
+hold on;
+contour(x,y,imgs,31);
+hh= findobj('Type','patch'); set(hh,'LineWidth',2)
+
+hold off; axis off; axis equal; %ylim([50,450]);
+print_convert thoraxmdl06a.jpg
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/thoraxmdl06a.jpg">
+<br>
+Stream lines and equipotiential through <i>z</i>= 0.35.
+</center>
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:21:02 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

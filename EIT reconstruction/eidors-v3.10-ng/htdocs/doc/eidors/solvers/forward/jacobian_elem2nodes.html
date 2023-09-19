@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of jacobian_elem2nodes</title>
+  <meta name="keywords" content="jacobian_elem2nodes">
+  <meta name="description" content="JACOBIAN_ELEM2NODES: calculate Jacobian on Nodes from Elem solver">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; jacobian_elem2nodes.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>jacobian_elem2nodes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>JACOBIAN_ELEM2NODES: calculate Jacobian on Nodes from Elem solver</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function J= jacobian_elem2nodes( fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> JACOBIAN_ELEM2NODES: calculate Jacobian on Nodes from Elem solver
+ Calculate Jacobian Matrix for EIT Alg of Adler &amp; Guardo 1996
+ J         = Jacobian matrix
+ img.fwd_model = forward model defined on nodes (elems may not be defined)
+ jacobian_elem2nodes.fwd_model 
+           = full forward model (with nodes and elements)
+
+ img = image background for jacobian calc</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/deprecated/mapper_nodes_elems.html" class="code" title="function EtoN= mapper_elems_nodes(fwd_model)">mapper_nodes_elems</a>	MAPPER_ELEMS_NODES: calculates mapping function taking elems to nodes</li><li><a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function e_d = calc_elem_from_node_image(EtoN, node_data);</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function J= jacobian_elem2nodes( fwd_model, img)</a>
+0002 <span class="comment">% JACOBIAN_ELEM2NODES: calculate Jacobian on Nodes from Elem solver</span>
+0003 <span class="comment">% Calculate Jacobian Matrix for EIT Alg of Adler &amp; Guardo 1996</span>
+0004 <span class="comment">% J         = Jacobian matrix</span>
+0005 <span class="comment">% img.fwd_model = forward model defined on nodes (elems may not be defined)</span>
+0006 <span class="comment">% jacobian_elem2nodes.fwd_model</span>
+0007 <span class="comment">%           = full forward model (with nodes and elements)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% img = image background for jacobian calc</span>
+0010 
+0011 <span class="comment">% (C) 2008 Andy Adler. License: GPL version 2 or version 3</span>
+0012 <span class="comment">% $Id: jacobian_elem2nodes.m 3819 2013-04-13 07:36:27Z bgrychtol $</span>
+0013 
+0014 <span class="keyword">if</span> nargin == 1
+0015    img= fwd_model;
+0016 <span class="keyword">elseif</span>  strcmp(getfield(warning(<span class="string">'query'</span>,<span class="string">'EIDORS:DeprecatedInterface'</span>),<span class="string">'state'</span>),<span class="string">'on'</span>)
+0017    warning(<span class="string">'EIDORS:DeprecatedInterface'</span>, <span class="keyword">...</span>
+0018       [<span class="string">'Calling JACOBIAN_elem2nodes with two arguments is deprecated and will cause'</span> <span class="keyword">...</span>
+0019        <span class="string">' an error in a future version. First argument ignored.'</span>]);
+0020 <span class="keyword">end</span>
+0021 fwd_model= img.fwd_model;
+0022 
+0023 fem_fmdl= fwd_model.jacobian_elem2nodes.fwd_model;
+0024 EtoN = <a href="../../../eidors/deprecated/mapper_nodes_elems.html" class="code" title="function EtoN= mapper_elems_nodes(fwd_model)">mapper_nodes_elems</a>( fem_fmdl);
+0025 
+0026 <span class="keyword">if</span> ~isfield(img,<span class="string">'elem_data'</span>)
+0027   img.elem_data= <a href="#_sub1" class="code" title="subfunction e_d = calc_elem_from_node_image(EtoN, node_data);">calc_elem_from_node_image</a>(EtoN, img.node_data);
+0028 <span class="keyword">end</span>
+0029 img.fwd_model = fem_fmdl;
+0030 J= <a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>(img)*EtoN';
+0031 
+0032 <span class="comment">% Create an image on the elements with a fwd_model on the elemtents</span>
+0033 <a name="_sub1" href="#_subfunctions" class="code">function e_d = calc_elem_from_node_image(EtoN, node_data); </a>
+0034    n_elems= size(EtoN,2);
+0035    mu=1e-3; <span class="comment">% regularization hyperparameter (squared)</span>
+0036    <span class="comment">% jnkflag needed to make lsqr shut up</span>
+0037    [e_d, jnkflag] = lsqr([EtoN;mu*speye(n_elems)], <span class="keyword">...</span>
+0038                          [node_data;zeros(n_elems,1)], <span class="keyword">...</span>
+0039                           1e-8,1000); <span class="comment">% should be enough, accuracy is ok</span>
+0040 
+0041 <span class="keyword">return</span>;
+0042 <span class="comment">% Three different ways to invert iEtoN. We only need something fairly</span>
+0043 <span class="comment">% approximate. This is test code to check</span>
+0044 [Nn,Ne]= size(EtoN);  
+0045 n1= ones(Nn,1); mu=1e-3;
+0046 t=cputime;
+0047    ed1= (EtoN'/(EtoN*EtoN'+mu^2*speye(Nn)))*n1;
+0048 disp([cputime-t, std(ed1)]);
+0049 t=cputime;
+0050    ed2= ((EtoN'*EtoN+mu^2*speye(Ne))\EtoN')*n1;
+0051 disp([cputime-t, std(ed2)]);
+0052 t=cputime;
+0053 <span class="comment">% Use model saying [E;m*I]*i= [n;0]</span>
+0054    ed3= lsqr([EtoN;mu*speye(Ne)],[n1;zeros(Ne,1)],1e-8,1000);
+0055 disp([cputime-t, std(ed3)]);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of elec_rearrange</title>
+  <meta name="keywords" content="elec_rearrange">
+  <meta name="description" content="ELEC_REARRANGE: rearrange electrodes for given pattern">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; elec_rearrange.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>elec_rearrange
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ELEC_REARRANGE: rearrange electrodes for given pattern</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ELEC_REARRANGE: rearrange electrodes for given pattern
+
+ Usage: 
+     elec_idx = elec_rearrange( pattern, newarrange );
+     fmdl.electrode( elec_idx ) = fmdl.electrode;
+   OR;
+     [~,new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model );
+
+ pattern    = [Elecs/row, rows]  (eg [16,2])
+   or a structure with (p.n_elecs, p.n_layers)
+
+ newarrange = 'square' 
+              'zigzag' / 'odd_even' 
+              'none' 
+
+
+ (C) 2017 Andy Adler. License: GPL v2 or v3. $Id: elec_rearrange.m 5663 2017-12-09 21:48:19Z bgrychtol $</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/show_fem_enhanced.html" class="code" title="function hh = show_fem_enhanced(mdl, options)">show_fem_enhanced</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>	ELEC_REARRANGE: rearrange electrodes for given pattern</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="GREIT3D_distribution.html" class="code" title="function [imdl,distr] = GREIT3D_distribution(fmdl, vopt)">GREIT3D_distribution</a>	GREIT3D_distribution: create target distributions for 3D GREIT</li><li><a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>	ELEC_REARRANGE: rearrange electrodes for given pattern</li><li><a href="solve_RM_2Dslice.html" class="code" title="function imdl = solve_RM_2Dslice(imdl, sel_fcn)">solve_RM_2Dslice</a>	SOLVE_RM_2DSLICE: cut slices out of a 3D model</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )</a>
+0002 <span class="comment">% ELEC_REARRANGE: rearrange electrodes for given pattern</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">%     elec_idx = elec_rearrange( pattern, newarrange );</span>
+0006 <span class="comment">%     fmdl.electrode( elec_idx ) = fmdl.electrode;</span>
+0007 <span class="comment">%   OR;</span>
+0008 <span class="comment">%     [~,new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model );</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% pattern    = [Elecs/row, rows]  (eg [16,2])</span>
+0011 <span class="comment">%   or a structure with (p.n_elecs, p.n_layers)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% newarrange = 'square'</span>
+0014 <span class="comment">%              'zigzag' / 'odd_even'</span>
+0015 <span class="comment">%              'none'</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% (C) 2017 Andy Adler. License: GPL v2 or v3. $Id: elec_rearrange.m 5663 2017-12-09 21:48:19Z bgrychtol $</span>
+0019 
+0020    <span class="keyword">if</span> ischar(pattern) &amp;&amp; strcmp(pattern,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0021 
+0022    <span class="keyword">if</span> isnumeric(pattern)
+0023       p.n_elecs = pattern(1);
+0024       p.n_layers= pattern(2);
+0025    <span class="keyword">elseif</span> isstruct(pattern)
+0026       p = pattern;
+0027    <span class="keyword">else</span>
+0028       error(<span class="string">'Can''t interpret &quot;pattern&quot; input'</span>);
+0029    <span class="keyword">end</span>
+0030 
+0031    <span class="keyword">if</span> p.n_layers &gt;= 3;
+0032       error(<span class="string">'elec_rearrange: can''t interpret n_layers &gt;=2'</span>);
+0033    <span class="keyword">end</span>
+0034 
+0035    idx = reshape(1:(p.n_elecs*p.n_layers),p.n_layers,p.n_elecs);
+0036    <span class="keyword">switch</span> lower(newarrange)
+0037      <span class="keyword">case</span> <span class="string">'none'</span>; <span class="comment">% nothing required</span>
+0038      <span class="keyword">case</span> {<span class="string">'odd_even'</span>,<span class="string">'zigzag'</span>};
+0039         idx = reshape(idx,2,[])';
+0040      <span class="keyword">case</span> <span class="string">'square'</span>  ;
+0041         idx = reshape(idx,2,[])';
+0042         idx(2:2:<span class="keyword">end</span>,:) = fliplr(idx(2:2:<span class="keyword">end</span>,:));
+0043      <span class="keyword">otherwise</span>;
+0044           error(<span class="string">'case %s not understood'</span>,newarrange);
+0045    <span class="keyword">end</span>
+0046   elec_idx = idx(:);
+0047 
+0048   <span class="keyword">if</span> nargin &gt;= 3
+0049      new_fmdl = fwd_model;
+0050      new_fmdl.electrode(elec_idx) = new_fmdl.electrode;
+0051   <span class="keyword">end</span>
+0052 
+0053 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0054    sqV = [1,2;4,3;5,6;8,7;9,10;12,11;13,14;16,15]';
+0055    oeV = [1,2;3,4;5,6;7,8;9,10;11,12;13,14;15,16]';
+0056 
+0057 
+0058    elec= reshape([1:16],8,2)';
+0059    idx = <a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>(size(elec'),<span class="string">'square'</span>);
+0060    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Sq#1 [8,2]'</span>, reshape(idx,size(elec'))', sqV);
+0061 
+0062    idx = <a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>(size(elec'),<span class="string">'odd_even'</span>);
+0063    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'OE#1 [8,2]'</span>, reshape(idx,size(elec'))', oeV);
+0064 
+0065    idx = <a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>(size(elec'),<span class="string">'zigZaG'</span>);
+0066    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'OE#2 [8,2]'</span>, reshape(idx,size(elec'))', oeV);
+0067 
+0068    idx = <a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>(size(elec'),<span class="string">'none'</span>);
+0069    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'OE#2 [8,2]'</span>, idx', 1:16);
+0070 
+0071    p.n_elecs = 8; p.n_layers = 2;
+0072    idx = <a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>(p,<span class="string">'square'</span>);
+0073    idx = reshape(idx,size(elec'))';
+0074    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Sq#2 [8,2]'</span>, idx, sqV);
+0075 
+0076    elec= [1:32]';
+0077    idx = <a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>(size(elec),<span class="string">'square'</span>);
+0078    idx= reshape(idx,[16,2])';
+0079    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Sq [16,2]'</span>, idx(:,1:8), sqV);
+0080 
+0081    imdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]); fmdl1= imdl.fwd_model;
+0082    subplot(221);
+0083    idx = <a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>([16,2],<span class="string">'square'</span>);
+0084    fmdl1.electrode(idx) = fmdl1.electrode;
+0085    <a href="../../eidors/graphics/matlab/show_fem_enhanced.html" class="code" title="function hh = show_fem_enhanced(mdl, options)">show_fem_enhanced</a>(fmdl1,[0,1]);
+0086    view(10,82);
+0087 
+0088    subplot(222);
+0089    [~,fmdl2] = <a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>([16,2],<span class="string">'square'</span>, imdl.fwd_model);
+0090    <a href="../../eidors/graphics/matlab/show_fem_enhanced.html" class="code" title="function hh = show_fem_enhanced(mdl, options)">show_fem_enhanced</a>(fmdl2,[0,1]);
+0091    view(10,82);
+0092 
+0093    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'fmdl#1'</span>, [fmdl1.electrode([5,9]).nodes], [156 157 219 220 128 129 191 192]);
+0094    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'fmdl#2'</span>, fmdl1.electrode, fmdl2.electrode)</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

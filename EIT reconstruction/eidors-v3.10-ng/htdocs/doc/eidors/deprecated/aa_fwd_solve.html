@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of aa_fwd_solve</title>
+  <meta name="keywords" content="aa_fwd_solve">
+  <meta name="description" content="AA_FWD_SOLVE: data= aa_fwd_solve( fwd_model, img)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; aa_fwd_solve.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>aa_fwd_solve
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>AA_FWD_SOLVE: data= aa_fwd_solve( fwd_model, img)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function data =aa_fwd_solve(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> AA_FWD_SOLVE: data= aa_fwd_solve( fwd_model, img)
+ Fwd solver for Andy Adler's EIT code
+ Input:
+    fwd_model = forward model
+    img       = image struct
+ Output:
+    data = measurements struct
+ Options: (to return internal FEM information)
+    img.fwd_solve.get_all_meas = 1 (data.volt = all FEM nodes, but not CEM)
+    img.fwd_solve.get_all_nodes= 1 (data.volt = all nodes, including CEM)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>	FWD_SOLVE_1ST_ORDER: data= fwd_solve_1st_order( img)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data =aa_fwd_solve(varargin)</a>
+0002 <span class="comment">% AA_FWD_SOLVE: data= aa_fwd_solve( fwd_model, img)</span>
+0003 <span class="comment">% Fwd solver for Andy Adler's EIT code</span>
+0004 <span class="comment">% Input:</span>
+0005 <span class="comment">%    fwd_model = forward model</span>
+0006 <span class="comment">%    img       = image struct</span>
+0007 <span class="comment">% Output:</span>
+0008 <span class="comment">%    data = measurements struct</span>
+0009 <span class="comment">% Options: (to return internal FEM information)</span>
+0010 <span class="comment">%    img.fwd_solve.get_all_meas = 1 (data.volt = all FEM nodes, but not CEM)</span>
+0011 <span class="comment">%    img.fwd_solve.get_all_nodes= 1 (data.volt = all nodes, including CEM)</span>
+0012 
+0013 <span class="comment">% (C) 1995-2002 Andy Adler. License: GPL version 2 or version 3</span>
+0014 <span class="comment">% Ref: Adler &amp; Guardo (1996) IEEE T. Med Imaging</span>
+0015 <span class="comment">% $Id: aa_fwd_solve.m 3083 2012-06-07 18:01:59Z aadler $</span>
+0016 
+0017 <span class="comment">% correct input paralemeters if function was called with only img</span>
+0018 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'AA_FWD_SOLVE is deprecated as of 07-Jun-2012. Use FWD_SOLVE_1ST_ORDER instead.'</span>);
+0019 
+0020 data = <a href="../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>( varargin{:} );</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

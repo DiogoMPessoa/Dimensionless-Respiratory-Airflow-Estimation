@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>GREIT Reconstruction for an neonate human thorax geometry</h2>
+
+<h3> 
+Data
+</h3>
+
+Data are available
+<a href="../../data_contrib/if-neonate-spontaneous/index-s.html">Here</a>.
+Data were recorded from a 
+        10-day old spontaneously breathing neonate lying in the
+        prone position with the head turned to the left, as
+        documented in:
+S. Heinrich, H. Schiffmann, A. Frerichs, A. Klockgether-Radke, I. Frerichs,
+<a href="http://www.springerlink.com/content/h68313183p54711j/">
+ Body and head position effects on regional lung ventilation in infants: an electrical impedance tomography study.</a>
+ Intensive Care Med., 32:1392-1398, 2006.
+
+
+<p><center>
+<b>Subject Image:</b><br>
+<a href = "http://eidors3d.sourceforge.net/data_contrib/if-neonate-spontaneous/if-neonate-spontaneous-image.jpeg"
+   ><img src = "http://eidors3d.sourceforge.net/data_contrib/if-neonate-spontaneous/if-neonate-spontaneous-image.jpeg"
+ width="15%"></a>
+</center>
+
+
+<h3> 
+Image reconstruction model
+</h3>
+
+Forward model model
+<pre>
+% Inverse model
+%fmdl = mk_library_model('neonate_16el_lungs');
+elec_pos = [16,1,.5]; elec_shape=[0.15,0.3,0.01,0,60]; maxsz=0.08; nfft=27;
+fmdl = mk_library_model({'neonate','boundary','left_lung','right_lung'}, ...
+      elec_pos, elec_shape, maxsz,nfft);
+
+[fmdl.stimulation fmdl.meas_select] = mk_stim_patterns(16,1,'{ad}','{ad}');
+fmdl = mdl_normalize(fmdl,1);
+
+img = mk_image(fmdl,1); img.elem_data(vertcat(fmdl.mat_idx{2:3})) = 0.3;
+img.calc_colours.ref_level=1;
+
+calc_colours('defaults');
+show_fem_enhanced(img); view(-2,32)
+print_convert neonate_ex01a.jpg
+
+</pre>
+<center>
+
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/neonate_ex01a.jpg">
+<br><i>Figure:</i>
+Finite element model of thorax
+</center>
+
+Reconstruction model
+<pre>
+img = mk_image(fmdl,1); img.elem_data(vertcat(fmdl.mat_idx{2:3})) = 0.6;
+opt.square_pixels = 1; opt.imgsz = [64 64];
+%opt.noise_figure = 0.5;
+%imdl = mk_GREIT_model(img, 0.20, [], opt);
+imdl = mk_GREIT_model(img, 0.20, 10, opt);
+
+</pre>
+
+<h3> 
+GREIT reconstruction
+</h3>
+
+Reconstruct images
+<pre>
+% Data: eidors3d.sf.net/data_contrib/if-neonate-spontaneous/if-neonate-spontaneous.zip
+vv= eidors_readdata('P04P-1016.get');
+
+% solve with reference to the mean
+imgall = inv_solve(imdl,mean(vv,2),vv);
+[insp, expi] = find_frc(imgall,[],13,[],2); % find breaths
+
+% use expirations as reference
+imgr = inv_solve(imdl,vv(:,expi),vv(:,insp(2:end)));
+   imgr.calc_colours.ref_level= 0;
+   imgr.calc_colours.backgnd= [1 1 1];
+   imgr.calc_colours.greylev= 0.001;
+   imgr.show_slices.img_cols = 4;
+   imgr.show_slices.sep      = 2;
+show_slices(imgr);
+
+print_convert neonate_ex03a.png
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/neonate_ex03a.png">
+<br><i>Figure:</i>
+Images of three different breaths (end inspiration)
+</center>
+
+Reconstruct temporal signals
+<pre>
+%%BUG. NEED TO FIND IMGALL.
+
+% positions of where to plot
+yposns = [20 20 45 45];
+xposns = [20 45 20 45];
+
+% Show image
+clf; axes('position',[0.05,0.5,0.25,0.45]);
+img1= imgall; img1.elem_data = imgall.elem_data(:,45);
+show_slices(img1);
+hold all;
+for i = 1:4
+    plot(xposns(i),yposns(i),'s','LineWidth',5);
+end
+hold off;
+
+% Show plots
+imgs = calc_slices(imgall);
+axes('position',[0.32,0.6,0.63,0.28]);
+
+imgs = permute(imgs,[3,1,2]);
+taxis =  (0:size(imgs,1)-1)/13; % frame rate = 13
+hold all
+for i = 1:4
+    plot(taxis,imgs(:,yposns(i),xposns(i)),'LineWidth',2);
+end
+hold off
+set(gca,'ytick',[]);
+xlim([0 16]);
+
+print_convert neonate_ex03a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/neonate_ex04a.png">
+<br><i>Figure:</i>
+(bottom) time course of several lung pixels
+</center>
+
+<h3> 
+Use Elliptic GREIT model
+</h3>
+
+The shape of a neonate is roughly elliptical. Based on the neonate CT
+<a href="http://eradiology.bidmc.harvard.edu/LearningLab/respiratory/Shaw.pdf">
+here</a>, the elliptical ration is about 1:1.14.
+
+<pre>
+clf
+n_elecs = 16;
+
+% Elliptic model
+[fmdle,midx] = ng_mk_ellip_models([1, 1.14,1,0.15] ,[n_elecs,0.5],[0.05]);
+[stim,msel] =  mk_stim_patterns(n_elecs,1,[0,1],[0,1],{'no_meas_current'}, 1);
+fmdle.stimulation =  stim;       
+fmdle.meas_select =  msel;       
+fmdle = mdl_normalize(fmdle, 1);
+
+% GREIT Ellip - circ objects
+opt.distr = 0; % central
+opt.noise_figure = 0.5;
+imdl = mk_GREIT_model(mk_image(fmdle,1), 0.25, [], opt);
+
+vh = mean(vv,2);        % reference is average
+vi = vv(:,[45,70,173]); %3 inspirations
+
+img = inv_solve(imdl,vh,vi);
+
+img.show_slices.img_cols = 3;
+img.show_slices.sep      = 2;
+img.calc_colours.ref_level=0;
+show_slices(img);
+
+print_convert neonate_ex04a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/neonate_ex05a.png">
+<br><i>Figure:</i>
+Images of lungs using ellipcal GREIT reconstruction
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of bitmap_downsize</title>
+  <meta name="keywords" content="bitmap_downsize">
+  <meta name="description" content="BITMAP_DONWSIZE scale down an image (anti-aliasing)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">external</a> &gt; <a href="index.html">export_fig</a> &gt; bitmap_downsize.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/external/export_fig&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>bitmap_downsize
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BITMAP_DONWSIZE scale down an image (anti-aliasing)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function A = bitmap_downsize(A, factor) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BITMAP_DONWSIZE scale down an image (anti-aliasing)
+ A = downsize(A, N) downsizes image array A by a factor N (natural number)
+
+ This function is part of the EXPORT_FIG suite by Oliver Woodford
+ http://www.mathworks.com/matlabcentral/fileexchange/23629</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/graphics/matlab/print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>	PRINT_CONVERT: print figures with anti-aliasing and trim them</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function A = bitmap_downsize(A, factor)</a>
+0002 <span class="comment">%BITMAP_DONWSIZE scale down an image (anti-aliasing)</span>
+0003 <span class="comment">% A = downsize(A, N) downsizes image array A by a factor N (natural number)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% This function is part of the EXPORT_FIG suite by Oliver Woodford</span>
+0006 <span class="comment">% http://www.mathworks.com/matlabcentral/fileexchange/23629</span>
+0007 
+0008 <span class="comment">% Copyright (C) Oliver Woodford 2008-2012</span>
+0009 <span class="comment">% License: BSD, see accompanying license.txt</span>
+0010 <span class="comment">% $Id: bitmap_downsize.m 5522 2017-06-07 12:03:37Z aadler $</span>
+0011 
+0012 <span class="keyword">if</span> factor == 1
+0013     <span class="comment">% Nothing to do</span>
+0014     <span class="keyword">return</span>
+0015 <span class="keyword">end</span>
+0016 <span class="keyword">try</span>
+0017     <span class="comment">% Faster, but requires image processing toolbox</span>
+0018     A = imresize(A, 1/factor, <span class="string">'bilinear'</span>);
+0019 <span class="keyword">catch</span>
+0020     <span class="comment">% No image processing toolbox - resize manually</span>
+0021     <span class="comment">% Lowpass filter - use Gaussian as is separable, so faster</span>
+0022     <span class="comment">% Compute the 1d Gaussian filter</span>
+0023     filt = (-factor-1:factor+1) / (factor * 0.6);
+0024     filt = exp(-filt .* filt);
+0025     <span class="comment">% Normalize the filter</span>
+0026     filt = single(filt / sum(filt));
+0027     <span class="comment">% Filter the image</span>
+0028     padding = floor(numel(filt) / 2);
+0029     <span class="keyword">for</span> a = 1:size(A, 3)
+0030         A(:,:,a) = conv2(filt, filt', single(A([ones(1, padding) 1:end repmat(<span class="keyword">end</span>, 1, padding)],[ones(1, padding) 1:end repmat(<span class="keyword">end</span>, 1, padding)],a)), <span class="string">'valid'</span>);
+0031     <span class="keyword">end</span>
+0032     <span class="comment">% Subsample</span>
+0033     A = A(1+floor(mod(end-1, factor)/2):factor:<span class="keyword">end</span>,1+floor(mod(end-1, factor)/2):factor:<span class="keyword">end</span>,:);
+0034 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

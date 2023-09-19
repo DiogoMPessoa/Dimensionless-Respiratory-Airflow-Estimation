@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of get_RM</title>
+  <meta name="keywords" content="get_RM">
+  <meta name="description" content="% GET_RM: obtains the reconstruction matrix from a given inverse model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; get_RM.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>get_RM
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>% GET_RM: obtains the reconstruction matrix from a given inverse model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [RM, J, RtR, W, Jfine] = get_RM(inv_model) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% GET_RM: obtains the reconstruction matrix from a given inverse model
+   [RM, J, RtR, W, Jfine] = get_RM(inv_model)
+
+ Output: 
+   RM          - reconstruction matrix
+   J           - Jacobian matrix
+   RtR         - RtR prior
+   W           - measurement covariance matrix
+   Jfine       - Jacobian matrix (without applying coarse2fine mapping)
+
+ Parameters:
+   inv_model   - inv_model
+
+ See also <a href="inv_solve_diff_GN_one_step.html" class="code" title="function img= inv_solve_diff_GN_one_step( inv_model, data1, data2)">INV_SOLVE_DIFF_GN_ONE_STEP</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/solvers/calc_R_prior.html" class="code" title="function R_prior = calc_R_prior( inv_model, varargin )">calc_R_prior</a>	R = calc_R_prior( inv_model, varargin )</li><li><a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>	RtR = calc_RtR_prior( inv_model )</li><li><a href="../../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>	CALC_HYPERPARAMETER: calculate hyperparameter value</li><li><a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>	CALC_JACOBIAN_BKGND: calculate background image around</li><li><a href="../../../eidors/solvers/calc_meas_icov.html" class="code" title="function meas_icov = calc_meas_icov( inv_model )">calc_meas_icov</a>	meas_icov = calc_meas_icov( inv_model )</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="calc_image_SNR.html" class="code" title="function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)">calc_image_SNR</a>	% CALC_IMAGE_SNR: Calculates the signal-to-noise ratio (SNR) in the image</li><li><a href="calc_lambda_regtools.html" class="code" title="function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)">calc_lambda_regtools</a>	% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)</li><li><a href="inv_solve_diff_GN_one_step.html" class="code" title="function img= inv_solve_diff_GN_one_step( inv_model, data1, data2)">inv_solve_diff_GN_one_step</a>	INV_SOLVE_DIFF_GN_ONE_STEP inverse solver using approach of Adler&Guardo 1996</li><li><a href="nodal_solve.html" class="code" title="function img= nodal_solve( inv_model, data1, data2)">nodal_solve</a>	NODAL_SOLVE inverse solver using approach of Adler&Guardo 1996</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [RM, J, RtR, W, Jfine] = get_RM(inv_model)</a>
+0002 <span class="comment">%% GET_RM: obtains the reconstruction matrix from a given inverse model</span>
+0003 <span class="comment">%   [RM, J, RtR, W, Jfine] = get_RM(inv_model)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Output:</span>
+0006 <span class="comment">%   RM          - reconstruction matrix</span>
+0007 <span class="comment">%   J           - Jacobian matrix</span>
+0008 <span class="comment">%   RtR         - RtR prior</span>
+0009 <span class="comment">%   W           - measurement covariance matrix</span>
+0010 <span class="comment">%   Jfine       - Jacobian matrix (without applying coarse2fine mapping)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Parameters:</span>
+0013 <span class="comment">%   inv_model   - inv_model</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% See also INV_SOLVE_DIFF_GN_ONE_STEP</span>
+0016 
+0017 <span class="comment">% (C) 2016 Andy Adler. License: GPL version 2 or version 3</span>
+0018 <span class="comment">% $Id: get_RM.m 5424 2017-04-25 17:45:19Z aadler $</span>
+0019 
+0020 <span class="comment">% TODO: add caching capabilities here</span>
+0021 
+0022 <span class="keyword">if</span> isfield(inv_model, <span class="string">'solve_use_matrix'</span>) &amp;&amp; isfield(inv_model.solve_use_matrix, <span class="string">'RM'</span>)
+0023     <span class="comment">% GREIT</span>
+0024     RM = inv_model.solve_use_matrix.RM;
+0025 <span class="keyword">else</span>
+0026     <span class="comment">% GN</span>
+0027     img_bkgnd= <a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>( inv_model );
+0028     J = <a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>( img_bkgnd);
+0029     <span class="keyword">if</span> nargout &gt; 4
+0030         <span class="keyword">if</span> isfield(img_bkgnd.fwd_model, <span class="string">'coarse2fine'</span>)
+0031             img_bkgnd.fwd_model = rmfield(img_bkgnd.fwd_model, <span class="string">'coarse2fine'</span>);
+0032         <span class="keyword">end</span>
+0033         Jfine = <a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>( img_bkgnd);
+0034     <span class="keyword">end</span>
+0035     
+0036     RtR = <a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>( inv_model );
+0037     R   = <a href="../../../eidors/solvers/calc_R_prior.html" class="code" title="function R_prior = calc_R_prior( inv_model, varargin )">calc_R_prior</a>( inv_model );
+0038     W   = <a href="../../../eidors/solvers/calc_meas_icov.html" class="code" title="function meas_icov = calc_meas_icov( inv_model )">calc_meas_icov</a>( inv_model );
+0039     hp  = <a href="../../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>( inv_model );
+0040     
+0041     RM = (J'*W*J +  hp^2*RtR)\J'*W;
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

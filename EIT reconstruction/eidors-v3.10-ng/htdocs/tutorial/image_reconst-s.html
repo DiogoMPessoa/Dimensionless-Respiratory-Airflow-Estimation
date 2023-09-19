@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../index-s.html"
+>Main</a><br>
+<a href="../docs-s.html"
+   >Documentation</a><br>
+<a href="../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../download-s.html"
+   >Download</a><br>
+<a href="../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../faq-s.html">FAQ</a><br>
+<a href="../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+<h2>EIDORS Image Reconstruction</h2>
+
+To run these tutorials, you need to 
+<a href="../download-s.html">download and install</a>
+EIDORS and then run this command in a matlab
+(or octave) session.
+<pre width="40">
+&gt;&gt;run /path/to/eidors3d/startup.m
+</pre>
+
+<h3>EIDORS Image Reconstruction</h3>
+<ul>
+    <li><h3> 
+<a href="./EIDORS_basics/one_line-s.html"
+      >One-line starter program</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/tutorial010-s.html"
+      >EIDORS Basics</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/neonate_intro-s.html"
+      >Breathing baby (from Wikipedia page)</a>
+</h3>
+
+
+    <li><h3> 
+<a href="./EIDORS_basics/forward_solvers-s.html"
+      >Solving a forward model with EIDORS</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/forward_solvers_3d-s.html"
+      >Solving a 3D forward model with EIDORS</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/view_3D_surface-s.html"
+      >Viewing surface and internal voltage on 3D shape</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/tutorial110-s.html"
+      >Basic Image reconstruction</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/real_complex-s.html"
+      >Reconstruction of real and complex components</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/basic_3d-s.html"
+      >Basic 3D Image reconstruction</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/compare_3D_abs_GN-s.html"
+      >Basic Absolute 3D Image reconstruction</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/rpi_data-s.html"
+      >Absolute and difference solvers</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/sensitivity_map-s.html"
+      >Sensitivity of EIT and Reconstruction</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/tutorial120-s.html"
+      >Compare 2D Image reconstruction</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/tutorial130-s.html"
+       >Compare 3D Image reconstruction</a>
+</h3>
+
+    <li><h3> 
+<a href="./GREIT/algorithm_performance-s.html"
+       >Compare Algorithm Performance (GREIT parameters)</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/backproj_vs_GN-s.html"
+      >GN reconstruction vs Backprojection</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/contrasts-s.html"
+      >Conductivity contrasts and shape</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/contact_impedance-s.html"
+      >Effect of electrode contact impedance</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/forward_solvers_2d_high_order-s.html"
+      >Higher order 2D FEM solvers (quadratic and cubic)</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/forward_solvers_3d_high_order-s.html"
+      >Higher order 3D FEM solvers (quadratic)</a>
+</h3>
+
+    <li><h3> 
+<a href="./EIDORS_basics/error_rates_contactimp_higher_order-s.html"
+      >Convergence study of higher order FEM and contact impedance</a>
+</h3>
+
+</ul>
+
+
+<h3>More advanced Image Reconstruction</h3>
+<ul>
+
+    <li><H3>
+<a href="./EIDORS_basics/nodal_solv-s.html"
+      >Nodal Solvers</a>
+</h3>
+
+    <li><h3> 
+<a href="./adv_image_reconst/basic_iterative-s.html"
+      >Iterative GN reconstruction 3D</a>
+</h3>
+
+    <li><h3> 
+<a href="./adv_image_reconst/total_variation-s.html"
+      >Total Variation reconstruction 2D</a>
+</h3>
+
+    <li><h3> 
+<a href="./adv_image_reconst/TV_compare_hyperparams-s.html"
+      >Total Variation: choice of hyperparameters</a>
+</h3>
+
+    <li><h3> 
+<a href="./adv_image_reconst/noise_performance-s.html"
+      >Approaches to choose hyperparameter: NF, L-curve, SNR</a>
+</h3>
+
+    <li><h3> 
+<a href="./adv_image_reconst/temporal_solver-s.html"
+       >Temporal image reconstruction of moving objects</a>
+</h3>
+
+    <li><h3> 
+<a href="./adv_image_reconst/frame_timing_correct-s.html"
+       >Correct timing of acquired data for effect of serial data collection</a>
+</h3>
+
+    <li><h3> 
+<a href="./adv_image_reconst/electrode_errors-s.html"
+       >Managing Electrode Errors</a>
+</h3>
+
+    <li><h3> 
+<a href="./adv_image_reconst/transients-s.html"
+       >Transient effects with time domain current stimulus</a>
+</h3>
+
+    <li><h3> 
+<a href="./absolute_reconst/tutorial151-s.html"
+       >Absolute image reconstruction</a>
+</h3>
+
+    <li><h3> 
+<a href="./cheating_EIDORS/tutorial210-cheating-s.html"
+       >Exploration of "Cheating" in image reconstruction</a>
+</h3>
+</ul>
+
+<h3>Dual model image reconstruction</h3>
+<ul>
+    <li><h3> 
+<a href="./dual_model/dual_model_intro-s.html"
+       >Introduction to dual models</a>
+</h3>
+
+    <li><h3> 
+<a href="./dual_model/dual_model_partial_2d-s.html"
+       >Partially overlapping dual models</a>
+</h3>
+
+    <li><h3> 
+<a href="./dual_model/two_and_half_d-s.html"
+       >"2&frac12;D" Image Reconstruction</a>
+</h3>
+
+    <li><h3> 
+<a href="./dual_model/pipe-s.html"
+       >Cross section of a pipe flow</a>
+</h3>
+
+    <li><h3> 
+<a href="./dual_model/centre_slice-s.html"
+       >Reconstruction of a layer of a 3D model</a>
+</h3>
+
+    <li><h3> 
+<a href="./dual_model/square_mesh-s.html"
+       >Dual models reconstructing onto a rectangular pixelization</a>
+</h3>
+
+    <li><h3> 
+<a href="./dual_model/dual_3d3d-s.html"
+       >3D&minus;3D Dual Models</a>
+</h3>
+
+</ul>
+
+
+<h3>Image Reconstruction with electrode movement</h3>
+<ul>
+    <li><h3> 
+<a href="./adv_image_reconst/move_2d-s.html"
+       >Reconstruct Image and Electrode movement in 2D</a>
+</h3>
+    <li><h3> 
+<a href="./adv_image_reconst/move_3d-s.html"
+       >Reconstruct Image and Electrode movement in 3D</a>
+</h3>
+</ul>
+
+<h3>Unexpected Effects</h3>
+<ul>
+    <li><h3> 
+<a href="./strange_effects/opposite_meas-s.html"
+       >Opposite Stimulation and Measurement produces mirror images</a>
+   </h3>
+
+    <li><h3> 
+<a href="./strange_effects/conformal-s.html"
+       >Conformal Mapping deformations of boundary shape</a>
+   </h3>
+
+    <li><h3> 
+<a href="./strange_effects/absolute_value-s.html"
+       >Imaging with absolute value of measurements</a>
+   </h3>
+
+    <li><h3> 
+<a href="./strange_effects/anisotropy-s.html"
+       >Anisotropic deformations of medium</a>
+   </h3>
+
+
+    <li><h3> 
+<a href="./strange_effects/minima_region-s.html"
+       >"Banana-shaped" minima region</a>
+   </h3>
+
+</h3>
+</ul>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:02:17 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      <p><li><b>
+      </b><br>
+      <ul>
+      </ul>
+      <i>Questions</i>:
+      <br>&minus;
+
+      -->

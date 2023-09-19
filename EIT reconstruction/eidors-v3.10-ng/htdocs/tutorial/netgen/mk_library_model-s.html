@@ -1,0 +1,242 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Pre-packaged models
+</h2>
+
+
+Many pre-compiled shapes have been put into the function
+<tt>mk_library_model.m</tt>. This may be used to give easy
+access to thorax shapes. <i>We indend to add more shapes
+to this model. Contributions are welcome</i>
+
+<p>
+To see what shapes are available, run:
+<pre>
+&gt;&gt; >> mk_library_model('list')
+ans =
+    'adult_male_16el'
+    'adult_male_32el'
+    'adult_male_16el_lungs'
+    'adult_male_32el_lungs'
+    'adult_male_grychtol2016a_1x32'
+    'adult_male_grychtol2016a_2x16'
+    'cylinder_16x1el_coarse'
+    'cylinder_16x1el_fine'
+    'cylinder_16x1el_vfine'
+    'cylinder_16x2el_coarse'
+    'cylinder_16x2el_fine'
+    'cylinder_16x2el_vfine'
+    'neonate_16el'
+    'neonate_32el'
+    'neonate_16el_lungs'
+    'neonate_32el_lungs'
+    'pig_23kg_16el'
+    'pig_23kg_32el'
+    'pig_23kg_16el_lungs'
+    'pig_23kg_32el_lungs'
+    'lamb_newborn_16el'
+    'lamb_newborn_32el'
+    'lamb_newborn_16el_organs'
+    'beagle_16el'
+    'beagle_32el'
+    'beagle_16el_lungs'
+    'beagle_32el_lungs'
+    'beagle_16el_rectelec'
+    'beagle_32el_rectelec'
+    'beagle_16el_lungs_rectelec'
+    'beagle_32el_lungs_rectelec'
+</pre>
+
+<h3>Pig thorax model</h3>
+
+<pre>
+fmdl= mk_library_model('pig_23kg_16el');
+subplot(211); show_fem(fmdl);
+print_convert mk_library_model01a.png
+view(2);
+print_convert mk_library_model01b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/mk_library_model01a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/mk_library_model01b.png">
+</center>
+
+
+<h3>Human thorax model with lungs</h3>
+
+<pre>
+fmdl= mk_library_model('adult_male_16el_lungs');
+img = mk_image(fmdl, 0.25); % background conductivity
+img.elem_data([fmdl.mat_idx{2};fmdl.mat_idx{3}]) = 0.05; % lungs
+subplot(211); show_fem(img);
+print_convert mk_library_model02a.png
+view(2);
+print_convert mk_library_model02b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/mk_library_model02a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/mk_library_model02b.png">
+</center>
+
+<h3>Customized library model</h3>
+
+A model can be customized from the one provided
+by the library. Here we get the shape and boundary,
+but add our own electrode positions.
+
+<pre>
+elec_per_plane = 8;
+equal_spacing = 1;
+elec_planes = [0.4,0.6];
+elec_shape = [0.05]; % circular elecs,
+maxh       = 0.08;   % mesh size
+fmdl= mk_library_model({'adult_male','boundary'}, ...
+       [elec_per_plane,equal_spacing, elec_planes], elec_shape, maxh);
+subplot
+subplot(211); show_fem(fmdl);
+print_convert mk_library_model03a.png
+view(2);
+print_convert mk_library_model03b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/mk_library_model03a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/mk_library_model03b.png">
+</center>
+
+<h3>Human thorax model from Visible Human Geometry</h3>
+
+The following models are generated from the visible human geometry
+and use <tt>gmsh</tt> and <tt>netgen</tt> for meshing.
+
+<pre>
+fmdl= mk_library_model('adult_male_grychtol2016a_2x16')
+subplot(211);
+view(-20,24); show_fem_enhanced(fmdl);
+print_convert mk_library_model04a.png
+view(0,0);    show_fem_enhanced(fmdl);
+print_convert mk_library_model04b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/mk_library_model04a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/mk_library_model04b.png">
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-03-21 10:50:31 -0400 (Tue, 21 Mar 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

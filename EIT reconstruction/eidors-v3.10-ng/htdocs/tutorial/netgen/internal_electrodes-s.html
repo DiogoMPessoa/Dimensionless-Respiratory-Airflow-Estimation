@@ -1,0 +1,207 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Internal electrodes
+</h2>
+
+
+If you would like to use electrodes inside the
+FEM models, it needs a little work from EIDORS,
+because EIDORS uses the model boundary to look
+for electrode complete electrode model nodes.
+There are two ways to get around this.
+
+<h3>Electrode in a hole in the model</h3>
+
+By placing a hole in a model as below, the electrode
+s on the boundary, and thus no special treatment
+is required.
+
+</p>
+<pre>
+shape_str = [ ...
+  'solid hole = sphere(0.2,0.2,1.5;0.08);' ... 
+  'solid cyl    = cylinder (0,0,0; 0,0,1; 1) and not hole; \n', ...
+  'solid mainobj= orthobrick(-2,-2,0;2,2,2) and cyl -maxh=0.3;\n'];
+th = linspace(0,2*pi,7)'; th(end) = []; cs = [cos(th), sin(th)];
+elec_pos = [  cs, th/2/pi + 0.5, cs, 0*th];
+elec_shape=[0.1]; elec_obj = 'cyl';
+fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+
+% Put an electrode in the hole
+el_nodes = fmdl.nodes - ones(num_nodes(fmdl),1)*[0.2,0.2,1.5];
+shim = 1e-4; % a little bit extra to catch elements
+el_nodes = sum(el_nodes.^2,2) <= .08^2 + shim;
+fmdl.electrode(end+1) = struct( ...
+    'nodes', find(el_nodes), ...
+    'z_contact',.01);
+
+show_fem(fmdl); view(90,60);
+print_convert internal_electrodes01a.jpg
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/internal_electrodes01a.jpg">
+<br><i>Figure:</i>
+Internal electrode using a hole in the model.
+</center>
+
+<h3>Specifying the electrode boundary to EIDORS</h3>
+
+<pre>
+extra={'ctr_el','solid ctr_el = sphere(0.2,0.2,0.5;0.08);'};
+fmdl = ng_mk_cyl_models(1,[8,0.5],0.1,extra);
+
+
+% Get electrode boundary
+ctr_elec = fmdl.elems(fmdl.mat_idx{2},:);
+bdy_elec = find_boundary(ctr_elec);
+elec_nod = unique(bdy_elec(:));
+fmdl.electrode(end+1) = struct( ...
+     'nodes', elec_nod, 'z_contact',.01);
+% Make sure EIDORS knows you have internal electrodes
+fmdl.system_mat_fields.CEM_boundary = bdy_elec;
+
+show_fem(fmdl); view(90,60);
+print_convert internal_electrodes02a.jpg
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/internal_electrodes02a.jpg">
+<br><i>Figure:</i>
+Internal electrode by specifying using <tt>CEM_boundary</tt>
+</center>
+
+<pre>
+fmdl.stimulation = stim_meas_list([1,num_elecs(fmdl),1,2]);
+
+img= mk_image(fmdl,1);
+img.fwd_solve.get_all_meas = true;
+vh=fwd_solve(img);
+
+imgh = rmfield(img,'elem_data');
+imgh.node_data = vh.volt;
+show_slices(imgh,1); %center slice
+
+print_convert internal_electrodes03a.jpg
+
+</pre>
+
+<center>
+<img src="internal_electrodes03a.jpg">
+<br><i>Figure:</i>
+Voltages in a slide of a model with internal electrode
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2018-06-14 11:07:21 -0400 (Thu, 14 Jun 2018) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

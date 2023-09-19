@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of prior_covar</title>
+  <meta name="keywords" content="prior_covar">
+  <meta name="description" content="PRIOR_COVAR image prior with distance-based interelement covar">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; prior_covar.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>prior_covar
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PRIOR_COVAR image prior with distance-based interelement covar</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Reg= prior_covar( inv_model ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PRIOR_COVAR image prior with distance-based interelement covar
+ This is a simplification of prior_exponential_covar.m
+ Reg= prior_covar( inv_model )
+ Reg        =&gt; output regularization 
+ inv_model  =&gt; inverse model struct
+ P_type--prior type
+ 1: elements are globally correlated
+ 2: elements within/without electrode rings are correlated to elements in same region.
+ 3: only elements within electrode rings are correlated.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="prior_covar.html" class="code" title="function Reg= prior_covar( inv_model )">prior_covar</a>	PRIOR_COVAR image prior with distance-based interelement covar</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/deprecated/calc_covar_prior.html" class="code" title="function Reg= calc_covar_prior( inv_model )">calc_covar_prior</a>	CALC_COVAR_PRIOR image prior with distance-based interelement covar</li><li><a href="prior_covar.html" class="code" title="function Reg= prior_covar( inv_model )">prior_covar</a>	PRIOR_COVAR image prior with distance-based interelement covar</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function Reg = prior_covar_calc(ff, P_type);</a></li><li><a href="#_sub2" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Reg= prior_covar( inv_model )</a>
+0002 <span class="comment">% PRIOR_COVAR image prior with distance-based interelement covar</span>
+0003 <span class="comment">% This is a simplification of prior_exponential_covar.m</span>
+0004 <span class="comment">% Reg= prior_covar( inv_model )</span>
+0005 <span class="comment">% Reg        =&gt; output regularization</span>
+0006 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0007 <span class="comment">% P_type--prior type</span>
+0008 <span class="comment">% 1: elements are globally correlated</span>
+0009 <span class="comment">% 2: elements within/without electrode rings are correlated to elements in same region.</span>
+0010 <span class="comment">% 3: only elements within electrode rings are correlated.</span>
+0011 
+0012 <span class="comment">% (C) 2007, Tao Dai and Andy Adler. Licenced under the GPL Version 2</span>
+0013 <span class="comment">% $Id: prior_covar.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0014 
+0015 <span class="keyword">if</span> ischar(inv_model) &amp;&amp; strcmp(inv_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub2" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0016 
+0017 params = {inv_model.fwd_model, inv_model.fourD_prior.P_type};
+0018 Reg = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction Reg = prior_covar_calc(ff, P_type);">prior_covar_calc</a>, params, <span class="string">'prior_covar'</span>);
+0019 
+0020 
+0021 <a name="_sub1" href="#_subfunctions" class="code">function Reg = prior_covar_calc(ff, P_type);</a>
+0022    <span class="comment">% get average x,y,z of each element</span>
+0023    nel = size(ff.elems,1);
+0024    eta = .1;<span class="comment">%attenuation factor. eta is large when elems're spatially highly correlated</span>
+0025 
+0026    dist = zeros(nel);
+0027 
+0028    z1 = ff.nodes(ff.electrode(1).nodes,3);<span class="comment">%upper electrode ring</span>
+0029    z2 = ff.nodes(ff.electrode(end).nodes,3);<span class="comment">%lower electrode ring</span>
+0030    zmax = max(z1,z2);
+0031    zmin = min(z1,z2);
+0032 
+0033    <span class="keyword">for</span> dim = 1: size(ff.nodes,2);
+0034        coords = reshape(ff.nodes(ff.elems,dim),[size(ff.elems)]);<span class="comment">%coord of four vertex of each elem</span>
+0035        m_coords = mean( coords,2);<span class="comment">%calc center coord</span>
+0036        difm = m_coords*ones(1,nel);
+0037        difm = difm - difm';
+0038        dist= dist + difm.^2;<span class="comment">%</span>
+0039    <span class="keyword">end</span>
+0040    dist = sqrt(dist);<span class="comment">%elements distance matrix</span>
+0041    <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0042    dist = dist/max(dist(:));
+0043 
+0044    Reg = exp(-dist ./ eta);<span class="comment">% 3-D elements correlations matrix.</span>
+0045        <span class="keyword">if</span> dim == 3
+0046 <span class="comment">%          temp = double((m_coords&lt;max(z1,z2))&amp;(m_coords&gt;min(z1,z2)));%regions of interests</span>
+0047 <span class="comment">%          H = temp*temp';</span>
+0048            above = m_coords&gt;zmax;
+0049            below = m_coords&lt;zmin;
+0050            <span class="keyword">switch</span> P_type <span class="comment">%Prior type</span>
+0051                <span class="keyword">case</span> 2 <span class="comment">% elements of ROI are not correlated with elements of non_ROI</span>
+0052 <span class="comment">%          temp = find( ~above &amp; ~below);</span>
+0053 <span class="comment">%          Reg(temp,temp) = 1;</span>
+0054 <span class="comment">%                  temp = double(m_coords&gt;max(z1,z2));</span>
+0055 <span class="comment">%                  H = H + temp*temp';</span>
+0056 <span class="comment">%                  above = find(above);</span>
+0057 <span class="comment">%                  H(above,above) = 1;</span>
+0058 <span class="comment">%                  temp = double(m_coords&lt;min(z1,z2));</span>
+0059 <span class="comment">%                  H = H + temp*temp';</span>
+0060 <span class="comment">%                  temp = m_coords&lt;zmin;</span>
+0061 <span class="comment">%                  below = find(below);</span>
+0062 <span class="comment">%                  H(below,below) = 1;</span>
+0063 <span class="comment">%                  H = eta*(H+1e-6);</span>
+0064                    Reg(above,~above) = 0;
+0065                    Reg(below,~below) = 0;
+0066                <span class="keyword">case</span> 3 <span class="comment">% elements are only correlated within ROI, non-ROI elements are highly attenuated</span>
+0067 <span class="comment">%                  H = eta*(H+1e-6);</span>
+0068                    temp = find( above | below);
+0069                    Reg(temp,temp) = 0;
+0070                <span class="keyword">otherwise</span>
+0071                    error(<span class="string">'Prior type (%d) has not yet been defined'</span>,P_type);
+0072            <span class="keyword">end</span>
+0073        <span class="keyword">end</span>
+0074 
+0075 
+0076 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test</a>
+0077    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'b3cr'</span>,[16,3]);
+0078    imdl.fourD_prior.P_type = 2;
+0079 <span class="comment">%tic;</span>
+0080    Reg = <a href="prior_covar.html" class="code" title="function Reg= prior_covar( inv_model )">prior_covar</a>( imdl );
+0081    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'#1:'</span>, diag(Reg), ones(size(Reg,1),1));
+0082    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'#2:'</span>, Reg(102:103,100:103), [ <span class="keyword">...</span>
+0083    0.011818547266014   0.367556336897157   1.000000000000000   0.396442626219240; <span class="keyword">...</span>
+0084    0.008985742075647   0.160077522568152   0.396442626219240   1.000000000000000], 1e-6);
+0085 
+0086 <span class="comment">%toc;</span>
+0087 
+0088 <span class="comment">%tic;</span>
+0089    imdl.fourD_prior.P_type = 3;
+0090    Reg = <a href="prior_covar.html" class="code" title="function Reg= prior_covar( inv_model )">prior_covar</a>( imdl );
+0091    test = zeros(size(Reg,1),1); test(769:6912) = 1;
+0092    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'#1:'</span>, diag(Reg), test);
+0093    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'#2:'</span>, Reg(802:803,800:803), [ <span class="keyword">...</span>
+0094    0.086725242542203   0.132995997778770   1.000000000000000   0.417609404846561; <span class="keyword">...</span>
+0095    0.157824974662458   0.293750928546438   0.417609404846561   1.000000000000000], 1e-10);
+0096 <span class="comment">%toc;</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

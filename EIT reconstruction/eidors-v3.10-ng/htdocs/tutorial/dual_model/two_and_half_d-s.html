@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Two and a half dim (2&frac12;D) image reconstruction
+</h2>
+
+The term "2&frac12;D" or 2.5D originates from geophysics.
+Measurements are made around a medium (or in a borehole)
+in 3D. However, in order to simplify image reconstruction,
+the medium properties are assumed to be constant in
+the <i>z</i> direction. 
+<p>
+Thus, the <i>z</i> direction is part of the forward
+model, but not the inverse. It is thus "half" a 
+dimension.
+
+<h3>Fourier Approximation</h3>
+
+<p>
+The 2&frac12;D is typically built by constructing a 2D forward model and
+approximating the effect of the additional <i>z</i> direction through a
+summation of Fourier transform coefficients.
+Depending on the formulation, the Fourier summation may represent a finite
+region on either (for example, a cylinder) or an infinitely large region (for
+example, a half-space).
+Course/fine mapping can be applied on top of this to give a fine 2D forward model and a coarse 2D inverse model.
+The electrodes must all be at the <i>z</i>=0 plane.
+</p>
+
+<p>
+For an explanation of the formulation, see the presentation for<br/>
+<ul>
+Modelling with 2.5D Approximations,
+Alistair Boyle, Andy Adler,
+17th Conference on Electrical Impedance Tomography, Stockholm, Sweden, June 19-23, 2016. 
+</ul></p>
+
+<p>Generally, the formulation used in geophysics uses Point Electrodes Models
+(PEM). Here we use the Complete Electrode Model (CEM) in the <i>x</i> and
+<i>y</i> directions, and the PEM in the <i>z</i> direction.
+
+<pre>
+% Models
+fmdl = mk_common_model('d2C',16); % fine model
+cmdl = mk_common_model('c2C',16); % coarse model
+c2f = mk_coarse_fine_mapping(fmdl.fwd_model, cmdl.fwd_model);
+imdl = fmdl;
+imdl.rec_model = cmdl.fwd_model;
+imdl.fwd_model.coarse2fine = c2f;
+
+clf; % figure 1
+subplot(121);show_fem(imdl.fwd_model);
+title('fine (2d) model'); axis square; axis off;
+subplot(122); show_fem(imdl.rec_model);
+title('coarse (2d) model'); axis square; axis off;
+print_convert two_and_half_d01a.png '-density 75'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/two_and_half_d01a.png">
+<br><i> Figure:</i>
+<i>Left</i> fine (2d) model,
+<i>Right</i> coarse (2d) model
+</center>
+
+
+First, show the simulated target and
+the reconstruction on the (<i>inverse crime</i>)
+meshes. We check that the mapping is correct.
+<pre>
+% test c2f
+rimg = mk_image(cmdl,1);
+rimg.fwd_model = imdl.fwd_model;
+rimg.rec_model = imdl.rec_model;
+rimg.elem_data = 1 + ...
+   elem_select( rimg.rec_model, '(x-0.3).^2+(y+0.1).^2<0.15^2' ) - ...
+   elem_select( rimg.rec_model, '(x+0.4).^2+(y-0.2).^2<0.2^2' )*0.5;
+fimg = mk_image(fmdl,1);
+fimg.elem_data = 1 + ...
+   elem_select( rimg.fwd_model, '(x-0.3).^2+(y+0.1).^2<0.15^2' ) - ...
+   elem_select( rimg.fwd_model, '(x+0.4).^2+(y-0.2).^2<0.2^2' )*0.5;
+clf; % figure 1
+subplot(131); show_fem(mk_image(imdl.rec_model,rimg.elem_data)); axis square; axis off;
+title('coarse');
+subplot(132); show_fem(mk_image(imdl.fwd_model,c2f*rimg.elem_data)); axis square; axis off;
+title('coarse-to-fine');
+subplot(133); show_fem(fimg); axis square; axis off; title('fwd fine');
+print_convert two_and_half_d02a.png '-density 75';
+
+% Simulate data - homogeneous
+himg = mk_image(fmdl,1);
+vh = fwd_solve_2p5d_1st_order(himg);
+% Simulate data - inhomogeneous
+vi = fwd_solve_2p5d_1st_order(fimg);
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/two_and_half_d02a.png">
+<br><i> Figure:</i>
+<i>Left</i> coarse model
+<i>Centre</i> coarse data mapped to fine model
+<i>Right</i> fine model
+</center>
+
+Next, create geometries for the fine and
+coarse mesh. 
+Images are reconstructed by calling the
+<tt>coase_fine_solver</tt> function rather
+than the original. (<i>Note</i> this function
+still needs some work, it doesn't account for
+all cases)
+
+<pre>
+% Solve 2.5D
+% Create inverse Model: Classic
+imdl.hyperparameter.value = .1;
+imdl.reconst_type = 'difference';
+imdl.type = 'inv_model';
+
+% Classic and 2.5D (inverse crime) solver
+vh.type = 'data';
+vi.type = 'data';
+img2 = inv_solve(imdl, vh, vi);
+imdl.fwd_model.jacobian = @jacobian_adjoint_2p5d_1st_order;
+img25 = inv_solve(imdl, vh, vi);
+
+clf;
+subplot(131); show_fem(fimg); title('model'); axis off; axis square;
+subplot(132); show_fem(img2); title('2D'); axis off; axis square;
+subplot(133); show_fem(img25);title('2.5D'); axis off; axis square;
+print_convert two_and_half_d03a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/two_and_half_d03a.png">
+<br><i> Figure:</i>
+<i>Left</i> original model
+<i>Centre</i> 2d reconstruction
+<i>Right</i>  2&frac12; reconstruction onto coarse model
+</center>
+
+<h3>2D + 3D = 2.5D</h3>
+
+<p>
+The 2&frac12;D can also be built as an application
+of coarse/fine mapping, where the fine (high density)
+3D forward model is used with a coarse (low density) 
+2D inverse model.
+The 2D model is projected through the 3D model giving constant conductivity
+along the axis of the projection.
+<pre>
+% Build 2D and 3D model $Id: two_and_half_d04.m 5392 2017-04-12 05:22:03Z alistair_boyle $
+
+demo_img = mk_common_model('n3r2',[16,2]);
+
+% Create 2D FEM of all NODES with z=0
+f_mdl = demo_img.fwd_model;
+n2d = f_mdl.nodes( (f_mdl.nodes(:,3) == 0), 1:2);
+e2d = delaunayn(n2d);
+c_mdl = eidors_obj('fwd_model','2d','elems',e2d,'nodes',n2d);
+
+subplot(121);
+show_fem(f_mdl); title('fine (3d) model');
+
+subplot(122);
+show_fem(c_mdl); title('coarse (2d) model');
+axis square
+
+print_convert two_and_half_d04a.png '-density 75'
+
+% Simulate data - inhomogeneous
+img = mk_image(demo_img,1);
+vi= fwd_solve(img);
+
+% Simulate data - homogeneous
+load( 'datacom.mat' ,'A','B')
+img.elem_data(A)= 1.15;
+img.elem_data(B)= 0.80;
+vh= fwd_solve(img);
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/two_and_half_d04a.png">
+<br><i> Figure:</i>
+<i>Left</i> fine (3d) model,
+<i>Right</i> coarse (2d) model
+</center>
+
+
+First, show the simulated target and
+the reconstruction on the fine (<i>inverse crime</i>)
+mesh.
+<pre>
+% Solve 2D and 3D model $Id: two_and_half_d05.m 5392 2017-04-12 05:22:03Z alistair_boyle $
+
+% Original target
+subplot(141)
+show_fem(img); view(-62,28)
+
+% Create inverse Model: Classic
+imdl= select_imdl(f_mdl, {'Basic GN dif'});
+imdl.hyperparameter.value = .1;
+
+% Classic (inverse crime) solver
+img1= inv_solve(imdl, vh, vi);
+subplot(142)
+show_fem(img1); view(-62,28)
+
+</pre>
+
+Next, create geometries for the fine and
+coarse mesh. 
+Images are reconstructed by calling the
+<tt>coase_fine_solver</tt> function rather
+than the original. (<i>Note</i> this function
+still needs some work, it doesn't account for
+all cases)
+
+<pre>
+% Solve 2D and 3D model $Id: two_and_half_d06.m 5392 2017-04-12 05:22:03Z alistair_boyle $
+
+c2f= mk_coarse_fine_mapping( f_mdl, c_mdl );
+
+imdl.fwd_model.coarse2fine = c2f;
+img2= inv_solve(imdl, vh, vi);
+img2.elem_data= c2f*img2.elem_data;
+subplot(143)
+show_fem(img2); view(-62,28)
+
+% 2.5D reconstruct onto coarse model
+subplot(144)
+img3= inv_solve(imdl, vh, vi);
+img3.fwd_model= c_mdl;
+show_fem(img3);
+zlim([0,3]); xlim([-1,1]); ylim([-1,1]);
+ axis equal; view(-62,28)
+
+print_convert two_and_half_d06a.png
+
+</pre>
+
+Note the reconstructed image on the coarse
+mesh is extruded into 2D, as the assumptions
+require.
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/two_and_half_d06a.png">
+<br><i> Figure:</i>
+<i>Left</i> original (3d) model
+<i>Centre left</i> fine (3d) reconstruction
+<i>Centre right</i> 2&frac12; reconstruction onto fine model
+<i>Right</i>  2&frac12; reconstruction onto coarse model
+</center>
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-04-12 01:30:57 -0400 (Wed, 12 Apr 2017) $ by $Author: alistair_boyle $
+</small>
+</BODY></HTML>
+<!--
+      -->

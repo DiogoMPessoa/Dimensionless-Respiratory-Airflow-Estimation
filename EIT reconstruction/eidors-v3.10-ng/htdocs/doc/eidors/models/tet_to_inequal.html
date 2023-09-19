@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of tet_to_inequal</title>
+  <meta name="keywords" content="tet_to_inequal">
+  <meta name="description" content="[A,b]=tet_to_inequal(v)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; tet_to_inequal.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>tet_to_inequal
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[A,b]=tet_to_inequal(v)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [A,b]=tet_to_inequal(v,e) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [A,b]=tet_to_inequal(v)
+ Given the vertices of a simplex v return a system
+ of linear inequalities so that a point x in in 
+ the simplex iff Ax &lt;= b
+
+ [A,b]=tet_to_inequal(v)
+ Given the Nx3 list of vertices v and the Nx4 list of elements e indexing
+ v, return a system of linear inequalities so that a point x in in 
+ the simplex iff Ax &lt;= b</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="linear_reorder.html" class="code" title="function [fwd_model] = linear_reorder(fwd_model,ccw)">linear_reorder</a>	[fwd_model] = linear_reorder(fwd_model,ccw)</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="tet_to_inequal.html" class="code" title="function [A,b]=tet_to_inequal(v,e)">tet_to_inequal</a>	[A,b]=tet_to_inequal(v)</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a>	MK_TET_C2F - calculate a coarse2fine mapping for two tet-based models.</li><li><a href="point_in_tet.html" class="code" title="function point2tet = point_in_tet(fmdl,points, epsilon)">point_in_tet</a>	POINT_IN_TET test for points contained in elements</li><li><a href="tet_to_inequal.html" class="code" title="function [A,b]=tet_to_inequal(v,e)">tet_to_inequal</a>	[A,b]=tet_to_inequal(v)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function c = my_cross(a,b)</a></li><li><a href="#_sub2" class="code">function d = my_det(a)</a></li><li><a href="#_sub3" class="code">function do_unit_test</a></li><li><a href="#_sub4" class="code">function test_3d</a></li><li><a href="#_sub5" class="code">function simple_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [A,b]=tet_to_inequal(v,e)</a>
+0002 <span class="comment">% [A,b]=tet_to_inequal(v)</span>
+0003 <span class="comment">% Given the vertices of a simplex v return a system</span>
+0004 <span class="comment">% of linear inequalities so that a point x in in</span>
+0005 <span class="comment">% the simplex iff Ax &lt;= b</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% [A,b]=tet_to_inequal(v)</span>
+0008 <span class="comment">% Given the Nx3 list of vertices v and the Nx4 list of elements e indexing</span>
+0009 <span class="comment">% v, return a system of linear inequalities so that a point x in in</span>
+0010 <span class="comment">% the simplex iff Ax &lt;= b</span>
+0011 
+0012 <span class="comment">% (C) 2012 Bill Lionheart. License GPL v2 or v3</span>
+0013 <span class="comment">% $Id: tet_to_inequal.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0014 
+0015 <span class="keyword">if</span> ischar(v) &amp;&amp; strcmp(v,<span class="string">'UNIT_TEST'</span>); <a href="#_sub3" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0016 
+0017 <span class="keyword">if</span> nargin == 1
+0018    e = [1 2 3 4];
+0019    ne = 1;
+0020 <span class="keyword">end</span>
+0021 ne = size(e,1);
+0022 d1 = size(e,2);
+0023 d  = size(v,2);
+0024 <span class="comment">% [d1,d]=size(v(e,:));</span>
+0025 <span class="keyword">if</span> d~=3
+0026     error(<span class="string">'Only works for dimension 3 at the moment'</span>)
+0027 <span class="keyword">end</span>
+0028 <span class="keyword">if</span> d1 ~= d+1
+0029     error(<span class="string">'Simplex needs to have one more vertex than dimension'</span>)
+0030 <span class="keyword">end</span>
+0031 <span class="comment">% the d edges at vertex 1</span>
+0032 edges1= v(e(:,2:end)',:) - kron(v(e(:,1),:), ones(3,1));<span class="comment">%ones(3,1)*v(e(:,1),:);</span>
+0033 
+0034 dt = <a href="#_sub2" class="code" title="subfunction d = my_det(a)">my_det</a>(edges1);
+0035 idx = dt&lt;0;
+0036 <span class="keyword">if</span> any(idx)
+0037    e(idx, :) = [e(idx,2) e(idx,1) e(idx,3:end)];
+0038    idx3 = reshape(repmat(idx,1,3)',1,[])';
+0039    edges1(idx3,:)= v(e(idx,2:end)',:)-reshape(repmat(v(e(idx,1),:),1,3)',3,[])';
+0040 <span class="keyword">end</span>
+0041 idx1 = 1:3*ne; <span class="comment">% 1 2 3 4 5 6 ...</span>
+0042 idx3 = reshape(circshift(reshape(idx1,3,[]),-1),1,[]); <span class="comment">% 2 3 1 5 6 4 ...</span>
+0043 idx2 = 1:4*ne; idx2(4:4:end) = [];
+0044 A(idx2,:) = -reshape(<a href="#_sub1" class="code" title="subfunction c = my_cross(a,b)">my_cross</a>(edges1(idx1,:),edges1(idx3,:)),[],3);
+0045 b(idx2) = sum(A(idx2,:).*v(e(:,2:end)',:),2);
+0046 <span class="comment">% One more face not containing vertex 1</span>
+0047 edges3= [v(e(:,3)',:)-v(e(:,2)',:);v(e(:,4)',:)-v(e(:,2)',:)];
+0048 idx4 = 4:4:4*ne;
+0049 A(idx4,:) = reshape(<a href="#_sub1" class="code" title="subfunction c = my_cross(a,b)">my_cross</a>(edges3(1:end/2,:),edges3(end/2+1:<span class="keyword">end</span>,:)),[],3);
+0050 b(idx4) = sum(A(idx4,:).*v(e(:,2)',:),2);
+0051 b=b';
+0052 <span class="keyword">end</span>
+0053 
+0054 <a name="_sub1" href="#_subfunctions" class="code">function c = my_cross(a,b)</a>
+0055 c = [a(:,2).*b(:,3)-a(:,3).*b(:,2) 
+0056      a(:,3).*b(:,1)-a(:,1).*b(:,3)
+0057      a(:,1).*b(:,2)-a(:,2).*b(:,1)];
+0058 <span class="keyword">end</span>  
+0059 
+0060 <a name="_sub2" href="#_subfunctions" class="code">function d = my_det(a)</a>
+0061 ln = size(a,1);
+0062 c1 = 1:3:ln;
+0063 c2 = 2:3:ln;
+0064 c3 = 3:3:ln;
+0065 d = a(c1,1).*a(c2,2).*a(c3,3) + <span class="keyword">...</span>
+0066     a(c2,1).*a(c3,2).*a(c1,3) + <span class="keyword">...</span>
+0067     a(c3,1).*a(c1,2).*a(c2,3) - <span class="keyword">...</span>
+0068     a(c3,1).*a(c2,2).*a(c1,3) - <span class="keyword">...</span>
+0069     a(c2,1).*a(c1,2).*a(c3,3) - <span class="keyword">...</span>
+0070     a(c1,1).*a(c3,2).*a(c2,3);
+0071 <span class="keyword">end</span>
+0072 
+0073 <a name="_sub3" href="#_subfunctions" class="code">function do_unit_test</a>
+0074 <a href="#_sub5" class="code" title="subfunction simple_test">simple_test</a>
+0075 <a href="#_sub4" class="code" title="subfunction test_3d">test_3d</a>
+0076 <span class="keyword">end</span>
+0077 
+0078 <a name="_sub4" href="#_subfunctions" class="code">function test_3d</a>
+0079 imdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a3cr'</span>,16);
+0080 fmdl = imdl.fwd_model;
+0081 fmdl = <a href="linear_reorder.html" class="code" title="function [fwd_model] = linear_reorder(fwd_model,ccw)">linear_reorder</a>(fmdl,1);
+0082 [A1,b1] = <a href="tet_to_inequal.html" class="code" title="function [A,b]=tet_to_inequal(v,e)">tet_to_inequal</a>(fmdl.nodes,fmdl.elems);
+0083 v = fmdl.nodes(fmdl.elems(1,:),:);
+0084 [A2,b2] = <a href="tet_to_inequal.html" class="code" title="function [A,b]=tet_to_inequal(v,e)">tet_to_inequal</a>(v);
+0085 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Parallel vs serial'</span>, A1((1:4),:),A2)
+0086 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Parallel vs serial'</span>, b1(1:4),b2)
+0087 v = fmdl.nodes(fmdl.elems(2,:),:);
+0088 [A2,b2] = <a href="tet_to_inequal.html" class="code" title="function [A,b]=tet_to_inequal(v,e)">tet_to_inequal</a>(v);
+0089 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Parallel vs serial'</span>, A1(4*(2-1)+(1:4),:),A2)
+0090 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Parallel vs serial'</span>, b1(4*(2-1)+(1:4)),b2)
+0091 v = fmdl.nodes(fmdl.elems(57,:),:);
+0092 [A2,b2] = <a href="tet_to_inequal.html" class="code" title="function [A,b]=tet_to_inequal(v,e)">tet_to_inequal</a>(v);
+0093 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Parallel vs serial'</span>, A1(4*(57-1)+(1:4),:),A2)
+0094 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Parallel vs serial'</span>, b1(4*(57-1)+(1:4)),b2)
+0095 <span class="keyword">end</span>
+0096 
+0097 <a name="_sub5" href="#_subfunctions" class="code">function simple_test</a>
+0098 v1=[0,0,0;eye(3)];
+0099 [A1,b1] =  <a href="tet_to_inequal.html" class="code" title="function [A,b]=tet_to_inequal(v,e)">tet_to_inequal</a>(v1);
+0100 out = all( A1*[0.1;0.1;0.1]-b1&lt;0);
+0101 correct = 1;
+0102 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Point in unit tetrahedron'</span>, out, correct)
+0103 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

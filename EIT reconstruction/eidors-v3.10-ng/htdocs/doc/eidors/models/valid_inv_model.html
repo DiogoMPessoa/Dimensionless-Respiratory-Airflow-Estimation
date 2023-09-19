@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of valid_inv_model</title>
+  <meta name="keywords" content="valid_inv_model">
+  <meta name="description" content="[pass, err_str] = valid_fwd_model(imdl)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; valid_inv_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>valid_inv_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[pass, err_str] = valid_fwd_model(imdl)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [pass, err_str] = valid_inv_model(imdl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [pass, err_str] = valid_fwd_model(imdl)
+
+ Confirms that a valid forward model structure exists or
+ explain why a model is not valid.
+
+ If called without an output argument (nargout=0), will
+ error out if invalid. Otherwise the function is silent,
+ returning an explaination of failures in err_str.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="valid_fwd_model.html" class="code" title="function [pass, err_str] = valid_fwd_model(fmdl, type)">valid_fwd_model</a>	[pass, err_str] = valid_fwd_model(fmdl, [type])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="valid_img.html" class="code" title="function pass = valid_img(img)">valid_img</a>	[pass, err_str] = valid_img(img)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function t=isfunc(f)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [pass, err_str] = valid_inv_model(imdl)</a>
+0002 <span class="comment">% [pass, err_str] = valid_fwd_model(imdl)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Confirms that a valid forward model structure exists or</span>
+0005 <span class="comment">% explain why a model is not valid.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% If called without an output argument (nargout=0), will</span>
+0008 <span class="comment">% error out if invalid. Otherwise the function is silent,</span>
+0009 <span class="comment">% returning an explaination of failures in err_str.</span>
+0010 
+0011 <span class="comment">% (C) 2015 Alistair Boyle. License: GPL version 2 or version 3</span>
+0012 <span class="comment">% $Id: valid_inv_model.m 5114 2015-06-14 16:26:04Z aadler $</span>
+0013 
+0014 pass = 1;
+0015 err_str = <span class="string">''</span>;
+0016 
+0017 <span class="comment">% it's a struct with fields</span>
+0018 <span class="keyword">if</span> ~isstruct(imdl)
+0019    pass = 0;
+0020    err_str = [err_str <span class="string">'- not a struct\n'</span>];
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="comment">% required fields</span>
+0024 <span class="comment">%      field         type</span>
+0025 f = {<span class="string">'name'</span>,        <span class="string">'char'</span>, <span class="keyword">...</span>
+0026      <span class="string">'fwd_model'</span>,   <span class="string">'struct'</span>, <span class="keyword">...</span>
+0027      <span class="string">'solve'</span>,       <span class="string">'function'</span>, <span class="keyword">...</span>
+0028      <span class="string">'reconst_type'</span>,<span class="string">'char'</span>, <span class="keyword">...</span><span class="comment"> % 'absolute' or 'difference'</span>
+0029      <span class="string">'type'</span>,        <span class="string">'char'</span>};
+0030 <span class="comment">%     'hyperparameter', 'numeric', ... % struct, func, or numeric?</span>
+0031 <span class="comment">%     'RtR_prior',   'function', ... % function OR numeric</span>
+0032 <span class="comment">%    'jacobian_bkgnd', 'struct', ... % struct OR numeric</span>
+0033 <span class="keyword">for</span> i=1:length(f)/2
+0034    x=2*(i-1)+1;
+0035    y=x+1;
+0036    <span class="keyword">if</span> ~isfield(imdl, f{x})
+0037       pass = 0;
+0038       err_str = [err_str <span class="string">'- missing required field: &quot;'</span> f{x} <span class="string">'&quot;\n'</span>];
+0039    <span class="keyword">elseif</span> strcmp(f{y},<span class="string">'function'</span>)
+0040       <span class="keyword">if</span> ~<a href="#_sub1" class="code" title="subfunction t=isfunc(f)">isfunc</a>(imdl.(f{x}))
+0041          pass = 0;
+0042          err_str = [err_str <span class="string">'- expected function (pointer or string): &quot;'</span> f{x} <span class="string">'&quot;\n'</span>];
+0043       <span class="keyword">end</span>
+0044    <span class="keyword">elseif</span> ~isa(imdl.(f{x}), f{y})
+0045       pass = 0;
+0046       err_str = [err_str <span class="string">'- required field &quot;'</span> f{x} <span class="string">'&quot; is not a '</span> f{y} <span class="string">'\n'</span>];
+0047    <span class="keyword">end</span>
+0048 <span class="keyword">end</span>
+0049 <span class="comment">% check the fwd_model</span>
+0050 [pass_local, err_str_local] = <a href="valid_fwd_model.html" class="code" title="function [pass, err_str] = valid_fwd_model(fmdl, type)">valid_fwd_model</a>(imdl.fwd_model);
+0051 <span class="keyword">if</span> ~pass_local
+0052    pass = 0;
+0053    disp(err_str_local);
+0054    err_str_local = strrep(err_str_local, <span class="string">' &quot;'</span>, <span class="string">' &quot;fwd_model.'</span>);
+0055    err_str = [err_str err_str_local];
+0056 <span class="keyword">end</span>
+0057 clear err_str_local pass_local;
+0058 <span class="comment">% check for correct 'type'</span>
+0059 <span class="keyword">if</span> ~strcmp(imdl.type, <span class="string">'inv_model'</span>)
+0060    pass = 0;
+0061    err_str = [err_str <span class="string">'- field &quot;type&quot; must be &quot;inv_model&quot;\n'</span>];
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="comment">% optional fields</span>
+0065 <span class="comment">%      field       type</span>
+0066 f = {<span class="string">'rec_model'</span>,   <span class="string">'struct'</span>};
+0067 <span class="keyword">for</span> i=1:length(f)/2
+0068    x=2*(i-1)+1;
+0069    y=x+1;
+0070    <span class="keyword">if</span> isfield(imdl, f{x}) &amp;&amp; ~isa(imdl.(f{x}), f{y})
+0071       pass = 0;
+0072       err_str = [err_str <span class="string">'- optional field &quot;'</span> f{x} <span class="string">'&quot; is not a '</span> f{y} <span class="string">'\n'</span>];
+0073    <span class="keyword">end</span>
+0074 <span class="keyword">end</span>
+0075 <span class="comment">% check the rec_model</span>
+0076 <span class="keyword">if</span> isfield(imdl, <span class="string">'rec_model'</span>)
+0077    [pass_local, err_str_local] = <a href="valid_fwd_model.html" class="code" title="function [pass, err_str] = valid_fwd_model(fmdl, type)">valid_fwd_model</a>(imdl.rec_model, <span class="string">'rec_model'</span>);
+0078    <span class="keyword">if</span> ~pass_local
+0079       pass = 0;
+0080       disp(err_str_local);
+0081       err_str_local = strrep(err_str_local, <span class="string">' &quot;'</span>, <span class="string">' &quot;rec_model.'</span>);
+0082       err_str = [err_str err_str_local];
+0083    <span class="keyword">end</span>
+0084    clear err_str_local pass_local;
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="comment">% illegal fields</span>
+0088 <span class="comment">%      field</span>
+0089 f = {<span class="string">'inv_model'</span>, <span class="keyword">...</span><span class="comment"> % no recursion</span>
+0090      <span class="string">'fmdl'</span>, <span class="keyword">...</span><span class="comment"> % no short forms</span>
+0091      <span class="string">'fwd_mdl'</span>};
+0092 <span class="keyword">for</span> i=1:length(f)
+0093    x=i;
+0094    <span class="keyword">if</span> isfield(imdl, f{x})
+0095       pass = 0;
+0096       err_str = [err_str <span class="string">'- illegal field &quot;'</span> f{x} <span class="string">'&quot; found\n'</span>];
+0097    <span class="keyword">end</span>
+0098 <span class="keyword">end</span>
+0099 
+0100 <span class="comment">% result</span>
+0101 <span class="keyword">if</span> ~pass
+0102    err_str = err_str(1:end-2); <span class="comment">% drop last \n</span>
+0103 <span class="keyword">end</span>
+0104 <span class="keyword">if</span> ( nargout == 0 ) &amp;&amp; ~pass
+0105    error(sprintf([<span class="string">'Reasons:\n'</span> err_str]));
+0106 <span class="keyword">end</span>
+0107 
+0108 <a name="_sub1" href="#_subfunctions" class="code">function t=isfunc(f)</a>
+0109 t=isa(f, <span class="string">'function_handle'</span>) || isa(f, <span class="string">'char'</span>);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

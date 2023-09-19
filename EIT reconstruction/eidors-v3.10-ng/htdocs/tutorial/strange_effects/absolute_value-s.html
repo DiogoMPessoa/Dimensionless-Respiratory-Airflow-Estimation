@@ -1,0 +1,242 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<H2>Unexpected Effect: Imaging with absolute value of measurements</H2>
+
+
+Many EIT systems take the amplitude of the measured signal; however
+EIDORS expects to see the in-phase (and quadrature) signals. If these
+are not used, EIDORS will reconstruct incorrectly.
+
+<h3>Stimulation Patterns</h3>
+This effect is not visible for adjacent stimulation/measurement
+(the default from <tt>mk_common_models</tt>. It is necessary to
+specify a pattern such as this.
+<pre>
+% Create Stimulation Patterns
+[stim,msel] = mk_stim_patterns(16,1,[0,5],[0,5],{},1);
+
+</pre>
+
+<h3>Simulation Image</h3>
+<pre>
+% Create Simulation Image
+extra={'ball1', 'ball2','ball3',...
+      ['solid ob = orthobrick(-1,-1,0;1,1,0.05) -maxh=0.1;' ...
+       'solid ball1 = cylinder( 0.5, 0.2,0; 0.5, 0.2,1;0.2) and ob;' ...
+       'solid ball2 = cylinder(-0.5, 0.2,0;-0.5, 0.2,1;0.2) and ob;' ...
+       'solid ball3 = cylinder( 0.0,-0.5,0; 0.0,-0.5,1;0.2) and ob;']};
+
+fmdl= ng_mk_cyl_models(0,[16],[0.1,0,0.05],extra); 
+fmdl.stimulation = stim;
+fmdl.meas_select = msel;
+img = mk_image( fmdl, 1);
+vh = fwd_solve(img); vh= vh.meas;
+
+img.elem_data( fmdl.mat_idx{2} ) = 1.1;
+img.elem_data( fmdl.mat_idx{3} ) = 0.9;
+img.elem_data( fmdl.mat_idx{4} ) = 1.1;
+vi = fwd_solve(img); vi= vi.meas;
+
+subplot(221); show_fem(img);
+print_convert absolute_value02a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/absolute_value02a.png">
+<br><i> Figure:</i>
+Stimulation Image
+</center>
+
+<h3>Reconstruct without/with Absolute Value</h3>
+<pre>
+% create inverse model
+imdl = mk_common_model('c2c2',16);
+imdl.fwd_model.stimulation = stim;
+imdl.fwd_model.meas_select = msel;
+imdl.hyperparameter.value = 0.10;
+
+% reconstruct normally
+show_fem( inv_solve( imdl, vh, vi));
+print_convert absolute_value03a.png
+
+% reconstruct abs
+vha = abs(vh);
+via = abs(vi);
+show_fem( inv_solve( imdl, vha, via));
+print_convert absolute_value03b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/absolute_value03a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/absolute_value03b.png">
+<br><i> Figure:</i>
+Reconstructed images:
+  <i>left</i>) Real measurements,
+  <i>right</i>) Absolute measurements,
+</center>
+
+<h3>Strategy #1 for absolute values</h3>
+The easiest way is to re-calculate the
+original value, by getting the sign of
+simulated data. This may have errors if
+voltages are close to zero.
+<pre>
+% simulate homogeneous voltages
+vhomg = fwd_solve( mk_image(imdl, 1));
+flip  = sign(vhomg.meas);
+
+% recalculate the correct values
+vhr = vha.*flip;
+vir = via.*flip;
+
+show_fem( inv_solve( imdl, vhr, vir));
+print_convert absolute_value04a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/absolute_value04a.png">
+<br><i> Figure:</i>
+Reconstructed images by re-calculating the sign
+</center>
+
+<h3>Strategy #2 for absolute values</h3>
+Define a new Jacobian matrix calculator for the
+system that knows about absolute values
+<pre>
+function J = jacobian_absolute( fwd_model, img);
+    vh = fwd_solve(img);
+    flip = sign(vh.meas);
+    flip = spdiags(flip, 0, length(flip), length(flip));
+    J = flip*jacobian_adjoint(img);
+
+</pre>
+
+Then use this jacobian to override the <tt>jacobian</tt> field in 
+the <tt>fwd_model.jacobian</tt>.
+<pre>
+% Modify Jacobian 
+imdl.fwd_model.jacobian = @jacobian_absolute;
+show_fem( inv_solve( imdl, vha, via));
+print_convert absolute_value05a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/absolute_value05a.png">
+<br><i> Figure:</i>
+Reconstructed images by re-calculating the Jacobian matrix
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

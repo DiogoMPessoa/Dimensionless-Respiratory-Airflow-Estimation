@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of prior_movement</title>
+  <meta name="keywords" content="prior_movement">
+  <meta name="description" content="PRIOR_MOVEMENT calculate image prior">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; prior_movement.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>prior_movement
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PRIOR_MOVEMENT calculate image prior</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Reg= prior_movement( inv_model ); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PRIOR_MOVEMENT calculate image prior
+ Reg= prior_movement( inv_model )
+ Reg        =&gt; output regularization term
+ inv_model  =&gt; inverse model struct
+ Parameters:
+   inv_model.prior_movement.parameters(1) -&gt; relative weighting
+     of movement vs image fraction of hyperparameter
+     =&gt; Default = 10
+   inv_model.prior_movement.RegC.func = Cond Reg fcn
+   inv_model.prior_movement.RegM.func = Move Reg fcn
+   either @laplace_movement_image_prior OR @tikhonov_movement_image_prior
+
+ For image portion, we use a Laplace prior, as 
+ -1 for each adjacent element, and 3 (in 2D) or 4 (in 3D)
+ for the element itself
+
+ For the movement portion, we define a smoothness
+ constraint, such that Rij = -1 for adjacent electrodes
+
+ If used with a dual model (ie coarse2fine mapping), ensure
+    imdl.prior_use_fwd_not_rec = 1;</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>	RtR = calc_RtR_prior( inv_model )</li><li><a href="../../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>	FWD_MODEL_PARAMETERS: data= fwd_solve_1st_order( fwd_model, image)</li><li><a href="prior_laplace.html" class="code" title="function Reg= prior_laplace( inv_model )">prior_laplace</a>	PRIOR_LAPLACE calculate image prior</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/deprecated/aa_e_move_image_prior.html" class="code" title="function Reg= aa_e_move_image_prior( inv_model );">aa_e_move_image_prior</a>	AA_E_MOVE_IMAGE_PRIOR calculate image prior</li><li><a href="../../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>	SELECT_IMDL: select pre-packaged inverse model features</li><li><a href="../../../eidors/solvers/forward/jacobian_movement.html" class="code" title="function J = jacobian_movement(fwd_model, img)">jacobian_movement</a>	JACOBIAN_MOVEMENT   Computes the Jacobian matrix for conductivity and</li><li><a href="inv_solve_core.html" class="code" title="function img= inv_solve_core( inv_model, data0, data1);">inv_solve_core</a>	INV_SOLVE_CORE Solver using a generic iterative algorithm</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function RegM = laplace_movement_image_prior( dims, elecs );</a></li><li><a href="#_sub2" class="code">function RegM = tikhonov_movement_image_prior( dims, elecs);</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Reg= prior_movement( inv_model );</a>
+0002 <span class="comment">% PRIOR_MOVEMENT calculate image prior</span>
+0003 <span class="comment">% Reg= prior_movement( inv_model )</span>
+0004 <span class="comment">% Reg        =&gt; output regularization term</span>
+0005 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0006 <span class="comment">% Parameters:</span>
+0007 <span class="comment">%   inv_model.prior_movement.parameters(1) -&gt; relative weighting</span>
+0008 <span class="comment">%     of movement vs image fraction of hyperparameter</span>
+0009 <span class="comment">%     =&gt; Default = 10</span>
+0010 <span class="comment">%   inv_model.prior_movement.RegC.func = Cond Reg fcn</span>
+0011 <span class="comment">%   inv_model.prior_movement.RegM.func = Move Reg fcn</span>
+0012 <span class="comment">%   either @laplace_movement_image_prior OR @tikhonov_movement_image_prior</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% For image portion, we use a Laplace prior, as</span>
+0015 <span class="comment">% -1 for each adjacent element, and 3 (in 2D) or 4 (in 3D)</span>
+0016 <span class="comment">% for the element itself</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% For the movement portion, we define a smoothness</span>
+0019 <span class="comment">% constraint, such that Rij = -1 for adjacent electrodes</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% If used with a dual model (ie coarse2fine mapping), ensure</span>
+0022 <span class="comment">%    imdl.prior_use_fwd_not_rec = 1;</span>
+0023 
+0024 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0025 <span class="comment">% $Id: prior_movement.m 4656 2015-01-16 07:57:18Z alistair_boyle $</span>
+0026 
+0027 <span class="comment">% relative strengths of conductivity and movement priors</span>
+0028 <span class="keyword">if</span> isfield( inv_model,<span class="string">'prior_movement'</span>)
+0029    hp_move= inv_model.prior_movement.parameters(1);
+0030 <span class="keyword">else</span>
+0031    hp_move= 10;
+0032 <span class="keyword">end</span>
+0033 
+0034 pp= <a href="../../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>( inv_model.fwd_model );
+0035 n_elec = pp.n_elec;
+0036 
+0037 <span class="comment">% calc conductivity portion</span>
+0038 <span class="keyword">try</span>
+0039    RegCfcn = inv_model.prior_movement.RegC.func;
+0040 <span class="keyword">catch</span>
+0041    RegCfcn = @<a href="prior_laplace.html" class="code" title="function Reg= prior_laplace( inv_model )">prior_laplace</a>;
+0042 <span class="keyword">end</span>
+0043 <span class="keyword">try</span>; inv_model = rmfield(inv_model, <span class="string">'R_prior'</span>); <span class="keyword">end</span>
+0044 <span class="keyword">try</span>; inv_model = rmfield(inv_model, <span class="string">'prior_use_fwd_not_rec'</span>); <span class="keyword">end</span>
+0045 inv_model.RtR_prior = RegCfcn;
+0046 
+0047 pp= <a href="../../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>( inv_model.fwd_model );
+0048 
+0049 
+0050 RegC= <a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>( inv_model); 
+0051 szC = size(RegC,1);
+0052 
+0053 <span class="comment">% calc movement portion</span>
+0054 <span class="keyword">try</span>
+0055    fname = func2str(inv_model.prior_movement.RegM.func);
+0056    <span class="keyword">if</span>(strcmp(fname,<span class="string">'tikhonov_movement_image_prior'</span>))
+0057        RegM = <a href="#_sub2" class="code" title="subfunction RegM = tikhonov_movement_image_prior( dims, elecs);">tikhonov_movement_image_prior</a>(pp.n_dims,pp.n_elec);
+0058    <span class="keyword">elseif</span>(strcmp(fname,<span class="string">'laplace_movement_image_prior'</span>))
+0059        RegM=<a href="#_sub1" class="code" title="subfunction RegM = laplace_movement_image_prior( dims, elecs );">laplace_movement_image_prior</a>(pp.n_dims,pp.n_elec);
+0060    <span class="keyword">end</span>
+0061 <span class="keyword">catch</span>
+0062    RegM = <a href="#_sub1" class="code" title="subfunction RegM = laplace_movement_image_prior( dims, elecs );">laplace_movement_image_prior</a>( pp.n_dims, pp.n_elec );
+0063 <span class="keyword">end</span>
+0064 <span class="comment">% zero blocks</span>
+0065 RegCM= <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>( szC, pp.n_dims*pp.n_elec );
+0066 
+0067 Reg= [RegC,           RegCM;
+0068       RegCM', hp_move^2*RegM ]; 
+0069 
+0070 <span class="comment">% For the movmenent portion, we define a smoothness</span>
+0071 <span class="comment">% constraint, such that Rij = -1 for adjacent electrodes</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">% TODO: this approach assumes that electrodes close in number</span>
+0074 <span class="comment">%   are close to each other. This isn't necessarily right.</span>
+0075 <a name="_sub1" href="#_subfunctions" class="code">function RegM = laplace_movement_image_prior( dims, elecs );</a>
+0076 
+0077    <span class="comment">% movement constraint in each dimention</span>
+0078    idx =(0:elecs-1)';
+0079    im1= rem(idx-1+elecs,elecs);
+0080    ip1= rem(idx+1,elecs); 
+0081    mv= <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>([idx,idx,idx]+1,[im1,idx,ip1]+1,ones(elecs,1)*[-1,2.1,-1]);
+0082 
+0083    RegM= spalloc(dims*elecs,dims*elecs, 3*dims*elecs);
+0084 
+0085    <span class="keyword">for</span> i=0:dims-1;
+0086      m_idx= idx + i*elecs + 1;
+0087      RegM( m_idx, m_idx ) = mv;
+0088    <span class="keyword">end</span>
+0089    
+0090 <a name="_sub2" href="#_subfunctions" class="code">function RegM = tikhonov_movement_image_prior( dims, elecs);</a>
+0091    RegM=eye(dims*elecs);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,377 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Absolute and Difference solvers</h2>
+
+<h3> 
+Get data from the RPI tank phantom
+</h3>
+
+This tutorial is based on the
+<a href="../../data_contrib/jn_chest_phantom/jn_chest_phantom-s.html">
+tank phantom data</a> contributed by Jon Newell. Data were measured
+on a cylindrical tank shown below. The data can by assumed to
+be 2D because the vertical dimension is constant.
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/data_contrib/jn_chest_phantom/RPI_2d_chest_phantom.jpg">
+<br><i> Figure:</i>
+Figure: Phantom Image (from Isaacson,
+Mueller, Newell and Siltanen,
+ IEEE Trans Med Imaging 23(7): 821-828, 2004) 
+</center>
+
+<h3> 
+Build a good FEM of the phantom
+</h3>
+
+It is important to correctly model the size of the electrodes
+and their position to get absolute imaging to work.
+
+<pre>
+% RPI tank model $Id: rpi_data01.m 3790 2013-04-04 15:41:27Z aadler $
+
+Nel= 32; %Number of elecs
+Zc = .0001; % Contact impedance
+curr = 20; % applied current mA
+
+
+th= linspace(0,360,Nel+1)';th(1)=[];
+els = [90-th]*[1,0]; % [radius (clockwise), z=0]
+elec_sz = 1/6;
+fmdl= ng_mk_cyl_models([0,1,0.1],els,[elec_sz,0,0.03]);
+
+for i=1:Nel
+   fmdl.electrode(i).z_contact= Zc;
+end
+
+% Trig stim patterns
+th= linspace(0,2*pi,Nel+1)';th(1)=[];
+for i=1:Nel-1;
+   if i<=Nel/2;
+      stim(i).stim_pattern = curr*cos(th*i);
+   else;
+      stim(i).stim_pattern = curr*sin(th*( i - Nel/2 ));
+   end
+   stim(i).meas_pattern= eye(Nel)-ones(Nel)/Nel;
+   stim(i).stimulation = 'Amp';
+end
+
+fmdl.stimulation = stim;
+
+clf; show_fem(fmdl,[0,1])
+
+print_convert('rpi_data01a.png','-density 60');
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data01a.png">
+<br><i> Figure:</i>
+Figure: FEM phantom
+</center>
+
+<h3> 
+Load and preprocess data
+</h3>
+
+One can improve the equality of the images by ensuring that all channels
+have a mean voltage of zero before beginning.
+<pre>
+% load RPI tank data $Id: rpi_data02a.m 2236 2010-07-04 14:16:21Z aadler $
+
+load Rensselaer_EIT_Phantom;
+vh = real(ACT2006_homog);
+vi = real(ACT2000_phant);
+
+if 1
+% Preprocessing data. We ensure that each voltage sequence sums to zero
+  for i=0:30
+    idx = 32*i + (1:32);
+    vh(idx) = vh(idx) - mean(vh(idx));
+    vi(idx) = vi(idx) - mean(vi(idx));
+  end
+end
+
+</pre>
+
+<h3> 
+Difference imaging
+</h3>
+
+Using a very simple model
+<pre>
+% RPI tank model $Id: rpi_data02b.m 3790 2013-04-04 15:41:27Z aadler $
+
+% simple inverse model -> replace fields to match this model
+imdl = mk_common_model('b2c2',32);
+imdl.fwd_model = mdl_normalize(imdl.fwd_model, 0);
+
+imdl.fwd_model.electrode = imdl.fwd_model.electrode([8:-1:1, 32:-1:9]);
+
+imdl.fwd_model = rmfield(imdl.fwd_model,'meas_select');
+imdl.fwd_model.stimulation = stim;
+imdl.hyperparameter.value = 1.00;
+
+% Reconstruct image
+img = inv_solve(imdl, vh, vi);
+img.calc_colours.cb_shrink_move = [0.5,0.8,0.02];
+img.calc_colours.ref_level = 0;
+clf; show_fem(img,[1,1]); axis off; axis image
+
+print_convert('rpi_data02a.png','-density 60');
+
+</pre>
+Using a the accurate electrode model
+<pre>
+% RPI tank model $Id: rpi_data03.m 3790 2013-04-04 15:41:27Z aadler $
+
+% simple inverse model -> replace fields to match this model
+imdl.fwd_model = fmdl; 
+
+img = inv_solve(imdl , vh, vi);
+img.calc_colours.cb_shrink_move = [0.5,0.8,0.02];
+img.calc_colours.ref_level = 0;
+clf; show_fem(img,[1,1]); axis off; axis image
+
+print_convert('rpi_data03a.png','-density 60');
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data02a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data03a.png">
+<br><i> Figure:</i>
+Figure: Differences images reconstructed of the phantom. For difference
+imaging, the simple model works surprisingly well.
+</center>
+
+<h3> 
+Estimating actual conductivities
+</h3>
+
+In order to estimate the actual conductivity values, we need
+to scale for the applied voltage, tank size (in 3D) and
+background conductivity
+<pre>
+% RPI tank model $Id: rpi_data04.m 5509 2017-06-06 14:33:29Z aadler $
+
+% In 3D, it's important to get the model diameter right, 2D is
+imdl.fwd_model.nodes= imdl.fwd_model.nodes*15; % 30 cm diameter
+
+% Estimate the background conductivity
+imgs = mk_image(imdl);
+vs = fwd_solve(imgs); vs = vs.meas;
+
+pf = polyfit(vh,vs,1);
+
+imdl.jacobian_bkgnd.value = pf(1)*imdl.jacobian_bkgnd.value;
+imdl.hyperparameter.value = imdl.hyperparameter.value/pf(1)^2;
+
+img = inv_solve(imdl, vh, vi);
+img.calc_colours.cb_shrink_move = [0.5,0.8,0.02];
+img.calc_colours.ref_level = 0;
+clf; show_fem(img,[1,1]); axis off; axis image
+
+print_convert('rpi_data04a.png','-density 60');
+
+
+</pre>
+
+This can even be a quick way to use a difference solver
+for absolute imaging
+<pre>
+% Cheap static solver $Id: rpi_data05.m 3790 2013-04-04 15:41:27Z aadler $
+
+% Do a diff solve with respect to simulated data
+imgs = mk_image(imdl);
+vs = fwd_solve(imgs); vs = vs.meas;
+
+
+imdl.hyperparameter.value = 1.00;
+img = inv_solve(imdl, vs, vi);
+img.elem_data = pf(1) + img.elem_data*0.5;
+img.calc_colours.cb_shrink_move = [0.5,0.8,0.02];
+clf; show_fem(img,[1,1]); axis off; axis image
+
+print_convert('rpi_data05a.png','-density 60');
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data04a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data05a.png">
+<br><i> Figure:</i>
+Difference (right) and one step absolute (left) images
+</center>
+
+<h3> 
+Absolute solvers as a function of iteration
+</h3>
+
+<pre>
+% Absolute reconstructions $Id: rpi_data06.m 5537 2017-06-14 12:49:20Z aadler $
+
+imdl = mk_common_model('b2c2',32);
+imdl.fwd_model = fmdl;
+imdl.reconst_type = 'absolute';
+imdl.hyperparameter.value = 2.0;
+imdl.solve = @inv_solve_abs_GN;
+
+for iter = [1,2,3, 5];
+   imdl.inv_solve_gn.max_iterations = iter;
+   img = inv_solve(imdl , vi);
+   img.calc_colours.cb_shrink_move = [0.5,0.8,0.02];
+   img.calc_colours.ref_level = 0.6;
+   clf; show_fem(img,[1,1]); axis off; axis image
+
+   print_convert(sprintf('rpi_data06%c.png', 'a'-1+iter),'-density 60');
+end
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data06a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data06c.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data06e.png">
+<br><i> Figure:</i>
+Gauss-Newton Absolute solver on conductivity at iterations (from left to right): 1, 3, 5
+</center>
+
+<pre>
+% Absolute reconstructions $Id: rpi_data07.m 4986 2015-05-11 20:09:28Z aadler $
+
+imdl = mk_common_model('b2c2',32);
+imdl.fwd_model = fmdl;
+imdl.reconst_type = 'absolute';
+imdl.hyperparameter.value = 2.0;
+imdl.solve = @inv_solve_abs_CG;
+imdl.inv_solve_abs_CG.elem_working = 'log_conductivity';
+imdl.inv_solve_abs_CG.elem_output  =     'conductivity';
+
+for iter = [1,2,3, 5];
+   imdl.parameters.max_iterations = iter;
+   img = inv_solve(imdl , vi);
+   img.calc_colours.cb_shrink_move = [0.5,0.8,0.02];
+   img.calc_colours.ref_level = 0.6;
+   clf; show_fem(img,[1,1]); axis off; axis image
+
+   print_convert(sprintf('rpi_data07%c.png', 'a'-1+iter),'-density 60');
+end
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data07a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data07c.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data07e.png">
+<br><i> Figure:</i>
+Conjugate-Gradient Absolute solver on log conductivity at iterations (from left to right): 1, 3, 5
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

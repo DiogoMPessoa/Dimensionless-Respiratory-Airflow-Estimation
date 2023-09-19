@@ -1,0 +1,206 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../index-s.html"
+>Main</a><br>
+<a href="../docs-s.html"
+   >Documentation</a><br>
+<a href="../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../download-s.html"
+   >Download</a><br>
+<a href="../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../faq-s.html">FAQ</a><br>
+<a href="../programming/programming-s.html">Developer</a><br>
+
+<a href="../programming/examples-s.html"
+      >&minus; Examples</a><br>
+<a href="../programming/structure-s.html"
+      >&minus; Structure</a><br>
+<a href="../programming/objects-s.html"
+      >&minus; Objects</a><br>
+<a href="../programming/caching-s.html"
+      >&minus; Caching</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>EIDORS: Programming / Objects</h2>
+
+In order to clarify the operation of EIDORS, variables are
+packaged in to eidors objects. This page describes
+each EIDORS object and its members and methods.
+
+<H3>Definition of Symbols</H3>
+<dl>
+   <DT><b><i>D</i></b>
+       <DD>Problem dimension (D=2 for 2D, D=3 for 3D, etc)
+   <DT><b><i>N</i><sub>f</sub></b>
+       <DD>Number of simplices (elems) in fwd problem (fine mesh)
+   <DT><b><i>N</i><sub>c</sub></b>
+       <DD>Number of simplices (elems) in inv problem (coarse/reconst mesh)
+   <DT><b><i>V</i><sub>f</sub></b>
+       <DD>Number of vertices (nodes) in fwd problem (fine mesh)
+   <DT><b><i>V</i><sub>c</sub></b>
+       <DD>Number of vertices (nodes) in inv problem (coarse/reconst mesh)
+   <DT><b><i>B</i><sub>f</sub></b>
+       <DD>Number of vertices (nodes) on boundary in fwd problem (finemesh)
+   <DT><b><i>E</i></b>
+       <DD>Number of electrodes
+   <DT><b><i>S</i></b>
+       <DD>Number of stimulation patterns
+   <DT><b><i>M</i><sub>j</sub></b>
+       <DD>Number measurements made for stimulation pattern <i>j</i>
+   <DT><b><i>M</i></b>
+       <DD>Number measurements per data frame
+            (<i>M</i> = &Sigma;<i>M</i><sub>j</sub>)
+</dl>
+
+
+<H3>EIDORS Objects Reference</H3>
+      <H4>
+        data
+      </H4>
+      A data object represents one set of measurement data. It is a
+      collection of all measurements for each stimulation pattern.
+      While not simultaneous, we conceptually represent this as
+      representing the conductivity distribution at an instant.
+      It is invisaged that data converter software be written to
+      load from the various hardware systems into this format.
+<blockquote>
+<img src="obj_data.gif">
+</blockquote>
+
+      <h4>
+        fwd_model
+      </h4>
+      The EIDORS fwd_model represents the setup of the measurement
+      configuration, including the medium geometry, electrode 
+      position and locations, and stimulation patterns
+<blockquote>
+<img src="objl_fwd_model.gif">
+</blockquote>
+      <b>Notes</b>
+      <ul>
+          <li> If the fwd_model does not correspond to a finite
+               element model, then the <tt>elems</tt> parameter
+               will not be present 
+      </ul>
+
+      <h4>
+        inv_model
+      </h4>
+<blockquote>
+<img src="obj_inv_model.gif">
+</blockquote>
+      <b>Notes</b>
+      <ul>
+          <li> The <tt>fwd_model</tt> in the <tt>inv_model</tt> refers to the 
+               model on which the <i>reconstruction</i> is done.
+               If any of the calculations take place on a fine
+               mesh model, then these would be parameters to the
+               particular <tt>inv_solve</tt> function.
+          <li> If the <tt>inv_model</tt> solves onto nodes, rather than
+               elements, then the fwd_model
+               <tt>elems</tt> parameter
+               will not be present 
+      </ul>
+
+      <h4>
+        image
+      </h4>
+<blockquote>
+<img src="obj_image.gif">
+</blockquote>
+      <ul>
+          <li> If the <tt>inv_model</tt> solves onto nodes, rather than
+               elements, then the image will have a parameter
+               <tt>node_data</tt> (rather than <tt>elem_data</tt>)
+      </ul>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:02:17 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      <p><li><b>
+      </b><br>
+      <ul>
+      </ul>
+      <i>Questions</i>:
+      <br>&minus;
+
+      -->

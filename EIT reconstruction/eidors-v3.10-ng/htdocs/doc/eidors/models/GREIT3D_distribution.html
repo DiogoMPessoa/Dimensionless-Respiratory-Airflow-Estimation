@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of GREIT3D_distribution</title>
+  <meta name="keywords" content="GREIT3D_distribution">
+  <meta name="description" content="GREIT3D_distribution: create target distributions for 3D GREIT">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; GREIT3D_distribution.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>GREIT3D_distribution
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GREIT3D_distribution: create target distributions for 3D GREIT</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [imdl,distr] = GREIT3D_distribution(fmdl, vopt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> GREIT3D_distribution: create target distributions for 3D GREIT
+
+ The basic usage is part of creating a 3D GREIT model, 
+  given a forward model fmdl
+    vopt.imgsz = [32 32 19]; % and other parameters
+    opt.noise_figure = NF;   % and other GREIT options
+    [imdl,opt.distr] = GREIT3D_distribution(fmdl, vopt);
+    imdl = mk_GREIT_model(imdl, 0.20, [], opt);
+
+ INPUTS:
+  fmdl =&gt; EIDORS forward model structure
+  vopt =&gt; Vertical options (see mk_voxel_volume help)
+
+ Options for vopt
+   1: Simple
+        vopt.imgsz = [32 32 19];
+        vopt.square_pixels = true;
+   2: Specify in detail the z planes (e.g.)
+        vopt.imgsz = [32 32];
+        vopt.zvec = linspace( 0.5,3.5,15);
+          (Vertical size is: length(vopt.zvec)-1
+   3: Specify x,y and z planes (e.g.)
+        vopt.xvec = linspace(-.95,.95,32);
+        vopt.yvec = linspace(-.95,.95,32);
+        vopt.zvec = linspace( .1,3.9,11);
+
+ NOTE: mk_voxel_volume is slow and uses lots of memory
+   To reduce the memory footprint, try
+   vopt.save_memory = 1; %(or try 10)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="../../eidors/meshing/order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>	ORDER_LOOP Order a list of points on a loop</li><li><a href="GREIT3D_distribution.html" class="code" title="function [imdl,distr] = GREIT3D_distribution(fmdl, vopt)">GREIT3D_distribution</a>	GREIT3D_distribution: create target distributions for 3D GREIT</li><li><a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>	ELEC_REARRANGE: rearrange electrodes for given pattern</li><li><a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>	FIX_MODEL: Add useful fields to a model</li><li><a href="mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>	MK_STIM_PATTERNS: create an EIDORS stimulation pattern structure</li><li><a href="mk_voxel_volume.html" class="code" title="function [imdl, fmdl] = mk_voxel_volume(varargin)">mk_voxel_volume</a>	MK_VOXEL_VOLUME create a voxel model to reconstruct on</li><li><a href="select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>	SELECT_IMDL: select pre-packaged inverse model features</li><li><a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="GREIT3D_distribution.html" class="code" title="function [imdl,distr] = GREIT3D_distribution(fmdl, vopt)">GREIT3D_distribution</a>	GREIT3D_distribution: create target distributions for 3D GREIT</li><li><a href="solve_RM_2Dslice.html" class="code" title="function imdl = solve_RM_2Dslice(imdl, sel_fcn)">solve_RM_2Dslice</a>	SOLVE_RM_2DSLICE: cut slices out of a 3D model</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function out = point_in_vox(fmdl,points, epsilon)</a></li><li><a href="#_sub2" class="code">function do_unit_test</a></li><li><a href="#_sub3" class="code">function fmdl = mystim_square(fmdl);</a></li><li><a href="#_sub4" class="code">function [vh,vi] = test_fwd_solutions;</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [imdl,distr] = GREIT3D_distribution(fmdl, vopt) </a>
+0002 <span class="comment">% GREIT3D_distribution: create target distributions for 3D GREIT</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% The basic usage is part of creating a 3D GREIT model,</span>
+0005 <span class="comment">%  given a forward model fmdl</span>
+0006 <span class="comment">%    vopt.imgsz = [32 32 19]; % and other parameters</span>
+0007 <span class="comment">%    opt.noise_figure = NF;   % and other GREIT options</span>
+0008 <span class="comment">%    [imdl,opt.distr] = GREIT3D_distribution(fmdl, vopt);</span>
+0009 <span class="comment">%    imdl = mk_GREIT_model(imdl, 0.20, [], opt);</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% INPUTS:</span>
+0012 <span class="comment">%  fmdl =&gt; EIDORS forward model structure</span>
+0013 <span class="comment">%  vopt =&gt; Vertical options (see mk_voxel_volume help)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Options for vopt</span>
+0016 <span class="comment">%   1: Simple</span>
+0017 <span class="comment">%        vopt.imgsz = [32 32 19];</span>
+0018 <span class="comment">%        vopt.square_pixels = true;</span>
+0019 <span class="comment">%   2: Specify in detail the z planes (e.g.)</span>
+0020 <span class="comment">%        vopt.imgsz = [32 32];</span>
+0021 <span class="comment">%        vopt.zvec = linspace( 0.5,3.5,15);</span>
+0022 <span class="comment">%          (Vertical size is: length(vopt.zvec)-1</span>
+0023 <span class="comment">%   3: Specify x,y and z planes (e.g.)</span>
+0024 <span class="comment">%        vopt.xvec = linspace(-.95,.95,32);</span>
+0025 <span class="comment">%        vopt.yvec = linspace(-.95,.95,32);</span>
+0026 <span class="comment">%        vopt.zvec = linspace( .1,3.9,11);</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% NOTE: mk_voxel_volume is slow and uses lots of memory</span>
+0029 <span class="comment">%   To reduce the memory footprint, try</span>
+0030 <span class="comment">%   vopt.save_memory = 1; %(or try 10)</span>
+0031 
+0032 <span class="comment">% (C) 2015-2018 Andy Adler and Bartlomiej Grychtol</span>
+0033 <span class="comment">% License: GPL version 2 or version 3</span>
+0034 <span class="comment">% $Id: GREIT3D_distribution.m 5791 2018-05-22 15:16:02Z aadler $</span>
+0035 
+0036 <span class="keyword">if</span> ischar(fmdl) &amp;&amp; strcmp(fmdl,<span class="string">'UNIT_TEST'</span>); <a href="#_sub2" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0037 
+0038    imdl = <a href="select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>(fmdl,{<span class="string">'Basic GN dif'</span>});
+0039    imdl = <a href="mk_voxel_volume.html" class="code" title="function [imdl, fmdl] = mk_voxel_volume(varargin)">mk_voxel_volume</a>(imdl,vopt);
+0040    msm = imdl.rec_model.mdl_slice_mapper;
+0041    imdl.rec_model.mdl_slice_mapper.y_pts = <span class="keyword">...</span>
+0042        fliplr(imdl.rec_model.mdl_slice_mapper.y_pts);
+0043    [x, y, z] = ndgrid(msm.x_pts, msm.y_pts, msm.z_pts);
+0044 
+0045    IN = <a href="#_sub1" class="code" title="subfunction out = point_in_vox(fmdl,points, epsilon)">point_in_vox</a>(imdl.rec_model,[x(:),y(:),z(:)]);
+0046    distr = [x(IN),y(IN),z(IN)]';
+0047 
+0048 <a name="_sub1" href="#_subfunctions" class="code">function out = point_in_vox(fmdl,points, epsilon)</a>
+0049 
+0050    <span class="keyword">if</span> nargin &lt; 3
+0051       epsilon = 0;
+0052    <span class="keyword">end</span>
+0053 
+0054    levels = unique(fmdl.nodes(:,3));
+0055    out = false(numel(points)/3,1);
+0056 
+0057    opt.faces = true;
+0058    fmdl = <a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>(fmdl, opt);
+0059 
+0060    jnk.nodes = fmdl.nodes(:,1:2);
+0061    jnk.type = <span class="string">'fwd_model'</span>;
+0062 
+0063    <span class="keyword">for</span> i = 1:numel(levels)-1
+0064       idx = (points(:,3) - levels(i)) &gt; epsilon;
+0065       idx = idx &amp; ((levels(i+1) - points(:,3)) &gt; epsilon);
+0066       
+0067       nidx = fmdl.nodes(:,3) == levels(i);
+0068       F = all(nidx(fmdl.faces),2);
+0069       jnk.elems = fmdl.faces(F,:);
+0070       bnd = <a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(jnk);
+0071       bnd = <a href="../../eidors/meshing/order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>(jnk.nodes(unique(bnd(:)),:));
+0072       out(idx) = out(idx) | inpolygon(points(idx,1),points(idx,2),bnd(:,1),bnd(:,2));
+0073    <span class="keyword">end</span>
+0074 
+0075 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test</a>
+0076    [vh,vi] = test_fwd_solutions;
+0077    <span class="comment">% inverse geometry</span>
+0078    fmdl= <a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>([4,1,.5],[16,1.5,2.5],[0.05]);
+0079    fmdl= <a href="#_sub3" class="code" title="subfunction fmdl = mystim_square(fmdl);">mystim_square</a>(fmdl);
+0080 
+0081    vopt.imgsz = [32 32];
+0082    vopt.zvec = linspace( 0.5,3.5,7);
+0083    vopt.save_memory = 1;
+0084    opt.noise_figure = 2;
+0085    [imdl,opt.distr] = <a href="GREIT3D_distribution.html" class="code" title="function [imdl,distr] = GREIT3D_distribution(fmdl, vopt)">GREIT3D_distribution</a>(fmdl, vopt);
+0086    imdl = <a href="mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>(imdl, 0.2, [], opt);
+0087 
+0088    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'RM size'</span>, size(imdl.solve_use_matrix.RM), [5136,928]);
+0089    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'RM'</span>, imdl.solve_use_matrix.RM(1,1:2), <span class="keyword">...</span>
+0090        [8.573008430710381 -18.601036109804095], 1e-10);
+0091 
+0092    img = <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0093    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'img size'</span>, size(img.elem_data), [5136,5]);
+0094    [mm,ll] =max(img.elem_data(:,1));
+0095    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'img'</span>, [mm,ll], <span class="keyword">...</span>
+0096        [0.582161052175761, 1308], 1e-10);
+0097 
+0098    img.show_slices.img_cols = 1;
+0099    subplot(131); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl); title <span class="string">'fmdl'</span>
+0100    subplot(132); <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img,[inf,inf,2]); title <span class="string">'centre'</span>;
+0101    subplot(133); <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img,[inf,inf,1.5]); title <span class="string">'bottom'</span>;
+0102    
+0103 
+0104 <a name="_sub3" href="#_subfunctions" class="code">function fmdl = mystim_square(fmdl);</a>
+0105    [~,fmdl] = <a href="elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>([16,2],<span class="string">'square'</span>, fmdl);
+0106    [fmdl.stimulation, fmdl.meas_select] =  <span class="keyword">...</span>
+0107        <a href="mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(32,1,[0,5],[0,5],{},1);
+0108 
+0109 <a name="_sub4" href="#_subfunctions" class="code">function [vh,vi] = test_fwd_solutions;</a>
+0110    posns= linspace(1.0,3.0,5);
+0111    str=<span class="string">''</span>; <span class="keyword">for</span> i=1:length(posns);
+0112       extra{i} = sprintf(<span class="string">'ball%03d'</span>,round(posns(i)*100));
+0113       str = [str,sprintf(<span class="string">'solid %s=sphere(0.5,0,%f;0.1); '</span>, extra{i}, posns(i))];
+0114    <span class="keyword">end</span>
+0115    extra{i+1} = str;
+0116    fmdl= <a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>([4,1,.2],[16,1.5,2.5],[0.05],extra); 
+0117    fmdl = <a href="#_sub3" class="code" title="subfunction fmdl = mystim_square(fmdl);">mystim_square</a>(fmdl);
+0118    
+0119    img= <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1);
+0120    vh = <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0121    <span class="comment">%vh = add_noise(2000, vh);</span>
+0122    <span class="keyword">for</span> i=1:length(posns);
+0123       img= <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1);
+0124       img.elem_data(fmdl.mat_idx{i+1}) = 2;
+0125       vi{i} = <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0126    <span class="keyword">end</span>;
+0127    vi = [vi{:}];</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

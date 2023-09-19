@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of eit_spice</title>
+  <meta name="keywords" content="eit_spice">
+  <meta name="description" content="function spice = eit_spice(img, [name])">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; eit_spice.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>eit_spice
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function spice = eit_spice(img, [name])</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function spice = eit_spice(img, name) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">function spice = eit_spice(img, [name])
+ Converts an EIT FEM model with assigned conductivities (an EIDORS &quot;img&quot;) to a
+ model reduced, fully connected mesh of resistors in SPICE format.
+ If the FEM model has complex valued conductivities, the mesh will be an RLC
+ mesh network.
+
+ An optional subcircuit 'name' can be provided.
+
+ TODO complex value support
+ TODO fix electrode ordering for mixed PEM/CEM electrodes
+
+ CITATION_REQUEST:
+ AUTHOR: A Boyle and A Adler
+ TITLE: Integrating Circuit Simulation with EIT FEM Models 
+ JOURNAL: 19th International Conference on Biomedical Applications of Electrical Impedance Tomography, Edinburgh, UK
+ YEAR: 2018</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>	MK_STIM_PATTERNS: create an EIDORS stimulation pattern structure</li><li><a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>	NUM_NODES: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/solvers/calc_system_mat.html" class="code" title="function system_mat = calc_system_mat( fwd_model, img)">calc_system_mat</a>	CALC_SYSTEM_MAT: calculate FEM system matrix from fwd_model and image</li><li><a href="eit_spice.html" class="code" title="function spice = eit_spice(img, name)">eit_spice</a>	function spice = eit_spice(img, [name])</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="eit_spice.html" class="code" title="function spice = eit_spice(img, name)">eit_spice</a>	function spice = eit_spice(img, [name])</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function Dprime = model_reduce(img)</a></li><li><a href="#_sub2" class="code">function out = netlist(Dprime, name)</a></li><li><a href="#_sub3" class="code">function unit_test()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function spice = eit_spice(img, name)</a>
+0002 <span class="comment">%function spice = eit_spice(img, [name])</span>
+0003 <span class="comment">% Converts an EIT FEM model with assigned conductivities (an EIDORS &quot;img&quot;) to a</span>
+0004 <span class="comment">% model reduced, fully connected mesh of resistors in SPICE format.</span>
+0005 <span class="comment">% If the FEM model has complex valued conductivities, the mesh will be an RLC</span>
+0006 <span class="comment">% mesh network.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% An optional subcircuit 'name' can be provided.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% TODO complex value support</span>
+0011 <span class="comment">% TODO fix electrode ordering for mixed PEM/CEM electrodes</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% CITATION_REQUEST:</span>
+0014 <span class="comment">% AUTHOR: A Boyle and A Adler</span>
+0015 <span class="comment">% TITLE: Integrating Circuit Simulation with EIT FEM Models</span>
+0016 <span class="comment">% JOURNAL: 19th International Conference on Biomedical Applications of Electrical Impedance Tomography, Edinburgh, UK</span>
+0017 <span class="comment">% YEAR: 2018</span>
+0018 <span class="comment">%</span>
+0019 
+0020 <span class="comment">%  (C) 2018 A. Boyle, License: GPL version 2 or version 3</span>
+0021 
+0022    <span class="keyword">if</span> ischar(img) &amp; strcmp(img, <span class="string">'UNIT_TEST'</span>) <a href="#_sub3" class="code" title="subfunction unit_test()">unit_test</a>(); <span class="keyword">return</span>; <span class="keyword">end</span>
+0023 
+0024    <span class="keyword">if</span> nargin == 1
+0025       name = <span class="string">'eit'</span>;
+0026    <span class="keyword">end</span>
+0027 
+0028    Dprime = <a href="#_sub1" class="code" title="subfunction Dprime = model_reduce(img)">model_reduce</a>(img);
+0029 <span class="comment">%  disp(full(1./Dprime))</span>
+0030 <span class="comment">%  disp(full(-1./(Dprime - tril(Dprime))));</span>
+0031    spice = <a href="#_sub2" class="code" title="subfunction out = netlist(Dprime, name)">netlist</a>(Dprime,name);
+0032 
+0033    <span class="keyword">if</span> nargout == 0
+0034       filename = [ name <span class="string">'.s'</span> ];
+0035       FILE = fopen(filename, <span class="string">'w'</span>);
+0036       fprintf(FILE,<span class="string">'%s\n'</span>,spice{:});
+0037       fclose(FILE);
+0038       <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>([<span class="string">'saved SPICE netlist to '</span> filename]);
+0039       <span class="keyword">return</span>
+0040    <span class="keyword">end</span>
+0041 <span class="keyword">end</span>
+0042 
+0043 <a name="_sub1" href="#_subfunctions" class="code">function Dprime = model_reduce(img)</a>
+0044    Y = <a href="../../../eidors/solvers/calc_system_mat.html" class="code" title="function system_mat = calc_system_mat( fwd_model, img)">calc_system_mat</a>(img); Y= Y.E;
+0045    nn= <a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(img);
+0046    <span class="comment">% Decompose into blocks; assumes that the nn+1:end nodes are CEM electrodes</span>
+0047    rm = 1:nn; <span class="comment">% nodes to fold</span>
+0048    kp = nn+1:size(Y,1); <span class="comment">% nodes to keep</span>
+0049    <span class="comment">% Now handle PEM electrodes, by transferring nodes between the rm and el sets</span>
+0050    <span class="keyword">for</span> i = 1:length(img.fwd_model.electrode)
+0051       el = img.fwd_model.electrode(i);
+0052       <span class="keyword">if</span> length(el.nodes) == 1
+0053          rm(rm == el.nodes) = [];
+0054          kp(end+1) = el.nodes;
+0055       <span class="keyword">end</span>
+0056    <span class="keyword">end</span>
+0057    <span class="comment">% Note: C = B' ... we don't need to calculate it for symmetric matrices</span>
+0058    A = Y(rm,rm); B= Y(rm,kp); D = Y(kp,kp);
+0059    Dprime  = D - B'*inv(A)*B;
+0060 <span class="keyword">end</span>
+0061 
+0062 <a name="_sub2" href="#_subfunctions" class="code">function out = netlist(Dprime, name)</a>
+0063    nn = size(Dprime,1);
+0064    ndr = floor(log10(nn*(nn-1)/2))+1; <span class="comment">% number of digits for resistors</span>
+0065    nde = floor(log10(nn))+1; <span class="comment">% number of digits for electrodes</span>
+0066    str = [<span class="string">'.subckt '</span> name ];
+0067    <span class="keyword">for</span> ii = 1:nn;
+0068       str = [ str sprintf([<span class="string">' e%0'</span> num2str(nde) <span class="string">'d'</span>], ii) ];
+0069    <span class="keyword">end</span>
+0070    out = { str };
+0071    str = [<span class="string">'re%0'</span> num2str(ndr) <span class="string">'d e%0'</span> num2str(nde) <span class="string">'d e%0'</span> num2str(nde) <span class="string">'d %s'</span>];
+0072    rr = 1;
+0073    <span class="keyword">for</span> ii = 1:nn;
+0074       <span class="keyword">for</span> jj = (ii+1):nn;
+0075          val = sprintf(<span class="string">'%0.17g'</span>,-1/Dprime(ii,jj));
+0076          out(end+1,1) = { strrep(sprintf(str,rr,ii,jj,val),<span class="string">'+'</span>,<span class="string">''</span>) }; <span class="comment">% we strip '+'</span>
+0077          rr = rr +1;
+0078       <span class="keyword">end</span>
+0079    <span class="keyword">end</span>
+0080    out(end+1,1) = { <span class="string">'.ends'</span> };
+0081 <span class="keyword">end</span>
+0082 
+0083 <a name="_sub3" href="#_subfunctions" class="code">function unit_test()</a>
+0084    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2s'</span>,8);
+0085    stim = <a href="../../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(8,1,<span class="string">'{ad}'</span>,<span class="string">'{ad}'</span>,{<span class="string">'meas_current'</span>},1);
+0086    imdl.fwd_model.stimulation = stim(1);
+0087    imdl.fwd_model = rmfield(imdl.fwd_model, <span class="string">'meas_select'</span>);
+0088    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl,1);
+0089    v = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0090    disp(<span class="string">'stim'</span>);
+0091    disp(full(stim(1).stim_pattern));
+0092    disp(stim(1).stimulation)
+0093    disp(<span class="string">'meas'</span>);
+0094    disp(full(stim(1).meas_pattern));
+0095    disp(<span class="string">'voltages'</span>);
+0096    disp(v.meas)
+0097    <a href="eit_spice.html" class="code" title="function spice = eit_spice(img, name)">eit_spice</a>(img)
+0098 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

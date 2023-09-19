@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of order_loop</title>
+  <meta name="keywords" content="order_loop">
+  <meta name="description" content="ORDER_LOOP Order a list of points on a loop">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">meshing</a> &gt; order_loop.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>order_loop
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ORDER_LOOP Order a list of points on a loop</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [p n] = order_loop(pp,clk) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">ORDER_LOOP Order a list of points on a loop
+ P = ORDER_LOOP(PP) orders clockwise a matrix PP (N x D) of N points in D 
+ dimensions that constitute a continues loop, under the assumption that 
+ the distance between two neighbouring points is always smaller than 
+ distance between any non-neighbouring points.
+
+ [P,idx] = ORDER_LOOP(PP, CLK) orders the loop clockwise if
+   CLK == 1 and counter-clockwise if CLK == 0.
+ idx is the sort index of the points</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/external/distmat/distmat.html" class="code" title="function [dmat,opt] = distmat(xy,varargin)">distmat</a>	DISTMAT Distance matrix for a set of points</li><li><a href="order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>	ORDER_LOOP Order a list of points on a loop</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>	ORDER_LOOP Order a list of points on a loop</li><li><a href="../../eidors/models/GREIT3D_distribution.html" class="code" title="function [imdl,distr] = GREIT3D_distribution(fmdl, vopt)">GREIT3D_distribution</a>	GREIT3D_distribution: create target distributions for 3D GREIT</li><li><a href="../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="../../eidors/models/mk_hollow_electrode.html" class="code" title="function fmdl = mk_hollow_electrode(fmdl, elec_idx)">mk_hollow_electrode</a>	MK_HOLLOW_ELECTRODE: remove nodes with indicated electrdoes</li><li><a href="../../eidors/solvers/inverse/calc_image_SNR.html" class="code" title="function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)">calc_image_SNR</a>	% CALC_IMAGE_SNR: Calculates the signal-to-noise ratio (SNR) in the image</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [p n] = order_loop(pp,clk)</a>
+0002 <span class="comment">%ORDER_LOOP Order a list of points on a loop</span>
+0003 <span class="comment">% P = ORDER_LOOP(PP) orders clockwise a matrix PP (N x D) of N points in D</span>
+0004 <span class="comment">% dimensions that constitute a continues loop, under the assumption that</span>
+0005 <span class="comment">% the distance between two neighbouring points is always smaller than</span>
+0006 <span class="comment">% distance between any non-neighbouring points.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% [P,idx] = ORDER_LOOP(PP, CLK) orders the loop clockwise if</span>
+0009 <span class="comment">%   CLK == 1 and counter-clockwise if CLK == 0.</span>
+0010 <span class="comment">% idx is the sort index of the points</span>
+0011 
+0012 <span class="comment">% (C) 2012 Bartlomiej Grychtol.</span>
+0013 <span class="comment">% License: GPL version 2 or version 3</span>
+0014 <span class="comment">% $Id: order_loop.m 5459 2017-05-03 00:35:43Z aadler $</span>
+0015 
+0016 <span class="keyword">if</span> ischar(pp) &amp;&amp; strcmp(pp,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>, <span class="keyword">end</span>;
+0017 
+0018 <span class="keyword">if</span> nargin == 1
+0019    clk = 1;
+0020 <span class="keyword">end</span>
+0021 <span class="keyword">if</span> size(pp,1) &lt;= 1;  <span class="comment">% only one element in loop, no need to order</span>
+0022   p = pp; n=size(pp,1);
+0023   <span class="keyword">return</span>
+0024 <span class="keyword">end</span>
+0025 
+0026 D = <a href="../../eidors/external/distmat/distmat.html" class="code" title="function [dmat,opt] = distmat(xy,varargin)">distmat</a>(pp) + diag(inf*ones(length(pp),1));
+0027 p = zeros(size(pp));
+0028 n = zeros(size(pp,1),1);
+0029 N = 1:size(pp,1);
+0030 p(1,:) = pp(1,:);
+0031 idx1 = 1;
+0032 n(1) = 1;
+0033 <span class="keyword">for</span> i = 1:length(pp)-1
+0034    [jnk,idx2] = min(D(idx1,:));
+0035    p(i+1,:) = pp(idx2,:);
+0036    D(:,idx1) = [];
+0037    D(idx1,:) = [];
+0038    pp(idx1,:) = [];
+0039    N(idx1)   = [];
+0040    <span class="keyword">if</span> idx2 &gt; idx1
+0041       idx1 = idx2-1;
+0042    <span class="keyword">else</span>
+0043       idx1 = idx2;
+0044    <span class="keyword">end</span>
+0045    n(i+1) = N(idx1);
+0046 <span class="keyword">end</span>
+0047 ctr = mean(p);
+0048 tmp = p - repmat(ctr,length(p),1);
+0049 [th,r]=cart2pol(tmp(:,1),tmp(:,2)); <span class="comment">% OCTAVE BUG in 3.7 - needs 2 outputs</span>
+0050 th = unwrap(th);
+0051 
+0052 <span class="keyword">if</span> th(1) &lt; th(end)
+0053    <span class="comment">%counter-clockwise</span>
+0054    p = flipud(p);
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="keyword">if</span> clk == -1
+0058    p = flipud(p);
+0059 <span class="keyword">end</span>
+0060 
+0061 
+0062 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0063 t = linspace(0,2*pi,101); t(end) = [];
+0064 p1(:,1) = sin(t);
+0065 p1(:,2) = 4*cos(t);
+0066 n = randperm(100);
+0067 p2 = p1(n,:);
+0068 p3 = <a href="order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>(p2);
+0069 expect1= circshift(p1,-n(1));
+0070 expect2= circshift(p1,-n(1)+1);
+0071 <span class="comment">%% No idea why it could be either -- AA, May2015</span>
+0072 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'order_loop:t2'</span>, <span class="keyword">...</span>
+0073     all(all(p3==expect1)) | all(all(p3== expect2)),1);
+0074 
+0075</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

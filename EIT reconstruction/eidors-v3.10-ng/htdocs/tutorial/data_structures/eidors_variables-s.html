@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>EIDORS data structures and Variables</h2>
+
+<h3> 
+What version am I running?
+</h3>
+
+<pre>
+&gt;&gt; eidors_obj('eidors_version')
+ans =
+3.2
+</pre>
+
+<h3>
+Controlling Output Images
+</H3>
+
+The colours of the graphics may be controlled with the
+<tt>calc_colours</tt> function. This applies to output
+of the <tt>show_fem</tt> and <tt>show_slices</tt> and
+other functions that work using the matlab graphics
+engine.
+
+<pre>
+% Show EIDORS colours $Id: eidors_vars01.m 3273 2012-06-30 18:00:35Z aadler $
+
+imdl= mk_common_model('a2c2',16);
+img= mk_image(imdl.fwd_model,0);
+img.elem_data(1:2)=[1,1];
+img.elem_data([14,16])=[-1,-1];
+img.elem_data([27,30])=.5*[1,1];
+show_fem(img);
+
+print_convert  eidors_vars01a.png '-density 50'
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/data_structures/eidors_vars01a.png">
+<br><i>Figure:</i>
+Simple EIDORS image with three contrasts to show the
+effect of changing the colour mapping parameters
+</center>
+
+<p>
+The Calc Colours function can modify these values:
+<p>
+<tt>calc_colours( 'param', value );</tt>
+<br>The following parameters are accepted
+
+<ul>
+ 
+<li>
+    'greylev'    (DEFAULT -.01): the colour of the ref_level.
+<br>
+       Negative values indicate black (inversed colour).
+       For almost white, greylev=.01; Black=&gt; greylev=-.01
+<li>
+    'sat_adj'    (DEFAULT .9): max G,B when R=1
+<li>
+    'window_range' (DEFAULT .9); window colour range
+       Colour slope outside range is 1/3 of centre slope
+<li>
+    'backgnd' ( DEFAULT [.5,.5,.15] ): image border colour 
+<li>
+    'ref_level' (DEFAULT 'auto') conductivity of centre of
+       colour mapping. 'auto' tries to estimate a good level.
+<li>
+    'mapped_colour' (DEFAULT 127) number of colourmap entries
+       using mapped_colour allows matlab to print vector graphics to eps
+<li>
+    'npoints' (DEFAULT 64) number of points accross the image
+</ul>
+
+<h3>
+Image Output Resolution
+</H3>
+
+<pre>
+% Show EIDORS colours $Id: eidors_vars02.m 2757 2011-07-14 15:56:06Z bgrychtol $
+
+subplot(131)
+calc_colours('npoints',32);
+show_slices(img);
+
+subplot(132)
+calc_colours('npoints',128);
+show_slices(img);
+
+subplot(133)
+calc_colours('npoints',64);
+show_slices(img); %default value
+print_convert eidors_vars02a.png '-density 100'
+
+</pre>
+<center>
+<img src="eidors_vars02a.png">
+<br><i>Figure:</i>
+Effect of changing the <tt>npoints</tt> parameter. From
+left:
+ 1) <tt>npoints=32</tt>
+ 2) <tt>npoints=128</tt>
+ 3) <tt>npoints=64</tt> (default)
+</center>
+
+<h3>
+Image Reference Colours
+</H3>
+
+<pre>
+% Show EIDORS colours $Id: eidors_vars03.m 2757 2011-07-14 15:56:06Z bgrychtol $
+
+clf;
+% Set square figure and make figure fill the axis
+axes('position',[0 0 1 1]);
+pp= get(gcf,'paperposition');
+set(gcf,'paperposition',[pp(1:3),pp(3)]);
+
+calc_colours('greylev',.001); % black background level
+show_slices(img);
+print_convert eidors_vars03a.png '-density 20'
+
+calc_colours('greylev',.2); % grey background level
+show_slices(img);
+print_convert eidors_vars03b.png '-density 20'
+
+calc_colours('greylev',-.2); %light grey background level
+show_slices(img);
+print_convert eidors_vars03c.png '-density 20'
+
+calc_colours('greylev',-.001); %white background level (default)
+show_slices(img);
+print_convert eidors_vars03d.png '-density 20'
+
+
+calc_colours('backgnd',[0.2,0.1,0.15]);
+show_slices(img);
+calc_colours('backgnd',[0.5,0.5,0.15]); %default value
+print_convert eidors_vars03e.png '-density 20'
+set(gcf,'paperposition',pp(1:4));
+
+</pre>
+<center>
+<img src="eidors_vars03a.png">
+<img src="eidors_vars03b.png">
+<img src="eidors_vars03c.png">
+<img src="eidors_vars03d.png">
+<img src="eidors_vars03e.png">
+<br><i>Figure:</i>
+Effect of changing the <tt>greylev</tt> parameter. From
+left:
+ 1) <tt>greylev=0.001</tt>
+ 2) <tt>greylev=0.2</tt>
+ 3) <tt>greylev=-0.2</tt>
+ 4) <tt>greylev=-0.001</tt> (default)
+5) Changing <tt>backgnd</tt>
+</center>
+
+<h3>
+Colour Mapping in the image
+</H3>
+
+The default EIDORS behaviour is to auto range the colours, so that
+the full image range is displayed. This can be changed to set
+a strict colour limit, or to show a non linear colour break.
+
+<pre>
+% Show EIDORS colours $Id: eidors_vars04.m 2757 2011-07-14 15:56:06Z bgrychtol $
+
+idx= [51:52, 56:-1:53, 57:60, 64:-1:61, 49,50]; % clockwise index elements 
+img.elem_data(idx)= linspace(-2,2,16);
+subplot(131)
+calc_colours('clim',1.3); % Limit colours to 1,3
+show_slices(img);
+
+subplot(132)
+calc_colours('clim',[]); % default
+show_slices(img);
+
+subplot(133)
+img.calc_colours.clim= .3;
+show_slices(img);
+print_convert eidors_vars04a.png '-density 100'
+
+</pre>
+<center>
+<img src="eidors_vars04a.png">
+<br><i>Figure:</i>
+Effect of changing the <tt>greylev</tt> parameter. From
+left:
+ 1) <tt>clim=1.3</tt>
+ 2) <tt>clim=[]</tt> <i>(autorange)</i>
+ 3) <tt>clim=0.3</tt>
+</center>
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

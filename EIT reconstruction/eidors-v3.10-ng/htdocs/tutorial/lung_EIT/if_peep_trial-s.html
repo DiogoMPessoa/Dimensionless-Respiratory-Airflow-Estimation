@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2 >PEEP trial after lung injury (pig)</h2>
+
+
+<h3> 
+Methods and Data
+</h3>
+The measurements were performed in the same pig after induction of
+acute lung injury by repeated bronchoalveolar lavage (p1130107.get) and
+after administration of surfactant (p1130122.get). Both measurements
+were acquired at a rate of 13 scans/s, a total of 1500 frames were
+obtained. The excitation current was 50 kHz. The data was acquired
+during an incremental and decremental PEEP trial (stepwise increase and
+decrease of positive end-expiratory pressure).
+<p>
+Data were published in 
+Frerichs, I., Dargavillle, P.A., Dudykevych, T., Rimensberger,
+   P.M. (2003)
+<a href="http://www.springerlink.com/content/220rudd750445m6y/"
+   >Electrical Impedance Tomography &minus; a method for monitoring
+   regional lung aeration and tidal volume distribution?</a>
+  <i>Intensive Care Med.</i> 29:2312-2316, 2003.
+
+<h3> 
+Results
+</h3>
+The key results are shown in Fig.3 from the paper
+<br>
+<a href="http://www.springerlink.com/content/220rudd750445m6y/"
+   ><img src = "http://eidors3d.sourceforge.net/data_contrib/if-peep-acute-lung-injury/Frerichs-2003-regional-lung-fig3.png" alt="figure 3"></a>
+
+<h3> 
+EIDORS Analysis
+</h3>
+
+<ol>
+<li><b> Download </b> the
+    <a href = "http://eidors3d.sourceforge.net/data_contrib/if-peep-acute-lung-injury/if_data_2003.zip"
+   >data</a> and save it to your working directory.
+
+<li><b> Create a FEM model of the pig</b>
+<pre>
+% Create Model $Id: if_peep_trial01.m 3371 2012-07-02 09:08:43Z bgrychtol $
+
+fmdl = mk_library_model('pig_23kg_16el');
+[fmdl.stimulation fmdl.meas_select] = mk_stim_patterns(16,1,'{ad}','{ad}');
+fmdl = mdl_normalize(fmdl, 1);  % Use normalized difference imaging
+opt.noise_figure = 0.5; opt.imgsz = [64 64];
+imdl = mk_GREIT_model(fmdl, 0.25, [], opt);
+
+% subplot(211);
+show_fem(imdl.fwd_model, [0,1,0]);
+axis equal; axis off
+
+hh=text(-1.1,0,'Right');
+set(hh,'Rotation',90,'HorizontalAlignment','Center');
+hh=text(0,-1.15,'Ventral');
+set(hh,'HorizontalAlignment','Center');
+
+print_convert if_peep_trial01.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/if_peep_trial01.png">
+<br><i> Figure:</i>
+3D FEM of pig thorax
+</center>
+
+<li><b> Reconstruct images</b>
+<pre>
+% Reconstruct Images $Id: if_peep_trial02.m 1535 2008-07-26 15:36:27Z aadler $
+
+v_injury = eidors_readdata('p1130107.get');
+r_injury = mean(v_injury(:,1:10),2); % reference meas
+v_treat  = eidors_readdata('p1130122.get');
+r_treat  = mean(v_treat(:,1:10),2); % reference meas
+
+i_injury = inv_solve(imdl, r_injury, v_injury);
+i_treat  = inv_solve(imdl, r_treat , v_treat );
+
+</pre>
+
+<li><b> Select Regions of interest to plot</b>
+<pre>
+% Select ROI's
+
+img = i_injury; img.elem_data = img.elem_data(:,700);
+rimg = calc_colours( calc_slices( img ), img);
+
+np= calc_colours('npoints');
+xlocn= 5/16 * np;
+ylocn= [4:2:10]/16 * np; 
+for yl = 1:4;
+   rimg(ylocn(yl) + (-2:2), xlocn + (-2:2) ) = 1;
+end
+image(rimg); axis square
+
+for yl = 1:4;
+   text(xlocn-1, ylocn(yl), num2str(yl));
+end
+
+axis off
+print_convert if_peep_trial03.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/if_peep_trial03.png">
+<br><i> Figure:</i>
+Image of ventilation and 4 identified points to analyse
+regional ventilation
+</center>
+
+<li><b> Normalized Impedance Change (&Delta;Z) at each ROI</b>
+<pre>
+% Display Times courses $Id: if_peep_trial04.m 5788 2018-05-21 22:35:48Z aadler $
+
+for loop = 1:2;
+   if loop == 1; img = i_injury;
+   else          img = i_treat;
+   end
+
+   subplot(2,2,loop);
+   time = (0:size(img.elem_data,2)-1)/13; % Frame rate = 13/s
+
+   raster= calc_slices( img );
+   ROIs  = raster(ylocn, xlocn, :);
+   ROIs  = permute(ROIs, [3,1,2]);
+
+   %Normalize to its maximum
+   for i=1:length(ylocn)
+      ROIs(:,i) = - ROIs(:,i) / max(abs(ROIs(:,i)));
+   end
+   plot(time, ROIs);
+   axis([0, max(time), -0.1, 1]);
+   legend('1','2','3','4','Location','NorthWest')
+   xlabel('time (s)')
+   ylabel('normalized \Delta Z')
+end
+
+print_convert if_peep_trial04.png '-density 175'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/if_peep_trial04.png">
+<br><i> Figure:</i>
+Normalized &Delta;Z time course for different lung ROIs.
+<i>Left</i> Lung Injury 
+<i>Right</i> Treated
+</center>
+
+<li><b> Animate Output for each condition </b>
+
+This function creates a video of the sample sequences.
+<pre>
+% Show images $Id: if_peep_trial05.m 1535 2008-07-26 15:36:27Z aadler $
+
+for loop = 1:2;
+   if loop == 1; img = i_injury; fn= 'a';
+   else          img = i_treat;  fn= 'b';
+   end
+
+   % image properties
+   img.calc_colours.npoints     = 32;
+   img.calc_colours.window_range= .5;
+   img.calc_colours.ref_level   = 0;
+   img.calc_colours.greylev     = 0.01;
+   img.calc_colours.backgnd     = [1,1,1];
+   img.animate_reconstructions.show_times = 1;
+
+   animate_reconstructions(['if_peep_trial05',fn], img);
+end
+
+</pre>
+
+<center>
+<img src="if_peep_trial05a.gif" width="196">
+<img src="if_peep_trial05b.gif" width="196">
+<br><i> Figure:</i>
+Video of sample sequences
+<i>Left</i> Lung Injury 
+<i>Right</i> Treated
+</center>
+
+
+</ol>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

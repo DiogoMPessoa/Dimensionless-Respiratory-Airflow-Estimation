@@ -1,0 +1,518 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mdl_slice_mapper</title>
+  <meta name="keywords" content="mdl_slice_mapper">
+  <meta name="description" content="MDL_SLICE_MAPPER: map pixels to FEM elements or nodes">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; mdl_slice_mapper.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>mdl_slice_mapper
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>MDL_SLICE_MAPPER: map pixels to FEM elements or nodes</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function map = mdl_slice_mapper( fmdl, maptype ); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> MDL_SLICE_MAPPER: map pixels to FEM elements or nodes
+    map = mdl_slice_mapper( fmdl, maptype );
+
+ USAGE:
+ fmdl = fwd_model object
+     required fields
+   fmdl.mdl_slice_mapper.npx   - number of points in horizontal direction
+   fmdl.mdl_slice_mapper.npy   - number of points in vertical 
+    or
+   fmdl.mdl_slice_mapper.x_pts - vector of points in horizontal direction
+   fmdl.mdl_slice_mapper.y_pts - vector of points in vertical
+     x_pts starts at the left, and y_pts starts at the top, this means
+     that y_pts normally would run from max to min
+
+   fmdl.mdl_slice_mapper.level = Vector [1x3] of intercepts
+          of the slice on the x, y, z axis. To specify a z=2 plane
+          parallel to the x,y: use levels= [inf,inf,2]
+   OR
+   fmdl.mdl_slice_mapper.centre and .rotate
+          are the centre point and rotation matrices around the point
+
+ maptype
+    for 'elem' map is FEM element nearest the point
+    for 'node' map is FEM vertex nearest the point
+    for 'nodeinterp' map a npx x npy x (Nd+1) matrix such that for each point i,j
+       the nearby nodes are weighted with the corresponding element in the map(i,j).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>	MDL_SLICE_MAPPER: map pixels to FEM elements or nodes</li><li><a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>	show_3d_slices(img, z_cuts, x_cuts, y_cuts, any_cuts)</li><li><a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="../../../eidors/models/mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>	MDL_DIM: dimension of model space (are nodes in 2D or 3D space)</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>	calc_slices (img, levels, clim  ) show slices at levels of an</li><li><a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>	MDL_SLICE_MAPPER: map pixels to FEM elements or nodes</li><li><a href="show_current.html" class="code" title="function quiv = show_current( img, vv )">show_current</a>	SHOW_CURRENT: show current or other quantity defined</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function elem_ptr = mdl_elem_mapper(fwd_model);</a></li><li><a href="#_sub2" class="code">function ninterp_ptr = mdl_nodeinterp_mapper(fwd_model);</a></li><li><a href="#_sub3" class="code">function node_ptr = mdl_node_mapper(fwd_model);</a></li><li><a href="#_sub4" class="code">function NPTR= node_mapper( NODE, ELEM, bdy, x, y);</a></li><li><a href="#_sub5" class="code">function EPTR= img_mapper2(NODE, ELEM, x, y );</a></li><li><a href="#_sub6" class="code">function EPTR= img_mapper2a(NODE, ELEM, npx, npy );</a></li><li><a href="#_sub7" class="code">function EPTR= img_mapper3(NODE, ELEM, x, y );</a></li><li><a href="#_sub8" class="code">function NODE= level_model( fwd_model )</a></li><li><a href="#_sub9" class="code">function NODE = level_model_level(vtx, level)</a></li><li><a href="#_sub10" class="code">function NODE = ctr_norm_model(vtx, rotate, centre);</a></li><li><a href="#_sub11" class="code">function  [x,y] = grid_the_space( fmdl);</a></li><li><a href="#_sub12" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function map = mdl_slice_mapper( fmdl, maptype );</a>
+0002 <span class="comment">% MDL_SLICE_MAPPER: map pixels to FEM elements or nodes</span>
+0003 <span class="comment">%    map = mdl_slice_mapper( fmdl, maptype );</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% USAGE:</span>
+0006 <span class="comment">% fmdl = fwd_model object</span>
+0007 <span class="comment">%     required fields</span>
+0008 <span class="comment">%   fmdl.mdl_slice_mapper.npx   - number of points in horizontal direction</span>
+0009 <span class="comment">%   fmdl.mdl_slice_mapper.npy   - number of points in vertical</span>
+0010 <span class="comment">%    or</span>
+0011 <span class="comment">%   fmdl.mdl_slice_mapper.x_pts - vector of points in horizontal direction</span>
+0012 <span class="comment">%   fmdl.mdl_slice_mapper.y_pts - vector of points in vertical</span>
+0013 <span class="comment">%     x_pts starts at the left, and y_pts starts at the top, this means</span>
+0014 <span class="comment">%     that y_pts normally would run from max to min</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   fmdl.mdl_slice_mapper.level = Vector [1x3] of intercepts</span>
+0017 <span class="comment">%          of the slice on the x, y, z axis. To specify a z=2 plane</span>
+0018 <span class="comment">%          parallel to the x,y: use levels= [inf,inf,2]</span>
+0019 <span class="comment">%   OR</span>
+0020 <span class="comment">%   fmdl.mdl_slice_mapper.centre and .rotate</span>
+0021 <span class="comment">%          are the centre point and rotation matrices around the point</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% maptype</span>
+0024 <span class="comment">%    for 'elem' map is FEM element nearest the point</span>
+0025 <span class="comment">%    for 'node' map is FEM vertex nearest the point</span>
+0026 <span class="comment">%    for 'nodeinterp' map a npx x npy x (Nd+1) matrix such that for each point i,j</span>
+0027 <span class="comment">%       the nearby nodes are weighted with the corresponding element in the map(i,j).</span>
+0028 
+0029 <span class="comment">% (C) 2006 Andy Adler. License: GPL version 2 or version 3</span>
+0030 <span class="comment">% $Id: mdl_slice_mapper.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0031 
+0032 <span class="keyword">if</span> ischar(fmdl) &amp;&amp; strcmp(fmdl,<span class="string">'UNIT_TEST'</span>); <a href="#_sub12" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0033 copt.log_level = 4;
+0034 <span class="keyword">switch</span> maptype
+0035    <span class="keyword">case</span> <span class="string">'elem'</span>;
+0036       copt.fstr = <span class="string">'elem_ptr'</span>;
+0037       map = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction elem_ptr = mdl_elem_mapper(fwd_model);">mdl_elem_mapper</a>,      fmdl,copt);
+0038    <span class="keyword">case</span> <span class="string">'node'</span>;
+0039       copt.fstr = <span class="string">'node_ptr'</span>;
+0040       map = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub3" class="code" title="subfunction node_ptr = mdl_node_mapper(fwd_model);">mdl_node_mapper</a>,      fmdl,copt);
+0041    <span class="keyword">case</span> <span class="string">'nodeinterp'</span>;
+0042       copt.fstr = <span class="string">'nodeinterp'</span>;
+0043       map = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub2" class="code" title="subfunction ninterp_ptr = mdl_nodeinterp_mapper(fwd_model);">mdl_nodeinterp_mapper</a>,fmdl,copt);
+0044    <span class="keyword">otherwise</span>;
+0045       error(<span class="string">'expecting maptype = elem or node'</span>);
+0046 <span class="keyword">end</span>
+0047 
+0048 <a name="_sub1" href="#_subfunctions" class="code">function elem_ptr = mdl_elem_mapper(fwd_model);</a>
+0049    NODE = <a href="#_sub8" class="code" title="subfunction NODE= level_model( fwd_model )">level_model</a>( fwd_model );
+0050    <span class="keyword">if</span> isfield(fwd_model.mdl_slice_mapper,<span class="string">'model_2d'</span>) &amp;&amp; <span class="keyword">...</span>
+0051            fwd_model.mdl_slice_mapper.model_2d &amp;&amp; size(NODE,1) == 3
+0052        NODE(3,:) = [];
+0053    <span class="keyword">end</span>
+0054    ELEM= fwd_model.elems';
+0055    <span class="keyword">if</span> size(NODE,1) ==2 <span class="comment">%2D</span>
+0056       [x,y] = <a href="#_sub11" class="code" title="subfunction  [x,y] = grid_the_space( fmdl);">grid_the_space</a>( fwd_model);
+0057       elem_ptr= <a href="#_sub5" class="code" title="subfunction EPTR= img_mapper2(NODE, ELEM, x, y );">img_mapper2</a>( NODE, ELEM, x, y);
+0058    <span class="keyword">else</span>
+0059       fmdl3 = fwd_model; fmdl3.nodes = NODE'; 
+0060       [x,y] = <a href="#_sub11" class="code" title="subfunction  [x,y] = grid_the_space( fmdl);">grid_the_space</a>( fmdl3 );
+0061       elem_ptr= <a href="#_sub7" class="code" title="subfunction EPTR= img_mapper3(NODE, ELEM, x, y );">img_mapper3</a>( NODE, ELEM, x, y);
+0062    <span class="keyword">end</span>
+0063 
+0064 
+0065 <a name="_sub2" href="#_subfunctions" class="code">function ninterp_ptr = mdl_nodeinterp_mapper(fwd_model);</a>
+0066    elem_ptr = <a href="#_sub1" class="code" title="subfunction elem_ptr = mdl_elem_mapper(fwd_model);">mdl_elem_mapper</a>(fwd_model);
+0067    NODE = <a href="#_sub8" class="code" title="subfunction NODE= level_model( fwd_model )">level_model</a>( fwd_model );
+0068    fwd_model.nodes = NODE';
+0069    [x,y] = <a href="#_sub11" class="code" title="subfunction  [x,y] = grid_the_space( fmdl);">grid_the_space</a>( fwd_model);
+0070 
+0071    ndims = size(NODE,1);
+0072    <span class="keyword">if</span>  ndims == 2;  NODEz = []; <span class="keyword">else</span>; NODEz= 0; <span class="keyword">end</span>
+0073    ninterp_ptr = zeros(length(x(:)),ndims+1); <span class="comment">% reshape later</span>
+0074 
+0075    <span class="keyword">for</span> i= find( elem_ptr(:)&gt;0 )'; <span class="comment">% look for all x,y inside elements</span>
+0076      nodes_i = fwd_model.elems(elem_ptr(i),:);
+0077      int_fcn = inv( [ones(1,ndims+1);NODE(:,nodes_i)] );
+0078      ninterp_ptr(i,:) = ( int_fcn *[1;x(i);y(i);NODEz] )';
+0079    <span class="keyword">end</span>
+0080    ninterp_ptr = reshape( ninterp_ptr, size(x,1), size(x,2), ndims + 1);
+0081 
+0082 <a name="_sub3" href="#_subfunctions" class="code">function node_ptr = mdl_node_mapper(fwd_model);</a>
+0083    NODE = <a href="#_sub8" class="code" title="subfunction NODE= level_model( fwd_model )">level_model</a>( fwd_model );
+0084    [x,y] = <a href="#_sub11" class="code" title="subfunction  [x,y] = grid_the_space( fmdl);">grid_the_space</a>( fwd_model);
+0085    node_ptr= <a href="#_sub4" class="code" title="subfunction NPTR= node_mapper( NODE, ELEM, bdy, x, y);">node_mapper</a>( NODE, fwd_model.elems', fwd_model.boundary, x, y);
+0086 
+0087 
+0088 
+0089 <span class="comment">% Search through each element and find the points which</span>
+0090 <span class="comment">% are in that element</span>
+0091 <span class="comment">% NPTR is matrix npx x npy with a pointer to the</span>
+0092 <span class="comment">% node closest to it.</span>
+0093 <a name="_sub4" href="#_subfunctions" class="code">function NPTR= node_mapper( NODE, ELEM, bdy, x, y);</a>
+0094   [npy,npx] = size(x);
+0095 
+0096   NODEx= NODE(1,:);
+0097   NODEy= NODE(2,:);
+0098   <span class="keyword">if</span> size(NODE,1) == 2
+0099      NODEz2= 0;
+0100      bdy= unique(bdy(:));
+0101      in = inpolygon(x(:),y(:),NODE(1,bdy)',NODE(2,bdy)');
+0102   <span class="keyword">else</span>
+0103      NODEz2= NODE(3,:).^2;
+0104      <span class="comment">% This is a slow way to get the elems outside the space, but I don't see another</span>
+0105      EPTR= <a href="#_sub7" class="code" title="subfunction EPTR= img_mapper3(NODE, ELEM, x, y );">img_mapper3</a>(NODE, ELEM, x, y );
+0106      in = EPTR&gt;0;
+0107   <span class="keyword">end</span>
+0108   NPTR=zeros(npy,npx);
+0109 
+0110 <span class="comment">% This next operation can be vectorized, but we don't</span>
+0111 <span class="comment">%  do it because that can make really big matrices</span>
+0112 
+0113   <span class="keyword">for</span> i= 1: npy
+0114      <span class="keyword">for</span> j= 1: npx
+0115         dist2 = (NODEx-x(i,j)).^2 + (NODEy-y(i,j)).^2 + NODEz2;
+0116         ff = find(dist2 == min(dist2));
+0117         NPTR(i,j) = ff(1);
+0118      <span class="keyword">end</span>
+0119   <span class="keyword">end</span>
+0120   NPTR(~in)= 0; <span class="comment">% outside</span>
+0121 
+0122 <span class="comment">% Search through each element and find the points which</span>
+0123 <span class="comment">% are in that element</span>
+0124 <span class="comment">% EPTR is matrix npx x npy with a pointer to the</span>
+0125 <span class="comment">% element which contains it.</span>
+0126 <a name="_sub5" href="#_subfunctions" class="code">function EPTR= img_mapper2(NODE, ELEM, x, y );</a>
+0127   [npy,npx] = size(x);
+0128   v_yx= [-y(:),x(:)];
+0129   turn= [0 -1 1;1 0 -1;-1 1 0];
+0130   EPTR=zeros(npy,npx);
+0131   <span class="comment">% for each element j, we get points on the simplex a,b,c</span>
+0132   <span class="comment">%   area A = abc</span>
+0133   <span class="comment">%   for each candidate point d,</span>
+0134   <span class="comment">%      area AA = abd + acd + bcd</span>
+0135   <span class="comment">%      d is in j if AA = A</span>
+0136   <span class="keyword">for</span> j= 1: size(ELEM,2)
+0137     <span class="comment">% calculate area of three subtrianges to each candidate point.</span>
+0138     xy= NODE(:,ELEM(:,j))';
+0139     <span class="comment">% come up with a limited set of candidate points which</span>
+0140     <span class="comment">% may be within the simplex</span>
+0141     endr=find( y(:)&lt;=max(xy(:,2)) &amp; y(:)&gt;=min(xy(:,2)) <span class="keyword">...</span>
+0142              &amp; x(:)&lt;=max(xy(:,1)) &amp; x(:)&gt;=min(xy(:,1)) );
+0143     <span class="comment">% a is determinant of matrix [i,j,k, xy]</span>
+0144     a= xy([2;3;1],1).*xy([3;1;2],2)- xy([3;1;2],1).*xy([2;3;1],2);
+0145 
+0146     aa= sum(abs(ones(length(endr),1)*a'+ <span class="keyword">...</span>
+0147                 v_yx(endr,:)*xy'*turn)');
+0148     endr( abs( (abs(sum(a))-aa) ./ sum(a)) &gt;1e-8)=[];
+0149     EPTR(endr)= j;
+0150   <span class="keyword">end</span> <span class="comment">%for j=1:ELEM</span>
+0151 
+0152 <span class="comment">% 2D mapper of points to elements. First, we assume that</span>
+0153 <span class="comment">% The vertex geometry (NODE) has been rotated and translated</span>
+0154 <span class="comment">% so that the imaging plane is on the z-axis. Then we iterate</span>
+0155 <span class="comment">% through elements to find the containing each pixel</span>
+0156 <a name="_sub6" href="#_subfunctions" class="code">function EPTR= img_mapper2a(NODE, ELEM, npx, npy );</a>
+0157   [x,y] = <a href="#_sub11" class="code" title="subfunction  [x,y] = grid_the_space( fmdl);">grid_the_space</a>(npx, npy);
+0158 
+0159   EPTR=zeros(npy,npx);
+0160   <span class="comment">% for each element j, we get points on the simplex a,b,c</span>
+0161   <span class="comment">%   area A = abc</span>
+0162   <span class="comment">%   for each candidate point d,</span>
+0163   <span class="comment">%      area AA = abd + acd + bcd</span>
+0164   <span class="comment">%      d is in j if AA = A</span>
+0165   <span class="keyword">for</span> j= 1: size(ELEM,2)
+0166     xyz= NODE(:,ELEM(:,j))';
+0167     min_x= min(xyz(:,1)); max_x= max(xyz(:,1));
+0168     min_y= min(xyz(:,2)); max_y= max(xyz(:,2));
+0169 
+0170     <span class="comment">% Simplex volume is det([v2-v1,v3-v1, ...])</span>
+0171     VOL= abs(det(xyz'*[-1,1,0;-1,0,1]'));
+0172 
+0173     <span class="comment">% come up with a limited set of candidate points which</span>
+0174     <span class="comment">% may be within the simplex</span>
+0175     endr=find( y(:)&lt;=max_y &amp; y(:)&gt;=min_y <span class="keyword">...</span>
+0176              &amp; x(:)&lt;=max_x &amp; x(:)&gt;=min_x );
+0177 
+0178     nn=  size(ELEM,1); <span class="comment">%Simplex vertices</span>
+0179     ll=  length(endr);
+0180     vol=zeros(ll,nn);
+0181     <span class="keyword">for</span> i=1:nn
+0182        i1= i; i2= rem(i,nn)+1;
+0183        x1= xyz(i1,1) - x(endr);
+0184        y1= xyz(i1,2) - y(endr);
+0185        x2= xyz(i2,1) - x(endr);
+0186        y2= xyz(i2,2) - y(endr);
+0187        vol(:,i)= x1.*y2 - x2.*y1;  <span class="comment">% determinant</span>
+0188     <span class="keyword">end</span>
+0189 
+0190     endr( sum(abs(vol),2) - VOL &gt;1e-8 )=[];
+0191     EPTR(endr)= j;
+0192   <span class="keyword">end</span> <span class="comment">%for j=1:ELEM</span>
+0193 
+0194 
+0195 <span class="comment">% 3D mapper of points to elements. First, we assume that</span>
+0196 <span class="comment">% The vertex geometry (NODE) has been rotated and translated</span>
+0197 <span class="comment">% so that the imaging plane is on the z-axis. Then we iterate</span>
+0198 <span class="comment">% through elements to find the containing each pixel</span>
+0199 <a name="_sub7" href="#_subfunctions" class="code">function EPTR= img_mapper3(NODE, ELEM, x, y );</a>
+0200   [npy,npx] = size(x);
+0201 
+0202   EPTR=zeros(npy,npx);
+0203   <span class="comment">% for each element j, we get points on the simplex a,b,c</span>
+0204   <span class="comment">%   area A = abc</span>
+0205   <span class="comment">%   for each candidate point d,</span>
+0206   <span class="comment">%      area AA = abd + acd + bcd</span>
+0207   <span class="comment">%      d is in j if AA = A</span>
+0208   idx = 1:size(ELEM,2);
+0209   z = reshape(NODE(3,ELEM),size(ELEM));
+0210   idx(min(z)&gt;0 | max(z)&lt;0) = [];
+0211   <span class="keyword">for</span> j= idx
+0212     xyz= NODE(:,ELEM(:,j))';
+0213 
+0214     min_x= min(xyz(:,1)); max_x= max(xyz(:,1));
+0215     min_y= min(xyz(:,2)); max_y= max(xyz(:,2));
+0216 
+0217     <span class="comment">% Simplex volume is det([v2-v1,v3-v1, ...])</span>
+0218     VOL= abs(det(xyz'*[-1,1,0,0;-1,0,1,0;-1,0,0,1]'));
+0219 
+0220     <span class="comment">% come up with a limited set of candidate points which</span>
+0221     <span class="comment">% may be within the simplex</span>
+0222     endr=find( y(:)&lt;=max_y &amp; y(:)&gt;=min_y <span class="keyword">...</span>
+0223              &amp; x(:)&lt;=max_x &amp; x(:)&gt;=min_x );
+0224 
+0225     nn=  size(ELEM,1); <span class="comment">%Simplex vertices</span>
+0226     ll=  length(endr);
+0227     vol=zeros(ll,nn);
+0228     <span class="keyword">for</span> i=1:nn
+0229        i1= i; i2= rem(i,nn)+1; i3= rem(i+1,nn)+1;
+0230        x1= xyz(i1,1)-x(endr); y1= xyz(i1,2)-y(endr); z1= xyz(i1,3);
+0231        x2= xyz(i2,1)-x(endr); y2= xyz(i2,2)-y(endr); z2= xyz(i2,3);
+0232        x3= xyz(i3,1)-x(endr); y3= xyz(i3,2)-y(endr); z3= xyz(i3,3);
+0233        vol(:,i)= x1.*y2.*z3 - x1.*y3.*z2 - x2.*y1.*z3 + <span class="keyword">...</span>
+0234                  x3.*y1.*z2 + x2.*y3.*z1 - x3.*y2.*z1;
+0235     <span class="keyword">end</span>
+0236 
+0237     endr( sum(abs(vol),2) - VOL &gt;1e-8 )=[];
+0238     EPTR(endr)= j;
+0239   <span class="keyword">end</span> <span class="comment">%for j=1:ELEM</span>
+0240 
+0241 
+0242 <span class="comment">% Level model: usage</span>
+0243 <span class="comment">%   NODE= level_model( fwd_model, level );</span>
+0244 <span class="comment">%</span>
+0245 <span class="comment">% Level is a 1x3 vector specifying the x,y,z axis intercepts</span>
+0246 <span class="comment">% NODE describes the vertices in this coord space</span>
+0247 
+0248 <a name="_sub8" href="#_subfunctions" class="code">function NODE= level_model( fwd_model )</a>
+0249    vtx= fwd_model.nodes;
+0250    <span class="keyword">if</span> <a href="../../../eidors/models/mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>(fwd_model) ==2 <span class="comment">% 2D case</span>
+0251        NODE= vtx';
+0252        <span class="keyword">return</span>;
+0253    <span class="keyword">end</span>
+0254 
+0255    <span class="keyword">if</span>     isfield(fwd_model.mdl_slice_mapper,<span class="string">'level'</span>)
+0256        NODE = <a href="#_sub9" class="code" title="subfunction NODE = level_model_level(vtx, level)">level_model_level</a>(vtx, fwd_model.mdl_slice_mapper.level);
+0257    <span class="keyword">elseif</span> isfield(fwd_model.mdl_slice_mapper,<span class="string">'centre'</span>)
+0258        rotate = fwd_model.mdl_slice_mapper.rotate;
+0259        centre = fwd_model.mdl_slice_mapper.centre;
+0260        NODE = <a href="#_sub10" class="code" title="subfunction NODE = ctr_norm_model(vtx, rotate, centre);">ctr_norm_model</a>(vtx, rotate, centre);
+0261    <span class="keyword">else</span>   error(<span class="string">'mdl_slice_mapper: no field level or centre provided'</span>);
+0262    <span class="keyword">end</span>
+0263    
+0264 <a name="_sub9" href="#_subfunctions" class="code">function NODE = level_model_level(vtx, level)   </a>
+0265    [nn, dims] = size(vtx);
+0266    <span class="comment">% Infinities tend to cause issues -&gt; replace with realmax</span>
+0267    <span class="comment">% Don't need to worry about the sign of the inf</span>
+0268    level( isinf(level) | isnan(level) ) = realmax;
+0269    level( level==0 ) =     1e-10; <span class="comment">%eps;</span>
+0270 
+0271    <span class="comment">% Step 1: Choose a centre point in the plane</span>
+0272    <span class="comment">%  Weight the point by it's inv axis coords</span>
+0273    invlev= 1./level;
+0274    ctr= invlev / sum( invlev.^2 );
+0275 
+0276    <span class="comment">% Step 2: Choose basis vectors in the plane</span>
+0277    <span class="comment">%  First is the axis furthest from ctr</span>
+0278    [jnk, s_ax]= sort( - abs(level - ctr) );
+0279    v1= [0,0,0]; v1(s_ax(1))= level(s_ax(1));
+0280    v1= v1 - ctr;
+0281    v1= v1 / norm(v1);
+0282 
+0283    <span class="comment">% Step 3: Get off-plane vector, by cross product</span>
+0284    v2= [0,0,0]; v2(s_ax(2))= level(s_ax(2));
+0285    v2= v2 - ctr;
+0286    v2= v2 / norm(v2);
+0287    v3= cross(v1,v2);
+0288 
+0289    <span class="comment">% Step 4: Get orthonormal basis. Replace v2</span>
+0290    v2= cross(v1,v3);
+0291 
+0292    <span class="comment">% Step 5: Get bases to point in 'positive directions'</span>
+0293    v1= v1 * (1-2*(sum(v1)&lt;0));
+0294    v2= v2 * (1-2*(sum(v2)&lt;0));
+0295    v3= v3 * (1-2*(sum(v3)&lt;0));
+0296 
+0297    NODE= [v1;v2;v3] * (vtx' - ctr'*ones(1,nn) );
+0298    
+0299 <a name="_sub10" href="#_subfunctions" class="code">function NODE = ctr_norm_model(vtx, rotate, centre);</a>
+0300    [nn, dims] = size(vtx);
+0301    NODE = rotate * (vtx' - centre'*ones(1,nn));
+0302 
+0303 <span class="comment">% Create matrices x y which grid the space of NODE</span>
+0304 <a name="_sub11" href="#_subfunctions" class="code">function  [x,y] = grid_the_space( fmdl);</a>
+0305 
+0306   xspace = []; yspace = [];
+0307   <span class="keyword">try</span> 
+0308      xspace =  fmdl.mdl_slice_mapper.x_pts;
+0309      yspace =  fmdl.mdl_slice_mapper.y_pts;
+0310   <span class="keyword">end</span>
+0311 
+0312   <span class="keyword">if</span> isempty(xspace)
+0313      npx  = fmdl.mdl_slice_mapper.npx;
+0314      npy  = fmdl.mdl_slice_mapper.npy;
+0315 
+0316      xmin = min(fmdl.nodes(:,1));    xmax = max(fmdl.nodes(:,1));
+0317      xmean= mean([xmin,xmax]); xrange= xmax-xmin;
+0318 
+0319      ymin = min(fmdl.nodes(:,2));    ymax = max(fmdl.nodes(:,2));
+0320      ymean= mean([ymin,ymax]); yrange= ymax-ymin;
+0321 
+0322      range= max([xrange, yrange]);
+0323      xspace = linspace( xmean - range*0.5, xmean + range*0.5, npx );
+0324      yspace = linspace( ymean + range*0.5, ymean - range*0.5, npy );
+0325   <span class="keyword">end</span>
+0326 <span class="comment">%   if size(xspace,2) == 1</span>
+0327       [x,y]=meshgrid( xspace, yspace );
+0328 <span class="comment">%   else</span>
+0329 <span class="comment">%       x= xspace;</span>
+0330 <span class="comment">%       y= yspace;</span>
+0331 <span class="comment">%   end</span>
+0332 <span class="comment">%   [x,y]=meshgrid( xspace, yspace );</span>
+0333 
+0334 <a name="_sub12" href="#_subfunctions" class="code">function do_unit_test</a>
+0335 <span class="comment">% 2D NUMBER OF POINTS</span>
+0336    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,8); fmdl = imdl.fwd_model;
+0337    fmdl.mdl_slice_mapper.level = [inf,inf,0];
+0338    fmdl.mdl_slice_mapper.npx = 5;
+0339    fmdl.mdl_slice_mapper.npy = 5;
+0340    eptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'elem'</span>);
+0341    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'eptr01'</span>,eptr,[ 0  0 51  0  0; 0 34 26 30  0;
+0342                  62 35  4 29 55; 0 36 32 31  0; 0  0 59  0  0]);
+0343 
+0344    nptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'node'</span>);
+0345    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'nptr01'</span>,nptr,[ 0  0 28  0  0; 0 14  7 17  0;
+0346                  40 13  1  9 32; 0 23 11 20  0; 0  0 36  0  0]);
+0347 
+0348    nint = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'nodeinterp'</span>);
+0349    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'nint01a'</span>,nint(2:4,2:4,1),[ 0.8284, 1, 0.8284;1,1,1; 0.8284, 1, 0.8284], 1e-3);
+0350 
+0351    fmdl.mdl_slice_mapper.npx = 5;
+0352    fmdl.mdl_slice_mapper.npy = 3;
+0353    eptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'elem'</span>);
+0354    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'eptr02'</span>,eptr,[  0  0 51 0  0;62 35  4 29 55; 0 0 59 0 0]);
+0355 
+0356    nptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'node'</span>);
+0357    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'nptr02'</span>,nptr,[ 0 0 28 0 0; 40 13 1 9 32; 0 0 36 0 0 ]);
+0358 
+0359 <span class="comment">% DIRECT POINT TESTS</span>
+0360    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,8); fmdl = imdl.fwd_model;
+0361    fmdl.mdl_slice_mapper.level = [inf,inf,0];
+0362    fmdl.mdl_slice_mapper.x_pts = linspace(-1,1,5);
+0363    fmdl.mdl_slice_mapper.y_pts = [0,0.5];
+0364    eptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'elem'</span>);
+0365    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'eptr03'</span>,eptr,[ 62 35 4 29 55; 0 34 26 30 0]);
+0366 
+0367    nptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'node'</span>);
+0368    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'nptr03'</span>,nptr,[ 40 13 1 9 32; 0 14 7 17 0]);
+0369 
+0370 <span class="comment">% 3D NPOINTS</span>
+0371    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]); fmdl = imdl.fwd_model;
+0372    fmdl.mdl_slice_mapper.level = [inf,inf,1];
+0373    fmdl.mdl_slice_mapper.npx = 4;
+0374    fmdl.mdl_slice_mapper.npy = 4;
+0375    eptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'elem'</span>);
+0376    test = zeros(4); test(2:3,2:3) = [512 228;524 533];
+0377    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'eptr04'</span>,eptr, test);
+0378    nptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'node'</span>);
+0379    test = zeros(4); test(2:3,2:3) = [116 113;118 121];
+0380    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'nptr04'</span>,nptr, test);
+0381 
+0382    fmdl.mdl_slice_mapper.level = [inf,0,inf];
+0383    eptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'elem'</span>);
+0384    test = zeros(4); test(1:4,2:3) = [ 792 777; 791 776; 515 500; 239 224];
+0385    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'eptr05'</span>,eptr,test);
+0386 
+0387    nptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'node'</span>);
+0388    test = zeros(4); test(1:2,:) = [ 80, 124, 122, 64; 17, 61, 59, 1];
+0389    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'nptr05'</span>,nptr,test);
+0390 
+0391    nint = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'nodeinterp'</span>);
+0392    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'nint05a'</span>,nint(2:3,2:3,1),[0,1;0,1],1e-3);
+0393    
+0394 <span class="comment">% Centre and Rotate</span>
+0395    fmdl.mdl_slice_mapper = rmfield(fmdl.mdl_slice_mapper,<span class="string">'level'</span>);
+0396    fmdl.mdl_slice_mapper.centre = [0,0,1];
+0397    fmdl.mdl_slice_mapper.rotate = eye(3);
+0398    fmdl.mdl_slice_mapper.npx = 4;
+0399    fmdl.mdl_slice_mapper.npy = 4;
+0400    eptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'elem'</span>);
+0401    test = zeros(4); test(2:3,2:3) = [512 503;524 533];
+0402    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'eptr06'</span>,eptr, test);
+0403 
+0404 <span class="comment">% SLOW</span>
+0405    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'d3cr'</span>,[16,3]); fmdl = imdl.fwd_model;
+0406    fmdl.mdl_slice_mapper.level = [inf,inf,1];
+0407    fmdl.mdl_slice_mapper.npx = 64;
+0408    fmdl.mdl_slice_mapper.npy = 64;
+0409    t = cputime;
+0410    eptr = <a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>(fmdl,<span class="string">'elem'</span>);
+0411    txt = sprintf(<span class="string">'eptr10 (t=%5.3fs)'</span>,cputime - t);
+0412    test = [0,122872,122872; 0,122809,122809; 0,122809,122749];
+0413    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(txt,eptr(10:12,10:12),test);  
+0414    
+0415 
+0416 <span class="comment">% CHECK ORIENTATION</span>
+0417    imdl=<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c0'</span>,16);
+0418    img= <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl,1); img.elem_data(26)=1.2;
+0419    subplot(231);<a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0420    subplot(232);<a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img);
+0421    img.fwd_model.mdl_slice_mapper.npx= 20;
+0422    img.fwd_model.mdl_slice_mapper.npy= 30;
+0423    img.fwd_model.mdl_slice_mapper.level= [inf,inf,0];
+0424    subplot(233);<a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img);
+0425    img.fwd_model.mdl_slice_mapper.x_pts = [linspace(-1,1,23),.5];
+0426    img.fwd_model.mdl_slice_mapper.y_pts = [linspace( 1,-1,34),.5];
+0427    subplot(234);<a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img);
+0428    
+0429    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]);
+0430    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl,1); vh= <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0431    load datacom.mat A B;
+0432    img.elem_data(A) = 1.2;
+0433    img.elem_data(B) = 0.8;
+0434    img.calc_colours.transparency_thresh= 0.25;
+0435    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img);
+0436  
+0437    cuts = [inf, -2.5, 1.5; inf, 10, 1.5];
+0438    subplot(235);  <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img ,[],[],[],cuts );
+0439    
+0440    cuts = [inf, inf, 0.5; 
+0441            1e-10, 2e-10, inf;1e-10, 1e-10, inf;2e-10, 1e-10, inf;
+0442            inf  , 1e-10, inf;1e-10, inf  , inf];
+0443    subplot(236);  <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img ,[],[],[],cuts );
+0444</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

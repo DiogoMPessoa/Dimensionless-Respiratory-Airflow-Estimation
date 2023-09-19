@@ -1,0 +1,190 @@
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="./eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="./index-s.html"
+>Main</a><br>
+<a href="./docs-s.html"
+   >Documentation</a><br>
+<a href="./tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="./download-s.html"
+   >Download</a><br>
+<a href="./data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="./GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="./doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="./news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="./faq-s.html">FAQ</a><br>
+<a href="./programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+<H3>Project Goal</H3>
+Provide free software algorithms for forward and inverse modelling
+for Electrical Impedance Tomography (EIT) and Diffusion based
+Optical Tomography, in medical and industrial settings, 
+and to share data and promote collaboration between groups
+working these fields.
+<center>
+<img height="150" src = "http://eidors3d.sourceforge.net/tutorial/GREIT/adult_ex01b.png">
+<img height="150" src = "http://eidors3d.sourceforge.net/tutorial/GREIT/adult_ex03a.png">
+<img height="150" src = "http://eidors3d.sourceforge.net/tutorial/GREIT/adult_ex03b.png">
+<br>
+FEM model (left) and reconstructed image (centre) and sequence (right)
+ from <a href="./tutorial/GREIT/adult_ex-s.html"
+>human shallow breathing</a>
+</center>
+<H3>Requirements</H3>
+<ul>
+<li> <a href="http://www.matlab.com">Matlab</a> (&ge;2016b or 9.1) or
+     <a href="http://www.octave.org">Octave</a> (&ge;4.4),
+<li> <a href="http://netgen-mesher.sf.net">Netgen Mesher</a> (optional),
+(Direct link to 
+<a href="http://sourceforge.net/projects/netgen-mesher/files/netgen-mesher/5.3/">Netgen 5.3</a>)
+<li> <a href="http://geuz.org/gmsh/">Gmsh Mesher</a> (optional)
+</ul>
+
+<H3>Getting Started</H3>
+
+To try the EIDORS software, follow these steps:
+<ol>
+<li> Download EIDORS :
+    <br>&minus; <i>Release (31 December 2019):</i>
+         <a href="http://prdownloads.sf.net/eidors3d/eidors-v3.10.zip"
+             >EIDORS 3.10</a>, or
+         <a href="http://prdownloads.sf.net/eidors3d/eidors-v3.10-ng.zip"
+             >EIDORS 3.10 with Netgen 5.3</a> (for windows 64 bit).
+       Or <a href="./download-s.html"><i>Developer Version</i></a>
+    <br>&minus; <i>Optional ready-made FEM models:</i>
+         <a href="http://prdownloads.sf.net/eidors3d/model_library.zip"
+             >model_library</a> (7 Jul 2012)
+
+<li> Unzip the software in a directory such as
+      <tt>/path/to/eidors</tt>(UNIX) or <tt>C:\path\to\eidors</tt>(Windows)
+
+<br> (installation instructions for model_library are included in a README file)
+
+<li> Download and install 
+<a href="http://sourceforge.net/projects/netgen-mesher/files/netgen-mesher/5.3/"
+     >Netgen</a> (Unless version with netgen installed.
+      EIDORS will ask for the path to netgen when required)
+
+<li> Start Matlab
+
+<li> In the Matlab command window type: <tt>&gt;&gt;run /path/to/eidors/startup.m</tt>
+<br> (windows
+           <tt>&gt;&gt;run C:/path/to/eidors/startup.m</tt>)
+
+<li> Try the <a href="tutorial/tutorial-s.html">Tutorials</a>, or
+     execute one of the sample programs in the
+    <tt>/path/to/eidors/examples</tt>
+     directory (such as <tt>compare_2d_algs(1)</tt>)
+</ol>
+
+
+<H3>Getting Help</H3>
+
+For questions or help, search the 
+<a href="http://sourceforge.net/search/?group_id=100454&type_of_search=mlists"
+   >[EIDORS-help] Mailing list</a>.
+Email requests for help should be sent to 
+<a href="mailto:eidors3d-help@lists.sourceforge.net"><tt>
+                eidors3d-help@lists.sourceforge.net</tt></a>.
+Sign up for 
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"><tt>
+                 eidors3d-help</tt> here</a>.
+<br>
+Make sure your request answers the questions:
+<br>&minus; What specifically did you do (so that it can be repeated)?
+<br>&minus; What version of EIDORS and Matlab/OS are you using?
+<br>&minus; What, specifically, did EIDORS do that you didn't what it to?
+<br>
+If you are a student, please state your full name, institution and department (or research group) and CC your supervisor on your emails.
+
+
+<H3>License</H3>
+EIDORS is licenced under the GNU 
+<a href="http://www.gnu.org/licenses/gpl.html"
+    >General Public License</a> (version 2 or 3).
+Users are free to use, modify, and distribute their
+modifications.
+However, we would be interested in keeping track of
+who is working with this code. If you make any
+interesting uses or modifications, please inform us and
+consider contributing it.
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2019-12-31 15:45:45 -0500 (Tue, 31 Dec 2019) $ by $Author: aadler $
+</small>
+
+</body>
+
+</html>

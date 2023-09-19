@@ -1,0 +1,225 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Effects of the Meshsize parameter in Netgen
+</h2>
+
+<h3>
+Setup: use default meshsize
+</h3>
+
+First we build a netgen model using the default meshsize,
+by specifying <tt>maxh=''</tt>.
+<p>
+Call netgen:
+<pre>
+% Call Netgen $Id: meshsize_param01.m 3266 2012-06-30 16:01:06Z aadler $ 
+stim = mk_stim_patterns(16,1,'{ad}','{ad}',{},1);
+fmdl = ng_mk_cyl_models([10,15],[16,5],[0.5]);
+fmdl.stimulation= stim;
+img = mk_image(fmdl,1);
+vh = fwd_solve(img);
+
+extra={'ball','solid ball = sphere(7.5,0,5;2);'};
+fmdl = ng_mk_cyl_models([10,15],[16,5],[0.5],extra);
+fmdl.stimulation= stim;
+img = mk_image(fmdl,1);
+img.elem_data(fmdl.mat_idx{2}) = 1.1;
+vi = fwd_solve(img);
+
+</pre>
+<p>
+Reconstruct images:
+<pre>
+% Reconstruct images $Id: meshsize_param02.m 4839 2015-03-30 07:44:50Z aadler $
+imdl= mk_common_model('c2c2',16);
+imdl.RtR_prior= @prior_laplace;
+imdl.hyperparameter.value = 0.10;
+
+th= linspace(0,2*pi,100); th(end)= [];
+xcirc= 0.5+0.1*cos(th); ycirc= 0.1*sin(th);
+
+subplot(121);
+show_fem(img); view(0,60);
+
+subplot(122);
+show_fem(inv_solve( imdl, vh, vi(1)));
+line(xcirc,ycirc,'Color',[0,0.5,0],'LineWidth',2);
+axis image
+ylabel(sprintf('No. Elems= %d', size(img.fwd_model.elems,1)));
+
+print_convert meshsize_param02a.png '-density 100'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/meshsize_param02a.png">
+<br><i>Figure:</i>
+<i>Left</i>:  forward model
+<i>Right</i>: reconstructed image (with target position in green)
+</center>
+
+<h3>
+Calculate several meshsizes
+</h3>
+<pre>
+extra={'ball','solid ball = sphere(7.5,0,5;2);'};
+stim = mk_stim_patterns(16,1,'{ad}','{ad}',{},1);
+
+for loop2 = 1:7
+   switch loop2;
+      case 1; maxh= 2.0;
+      case 2; maxh= 1.5;
+      case 3; maxh= 1.0;
+      case 4; maxh= 0.8;
+      case 5; maxh= 0.7;
+      case 6; maxh= 0.6;
+      case 7; maxh= 0.5;
+   end
+   fmdl = ng_mk_cyl_models([10,15,maxh],[16,5],[0.5]);
+   fmdl.stimulation= stim;
+   img = mk_image(fmdl,1);
+   vh = fwd_solve(img);
+
+   fmdl = ng_mk_cyl_models([10,15,maxh],[16,5],[0.5],extra);
+   fmdl.stimulation= stim;
+   img = mk_image(fmdl,1);
+   img.elem_data(fmdl.mat_idx{2}) = 1.1;
+   vi = fwd_solve(img);
+
+   subplot(121); show_fem(img); view(0,60);
+
+   subplot(122); show_fem(inv_solve( imdl, vh, vi(1))); axis image
+   line(xcirc,ycirc,'Color',[0,0.5,0],'LineWidth',2);
+   ylabel(sprintf('No. Elems= %d', size(img.fwd_model.elems,1)));
+
+   fname= sprintf('meshsize_param03%c%c.png', 'a', loop2-1+'a');
+   print_convert( fname ,'-density 100');
+end
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/meshsize_param03aa.png"><br>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/meshsize_param03ab.png"><br>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/meshsize_param03ac.png"><br>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/meshsize_param03ad.png"><br>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/meshsize_param03ae.png"><br>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/meshsize_param03af.png"><br>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/meshsize_param03ag.png"><br>
+<br><i>Figure:</i>
+<i>Left</i>:  forward model
+<i>Right</i>: reconstructed image (with target position in green)
+</center>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->
+

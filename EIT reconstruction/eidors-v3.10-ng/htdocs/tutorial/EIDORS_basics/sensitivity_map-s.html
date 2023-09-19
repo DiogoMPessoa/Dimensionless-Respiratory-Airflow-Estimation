@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Sensitivity of EIT and Reconstruction</h2>
+
+<h3> 
+Sensitivity of EIT in 2D
+</h3>
+
+The regional sensitivity of EIT for a particular current pattern can be shown
+
+<pre>
+% Sensitivity map $Id: sensitivity_map01.m 4070 2013-05-26 21:22:03Z bgrychtol $
+
+imdl= mk_common_model('f2d1c',16); % 'j2d1c'
+J= calc_jacobian(calc_jacobian_bkgnd(imdl));
+Sens = J(5,:)'./get_elem_volume(imdl.fwd_model);
+img = mk_image(imdl, Sens);
+
+img.calc_colours.npoints= 256;
+img.calc_slices.filter = conv2(ones(3),ones(3));
+img.calc_colours.clim = 0.5;
+show_slices(img);
+print_convert('sensitivity_map01a.png','-density 60');
+
+img.calc_colours.cb_shrink_move = [0.5,0.7,0];
+clf;axis square,show_fem(img,[1,1]);axis off
+print_convert('sensitivity_map01b.png','-density 60');
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/sensitivity_map01a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/sensitivity_map01b.png">
+<br><i>Figure:</i>
+Sensitivity field of 2D EIT to a single simulation ([1-2]) and
+measurement [7-8] pattern
+</center>
+
+<h3> 
+Reconstruction from each component
+</h3>
+
+<pre>
+% Sensitivity map $Id: sensitivity_map02.m 3561 2012-08-01 12:04:39Z bgrychtol $
+
+fwd_model= ng_mk_cyl_models([2,1,.07],[16,1.0],[0.1]);
+fwd_model.stimulation = mk_stim_patterns(16,1,[0,1],[0,1],{},1);
+J= calc_jacobian( mk_image(fwd_model,1) );
+Sens = J(5,:)'./get_elem_volume(fwd_model);
+img = mk_image(fwd_model, Sens');
+
+img.calc_colours.clim= 3e-2;
+
+img.calc_colours.npoints= 256;
+% img.calc_slices.filter = conv2(ones(3),ones(3));
+img.calc_colours.transparency_thresh = -1;
+show_3d_slices(img,[0.7,1.0],[0.5],[]);
+view(-70,22);
+print_convert('sensitivity_map02a.png','-density 60');
+view(-70,62);
+print_convert('sensitivity_map02b.png','-density 60');
+
+np = interp_mesh(img.fwd_model);
+img.calc_colours.transparency_thresh = .15;
+img.elem_data(np(:,3)>1.05)= 0;
+show_fem(img);
+
+% Show better
+view(-70,52);
+crop_model(gca, inline('-x/5 + z>1.05','x','y','z'))
+print_convert('sensitivity_map02c.png','-density 60');
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/sensitivity_map02a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/sensitivity_map02b.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/sensitivity_map02c.png">
+<br><i>Figure:</i>
+Sensitivity field of 3D EIT to a single simulation ([1-2]) and
+measurement [7-8] pattern
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

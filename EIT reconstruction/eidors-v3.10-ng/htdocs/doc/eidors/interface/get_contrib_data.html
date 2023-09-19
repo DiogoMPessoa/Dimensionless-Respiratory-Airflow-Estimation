@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of get_contrib_data</title>
+  <meta name="keywords" content="get_contrib_data">
+  <meta name="description" content="GET_CONTRIB_DATA Get files from the EIDORS data_contrib repository">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">interface</a> &gt; get_contrib_data.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/interface&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>get_contrib_data
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GET_CONTRIB_DATA Get files from the EIDORS data_contrib repository</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function p = get_contrib_data( contrib , file ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">GET_CONTRIB_DATA Get files from the EIDORS data_contrib repository
+   GET_CONTRIB_DATA(CONTRIB, FILE) returns the path to the FILE from
+   directory CONTRIB.
+
+   GOT_CONTRIB_DATA('list') lists the valid contributions
+
+   If the file in question is not found locally, GET_CONTRIB_DATA offers
+   the option to download it to the current directory.
+
+ See also: WEBSAVE</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/models/mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function p=download_file(contrib,file,path)</a></li><li><a href="#_sub2" class="code">function p = get_local_path</a></li><li><a href="#_sub3" class="code">function p = get_remote_address</a></li><li><a href="#_sub4" class="code">function ls = list_directories(have_local_data)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function p = get_contrib_data( contrib , file )</a>
+0002 <span class="comment">%GET_CONTRIB_DATA Get files from the EIDORS data_contrib repository</span>
+0003 <span class="comment">%   GET_CONTRIB_DATA(CONTRIB, FILE) returns the path to the FILE from</span>
+0004 <span class="comment">%   directory CONTRIB.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   GOT_CONTRIB_DATA('list') lists the valid contributions</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   If the file in question is not found locally, GET_CONTRIB_DATA offers</span>
+0009 <span class="comment">%   the option to download it to the current directory.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% See also: WEBSAVE</span>
+0012 
+0013 <span class="comment">% (C) 2016 Bartlomiej Grychtol. License: GPL version 2 or version 3</span>
+0014 <span class="comment">% $Id: get_contrib_data.m 5424 2017-04-25 17:45:19Z aadler $</span>
+0015 
+0016 <span class="comment">% check for data_contrib</span>
+0017 have_local_data = exist(<a href="#_sub2" class="code" title="subfunction p = get_local_path">get_local_path</a>,<span class="string">'dir'</span>);
+0018 
+0019 <span class="keyword">if</span> nargin&gt;0 &amp;&amp; ischar(contrib) &amp;&amp; strcmp(contrib,<span class="string">'list'</span>)
+0020    disp(<a href="#_sub4" class="code" title="subfunction ls = list_directories(have_local_data)">list_directories</a>);
+0021 <span class="keyword">end</span>
+0022 
+0023 
+0024 ls = <a href="#_sub4" class="code" title="subfunction ls = list_directories(have_local_data)">list_directories</a>(have_local_data);
+0025 
+0026 <span class="keyword">if</span> ~ismember(contrib,ls)
+0027    error(<span class="string">'Unknown contribution %s.'</span>,contrib);
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="keyword">if</span> have_local_data
+0031    p = [<a href="#_sub2" class="code" title="subfunction p = get_local_path">get_local_path</a> filesep contrib filesep file];
+0032    <span class="keyword">if</span> ~exist(p, <span class="string">'file'</span>)
+0033       fprintf(<span class="string">'File %s not found.\n'</span>,p);
+0034       p = <a href="#_sub1" class="code" title="subfunction p=download_file(contrib,file,path)">download_file</a>(contrib,file,[<a href="#_sub2" class="code" title="subfunction p = get_local_path">get_local_path</a> filesep contrib]);
+0035    <span class="keyword">end</span>
+0036 <span class="keyword">else</span> <span class="comment">% attempt to get from the web</span>
+0037    fprintf(<span class="string">'The requested file %s is absent and needs to be downloaded from the web\n'</span>,file);
+0038    p = <a href="#_sub1" class="code" title="subfunction p=download_file(contrib,file,path)">download_file</a>(contrib,file,cd);
+0039 <span class="keyword">end</span>
+0040 <span class="keyword">end</span>
+0041 
+0042 <a name="_sub1" href="#_subfunctions" class="code">function p=download_file(contrib,file,path)</a>
+0043    p = [<a href="#_sub3" class="code" title="subfunction p = get_remote_address">get_remote_address</a> <span class="string">'/'</span> contrib <span class="string">'/'</span> file];
+0044    <span class="keyword">while</span> 1
+0045       s = input(<span class="string">'Try to download now? Y/N [Y]'</span>,<span class="string">'s'</span>);
+0046       <span class="keyword">if</span> isempty(s), s=<span class="string">'Y'</span>; <span class="keyword">end</span>
+0047       <span class="keyword">switch</span> s
+0048          <span class="keyword">case</span> {<span class="string">'n'</span>,<span class="string">'N'</span>}
+0049             fprintf(<span class="string">'The file can be obtained from &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;\n'</span>,p,p);
+0050             <span class="keyword">break</span>
+0051          <span class="keyword">case</span> {<span class="string">'y'</span>,<span class="string">'Y'</span>}
+0052             <span class="keyword">try</span>
+0053                p = websave([path filesep file],p);
+0054             <span class="keyword">catch</span>
+0055                fprintf(<span class="string">'Download of &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt; failed!\n'</span>,p,p);
+0056                <span class="keyword">try</span> delete([path filesep file <span class="string">'.html'</span>]); <span class="keyword">end</span> <span class="comment">% cleanup</span>
+0057                p = [];
+0058             <span class="keyword">end</span>
+0059             <span class="keyword">break</span>
+0060          <span class="keyword">otherwise</span>
+0061             fprintf(<span class="string">'Response not understood\n'</span>);
+0062       <span class="keyword">end</span>
+0063    <span class="keyword">end</span>
+0064 <span class="keyword">end</span>
+0065 
+0066 <a name="_sub2" href="#_subfunctions" class="code">function p = get_local_path</a>
+0067    <span class="comment">% where am i</span>
+0068    p = fileparts(mfilename(<span class="string">'fullpath'</span>));
+0069    p = strrep(p,[<span class="string">'eidors'</span> filesep <span class="string">'interface'</span>],<span class="string">''</span>);
+0070    p = [p <span class="string">'htdocs'</span> filesep <span class="string">'data_contrib'</span>];
+0071 <span class="keyword">end</span>
+0072 
+0073 <a name="_sub3" href="#_subfunctions" class="code">function p = get_remote_address</a>
+0074    p = <span class="string">'http://eidors.org/data_contrib'</span>;
+0075 <span class="keyword">end</span>
+0076 
+0077 <a name="_sub4" href="#_subfunctions" class="code">function ls = list_directories(have_local_data)</a>
+0078    <span class="keyword">if</span> nargin==0, have_local_data=false; <span class="keyword">end</span>
+0079    <span class="keyword">if</span> have_local_data
+0080       d = dir(<a href="#_sub2" class="code" title="subfunction p = get_local_path">get_local_path</a>);
+0081       d(1:2) = []; <span class="comment">% . and ..</span>
+0082       isdir = cell2mat({d.isdir});
+0083       ls = {d.name};
+0084       ls = ls(isdir)';
+0085    <span class="keyword">else</span> <span class="comment">% static list</span>
+0086       ls = {<span class="string">'Dargaville-ICM2010'</span>
+0087          <span class="string">'ab_2d_thorax_model'</span>
+0088          <span class="string">'at-head-mesh'</span>
+0089          <span class="string">'at-thorax-mesh'</span>
+0090          <span class="string">'bb-human-arm'</span>
+0091          <span class="string">'cg-2012-ards-recruitment'</span>
+0092          <span class="string">'cg_deforming_tank_phantom'</span>
+0093          <span class="string">'cg_normal_breathing_2006'</span>
+0094          <span class="string">'chb_child_acute_lung_injury'</span>
+0095          <span class="string">'chb_hfov_porcine'</span>
+0096          <span class="string">'db_backproj_matrix'</span>
+0097          <span class="string">'dg_geophysical_EIT'</span>
+0098          <span class="string">'ds_tank_phantom'</span>
+0099          <span class="string">'evaluation-phantom'</span>
+0100          <span class="string">'gh_pleural_cavity'</span>
+0101          <span class="string">'if-experimental-lung-injury'</span>
+0102          <span class="string">'if-neonate-spontaneous'</span>
+0103          <span class="string">'if-peep-acute-lung-injury'</span>
+0104          <span class="string">'jn_chest_phantom'</span>
+0105          <span class="string">'yg-ventilation-colourmap'</span>
+0106          };
+0107    <span class="keyword">end</span>
+0108 
+0109 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

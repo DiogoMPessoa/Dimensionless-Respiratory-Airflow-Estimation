@@ -1,0 +1,2238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ng_mk_geometric_models</title>
+  <meta name="keywords" content="ng_mk_geometric_models">
+  <meta name="description" content="NG_MK_GEOMETRIC_MODELS: create geometric mesh models using Netgen. Body">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">netgen</a> &gt; ng_mk_geometric_models.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/netgen&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>ng_mk_geometric_models
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>NG_MK_GEOMETRIC_MODELS: create geometric mesh models using Netgen. Body</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> NG_MK_GEOMETRIC_MODELS: create geometric mesh models using Netgen. Body
+ and electrodes are defined as combinations of solid primitives. The 3-D
+ surface intersection of the electrode and body volumes define the
+ electrode surfaces.
+
+[fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)
+
+ INPUT:
+  body_geometry      - Structure whose fields describe body geometries as
+                       combinations of unions, intersections and 
+                       complements of solid primitives. Cell array
+                       should be used when describing several body 
+                       geometries.
+
+  electrode_geometry - Structure whose fields describe electrode
+                       geometries as combinations of unions, intersections
+                       and complements of solid primitives. Cell array
+                       should be used when describing several electrode 
+                       geometries.
+
+ The following field names are available for geometry descriptions. Each 
+ field is followed by the available subfields whose default values if left 
+ unspecified are indicated between parentheses. 
+
+ complement_flag:    If true, the desired geometry description is the
+                     complement of the geometry description. (false)
+
+ body_of_revolution: A body of revolution is described with the following
+                     subfields: axis_point_a ([0; 0; 0]), axis_point_b 
+                     ([0; 0; 1]), points (1 1; 1 2; 2 2; 2 1]),
+                     segments ([1 2; 2 3; 3 4; 4 1]), complement_flag
+                     (false).    
+
+ cone:               A cone is described with the following subfields:
+                     bottom_center ([0; 0; 0]), bottom_radius (1),
+                     top_center ([0; 0; 1]), top_radius (0.5),
+                     complement_flag (false).                    
+
+ cylinder:           A cylinder is described with the following subfields:
+                     bottom_center ([0; 0; 0]), top_center ([0; 0; 1]),
+                     radius (1), complement_flag (false).
+
+ ellipsoid:          An ellipsoid is described with the following
+                     subfields: center ([0; 0; 0]), axis_a ([1; 0; 0]),
+                     axis_b ([0; 1; 0]), axis_c ([0; 0; 1]),
+                     complement_flag (false).
+
+ elliptic_cylinder:  An elliptic cylinder is described with the following
+                     subfields: bottom_center ([0; 0; 0]),
+                     top_center ([0; 0; 1]), axis_a ([1; 0; 0]),
+                     axis_b ([0; 1; 0]), complement_flag (false). 
+
+ enter_body_flag:    This flag can be used only for electrode geometry
+                     descriptions to indicate that the associated
+                     electrode solid enters the body solids. It can only
+                     be defined at the top level of each geometry
+                     description. If this flag is true, it means that the
+                     volume of the electrode intersecting with any body is
+                     part of the electrode, otherwise it is part of a
+                     body. (false)
+
+ half_space          A half-space is described by the following subfields:
+                     point ([0; 0; 0]), outward_normal_vector ([0; 0; 1]),
+                     complement_flag (false).
+
+ intersection:       This fields indicates to perform the intersection of
+                     all subfields. Subfields: complement_flag (false).
+
+ keep_material_flag: This flag can be used only for electrode geometry 
+                     descriptions to indicate that the associated
+                     electrode material should be kept in the final mesh.
+                     It can only be defined at the top level of each
+                     geometry description. If true, it means that the
+                     volume of the electrode is meshed. Volume elements
+                     that are part of the mesh are indicated in mat_idx
+                     output argument. (false)
+
+ max_edge_length:    This parameter is used to adjust the maximum size of
+                     the element composing the mesh. It can only be used
+                     at the top level of each geometry description. (inf)
+
+ name:               This parameter is used to name the geometry
+                     description.
+
+ ortho_brick:        An ortho-brick is described by the following
+                     subfields: opposite_corner_a ([0; 0; 0]),
+                     opposite_corner_b ([1; 1; 1]), complement_flag
+                     (false).
+
+ parallelepiped:     A parallelepiped is described by the following
+                     subfields: vertex ([0; 0; 0]), vector_a ([1; 0; 0]),
+                     vector_b ([0; 1; 0]), vector_c ([0; 0; 1]),
+                     complement_flag (false).
+
+ point:              This parameter describes a point. It can only be used
+                     at the top level of an electrode geometry
+                     description. It must be the only field in the
+                     structure. ([])
+
+ sphere:             A sphere is described with the following subfields:
+                     center ([0; 0; 0]), radius (1), complement_flag
+                     (false).
+
+ union:              This will perform the union of all its subfields.
+                     There is an implicit union operator at the top level
+                     of the geometry structure. Subfields: complement_flag
+                     (false)
+
+ OUTPUT:
+  fmdl               - EIDORS forward model object.
+
+  mat_idx            - Vector indicating for each mesh element the indices
+                       of materials corresponding as separately defined
+                       by input argument body_geometry.
+
+ USAGE EXAMPLES:
+ % 3D cylinder with radius 1. One plane of 16 electrodes with radius 0.1
+   body_geometry.cylinder = struct;
+   n_elect = 16;
+   theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+   for i = 1:n_elect
+     electrode_geometry{i}.sphere.center = [cos(theta(i)) sin(theta(i)) 0.5];
+     electrode_geometry{i}.sphere.radius = 0.1;
+   end
+   fmdl = ng_mk_geometric_models(body_geometry, electrode_geometry);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../../eidors/graphics/matlab/show_fem_enhanced.html" class="code" title="function hh = show_fem_enhanced(mdl, options)">show_fem_enhanced</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>	CALL_NETGEN: call netgen to create a vol_file from a geo_file</li><li><a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>	NG_MK_GEOMETRIC_MODELS: create geometric mesh models using Netgen. Body</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>	EIDORS_DEBUG Global managment of debug flags</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>	NG_MK_GEOMETRIC_MODELS: create geometric mesh models using Netgen. Body</li><li><a href="../../../eidors/meshing/ng_mk_common_model.html" class="code" title="function fmdl = ng_mk_common_model(mdl_type,mdl_shape, elec_pos, elec_shape);">ng_mk_common_model</a>	NG_MK_COMMON_MODEL: utility to create common models</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [fmdl_mat_idx] = mk_geometric_models(body_geometry, electrode_geometry)</a></li><li><a href="#_sub2" class="code">function radius = assign_radius(struct, n_structs, struct_name, field_name, default_value)</a></li><li><a href="#_sub3" class="code">function point = assign_point(struct, n_structs, struct_name, field_name, default_value)</a></li><li><a href="#_sub4" class="code">function point_list = assign_list_of_3D_points(struct, n_structs, struct_name, field_name, default_value)</a></li><li><a href="#_sub5" class="code">function segment_list = assign_list_of_2D_points(struct, n_structs, struct_name, field_name, default_value)</a></li><li><a href="#_sub6" class="code">function segment_list = assign_list_of_2D_or_3D_points(struct, n_structs, struct_name, field_name, default_value)</a></li><li><a href="#_sub7" class="code">function flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)</a></li><li><a href="#_sub8" class="code">function [extra_code extra_param] = parse_geometry_point(geometry)</a></li><li><a href="#_sub9" class="code">function [geo_code extra_code extra_param] = parse_geometry(geometry, field_operator_string, element_operator_string)</a></li><li><a href="#_sub10" class="code">function [geo_code extra_code] = parse_geometry_body_of_extrusion(body_of_extrusion, operator_string)</a></li><li><a href="#_sub11" class="code">function [geo_code extra_code] = parse_geometry_body_of_revolution(body_of_revolution, operator_string)</a></li><li><a href="#_sub12" class="code">function geo_code = parse_geometry_cone(cone, operator_string)</a></li><li><a href="#_sub13" class="code">function [geo_code,extra_code] = parse_geometry_cylinder(cylinder, operator_string)</a></li><li><a href="#_sub14" class="code">function geo_code = parse_geometry_ellipsoid(ellipsoid, operator_string)</a></li><li><a href="#_sub15" class="code">function geo_code = parse_geometry_elliptic_cylinder(elliptic_cylinder, operator_string)</a></li><li><a href="#_sub16" class="code">function geo_code = parse_geometry_half_space(half_space, operator_string)</a></li><li><a href="#_sub17" class="code">function geo_code = parse_geometry_ortho_brick(ortho_brick, operator_string)</a></li><li><a href="#_sub18" class="code">function geo_code = parse_geometry_parallelepiped(parallelepiped, operator_string)</a></li><li><a href="#_sub19" class="code">function geo_code = parse_geometry_sphere(sphere, operator_string)</a></li><li><a href="#_sub20" class="code">function write_geo_file(geo_fn, body_solid_code, electrode_solid_code, body_extra_code, electrode_extra_code, body_extra_param, electrode_extra_param)</a></li><li><a href="#_sub21" class="code">function mat = read_mat_from_file(fid, nrows, ncols)</a></li><li><a href="#_sub22" class="code">function fmdl = read_vol_file(vol_fn, electrode_extra_param)</a></li><li><a href="#_sub23" class="code">function fmdl = complete_fmdl(fmdl, electrode_extra_param)</a></li><li><a href="#_sub24" class="code">function do_unit_test</a></li><li><a href="#_sub25" class="code">function [fmdl, opts] = do_test_number(tn)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)</a>
+0002 <span class="comment">% NG_MK_GEOMETRIC_MODELS: create geometric mesh models using Netgen. Body</span>
+0003 <span class="comment">% and electrodes are defined as combinations of solid primitives. The 3-D</span>
+0004 <span class="comment">% surface intersection of the electrode and body volumes define the</span>
+0005 <span class="comment">% electrode surfaces.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%[fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% INPUT:</span>
+0010 <span class="comment">%  body_geometry      - Structure whose fields describe body geometries as</span>
+0011 <span class="comment">%                       combinations of unions, intersections and</span>
+0012 <span class="comment">%                       complements of solid primitives. Cell array</span>
+0013 <span class="comment">%                       should be used when describing several body</span>
+0014 <span class="comment">%                       geometries.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%  electrode_geometry - Structure whose fields describe electrode</span>
+0017 <span class="comment">%                       geometries as combinations of unions, intersections</span>
+0018 <span class="comment">%                       and complements of solid primitives. Cell array</span>
+0019 <span class="comment">%                       should be used when describing several electrode</span>
+0020 <span class="comment">%                       geometries.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% The following field names are available for geometry descriptions. Each</span>
+0023 <span class="comment">% field is followed by the available subfields whose default values if left</span>
+0024 <span class="comment">% unspecified are indicated between parentheses.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% complement_flag:    If true, the desired geometry description is the</span>
+0027 <span class="comment">%                     complement of the geometry description. (false)</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% body_of_revolution: A body of revolution is described with the following</span>
+0030 <span class="comment">%                     subfields: axis_point_a ([0; 0; 0]), axis_point_b</span>
+0031 <span class="comment">%                     ([0; 0; 1]), points (1 1; 1 2; 2 2; 2 1]),</span>
+0032 <span class="comment">%                     segments ([1 2; 2 3; 3 4; 4 1]), complement_flag</span>
+0033 <span class="comment">%                     (false).</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% cone:               A cone is described with the following subfields:</span>
+0036 <span class="comment">%                     bottom_center ([0; 0; 0]), bottom_radius (1),</span>
+0037 <span class="comment">%                     top_center ([0; 0; 1]), top_radius (0.5),</span>
+0038 <span class="comment">%                     complement_flag (false).</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% cylinder:           A cylinder is described with the following subfields:</span>
+0041 <span class="comment">%                     bottom_center ([0; 0; 0]), top_center ([0; 0; 1]),</span>
+0042 <span class="comment">%                     radius (1), complement_flag (false).</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% ellipsoid:          An ellipsoid is described with the following</span>
+0045 <span class="comment">%                     subfields: center ([0; 0; 0]), axis_a ([1; 0; 0]),</span>
+0046 <span class="comment">%                     axis_b ([0; 1; 0]), axis_c ([0; 0; 1]),</span>
+0047 <span class="comment">%                     complement_flag (false).</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% elliptic_cylinder:  An elliptic cylinder is described with the following</span>
+0050 <span class="comment">%                     subfields: bottom_center ([0; 0; 0]),</span>
+0051 <span class="comment">%                     top_center ([0; 0; 1]), axis_a ([1; 0; 0]),</span>
+0052 <span class="comment">%                     axis_b ([0; 1; 0]), complement_flag (false).</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% enter_body_flag:    This flag can be used only for electrode geometry</span>
+0055 <span class="comment">%                     descriptions to indicate that the associated</span>
+0056 <span class="comment">%                     electrode solid enters the body solids. It can only</span>
+0057 <span class="comment">%                     be defined at the top level of each geometry</span>
+0058 <span class="comment">%                     description. If this flag is true, it means that the</span>
+0059 <span class="comment">%                     volume of the electrode intersecting with any body is</span>
+0060 <span class="comment">%                     part of the electrode, otherwise it is part of a</span>
+0061 <span class="comment">%                     body. (false)</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">% half_space          A half-space is described by the following subfields:</span>
+0064 <span class="comment">%                     point ([0; 0; 0]), outward_normal_vector ([0; 0; 1]),</span>
+0065 <span class="comment">%                     complement_flag (false).</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">% intersection:       This fields indicates to perform the intersection of</span>
+0068 <span class="comment">%                     all subfields. Subfields: complement_flag (false).</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% keep_material_flag: This flag can be used only for electrode geometry</span>
+0071 <span class="comment">%                     descriptions to indicate that the associated</span>
+0072 <span class="comment">%                     electrode material should be kept in the final mesh.</span>
+0073 <span class="comment">%                     It can only be defined at the top level of each</span>
+0074 <span class="comment">%                     geometry description. If true, it means that the</span>
+0075 <span class="comment">%                     volume of the electrode is meshed. Volume elements</span>
+0076 <span class="comment">%                     that are part of the mesh are indicated in mat_idx</span>
+0077 <span class="comment">%                     output argument. (false)</span>
+0078 <span class="comment">%</span>
+0079 <span class="comment">% max_edge_length:    This parameter is used to adjust the maximum size of</span>
+0080 <span class="comment">%                     the element composing the mesh. It can only be used</span>
+0081 <span class="comment">%                     at the top level of each geometry description. (inf)</span>
+0082 <span class="comment">%</span>
+0083 <span class="comment">% name:               This parameter is used to name the geometry</span>
+0084 <span class="comment">%                     description.</span>
+0085 <span class="comment">%</span>
+0086 <span class="comment">% ortho_brick:        An ortho-brick is described by the following</span>
+0087 <span class="comment">%                     subfields: opposite_corner_a ([0; 0; 0]),</span>
+0088 <span class="comment">%                     opposite_corner_b ([1; 1; 1]), complement_flag</span>
+0089 <span class="comment">%                     (false).</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">% parallelepiped:     A parallelepiped is described by the following</span>
+0092 <span class="comment">%                     subfields: vertex ([0; 0; 0]), vector_a ([1; 0; 0]),</span>
+0093 <span class="comment">%                     vector_b ([0; 1; 0]), vector_c ([0; 0; 1]),</span>
+0094 <span class="comment">%                     complement_flag (false).</span>
+0095 <span class="comment">%</span>
+0096 <span class="comment">% point:              This parameter describes a point. It can only be used</span>
+0097 <span class="comment">%                     at the top level of an electrode geometry</span>
+0098 <span class="comment">%                     description. It must be the only field in the</span>
+0099 <span class="comment">%                     structure. ([])</span>
+0100 <span class="comment">%</span>
+0101 <span class="comment">% sphere:             A sphere is described with the following subfields:</span>
+0102 <span class="comment">%                     center ([0; 0; 0]), radius (1), complement_flag</span>
+0103 <span class="comment">%                     (false).</span>
+0104 <span class="comment">%</span>
+0105 <span class="comment">% union:              This will perform the union of all its subfields.</span>
+0106 <span class="comment">%                     There is an implicit union operator at the top level</span>
+0107 <span class="comment">%                     of the geometry structure. Subfields: complement_flag</span>
+0108 <span class="comment">%                     (false)</span>
+0109 <span class="comment">%</span>
+0110 <span class="comment">% OUTPUT:</span>
+0111 <span class="comment">%  fmdl               - EIDORS forward model object.</span>
+0112 <span class="comment">%</span>
+0113 <span class="comment">%  mat_idx            - Vector indicating for each mesh element the indices</span>
+0114 <span class="comment">%                       of materials corresponding as separately defined</span>
+0115 <span class="comment">%                       by input argument body_geometry.</span>
+0116 <span class="comment">%</span>
+0117 <span class="comment">% USAGE EXAMPLES:</span>
+0118 <span class="comment">% % 3D cylinder with radius 1. One plane of 16 electrodes with radius 0.1</span>
+0119 <span class="comment">%   body_geometry.cylinder = struct;</span>
+0120 <span class="comment">%   n_elect = 16;</span>
+0121 <span class="comment">%   theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];</span>
+0122 <span class="comment">%   for i = 1:n_elect</span>
+0123 <span class="comment">%     electrode_geometry{i}.sphere.center = [cos(theta(i)) sin(theta(i)) 0.5];</span>
+0124 <span class="comment">%     electrode_geometry{i}.sphere.radius = 0.1;</span>
+0125 <span class="comment">%   end</span>
+0126 <span class="comment">%   fmdl = ng_mk_geometric_models(body_geometry, electrode_geometry);</span>
+0127 
+0128 <span class="comment">% (C) Herve Gagnon, 2015. Licenced under GPL v2 or v3</span>
+0129 <span class="comment">% $Id: ng_mk_geometric_models.m 5836 2018-10-09 07:23:36Z aadler $</span>
+0130 
+0131 <span class="comment">% Check if function is called in UNIT_TEST mode.</span>
+0132 <span class="keyword">if</span> (ischar(body_geometry) &amp;&amp; strcmp(body_geometry, <span class="string">'UNIT_TEST'</span>))
+0133     <a href="#_sub24" class="code" title="subfunction do_unit_test">do_unit_test</a>; 
+0134     <span class="keyword">return</span>; 
+0135 <span class="keyword">end</span>
+0136 
+0137 <span class="comment">% Validate function parameters.</span>
+0138 <span class="keyword">if</span> (isempty(body_geometry) || ~isstruct(body_geometry) &amp;&amp; ~iscell(body_geometry))
+0139    error(<span class="string">'Parameter body_geometry must be a structure or a cell.'</span>);
+0140 <span class="keyword">end</span>
+0141 
+0142 <span class="comment">% Check if parameter electrode_geometry is specified.</span>
+0143 <span class="keyword">if</span> (nargin &lt; 2 || isempty(electrode_geometry))
+0144     electrode_geometry = {};
+0145 <span class="keyword">end</span>
+0146 
+0147 <span class="keyword">if</span> (~isstruct(electrode_geometry) &amp;&amp; ~iscell(electrode_geometry))
+0148    error(<span class="string">'Parameter electrode_geometry must be a structure or a cell.'</span>);
+0149 <span class="keyword">end</span>
+0150 
+0151 <span class="comment">% If parameters are not of cell type, convert them to cell.</span>
+0152 <span class="keyword">if</span> (~iscell(body_geometry))
+0153     body_geometry = {body_geometry};
+0154 <span class="keyword">end</span>
+0155 
+0156 <span class="keyword">if</span> (~iscell(electrode_geometry))
+0157     electrode_geometry = {electrode_geometry};
+0158 <span class="keyword">end</span>
+0159 
+0160 <span class="comment">% Check if result is already in cache. Otherwise, compute and store in cache.</span>
+0161 copt.cache_obj = {body_geometry, electrode_geometry};
+0162 copt.fstr = <span class="string">'ng_mk_geometric_models'</span>;
+0163 args = {body_geometry, electrode_geometry};
+0164 fmdl_mat_idx = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction [fmdl_mat_idx] = mk_geometric_models(body_geometry, electrode_geometry)">mk_geometric_models</a>, args, copt);
+0165 
+0166 <span class="comment">% Reformat output arguments.</span>
+0167 fmdl    = fmdl_mat_idx{1};
+0168 mat_idx = fmdl_mat_idx{2};
+0169 
+0170 <a name="_sub1" href="#_subfunctions" class="code">function [fmdl_mat_idx] = mk_geometric_models(body_geometry, electrode_geometry)     </a>
+0171     <span class="comment">% Find number of subdomains</span>
+0172     n_body      = numel(body_geometry);
+0173     n_electrode = numel(electrode_geometry);
+0174 
+0175     <span class="comment">% Allocate cell memory.</span>
+0176     body_solid_code       = cell(size(body_geometry));
+0177     body_extra_code       = cell(size(body_geometry));
+0178     body_extra_param      = cell(size(body_geometry));
+0179     electrode_solid_code  = cell(size(electrode_geometry));
+0180     electrode_extra_code  = cell(size(electrode_geometry));
+0181     electrode_extra_param = cell(size(electrode_geometry));
+0182     
+0183     <span class="comment">% Parse geometry for each body subdomain.</span>
+0184     <span class="keyword">for</span> i = 1:n_body
+0185         <span class="keyword">if</span> (isfield(body_geometry{i}, <span class="string">'point'</span>))
+0186             error(<span class="string">'Field name &quot;point&quot; is not allowed for body geometry.'</span>);
+0187         <span class="keyword">end</span>
+0188         <span class="keyword">if</span> (isfield(body_geometry{i}, <span class="string">'enter_body_flag'</span>))
+0189             error(<span class="string">'Field name &quot;enter_body_flag&quot; is not allowed for body geometry.'</span>);
+0190         <span class="keyword">end</span>
+0191         <span class="keyword">if</span> (isfield(body_geometry{i}, <span class="string">'keep_material_flag'</span>))
+0192             error(<span class="string">'Field name &quot;keep_material_flag&quot; is not allowed for body geometry.'</span>);
+0193         <span class="keyword">end</span>
+0194         [body_solid_code{i} body_extra_code{i} body_extra_param{i}] = <a href="#_sub9" class="code" title="subfunction [geo_code extra_code extra_param] = parse_geometry(geometry, field_operator_string, element_operator_string)">parse_geometry</a>(body_geometry{i});  
+0195     <span class="keyword">end</span>
+0196     
+0197     <span class="comment">% Parse geometry for each body subdomain.</span>
+0198     <span class="keyword">for</span> i = 1:n_electrode
+0199         [electrode_extra_code{i} electrode_extra_param{i}] = <a href="#_sub8" class="code" title="subfunction [extra_code extra_param] = parse_geometry_point(geometry)">parse_geometry_point</a>(electrode_geometry{i});
+0200         <span class="keyword">if</span> (isempty(electrode_extra_param{i}.point))
+0201             [electrode_solid_code{i} electrode_extra_code{i} electrode_extra_param{i}] = <a href="#_sub9" class="code" title="subfunction [geo_code extra_code extra_param] = parse_geometry(geometry, field_operator_string, element_operator_string)">parse_geometry</a>(electrode_geometry{i}); 
+0202         <span class="keyword">end</span>
+0203     <span class="keyword">end</span>
+0204 
+0205     <span class="comment">% Define temporary unique filenames.</span>
+0206     fn_prefix = tempname;
+0207     geo_fn    = [fn_prefix, <span class="string">'.geo'</span>];
+0208     vol_fn    = [fn_prefix, <span class="string">'.vol'</span>];
+0209    
+0210      <span class="comment">% Add body names if unspecified.</span>
+0211     <span class="keyword">for</span> i = 1:numel(body_solid_code)
+0212         <span class="keyword">if</span> (isempty(body_extra_param{i}.name))
+0213             body_extra_param{i}.name = sprintf(<span class="string">'body%04d'</span>, i);
+0214         <span class="keyword">end</span>
+0215     <span class="keyword">end</span>
+0216     
+0217     <span class="comment">% Add electrode names if unspecified.</span>
+0218     <span class="keyword">for</span> i = 1:numel(electrode_solid_code)
+0219         <span class="keyword">if</span> (isempty(electrode_extra_param{i}.name))
+0220             electrode_extra_param{i}.name = sprintf(<span class="string">'electrode%04d'</span>, i);
+0221         <span class="keyword">end</span>
+0222     <span class="keyword">end</span>
+0223 
+0224     <span class="comment">% Write geo file for netgen.</span>
+0225     <a href="#_sub20" class="code" title="subfunction write_geo_file(geo_fn, body_solid_code, electrode_solid_code, body_extra_code, electrode_extra_code, body_extra_param, electrode_extra_param)">write_geo_file</a>(geo_fn, body_solid_code, electrode_solid_code, body_extra_code, electrode_extra_code, body_extra_param, electrode_extra_param);
+0226    
+0227     <span class="comment">% Call netgen.</span>
+0228     <a href="call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>(geo_fn, vol_fn);
+0229  
+0230     <span class="comment">% Read vol file generated by netgen.</span>
+0231     fmdl_mat_idx{1} = <a href="#_sub22" class="code" title="subfunction fmdl = read_vol_file(vol_fn, electrode_extra_param)">read_vol_file</a>(vol_fn, electrode_extra_param);
+0232     
+0233     <span class="comment">% Delete temporary files.</span>
+0234     <span class="keyword">if</span> ~<a href="../../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>(<span class="string">'query'</span>,<span class="string">'ng_mk_geometric_models:keep_temp_files'</span>)
+0235        delete(geo_fn);
+0236        delete(vol_fn);
+0237     <span class="keyword">end</span>
+0238 
+0239     <span class="comment">% Complete fmdl object.</span>
+0240     fmdl_mat_idx{1} = <a href="#_sub23" class="code" title="subfunction fmdl = complete_fmdl(fmdl, electrode_extra_param)">complete_fmdl</a>(fmdl_mat_idx{1}, electrode_extra_param);
+0241 
+0242     <span class="comment">% Assign mat_idx value from fmdl.</span>
+0243     fmdl_mat_idx{2} = fmdl_mat_idx{1}.mat_idx;
+0244 
+0245 <a name="_sub2" href="#_subfunctions" class="code">function radius = assign_radius(struct, n_structs, struct_name, field_name, default_value)</a>
+0246 
+0247     radius = default_value;
+0248     
+0249     <span class="keyword">for</span> i = 1:n_structs
+0250         value = struct(i).(field_name);
+0251 
+0252         <span class="keyword">if</span> (~isempty(value))
+0253             <span class="keyword">if</span> (isscalar(value) &amp;&amp; isnumeric(value) &amp;&amp; isreal(value) &amp;&amp; value &gt; 0)
+0254                 radius(i) = value;
+0255             <span class="keyword">else</span> 
+0256                 error(<span class="string">'%s(%d).%s value is not valid.'</span>, struct_name, i, field_name);
+0257             <span class="keyword">end</span>
+0258         <span class="keyword">end</span>
+0259     <span class="keyword">end</span>
+0260     
+0261 <a name="_sub3" href="#_subfunctions" class="code">function point = assign_point(struct, n_structs, struct_name, field_name, default_value)</a>
+0262         
+0263     point = default_value;
+0264     
+0265     <span class="keyword">for</span> i = 1:n_structs
+0266         value =  struct(i).(field_name);
+0267 
+0268         <span class="keyword">if</span> (~isempty(value))
+0269             <span class="keyword">if</span> (numel(value) == 3 &amp;&amp; isnumeric(value) &amp;&amp; isreal(value))
+0270                 point(:, i) = value;
+0271             <span class="keyword">else</span>
+0272                 error(<span class="string">'%s(%d).%s value is not valid.'</span>, struct_name, i, field_name);
+0273             <span class="keyword">end</span>
+0274         <span class="keyword">end</span>
+0275     <span class="keyword">end</span>
+0276  
+0277 <a name="_sub4" href="#_subfunctions" class="code">function point_list = assign_list_of_3D_points(struct, n_structs, struct_name, field_name, default_value)</a>
+0278         
+0279     point_list = cell(n_structs, 1);
+0280     
+0281     <span class="keyword">for</span> i = 1:n_structs
+0282         
+0283         point_list{i} = default_value;
+0284         
+0285         value = struct(i).(field_name);
+0286 
+0287         <span class="keyword">if</span> (~isempty(value))
+0288             <span class="keyword">if</span> (size(value, 2) == 3 &amp;&amp; isnumeric(value) &amp;&amp; isreal(value))
+0289                 point_list{i} = value;
+0290             <span class="keyword">else</span>
+0291                 error(<span class="string">'%s(%d).%s value is not valid.'</span>, struct_name, i, field_name);
+0292             <span class="keyword">end</span>
+0293         <span class="keyword">end</span>
+0294     <span class="keyword">end</span>
+0295     
+0296 <a name="_sub5" href="#_subfunctions" class="code">function segment_list = assign_list_of_2D_points(struct, n_structs, struct_name, field_name, default_value)</a>
+0297         
+0298     segment_list = cell(n_structs, 1);
+0299     
+0300     <span class="keyword">for</span> i = 1:n_structs
+0301         
+0302         segment_list{i} = default_value;
+0303         
+0304         value = struct(i).(field_name);
+0305 
+0306         <span class="keyword">if</span> (~isempty(value))
+0307             <span class="keyword">if</span> (size(value, 2) == 2 &amp;&amp; isnumeric(value) &amp;&amp; isreal(value))
+0308                 segment_list{i} = value;
+0309             <span class="keyword">else</span>
+0310                 error(<span class="string">'%s(%d).%s value is not valid.'</span>, struct_name, i, field_name);
+0311             <span class="keyword">end</span>
+0312         <span class="keyword">end</span>
+0313     <span class="keyword">end</span> 
+0314     
+0315  <a name="_sub6" href="#_subfunctions" class="code">function segment_list = assign_list_of_2D_or_3D_points(struct, n_structs, struct_name, field_name, default_value)</a>
+0316         
+0317     segment_list = cell(n_structs, 1);
+0318     
+0319     <span class="keyword">for</span> i = 1:n_structs
+0320         
+0321         segment_list{i} = default_value;
+0322         
+0323         value = struct(i).(field_name);
+0324 
+0325         <span class="keyword">if</span> (~isempty(value))
+0326             <span class="keyword">if</span> ((size(value, 2) == 2 || size(value, 2) == 3) &amp;&amp; isnumeric(value) &amp;&amp; isreal(value))
+0327                 segment_list{i} = value;
+0328             <span class="keyword">else</span>
+0329                 error(<span class="string">'%s(%d).%s value is not valid.'</span>, struct_name, i, field_name);
+0330             <span class="keyword">end</span>
+0331         <span class="keyword">end</span>
+0332     <span class="keyword">end</span>    
+0333     
+0334 <a name="_sub7" href="#_subfunctions" class="code">function flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)</a>
+0335 
+0336     flag = default_value;
+0337 
+0338     <span class="keyword">for</span> i = 1:n_structs
+0339         value = struct(i).(field_name);
+0340  
+0341         <span class="keyword">if</span> (~isempty(value))
+0342             <span class="keyword">if</span> (isscalar(value) &amp;&amp; (islogical(value) || (isnumeric(value) &amp;&amp; <span class="keyword">...</span>
+0343                                      isreal(value) &amp;&amp; (value == 0 || value == 1))))
+0344                 flag(i) = value;
+0345             <span class="keyword">else</span>
+0346 value
+0347                 error(<span class="string">'%s(%d).%s value is not valid.'</span>, struct_name, i, field_name);
+0348             <span class="keyword">end</span>
+0349         <span class="keyword">end</span>
+0350     <span class="keyword">end</span>
+0351 
+0352 <a name="_sub8" href="#_subfunctions" class="code">function [extra_code extra_param] = parse_geometry_point(geometry)</a>
+0353 
+0354     <span class="comment">% Initialize extra param values to default values.</span>
+0355     extra_code                     = <span class="string">''</span>;
+0356     extra_param.point              = [];
+0357     extra_param.max_edge_length    = inf;
+0358     extra_param.enter_body_flag    = false;
+0359     extra_param.keep_material_flag = false;
+0360     extra_param.name               = <span class="string">''</span>;
+0361 
+0362     <span class="comment">% Check if geometry is a point, return otherwise.</span>
+0363     <span class="keyword">if</span> (isfield(geometry, <span class="string">'point'</span>))
+0364         <span class="comment">% Check if a single point is defined.</span>
+0365         <span class="keyword">if</span> (numel(geometry) ~= 1)
+0366             error(<span class="string">'Field name &quot;point&quot; must define only a single point.'</span>);
+0367         <span class="keyword">end</span>
+0368         
+0369         <span class="comment">% Get structure field names.</span>
+0370         field_names = fieldnames(geometry);
+0371         n_fields = numel(field_names);
+0372         
+0373         <span class="comment">% Check if it is the only field names.</span>
+0374         <span class="keyword">if</span> (n_fields ~= 1)
+0375             <span class="keyword">if</span> (isfield(geometry, <span class="string">'name'</span>))
+0376                 extra_param.name = geometry.name;
+0377             <span class="keyword">else</span>
+0378                 error(<span class="string">'Field name &quot;point&quot; must be used as a single field.'</span>);
+0379             <span class="keyword">end</span>
+0380         <span class="keyword">end</span>
+0381         
+0382         <span class="comment">% Check point is 3D.</span>
+0383         <span class="keyword">if</span> (numel(geometry.point) ~= 3)
+0384             error(<span class="string">'geometry.point value is not valid.'</span>);
+0385         <span class="keyword">end</span>
+0386         
+0387         <span class="comment">% Set returning values.</span>
+0388         extra_param.point = geometry.point(:);
+0389         
+0390         extra_code = sprintf(<span class="string">'point(%g, %g, %g);\n'</span>, extra_param.point);
+0391     <span class="keyword">end</span>
+0392     
+0393 <a name="_sub9" href="#_subfunctions" class="code">function [geo_code extra_code extra_param] = parse_geometry(geometry, field_operator_string, element_operator_string)</a>
+0394 
+0395     <span class="comment">% Extra code is initialized empty;</span>
+0396     extra_code = <span class="string">''</span>;
+0397     
+0398     <span class="comment">% Initialize extra param values to default values.</span>
+0399     extra_param.max_edge_length     = inf;
+0400     extra_param.enter_body_flag     = false;
+0401     extra_param.keep_material_flag  = false;
+0402     extra_param.name                = <span class="string">''</span>;
+0403     
+0404     <span class="comment">% If called from top_level, operators default to or.</span>
+0405     <span class="keyword">if</span> (nargin == 1)
+0406         top_level_flag = 1;
+0407         field_operator_string = <span class="string">' or '</span>;
+0408         element_operator_string = <span class="string">' or '</span>;
+0409     <span class="keyword">else</span>
+0410         top_level_flag = 0;
+0411     <span class="keyword">end</span>
+0412 
+0413     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with (field: &quot;%s&quot;, element: &quot;%s&quot;).'</span>, field_operator_string, element_operator_string, 4);
+0414     
+0415     <span class="comment">% Validate that geometry is a non-empty structure.</span>
+0416     <span class="keyword">if</span> (~isstruct(geometry) || isempty(geometry))
+0417         error(<span class="string">'Parameter geometry must be a valid structure.'</span>);        
+0418     <span class="keyword">else</span>
+0419         <span class="comment">% Get number of geometries.</span>
+0420         n_geometries = numel(geometry);
+0421         
+0422         <span class="comment">% Get structure field names.</span>
+0423         field_names = fieldnames(geometry);
+0424         n_fields = numel(field_names);
+0425 
+0426         <span class="comment">% Recursively parse all geometry fields.</span>
+0427         geo_code = <span class="string">'('</span>;
+0428         <span class="keyword">for</span> i = 1:n_geometries
+0429             <span class="comment">% complement_flag field has to be processed first.</span>
+0430             <span class="keyword">if</span> (isfield(geometry(i), <span class="string">'complement_flag'</span>) &amp;&amp; ~isempty(geometry(i).complement_flag) &amp;&amp; geometry(i).complement_flag)
+0431                  geo_code = [geo_code <span class="string">'(not('</span>];
+0432             <span class="keyword">else</span>
+0433                  geo_code = [geo_code <span class="string">'('</span>];
+0434             <span class="keyword">end</span>
+0435             <span class="comment">% Process name field.</span>
+0436             <span class="keyword">if</span> (isfield(geometry(i), <span class="string">'name'</span>))
+0437                 <span class="keyword">if</span> (~top_level_flag)
+0438                     error(<span class="string">'Field &quot;name&quot; can only be specified at the top level of the geometry description'</span>);
+0439                 <span class="keyword">end</span>
+0440                 extra_param.name = geometry(i).name;
+0441 
+0442                 <span class="keyword">if</span> (isempty(extra_param.name) || ~ischar(extra_param.name))
+0443                     error(<span class="string">'name value is not valid.'</span>);
+0444                 <span class="keyword">end</span>
+0445             <span class="keyword">end</span>
+0446            <span class="comment">% Process max_edge_length field.</span>
+0447             <span class="keyword">if</span> (isfield(geometry(i), <span class="string">'max_edge_length'</span>))
+0448                 <span class="keyword">if</span> (~top_level_flag)
+0449                     error(<span class="string">'Field &quot;max_edge_length&quot; can only be specified at the top level of the geometry description'</span>);
+0450                 <span class="keyword">end</span>
+0451                 extra_param.max_edge_length = geometry(i).max_edge_length;
+0452 
+0453                 <span class="keyword">if</span> (isempty(extra_param.max_edge_length) || ~isscalar(extra_param.max_edge_length) || ~isnumeric(extra_param.max_edge_length) || ~isreal(extra_param.max_edge_length) || extra_param.max_edge_length &lt;= 0)
+0454                     error(<span class="string">'max_edge_length value is not valid.'</span>);
+0455                 <span class="keyword">end</span>
+0456             <span class="keyword">end</span>
+0457             <span class="comment">% Process enter_body_flag field.</span>
+0458             <span class="keyword">if</span> (isfield(geometry(i), <span class="string">'enter_body_flag'</span>))
+0459                 <span class="keyword">if</span> (~top_level_flag)
+0460                     error(<span class="string">'Field &quot;enter_body_flag&quot; can only be specified at the top level of the geometry description'</span>);
+0461                 <span class="keyword">end</span>
+0462                 extra_param.enter_body_flag = geometry(i).enter_body_flag;
+0463                 
+0464                 <span class="keyword">if</span> (isempty(extra_param.enter_body_flag) || ~isscalar(extra_param.enter_body_flag) || (~islogical(extra_param.enter_body_flag) &amp;&amp; <span class="keyword">...</span>
+0465                         (~isnumeric(extra_param.enter_body_flag) || ~isreal(extra_param.enter_body_flag) || (extra_param.enter_body_flag ~= 0 &amp;&amp; extra_param.enter_body_flag ~= 1))))
+0466                     error(<span class="string">'Field &quot;enter_body_flag value&quot; is not valid.'</span>);
+0467                 <span class="keyword">end</span>
+0468             <span class="keyword">end</span>
+0469             <span class="comment">% Process keep_material_flag field.</span>
+0470             <span class="keyword">if</span> (isfield(geometry(i), <span class="string">'keep_material_flag'</span>))
+0471                 <span class="keyword">if</span> (~top_level_flag)
+0472                     error(<span class="string">'Field &quot;keep_material_flag&quot; can only be specified at the top level of the geometry description'</span>);
+0473                 <span class="keyword">end</span>
+0474                 extra_param.keep_material_flag = geometry(i).keep_material_flag;
+0475                 
+0476                 <span class="keyword">if</span> (isempty(extra_param.keep_material_flag) || ~isscalar(extra_param.keep_material_flag) || (~islogical(extra_param.keep_material_flag) &amp;&amp; <span class="keyword">...</span>
+0477                         (~isnumeric(extra_param.keep_material_flag) || ~isreal(extra_param.keep_material_flag) || (extra_param.keep_material_flag ~= 0 &amp;&amp; extra_param.keep_material_flag ~= 1))))
+0478                     error(<span class="string">'Field &quot;keep_material_flag&quot; value is not valid.'</span>);
+0479                 <span class="keyword">end</span>
+0480             <span class="keyword">end</span>  
+0481             first_internal_term = 1;
+0482             <span class="keyword">for</span> j = 1:n_fields
+0483                 <span class="keyword">if</span> (~isempty(geometry(i).(field_names{j})) &amp;&amp; ~strcmp(field_names{j}, <span class="string">'complement_flag'</span>) &amp;&amp; ~strcmp(field_names{j}, <span class="string">'name'</span>) &amp;&amp; ~strcmp(field_names{j}, <span class="string">'max_edge_length'</span>) &amp;&amp; ~strcmp(field_names{j}, <span class="string">'keep_material_flag'</span>) &amp;&amp; ~strcmp(field_names{j}, <span class="string">'enter_body_flag'</span>))
+0484                     <span class="keyword">if</span> (first_internal_term)
+0485                         first_internal_term = 0;
+0486                     <span class="keyword">else</span>
+0487                         geo_code = [geo_code field_operator_string];
+0488                     <span class="keyword">end</span>
+0489                     <span class="keyword">switch</span> (field_names{j})
+0490                         <span class="keyword">case</span> <span class="string">'body_of_extrusion'</span>
+0491                             [geo_code_temp extra_code_temp] = <span class="keyword">...</span>
+0492                                         <a href="#_sub10" class="code" title="subfunction [geo_code extra_code] = parse_geometry_body_of_extrusion(body_of_extrusion, operator_string)">parse_geometry_body_of_extrusion</a>(geometry(i).(field_names{j}), field_operator_string);
+0493                             geo_code   = [geo_code geo_code_temp];        
+0494                             extra_code = [extra_code extra_code_temp];
+0495                         <span class="keyword">case</span> <span class="string">'body_of_revolution'</span>
+0496                             [geo_code_temp extra_code_temp] = <span class="keyword">...</span>
+0497                                         <a href="#_sub11" class="code" title="subfunction [geo_code extra_code] = parse_geometry_body_of_revolution(body_of_revolution, operator_string)">parse_geometry_body_of_revolution</a>(geometry(i).(field_names{j}), field_operator_string);
+0498                             geo_code   = [geo_code geo_code_temp];        
+0499                             extra_code = [extra_code extra_code_temp];
+0500                         <span class="keyword">case</span> <span class="string">'cone'</span>
+0501                             geo_code = [geo_code <span class="keyword">...</span>
+0502                                         <a href="#_sub12" class="code" title="subfunction geo_code = parse_geometry_cone(cone, operator_string)">parse_geometry_cone</a>(geometry(i).(field_names{j}), field_operator_string)];
+0503                         <span class="keyword">case</span> <span class="string">'cylinder'</span>
+0504                             [geo_code_temp, extra_code_temp] = <span class="keyword">...</span>
+0505                                         <a href="#_sub13" class="code" title="subfunction [geo_code,extra_code] = parse_geometry_cylinder(cylinder, operator_string)">parse_geometry_cylinder</a>(geometry(i).(field_names{j}), field_operator_string);
+0506                             geo_code   = [geo_code geo_code_temp];        
+0507                             extra_code = [extra_code extra_code_temp];
+0508                         <span class="keyword">case</span> <span class="string">'ellipsoid'</span>
+0509                             geo_code = [geo_code <span class="keyword">...</span>
+0510                                         <a href="#_sub14" class="code" title="subfunction geo_code = parse_geometry_ellipsoid(ellipsoid, operator_string)">parse_geometry_ellipsoid</a>(geometry(i).(field_names{j}), field_operator_string)];
+0511                         <span class="keyword">case</span> <span class="string">'elliptic_cylinder'</span>
+0512                             geo_code = [geo_code <span class="keyword">...</span>
+0513                                         <a href="#_sub15" class="code" title="subfunction geo_code = parse_geometry_elliptic_cylinder(elliptic_cylinder, operator_string)">parse_geometry_elliptic_cylinder</a>(geometry(i).(field_names{j}), field_operator_string)];
+0514                         <span class="keyword">case</span> <span class="string">'half_space'</span>
+0515                             geo_code = [geo_code <span class="keyword">...</span>
+0516                                         <a href="#_sub16" class="code" title="subfunction geo_code = parse_geometry_half_space(half_space, operator_string)">parse_geometry_half_space</a>(geometry(i).(field_names{j}), field_operator_string)];    
+0517                         <span class="keyword">case</span> <span class="string">'ortho_brick'</span>
+0518                             geo_code = [geo_code <span class="keyword">...</span>
+0519                                         <a href="#_sub17" class="code" title="subfunction geo_code = parse_geometry_ortho_brick(ortho_brick, operator_string)">parse_geometry_ortho_brick</a>(geometry(i).(field_names{j}), field_operator_string)];
+0520                         <span class="keyword">case</span> <span class="string">'parallelepiped'</span>
+0521                             geo_code = [geo_code <span class="keyword">...</span>
+0522                                         <a href="#_sub18" class="code" title="subfunction geo_code = parse_geometry_parallelepiped(parallelepiped, operator_string)">parse_geometry_parallelepiped</a>(geometry(i).(field_names{j}), field_operator_string)];       
+0523                         <span class="keyword">case</span> <span class="string">'sphere'</span>
+0524                             geo_code = [geo_code <span class="keyword">...</span>
+0525                                         <a href="#_sub19" class="code" title="subfunction geo_code = parse_geometry_sphere(sphere, operator_string)">parse_geometry_sphere</a>(geometry(i).(field_names{j}), field_operator_string)];
+0526                         <span class="keyword">case</span> <span class="string">'intersection'</span>
+0527                             [geo_code_temp extra_code_temp] = <span class="keyword">...</span>
+0528                                         <a href="#_sub9" class="code" title="subfunction [geo_code extra_code extra_param] = parse_geometry(geometry, field_operator_string, element_operator_string)">parse_geometry</a>(geometry(i).(field_names{j}), <span class="string">' and '</span>, field_operator_string);
+0529                             geo_code   = [geo_code geo_code_temp];        
+0530                             extra_code = [extra_code extra_code_temp];
+0531                         <span class="keyword">case</span> <span class="string">'union'</span>
+0532                             [geo_code_temp extra_code_temp] = <span class="keyword">...</span>
+0533                                         <a href="#_sub9" class="code" title="subfunction [geo_code extra_code extra_param] = parse_geometry(geometry, field_operator_string, element_operator_string)">parse_geometry</a>(geometry(i).(field_names{j}), <span class="string">' or '</span>, field_operator_string);
+0534                             geo_code   = [geo_code geo_code_temp];        
+0535                             extra_code = [extra_code extra_code_temp];
+0536                         <span class="keyword">otherwise</span>
+0537                             error([<span class="string">'Field name &quot;%s&quot; is not valid for a geometry.\nAvailable field names for a geometry are: '</span><span class="keyword">...</span>
+0538                                    <span class="string">'complement_flag, intersection, union, body_of_extrusion, body_of_revolution, cone, cylinder, ellipsoid, elliptic_cylinder, half_space, ortho_brick, parallelepiped, point, sphere, keep_material_flag, enter_body_flag, name, and max_edge_length.'</span>], field_names{j});
+0539                     <span class="keyword">end</span>
+0540                 <span class="keyword">end</span>
+0541             <span class="keyword">end</span>
+0542             <span class="keyword">if</span> (isfield(geometry(i), <span class="string">'complement_flag'</span>) &amp;&amp; ~isempty(geometry(i).complement_flag) &amp;&amp; geometry(i).complement_flag)
+0543                 geo_code = [geo_code <span class="string">'))'</span>];
+0544             <span class="keyword">else</span>
+0545                 geo_code = [geo_code <span class="string">')'</span>];  
+0546             <span class="keyword">end</span>
+0547            
+0548             <span class="keyword">if</span> (i &lt; n_geometries)
+0549                 geo_code = [geo_code element_operator_string];         
+0550             <span class="keyword">end</span>           
+0551         <span class="keyword">end</span>
+0552         geo_code = [geo_code <span class="string">')'</span>];  
+0553     <span class="keyword">end</span>
+0554     
+0555     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ returned with (field: &quot;%s&quot;, element: &quot;%s&quot;).'</span>, field_operator_string, element_operator_string, 4);
+0556  
+0557 <a name="_sub10" href="#_subfunctions" class="code">function [geo_code extra_code] = parse_geometry_body_of_extrusion(body_of_extrusion, operator_string)</a>
+0558 
+0559     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; starting.'</span>, operator_string, 4);
+0560 
+0561     <span class="keyword">if</span> (~isstruct(body_of_extrusion) || isempty(body_of_extrusion))
+0562         error(<span class="string">'Parameter body_of_extrusion must be a valid structure.'</span>);        
+0563     <span class="keyword">else</span>
+0564         <span class="comment">% Get number of body_of_extrusion.</span>
+0565         n_body_of_extrusions = numel(body_of_extrusion);
+0566         
+0567         <span class="comment">% Get structure field names.</span>
+0568         field_names = fieldnames(body_of_extrusion);
+0569         n_fields = numel(field_names);
+0570         
+0571         <span class="comment">% Assign default values.</span>
+0572         vector_d            = [0; 1; 0]*ones(1, n_body_of_extrusions);
+0573         profile_points{1}   = [1 1; 1 2; 2 2; 2 1];
+0574         profile_segments{1} = [1 2; 2 3; 3 4; 4 1];
+0575         path_points{1}      = [0 0 0; 0 0 1; 0 0 2; 0 0 3];
+0576         path_segments{1}    = [1 2; 2 3; 3 4];
+0577         complement_flag     = false(1, n_body_of_extrusions);
+0578         
+0579         <span class="comment">% Parse all structure fields.</span>
+0580         <span class="keyword">for</span> i = 1:n_fields
+0581             <span class="keyword">switch</span> (field_names{i})
+0582                 <span class="keyword">case</span> <span class="string">'vector_d'</span>
+0583                     vector_d = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(body_of_extrusion, n_body_of_extrusions, <span class="string">'body_of_extrusion'</span>, field_names{i}, vector_d);
+0584                 <span class="keyword">case</span> <span class="string">'profile_points'</span>
+0585                     profile_points = <a href="#_sub5" class="code" title="subfunction segment_list = assign_list_of_2D_points(struct, n_structs, struct_name, field_name, default_value)">assign_list_of_2D_points</a>(body_of_extrusion, n_body_of_extrusions, <span class="string">'body_of_extrusion'</span>, field_names{i}, profile_points{1});
+0586                 <span class="keyword">case</span> <span class="string">'profile_segments'</span>
+0587                     profile_segments = <a href="#_sub6" class="code" title="subfunction segment_list = assign_list_of_2D_or_3D_points(struct, n_structs, struct_name, field_name, default_value)">assign_list_of_2D_or_3D_points</a>(body_of_extrusion, n_body_of_extrusions, <span class="string">'body_of_extrusion'</span>, field_names{i}, profile_segments{1});
+0588                 <span class="keyword">case</span> <span class="string">'path_points'</span>
+0589                     path_points = <a href="#_sub4" class="code" title="subfunction point_list = assign_list_of_3D_points(struct, n_structs, struct_name, field_name, default_value)">assign_list_of_3D_points</a>(body_of_extrusion, n_body_of_extrusions, <span class="string">'body_of_extrusion'</span>, field_names{i}, path_points{1});
+0590                 <span class="keyword">case</span> <span class="string">'path_segments'</span>
+0591                     path_segments = <a href="#_sub6" class="code" title="subfunction segment_list = assign_list_of_2D_or_3D_points(struct, n_structs, struct_name, field_name, default_value)">assign_list_of_2D_or_3D_points</a>(body_of_extrusion, n_body_of_extrusions, <span class="string">'body_of_extrusion'</span>, field_names{i}, path_segments{1});
+0592                 <span class="keyword">case</span> <span class="string">'complement_flag'</span>
+0593                     complement_flag = <a href="#_sub7" class="code" title="subfunction flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)">assign_flag</a>(body_of_extrusion, n_body_of_extrusions, <span class="string">'body_of_extrusion'</span>, field_names{i}, complement_flag);
+0594                 <span class="keyword">otherwise</span>
+0595                     error([<span class="string">'Field name &quot;%s&quot; is not allowed for a body_of_extrusion!\nAllowed field names for a body_of_extrusion are: '</span> <span class="keyword">...</span>
+0596                            <span class="string">'path_points, path_segments, profile_points, profile_segments, vector_d, and complement_flag.'</span>], field_names{i});
+0597             <span class="keyword">end</span>
+0598         <span class="keyword">end</span>
+0599         
+0600         <span class="comment">% Start geo code with an opening parenthesis.</span>
+0601         geo_code = <span class="string">'('</span>;
+0602         extra_code = <span class="string">''</span>;
+0603         
+0604         <span class="comment">% Add geo code for each body_of_extrusion.</span>
+0605         <span class="keyword">for</span> i = 1:n_body_of_extrusions
+0606             
+0607             <span class="keyword">for</span> j = 1:size(path_segments{i}, 1)
+0608                 <span class="keyword">if</span> (dot(vector_d(:,i), path_points{i}(path_segments{i}(j, 1), :) - path_points{i}(path_segments{i}(j, end), :)) ~= 0)
+0609                     error(<span class="string">'vector_d and path must be perpendicular for a body of extrusion.'</span>);
+0610                 <span class="keyword">end</span>
+0611             <span class="keyword">end</span>
+0612             
+0613             n_points = size(profile_points{i}, 1);
+0614             n_segments = size(profile_segments{i}, 1);
+0615             
+0616             <span class="keyword">if</span> (size(profile_segments{i}, 2) == 2)
+0617                 extra_code = [extra_code sprintf(<span class="string">'curve2d Extrusion2DProfileCurve%d = (%g ; '</span>, i, n_points) <span class="keyword">...</span>
+0618                                          sprintf(<span class="string">'%g, %g ; '</span>, profile_points{i}') <span class="keyword">...</span>
+0619                                          sprintf(<span class="string">' %g '</span>, n_segments) <span class="keyword">...</span>
+0620                                          sprintf(<span class="string">'; 2, %g, %g '</span>, profile_segments{i}') <span class="keyword">...</span>
+0621                                          sprintf(<span class="string">');\n\n'</span>)];
+0622             <span class="keyword">else</span>
+0623                 extra_code = [extra_code sprintf(<span class="string">'curve2d Extrusion2DProfileCurve%d = (%g ; '</span>, i, n_points) <span class="keyword">...</span>
+0624                                          sprintf(<span class="string">'%g, %g ; '</span>, profile_points{i}') <span class="keyword">...</span>
+0625                                          sprintf(<span class="string">' %g '</span>, n_segments) <span class="keyword">...</span>
+0626                                          sprintf(<span class="string">'; 3, %g, %g, %g '</span>, profile_segments{i}') <span class="keyword">...</span>
+0627                                          sprintf(<span class="string">');\n\n'</span>)];
+0628             <span class="keyword">end</span>
+0629   
+0630             n_points = size(path_points{i}, 1);
+0631             n_segments = size(path_segments{i}, 1);
+0632             
+0633             <span class="keyword">if</span> (size(path_segments{i}, 2) == 2)
+0634                 extra_code = [extra_code sprintf(<span class="string">'curve3d Extrusion3DPathCurve%d = (%g ; '</span>, i, n_points) <span class="keyword">...</span>
+0635                                          sprintf(<span class="string">'%g, %g, %g ; '</span>, path_points{i}') <span class="keyword">...</span>
+0636                                          sprintf(<span class="string">' %g '</span>, n_segments) <span class="keyword">...</span>
+0637                                          sprintf(<span class="string">'; 2, %g, %g '</span>, path_segments{i}') <span class="keyword">...</span>
+0638                                          sprintf(<span class="string">');\n\n'</span>)];
+0639             <span class="keyword">else</span>
+0640                  extra_code = [extra_code sprintf(<span class="string">'curve3d Extrusion3DPathCurve%d = (%g ; '</span>, i, n_points) <span class="keyword">...</span>
+0641                                          sprintf(<span class="string">'%g, %g, %g ; '</span>, path_points{i}') <span class="keyword">...</span>
+0642                                          sprintf(<span class="string">' %g '</span>, n_segments) <span class="keyword">...</span>
+0643                                          sprintf(<span class="string">'; 3, %g, %g, %g '</span>, path_segments{i}') <span class="keyword">...</span>
+0644                                          sprintf(<span class="string">');\n\n'</span>)];               
+0645             <span class="keyword">end</span>
+0646                                        
+0647             <span class="keyword">if</span> (complement_flag(i))
+0648                 geo_code = [geo_code <span class="string">'not '</span>];
+0649             <span class="keyword">end</span>
+0650             
+0651             <span class="comment">% Check if path is closed.</span>
+0652             <span class="keyword">if</span> (path_segments{i}(end) == path_segments{i}(1))
+0653                 geo_code = [geo_code sprintf(<span class="string">'extrusion(Extrusion3DPathCurve%d ; Extrusion2DProfileCurve%d ; %g, %g, %g)'</span>, i, i, vector_d(:,i))];
+0654             <span class="keyword">else</span>
+0655                 <span class="comment">%error('Unclosed path are not yet supported for body of extrusion!');</span>
+0656                 <span class="comment">%for j = 1: [1 1; 1 2; 2 2; 2 1];</span>
+0657                 <span class="comment">%polyhedron1 = 'polyhedron(-1, 1, 0; -1, 2, 0; -2, 2, 0; -2, 1, 0; -1.5, 1.5, 0; -1.5, 1.5, 1 ;; 2, 1, 5; 3, 2, 5; 4, 3, 5; 1, 4, 5; 1, 2, 6; 2, 3, 6; 3, 4, 6; 4, 1, 6)';</span>
+0658                 <span class="comment">%polyhedron2 = 'polyhedron(-1, 1, 3; -1, 2, 3; -2, 2, 3; -2, 1, 3; -1.5, 1.5, 3; -1.5, 1.5, 2 ;; 1, 2, 5; 2, 3, 5; 3, 4, 5; 4, 1, 5; 2, 1, 6; 3, 2, 6; 4, 3, 6; 1, 4, 6)';</span>
+0659                 <span class="comment">%polyhedron1 = 'plane(0, 0, 3; 0, 0, 1)';</span>
+0660                 <span class="comment">%polyhedron2 = 'plane(0, 0, 0; 0, 0, -1)';</span>
+0661                 first_point  = path_points{i}(path_segments{i}(1, 1), :);
+0662                 first_vector = first_point - path_points{i}(path_segments{i}(1, end), :);
+0663                 last_point   = path_points{i}(path_segments{i}(<span class="keyword">end</span>, end), :);
+0664                 last_vector  = last_point - path_points{i}(path_segments{i}(<span class="keyword">end</span>, 1), :);
+0665                 geo_code = [geo_code sprintf(<span class="string">'(extrusion(Extrusion3DPathCurve%d ; Extrusion2DProfileCurve%d ; %g, %g, %g) and plane(%g, %g, %g; %g, %g, %g) and plane(%g, %g, %g; %g, %g, %g))'</span>, <span class="keyword">...</span>
+0666                             i, i, vector_d(:,i), first_point, first_vector, last_point, last_vector)];
+0667                 <span class="comment">%geo_code = [geo_code sprintf('(%s or %s)', polyhedron1, polyhedron2)];</span>
+0668             <span class="keyword">end</span>
+0669 
+0670             <span class="keyword">if</span> (i &lt; n_body_of_extrusions)
+0671                 geo_code = [geo_code operator_string];
+0672             <span class="keyword">else</span>
+0673                 geo_code = [geo_code <span class="string">')'</span>];             
+0674             <span class="keyword">end</span>
+0675         <span class="keyword">end</span>
+0676     <span class="keyword">end</span>
+0677     
+0678     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; returning.'</span>, operator_string, 4);
+0679 
+0680 <a name="_sub11" href="#_subfunctions" class="code">function [geo_code extra_code] = parse_geometry_body_of_revolution(body_of_revolution, operator_string)</a>
+0681 
+0682     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; starting.'</span>, operator_string, 4);
+0683 
+0684     <span class="keyword">if</span> (~isstruct(body_of_revolution) || isempty(body_of_revolution))
+0685         error(<span class="string">'Parameter body_of_revolution must be a valid structure.'</span>);        
+0686     <span class="keyword">else</span>
+0687         <span class="comment">% Get number of body_of_revolution.</span>
+0688         n_body_of_revolutions = numel(body_of_revolution);
+0689         
+0690         <span class="comment">% Get structure field names.</span>
+0691         field_names = fieldnames(body_of_revolution);
+0692         n_fields = numel(field_names);
+0693         
+0694         <span class="comment">% Assign default values.</span>
+0695         axis_point_a   = [0;0;0]*ones(1, n_body_of_revolutions);
+0696         axis_point_b   = [0;0;1]*ones(1, n_body_of_revolutions);
+0697         points{1}      = [1 1; 1 2; 2 2; 2 1];
+0698         segments{1}    = [1 2; 2 3; 3 4; 4 1];
+0699         complement_flag = false(1, n_body_of_revolutions);
+0700         
+0701         <span class="comment">% Parse all structure fields.</span>
+0702         <span class="keyword">for</span> i = 1:n_fields
+0703             <span class="keyword">switch</span> (field_names{i})
+0704                 <span class="keyword">case</span> <span class="string">'axis_point_a'</span>
+0705                     axis_point_a = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(body_of_revolution, n_body_of_revolutions, <span class="string">'body_of_revolution'</span>, field_names{i}, axis_point_a);
+0706                 <span class="keyword">case</span> <span class="string">'axis_point_b'</span>
+0707                     axis_point_b = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(body_of_revolution, n_body_of_revolutions, <span class="string">'body_of_revolution'</span>, field_names{i}, axis_point_b);
+0708                 <span class="keyword">case</span> <span class="string">'points'</span>
+0709                     points = <a href="#_sub5" class="code" title="subfunction segment_list = assign_list_of_2D_points(struct, n_structs, struct_name, field_name, default_value)">assign_list_of_2D_points</a>(body_of_revolution, n_body_of_revolutions, <span class="string">'body_of_revolution'</span>, field_names{i}, points{1});
+0710                 <span class="keyword">case</span> <span class="string">'segments'</span>
+0711                     segments = <a href="#_sub6" class="code" title="subfunction segment_list = assign_list_of_2D_or_3D_points(struct, n_structs, struct_name, field_name, default_value)">assign_list_of_2D_or_3D_points</a>(body_of_revolution, n_body_of_revolutions, <span class="string">'body_of_revolution'</span>, field_names{i}, segments{1});
+0712                 <span class="keyword">case</span> <span class="string">'complement_flag'</span>
+0713                     complement_flag = <a href="#_sub7" class="code" title="subfunction flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)">assign_flag</a>(body_of_revolution, n_body_of_revolutions, <span class="string">'body_of_revolution'</span>, field_names{i}, complement_flag);
+0714                 <span class="keyword">otherwise</span>
+0715                     error([<span class="string">'Field name ''%s'' is not valid for a body_of_revolution.\Available field names for a body_of_revolution are: '</span> <span class="keyword">...</span>
+0716                            <span class="string">'axis_point_a, axis_point_b, points, segments, and complement_flag.'</span>], field_names{i});
+0717             <span class="keyword">end</span>
+0718         <span class="keyword">end</span>
+0719         
+0720         <span class="comment">% Start geo code with an opening parenthesis.</span>
+0721         geo_code = <span class="string">'('</span>;
+0722         extra_code = <span class="string">''</span>;
+0723         
+0724         <span class="comment">% Add geo code for each body_of_revolution.</span>
+0725         <span class="keyword">for</span> i = 1:n_body_of_revolutions
+0726             
+0727             n_points = size(points{i}, 1);
+0728             n_segments = size(segments{i}, 1);
+0729             
+0730             <span class="keyword">if</span> (size(segments{i}, 2) == 2)
+0731                 extra_code = [extra_code sprintf(<span class="string">'curve2d Revolution2DCurve%d = (%g ; '</span>, i, n_points) <span class="keyword">...</span>
+0732                                                sprintf(<span class="string">'%g, %g ; '</span>, points{i}') <span class="keyword">...</span>
+0733                                                sprintf(<span class="string">' %g '</span>, n_segments) <span class="keyword">...</span>
+0734                                                sprintf(<span class="string">'; 2, %g, %g '</span>, segments{i}') <span class="keyword">...</span>
+0735                                                sprintf(<span class="string">');\n\n'</span>)];
+0736             <span class="keyword">else</span>
+0737                 extra_code = [extra_code sprintf(<span class="string">'curve2d Revolution2DCurve%d = (%g ; '</span>, i, n_points) <span class="keyword">...</span>
+0738                                                sprintf(<span class="string">'%g, %g ; '</span>, points{i}') <span class="keyword">...</span>
+0739                                                sprintf(<span class="string">' %g '</span>, n_segments) <span class="keyword">...</span>
+0740                                                sprintf(<span class="string">'; 3, %g, %g, %g '</span>, segments{i}') <span class="keyword">...</span>
+0741                                                sprintf(<span class="string">');\n\n'</span>)];
+0742             <span class="keyword">end</span>
+0743             
+0744             <span class="keyword">if</span> (complement_flag(i))
+0745                 geo_code = [geo_code <span class="string">'not '</span>];
+0746             <span class="keyword">end</span>
+0747             
+0748             geo_code = [geo_code sprintf(<span class="string">'revolution(%g, %g, %g ; %g, %g, %g ; Revolution2DCurve%d)'</span>, <span class="keyword">...</span>
+0749                         axis_point_a(:, i), axis_point_b(:, i), i)];
+0750 
+0751             <span class="keyword">if</span> (i &lt; n_body_of_revolutions)
+0752                 geo_code = [geo_code operator_string];
+0753             <span class="keyword">else</span>
+0754                 geo_code = [geo_code <span class="string">')'</span>];             
+0755             <span class="keyword">end</span>
+0756         <span class="keyword">end</span>
+0757     <span class="keyword">end</span>
+0758     
+0759     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; returning.'</span>, operator_string, 4);
+0760     
+0761 <a name="_sub12" href="#_subfunctions" class="code">function geo_code = parse_geometry_cone(cone, operator_string)</a>
+0762 
+0763     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; starting.'</span>, operator_string, 4);
+0764 
+0765     <span class="keyword">if</span> (~isstruct(cone) || isempty(cone))
+0766         error(<span class="string">'Parameter cone must be a valid structure.'</span>);        
+0767     <span class="keyword">else</span>
+0768         <span class="comment">% Get number of cones.</span>
+0769         n_cones = numel(cone);
+0770         
+0771         <span class="comment">% Get structure field names.</span>
+0772         field_names = fieldnames(cone);
+0773         n_fields = numel(field_names);
+0774         
+0775         <span class="comment">% Assign default values.</span>
+0776         top_radius      = 0.5*ones(1, n_cones);
+0777         bottom_radius   = ones(1, n_cones);
+0778         top_center      = [0;0;1]*ones(1, n_cones);
+0779         bottom_center   = [0;0;0]*ones(1, n_cones);
+0780         complement_flag = false(1, n_cones);
+0781         
+0782         <span class="comment">% Parse all structure fields.</span>
+0783         <span class="keyword">for</span> i = 1:n_fields
+0784             <span class="keyword">switch</span> (field_names{i})
+0785                 <span class="keyword">case</span> <span class="string">'top_radius'</span>
+0786                     top_radius = <a href="#_sub2" class="code" title="subfunction radius = assign_radius(struct, n_structs, struct_name, field_name, default_value)">assign_radius</a>(cone, n_cones, <span class="string">'cone'</span>, field_names{i}, top_radius);
+0787                 <span class="keyword">case</span> <span class="string">'bottom_radius'</span>
+0788                     bottom_radius = <a href="#_sub2" class="code" title="subfunction radius = assign_radius(struct, n_structs, struct_name, field_name, default_value)">assign_radius</a>(cone, n_cones, <span class="string">'cone'</span>, field_names{i}, bottom_radius);
+0789                 <span class="keyword">case</span> {<span class="string">'top_center'</span>, <span class="string">'top_centre'</span>}
+0790                     top_center = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(cone, n_cones, <span class="string">'cone'</span>, field_names{i}, top_center);
+0791                 <span class="keyword">case</span> {<span class="string">'bottom_center'</span>, <span class="string">'bottom_centre'</span>}
+0792                     bottom_center = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(cone, n_cones, <span class="string">'cone'</span>, field_names{i}, bottom_center);
+0793                 <span class="keyword">case</span> <span class="string">'complement_flag'</span>
+0794                     complement_flag = <a href="#_sub7" class="code" title="subfunction flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)">assign_flag</a>(cone, n_cones, <span class="string">'cone'</span>, field_names{i}, complement_flag);
+0795                 <span class="keyword">otherwise</span>
+0796                     error([<span class="string">'Field name ''%s'' is not valid for a cone.\Available field names for a cone are: '</span> <span class="keyword">...</span>
+0797                            <span class="string">'bottom_center, bottom_radius, top_center, top_radius, and complement_flag.'</span>], field_names{i});
+0798             <span class="keyword">end</span>
+0799         <span class="keyword">end</span>
+0800         
+0801         <span class="comment">% Start geo code with an opening parenthesis.</span>
+0802         geo_code = <span class="string">'('</span>;
+0803 
+0804         <span class="comment">% Add geo code for each cone.</span>
+0805         <span class="keyword">for</span> i = 1:n_cones
+0806             <span class="keyword">if</span> (complement_flag(i))
+0807                 geo_code = [geo_code <span class="string">'not '</span>];
+0808             <span class="keyword">end</span>
+0809             
+0810             n_vector = top_center(:,i) - bottom_center(:,i); 
+0811             
+0812             geo_code = [geo_code sprintf(<span class="string">'(cone(%g, %g, %g ; %g ; %g, %g, %g ; %g) and plane(%g, %g, %g ; %g, %g, %g) and plane(%g, %g, %g ; %g, %g, %g))'</span>, <span class="keyword">...</span>
+0813                         bottom_center(:,i), bottom_radius(i), top_center(:,i), top_radius(i), bottom_center(:,i), -n_vector, top_center(:,i), n_vector)];
+0814 
+0815             <span class="keyword">if</span> (i &lt; n_cones)
+0816                 geo_code = [geo_code operator_string];
+0817             <span class="keyword">else</span>
+0818                 geo_code = [geo_code <span class="string">')'</span>];             
+0819             <span class="keyword">end</span>
+0820         <span class="keyword">end</span>
+0821     <span class="keyword">end</span>
+0822     
+0823     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; returning.'</span>, operator_string, 4);
+0824     
+0825 <a name="_sub13" href="#_subfunctions" class="code">function [geo_code,extra_code] = parse_geometry_cylinder(cylinder, operator_string)</a>
+0826 
+0827     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; starting.'</span>, operator_string, 4);
+0828 
+0829     <span class="keyword">if</span> (~isstruct(cylinder) || isempty(cylinder))
+0830         error(<span class="string">'Parameter cylinder must be a valid structure.'</span>);        
+0831     <span class="keyword">else</span>
+0832         <span class="comment">% Get number of cylinders.</span>
+0833         n_cylinders = numel(cylinder);
+0834         
+0835         <span class="comment">% Get structure field names.</span>
+0836         field_names = fieldnames(cylinder);
+0837         n_fields = numel(field_names);
+0838         
+0839         <span class="comment">% Assign default values.</span>
+0840         radius          = ones(1, n_cylinders);
+0841         top_center      = [0;0;1]*ones(1, n_cylinders);
+0842         bottom_center   = [0;0;0]*ones(1, n_cylinders);
+0843         complement_flag = false(1, n_cylinders);
+0844         max_edge_length = inf(1,n_cylinders);;
+0845         
+0846         <span class="comment">% Parse all structure fields.</span>
+0847         <span class="keyword">for</span> i = 1:n_fields
+0848             <span class="keyword">switch</span> (field_names{i})
+0849                 <span class="keyword">case</span> <span class="string">'radius'</span>
+0850                     radius = <a href="#_sub2" class="code" title="subfunction radius = assign_radius(struct, n_structs, struct_name, field_name, default_value)">assign_radius</a>(cylinder, n_cylinders, <span class="string">'cylinder'</span>, field_names{i}, radius);     
+0851                 <span class="keyword">case</span> {<span class="string">'top_center'</span>, <span class="string">'top_centre'</span>}
+0852                     top_center = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(cylinder, n_cylinders, <span class="string">'cylinder'</span>, field_names{i}, top_center);
+0853                 <span class="keyword">case</span> {<span class="string">'bottom_center'</span>, <span class="string">'bottom_centre'</span>}
+0854                     bottom_center = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(cylinder, n_cylinders, <span class="string">'cylinder'</span>, field_names{i}, bottom_center);
+0855                 <span class="keyword">case</span> <span class="string">'complement_flag'</span>
+0856                     complement_flag = <a href="#_sub7" class="code" title="subfunction flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)">assign_flag</a>(cylinder, n_cylinders, <span class="string">'cylinder'</span>, field_names{i}, complement_flag);
+0857                 <span class="keyword">case</span> <span class="string">'max_edge_length'</span>
+0858                     <span class="keyword">for</span> ii=1:length(cylinder);
+0859                        mel = cylinder(ii).max_edge_length;
+0860                        <span class="keyword">if</span> isempty(mel)
+0861                           max_edge_length(ii) = inf;
+0862                        <span class="keyword">else</span>
+0863                           max_edge_length(ii) = mel;
+0864                        <span class="keyword">end</span>
+0865                     <span class="keyword">end</span>
+0866                 <span class="keyword">otherwise</span>
+0867                     error([<span class="string">'Field name ''%s'' is not valid for a cylinder!\nAvailable field names for a cylinder are: '</span><span class="keyword">...</span>
+0868                            <span class="string">'bottom_center, top_center, radius, max_edge_length and complement_flag.'</span>], field_names{i});
+0869             <span class="keyword">end</span>
+0870         <span class="keyword">end</span>
+0871         
+0872         <span class="comment">% Start geo code with an opening parenthesis.</span>
+0873         extra_code = <span class="string">''</span>;
+0874         geo_code = <span class="string">'('</span>;
+0875 
+0876         <span class="comment">% Add geo code for each cylinder.</span>
+0877         <span class="keyword">for</span> i = 1:n_cylinders
+0878             <span class="keyword">if</span> (complement_flag(i))
+0879                 geo_code = [geo_code <span class="string">'not '</span>];
+0880             <span class="keyword">end</span>
+0881             
+0882             n_vector = top_center(:,i) - bottom_center(:,i); 
+0883             
+0884             <span class="keyword">if</span> isinf(max_edge_length(i))
+0885                geo_code = [geo_code sprintf(<span class="string">'(cylinder(%g, %g, %g ; %g, %g, %g ; %g) and plane(%g, %g, %g ; %g, %g, %g) and plane(%g, %g, %g ; %g, %g, %g))'</span>, <span class="keyword">...</span>
+0886                            bottom_center(:,i), top_center(:,i), radius(i), bottom_center(:,i), -n_vector, top_center(:,i), n_vector)];
+0887             <span class="keyword">else</span>
+0888                tmpvar   = sprintf(<span class="string">'V%015d'</span>,round(1e15*rand));
+0889                extra_code = [extra_code, sprintf( <span class="keyword">...</span>
+0890                   <span class="string">'solid %s = cylinder(%g, %g, %g ; %g, %g, %g ; %g) -maxh=%g;\n'</span>, <span class="keyword">...</span>
+0891                   tmpvar, bottom_center(:,i), top_center(:,i), radius(i), max_edge_length(i))];
+0892                geo_code = [geo_code sprintf(<span class="string">'((%s) and plane(%g, %g, %g ; %g, %g, %g) and plane(%g, %g, %g ; %g, %g, %g))'</span>, <span class="keyword">...</span>
+0893                            tmpvar, bottom_center(:,i), -n_vector, top_center(:,i), n_vector)];
+0894             <span class="keyword">end</span>
+0895                     
+0896             <span class="keyword">if</span> (i &lt; n_cylinders)
+0897                 geo_code = [geo_code operator_string];
+0898             <span class="keyword">else</span>
+0899                 geo_code = [geo_code <span class="string">')'</span>];             
+0900             <span class="keyword">end</span>
+0901         <span class="keyword">end</span>
+0902     <span class="keyword">end</span>
+0903     
+0904     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; returning.'</span>, operator_string, 4);
+0905     
+0906 <a name="_sub14" href="#_subfunctions" class="code">function geo_code = parse_geometry_ellipsoid(ellipsoid, operator_string)</a>
+0907 
+0908     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; starting.'</span>, operator_string, 4);
+0909 
+0910     <span class="keyword">if</span> (~isstruct(ellipsoid) || isempty(ellipsoid))
+0911         error(<span class="string">'Parameter ellipsoid must be a valid structure.'</span>);        
+0912     <span class="keyword">else</span>
+0913         <span class="comment">% Get number of ellipsoids.</span>
+0914         n_ellipsoids = numel(ellipsoid);
+0915         
+0916         <span class="comment">% Get structure field names.</span>
+0917         field_names = fieldnames(ellipsoid);
+0918         n_fields = numel(field_names);
+0919   
+0920         <span class="comment">% Assign default values.</span>
+0921         axis_a          = [1;0;0]*ones(1, n_ellipsoids);
+0922         axis_b          = [0;1;0]*ones(1, n_ellipsoids);
+0923         axis_c          = [0;0;1]*ones(1, n_ellipsoids);
+0924         center          = [0;0;0]*ones(1, n_ellipsoids);
+0925         complement_flag = false(1, n_ellipsoids);
+0926         
+0927         <span class="comment">% Parse all structure fields.</span>
+0928         <span class="keyword">for</span> i = 1:n_fields
+0929             <span class="keyword">switch</span> (field_names{i})   
+0930                 <span class="keyword">case</span> {<span class="string">'center'</span>, <span class="string">'centre'</span>}
+0931                     center = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(ellipsoid, n_ellipsoids, <span class="string">'ellipsoid'</span>, field_names{i}, center);
+0932                 <span class="keyword">case</span> <span class="string">'axis_a'</span>
+0933                     axis_a = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(ellipsoid, n_ellipsoids, <span class="string">'ellipsoid'</span>, field_names{i}, axis_a);
+0934                 <span class="keyword">case</span> <span class="string">'axis_b'</span>
+0935                     axis_b = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(ellipsoid, n_ellipsoids, <span class="string">'ellipsoid'</span>, field_names{i}, axis_b);
+0936                 <span class="keyword">case</span> <span class="string">'axis_c'</span>
+0937                     axis_c = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(ellipsoid, n_ellipsoids, <span class="string">'ellipsoid'</span>, field_names{i}, axis_c);
+0938                 <span class="keyword">case</span> <span class="string">'complement_flag'</span>
+0939                     complement_flag = <a href="#_sub7" class="code" title="subfunction flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)">assign_flag</a>(ellipsoid, n_ellipsoids, <span class="string">'ellipsoid'</span>, field_names{i}, complement_flag);
+0940                 <span class="keyword">otherwise</span>
+0941                      error([<span class="string">'Field name ''%s'' is not valid for an ellipsoid!\nAvailable field names for an ellipsoid are: '</span><span class="keyword">...</span>
+0942                            <span class="string">'center, axis_a, axis_b, axis_c, and complement_flag.'</span>], field_names{i});
+0943             <span class="keyword">end</span>
+0944         <span class="keyword">end</span>
+0945         
+0946         <span class="comment">% Start geo code with an opening parenthesis.</span>
+0947         geo_code = <span class="string">'('</span>;
+0948 
+0949         <span class="comment">% Add geo code for each ellipsoid.</span>
+0950         <span class="keyword">for</span> i = 1:n_ellipsoids
+0951             <span class="keyword">if</span> (dot(axis_a(:,i), axis_b(:,i)) ~= 0)
+0952                 error(<span class="string">'axis_a and axis_b have to be perpendicular for an ellipsoid.'</span>);
+0953             <span class="keyword">elseif</span> (dot(axis_a(:,i), axis_c(:,i)) ~= 0)
+0954                 error(<span class="string">'axis_a and axis_c have to be perpendicular for an ellipsoid.'</span>);
+0955             <span class="keyword">elseif</span> (dot(axis_b(:,i), axis_c(:,i)) ~= 0)
+0956                 error(<span class="string">'axis_b and axis_c have to be perpendicular for an ellipsoid.'</span>);
+0957             <span class="keyword">end</span>
+0958             
+0959             <span class="keyword">if</span> (complement_flag(i))
+0960                 geo_code = [geo_code <span class="string">'not '</span>];
+0961             <span class="keyword">end</span>
+0962                 
+0963             geo_code = [geo_code sprintf(<span class="string">'ellipsoid(%g, %g, %g ; %g, %g, %g ; %g, %g, %g ; %g, %g, %g)'</span>, <span class="keyword">...</span>
+0964                         center(:,i), axis_a(:, i), axis_b(:,i) , axis_c(:,i))];
+0965                     
+0966             <span class="keyword">if</span> (i &lt; n_ellipsoids)
+0967                 geo_code = [geo_code operator_string];
+0968             <span class="keyword">else</span>
+0969                 geo_code = [geo_code <span class="string">')'</span>];             
+0970             <span class="keyword">end</span>
+0971         <span class="keyword">end</span>
+0972     <span class="keyword">end</span>
+0973     
+0974     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; returning.'</span>, operator_string, 4);
+0975       
+0976 <a name="_sub15" href="#_subfunctions" class="code">function geo_code = parse_geometry_elliptic_cylinder(elliptic_cylinder, operator_string)</a>
+0977 
+0978     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; starting.'</span>, operator_string, 4);
+0979 
+0980     <span class="keyword">if</span> (~isstruct(elliptic_cylinder) || isempty(elliptic_cylinder))
+0981         error(<span class="string">'Parameter elliptic_cylinder must be a valid structure.'</span>);        
+0982     <span class="keyword">else</span>
+0983         <span class="comment">% Get number of elliptic_cylinders.</span>
+0984         n_elliptic_cylinders = numel(elliptic_cylinder);
+0985         
+0986         <span class="comment">% Get structure field names.</span>
+0987         field_names = fieldnames(elliptic_cylinder);
+0988         n_fields = numel(field_names);
+0989         
+0990         <span class="comment">% Assign default values.</span>
+0991         top_center      = [0;0;1]*ones(1, n_elliptic_cylinders);
+0992         bottom_center   = [0;0;0]*ones(1, n_elliptic_cylinders);
+0993         axis_a          = [1;0;0]*ones(1, n_elliptic_cylinders);
+0994         axis_b          = [0;1;0]*ones(1, n_elliptic_cylinders);
+0995         complement_flag = false(1, n_elliptic_cylinders);
+0996         
+0997         <span class="comment">% Parse all structure fields.</span>
+0998         <span class="keyword">for</span> i = 1:n_fields
+0999             <span class="keyword">switch</span> (field_names{i})   
+1000                 <span class="keyword">case</span> {<span class="string">'top_center'</span>, <span class="string">'top_centre'</span>}
+1001                     top_center = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(elliptic_cylinder, n_elliptic_cylinders, <span class="string">'elliptic_cylinder'</span>, field_names{i}, top_center);
+1002                 <span class="keyword">case</span> {<span class="string">'bottom_center'</span>, <span class="string">'bottom_centre'</span>}
+1003                     bottom_center = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(elliptic_cylinder, n_elliptic_cylinders, <span class="string">'elliptic_cylinder'</span>, field_names{i}, bottom_center);
+1004                 <span class="keyword">case</span> <span class="string">'axis_a'</span>
+1005                     axis_a = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(elliptic_cylinder, n_elliptic_cylinders, <span class="string">'elliptic_cylinder'</span>, field_names{i}, axis_a);
+1006                 <span class="keyword">case</span> <span class="string">'axis_b'</span>
+1007                     axis_b = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(elliptic_cylinder, n_elliptic_cylinders, <span class="string">'elliptic_cylinder'</span>, field_names{i}, axis_b);
+1008                 <span class="keyword">case</span> <span class="string">'complement_flag'</span>
+1009                     complement_flag = <a href="#_sub7" class="code" title="subfunction flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)">assign_flag</a>(elliptic_cylinder, n_elliptic_cylinders, <span class="string">'elliptic_cylinder'</span>, field_names{i}, complement_flag);
+1010                 <span class="keyword">otherwise</span>
+1011                     error([<span class="string">'Field name ''%s'' is not valid for an elliptic cylinder!\nAvailable field names for an elliptic cylinder are: '</span><span class="keyword">...</span>
+1012                            <span class="string">'bottom_center, top_center, axis_a, axis_b, and complement_flag.'</span>], field_names{i});
+1013             <span class="keyword">end</span>
+1014         <span class="keyword">end</span>
+1015         
+1016         <span class="comment">% Start geo code with an opening parenthesis.</span>
+1017         geo_code = <span class="string">'('</span>;
+1018 
+1019         <span class="comment">% Add geo code for each cylinder.</span>
+1020         <span class="keyword">for</span> i = 1:n_elliptic_cylinders
+1021             <span class="keyword">if</span> (complement_flag(i))
+1022                 geo_code = [geo_code <span class="string">'not '</span>];
+1023             <span class="keyword">end</span>
+1024             
+1025             central_axis = top_center(:,i) - bottom_center(:,i);
+1026             
+1027             <span class="keyword">if</span> (dot(axis_a(:,i), axis_b(:,i)) ~= 0)
+1028                 error(<span class="string">'axis_a and axis_b have to be perpendicular for an elliptic cylinder.'</span>);
+1029             <span class="keyword">elseif</span> (dot(axis_a(:,i), central_axis(:,i)) ~= 0)
+1030                 error(<span class="string">'axis_a and the central axis have to be perpendicular for an elliptic cylinder.'</span>);
+1031             <span class="keyword">elseif</span> (dot(axis_b(:,i), central_axis(:,i)) ~= 0)
+1032                 error(<span class="string">'axis_b and the central axis have to be perpendicular for an elliptic cylinder.'</span>);
+1033             <span class="keyword">end</span>
+1034             
+1035             geo_code = [geo_code sprintf(<span class="string">'(ellipticcylinder(%g, %g, %g ; %g, %g, %g ; %g, %g, %g) and plane(%g, %g, %g ; %g, %g, %g) and plane(%g, %g, %g ; %g, %g, %g))'</span>, <span class="keyword">...</span>
+1036                         bottom_center(:,i), axis_a(:,i), axis_b(:,i), bottom_center(:,i), -central_axis, top_center(:,i), central_axis)];
+1037                     
+1038             <span class="keyword">if</span> (i &lt; n_elliptic_cylinders)
+1039                 geo_code = [geo_code operator_string];
+1040             <span class="keyword">else</span>
+1041                 geo_code = [geo_code <span class="string">')'</span>];             
+1042             <span class="keyword">end</span>
+1043         <span class="keyword">end</span>
+1044     <span class="keyword">end</span>
+1045     
+1046     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; returning.'</span>, operator_string, 4);
+1047     
+1048 <a name="_sub16" href="#_subfunctions" class="code">function geo_code = parse_geometry_half_space(half_space, operator_string)</a>
+1049 
+1050     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; starting.'</span>, operator_string, 4);
+1051 
+1052     <span class="keyword">if</span> (~isstruct(half_space) || isempty(half_space))
+1053         error(<span class="string">'Parameter half_space must be a valid structure.'</span>);        
+1054     <span class="keyword">else</span>
+1055         <span class="comment">% Get number of half_spaces.</span>
+1056         n_half_spaces = numel(half_space);
+1057         
+1058         <span class="comment">% Get structure field names.</span>
+1059         field_names = fieldnames(half_space);
+1060         n_fields = numel(field_names);
+1061         
+1062         <span class="comment">% Assign default values.</span>
+1063         point           = [0;0;0]*ones(1, n_half_spaces);
+1064         outward_normal_vector  = [0;0;1]*ones(1, n_half_spaces);
+1065         complement_flag = false(1, n_half_spaces);
+1066         
+1067         <span class="comment">% Parse all structure fields.</span>
+1068         <span class="keyword">for</span> i = 1:n_fields
+1069             <span class="keyword">switch</span> (field_names{i})  
+1070                 <span class="keyword">case</span> <span class="string">'point'</span>
+1071                     point = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(half_space, n_half_spaces, <span class="string">'half_space'</span>, field_names{i}, point);
+1072                 <span class="keyword">case</span> <span class="string">'outward_normal_vector'</span>
+1073                     outward_normal_vector = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(half_space, n_half_spaces, <span class="string">'half_space'</span>, field_names{i}, outward_normal_vector);
+1074                 <span class="keyword">case</span> <span class="string">'complement_flag'</span>
+1075                     complement_flag = <a href="#_sub7" class="code" title="subfunction flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)">assign_flag</a>(half_space, n_half_spaces, <span class="string">'half_space'</span>, field_names{i}, complement_flag);
+1076                 <span class="keyword">otherwise</span>
+1077                     error([<span class="string">'Field name ''%s'' is not valid for a half_space!\Available field names for a half_space are: '</span> <span class="keyword">...</span>
+1078                            <span class="string">'point, outward_normal_vector, and complement_flag.'</span>], field_names{i});
+1079             <span class="keyword">end</span>
+1080         <span class="keyword">end</span>
+1081         
+1082         <span class="comment">% Start geo code with an opening parenthesis.</span>
+1083         geo_code = <span class="string">'('</span>;
+1084 
+1085         <span class="comment">% Add geo code for each half_space.</span>
+1086         <span class="keyword">for</span> i = 1:n_half_spaces
+1087             <span class="keyword">if</span> (complement_flag(i))
+1088                 geo_code = [geo_code <span class="string">'not '</span>];
+1089             <span class="keyword">end</span>
+1090             
+1091             geo_code = [geo_code sprintf(<span class="string">'plane(%g, %g, %g ; %g, %g, %g)'</span>, <span class="keyword">...</span>
+1092                         point(:,i), outward_normal_vector(:,i))];
+1093                     
+1094             <span class="keyword">if</span> (i &lt; n_half_spaces)
+1095                 geo_code = [geo_code operator_string];
+1096             <span class="keyword">else</span>
+1097                 geo_code = [geo_code <span class="string">')'</span>];             
+1098             <span class="keyword">end</span>
+1099         <span class="keyword">end</span>
+1100     <span class="keyword">end</span>
+1101     
+1102     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; returning.'</span>, operator_string, 4);
+1103 
+1104 <a name="_sub17" href="#_subfunctions" class="code">function geo_code = parse_geometry_ortho_brick(ortho_brick, operator_string)</a>
+1105 
+1106     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; starting.'</span>, operator_string, 4);
+1107 
+1108     <span class="keyword">if</span> (~isstruct(ortho_brick) || isempty(ortho_brick))
+1109         error(<span class="string">'Parameter ortho_brick must be a valid structure.'</span>);        
+1110     <span class="keyword">else</span>
+1111         <span class="comment">% Get number of ortho_bricks.</span>
+1112         n_ortho_bricks = numel(ortho_brick);
+1113         
+1114         <span class="comment">% Get structure field names.</span>
+1115         field_names = fieldnames(ortho_brick);
+1116         n_fields = numel(field_names);
+1117         
+1118         <span class="comment">% Assign default values.</span>
+1119         opposite_corner_a = [0;0;0]*ones(1, n_ortho_bricks);
+1120         opposite_corner_b = [1;1;1]*ones(1, n_ortho_bricks);
+1121         complement_flag   = zeros(1, n_ortho_bricks);
+1122         
+1123         <span class="comment">% Parse all structure fields.</span>
+1124         <span class="keyword">for</span> i = 1:n_fields
+1125             <span class="keyword">switch</span> (field_names{i})  
+1126                 <span class="keyword">case</span> {<span class="string">'opposite_corner_a'</span>}
+1127                     opposite_corner_a = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(ortho_brick, n_ortho_bricks, <span class="string">'ortho_brick'</span>, field_names{i}, opposite_corner_a);
+1128                 <span class="keyword">case</span> {<span class="string">'opposite_corner_b'</span>}
+1129                     opposite_corner_b = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(ortho_brick, n_ortho_bricks, <span class="string">'ortho_brick'</span>, field_names{i}, opposite_corner_b);
+1130                 <span class="keyword">case</span> <span class="string">'complement_flag'</span>
+1131                     complement_flag = <a href="#_sub7" class="code" title="subfunction flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)">assign_flag</a>(ortho_brick, n_ortho_bricks, <span class="string">'ortho_brick'</span>, field_names{i}, complement_flag);
+1132                 <span class="keyword">otherwise</span>
+1133                     error([<span class="string">'Field name &quot;%s&quot; is not allowed for an ortho_brick!\nAllowed field names for an ortho_brick are: '</span> <span class="keyword">...</span>
+1134                            <span class="string">'opposite_corner_a, opposite_corner_b, and complement_flag.'</span>], field_names{i});
+1135             <span class="keyword">end</span>
+1136         <span class="keyword">end</span>
+1137         
+1138         <span class="comment">% Start geo code with an opening parenthesis.</span>
+1139         geo_code = <span class="string">'('</span>;
+1140 
+1141         <span class="comment">% Add geo code for each ortho_brick.</span>
+1142         <span class="keyword">for</span> i = 1:n_ortho_bricks
+1143             <span class="keyword">if</span> (complement_flag(i))
+1144                 geo_code = [geo_code <span class="string">'not '</span>];
+1145             <span class="keyword">end</span>
+1146             
+1147             geo_code = [geo_code sprintf(<span class="string">'orthobrick(%g, %g, %g ; %g, %g, %g)'</span>, <span class="keyword">...</span>
+1148                         min([opposite_corner_a(:, i) opposite_corner_b(:, i)], [], 2), <span class="keyword">...</span>
+1149                         max([opposite_corner_a(:, i) opposite_corner_b(:, i)], [], 2))];
+1150                     
+1151             <span class="keyword">if</span> (i &lt; n_ortho_bricks)
+1152                 geo_code = [geo_code operator_string];
+1153             <span class="keyword">else</span>
+1154                 geo_code = [geo_code <span class="string">')'</span>];             
+1155             <span class="keyword">end</span>
+1156         <span class="keyword">end</span>
+1157     <span class="keyword">end</span>
+1158     
+1159     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; returning.'</span>, operator_string, 4);
+1160     
+1161 <a name="_sub18" href="#_subfunctions" class="code">function geo_code = parse_geometry_parallelepiped(parallelepiped, operator_string)</a>
+1162 
+1163     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; starting.'</span>, operator_string, 4);
+1164 
+1165     <span class="keyword">if</span> (~isstruct(parallelepiped) || isempty(parallelepiped))
+1166         error(<span class="string">'Parameter parallelepiped must be a valid structure.'</span>);        
+1167     <span class="keyword">else</span>
+1168         <span class="comment">% Get number of parallelepiped.</span>
+1169         n_parallelepipeds = numel(parallelepiped);
+1170         
+1171         <span class="comment">% Get structure field names.</span>
+1172         field_names = fieldnames(parallelepiped);
+1173         n_fields = numel(field_names);
+1174         
+1175         <span class="comment">% Assign default values.</span>
+1176         vertex          = [0;0;0]*ones(1, n_parallelepipeds);
+1177         vector_a        = [1;0;0]*ones(1, n_parallelepipeds);
+1178         vector_b        = [0;1;0]*ones(1, n_parallelepipeds);
+1179         vector_c        = [0;0;1]*ones(1, n_parallelepipeds);
+1180         complement_flag = zeros(1, n_parallelepipeds);
+1181         
+1182         <span class="comment">% Parse all structure fields.</span>
+1183         <span class="keyword">for</span> i = 1:n_fields
+1184             <span class="keyword">switch</span> (field_names{i})  
+1185                 <span class="keyword">case</span> <span class="string">'vertex'</span>
+1186                     vertex = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(parallelepiped, n_parallelepipeds, <span class="string">'parallelepiped'</span>, field_names{i}, vertex);
+1187                 <span class="keyword">case</span> <span class="string">'vector_a'</span>
+1188                     vector_a = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(parallelepiped, n_parallelepipeds, <span class="string">'parallelepiped'</span>, field_names{i}, vector_a);
+1189                 <span class="keyword">case</span> <span class="string">'vector_b'</span>
+1190                     vector_b = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(parallelepiped, n_parallelepipeds, <span class="string">'parallelepiped'</span>, field_names{i}, vector_b);
+1191                 <span class="keyword">case</span> <span class="string">'vector_c'</span>
+1192                     vector_c = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(parallelepiped, n_parallelepipeds, <span class="string">'parallelepiped'</span>, field_names{i}, vector_c);
+1193                 <span class="keyword">case</span> <span class="string">'complement_flag'</span>
+1194                     complement_flag = <a href="#_sub7" class="code" title="subfunction flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)">assign_flag</a>(parallelepiped, n_parallelepipeds, <span class="string">'parallelepiped'</span>, field_names{i}, complement_flag);
+1195                 <span class="keyword">otherwise</span>
+1196                     error([<span class="string">'Field name &quot;%s&quot; is not allowed for a parallelepiped!\nAllowed field names for a parallelepiped are: '</span> <span class="keyword">...</span>
+1197                            <span class="string">'vertex, vector_a, vector_b, vector_c, and complement_flag.'</span>], field_names{i});
+1198             <span class="keyword">end</span>
+1199         <span class="keyword">end</span>
+1200         
+1201         <span class="comment">% Start geo code with an opening parenthesis.</span>
+1202         geo_code = <span class="string">'('</span>;
+1203 
+1204         <span class="comment">% Add geo code for each parallelepiped.</span>
+1205         <span class="keyword">for</span> i = 1:n_parallelepipeds
+1206             <span class="keyword">if</span> (complement_flag(i))
+1207                 geo_code = [geo_code <span class="string">'not '</span>];
+1208             <span class="keyword">end</span>
+1209              
+1210             <span class="comment">% Make sure all vectors are not coplanar.</span>
+1211             <span class="keyword">if</span> (abs(dot(vector_a(:,i), cross(vector_b(:,i), vector_c(:,i)))) &lt; eps)
+1212                 error(<span class="string">'parallelepiped(%d) description includes coplanar vectors.'</span>, i);
+1213             <span class="keyword">end</span>
+1214             
+1215             <span class="comment">% Compute opposite vertex.</span>
+1216             opposite_vertex = vertex(:,i) + vector_a(:,i) + vector_b(:,i) + vector_c(:,i);
+1217             
+1218             <span class="comment">% Compute normal vectors.</span>
+1219             n_vector_ab = cross(vector_a(:,i), vector_b(:,i));
+1220             n_vector_ac = cross(vector_a(:,i), vector_c(:,i));
+1221             n_vector_bc = cross(vector_b(:,i), vector_c(:,i));
+1222             
+1223             <span class="comment">% Check normal vectors directions.</span>
+1224             <span class="keyword">if</span> (dot(n_vector_ab, vector_c(:,i)) &lt; 0)
+1225                 n_vector_ab = -n_vector_ab;
+1226             <span class="keyword">end</span>
+1227             <span class="keyword">if</span> (dot(n_vector_ac, vector_b(:,i)) &lt; 0)
+1228                 n_vector_ac = -n_vector_ac;
+1229             <span class="keyword">end</span>
+1230             <span class="keyword">if</span> (dot(n_vector_bc, vector_a(:,i)) &lt; 0)
+1231                 n_vector_bc = -n_vector_bc;
+1232             <span class="keyword">end</span>
+1233             
+1234             geo_code = [geo_code sprintf([<span class="string">'(plane(%g, %g, %g ; %g, %g, %g) and'</span> <span class="keyword">...</span>
+1235                                           <span class="string">' plane(%g, %g, %g ; %g, %g, %g) and'</span> <span class="keyword">...</span>
+1236                                           <span class="string">' plane(%g, %g, %g ; %g, %g, %g) and'</span> <span class="keyword">...</span>
+1237                                           <span class="string">' plane(%g, %g, %g ; %g, %g, %g) and'</span> <span class="keyword">...</span>
+1238                                           <span class="string">' plane(%g, %g, %g ; %g, %g, %g) and'</span> <span class="keyword">...</span>
+1239                                           <span class="string">' plane(%g, %g, %g ; %g, %g, %g))'</span>], <span class="keyword">...</span>
+1240                         vertex(:,i), -n_vector_ab, <span class="keyword">...</span>
+1241                         vertex(:,i), -n_vector_ac, <span class="keyword">...</span>
+1242                         vertex(:,i), -n_vector_bc, <span class="keyword">...</span>
+1243                         opposite_vertex, n_vector_ab, <span class="keyword">...</span>
+1244                         opposite_vertex, n_vector_ac, <span class="keyword">...</span>
+1245                         opposite_vertex, n_vector_bc)];
+1246                     
+1247             <span class="keyword">if</span> (i &lt; n_parallelepipeds)
+1248                 geo_code = [geo_code operator_string];
+1249             <span class="keyword">else</span>
+1250                 geo_code = [geo_code <span class="string">')'</span>];             
+1251             <span class="keyword">end</span>
+1252         <span class="keyword">end</span>
+1253     <span class="keyword">end</span>
+1254     
+1255     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; returning.'</span>, operator_string, 4);
+1256     
+1257 <a name="_sub19" href="#_subfunctions" class="code">function geo_code = parse_geometry_sphere(sphere, operator_string)</a>
+1258 
+1259     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; starting.'</span>, operator_string, 4);
+1260 
+1261     <span class="keyword">if</span> (~isstruct(sphere) || isempty(sphere))
+1262         error(<span class="string">'Parameter sphere must be a valid structure.'</span>);        
+1263     <span class="keyword">else</span>
+1264         <span class="comment">% Get number of spheres.</span>
+1265         n_spheres = numel(sphere);
+1266         
+1267         <span class="comment">% Get structure field names.</span>
+1268         field_names = fieldnames(sphere);
+1269         n_fields = numel(field_names);
+1270   
+1271         <span class="comment">% Assign default values.</span>
+1272         radius          = ones(1, n_spheres);
+1273         center          = [0;0;0]*ones(1, n_spheres);
+1274         complement_flag = false(1, n_spheres);
+1275         
+1276         <span class="comment">% Parse all structure fields.</span>
+1277         <span class="keyword">for</span> i = 1:n_fields
+1278             <span class="keyword">switch</span> (field_names{i})
+1279                 <span class="keyword">case</span> {<span class="string">'center'</span>, <span class="string">'centre'</span>}
+1280                     center = <a href="#_sub3" class="code" title="subfunction point = assign_point(struct, n_structs, struct_name, field_name, default_value)">assign_point</a>(sphere, n_spheres, <span class="string">'sphere'</span>, field_names{i}, center);
+1281                 <span class="keyword">case</span> <span class="string">'radius'</span>
+1282                     radius = <a href="#_sub2" class="code" title="subfunction radius = assign_radius(struct, n_structs, struct_name, field_name, default_value)">assign_radius</a>(sphere, n_spheres, <span class="string">'sphere'</span>, field_names{i}, radius);     
+1283                 <span class="keyword">case</span> <span class="string">'complement_flag'</span>
+1284                     complement_flag = <a href="#_sub7" class="code" title="subfunction flag = assign_flag(struct, n_structs, struct_name, field_name, default_value)">assign_flag</a>(sphere, n_spheres, <span class="string">'sphere'</span>, field_names{i}, complement_flag);
+1285                 <span class="keyword">otherwise</span>
+1286                     error([<span class="string">'Field name ''%s'' is not valid for a sphere.\nAvailable field names for a sphere are: '</span> <span class="keyword">...</span>
+1287                            <span class="string">'center, radius, and complement_flag.'</span>], field_names{i});
+1288             <span class="keyword">end</span>
+1289         <span class="keyword">end</span>
+1290         
+1291         <span class="comment">% Start geo code with an opening parenthesis.</span>
+1292         geo_code = <span class="string">'('</span>;
+1293 
+1294         <span class="comment">% Add geo code for each sphere.</span>
+1295         <span class="keyword">for</span> i = 1:n_spheres
+1296             <span class="keyword">if</span> (complement_flag(i))
+1297                 geo_code = [geo_code <span class="string">'not '</span>];
+1298             <span class="keyword">end</span>
+1299                 
+1300             geo_code = [geo_code sprintf(<span class="string">'sphere(%g, %g, %g ; %g)'</span>, <span class="keyword">...</span>
+1301                         center(:,i), radius(i))];
+1302                     
+1303             <span class="keyword">if</span> (i &lt; n_spheres)
+1304                 geo_code = [geo_code operator_string];
+1305             <span class="keyword">else</span>
+1306                 geo_code = [geo_code <span class="string">')'</span>];             
+1307             <span class="keyword">end</span>
+1308         <span class="keyword">end</span>
+1309     <span class="keyword">end</span>
+1310     
+1311     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ called with &quot;%s&quot; returning.'</span>, operator_string, 4);
+1312                              
+1313 <a name="_sub20" href="#_subfunctions" class="code">function write_geo_file(geo_fn, body_solid_code, electrode_solid_code, body_extra_code, electrode_extra_code, body_extra_param, electrode_extra_param)</a>
+1314     
+1315     <span class="comment">% Open geo file for writing.</span>
+1316     fid = fopen(geo_fn, <span class="string">'w'</span>);
+1317     
+1318     <span class="keyword">if</span> (fid == -1)
+1319         error(<span class="string">'Unable to open file %s for writing.'</span>, geo_fn);
+1320     <span class="keyword">end</span>
+1321     
+1322     <span class="comment">% Write header for geo file.</span>
+1323     fprintf(fid, <span class="string">'#Automatically generated by ng_mk_geometric_models\n\n'</span>);
+1324     fprintf(fid, <span class="string">'algebraic3d\n\n'</span>);
+1325     
+1326     <span class="comment">% Assemble a string to represent the union of all bodies.</span>
+1327     total_body_solid = <span class="string">'('</span>;
+1328    
+1329     <span class="keyword">for</span> i = 1:numel(body_solid_code)
+1330         total_body_solid = [total_body_solid body_extra_param{i}.name];
+1331 
+1332         <span class="keyword">if</span> (i &lt; numel(body_solid_code))
+1333             total_body_solid = [total_body_solid <span class="string">' or '</span>];
+1334         <span class="keyword">else</span>
+1335             total_body_solid = [total_body_solid <span class="string">')'</span>];             
+1336         <span class="keyword">end</span>
+1337     <span class="keyword">end</span>
+1338     
+1339     <span class="comment">% Assemble a string to represent the union of all electrodes entering the body.</span>
+1340     total_electrode_solid = <span class="string">'('</span>;
+1341     n_total_electrode_solid = 0;
+1342    
+1343     <span class="keyword">for</span> i = 1:numel(electrode_solid_code)
+1344         <span class="keyword">if</span> (electrode_extra_param{i}.enter_body_flag)
+1345             <span class="keyword">if</span> (n_total_electrode_solid &gt; 0)
+1346                 total_electrode_solid = [total_electrode_solid <span class="string">' or '</span>];
+1347             <span class="keyword">end</span>
+1348             total_electrode_solid = [total_electrode_solid electrode_extra_param{i}.name];
+1349             n_total_electrode_solid = n_total_electrode_solid + 1;
+1350         <span class="keyword">end</span>
+1351     <span class="keyword">end</span>
+1352     total_electrode_solid = [total_electrode_solid <span class="string">')'</span>];   
+1353     
+1354     <span class="comment">% Write body_extra_code and electrode_extra_code in geo file</span>
+1355     <span class="keyword">for</span> i = 1:numel(body_extra_code)
+1356         <span class="keyword">if</span> (~isempty(body_extra_code{i}))
+1357             fprintf(fid, body_extra_code{i});
+1358         <span class="keyword">end</span>
+1359     <span class="keyword">end</span>
+1360     <span class="keyword">for</span> i = 1:numel(electrode_extra_code)
+1361         <span class="keyword">if</span> (~isempty(electrode_extra_code{i}))
+1362             fprintf(fid, electrode_extra_code{i});
+1363         <span class="keyword">end</span>
+1364     <span class="keyword">end</span>
+1365     fprintf(fid, <span class="string">'\n'</span>);
+1366  
+1367     <span class="comment">% Write electrode solids that enter the body in geo file.</span>
+1368     <span class="keyword">for</span> i = 1:numel(electrode_solid_code)
+1369         <span class="keyword">if</span> (~isempty(electrode_solid_code{i}) &amp;&amp; electrode_extra_param{i}.enter_body_flag)
+1370             fprintf(fid, <span class="string">'solid %s = %s;\n\n'</span>, electrode_extra_param{i}.name, electrode_solid_code{i});
+1371         <span class="keyword">end</span>
+1372     <span class="keyword">end</span>
+1373     
+1374     <span class="comment">% Write body solids in geo file.</span>
+1375     <span class="keyword">for</span> i = 1:numel(body_solid_code)
+1376         <span class="keyword">if</span> (n_total_electrode_solid == 0)
+1377             fprintf(fid, <span class="string">'solid %s = %s;\n\n'</span>, body_extra_param{i}.name, body_solid_code{i});
+1378         <span class="keyword">else</span>
+1379             fprintf(fid, <span class="string">'solid %s = not %s and %s;\n\n'</span>, body_extra_param{i}.name, total_electrode_solid, body_solid_code{i});            
+1380         <span class="keyword">end</span>
+1381     <span class="keyword">end</span>
+1382  
+1383     <span class="comment">% Write electrode solids that do not enter the body in geo file.</span>
+1384     <span class="keyword">for</span> i = 1:numel(electrode_solid_code)
+1385         <span class="keyword">if</span> (~isempty(electrode_solid_code{i}) &amp;&amp; ~electrode_extra_param{i}.enter_body_flag)
+1386             fprintf(fid, <span class="string">'solid %s = not %s and %s;\n\n'</span>, electrode_extra_param{i}.name, total_body_solid, electrode_solid_code{i});
+1387         <span class="keyword">end</span>
+1388     <span class="keyword">end</span>
+1389     
+1390     <span class="comment">% Write electrode tlos in geo file.</span>
+1391     <span class="keyword">for</span> i = 1:numel(electrode_solid_code)
+1392         <span class="keyword">if</span> (~isempty(electrode_solid_code{i}))
+1393             <span class="keyword">if</span> (isinf(electrode_extra_param{i}.max_edge_length))
+1394                 fprintf(fid, <span class="string">'tlo %s -col=[1,0,0] -material=%s;\n'</span>, electrode_extra_param{i}.name, electrode_extra_param{i}.name);
+1395             <span class="keyword">else</span>
+1396                 fprintf(fid, <span class="string">'tlo %s -col=[1,0,0] -material=%s -maxh=%g;\n'</span>, electrode_extra_param{i}.name, electrode_extra_param{i}.name, electrode_extra_param{i}.max_edge_length);          
+1397             <span class="keyword">end</span>
+1398         <span class="keyword">end</span>
+1399     <span class="keyword">end</span>
+1400     
+1401     <span class="comment">% Assume the first object is the main one</span>
+1402     mainobj = <span class="string">'MainNetgenObject'</span>;
+1403     fprintf(fid, <span class="string">'solid %s = %s '</span>, mainobj, body_extra_param{1}.name);
+1404     <span class="keyword">for</span> i= 2:numel(body_solid_code)
+1405        fprintf(fid, <span class="string">'and (not %s)'</span>, body_extra_param{i}.name);
+1406     <span class="keyword">end</span>
+1407     fprintf(fid, <span class="string">';\n'</span>);
+1408     body_extra_param{1}.name = mainobj; <span class="comment">% rename it for following code</span>
+1409      
+1410     <span class="comment">% Write body tlos in geo file.</span>
+1411     <span class="keyword">for</span> i = 1:numel(body_solid_code)
+1412         <span class="keyword">if</span> (isinf(body_extra_param{i}.max_edge_length))
+1413             fprintf(fid, <span class="string">'tlo %s -col=[0,1,0] -material=%s;\n'</span>, body_extra_param{i}.name, body_extra_param{i}.name);
+1414         <span class="keyword">else</span>
+1415             fprintf(fid, <span class="string">'tlo %s -col=[0,1,0] -material=%s -maxh=%g;\n'</span>, body_extra_param{i}.name, body_extra_param{i}.name, body_extra_param{i}.max_edge_length);            
+1416         <span class="keyword">end</span>
+1417     <span class="keyword">end</span>
+1418     
+1419     <span class="comment">% Close file.</span>
+1420     fclose(fid);
+1421 
+1422 <a name="_sub21" href="#_subfunctions" class="code">function mat = read_mat_from_file(fid, nrows, ncols)</a>
+1423     mat = fscanf(fid, <span class="string">'%g'</span>, [ncols, nrows])';
+1424 
+1425     <span class="comment">% Skip to next line.</span>
+1426     <span class="keyword">if</span> (~isempty(fgetl(fid)))
+1427         error(<span class="string">'Last line was only partialy read.'</span>);
+1428     <span class="keyword">end</span>
+1429     
+1430 <a name="_sub22" href="#_subfunctions" class="code">function fmdl = read_vol_file(vol_fn, electrode_extra_param)</a>
+1431 
+1432     <span class="comment">% Open file for reading.</span>
+1433     fid = fopen(vol_fn, <span class="string">'r'</span>);
+1434 
+1435     <span class="keyword">if</span> (fid == -1)
+1436         error(<span class="string">'Unable to open file %s for reading.'</span>, vol_fn);
+1437     <span class="keyword">end</span>
+1438     
+1439     <span class="comment">% Read a first line in vol file.</span>
+1440     line = fgetl(fid);
+1441    
+1442     <span class="comment">% While no EOF or &quot;endmesh&quot; keyword is found.</span>
+1443     <span class="keyword">while</span> (ischar(line) &amp;&amp; ~strcmp(line, <span class="string">'endmesh'</span>))
+1444         
+1445         <span class="comment">% Parse every line if not comment or empty line</span>
+1446         <span class="keyword">if</span> (~isempty(line) &amp;&amp; line(1) ~= <span class="string">'#'</span>) <span class="comment">% Supposing '#' is always the first character of a comment line.</span>
+1447             <span class="keyword">switch</span>(line)
+1448                 <span class="keyword">case</span> <span class="string">'mesh3d'</span>   <span class="comment">% Nothing to do.</span>
+1449                 <span class="keyword">case</span> <span class="string">'dimension'</span>
+1450                     dimension = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, 1, 1);
+1451                     <span class="keyword">if</span> (dimension ~= 3)
+1452                         error(<span class="string">'unknown dimension %g in vol file.'</span>, dimension);
+1453                     <span class="keyword">end</span>
+1454                 <span class="keyword">case</span> <span class="string">'geomtype'</span>
+1455                     geomtype = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, 1, 1);
+1456                     <span class="keyword">if</span> (geomtype ~= 0)
+1457                         error(<span class="string">'unknown %g geomtype in vol file.'</span>, geomtype);
+1458                     <span class="keyword">end</span>
+1459                 <span class="keyword">case</span> <span class="string">'surfaceelements'</span>
+1460                     <span class="comment">% # surfnr    bcnr   domin  domout      np      p1      p2      p3</span>
+1461                     n_surface_elements = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, 1, 1);
+1462                     <span class="keyword">if</span> (n_surface_elements)
+1463                         surface_elements   = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, n_surface_elements, 8);
+1464                     <span class="keyword">else</span>
+1465                         error(<span class="string">'vol file contains no surface elements. There is probably something wrong with the provided geometry description.'</span>);    
+1466                     <span class="keyword">end</span>
+1467                 <span class="keyword">case</span> <span class="string">'volumeelements'</span>
+1468                     <span class="comment">% #  matnr      np      p1      p2      p3      p4</span>
+1469                     n_volume_elements = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, 1, 1);
+1470                     <span class="keyword">if</span> (n_volume_elements)
+1471                         volume_elements   = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, n_volume_elements, 6);
+1472                     <span class="keyword">else</span>
+1473                         error(<span class="string">'vol file contains no volume elements. There is probably something wrong with the provided geometry description.'</span>);    
+1474                     <span class="keyword">end</span>
+1475                 <span class="keyword">case</span> <span class="string">'edgesegmentsgi2'</span>
+1476                     <span class="comment">% # surfid  0   p1   p2   trignum1    trignum2   domin/surfnr1    domout/surfnr2   ednr1   dist1   ednr2   dist2</span>
+1477                     n_edge_segments_sgi2 = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, 1, 1);
+1478                     edge_segments_sgi2   = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, n_edge_segments_sgi2, 12);
+1479                 <span class="keyword">case</span> <span class="string">'points'</span>
+1480                     <span class="comment">% #          X             Y             Z</span>
+1481                     n_points = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, 1, 1);
+1482                     <span class="keyword">if</span> (n_points)
+1483                         points   = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, n_points, 3);
+1484                     <span class="keyword">else</span>
+1485                         error(<span class="string">'vol file contains no points. There is probably something wrong with the provided geometry description.'</span>);                       
+1486                     <span class="keyword">end</span>
+1487                 <span class="keyword">case</span> <span class="string">'materials'</span>
+1488                     n_materials = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, 1, 1);
+1489                     <span class="keyword">if</span> (n_materials)
+1490                         materials   = cell(n_materials, 2);
+1491                         <span class="comment">% Read and parse each material line.</span>
+1492                         <span class="keyword">for</span> i = 1:n_materials
+1493                             material_line = fgetl(fid);
+1494                             sscanf_result = sscanf(material_line, <span class="string">'%g%c%s'</span>)';
+1495                             materials{i, 1} = sscanf_result(1);
+1496                             materials{i, 2} = char(sscanf_result(3:end));
+1497                         <span class="keyword">end</span>
+1498                     <span class="keyword">else</span>
+1499                         error(<span class="string">'vol file contains no materials. There is probably something wrong with the provided geometry description.'</span>);                             
+1500                     <span class="keyword">end</span>
+1501                 <span class="keyword">case</span> <span class="string">'face_colours'</span>
+1502                     <span class="comment">% #   Surfnr     Red     Green     Blue</span>
+1503                     n_face_colours = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, 1, 1);
+1504                     face_colours   = <a href="#_sub21" class="code" title="subfunction mat = read_mat_from_file(fid, nrows, ncols)">read_mat_from_file</a>(fid, n_face_colours, 4);
+1505                 <span class="keyword">otherwise</span>
+1506                     error(<span class="string">'unknown &quot;%s&quot; line in vol file.'</span>, line);
+1507             <span class="keyword">end</span>
+1508         <span class="keyword">end</span>
+1509         
+1510         <span class="comment">% Read next line in vol file.</span>
+1511         line = fgetl(fid);
+1512     <span class="keyword">end</span>
+1513     
+1514     <span class="comment">% Close file.</span>
+1515     fclose(fid);
+1516     
+1517     <span class="keyword">if</span> (~exist(<span class="string">'points'</span>, <span class="string">'var'</span>))
+1518         error(<span class="string">'Point description is missing from vol file.'</span>);
+1519     <span class="keyword">end</span>
+1520  
+1521     <span class="keyword">if</span> (~exist(<span class="string">'volume_elements'</span>, <span class="string">'var'</span>))
+1522         error(<span class="string">'Volume element description is missing from vol file.'</span>);
+1523     <span class="keyword">end</span>
+1524     
+1525     <span class="keyword">if</span> (~exist(<span class="string">'surface_elements'</span>, <span class="string">'var'</span>))
+1526         error(<span class="string">'Surface element description is missing from vol file.'</span>);
+1527     <span class="keyword">end</span>
+1528     
+1529     <span class="keyword">if</span> (~exist(<span class="string">'materials'</span>, <span class="string">'var'</span>))
+1530         error(<span class="string">'Material description is missing from vol file.'</span>);
+1531     <span class="keyword">end</span>
+1532     
+1533     <span class="comment">% Find electrode and body material indices.</span>
+1534     electrode_material = [];
+1535     <span class="keyword">for</span> i = 1:n_materials
+1536         material_name   = materials{i, 2};
+1537         material_number = materials{i, 1};
+1538         
+1539 <span class="comment">%         if (strncmp(material_name, 'electrode', 9))</span>
+1540 <span class="comment">%             % Extract electrode number from material_name</span>
+1541 <span class="comment">%             electrode_number = str2double(material_name(10:end));</span>
+1542 <span class="comment">%             electrode_material(electrode_number) = material_number;</span>
+1543 <span class="comment">%         end</span>
+1544         <span class="keyword">for</span> j = 1:numel(electrode_extra_param)
+1545             <span class="keyword">if</span> (strcmp(material_name, electrode_extra_param{j}.name))
+1546                 electrode_material(j) = material_number;
+1547             <span class="keyword">end</span>
+1548         <span class="keyword">end</span>
+1549     <span class="keyword">end</span>
+1550    
+1551     <span class="comment">% Remove electrode material if necessary</span>
+1552     original_n_nodes     = size(points, 1);
+1553     original_n_elements  = size(volume_elements, 1);
+1554     original_n_surfaces  = size(surface_elements, 1);
+1555     original_n_materials = size(materials, 1);
+1556 
+1557     <span class="keyword">for</span> i = 1:numel(electrode_material)
+1558         <span class="keyword">if</span> (~electrode_extra_param{i}.keep_material_flag)
+1559             <span class="comment">% Remove unwanted volume elements</span>
+1560             volume_elements(volume_elements(:, 1) == electrode_material(i), :) = [];
+1561 
+1562             <span class="comment">% Remove unwanted surface elements</span>
+1563             surface_elements(surface_elements(:, 3) == electrode_material(i) &amp; <span class="keyword">...</span>
+1564                              surface_elements(:, 4) == 0 | <span class="keyword">...</span>
+1565                              surface_elements(:, 4) == electrode_material(i) &amp; <span class="keyword">...</span>
+1566                              surface_elements(:, 3) == 0, :) = [];
+1567         <span class="keyword">end</span>
+1568     <span class="keyword">end</span>
+1569 
+1570     <span class="comment">% Find nodes that are now unused.</span>
+1571     unused_nodes = true(1, size(points, 1));
+1572     unused_nodes(volume_elements(:, 3:6))  = false;
+1573     unused_nodes(surface_elements(:, 6:8)) = false;     
+1574 
+1575     <span class="comment">% Remove unused points.</span>
+1576     points(unused_nodes, :) = [];
+1577 
+1578     <span class="comment">% Compute new node indices after node removal.</span>
+1579     new_node_index = (1:original_n_nodes) - cumsum(unused_nodes);   
+1580 
+1581     <span class="comment">% Update node indices for surface and volume elements.</span>
+1582     surface_elements(:, 6:8) = new_node_index(surface_elements(:, 6:8));
+1583     volume_elements(:, 3:6)  = new_node_index(volume_elements(:, 3:6));
+1584 
+1585     <span class="comment">% Find materials that are now unused.</span>
+1586     unused_materials = true(1, size(materials, 1));
+1587     unused_materials(volume_elements(:, 1)) = false;
+1588 
+1589     <span class="comment">% Remove unused materials.</span>
+1590     materials(unused_materials, :) = [];
+1591 
+1592     <span class="comment">% Compute new material indices after material removal.</span>
+1593     new_material_index = (1:original_n_materials) - cumsum(unused_materials);   
+1594 
+1595     <span class="comment">% Update material indices for volume elements.</span>
+1596     volume_elements(:, 1)  = new_material_index(volume_elements(:, 1));
+1597 
+1598     <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ Removed %d nodes, %d elements, %d surfaces and %d materials'</span>, <span class="keyword">...</span>
+1599         original_n_nodes     - size(points, 1), <span class="keyword">...</span>
+1600         original_n_elements  - size(volume_elements, 1), <span class="keyword">...</span>
+1601         original_n_surfaces  - size(surface_elements, 1), <span class="keyword">...</span>
+1602         original_n_materials - size(materials, 1), 3);
+1603     
+1604     <span class="comment">% Assign mesh data to fmdl structures.</span>
+1605     fmdl.nodes            = points;
+1606     fmdl.elems            = volume_elements(:, 3:6);
+1607     fmdl.boundary         = surface_elements(:, 6:8);
+1608     fmdl.boundary_numbers = surface_elements(:, 2);
+1609     <span class="keyword">for</span> i=1:max(volume_elements(:,1))
+1610        fmdl.mat_idx{i}    = find( volume_elements(:, 1) == i);
+1611     <span class="keyword">end</span>
+1612     fmdl.mat_name         = materials(:, 2);
+1613     
+1614     <span class="comment">% Find electrode surfaces and nodes.</span>
+1615     <span class="keyword">for</span> i = 1:numel(electrode_material)
+1616         <span class="comment">% Find surfaces that are part of the electrodes.</span>
+1617         <span class="keyword">if</span> (electrode_extra_param{i}.keep_material_flag)
+1618             electrode_boundary = <span class="keyword">...</span>
+1619                sort(find(surface_elements(:, 3) == 0 &amp; <span class="keyword">...</span>
+1620                          surface_elements(:, 4) == electrode_material(i) | <span class="keyword">...</span>
+1621                          surface_elements(:, 4) == 0 &amp; <span class="keyword">...</span>
+1622                          surface_elements(:, 3) == electrode_material(i)))';
+1623         <span class="keyword">else</span>
+1624             electrode_boundary = <span class="keyword">...</span>
+1625                 sort(find(surface_elements(:, 3) == electrode_material(i) | <span class="keyword">...</span>
+1626                           surface_elements(:, 4) == electrode_material(i)))';
+1627         <span class="keyword">end</span>
+1628      
+1629         <span class="keyword">if</span> (isempty(electrode_boundary))
+1630             <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'WARNING: Electrode #%04d has been removed since it does not contact any body.'</span>, i, 2);
+1631         <span class="keyword">else</span>
+1632             fmdl.electrode(i).boundary = electrode_boundary;
+1633             
+1634             <span class="comment">% Find nodes that are part of the electrodes.</span>
+1635             fmdl.electrode(i).nodes = <span class="keyword">...</span>
+1636                 unique(fmdl.boundary(fmdl.electrode(i).boundary(:), :))';                          
+1637 
+1638             <span class="comment">% Assign default contact impedance.</span>
+1639             fmdl.electrode(i).z_contact = 0.01;
+1640             
+1641             <span class="keyword">if</span> (~isempty(electrode_extra_param{i}.name))
+1642                 fmdl.electrode(i).name = electrode_extra_param{i}.name;
+1643             <span class="keyword">end</span>
+1644         <span class="keyword">end</span>
+1645     <span class="keyword">end</span>
+1646 
+1647 <a name="_sub23" href="#_subfunctions" class="code">function fmdl = complete_fmdl(fmdl, electrode_extra_param)</a>
+1648  
+1649     <span class="comment">% Find center point of domain.</span>
+1650     domain_center  = (max(fmdl.nodes)-min(fmdl.nodes))/2 + min(fmdl.nodes);
+1651     domain_centers = ones(size(fmdl.nodes, 1), 1)*domain_center;
+1652     
+1653     <span class="comment">% Find node closest to center for ground node.</span>
+1654     [unused, min_idx] = min(sum((fmdl.nodes - domain_centers).^2, 2));
+1655     fmdl.gnd_node     = min_idx(1);
+1656 
+1657     fmdl.np_fwd_solve.perm_sym = <span class="string">'{n}'</span>;
+1658 
+1659     fmdl.name = <span class="string">'ng_mk_geometric_models'</span>;
+1660 
+1661     fmdl.solve=      <span class="string">'eidors_default'</span>;
+1662     fmdl.jacobian=   <span class="string">'eidors_default'</span>;
+1663     fmdl.system_mat= <span class="string">'eidors_default'</span>;
+1664 
+1665     fmdl.normalize_measurements = 0;
+1666     
+1667     <span class="keyword">for</span> i = 1:numel(electrode_extra_param)
+1668         <span class="keyword">if</span> (isfield(electrode_extra_param{i}, <span class="string">'point'</span>))
+1669             <span class="comment">% Find center point of domain.</span>
+1670             electrode_points = ones(size(fmdl.nodes, 1), 1)*electrode_extra_param{i}.point';
+1671 
+1672             <span class="comment">% Find node closest to the electrode point.</span>
+1673             [unused, min_idx]       = min(sum((fmdl.nodes - electrode_points).^2, 2));
+1674             fmdl.electrode(i).nodes = min_idx(1);
+1675             fmdl.electrode(i).boundary = [];
+1676 
+1677             <span class="comment">% Assign default contact impedance.</span>
+1678             fmdl.electrode(i).z_contact = 0.01;
+1679         <span class="keyword">end</span>
+1680     <span class="keyword">end</span>
+1681 
+1682     fmdl = <a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>, fmdl);
+1683 
+1684 <a name="_sub24" href="#_subfunctions" class="code">function do_unit_test</a>
+1685     <span class="keyword">for</span> tn = 1:<a href="#_sub25" class="code" title="subfunction [fmdl, opts] = do_test_number(tn)">do_test_number</a>(0)
+1686         <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'ng_mk_geometric_models: unit_test %02d'</span>, tn, 1);
+1687         [fmdl, opts] = <a href="#_sub25" class="code" title="subfunction [fmdl, opts] = do_test_number(tn)">do_test_number</a>(tn);
+1688         subplot(1,3,1)
+1689         <a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl);
+1690         title(<span class="string">'show_fem'</span>, <span class="string">'Interpreter'</span>, <span class="string">'none'</span>, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+1691         subplot(1,3,2);
+1692         <a href="../../../eidors/graphics/matlab/show_fem_enhanced.html" class="code" title="function hh = show_fem_enhanced(mdl, options)">show_fem_enhanced</a>(fmdl, opts);
+1693         title({<span class="string">'show_fem_enhanced'</span>; <span class="string">'(default options)'</span>}, <span class="string">'Interpreter'</span>, <span class="string">'none'</span>, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+1694         subplot(1,3,3);
+1695         opts.edge.color = [0 0 1];
+1696         opts.edge.width = 0;
+1697         opts.edge.significant.color = [1 0 0];
+1698         opts.edge.significant.width = 1.5;
+1699         opts.edge.significant.viewpoint_dependent.color = [0 1 0];
+1700         opts.edge.significant.viewpoint_dependent.width = 1.5;
+1701         <a href="../../../eidors/graphics/matlab/show_fem_enhanced.html" class="code" title="function hh = show_fem_enhanced(mdl, options)">show_fem_enhanced</a>(fmdl, opts);
+1702         title({<span class="string">'show_fem_enhanced'</span>; <span class="string">'(with some options)'</span>}, <span class="string">'Interpreter'</span>, <span class="string">'none'</span>, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+1703         drawnow;
+1704         <span class="comment">%pause</span>
+1705     <span class="keyword">end</span>
+1706 
+1707 <a name="_sub25" href="#_subfunctions" class="code">function [fmdl, opts] = do_test_number(tn)</a>
+1708     opts = struct;
+1709     <span class="keyword">switch</span> tn
+1710         <span class="comment">% Simple 3D cylinder. Radius = 1 with no electrodes</span>
+1711         <span class="keyword">case</span> 1;
+1712             body_geometry.cylinder = struct;
+1713             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1714         <span class="comment">% Simple 3D cylinder. Radius = 1 with 16 spherical electrodes.</span>
+1715         <span class="keyword">case</span> 2;
+1716             body_geometry.cylinder = struct;
+1717             n_elect = 16;
+1718             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1719             <span class="keyword">for</span> i = 1:n_elect
+1720                 electrode_geometry{i}.sphere.center = [cos(theta(i)) sin(theta(i)) 0.5];
+1721                 electrode_geometry{i}.sphere.radius = 0.1;
+1722             <span class="keyword">end</span>
+1723             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1724         <span class="comment">% Simple 3D cylinder. Radius = 1 with 16 cylindrical electrodes.</span>
+1725         <span class="keyword">case</span> 3;
+1726             body_geometry.cylinder = struct;
+1727             n_elect = 16;
+1728             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1729             <span class="keyword">for</span> i = 1:n_elect
+1730                 electrode_geometry{i}.cylinder.top_center    = [1.03*cos(theta(i)) 1.03*sin(theta(i)) 0.5];
+1731                 electrode_geometry{i}.cylinder.bottom_center = [0.97*cos(theta(i)) 0.97*sin(theta(i)) 0.5];
+1732                 electrode_geometry{i}.cylinder.radius = 0.1;
+1733             <span class="keyword">end</span>
+1734             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1735         <span class="keyword">case</span> 4;
+1736             body_geometry.cylinder = struct;
+1737             n_elect = 16;
+1738             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1739             <span class="keyword">for</span> i = 1:n_elect
+1740                 electrode_geometry{i}.cylinder.top_center    = [1.03*cos(theta(i)) 1.03*sin(theta(i)) 0.5];
+1741                 electrode_geometry{i}.cylinder.bottom_center = [0.97*cos(theta(i)) 0.97*sin(theta(i)) 0.5];
+1742                 electrode_geometry{i}.cylinder.radius = 0.1;
+1743                 electrode_geometry{i}.keep_material_flag = 1;
+1744             <span class="keyword">end</span>
+1745             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1746         <span class="keyword">case</span> 5;
+1747             body_geometry.cylinder = struct;
+1748             n_elect = 16;
+1749             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1750             <span class="keyword">for</span> i = 1:n_elect
+1751                 electrode_geometry{i}.cylinder.top_center    = [1.03*cos(theta(i)) 1.03*sin(theta(i)) 0.5];
+1752                 electrode_geometry{i}.cylinder.bottom_center = [0.97*cos(theta(i)) 0.97*sin(theta(i)) 0.5];
+1753                 electrode_geometry{i}.cylinder.radius = 0.1;
+1754                 electrode_geometry{i}.enter_body_flag = 1;
+1755             <span class="keyword">end</span>
+1756             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1757         <span class="keyword">case</span> 6;
+1758             body_geometry.cylinder = struct;
+1759             n_elect = 16;
+1760             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1761             <span class="keyword">for</span> i = 1:n_elect
+1762                 electrode_geometry{i}.cylinder.top_center    = [1.03*cos(theta(i)) 1.03*sin(theta(i)) 0.5];
+1763                 electrode_geometry{i}.cylinder.bottom_center = [0.97*cos(theta(i)) 0.97*sin(theta(i)) 0.5];
+1764                 electrode_geometry{i}.cylinder.radius = 0.1;
+1765                 electrode_geometry{i}.keep_material_flag = 1;
+1766                 electrode_geometry{i}.enter_body_flag = 1;                
+1767             <span class="keyword">end</span>
+1768             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1769         <span class="keyword">case</span> 7;
+1770             body_geometry.cylinder = struct;
+1771             body_geometry.sphere.center = [0 0 1];
+1772             n_elect = 16;
+1773             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1774             <span class="keyword">for</span> i = 1:n_elect
+1775                 electrode_geometry{i}.cylinder.top_center    = [1.03*cos(theta(i)) 1.03*sin(theta(i)) 0.5];
+1776                 electrode_geometry{i}.cylinder.bottom_center = [0.97*cos(theta(i)) 0.97*sin(theta(i)) 0.5];
+1777                 electrode_geometry{i}.cylinder.radius = 0.1;
+1778             <span class="keyword">end</span>
+1779             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1780         <span class="keyword">case</span> 8;
+1781             body_geometry.cylinder  = struct;
+1782             body_geometry.sphere(1) = struct;  
+1783             body_geometry.sphere(2).center = [0 0 1];         
+1784             n_elect = 16;
+1785             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1786             <span class="keyword">for</span> i = 1:n_elect
+1787                 electrode_geometry{i}.cylinder.top_center    = [1.03*cos(theta(i)) 1.03*sin(theta(i)) 0.5];
+1788                 electrode_geometry{i}.cylinder.bottom_center = [0.97*cos(theta(i)) 0.97*sin(theta(i)) 0.5];
+1789                 electrode_geometry{i}.cylinder.radius = 0.1;
+1790             <span class="keyword">end</span>
+1791             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);   
+1792         <span class="keyword">case</span> 9;
+1793             body_geometry.intersection.cylinder(1) = struct;
+1794             body_geometry.intersection.cylinder(2).radius     = 0.5;
+1795             body_geometry.intersection.cylinder(2).complement_flag = 1;   
+1796             n_elect = 16;
+1797             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1798             <span class="keyword">for</span> i = 1:n_elect
+1799                 electrode_geometry{i}.cylinder.top_center    = [1.03*cos(theta(i)) 1.03*sin(theta(i)) 0.5];
+1800                 electrode_geometry{i}.cylinder.bottom_center = [0.97*cos(theta(i)) 0.97*sin(theta(i)) 0.5];
+1801                 electrode_geometry{i}.cylinder.radius = 0.1;
+1802             <span class="keyword">end</span>
+1803             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1804         <span class="keyword">case</span> 10;
+1805             body_geometry.intersection(1).sphere(1).radius     = 0.5;
+1806             body_geometry.intersection(1).sphere(1).center     = [0 0 2];
+1807             body_geometry.intersection(1).sphere(1).complement_flag = 1;
+1808             body_geometry.intersection(1).sphere(2).center     = [0 0 2];
+1809             body_geometry.intersection(2).cylinder(1).top_center = [0 0 2];
+1810             body_geometry.intersection(2).cylinder(2).radius     = 0.5;
+1811             body_geometry.intersection(2).cylinder(2).top_center = [0 0 2];
+1812             body_geometry.intersection(2).cylinder(2).complement_flag = 1;   
+1813             n_elect = 16;
+1814             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1815             <span class="keyword">for</span> i = 1:n_elect
+1816                 electrode_geometry{i}.cylinder.top_center    = [1.03*cos(theta(i)) 1.03*sin(theta(i)) 0.5];
+1817                 electrode_geometry{i}.cylinder.bottom_center = [0.97*cos(theta(i)) 0.97*sin(theta(i)) 0.5];
+1818                 electrode_geometry{i}.cylinder.radius = 0.1;
+1819             <span class="keyword">end</span>
+1820             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1821         <span class="keyword">case</span> 11;
+1822             body_geometry.intersection.union(1).sphere.radius = 0.5;
+1823             body_geometry.intersection.union(1).sphere.center = [0 0 2];
+1824             body_geometry.intersection.union(1).cylinder.radius = 0.5;
+1825             body_geometry.intersection.union(1).cylinder.top_center = [0 0 2];
+1826             body_geometry.intersection.union(1).complement_flag = 1;
+1827             body_geometry.intersection.union(2).sphere.center = [0 0 2];
+1828             body_geometry.intersection.union(2).cylinder.top_center = [0 0 2]; 
+1829             n_elect = 16;
+1830             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1831             <span class="keyword">for</span> i = 1:n_elect
+1832                 electrode_geometry{i}.cylinder.top_center    = [1.03*cos(theta(i)) 1.03*sin(theta(i)) 0.5];
+1833                 electrode_geometry{i}.cylinder.bottom_center = [0.97*cos(theta(i)) 0.97*sin(theta(i)) 0.5];
+1834                 electrode_geometry{i}.cylinder.radius = 0.1;
+1835             <span class="keyword">end</span>
+1836             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1837         <span class="keyword">case</span> 12;
+1838             body_geometry.cone = struct; 
+1839             n_elect = 16;
+1840             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1841             <span class="keyword">for</span> i = 1:n_elect
+1842                 electrode_geometry{i}.cylinder.top_center    = [0.85*cos(theta(i)) 0.85*sin(theta(i)) 0.5];
+1843                 electrode_geometry{i}.cylinder.bottom_center = [0.65*cos(theta(i)) 0.65*sin(theta(i)) 0.5];
+1844                 electrode_geometry{i}.cylinder.radius = 0.1;
+1845             <span class="keyword">end</span>
+1846             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1847         <span class="keyword">case</span> 13;
+1848             body_geometry.cone = struct; 
+1849             n_elect = 16;
+1850             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1851             <span class="keyword">for</span> i = 1:n_elect
+1852                 electrode_geometry{i}.sphere.center = [0.75*cos(theta(i)) 0.75*sin(theta(i)) 0.5];
+1853                 electrode_geometry{i}.sphere.radius = 0.1;
+1854             <span class="keyword">end</span>
+1855             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1856         <span class="keyword">case</span> 14;
+1857             body_geometry.cone(1).top_center = [0 0 1.5];
+1858             body_geometry.cone(1).bottom_center = [0 0 0.5];
+1859             body_geometry.cone(2).top_center = [0 0 -1.5];
+1860             body_geometry.cone(2).bottom_center = [0 0 -0.5];
+1861             body_geometry.cylinder.top_center    = [0, 0, 0.5];
+1862             body_geometry.cylinder.bottom_center = [0, 0, -0.5];
+1863             n_elect = 16;
+1864             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1865             <span class="keyword">for</span> i = 1:n_elect
+1866                 electrode_geometry{i}.sphere.center = [0.75*cos(theta(i)) 0.75*sin(theta(i)) 1.0];
+1867                 electrode_geometry{i}.sphere.radius = 0.1;
+1868                 electrode_geometry{i + n_elect}.sphere.center = [cos(theta(i)) sin(theta(i)) 0];
+1869                 electrode_geometry{i + n_elect}.sphere.radius = 0.15;
+1870                 electrode_geometry{i + 2*n_elect}.sphere.center = [0.75*cos(theta(i)) 0.75*sin(theta(i)) -1.0];
+1871                 electrode_geometry{i + 2*n_elect}.sphere.radius = 0.1;
+1872             <span class="keyword">end</span>
+1873             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1874             opts.edge.significant.angle = 15;
+1875         <span class="keyword">case</span> 15
+1876             body_geometry.ortho_brick = struct;
+1877             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1878         <span class="keyword">case</span> 16
+1879             body_geometry.intersection.ortho_brick.opposite_corner_a = [0 0 0];
+1880             body_geometry.intersection.ortho_brick.opposite_corner_b = [5 5 4];
+1881             <span class="keyword">for</span> i = 1:4; 
+1882                 <span class="keyword">for</span> j = 1:4; 
+1883                     body_geometry.intersection.cylinder(i,j).radius = 0.15;
+1884                     body_geometry.intersection.cylinder(i,j).top_center = [i, j, 4];
+1885                     body_geometry.intersection.cylinder(i,j).bottom_center = [i, j, 2];
+1886                     body_geometry.intersection.cylinder(i,j).complement_flag = 1;
+1887                 <span class="keyword">end</span>; 
+1888             <span class="keyword">end</span>;
+1889             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);    
+1890         <span class="keyword">case</span> 17
+1891             body_geometry.intersection.ortho_brick.opposite_corner_a = [0 0 0];
+1892             body_geometry.intersection.ortho_brick.opposite_corner_b = [5 5 4];
+1893             <span class="keyword">for</span> i = 1:4; 
+1894                 <span class="keyword">for</span> j = 1:4; 
+1895                     body_geometry.intersection.cylinder(i, j).radius = 0.15;
+1896                     body_geometry.intersection.cylinder(i, j).top_center    = [i, j, 4];
+1897                     body_geometry.intersection.cylinder(i, j).bottom_center = [i, j, 2];
+1898                     body_geometry.intersection.cylinder(i, j).complement_flag = 1;
+1899                     electrode_geometry{i, j, 1}.cylinder.radius        = 0.2;
+1900                     electrode_geometry{i, j, 1}.cylinder.top_center    = [i, j, 3.1];
+1901                     electrode_geometry{i, j, 1}.cylinder.bottom_center = [i, j, 2.9];
+1902                     electrode_geometry{i, j, 2}.cylinder.radius        = 0.2;
+1903                     electrode_geometry{i, j, 2}.cylinder.top_center    = [i, j, 2.2];
+1904                     electrode_geometry{i, j, 2}.cylinder.bottom_center = [i, j, 2.0];
+1905                 <span class="keyword">end</span>; 
+1906             <span class="keyword">end</span>;
+1907             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1908         <span class="keyword">case</span> 18
+1909             body_geometry.parallelepiped  = struct;
+1910             body_geometry.max_edge_length = 0.15;
+1911             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1912         <span class="keyword">case</span> 19
+1913             body_geometry.parallelepiped.vertex   = [ 0;  0;  0];
+1914             body_geometry.parallelepiped.vector_a = [ 1;  1;  0];
+1915             body_geometry.parallelepiped.vector_b = [ 0;  1;  1];
+1916             body_geometry.parallelepiped.vector_c = [ 1;  0;  1];
+1917             body_geometry.max_edge_length = 0.15;
+1918             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1919         <span class="keyword">case</span> 20
+1920             body_geometry.intersection.ortho_brick.opposite_corner_a = [-15, -15, 0];
+1921             body_geometry.intersection.ortho_brick.opposite_corner_b = [15, 15, 5];
+1922             body_geometry.intersection.half_space.point = [0, 0, 5];
+1923             body_geometry.intersection.half_space.outward_normal_vector = [-1, -1, 5];
+1924             
+1925             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1926         <span class="keyword">case</span> 21
+1927             body_geometry.ellipsoid.axis_a = [1 0 0];
+1928             body_geometry.ellipsoid.axis_b = [0 2 0];
+1929             body_geometry.ellipsoid.axis_c = [0 0 3];
+1930             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);   
+1931         <span class="keyword">case</span> 22
+1932             body_geometry.ellipsoid.axis_a = [1 0 0];
+1933             body_geometry.ellipsoid.axis_b = [0 1 1];
+1934             body_geometry.ellipsoid.axis_c = [0 -2 2];
+1935             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);   
+1936         <span class="keyword">case</span> 23
+1937             body_geometry.elliptic_cylinder.top_center = [0, 0, 10];
+1938             body_geometry.elliptic_cylinder.bottom_center = [0, 0, 0];           
+1939             body_geometry.elliptic_cylinder.axis_a = [1 0 0];
+1940             body_geometry.elliptic_cylinder.axis_b = [0 2 0];  
+1941             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1942         <span class="keyword">case</span> 24
+1943             body_geometry.elliptic_cylinder.top_center = [0, 5, 5];
+1944             body_geometry.elliptic_cylinder.bottom_center = [0, 0, 0];           
+1945             body_geometry.elliptic_cylinder.axis_a = [1 0 0];
+1946             body_geometry.elliptic_cylinder.axis_b = [0 -2 2];  
+1947             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1948         <span class="keyword">case</span> 25
+1949             body_geometry.body_of_revolution = struct;
+1950             body_geometry.max_edge_length = 0.15;
+1951             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1952         <span class="keyword">case</span> 26
+1953             body_geometry.body_of_revolution.points   = [1 1; 1 2; 2 1.5; 2 1];
+1954             body_geometry.body_of_revolution.segments = [1 2; 2 3; 3 4; 4 1];
+1955             body_geometry.max_edge_length = 0.15;
+1956             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1957         <span class="keyword">case</span> 27
+1958             n_points = 24;
+1959             theta = linspace(0, 2*pi, n_points+1)'; theta(end) = [];
+1960             body_geometry.body_of_revolution.points   = 2 + [sin(theta) cos(theta)];
+1961             body_geometry.body_of_revolution.segments = [(1:n_points)' [(2:n_points) 1]'];
+1962             body_geometry.max_edge_length = 0.15;
+1963             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1964         <span class="keyword">case</span> 28
+1965             n_points = 24;
+1966             theta = linspace(0, 2*pi, n_points+1)'; theta(end) = [];
+1967             body_geometry.body_of_revolution.points   = 2 + [sin(theta) cos(theta)];
+1968             body_geometry.body_of_revolution.segments = [(1:2:n_points)' (2:2:n_points)' [(3:2:n_points) 1]'];
+1969             body_geometry.max_edge_length = 0.15;
+1970             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+1971         <span class="keyword">case</span> 29
+1972             body_geometry{1}.cylinder(1).radius        = 0.5;
+1973             body_geometry{1}.cylinder(1).top_center    = [0 0 0.75];
+1974             body_geometry{1}.cylinder(1).bottom_center = [0 0 0.25];
+1975             body_geometry{1}.name                      = <span class="string">'Object'</span>;           
+1976             body_geometry{2}.cylinder(2).radius        = 1;
+1977             body_geometry{2}.name                      = <span class="string">'Tank'</span>;
+1978             n_elect = 16;
+1979             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1980             <span class="keyword">for</span> i = 1:n_elect
+1981                 electrode_geometry{i}.cylinder.top_center    = [1.03*cos(theta(i)) 1.03*sin(theta(i)) 0.5];
+1982                 electrode_geometry{i}.cylinder.bottom_center = [0.97*cos(theta(i)) 0.97*sin(theta(i)) 0.5];
+1983                 electrode_geometry{i}.cylinder.radius = 0.1;
+1984             <span class="keyword">end</span>
+1985             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1986         <span class="keyword">case</span> 30
+1987             body_geometry{1}.sphere.radius     = 0.25;
+1988             body_geometry{1}.sphere.center     = [0 0 0.5];
+1989             body_geometry{1}.name              = <span class="string">'Sphere'</span>;
+1990             body_geometry{2}.cylinder.radius   = 1;
+1991             body_geometry{2}.name              = <span class="string">'Tank'</span>;           
+1992             n_elect = 16;
+1993             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+1994             <span class="keyword">for</span> i = 1:n_elect
+1995                 electrode_geometry{i}.sphere.center = [cos(theta(i)) sin(theta(i)) 0.5];
+1996                 electrode_geometry{i}.sphere.radius = 0.1;
+1997             <span class="keyword">end</span>
+1998             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+1999        <span class="keyword">case</span> 31
+2000             n_sphere = 8;
+2001             theta = linspace(0, 2*pi, n_sphere+1); theta(end) = [];   
+2002             <span class="keyword">for</span> i = 1:n_sphere
+2003                 body_geometry{i}.sphere.radius   = 0.2;
+2004                 body_geometry{i}.sphere.center   = [0.65*cos(theta(i)) 0.65*sin(theta(i)) 0.5];  
+2005                 body_geometry{i}.max_edge_length = 0.025*(1 + rem(i,2));
+2006                 body_geometry{i}.name            = sprintf(<span class="string">'Sphere%d'</span>, i);  
+2007             <span class="keyword">end</span>        
+2008             body_geometry{n_sphere+1}.cylinder.radius = 1;
+2009             body_geometry{n_sphere+1}.name            = <span class="string">'Tank'</span>;  
+2010             n_elect = 16;
+2011             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+2012             <span class="keyword">for</span> i = 1:n_elect
+2013                 electrode_geometry{i}.sphere.center = [cos(theta(i)) sin(theta(i)) 0.5];
+2014                 electrode_geometry{i}.sphere.radius = 0.1;
+2015                 electrode_geometry{i}.max_edge_length = 0.025*(1 + rem(i,2));
+2016             <span class="keyword">end</span>
+2017             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+2018        <span class="keyword">case</span> 32
+2019             body_geometry.cylinder = struct;
+2020             n_elect = 16;
+2021             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+2022             <span class="keyword">for</span> i = 1:n_elect
+2023                 electrode_geometry{i}.point = [cos(theta(i)) sin(theta(i)) 0.5];
+2024             <span class="keyword">end</span>
+2025             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+2026        <span class="keyword">case</span> 33     
+2027             body_geometry.cylinder = struct;
+2028             n_elect = 16;
+2029             theta = linspace(0, 2*pi, n_elect+1); theta(end) = [];
+2030             <span class="keyword">for</span> i = 1:n_elect
+2031                 <span class="keyword">if</span> (rem(i,2))
+2032                     electrode_geometry{i}.point = [cos(theta(i)) sin(theta(i)) 0.5];
+2033                     electrode_geometry{i}.name  = sprintf(<span class="string">'Point_Electrode%d'</span>, ceil(i/2));
+2034                 <span class="keyword">else</span>
+2035                     electrode_geometry{i}.sphere.center = [cos(theta(i)) sin(theta(i)) 0.5];
+2036                     electrode_geometry{i}.sphere.radius = 0.1;
+2037                     electrode_geometry{i}.name          = sprintf(<span class="string">'Circular_Electrode%d'</span>, floor(i/2));
+2038                 <span class="keyword">end</span>
+2039             <span class="keyword">end</span>
+2040             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry, electrode_geometry);
+2041        <span class="keyword">case</span> 34
+2042             body_geometry.body_of_extrusion = struct;
+2043             body_geometry.max_edge_length = 0.15;
+2044             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+2045         <span class="keyword">case</span> 35
+2046             body_geometry.body_of_extrusion.path_points   = [0 0 0; 0.25 0 1; 0.25 0 2; 0.25 0 3; 0 0 4];
+2047             body_geometry.body_of_extrusion.path_segments = [1 2; 2 3; 3 4; 4 5];
+2048             body_geometry.max_edge_length = 0.15;
+2049             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry);
+2050        <span class="keyword">case</span> 36
+2051             n_points = 16;
+2052             theta = linspace(0, 2*pi, n_points+1)'; theta(end) = [];
+2053             body_geometry.body_of_extrusion.profile_points   = 0.2*(2 + [0.75*sin(theta) cos(theta)]);
+2054             body_geometry.body_of_extrusion.profile_segments = [(1:n_points)' [(2:n_points) 1]'];
+2055             n_points = 32;
+2056             theta = linspace(0, 2*pi, n_points+1)'; theta(end) = [];          
+2057             body_geometry.body_of_extrusion.path_points   = 1*(2 + [sin(theta) 1.5*cos(theta) zeros(n_points, 1)]);
+2058             body_geometry.body_of_extrusion.path_segments = [(1:n_points)' [(2:n_points) 1]'];
+2059             body_geometry.body_of_extrusion.vector_d      = [0; 0; 1];
+2060             body_geometry.max_edge_length = 0.15;
+2061             fmdl = <a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>(body_geometry); 
+2062         <span class="keyword">case</span> 0; fmdl = 36; <span class="comment">% Return maximum number of tests.</span>
+2063         <span class="keyword">otherwise</span>;
+2064             error(<span class="string">'Invalid test number.'</span>)
+2065     <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

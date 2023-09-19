@@ -1,0 +1,453 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="index-s.html"
+>Main</a><br>
+<a href="docs-s.html"
+   >Documentation</a><br>
+<a href="tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="download-s.html"
+   >Download</a><br>
+<a href="data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="faq-s.html">FAQ</a><br>
+<a href="programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+<h2>Samples for the EIDORS Workshop</h2>
+To run these tutorials, you need to 
+<a href="../download-s.html">download and install</a>
+EIDORS and then run this command in a matlab
+(or octave) session.
+<pre width="40">
+&gt;&gt;run /path/to/eidors3d/startup.m
+</pre>
+
+<h3>EIDORS Workshop</h3>
+<ul>
+    <li><h3>
+        <a href="./intro-s.html"
+         >Introduction</a>
+        </h3>
+
+<UL><H3>CODE</H3>
+<!--
+<pre>
+run ~/docs/eidors/eidors/startup.m
+</pre>
+-->
+<ul>
+   <li>Downloading and Installing EIDORS and Netgen
+   <li>Test that EIDORS is working
+   <li>EIDORS data structures
+   <ul>
+      <li><tt>fwd_model</tt>
+      <li><tt>inv_model</tt>
+      <li><tt>rec_model</tt>
+      <li><tt>data</tt>
+      <li><tt>image</tt>
+   </ul>
+   <li>EIDORS functions overview
+   <li>Documentation
+   <table><tr>
+    <tr><TD><a href="../doc/eidors/solvers">solvers</a>
+        <TD>forward and inverse solverse
+    <tr><TD><a href="../doc/eidors/meshing">meshing</a>
+        <TD>Interface to FEM libraries: Netgen / GMSH / distmesh
+    <tr><TD><a href="../doc/eidors/models">models</a>
+        <TD>FEM modelling tools
+    <tr><TD><a href="../doc/eidors/external">external</a>
+        <TD>Read write external file formats
+    <tr><TD><a href="../doc/eidors/graphics">graphics</a>
+        <TD>Graphics / Display functions
+    <tr><TD colspan=2><hr>
+
+    <tr><TD><a href="../doc/eidors/algorithms">algorithms</a>
+        <TD>Algorithms to process EIT images (time series)
+    <tr><TD><a href="http://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/eidors/sample_data/">sample_data</a>
+        <TD>Some sample data (deprecated, now use data_contrib)
+    <tr><TD><a href="../doc/eidors/examples">examples</a>
+        <TD>Examples (deprecated, now use tutorials)
+    <tr><TD><a href="../doc/eidors/tools">tools</a>
+        <TD>low level EIDORS tools
+    <tr><TD><a href="../doc/eidors/tests">tests</a>
+        <TD>Tests for debugging (deprecated, now in <tt>UNIT_TEST</tt>
+    <tr><TD><a href="../doc/eidors/arch">arch</a>
+        <TD>Mex files and architecture specific code
+    <tr><TD><a href="../doc/eidors/compatibility">compatibility</a>
+        <TD>Compatibility with older matlab versions
+    <tr><TD><a href="../doc/eidors/deprecated">deprecated</a>
+        <TD>Older, deprecated EIDORS files
+    <tr><TD><a href="../doc/eidors/overloads">overloads</a>
+        <TD>Override matlab functions to give extra features
+    </table>
+    <li><a href="../data_contrib-s.html">Contributed Data</a>
+    <li>Defaults
+    <li>Caching
+<pre>
+tic;
+fmdl= ng_mk_cyl_models(1,[16,.5],0.1)
+toc;
+
+fmdl.stimulation = mk_stim_patterns(16,1,[0,1],[0,1],{},1);
+img = mk_image( fmdl, 1);
+
+tic;
+vh = fwd_solve(img);
+toc
+</pre>
+      <li><b>Challenge Questions:</b>
+          <ul>
+ <li>What data are from a cute baby on EIDORS? load and display these data
+ <li>What is the speedup for larger FEM models?
+ <li>Look at inv_solve_diff_GN_one_step - what part is cached?
+          </ul>
+
+		<li> <h4> <a href="http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/tutorial010.shtml">"EIDORS basics" tutorials</a> </h4>
+   </ul>
+    
+
+    <li><h3>
+         Forward Models
+        </h3>
+     <ul>
+         <li>Finite Element Models (FEMs)
+         <li>EIDORS FEM structure
+<pre>
+>> fmdl= ng_mk_cyl_models(1,[16,.5],0.1);
+>> fmdl.stimulation = mk_stim_patterns(16,1,[0,1],[0,1],{},1) 
+fmdl =
+                     nodes: [1958x3 double]
+                     elems: [7849x4 double]
+                  boundary: [2326x3 double]
+          boundary_numbers: [2326x1 double]
+                  gnd_node: 350
+              np_fwd_solve: [1x1 struct]
+                      name: 'ng'
+                 electrode: [1x16 struct]
+                     solve: 'eidors_default'
+                  jacobian: 'eidors_default'
+                system_mat: 'eidors_default'
+                      type: 'fwd_model'
+                   mat_idx: {[7849x1 double]}
+    normalize_measurements: 0
+               stimulation: [1x16 struct]
+>> fmdl.stimulation(1)
+
+ans = 
+
+     stimulation: 'Amp'
+    stim_pattern: [16x1 double]
+    meas_pattern: [13x16 double]
+
+>> fmdl.electrode(1)
+
+ans = 
+
+    nodes: [114 115 116 117 118 119 415]
+    z_contact: 0.0100
+</pre>
+         <li> Use shape_library to obtain a human thorax contour
+			<br><tt>shape = <font color=#E0F0FE>
+			shape_library('get', 'adult_male','boundary');
+			</font></tt>		 
+		 <li> make a 2d model with 16 electrodes (width 0.1) with electrode 1 on the sternum (remember the shape must be counter-clockwise)
+		 	<br><tt>fmdl = <font color=#E0F0FE>
+			ng_mk_2d_model({flipud(shape),0.1},[16 -.17],[0.1 20]);
+			</font>show_fem(fmdl)</tt>		 
+		 <li> make a similar 3d model
+			<br><tt>fmdl = <font color=#E0F0FE>
+			ng_mk_extruded_model({1, shape, [4,49]},[16,1,0.5],[0.05 0 -1 0 60]);
+			</font>show_fem(fmdl)</tt>		 
+		 <li> add contrast using elem_select
+		 <li> solve for internal voltages
+		 <li> visualize using calc_slices
+		 <li> visualize using show_3d_slices
+		 <li> calculate current
+		 <li> calculate Jacobian
+		 <li> visualize Jacobian
+		 <li> change current pattern to N/2-1
+		 <li> compare Jacobian
+		 <li> (FEM generation 2D and 3D, Netgen, sensitivity, voltage and
+         current distributions, stimulation patterns )
+
+       <li><b>Challenge Questions:</b>
+       <ul>
+          <li>Compare the sensitivity for a slice of a 3D vs 2D tank. 
+              Why are they different?
+          <li>Create images of current flow in the thorax with various
+              values for lung conductivity. How do they vary?
+       </ul>
+
+    <li><h4>Further Tutorials on Forward Modelling </h4>
+				<ul>				
+					<li> FE model generation in Netgen
+					<ul>
+						<li> <a href="http://eidors3d.sourceforge.net/tutorial/netgen/netgen_cyl_models.shtml">Cylindrical models</a>
+						<li> <a href="http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/thoraxmdl.shtml">Human (extruded) thorax model</a>
+						<li> <a href="http://eidors3d.sourceforge.net/tutorial/netgen/mk_library_model.shtml">Pre-packaged models</a>
+						<li> <a href="http://eidors3d.sourceforge.net/tutorial/netgen/meshsize_parameter.shtml">Effects of mesh refinement</a>
+					</ul>
+					<li> FE approximations
+					<ul>
+						<li> <a href="./EIDORS_basics/forward_solvers_2d_high_order-s.html"> Higher order (2nd, 3rd) finite elements in 2D</a>
+						<li> <a href="./EIDORS_basics/forward_solvers_3d_high_order-s.html"> Higher order (2nd) finite elements in 3D</a>
+					</ul>
+					<li> Electrode modelling
+					<ul>
+						<li> <a href="http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/electrode_errors.shtml"> Estimating and managing electrode errors</a>
+						<li> <a href = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/contact_impedance.shtml"> Contact impedance</a>
+					</ul>
+   				<li> Physics
+				</ul>	
+     </ul>
+
+    <li><h3>
+         Reconstructions
+        </h3>
+		<ul>
+		<li> finemdl = 
+		<li> coarsemdl
+		<li> imdl = mk_common_mdl
+<pre>
+>> fmdl = ng_mk_cyl_models(0,16,0.05);
+>> imdl = select_imdl(fmdl,{'Basic GN dif'})
+imdl =
+              name: 'Basic imdl from select_imdl'
+              type: 'inv_model'
+             solve: @inv_solve_diff_GN_one_step
+    hyperparameter: [1x1 struct]
+         RtR_prior: @prior_laplace
+    jacobian_bkgnd: [1x1 struct]
+      reconst_type: 'difference'
+         fwd_model: [1x1 struct]
+</pre>
+		<li> select_imdl(imdl, 'Basic GN')
+		<li> inv_solve with inverse crime
+		<li> inv_solve w/o inverse crime
+		<li> show_slices
+		<li> use mk_pixel_grid to setup a dual model
+		<li> manually change hyperparam
+		<li> select_imdl('Choose NF')
+<pre>
+>> imdl = mk_common_model('c2c2',16);
+>> imdl = select_imdl(imdl,{'Choose NF=1.0'})
+</pre>
+		<li> ( 2D and 3D FEMS, inverse crime, visualization functions,
+      hyperparameter choice, functions: select_imdl ,
+      functions: mk_pixel_grid )
+
+       <li> <b>Challenge Questions:</b>
+   Using simulated and real data, test the effect of 
+          
+       <ul>
+          <li>different model shapes
+          <li>different priors
+          <li>hyperparameter.value
+          <li>noise figure
+       </ul>
+
+
+    <li><h4> Further Tutorials on Reconstruction </h4>
+				<ul>
+					<li> Dual modelling
+					<ul>
+						<li> <a href = "http://eidors3d.sourceforge.net/tutorial/dual_model/dual_model_intro.shtml">Introduction to dual models</a>
+						<li> <a href = "http://eidors3d.sourceforge.net/tutorial/dual_model/centre_slice.shtml"> Reconstruct a 3D volume onto a triangulated mesh</a>
+						<li> <a href = "http://eidors3d.sourceforge.net/tutorial/dual_model/square_mesh.shtml"> Reconstruct a 3D volume onto a rectangular mesh </a>
+					</ul>
+					<li> Absolute reconstructions
+					<ul>
+						<li> <a href = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/basic_iterative.shtml"> Iterative Gauss-Newton solvers in 3D</a>
+						<li> <a href = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/rpi_data.shtml"> Iterative vs one-step Gauss-Newton solvers using RPI data</a>
+						<li> <a href = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/total_variation.shtml"> Total Variation solvers in 2D</a>
+					</ul>
+	<!--				<li> jacobian_background								-->
+				</ul>
+		</ul>
+    
+
+    <li><h3>
+        <a href="./EIDORS_workshop/GREIT-s.html"
+         >GREIT</a>
+        </h3>
+		<ul>
+		<li> String interface
+		<li> Custom model (for a 2 ring cyl)
+		<li> Use ng_write_opt to increase minimum elem size and build a coarse pig model
+		<li> imdl1 = mk_GREIT_model (fmdl)
+		<li> Set the lungs to have 0.3 conductivity
+		<li> vh =
+		<li> vi = 
+		<li> compare reconstructions 
+		<li>( GREIT algorithm, adapting shape, background conductivity,
+		working with sample data )
+
+		<li> <h4>Further Tutorials on GREIT</h4>
+					<ul>
+						<li> <a href="http://eidors3d.sourceforge.net/tutorial/GREIT/adult_ex.shtml">2D human thorax</a>
+						<li> <a href="http://eidors3d.sourceforge.net/tutorial/GREIT/k_GREIT_mat_2layer.shtml">Multiple electrode layers</a>
+						<li> <a href="http://eidors3d.sourceforge.net/tutorial/GREIT/vox_GREIT_sim.shtml">3D reconstruction</a>
+					</ul>
+		</ul>
+
+    <li><h3>
+        <a href="./EIDORS_workshop/live-s.html"
+         >Live data</a>
+        </h3>
+				<ul>
+					<li> Working with live data from tank
+					<li> GREIT competition
+					<li> <a href="http://eidors3d.sourceforge.net/data_contrib.shtml">How to contribute data?</a>
+				</ul>
+
+    <li><h3>
+        <a href="./EIDORS_workshop/Applications-s.html">Assorted Tutorials on specific applications of EIT</a>
+        </h3>
+
+				
+				<ul>
+				<li> <h4> Respiratory Monitoring </h4>
+				<ul>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/lung_EIT/cg_2012_ards_recruitment.shtml">Lung recruitment in ARDS</a>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/lung_EIT/if_peep_trial.shtml">Lung injury after PEEP trial images</a>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/lung_EIT/if_lung_injury.shtml">Ventilation changes after lung injury</a>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/GREIT/neonate_ex.shtml">Neonate lung images</a>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial310-lung-images.shtml">Human shallow breathing</a>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial410-stomach-images.shtml">Stomach emptying images</a>
+				</ul>
+				<li> <h4> Geophysical </h4>
+				<ul>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/geophysics/pont_pean.shtml">Pont P&eacutean region</a>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/geophysics/tutorial410-hole-model.shtml">Borehole EIT</a>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/geophysics/tunnelsim.shtml">EIT in a tunnel</a>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/geophysics/surface_sim.shtml">3D surface electrode system</a>
+					<li><a href="http://eidors3d.sourceforge.net/tutorial/geophysics/stimPattern_pseudoSection.shtml">Stimulation patterns and pseudo-section representation</a>
+				</ul>
+	</yl>
+
+</ul>
+
+
+<h3>
+Other interesting Tutorials
+</h3>
+
+Here are useful tutorials to start with:
+<ul>
+<li>
+<h3>
+<a href="../tutorial/EIDORS_basics/tutorial010-s.html"
+     >EIDORS Basics</a>
+</h3>
+
+<li>
+<h3>
+<a href="../tutorial/EIDORS_basics/rpi_data-s.html"
+     >Absolute and difference solvers</a>
+</h3>
+
+<li>
+<h3>
+<a href="../tutorial/lung_EIT/if_peep_trial-s.html"
+     >Lung injury images</a>
+</h3>
+
+<li>
+<h3>
+<a href="../tutorial/netgen/netgen_cyl_models-s.html"
+     >Netgen FEM models</a>
+</h3>
+
+<li>
+<h3>
+<a href="../tutorial/GREIT/adult_ex-s.html"
+     >GREIT</a>
+</h3>
+</yl>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-04-28 11:39:30 -0400 (Fri, 28 Apr 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      <p><li><b>
+      </b><br>
+      <ul>
+      </ul>
+      <i>Questions</i>:
+      <br>&minus;
+
+      -->

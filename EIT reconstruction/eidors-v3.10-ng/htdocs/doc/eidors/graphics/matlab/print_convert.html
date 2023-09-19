@@ -1,0 +1,425 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of print_convert</title>
+  <meta name="keywords" content="print_convert">
+  <meta name="description" content="PRINT_CONVERT: print figures with anti-aliasing and trim them">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; print_convert.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>print_convert
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PRINT_CONVERT: print figures with anti-aliasing and trim them</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function print_convert(filename, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">PRINT_CONVERT: print figures with anti-aliasing and trim them
+  PRINT_CONVERT(FILENAME,OPT) prints current figure to FILENAME, which 
+  must include extenstion.
+
+  OPT is either a string specifying dpi in the format '-r150' or a struct
+  with (some of) these fields:
+   opt.resolution   = 150;              % 150 dpi (default: 125)
+   opt.pagesize     = [width, height];  % whatever matlab's current units
+   opt.jpeg_quality = 85;               % jpeg quality (default: 85)
+   opt.imwrite_opts = {'BitDepth',8};   % options to IMWRITE (default: '')
+   opt.horz_cut     = 50;               % remove horizontal gaps larger
+                                        % than 50 pixels (default: 0)
+   opt.horz_space   = 10;               % replace the removed horizontal
+                                        % gaps with 10 px of background
+   opt.vert_cut     = 50;               % remove vertical gaps larger
+                                        % than 50 pixels (default: 0)
+   opt.vert_space   = 10;               % replace the removed vertical
+                                        % gaps with 10 px of background
+   opt.supersampling_factor = 2;        % anti-aliasing (default: 1 for
+                                        % images, 2 for graphs). Higher is
+                                        % smoother.
+   opt.crop_slack   = [top,bot,left,right] %don't crop right to boundary
+   opt.figno        = number            % print figure, otherwise gca
+
+  Note that opt.imwrite_opts takes precedence over opt.jpeq_quality.
+
+  print_convert has pre-version 3.7 options, which are deprecated
+
+  Examples
+   print_convert('outname.png')         % uses default options
+   print_convert outname.png
+   print_convert outname.png -r150       % set dpi=150
+   print_convert('outname.png',opts);   % use options
+
+ See also IMWRITE</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../../eidors/external/export_fig/bitmap_downsize.html" class="code" title="function A = bitmap_downsize(A, factor)">bitmap_downsize</a>	BITMAP_DONWSIZE scale down an image (anti-aliasing)</li><li><a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>	PRINT_CONVERT: print figures with anti-aliasing and trim them</li><li><a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="../../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>	PRINT_CONVERT: print figures with anti-aliasing and trim them</li><li><a href="../../../eidors/solvers/forward/tools-beta/calc_error_norms_for_square_domain.html" class="code" title="function [L2_tot_error,H1semi_tot_error,H1_tot_error,I_err,U_errS,U_errM,U_errSM,timing_solver,DOF]=error_2D_squ_CEM(img,eletype,plot_on)">calc_error_norms_for_square_domain</a>	Get forward model of the img and the conductivity per element</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function im = crop_image(im,pp)</a></li><li><a href="#_sub2" class="code">function f = default_factor</a></li><li><a href="#_sub3" class="code">function fmt = parse_format(filename)</a></li><li><a href="#_sub4" class="code">function pp = parse_options(filename,varargin)</a></li><li><a href="#_sub5" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function print_convert(filename, varargin)</a>
+0002 <span class="comment">%PRINT_CONVERT: print figures with anti-aliasing and trim them</span>
+0003 <span class="comment">%  PRINT_CONVERT(FILENAME,OPT) prints current figure to FILENAME, which</span>
+0004 <span class="comment">%  must include extenstion.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%  OPT is either a string specifying dpi in the format '-r150' or a struct</span>
+0007 <span class="comment">%  with (some of) these fields:</span>
+0008 <span class="comment">%   opt.resolution   = 150;              % 150 dpi (default: 125)</span>
+0009 <span class="comment">%   opt.pagesize     = [width, height];  % whatever matlab's current units</span>
+0010 <span class="comment">%   opt.jpeg_quality = 85;               % jpeg quality (default: 85)</span>
+0011 <span class="comment">%   opt.imwrite_opts = {'BitDepth',8};   % options to IMWRITE (default: '')</span>
+0012 <span class="comment">%   opt.horz_cut     = 50;               % remove horizontal gaps larger</span>
+0013 <span class="comment">%                                        % than 50 pixels (default: 0)</span>
+0014 <span class="comment">%   opt.horz_space   = 10;               % replace the removed horizontal</span>
+0015 <span class="comment">%                                        % gaps with 10 px of background</span>
+0016 <span class="comment">%   opt.vert_cut     = 50;               % remove vertical gaps larger</span>
+0017 <span class="comment">%                                        % than 50 pixels (default: 0)</span>
+0018 <span class="comment">%   opt.vert_space   = 10;               % replace the removed vertical</span>
+0019 <span class="comment">%                                        % gaps with 10 px of background</span>
+0020 <span class="comment">%   opt.supersampling_factor = 2;        % anti-aliasing (default: 1 for</span>
+0021 <span class="comment">%                                        % images, 2 for graphs). Higher is</span>
+0022 <span class="comment">%                                        % smoother.</span>
+0023 <span class="comment">%   opt.crop_slack   = [top,bot,left,right] %don't crop right to boundary</span>
+0024 <span class="comment">%   opt.figno        = number            % print figure, otherwise gca</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%  Note that opt.imwrite_opts takes precedence over opt.jpeq_quality.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%  print_convert has pre-version 3.7 options, which are deprecated</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%  Examples</span>
+0031 <span class="comment">%   print_convert('outname.png')         % uses default options</span>
+0032 <span class="comment">%   print_convert outname.png</span>
+0033 <span class="comment">%   print_convert outname.png -r150       % set dpi=150</span>
+0034 <span class="comment">%   print_convert('outname.png',opts);   % use options</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% See also IMWRITE</span>
+0037  
+0038 <span class="comment">% (C) Andy Adler and Bartlomiej Grychtol 2010-2013. License: GPL v2 or v3.</span>
+0039 <span class="comment">% $Id: print_convert.m 5924 2019-03-20 07:56:29Z aadler $</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%  Compatibility with pre-3.7 features:</span>
+0042 <span class="comment">%  ------------------------------------</span>
+0043 <span class="comment">%  PRINT_CONVERT(FILENAME, OPTIONS, PAGEHWR)</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%  FILENAME : filename to print to file type is the extension</span>
+0046 <span class="comment">%  OPTIONS  : specify dpi as '-density N'</span>
+0047 <span class="comment">%  PAGEHWR  : set page hight/width to control shape of figures</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">%   print_convert('outname.png','-density 150') % resolution to 150 dpi</span>
+0050 <span class="comment">%   print_convert('outname.png','-density 150', 0.5)</span>
+0051  
+0052 <span class="keyword">if</span> ischar(filename) &amp;&amp; strcmp(filename,<span class="string">'UNIT_TEST'</span>); <a href="#_sub5" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0053 
+0054 pp = <a href="#_sub4" class="code" title="subfunction pp = parse_options(filename,varargin)">parse_options</a>(filename, varargin{:});
+0055 
+0056 tmpnam = [tempname,<span class="string">'.png'</span>];
+0057 
+0058 old_ihc = get(pp.figno, <span class="string">'InvertHardcopy'</span>);
+0059 old_col = get(pp.figno, <span class="string">'Color'</span>);
+0060 set(pp.figno,<span class="string">'InvertHardCopy'</span>,<span class="string">'off'</span>); 
+0061 set(pp.figno,<span class="string">'Color'</span>,<span class="string">'w'</span>);
+0062 
+0063 set(pp.figno,<span class="string">'PaperPosition'</span>,pp.posn); <span class="comment">% I wish matlab had unwind protect - like octave does!</span>
+0064 <span class="comment">%%% The -dpng driver is broken in R2014a on linux (and maybe others);</span>
+0065 print(pp.figno,<span class="string">'-dpng'</span>,pp.resolution,tmpnam);
+0066 set(pp.figno,<span class="string">'PaperPosition'</span>,pp.page);
+0067  
+0068 set(pp.figno,<span class="string">'InvertHardCopy'</span>,old_ihc); <span class="comment">%</span>
+0069 set(pp.figno,<span class="string">'Color'</span>,old_col);
+0070  
+0071 im = imread(tmpnam,<span class="string">'png'</span>);
+0072 delete(tmpnam);
+0073 
+0074 im = <a href="../../../eidors/external/export_fig/bitmap_downsize.html" class="code" title="function A = bitmap_downsize(A, factor)">bitmap_downsize</a>(im, pp.factor);
+0075 im = <a href="#_sub1" class="code" title="subfunction im = crop_image(im,pp)">crop_image</a>(im,pp);
+0076 <span class="keyword">try</span>
+0077    imwrite(im,filename,pp.imwrite_opts{:});
+0078 <span class="keyword">catch</span> e
+0079    <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>([<span class="string">'Call to IMWRITE failed.'</span><span class="keyword">...</span>
+0080                <span class="string">'Probably opt.imwrite_opts is incorrect for %s files.'</span>],<span class="keyword">...</span>
+0081                upper(pp.fmt), 1);
+0082    disp(<span class="string">'opt.imwrite_opts:'</span>);
+0083    disp(pp.imwrite_opts);
+0084    rethrow(e);
+0085 <span class="keyword">end</span>
+0086 
+0087 <a name="_sub1" href="#_subfunctions" class="code">function im = crop_image(im,pp)</a>
+0088    tu = pp.crop_slack(1);
+0089    bu = pp.crop_slack(2) + 1; <span class="comment">%remove starting one more</span>
+0090    lu = pp.crop_slack(3);
+0091    ru = pp.crop_slack(4) + 1;
+0092 
+0093    szim = size(im);
+0094    bdr = squeeze(mean(double(im(1,:,:)),2));
+0095  
+0096    isbdr = true(szim(1),szim(2));
+0097    <span class="keyword">for</span> i=1:szim(3);
+0098      isbdr = isbdr &amp; (im(:,:,i) == bdr(i));
+0099    <span class="keyword">end</span>
+0100  
+0101    horz = [true,all(isbdr,1),true];
+0102    horzpt = find(diff(horz)) - 1; <span class="comment">% first 'true'</span>
+0103    <span class="keyword">if</span> isempty(horzpt)
+0104       <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'Image is blank. Cropping aborted.'</span>,1);
+0105       <span class="keyword">return</span>
+0106    <span class="keyword">end</span>
+0107    im(:,horzpt(end)+ru:<span class="keyword">end</span>,:)= []; <span class="comment">% remove higher first</span>
+0108    <span class="keyword">if</span> pp.horz_cut &gt;0;
+0109       horz_e_pt = find(diff(horz)==-1) -1; horz_e_pt(1) = [];
+0110       horz_s_pt = find(diff(horz)==+1)   ; horz_s_pt(end) = [];
+0111       idx = find(horz_e_pt - horz_s_pt &gt; pp.horz_cut);
+0112       <span class="keyword">for</span> i=fliplr(idx) <span class="comment">% remove higher first</span>
+0113         im(:,horz_s_pt(i)+pp.horz_space:horz_e_pt(i),:)= [];
+0114       <span class="keyword">end</span>
+0115    <span class="keyword">end</span>
+0116    im(:,1:horzpt(1)-lu ,:)= [];
+0117  
+0118    vert = [true,all(isbdr,2)',true];
+0119    vertpt = find(diff(vert)) - 1; <span class="comment">% first 'true'</span>
+0120    im(vertpt(end)+bu:<span class="keyword">end</span>,:,:)= [];
+0121    <span class="keyword">if</span> pp.vert_cut &gt;0;
+0122       vert_e_pt = find(diff(vert)==-1) -1; vert_e_pt(1) = [];
+0123       vert_s_pt = find(diff(vert)==+1)   ; vert_s_pt(end) = [];
+0124       idx = find(vert_e_pt - vert_s_pt &gt; pp.vert_cut);
+0125       <span class="keyword">for</span> i=fliplr(idx) <span class="comment">% remove higher first</span>
+0126         im(vert_s_pt(i)+pp.vert_space:vert_e_pt(i),:,:)= [];
+0127       <span class="keyword">end</span>
+0128    <span class="keyword">end</span>
+0129    im(1:vertpt(1)-tu ,:,:)= [];
+0130  
+0131     
+0132 <span class="comment">% factor = 1 if all plots only contain images, 2 otherwise</span>
+0133 <a name="_sub2" href="#_subfunctions" class="code">function f = default_factor</a>
+0134    f = 1; <span class="comment">% default for images</span>
+0135    sp = get(gcf,<span class="string">'Children'</span>); <span class="comment">% subplots</span>
+0136    <span class="keyword">for</span> i = 1:length(sp)
+0137       obj = get(sp(i),<span class="string">'Children'</span>);
+0138       tp  = get(obj,<span class="string">'Type'</span>);
+0139       <span class="keyword">if</span> ~all(strcmp(tp,<span class="string">'image'</span>))
+0140          f = 2;
+0141          <span class="keyword">return</span>;
+0142       <span class="keyword">end</span>
+0143    <span class="keyword">end</span> 
+0144    
+0145 <a name="_sub3" href="#_subfunctions" class="code">function fmt = parse_format(filename)   </a>
+0146     ext = lower(regexp(filename,<span class="string">'(?&lt;=\.).+$'</span>,<span class="string">'match'</span>));
+0147     <span class="keyword">if</span> isempty(ext); error(<span class="string">'no filename extension detected (%s)'</span>,filename); <span class="keyword">end</span>
+0148     <span class="keyword">switch</span> ext{1}
+0149        <span class="keyword">case</span> {<span class="string">'jpg'</span>, <span class="string">'jpeg'</span>}
+0150           fmt = <span class="string">'jpg'</span>;
+0151        <span class="keyword">case</span> {<span class="string">'j2c'</span>, <span class="string">'j2k'</span>, <span class="string">'jp2'</span>}
+0152           fmt = <span class="string">'jp2'</span>;
+0153        <span class="keyword">case</span> {<span class="string">'tif'</span>,<span class="string">'tiff'</span>}
+0154           fmt = <span class="string">'tif'</span>;
+0155        <span class="keyword">otherwise</span>
+0156           fmt = ext{1};
+0157     <span class="keyword">end</span>
+0158        
+0159 <a name="_sub4" href="#_subfunctions" class="code">function pp = parse_options(filename,varargin)</a>
+0160    
+0161    pp.fmt = <a href="#_sub3" class="code" title="subfunction fmt = parse_format(filename)">parse_format</a>(filename);
+0162 
+0163    pp.page = get(gcf,<span class="string">'PaperPosition'</span>);
+0164    pp.posn = pp.page;
+0165    pp.jpeg_quality = 85; <span class="comment">% default jpeg quality</span>
+0166    pp.imwrite_opts = {}; <span class="comment">% initial</span>
+0167    pp.horz_cut = 50;
+0168    pp.horz_space = 10;
+0169    pp.vert_cut = 50;
+0170    pp.vert_space = 10;
+0171    pp.factor = <a href="#_sub2" class="code" title="subfunction f = default_factor">default_factor</a>;
+0172    pp.resolution = sprintf(<span class="string">'-r%d'</span>,125 * pp.factor);
+0173    pp.crop_slack = [0,0,0,0];
+0174    <span class="keyword">if</span> exist(<span class="string">'OCTAVE_VERSION'</span>)
+0175       pp.figno = gcf;
+0176    <span class="keyword">else</span>
+0177       pp.figno = get(gcf,<span class="string">'Number'</span>);
+0178    <span class="keyword">end</span>
+0179    
+0180    
+0181  
+0182 <span class="comment">% Old options</span>
+0183    <span class="keyword">if</span> nargin&lt; 2;   
+0184       <span class="keyword">return</span>; 
+0185    <span class="keyword">end</span>
+0186    <span class="keyword">if</span> nargin&gt;=3
+0187       pp.posn(4) = pp.posn(3)*varargin{2};  
+0188    <span class="keyword">end</span>
+0189  
+0190    opt = varargin{1};
+0191    <span class="keyword">if</span> ischar(opt)
+0192       val =regexp(opt,<span class="string">'-density (\d+)'</span>,<span class="string">'tokens'</span>);
+0193       <span class="keyword">if</span> ~isempty(val);
+0194          pp.resolution = sprintf(<span class="string">'-r%d'</span>, str2double(val{1}{1}) * pp.factor);
+0195       <span class="keyword">end</span>
+0196       val =regexp(opt,<span class="string">'-r(\d+)'</span>,<span class="string">'tokens'</span>);
+0197       <span class="keyword">if</span> ~isempty(val);
+0198          pp.resolution = sprintf(<span class="string">'-r%d'</span>, str2double(val{1}{1}) * pp.factor);
+0199       <span class="keyword">end</span>
+0200    <span class="keyword">elseif</span> isstruct(opt)
+0201      <span class="keyword">if</span> isfield(opt,<span class="string">'figno'</span>);
+0202         pp.figno = opt.figno;
+0203         pp.page = get(pp.figno,<span class="string">'PaperPosition'</span>);
+0204         pp.posn = pp.page;
+0205      <span class="keyword">end</span>
+0206      <span class="keyword">if</span> isfield(opt,<span class="string">'supersampling_factor'</span>)
+0207         pp.factor = opt.supersampling_factor;
+0208      <span class="keyword">end</span>
+0209      <span class="keyword">if</span> isfield(opt,<span class="string">'resolution'</span>);
+0210          pp.resolution = sprintf(<span class="string">'-r%d'</span>, opt.resolution * pp.factor);
+0211      <span class="keyword">else</span>
+0212          pp.resolution = sprintf(<span class="string">'-r%d'</span>,125 * pp.factor);
+0213      <span class="keyword">end</span>
+0214      <span class="keyword">if</span> isfield(opt,<span class="string">'pagesize'</span>);
+0215          pp.posn(3:4) = opt.pagesize;
+0216      <span class="keyword">end</span>
+0217      <span class="comment">% TODO, this code can copy from opt to pp</span>
+0218      <span class="keyword">if</span> isfield(opt,<span class="string">'jpeg_quality'</span>)
+0219         pp.jpeg_quality = opt.jpeg_quality;
+0220      <span class="keyword">end</span>
+0221      <span class="keyword">if</span> strcmp(pp.fmt,<span class="string">'jpg'</span>)
+0222         pp.imwrite_opts = {<span class="string">'quality'</span>,pp.jpeg_quality}; 
+0223      <span class="keyword">end</span>
+0224      <span class="keyword">if</span> isfield(opt,<span class="string">'imwrite_opts'</span>);
+0225         pp.imwrite_opts = opt.imwrite_opts;
+0226         <span class="keyword">if</span> strcmp(pp.fmt,<span class="string">'jpg'</span>) &amp;&amp; ~any(strcmpi(pp.imwrite_opts,<span class="string">'quality'</span>))
+0227            pp.imwrite_opts(end+1:end+2) = {<span class="string">'quality'</span>,pp.jpeg_quality};
+0228         <span class="keyword">end</span>
+0229      <span class="keyword">end</span>
+0230     
+0231      <span class="keyword">if</span> isfield(opt,<span class="string">'horz_cut'</span>);
+0232          pp.horz_cut = opt.horz_cut;
+0233      <span class="keyword">end</span>
+0234      <span class="keyword">if</span> isfield(opt,<span class="string">'vert_cut'</span>);
+0235          pp.vert_cut = opt.vert_cut;
+0236      <span class="keyword">end</span>
+0237      <span class="keyword">if</span> isfield(opt,<span class="string">'vert_space'</span>);
+0238         <span class="keyword">if</span> opt.vert_space &gt;= pp.vert_cut;
+0239            warrning(<span class="string">'Option vert_space must be smaller than vert_cut. Ingoring'</span>);
+0240         <span class="keyword">else</span>
+0241            pp.vert_space = opt.vert_space;
+0242         <span class="keyword">end</span>
+0243      <span class="keyword">end</span>
+0244      <span class="keyword">if</span> isfield(opt,<span class="string">'horz_space'</span>);
+0245         <span class="keyword">if</span> opt.horz_space &gt;= pp.horz_cut;
+0246            warrning(<span class="string">'Option vert_space must be smaller than vert_cut. Ingoring'</span>);
+0247         <span class="keyword">else</span>
+0248            pp.horz_space = opt.horz_space;
+0249         <span class="keyword">end</span>
+0250      <span class="keyword">end</span>
+0251      <span class="keyword">if</span> isfield(opt,<span class="string">'crop_slack'</span>);
+0252         pp.crop_slack = opt.crop_slack;
+0253      <span class="keyword">end</span>
+0254    <span class="keyword">else</span>
+0255       error(<span class="string">'Can''t parse options'</span>);
+0256    <span class="keyword">end</span>
+0257  
+0258  
+0259 <a name="_sub5" href="#_subfunctions" class="code">function do_unit_test</a>
+0260    fprintf(<span class="string">'does unit test \n'</span>);
+0261    fid = fopen(<span class="string">'print_convert_test.html'</span>,<span class="string">'w'</span>);
+0262    fprintf(fid,<span class="string">'&lt;HTML&gt;&lt;BODY&gt;\n'</span>);
+0263    <span class="keyword">for</span> i=1:26;
+0264      <span class="keyword">switch</span> i;
+0265        <span class="keyword">case</span> {9,10}; typ = <span class="string">'jpg'</span>;
+0266        <span class="keyword">otherwise</span>; typ = <span class="string">'png'</span>;
+0267      <span class="keyword">end</span>
+0268      fprintf(fid,<span class="keyword">...</span>
+0269      <span class="string">'&lt;H1&gt;%02d&lt;/H1&gt;&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;img src=&quot;pc%02d.%s&quot;&gt;&lt;/table&gt;\n'</span>,i,i,typ);
+0270    <span class="keyword">end</span>
+0271    fprintf(fid,<span class="string">'&lt;/BODY&gt;&lt;/HTML&gt;\n'</span>);
+0272    fclose(fid);
+0273    <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'TO VIEW OUTPUT, OPEN FILE print_convert_test.html'</span>,1);
+0274  
+0275    im = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>( <a href="../../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>(1,[16,.5],.05),1);
+0276    clf; <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(im);
+0277    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a> pc01.png
+0278  
+0279    im = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>( <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'b2c2'</span>,8), 1:256);
+0280    clf; <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(im);
+0281    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a> pc02.png
+0282  
+0283  
+0284    clf; subplot(221); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(im); 
+0285         subplot(224); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(im); 
+0286    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a> pc03.png
+0287  
+0288    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a> pc04.png <span class="string">'-density 50'</span>
+0289    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a> pc05.png <span class="string">'-r100'</span>
+0290  
+0291    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc06.png'</span>, <span class="string">'-r100'</span> , 1/8)
+0292  
+0293    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc06.png'</span>, <span class="string">'-r100'</span> , 3/1)
+0294  
+0295    opt.resolution = 100;
+0296    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc07.png'</span>, opt);
+0297    opt.pagesize = [8,2];
+0298    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc08.png'</span>, opt);
+0299  
+0300    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc09a.jpg'</span>);
+0301    
+0302    opt.pagesize = [8,6];
+0303    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc09.jpg'</span>, opt);
+0304   
+0305    
+0306    opt.imwrite_opts = {<span class="string">'Quality'</span>,20};
+0307    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc10.jpg'</span>, opt);
+0308    
+0309    opt.imwrite_opts = {<span class="string">'Quality'</span>,100};
+0310    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc10b.jpg'</span>, opt);
+0311  
+0312    opt.imwrite_opts = {};
+0313    opt.horz_cut = 50;
+0314    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc11.png'</span>, opt);
+0315  
+0316    opt.vert_cut = 50;
+0317    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc12.png'</span>, opt);
+0318  
+0319    clf; subplot(331); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(im); 
+0320         subplot(335); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(im); 
+0321         subplot(339); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(im); 
+0322    opt.vert_cut = 30;
+0323    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc13.png'</span>, opt);
+0324    
+0325    im = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>( <a href="../../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>(1,[16,.5],.05),1);
+0326    clf; <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(im);
+0327    clear opt; opt.supersampling_factor = 1;
+0328    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc14.png'</span>, opt);
+0329  
+0330    clear opt; opt.supersampling_factor = 2;
+0331    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc15.png'</span>, opt);
+0332  
+0333    clear opt; opt.supersampling_factor = 3;
+0334    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc16.png'</span>, opt);
+0335    
+0336    clear opt; opt.supersampling_factor = 4;
+0337    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc17.png'</span>, opt);
+0338    
+0339    clear opt; opt.supersampling_factor = 8;
+0340    <a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>(<span class="string">'pc18.png'</span>, opt);
+0341  
+0342</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

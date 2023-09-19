@@ -1,0 +1,473 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calc_image_SNR</title>
+  <meta name="keywords" content="calc_image_SNR">
+  <meta name="description" content="% CALC_IMAGE_SNR: Calculates the signal-to-noise ratio (SNR) in the image">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; calc_image_SNR.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>calc_image_SNR
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>% CALC_IMAGE_SNR: Calculates the signal-to-noise ratio (SNR) in the image</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% CALC_IMAGE_SNR: Calculates the signal-to-noise ratio (SNR) in the image 
+ domain as proposed by Braun et al. in:
+ F Braun et al., A Versatile Noise Performance Metric for Electrical
+ Impedance Tomography Algorithms, IEEE Trans. Biomed. Eng. 2017 (submitted).
+
+   [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)
+
+ Output:
+   SNRmean   - mean of all SNR values as in equ. (9) in publication below
+   SE        - std of all SNR values as in equ. (9) in publication below
+   debug     - structure holding some information used for debug purposes
+
+ Input:
+   imdl            - inverse model (EIDORS struct)
+      imdl.hyperparameter.roi_scaling_factor - amount of model shrinking
+                                   to determine ROI where seed n_T targets
+                                   (DEFAULT: 0.5);
+      imdl.hyperparameter.n_targets - number of targets to seed in ROI n_T
+                                   (DEFAULT: n_T = 200);
+      imdl.hyperparameter.target_radius - relative target radius r_T
+                                   (DEFAULT: r_T = 0.05);
+      imdl.hyperparameter.xyzr_targets - vector 4 x num targets n_T
+                                   specify targets manually [x y z r]
+   hyperparameter  - desired hyperparameter value, this will overwrite the
+                     imdl.hyperparameter.value and is for compatibility
+                     purposes with the function calc_noise_figure()
+   doPlot    will enable plotting if set to true (default = false)
+
+
+ See also: <a href="calc_noise_figure.html" class="code" title="function [NF,SE] = calc_noise_figure( inv_model, hp, iterations)">CALC_NOISE_FIGURE</a>
+
+ Fabian Braun, December 2016
+
+ CITATION_REQUEST:
+ AUTHOR: F Braun et al.
+ TITLE: A Versatile Noise Performance Metric for Electrical Impedance Tomography Algorithms
+ JOURNAL: IEEE Transactions on Biomedical Engineering
+ YEAR: 2017
+ VOL: 64
+ NUM: 10
+ PAGE: 2321-2330
+ DOI: 10.1109/TBME.2017.2659540</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>	calc_slices (img, levels, clim  ) show slices at levels of an</li><li><a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../../eidors/meshing/order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>	ORDER_LOOP Order a list of points on a loop</li><li><a href="../../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>	ELEM_DIM: dimension of elements in space (are elements in 2D or 3D space)</li><li><a href="../../../eidors/models/get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>	GET_ELEM_VOLUME: VOL = get_elem_volume(fwd_model, map_node )</li><li><a href="../../../eidors/models/mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>	MK_COARSE_FINE_MAPPING: create a mapping matrix from coarse to fine FEM</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/simulate_movement.html" class="code" title="function [vh,vi,xyzr,c2f]= simulate_movement( img, xyzr, value );">simulate_movement</a>	SIMULATE_MOVEMENT simulate small conductivity perturbations</li><li><a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="get_RM.html" class="code" title="function [RM, J, RtR, W, Jfine] = get_RM(inv_model)">get_RM</a>	% GET_RM: obtains the reconstruction matrix from a given inverse model</li><li><a href="../../../eidors/tools/citeme.html" class="code" title="function citeme(fname)">citeme</a>	CITEME Display citation requests</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="choose_image_SNR.html" class="code" title="function HP = choose_image_SNR(imdl)">choose_image_SNR</a>	% CHOOSE_IMAGE_SNR: choose hyperparameter based on image SNR calculation</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)</a>
+0002 <span class="comment">%% CALC_IMAGE_SNR: Calculates the signal-to-noise ratio (SNR) in the image</span>
+0003 <span class="comment">% domain as proposed by Braun et al. in:</span>
+0004 <span class="comment">% F Braun et al., A Versatile Noise Performance Metric for Electrical</span>
+0005 <span class="comment">% Impedance Tomography Algorithms, IEEE Trans. Biomed. Eng. 2017 (submitted).</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Output:</span>
+0010 <span class="comment">%   SNRmean   - mean of all SNR values as in equ. (9) in publication below</span>
+0011 <span class="comment">%   SE        - std of all SNR values as in equ. (9) in publication below</span>
+0012 <span class="comment">%   debug     - structure holding some information used for debug purposes</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Input:</span>
+0015 <span class="comment">%   imdl            - inverse model (EIDORS struct)</span>
+0016 <span class="comment">%      imdl.hyperparameter.roi_scaling_factor - amount of model shrinking</span>
+0017 <span class="comment">%                                   to determine ROI where seed n_T targets</span>
+0018 <span class="comment">%                                   (DEFAULT: 0.5);</span>
+0019 <span class="comment">%      imdl.hyperparameter.n_targets - number of targets to seed in ROI n_T</span>
+0020 <span class="comment">%                                   (DEFAULT: n_T = 200);</span>
+0021 <span class="comment">%      imdl.hyperparameter.target_radius - relative target radius r_T</span>
+0022 <span class="comment">%                                   (DEFAULT: r_T = 0.05);</span>
+0023 <span class="comment">%      imdl.hyperparameter.xyzr_targets - vector 4 x num targets n_T</span>
+0024 <span class="comment">%                                   specify targets manually [x y z r]</span>
+0025 <span class="comment">%   hyperparameter  - desired hyperparameter value, this will overwrite the</span>
+0026 <span class="comment">%                     imdl.hyperparameter.value and is for compatibility</span>
+0027 <span class="comment">%                     purposes with the function calc_noise_figure()</span>
+0028 <span class="comment">%   doPlot    will enable plotting if set to true (default = false)</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% See also: CALC_NOISE_FIGURE</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% Fabian Braun, December 2016</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% CITATION_REQUEST:</span>
+0036 <span class="comment">% AUTHOR: F Braun et al.</span>
+0037 <span class="comment">% TITLE: A Versatile Noise Performance Metric for Electrical Impedance Tomography Algorithms</span>
+0038 <span class="comment">% JOURNAL: IEEE Transactions on Biomedical Engineering</span>
+0039 <span class="comment">% YEAR: 2017</span>
+0040 <span class="comment">% VOL: 64</span>
+0041 <span class="comment">% NUM: 10</span>
+0042 <span class="comment">% PAGE: 2321-2330</span>
+0043 <span class="comment">% DOI: 10.1109/TBME.2017.2659540</span>
+0044 <span class="comment">%</span>
+0045 
+0046 <span class="comment">% (C) 2016 Fabian Braun. License: GPL version 2 or version 3</span>
+0047 <span class="comment">% $Id: calc_image_SNR.m 5646 2017-09-22 06:16:33Z fab-b $</span>
+0048 
+0049 <a href="../../../eidors/tools/citeme.html" class="code" title="function citeme(fname)">citeme</a>(mfilename);
+0050 
+0051 <span class="comment">%% Configuration</span>
+0052 <span class="comment">% model shrunken by this factor delimits the ROI</span>
+0053 ROI_SCALING_FACTOR = 0.5; 
+0054 <span class="comment">% approximate number of targets to uniformly distribute in the ROI</span>
+0055 N_DESIRED_TARGETS = 200;
+0056 <span class="comment">% relative radius of the circular(2D)/spherical(3D) target (this is relative to the outer model radius)</span>
+0057 NORM_TGT_RADIUS = 0.05; <span class="comment">% original</span>
+0058 <span class="comment">% TEZ region threshold</span>
+0059 TEZ_REGION_THRESH = 0.25;  <span class="comment">% as ratio of maximum value : QUATER AMPLITUDE THRESHOLD</span>
+0060 
+0061 
+0062 <span class="comment">%% Parse and default inputs</span>
+0063 <span class="keyword">if</span> ~exist(<span class="string">'doPlot'</span>, <span class="string">'var'</span>) || isempty(doPlot)
+0064     doPlot = false;
+0065 <span class="keyword">end</span>
+0066 <span class="keyword">if</span> isfield(imdl.hyperparameter, <span class="string">'roi_scaling_factor'</span>) &amp;&amp; ~isempty(imdl.hyperparameter.roi_scaling_factor)
+0067     ROI_SCALING_FACTOR = imdl.hyperparameter.roi_scaling_factor;
+0068 <span class="keyword">end</span>
+0069 assert(ROI_SCALING_FACTOR &lt; 1, <span class="string">'ROI must be scaled smaller than effective model'</span>);
+0070 <span class="keyword">if</span> isfield(imdl.hyperparameter, <span class="string">'n_targets'</span>) &amp;&amp; ~isempty(imdl.hyperparameter.n_targets)
+0071     N_DESIRED_TARGETS = imdl.hyperparameter.n_targets;
+0072 <span class="keyword">end</span>
+0073 <span class="keyword">if</span> isfield(imdl.hyperparameter, <span class="string">'target_radius'</span>) &amp;&amp; ~isempty(imdl.hyperparameter.target_radius)
+0074     NORM_TGT_RADIUS = imdl.hyperparameter.target_radius;
+0075 <span class="keyword">end</span>
+0076 <span class="keyword">if</span> isfield(imdl.hyperparameter, <span class="string">'xyzr_targets'</span>) &amp;&amp; ~isempty(imdl.hyperparameter.xyzr_targets)
+0077     xyzr_targets = imdl.hyperparameter.xyzr_targets;
+0078 <span class="keyword">else</span>
+0079     xyzr_targets = [];
+0080 <span class="keyword">end</span>
+0081 
+0082 
+0083 <span class="comment">%% input parsing</span>
+0084 <span class="keyword">if</span> nargin&gt;=2 &amp;&amp; numel(hyperparameter) == 1 &amp;&amp; ~isempty(hyperparameter)
+0085     imdl.hyperparameter.value = hyperparameter;
+0086     <span class="comment">% Remove function parameter because it will recurse</span>
+0087     <span class="keyword">try</span>; imdl.hyperparameter = rmfield(imdl.hyperparameter,<span class="string">'func'</span>); <span class="keyword">end</span>
+0088 <span class="keyword">end</span>
+0089 
+0090 
+0091 <span class="comment">%% generate targets inside of rec_model</span>
+0092 <span class="keyword">if</span> isfield(imdl, <span class="string">'rec_model'</span>)
+0093     RecMdl = imdl.rec_model;   
+0094 <span class="keyword">else</span>
+0095     RecMdl = imdl.fwd_model;
+0096 <span class="keyword">end</span>
+0097 MdlCtr = mean(RecMdl.nodes,1);
+0098 
+0099 <span class="keyword">if</span> isempty(xyzr_targets)
+0100     <span class="comment">% targets have not been defined, we'll generate them automatically</span>
+0101     <span class="comment">% by shrinking the model by the desired scaling factor and see the</span>
+0102     <span class="comment">% descired number of targets inside the shrunk area</span>
+0103     <span class="comment">%</span>
+0104 
+0105     <span class="comment">% first determine electrode level</span>
+0106     <span class="keyword">if</span> isfield(RecMdl, <span class="string">'mdl_slice_mapper'</span>) &amp;&amp; isfield(RecMdl.mdl_slice_mapper, <span class="string">'level'</span>)
+0107         ElectrodeLevel = RecMdl.mdl_slice_mapper.level;    
+0108     <span class="keyword">elseif</span> isfield(RecMdl, <span class="string">'mdl_slice_mapper'</span>) &amp;&amp; isfield(RecMdl.mdl_slice_mapper, <span class="string">'z_pts'</span>)
+0109         ElectrodeLevel = RecMdl.mdl_slice_mapper.z_pts;    
+0110         error(<span class="string">'3D not supported yet, please seed targets manually via xyzr_targets'</span>);
+0111     <span class="keyword">else</span>
+0112         <span class="keyword">if</span> isfield(RecMdl.electrode(1), <span class="string">'pos'</span>)
+0113             elec_loc = cell2mat(cellfun(@(x) mean(x)', {RecMdl.electrode.pos}, <span class="string">'uniformoutput'</span>, false))';
+0114         <span class="keyword">elseif</span> isfield(RecMdl.electrode(1), <span class="string">'nodes'</span>)
+0115             <span class="keyword">for</span> i=1:length(RecMdl.electrode)
+0116                enodesi = RecMdl.electrode(i).nodes;
+0117                elec_loc(i,:) = mean( RecMdl.nodes( enodesi,:),1 );
+0118             <span class="keyword">end</span>  
+0119         <span class="keyword">else</span>
+0120             error(<span class="string">'not supported!'</span>);
+0121         <span class="keyword">end</span>
+0122         ElectrodeLevel = mean(elec_loc,1);
+0123     <span class="keyword">end</span>
+0124     
+0125     <span class="comment">% uniformly distribute N_DESIRED_TARGETS targets in the shrunken model</span>
+0126     <span class="comment">% at the level of the electrodes</span>
+0127     
+0128     <span class="comment">% first, shrink original model</span>
+0129     RecMdlShrunk = RecMdl;
+0130     RecMdlShrunk.nodes = RecMdlShrunk.nodes - repmat(MdlCtr, size(RecMdlShrunk.nodes, 1), 1);
+0131     RecMdlShrunk.nodes = RecMdlShrunk.nodes * ROI_SCALING_FACTOR;
+0132     RecMdlShrunk.nodes = RecMdlShrunk.nodes + repmat(MdlCtr, size(RecMdlShrunk.nodes, 1), 1);
+0133 
+0134     <span class="comment">% find boundary of shrunken model</span>
+0135     BoundaryNodes = <a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(RecMdlShrunk);
+0136     <span class="comment">% TODO: there's still a little problem here that we don't always</span>
+0137     <span class="comment">% get a nicely oriented boundary, investigate this!</span>
+0138     Boundary = <a href="../../../eidors/meshing/order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>(RecMdlShrunk.nodes(BoundaryNodes, :));
+0139     Boundary = [Boundary; Boundary(1,:)];
+0140     <span class="comment">% pp = fourier_fit(Boundary, 10); Boundary = fourier_fit(pp, linspace(0,1,20));</span>
+0141 
+0142     <span class="comment">% seed uniformly in rectangle and remove outliers</span>
+0143     AreaPoly = polyarea(Boundary(:,1), Boundary(:,2));
+0144     Bounds = [max(Boundary); min(Boundary)];
+0145     AreaRect = prod([Bounds(1,:) - Bounds(2,:)]);
+0146     nUniformTgts = AreaRect * (N_DESIRED_TARGETS / AreaPoly);    
+0147 
+0148     <span class="comment">% Size of the ROI in the two dimensions (x/y)...</span>
+0149     RoiSize = abs(diff(Bounds,[], 1));
+0150     <span class="comment">% ensure uniform spacing and scale according to differences in x/y size</span>
+0151     ScaleX = RoiSize(1) / RoiSize(2);
+0152     ScaleY = 1./ScaleX;                 
+0153     <span class="comment">% create ROI centers</span>
+0154     [xx, yy] = meshgrid(linspace(Bounds(2,1), Bounds(1,1), ceil(ScaleX * sqrt(nUniformTgts))), <span class="keyword">...</span>
+0155                         linspace(Bounds(2,2), Bounds(1,2), ceil(ScaleY * sqrt(nUniformTgts))));
+0156     IsInside = inpolygon(xx(:), yy(:), Boundary(:,1), Boundary(:,2));
+0157     nTgts = sum(IsInside);
+0158     assert(abs((nTgts - N_DESIRED_TARGETS)/N_DESIRED_TARGETS) &lt; 0.15, <span class="string">'Cannot make desired number of targets'</span>);
+0159     xx = xx(IsInside);
+0160     yy = yy(IsInside);    
+0161     zz = ones(size(xx))*ElectrodeLevel(3);
+0162 <span class="keyword">else</span>
+0163     <span class="comment">% targets specified from outside the function, assign them properly</span>
+0164     xx = xyzr_targets(1,:)';
+0165     yy = xyzr_targets(2,:)';
+0166     zz = xyzr_targets(3,:)';
+0167 <span class="keyword">end</span>
+0168 
+0169 <span class="comment">% set target size relative to maximal model radius</span>
+0170 BoundsFull = [max(RecMdl.nodes); min(RecMdl.nodes)];
+0171 Rmodel = (max(BoundsFull(1,:) - BoundsFull(2,:)))/2;    <span class="comment">% maximal model radius</span>
+0172 Rtarget = Rmodel * NORM_TGT_RADIUS;
+0173 rr = ones(size(xx))*Rtarget;
+0174 
+0175 <span class="keyword">if</span> ~isempty(xyzr_targets)
+0176     <span class="keyword">try</span>
+0177         rr = xyzr_targets(4,:)';    <span class="comment">% overwrite target radii if existing</span>
+0178     <span class="keyword">end</span>
+0179 <span class="keyword">end</span>
+0180     
+0181 <span class="comment">%% generate differential voltages for each conductivity target</span>
+0182 img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl.fwd_model, 1);
+0183 <span class="keyword">if</span> <a href="../../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>(imdl.fwd_model) == 3
+0184     xyzr = [xx yy zz rr]';  
+0185 <span class="keyword">elseif</span> <a href="../../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>(imdl.fwd_model) == 2
+0186     xyzr = [xx yy rr]';    
+0187 <span class="keyword">else</span>
+0188     error(<span class="string">'unsupported dimensions'</span>);
+0189 <span class="keyword">end</span>
+0190 [vh, vi, xyzrOut, c2f] = <a href="../../../eidors/models/simulate_movement.html" class="code" title="function [vh,vi,xyzr,c2f]= simulate_movement( img, xyzr, value );">simulate_movement</a>(img, xyzr);
+0191 NotAssigned = ~ismember(xyzr', xyzrOut', <span class="string">'rows'</span>);
+0192 assert(sum(NotAssigned) == 0, <span class="string">'Error: target(s) got missing...'</span>);
+0193 vd = vi - repmat(vh, 1, size(vi,2));
+0194 
+0195 
+0196 <span class="comment">%% get reconstruction matrix</span>
+0197 RM = <a href="get_RM.html" class="code" title="function [RM, J, RtR, W, Jfine] = get_RM(inv_model)">get_RM</a>(imdl);
+0198 <span class="comment">% calculate volume/area of each element in RecMdl</span>
+0199 RecMdlVols = <a href="../../../eidors/models/get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(RecMdl);
+0200 
+0201 
+0202 <span class="comment">%% generate individual target evaluation zones (TEZs)</span>
+0203 <span class="comment">% first evaluate image response and take quater amplitude pixels as TEZ</span>
+0204 
+0205 <span class="comment">% we calculate it the direct way as we can reuse it again further down!</span>
+0206 imgrs = RM*vd;
+0207 imgrsNorm = imgrs;
+0208 imgrsNorm = imgrsNorm ./ repmat(max(imgrsNorm, [], 1), size(imgrsNorm,1), 1);
+0209 TEZs = double((imgrsNorm &gt; TEZ_REGION_THRESH));
+0210 
+0211 clear imgrsNorm;
+0212 
+0213 ElemVols = spdiags(RecMdlVols, 0, length(RecMdlVols), length(RecMdlVols));
+0214   
+0215 <span class="comment">% TEZ matrices with proper normalization (as defined in publication)</span>
+0216 <span class="comment">%      z_i  =  a_i     *  c_i    (in publication)</span>
+0217 Z = ElemVols * TEZs;
+0218 Vtez = sum(Z,1);                <span class="comment">% volume/area of each TEZ</span>
+0219 Vt = 4/3 * pi * rr.^3;          <span class="comment">% volume of each target</span>
+0220 <span class="comment">% note: even for the 2D case we take the volume as a target double</span>
+0221 <span class="comment">% as thick than another but with same area has double the influence</span>
+0222 K = Vtez ./ Vt';                <span class="comment">% TEZ volume / target volume</span>
+0223 <span class="comment">% \tilde{z}_i = z_i * k          (in publication)</span>
+0224 Ztilde = Z .* repmat(K, size(Z,1), 1);
+0225 
+0226 <span class="comment">% TEZ matrices kept for debugging / bw-compatility reasons</span>
+0227 TEZsNonNorm = Z; 
+0228 <span class="comment">% normalize ROIs</span>
+0229 TEZs = TEZs ./ repmat(sum(TEZs,1), size(TEZs,1), 1);  
+0230 
+0231 
+0232 <span class="comment">%% calculate target-wise distinguishability</span>
+0233 <span class="comment">% determine noise covariance matrix</span>
+0234 <span class="keyword">if</span> isfield(imdl.hyperparameter, <span class="string">'SigmaN'</span>) &amp;&amp; ~isempty(imdl.hyperparameter.SigmaN)
+0235     SigmaN = imdl.hyperparameter.SigmaN;    
+0236 <span class="keyword">else</span>
+0237     SigmaN = speye(size(RM,2));        <span class="comment">% assuming uniform and uncorrelated noise</span>
+0238 <span class="keyword">end</span>
+0239 
+0240 Signal = diag(Ztilde' * imgrs);    <span class="comment">% numerator in equation (9)</span>
+0241 VarPerPixel = diag(RM*SigmaN*RM');      
+0242 Noise = sqrt(Z' * VarPerPixel);      <span class="comment">% denominator in equation (9)</span>
+0243 
+0244 <span class="comment">% get the average of all SNRs</span>
+0245 SNRs = Signal ./ Noise;                 
+0246 SNRmean = mean(SNRs); 
+0247 SE = std(SNRs);
+0248 
+0249 <span class="keyword">if</span> isnan(SNRmean)
+0250     SNRmean = -inf;
+0251 <span class="keyword">elseif</span> isinf(SNRmean)
+0252     keyboard;
+0253 <span class="keyword">end</span>
+0254 
+0255 <span class="keyword">try</span>
+0256   <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'SNR = %e (hp=%e)'</span>, SNRmean, imdl.hyperparameter.value, 1);
+0257 <span class="keyword">end</span>
+0258 
+0259 
+0260 <span class="comment">%% debug info: fraction of amplitude response (AR) inside each TEZ</span>
+0261 <span class="keyword">if</span> nargout &gt;= 3
+0262     <span class="comment">% target-wise amplitude response inside TEZ: in terms of energy</span>
+0263     ArInFrac = diag((TEZsNonNorm'*abs(RM*vd).^2) ./ (repmat(RecMdlVols, 1, size(TEZs,2))'*abs(RM*vd).^2));    
+0264     debug.ArInFrac = ArInFrac;
+0265     
+0266     debug.SNRs = SNRs;
+0267     debug.Signal = Signal;
+0268     debug.Noise = Noise;
+0269     debug.TEZs = TEZs;
+0270     debug.TEZsNoNorm = TEZsNonNorm;
+0271     
+0272     debug.RoiBounds = Bounds;
+0273     debug.RoiBoundary = Boundary;
+0274     debug.MdlCtr = MdlCtr;
+0275     debug.BoundsFull = BoundsFull;
+0276     
+0277     imgrsNorm = imgrs;
+0278     imgrsNorm = imgrsNorm ./ repmat(max(imgrsNorm, [], 1), size(imgrsNorm,1), 1);
+0279     debug.meanInNormImg = diag(TEZs'*imgrsNorm);
+0280 <span class="keyword">end</span>
+0281 
+0282 
+0283 <span class="comment">%% visualize for debug purposes</span>
+0284 <span class="keyword">if</span> doPlot
+0285     fig = figure;
+0286     set(fig, <span class="string">'position'</span>, [  182         700        1531         313]);
+0287     
+0288     <span class="keyword">if</span> isfield(imdl.fwd_model, <span class="string">'coarse2fine'</span>)
+0289         MapTgts2Img = imdl.fwd_model.coarse2fine'*c2f;
+0290     <span class="keyword">else</span>
+0291         <span class="keyword">try</span>
+0292             imdl.fwd_model.coarse2fine = <a href="../../../eidors/models/mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>(imdl.fwd_model, imdl.rec_model);
+0293             MapTgts2Img = imdl.fwd_model.coarse2fine'*c2f;
+0294         <span class="keyword">catch</span>
+0295             warning(<span class="string">'Unable to make c2f mapping'</span>);
+0296             MapTgts2Img = c2f;
+0297         <span class="keyword">end</span>
+0298     <span class="keyword">end</span>
+0299     MapTgts2Img = MapTgts2Img ./ repmat(sum(MapTgts2Img,2), 1, size(MapTgts2Img, 2));
+0300     MapTgts2Img(isnan(MapTgts2Img(:))) = 0;
+0301     
+0302     img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(RecMdl, nan);
+0303     img.elem_data = MapTgts2Img * SNRs;
+0304     SnrImg = <a href="../../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>(img);
+0305     
+0306     img.elem_data = nan(size(img.elem_data));
+0307     img.elem_data = MapTgts2Img * Signal;
+0308     AmpSens = img.elem_data;
+0309     AmpSensImg = <a href="../../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>(img);
+0310     
+0311     img.elem_data = nan(size(img.elem_data));
+0312     img.elem_data = MapTgts2Img * Noise;
+0313     NoiseSens = img.elem_data;
+0314     NoiseSensImg = <a href="../../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>(img);
+0315     
+0316     sp1 = subplot(131);
+0317     imagescnan(SnrImg);
+0318     title([<span class="string">'SNR image: '</span>, num2str(SNRmean, <span class="string">'%0.2d'</span>)]);
+0319     colorbar; colormap jet;
+0320 
+0321     <span class="comment">% plot signal sensitivity image</span>
+0322     sp2 = subplot(132);
+0323     imagescnan(AmpSensImg);
+0324     title([<span class="string">'Amplitude response: '</span>, num2str(nanmean(AmpSens(:)), <span class="string">'%0.2d'</span>)]);
+0325     colorbar;
+0326 
+0327     <span class="comment">% plot noise sensitivity image</span>
+0328     sp3 = subplot(133);
+0329     imagescnan(NoiseSensImg);
+0330     title([<span class="string">'Noise sensitivity: '</span>, num2str(nanmean(NoiseSens(:)), <span class="string">'%0.2d'</span>)]);
+0331     colorbar;
+0332 
+0333     <span class="keyword">if</span> doPlot &lt; 2
+0334         linkaxes([sp1 sp2 sp3], <span class="string">'xy'</span>);
+0335     <span class="keyword">end</span>
+0336    
+0337     <span class="keyword">if</span> doPlot == 2
+0338        <span class="comment">% some extra debugging</span>
+0339        sp1 = subplot(131);
+0340        imgTmp = img;
+0341        iTgt = round(size(vd,2)/2);
+0342        imgTmp.elem_data = RM*vd(:,iTgt);
+0343        hh = <a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imgTmp);
+0344        set(hh, <span class="string">'edgecolor'</span>, <span class="string">'none'</span>);
+0345        hold on; 
+0346        circle(xyzr(1:2, iTgt), xyzr(3, iTgt), 100, <span class="string">'k'</span>);
+0347        circle(xyzr(1:2, iTgt), Rtarget, 100, <span class="string">'k'</span>);
+0348        axis equal;
+0349     <span class="keyword">end</span>
+0350     
+0351     
+0352     <span class="keyword">if</span> doPlot == 3
+0353        sp3 = subplot(133); 
+0354        cla;
+0355        hh = <a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(RecMdl);
+0356        set(hh, <span class="string">'edgecolor'</span>, <span class="string">'none'</span>)
+0357        hold on;
+0358        plot(Boundary(:,1), Boundary(:,2), <span class="string">'.-k'</span>);
+0359        plot(xyzr(1,:), xyzr(2,:), <span class="string">'.r'</span>);
+0360        plot(xyzr(1,:), xyzr(2,:), <span class="string">'or'</span>);
+0361     <span class="keyword">end</span>
+0362     
+0363     <span class="keyword">if</span> doPlot == 4
+0364         <span class="comment">% show pixel-wise noise sensitivity</span>
+0365        sp2 = subplot(132);
+0366        cla;
+0367        imgN = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl,0);
+0368        imgN.elem_data = VarPerPixel;
+0369        imgN.elem_data(sum(MapTgts2Img,2) == 0) = 0;
+0370        imagescnan(<a href="../../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>(imgN));
+0371        title([<span class="string">'Pixel-wise NoiseSens: '</span>, num2str(nanmean(imgN.elem_data(:)), <span class="string">'%0.2d'</span>)]);
+0372        colorbar;        
+0373     <span class="keyword">end</span>
+0374     
+0375     <span class="keyword">if</span> doPlot == 5
+0376         sp1 = subplot(131);
+0377         hist(SNRs); 
+0378         xlim([0 max(xlim())]);
+0379     <span class="keyword">end</span>
+0380     
+0381 <span class="keyword">end</span>
+0382 
+0383 <span class="keyword">end</span>
+0384 
+0385</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

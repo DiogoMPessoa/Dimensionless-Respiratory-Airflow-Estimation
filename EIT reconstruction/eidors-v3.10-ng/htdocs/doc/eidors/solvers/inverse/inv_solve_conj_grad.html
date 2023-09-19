@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of inv_solve_conj_grad</title>
+  <meta name="keywords" content="inv_solve_conj_grad">
+  <meta name="description" content="INV_SOLVE_CONJ_GRAD inverse solver based on the CG">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; inv_solve_conj_grad.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>inv_solve_conj_grad
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>INV_SOLVE_CONJ_GRAD inverse solver based on the CG</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function img= inv_solve_conj_grad( inv_model, data1, data2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> INV_SOLVE_CONJ_GRAD inverse solver based on the CG
+ inverse [Ref Shewchuck, 1994]
+ img= inv_solve_conj_grad( inv_model, data1, data2)
+ img        =&gt; output image
+ inv_model  =&gt; inverse model struct
+ data1      =&gt; differential data at earlier time
+ data2      =&gt; differential data at later time</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>	RtR = calc_RtR_prior( inv_model )</li><li><a href="../../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>	CALC_HYPERPARAMETER: calculate hyperparameter value</li><li><a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>	CALC_JACOBIAN_BKGND: calculate background image around</li><li><a href="../../../eidors/solvers/calc_meas_icov.html" class="code" title="function meas_icov = calc_meas_icov( inv_model )">calc_meas_icov</a>	meas_icov = calc_meas_icov( inv_model )</li><li><a href="../../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>	FWD_MODEL_PARAMETERS: data= fwd_solve_1st_order( fwd_model, image)</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="inv_solve_conj_grad.html" class="code" title="function img= inv_solve_conj_grad( inv_model, data1, data2)">inv_solve_conj_grad</a>	INV_SOLVE_CONJ_GRAD inverse solver based on the CG</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="inv_solve_conj_grad.html" class="code" title="function img= inv_solve_conj_grad( inv_model, data1, data2)">inv_solve_conj_grad</a>	INV_SOLVE_CONJ_GRAD inverse solver based on the CG</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function x= cg_ls_inv1( J, R, y, Rx0, maxiter, tol )</a></li><li><a href="#_sub2" class="code">function x= cg_ls_inv0( J, R, y, Rx0, maxiter, tol )</a></li><li><a href="#_sub3" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function img= inv_solve_conj_grad( inv_model, data1, data2)</a>
+0002 <span class="comment">% INV_SOLVE_CONJ_GRAD inverse solver based on the CG</span>
+0003 <span class="comment">% inverse [Ref Shewchuck, 1994]</span>
+0004 <span class="comment">% img= inv_solve_conj_grad( inv_model, data1, data2)</span>
+0005 <span class="comment">% img        =&gt; output image</span>
+0006 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0007 <span class="comment">% data1      =&gt; differential data at earlier time</span>
+0008 <span class="comment">% data2      =&gt; differential data at later time</span>
+0009 
+0010 <span class="comment">% parameters:</span>
+0011 <span class="comment">%   tol =     inv_model.parameters.term_tolerance;</span>
+0012 <span class="comment">%   maxiter = inv_model.parameters.max_iterations;</span>
+0013 
+0014 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0015 <span class="comment">% $Id: inv_solve_conj_grad.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0016 
+0017 <span class="keyword">if</span> ischar(inv_model) &amp;&amp; strcmp(inv_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub3" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0018 
+0019 fwd_model= inv_model.fwd_model;
+0020 pp= <a href="../../../eidors/solvers/forward/fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>( fwd_model );
+0021 
+0022 img_bkgnd= <a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>( inv_model );
+0023 J = <a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>( img_bkgnd);
+0024 
+0025 R = <a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>( inv_model );
+0026 W = <a href="../../../eidors/solvers/calc_meas_icov.html" class="code" title="function meas_icov = calc_meas_icov( inv_model )">calc_meas_icov</a>( inv_model );
+0027 hp= <a href="../../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>( inv_model );
+0028 
+0029 maxiter= 50;
+0030 tol= 1e-4;
+0031 <span class="keyword">if</span> isfield(inv_model,<span class="string">'parameters'</span>)
+0032     tol =     inv_model.parameters.term_tolerance;
+0033     maxiter = inv_model.parameters.max_iterations;
+0034 <span class="keyword">end</span>
+0035 
+0036 
+0037 
+0038 l_data1= length(data1); l1_0 = l_data1 ~=0;
+0039 l_data2= length(data2); l2_0 = l_data2 ~=0;
+0040 l_data= max( l_data1, l_data2 );
+0041 
+0042 dva= zeros(pp.n_meas, l_data);
+0043 
+0044 <span class="keyword">if</span> pp.normalize
+0045    dva= data2 ./ data1 - 1;
+0046 <span class="keyword">else</span>   
+0047    dva= data2 - data1;
+0048 <span class="keyword">end</span>
+0049 
+0050 n_img= size(dva,2);
+0051 sol = zeros( size(J,2), n_img );
+0052 Rx0 = zeros( size(R,1), 1);
+0053 <span class="keyword">for</span> i=1:n_img
+0054    sol(:,i) = <a href="#_sub2" class="code" title="subfunction x= cg_ls_inv0( J, R, y, Rx0, maxiter, tol )">cg_ls_inv0</a>( J,  hp*R, dva(:,i), Rx0, maxiter, tol );
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="comment">% create a data structure to return</span>
+0058 img.name= <span class="string">'solved by inv_solve_conj_grad'</span>;
+0059 img.elem_data = sol;
+0060 img.inv_model= inv_model;
+0061 img.fwd_model= fwd_model;
+0062 
+0063 <span class="comment">% x = [J;R]\[y;R*x0] using Moore - Penrose inverse</span>
+0064 <span class="comment">% For comparison purposes</span>
+0065 <a name="_sub1" href="#_subfunctions" class="code">function x= cg_ls_inv1( J, R, y, Rx0, maxiter, tol )</a>
+0066    x = [J;R]\[y;Rx0];
+0067 
+0068 <span class="comment">% Adapted from code in Hansen's regularization tools</span>
+0069 <a name="_sub2" href="#_subfunctions" class="code">function x= cg_ls_inv0( J, R, y, Rx0, maxiter, tol )</a>
+0070 <span class="comment">%  A = [J;R];</span>
+0071    b=[y;Rx0];
+0072    [m,n]= size(J);
+0073    m_idx= 1:m; n_idx = m+(1:n);
+0074    Jt = J.';
+0075    Rt = R.';
+0076    x = zeros(n,1); 
+0077 <span class="comment">%  d = A'*b;</span>
+0078    d = Jt*b(m_idx) + Rt*b(n_idx);
+0079    r = b; 
+0080    normr2 = d'*d; 
+0081     
+0082    k=0; <span class="comment">% Iterate.</span>
+0083    x_delta_filt= 1; x_filt= .1;
+0084    <span class="keyword">while</span> 1 
+0085      <span class="comment">% Update x and r vectors.</span>
+0086 <span class="comment">%    Ad = A*d;</span>
+0087      Ad = [J*d;R*d];
+0088      Alpha = normr2/(Ad'*Ad); 
+0089      xpre= x;
+0090      x  = x + Alpha*d; 
+0091 
+0092      k= k+1; <span class="keyword">if</span> k==maxiter; <span class="keyword">break</span> ; <span class="keyword">end</span>
+0093 
+0094      x_delta= norm(xpre-x)/norm(x);
+0095      x_delta_filt= x_delta_filt*(1-x_filt) + x_filt*x_delta;
+0096 
+0097      <span class="keyword">if</span> x_delta_filt&lt;tol; <span class="keyword">break</span> ; <span class="keyword">end</span>
+0098 
+0099      r  = r - Alpha*Ad; 
+0100 <span class="comment">%    s  = A'*r;</span>
+0101      s  = Jt*r(m_idx) + Rt*r(n_idx);
+0102     
+0103      <span class="comment">% Update d vector.</span>
+0104      normr2_new = s'*s; 
+0105      Beta = normr2_new/normr2; 
+0106      normr2 = normr2_new; 
+0107      d = s + Beta*d; 
+0108       
+0109    <span class="keyword">end</span> 
+0110 <span class="comment">%     disp([k, x_delta, x_delta_filt]);</span>
+0111 
+0112 <a name="_sub3" href="#_subfunctions" class="code">function do_unit_test</a>
+0113    img= <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>( <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'c2c2'</span>,16),1);
+0114    vh = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0115    img.elem_data([65,81,82,101,102,122])=2; 
+0116    vi = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0117 
+0118    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'b2c2'</span>,16);
+0119    subplot(221); <a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>( <a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi) );
+0120 
+0121    imdl.solve = @<a href="inv_solve_conj_grad.html" class="code" title="function img= inv_solve_conj_grad( inv_model, data1, data2)">inv_solve_conj_grad</a>;
+0122    imdl.hyperparameter.value = .001;
+0123    subplot(222); <a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>( <a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi) );
+0124 
+0125    imdl.parameters.max_iterations = 2;
+0126    imdl.parameters.term_tolerance = 1e-4;
+0127    subplot(223); <a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>( <a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi) );
+0128 
+0129    imdl.parameters.max_iterations = 20;
+0130    imdl.parameters.term_tolerance = 1e-4;
+0131    subplot(224); <a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>( <a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi) );</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

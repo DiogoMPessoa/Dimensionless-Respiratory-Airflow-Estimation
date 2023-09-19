@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+
+<h2>
+Image reconstruction of moving objects
+</H2>
+
+These results are taken from the paper:
+<ul>
+Andy Adler, Tao Dai, William R.B. Lionheart
+<i>Temporal Image Reconstruction in Electrical Impedance Tomography</i>
+Physiol. Meas., 2007.
+</ul>
+
+Electrical Impedance Tomography (EIT) calculates images of the body
+from body impedance measurements. While the spatial resolution of
+these images is relatively low, the temporal resolution of EIT
+data can be high. Most EIT reconstruction algorithms solve each
+data frame independently, although Kalman filter algorithms track
+the image changes across frames. This paper proposes a new approach
+which directly accounts for correlations between images in successive
+data frames.  Image reconstruction is posed in terms of an augmented
+image <b>x</b> and measurement vector <b>y</b>,
+ which concatenate the values from
+the <i>d</i> previous and future frames. Image reconstruction is then based
+on an augmented regularization matrix <b>R</b>, which accounts for a model
+of both the spatial and temporal correlations between image elements.
+Results are compared for reconstruction algorithms based on independent
+frames, Kalman filters, and the proposed approach. For low values of the
+regularization hyperparameter, the proposed approach performs similarly
+to independent frames, but for higher hyperparameter values, it uses
+adjacent frame data to reduce reconstructed image noise.
+
+<h3>
+Sample Data
+</H3>
+
+Simulated data are calculated using the function
+<tt>simulate_2d_movement</tt>, which models a
+small (0.05&times;radius) object moving in a 
+circle in a 2D circular tank.  These data are 
+<a href="../../data_contrib/aa_simulate_2d_movement/aa_simulate_2d_movement-s.html"> available here</a>.
+<p>
+Since the temporal solver works best for noisy data,
+we simulate a fairly low SNR (high NSR). To understand
+why the temporal solver works best at for noisy data,
+consider that if data are clean, then there is no reason
+to look at data from the past/future, since the current
+measurement tells us everything we need to know.
+
+<pre>
+% Sample Data $Id: temporal_solver01.m 3140 2012-06-09 10:55:15Z bgrychtol $
+
+if ~exist('simulate_2d_movement_data.mat')
+    [vh,vi,xyr_pt]=simulate_2d_movement;
+    save simulate_2d_movement_data vi vh xyr_pt
+else
+    load simulate_2d_movement_data
+end
+
+% Temporal solver works best at large Noise
+nsr= 4.0; %Noise to Signal Ratio
+
+signal = mean( abs(mean(vi,2) - vh) ); % remember to define signal
+% Only add noise to vi. This is reasonable, since we have
+% lots of data of vh to average to reduce noise
+vi_n= vi + nsr*signal*randn( size(vi) );
+
+</pre>
+
+<h3>
+Reconstruction Algorithms
+</H3>
+
+<p>
+
+
+Over time steps, <i>k</i>, a sequence of
+difference vectors, <b>y</b><sub>k</sub> =
+<b>J</b><b>x</b><sub>k</sub>, are measured (assuming
+the body and electrode geometry, and thus <b>J</b>, stay
+fixed). If the conductivity of the body under investigation
+doesn’t change too rapidly, then it is reasonable to expect
+that a certain number of measurements, <i>d</i>, into
+the past and future provide useful information about the
+current image. Labelling the current instant as <i>t</i>,
+we therefore seek to estimate <b>x</b><sub>t</sub> from
+data [<b>y</b><sub>t-d</sub>; ... ; <b>y</b><sub>t-1</sub>;
+<b>y</b><sub>t</sub>; <b>y</b><sub>t+1</sub>; ... ;
+<b>y</b><sub>t+d</sub>].
+<p>
+
+In the subsequent sections we consider three traditional approaches and the
+proposed temporal inverse; each estimates <b>x</b><sub>t</sub> at frame <i>t</i> from a sequence of data starting
+at frame 0, using the indicated data:
+<ol>
+ <li> Gauss-Newton (GN) inverse, using <b>y</b><sub>t</sub>
+ only;
+
+ <li> GN with weighted data, using a weighted average of
+ <b>y</b><sub>t-d</sub> ... <b>y</b><sub>t+d</sub>;
+
+ <li> Kalman filter inverse, using all previous and current
+ data, <b>y</b><sub>0</sub> ... <b>y</b><sub>t</sub>; 
+
+ <li> Temporal inverse, using <b>y</b><sub>t-d</sub>
+ ... <b>y</b><sub>t+d</sub> based on a temporal prior
+ model.
+
+</ol>
+
+The following code defines the reconstruction algorithms:
+<pre>% Image reconstruction of moving objects $Id: temporal_solver02.m 4839 2015-03-30 07:44:50Z aadler $
+
+time_steps=  3;
+time_weight= .8;
+
+base_model = mk_common_model( 'c2c2', 16 ); % 576 element
+base_model.fwd_model = mdl_normalize(base_model.fwd_model, 0);
+% HP value gives good solutions (calculated via Noise Figure)
+hp= sqrt(0.101046); % hp is squared
+base_model.hyperparameter.value= hp;
+
+% GN Solver
+imdl_GN = base_model;
+imdl_GN.RtR_prior= @prior_noser;
+imdl_GN.prior_noser.exponent= .5;
+imdl_GN.solve= @inv_solve_diff_GN_one_step;
+imdl_GN.hyperparameter.value= hp;
+imdl_GN.fwd_model = mdl_normalize(imdl_GN.fwd_model, 0);
+
+% Temporal Solver
+imdl_TS = base_model;
+imdl_TS.RtR_prior= @prior_time_smooth;
+imdl_TS.prior_time_smooth.space_prior= @prior_noser;
+imdl_TS.prior_noser.exponent= .5;
+imdl_TS.prior_time_smooth.time_weight= time_weight;
+imdl_TS.prior_time_smooth.time_steps=  time_steps;
+imdl_TS.solve= @inv_solve_time_prior;
+imdl_TS.inv_solve_time_prior.time_steps=   time_steps;
+
+% Kalman Solver
+imdl_KS = base_model;
+imdl_KS.RtR_prior= @prior_noser;
+imdl_KS.prior_noser.exponent= .5;
+imdl_KS.solve= @inv_solve_diff_kalman;
+</pre>
+
+<h3>
+Image Reconstruction
+</H3>
+
+We reconstruct the image at 9&nbsp;O'clock using
+each algorithm, using the code:
+<pre>% Image reconstruction of moving objects $Id: temporal_solver03.m 3346 2012-07-01 21:30:55Z bgrychtol $
+
+image_select= length(xyr_pt)/2+1;; % this image is at 9 O'Clock
+time_steps=  3; ts_expand= 5;
+time_weight= .8;
+ts_vec= -time_steps:time_steps;
+
+% vi_sel is the inhomog data used by the algorithm
+% sel is the image to show (ie. last for kalman, middle for temporal)
+for alg=1:4
+   if     alg==1; % GN Solver
+      im_sel = image_select;
+      vi_sel = vi_n(:,im_sel);
+
+      sel  = 1;
+      imdl= imdl_GN;
+
+   elseif alg==2  % Weighted GN Solver
+      im_sel= image_select+ ts_vec*ts_expand;
+      weight= (time_weight.^abs(ts_vec));
+      vi_sel= vi_n(:,im_sel) * weight(:) / sum(weight);
+
+      sel  = 1;
+      imdl= imdl_GN;
+
+   elseif alg==3  % Temporal Solver
+      im_sel= image_select+ ts_vec*ts_expand;
+      vi_sel= vi_n(:,im_sel);
+
+      sel  = 1 + time_steps; % choose the middle
+      imdl= imdl_TS;
+
+   elseif alg==4  % Kalman Solver
+      im_sel= image_select+ (-12:0)*ts_expand; %let Kalman warm up
+      vi_sel= vi_n(:,im_sel);
+
+      sel  = length(im_sel); % choose the last
+      imdl= imdl_KS;
+
+   end
+
+   imdl.fwd_model = mdl_normalize(imdl.fwd_model, 0);
+   img= inv_solve( imdl, vh, vi_sel);
+   % only show image for sel (ie. last for kalman, middle for temporal)
+   img.elem_data= img.elem_data(:,sel);
+
+   show_fem(img);
+   axis equal
+   axis([-1.1, 0.1, -1.1, 1.1]);
+   set(gca,{'XTicklabel','YTicklabel'},{'',''});
+%
+% Put circles where the data points used for reconstruction are
+%
+   theta= linspace(0,2*pi,length(xyr_pt)/ts_expand);
+   xr=   cos(theta);       yr=   sin(theta);
+   xpos= xyr_pt(1,im_sel); ypos= xyr_pt(2,im_sel);
+   rad= xyr_pt(3,im_sel);
+   hold on;
+   for i=1:length(xpos)
+       hh= plot(rad(i)*xr+ xpos(i),rad(i)*yr+ ypos(i));
+       set(hh,'LineWidth',3,'Color',[0,0,0]);
+   end
+   hold off;
+
+   print_convert(sprintf('temporal_solver03%c.png',96+alg));
+end % for i
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/temporal_solver03a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/temporal_solver03b.png">
+<br>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/temporal_solver03c.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/temporal_solver03d.png">
+<br><i>Figure:</i>
+Image reconstructions of a moving ball
+in a medium.
+<i>Top:</i> using a classic one-stop solver,
+<i>Bottom:</i> using a Kalman solver.
+Note the <i>warm up period</i> of the Kalman images
+when the time correlations are being <i>trained</i>.
+</center>
+
+<h3>
+Image Reconstruction Movies
+</H3>
+
+In order to show animated movies of temporal 
+solvers, we can do the following
+
+<pre>
+% Image reconstruction of moving objects $Id: temporal_solver04.m 1535 2008-07-26 15:36:27Z aadler $
+
+time_steps=  3; ts_expand= 5;
+time_weight= .8;
+ts_vec= -time_steps:time_steps;
+
+image_select= .25*length(xyr_pt)+1:ts_expand:.75*length(xyr_pt)+1;
+
+% GN Solver
+ vi_sel = vi(:,image_select);
+ img= inv_solve( imdl_GN, vh, vi_sel);
+ animate_reconstructions('temporal_solver04a', img);
+
+% Temporal Solver
+ k=1;
+ for i= image_select
+   vi_sel= vi(:,i+ts_vec);
+   imgs= inv_solve( imdl_TS, vh, vi_sel);
+   img.elem_data(:,k)= imgs.elem_data(:,1+time_steps);
+   k=k+1;
+ end
+ animate_reconstructions('temporal_solver04c', img);
+
+
+% Kalman Solver
+ vi_sel = vi(:,image_select);
+ img= inv_solve( imdl_KS, vh, vi_sel);
+ animate_reconstructions('temporal_solver04d', img);
+
+</pre>
+
+Output images are:
+<br>&minus;<a href="./temporal_solver04a.gif">Gauss-Newton solver</a>
+<br>&minus;<a href="./temporal_solver04c.gif">Temporal solver</a>
+<br>&minus;<a href="./temporal_solver04d.gif">Kalman solver</a>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

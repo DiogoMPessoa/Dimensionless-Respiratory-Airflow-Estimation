@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of join_models</title>
+  <meta name="keywords" content="join_models">
+  <meta name="description" content="JOIN_MODELS: Join two fmdl structures to create one">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">meshing</a> &gt; join_models.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>join_models
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>JOIN_MODELS: Join two fmdl structures to create one</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [fmdlo]= join_models(fmdl1, fmdl2, tol) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> JOIN_MODELS: Join two fmdl structures to create one
+
+ [fmdlu]= join_models(fmdl1, fmdl2, tol)
+ fmdlu is the union of fmdl1 and fmdl2 with common nodes removed.
+ tol is the minimum distance between nodes to consider them unique
+ tol (default 1e-6) if not provided. 
+
+ join_models only works on the elems, nodes and electrode fields;
+ any c2f, mat_idx, stimulation structures must be redefined
+
+ See also: MERGE_MESHES</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>	CROP_MODEL: Crop away parts of a fem model</li><li><a href="join_models.html" class="code" title="function [fmdlo]= join_models(fmdl1, fmdl2, tol)">join_models</a>	JOIN_MODELS: Join two fmdl structures to create one</li><li><a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../eidors/models/num_elecs.html" class="code" title="function num = num_elecs( mdl );">num_elecs</a>	NUM_ELECS: number of electrodes attached to model</li><li><a href="../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>	NUM_NODES: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="join_models.html" class="code" title="function [fmdlo]= join_models(fmdl1, fmdl2, tol)">join_models</a>	JOIN_MODELS: Join two fmdl structures to create one</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fmdlo = do_join_models(fmdl1,fmdl2,thresh);</a></li><li><a href="#_sub2" class="code">function do_unit_test</a></li><li><a href="#_sub3" class="code">function do_testing(txt,fmdlo,fmdl1,fmdl2)</a></li><li><a href="#_sub4" class="code">function [fmdl1,fmdl2]=do_unit_test_2D_mdls;</a></li><li><a href="#_sub5" class="code">function [fmdl1,fmdl2]=do_unit_test_3D_mdls;</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [fmdlo]= join_models(fmdl1, fmdl2, tol)</a>
+0002 <span class="comment">% JOIN_MODELS: Join two fmdl structures to create one</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% [fmdlu]= join_models(fmdl1, fmdl2, tol)</span>
+0005 <span class="comment">% fmdlu is the union of fmdl1 and fmdl2 with common nodes removed.</span>
+0006 <span class="comment">% tol is the minimum distance between nodes to consider them unique</span>
+0007 <span class="comment">% tol (default 1e-6) if not provided.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% join_models only works on the elems, nodes and electrode fields;</span>
+0010 <span class="comment">% any c2f, mat_idx, stimulation structures must be redefined</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% See also: MERGE_MESHES</span>
+0013 <span class="comment">%</span>
+0014 
+0015 <span class="comment">% (C) 2018 Andy Adler. License: GPL version 2 or version 3</span>
+0016 <span class="comment">% $Id: join_models.m 5848 2018-11-10 18:22:43Z aadler $</span>
+0017 
+0018 <span class="keyword">if</span> ischar(fmdl1) &amp;&amp; strcmp(fmdl1,<span class="string">'UNIT_TEST'</span>); <a href="#_sub2" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0019 
+0020 <span class="keyword">if</span> nargin==2; tol = 1e-5; <span class="keyword">end</span>
+0021 
+0022 fmdlo = <a href="#_sub1" class="code" title="subfunction fmdlo = do_join_models(fmdl1,fmdl2,thresh);">do_join_models</a>(fmdl1,fmdl2,tol);
+0023 
+0024 <a name="_sub1" href="#_subfunctions" class="code">function fmdlo = do_join_models(fmdl1,fmdl2,thresh);</a>
+0025    n1 = fmdl1.nodes;
+0026    n2 = fmdl2.nodes;
+0027    Dnodes = 0;
+0028    nD = size(n1,2); <span class="comment">%dimension</span>
+0029    <span class="keyword">for</span> i=1:nD
+0030       Dnodes = Dnodes + abs(bsxfun(@minus, n1(:,i), n2(:,i)'));
+0031    <span class="keyword">end</span>
+0032    <span class="comment">% idx of nodes in fmdl2 equal to nodes in fmdl1</span>
+0033    idx = find(any( Dnodes&lt;thresh,1 ));
+0034 
+0035    nn1 = <a href="../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(fmdl1);
+0036    fmdlo = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>,<span class="string">'joined model'</span>);
+0037    fmdlo.nodes = [fmdl1.nodes;fmdl2.nodes];
+0038    fmdlo.elems = [fmdl1.elems;fmdl2.elems+nn1];
+0039    fmdlo.gnd_node = fmdl1.gnd_node;
+0040    oidx = 1:<a href="../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(fmdlo);
+0041    nno = <a href="../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(fmdlo);
+0042    oidx(idx + nn1)= [];
+0043    nidx = zeros(<a href="../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(fmdlo),1);
+0044    nidx(oidx) = 1:length(oidx);
+0045    <span class="keyword">for</span> i= idx(:)'
+0046       ff = find(Dnodes(:,i)&lt;thresh);
+0047       <span class="keyword">if</span> length(ff)~=1; error(<span class="string">'Degenerate models with equal nodes'</span>); <span class="keyword">end</span>
+0048       nidx(i+nn1) = ff;
+0049    <span class="keyword">end</span>
+0050    fmdlo.nodes = fmdlo.nodes(oidx,:);
+0051    fmdlo.elems = reshape(nidx(fmdlo.elems(:)),[],nD+1);
+0052    <span class="keyword">if</span> isfield(fmdl1,<span class="string">'electrode'</span>)
+0053       fmdlo.electrode = fmdl1.electrode;
+0054    <span class="keyword">else</span>
+0055       <span class="comment">% SUPID MATLAB FORCES THIS SILLY INITALIZATION</span>
+0056       fmdlo.electrode = struct(<span class="string">'nodes'</span>,{},<span class="string">'z_contact'</span>,{});
+0057    <span class="keyword">end</span>
+0058    <span class="keyword">if</span> isfield(fmdl2,<span class="string">'electrode'</span>)
+0059       <span class="keyword">for</span> i=1:length(fmdl2.electrode);
+0060          eli = fmdl2.electrode(i);
+0061          eli.nodes = nidx(eli.nodes + nn1);
+0062          fmdlo.electrode(end+1) = eli;
+0063       <span class="keyword">end</span>
+0064    <span class="keyword">end</span>
+0065    fmdlo.boundary = <a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(fmdlo.elems);
+0066 
+0067    <span class="keyword">for</span> i=1:<a href="../../eidors/models/num_elecs.html" class="code" title="function num = num_elecs( mdl );">num_elecs</a>(fmdlo)
+0068       fmdlo.electrode(i).nodes = fmdlo.electrode(i).nodes(:)'; <span class="comment">% force row</span>
+0069    <span class="keyword">end</span>
+0070 
+0071 
+0072 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test</a>
+0073 
+0074    subplot(221); [fmdl1,fmdl2]=do_unit_test_2D_mdls;
+0075 
+0076    fmdlo= <a href="join_models.html" class="code" title="function [fmdlo]= join_models(fmdl1, fmdl2, tol)">join_models</a>(fmdl1, fmdl2);
+0077    <a href="#_sub3" class="code" title="subfunction do_testing(txt,fmdlo,fmdl1,fmdl2)">do_testing</a>(<span class="string">'join_models-2Da'</span>,fmdlo,fmdl1,fmdl2)
+0078    subplot(222); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdlo,[0,1,1]); axis off
+0079 
+0080    fmdl1 = rmfield(fmdl1,<span class="string">'electrode'</span>);
+0081    fmdlo= <a href="join_models.html" class="code" title="function [fmdlo]= join_models(fmdl1, fmdl2, tol)">join_models</a>(fmdl1, fmdl2);
+0082    <a href="#_sub3" class="code" title="subfunction do_testing(txt,fmdlo,fmdl1,fmdl2)">do_testing</a>(<span class="string">'join_models-2Db'</span>,fmdlo,fmdl1,fmdl2)
+0083 
+0084    fmdl2 = rmfield(fmdl2,<span class="string">'electrode'</span>);
+0085    fmdlo= <a href="join_models.html" class="code" title="function [fmdlo]= join_models(fmdl1, fmdl2, tol)">join_models</a>(fmdl1, fmdl2);
+0086    <a href="#_sub3" class="code" title="subfunction do_testing(txt,fmdlo,fmdl1,fmdl2)">do_testing</a>(<span class="string">'join_models-2Dc'</span>,fmdlo,fmdl1,fmdl2)
+0087 
+0088    subplot(223); [fmdl1,fmdl2]=do_unit_test_3D_mdls; view(0,63);
+0089    fmdlo= <a href="join_models.html" class="code" title="function [fmdlo]= join_models(fmdl1, fmdl2, tol)">join_models</a>(fmdl1, fmdl2);
+0090    <a href="#_sub3" class="code" title="subfunction do_testing(txt,fmdlo,fmdl1,fmdl2)">do_testing</a>(<span class="string">'join_models-3Da'</span>,fmdlo,fmdl1,fmdl2)
+0091    subplot(224); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdlo,[0,1,0]); axis off; view(0,63);
+0092 
+0093 
+0094 <a name="_sub3" href="#_subfunctions" class="code">function do_testing(txt,fmdlo,fmdl1,fmdl2)</a>
+0095    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>([txt,<span class="string">'-01'</span>], <span class="keyword">...</span>
+0096        size(fmdl1.elems,1) + size(fmdl2.elems,1), <span class="keyword">...</span>
+0097        size(fmdlo.elems,1) );
+0098    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>([txt,<span class="string">'-02'</span>], <span class="keyword">...</span>
+0099        size(fmdl1.nodes,1) + size(fmdl2.nodes,1) &gt;= <span class="keyword">...</span>
+0100        size(fmdlo.nodes,1), true );
+0101 
+0102    <span class="keyword">if</span> ~isfield(fmdl1,<span class="string">'electrode'</span>); fmdl1.electrode = struct([]); <span class="keyword">end</span>
+0103    <span class="keyword">if</span> ~isfield(fmdl2,<span class="string">'electrode'</span>); fmdl2.electrode = struct([]); <span class="keyword">end</span>
+0104    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>([txt,<span class="string">'-02'</span>], <span class="keyword">...</span>
+0105        length(fmdl1.electrode) + length(fmdl2.electrode), <span class="keyword">...</span>
+0106        length(fmdlo.electrode));
+0107 
+0108 <a name="_sub4" href="#_subfunctions" class="code">function [fmdl1,fmdl2]=do_unit_test_2D_mdls;</a>
+0109    imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c0'</span>,8); fmdl= imdl.fwd_model;
+0110    fmdl = <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdl,inline(<span class="string">'x&lt;-0.4'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0111    idx  = fmdl.nodes(:,1)&lt;-0.25;
+0112    fmdl.nodes(idx,1) = -0.25;
+0113    fmdl.nodes(:,1) = fmdl.nodes(:,1) + 0.25;
+0114    fmdl1 = <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdl,inline(<span class="string">'x&gt; 1.0'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0115    fmdl2 = fmdl;
+0116    fmdl2.nodes(:,1) = -fmdl2.nodes(:,1);
+0117    fmdl2 = <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdl2,inline(<span class="string">'x+y&lt;-1.28'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0118    fmdl2 = <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdl2,inline(<span class="string">'y&lt;-0.95'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0119    fmdl2 = <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdl2,inline(<span class="string">'x&lt;-1.20'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0120 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl1,[0,1,1]);
+0121 hold on; hh=<a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl2,[0,1,1]); set(hh,<span class="string">'EdgeColor'</span>,[0,0,1]);
+0122 hold off; xlim([-1.3,1.3]); axis off
+0123 
+0124 <a name="_sub5" href="#_subfunctions" class="code">function [fmdl1,fmdl2]=do_unit_test_3D_mdls;</a>
+0125    imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]); fmdl= imdl.fwd_model;
+0126    fmdl1= <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdl,inline(<span class="string">'x&lt;-0.55'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0127    idx  = fmdl1.nodes(:,1)&lt;-0.25;
+0128    fmdl1.nodes(idx,1) = -0.35;
+0129    fmdl1.electrode([19,9])=[];
+0130    fmdl1.nodes(:,1) = fmdl1.nodes(:,1) + 0.35;
+0131    fmdl2 = fmdl1;
+0132    fmdl2.nodes(:,1) = -fmdl2.nodes(:,1);
+0133 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl1,[0,1,0]);
+0134 hold on; hh=<a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl2,[0,1,0]); set(hh,<span class="string">'EdgeColor'</span>,[0,0,1]);
+0135 hold off; xlim([-1.3,1.3]); axis off</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,240 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>GREIT Reconstruction Matrix</h2>
+
+The AUSPEX Software is an EIT evaluate and analysis
+software from Carefusion. AUSPEX is designed to analyse
+data collected from the Geo II MF EIT system. It uses
+a reconstruction algorithm based on Sheffield
+backprojection. 
+
+<p>
+To replace this algorithm with GREIT algorithm, one
+needs to replace the file <tt>ReconstructionMatrixF.mat</tt>
+with another one calculated by this tutorial.
+
+<h3> 
+Circular GREIT model
+</h3>
+
+<pre>
+n_elecs = 16;
+fmdl = ng_mk_cyl_models([1 1 0.1] ,[n_elecs,.5],[0.05]);
+% NOTE: The 'rotate_meas' is essential here.
+fmdl.stimulation =  mk_stim_patterns(n_elecs,1,[0,1],[0,1],{'rotate_meas','no_meas_current'}, 1);
+fmdl = mdl_normalize(fmdl, 1); %MUST FOR AUSPEX
+
+opt.imgsz = [32 32];
+opt.distr = 3; 
+opt.noise_figure = 0.5; 
+imdl = mk_GREIT_model(fmdl, 0.20, [], opt);
+
+% DESTINATION AUSPEX MODEL
+cmdl = mk_common_gridmdl('b2d','backproj');
+cmdl = rmfield(cmdl.fwd_model,'coarse2fine');
+% MODEL GEOMETRIES MUST MATCH
+f2c  = mk_coarse_fine_mapping(cmdl, imdl.rec_model);
+
+RM = f2c*imdl.solve_use_matrix.RM(1:size(f2c,2),:);
+
+ReconstrMatrix= - ( RM(1:2:end,:) + RM(2:2:end,:) )';
+save ReconstrMatrixGREITc ReconstrMatrix -V6;
+
+</pre>
+
+<h3> 
+Adult human GREIT model
+</h3>
+
+<pre>
+n_elecs = 16;
+   fmdl= mk_library_model('adult_male_16el');
+   fmdl.electrode = fmdl.electrode([9:16,1:8]);
+   fmdl.electrode = fmdl.electrode([1,16:-1:2]);
+   fmdl.stimulation =  mk_stim_patterns(n_elecs,1,[0,1],[0,1],{'rotate_meas','no_meas_current'}, 1);
+
+   fmdl = mdl_normalize(fmdl, 1);
+   img = mk_image(fmdl,1); % Homogeneous background
+
+   opt.imgsz = [32 32];
+   opt.distr = 3; 
+   opt.noise_figure = 0.5; 
+   imdl = mk_GREIT_model(fmdl, 0.25, [], opt);
+
+% MODEL
+fmdl = imdl.rec_model;
+fmdl.nodes = fmdl.nodes/max(fmdl.nodes(:))*1.1*[1,0;0,-1];
+cmdl = mk_common_gridmdl('b2d','backproj');
+cmdl = rmfield(cmdl.fwd_model,'coarse2fine');
+f2c  = mk_coarse_fine_mapping(cmdl, fmdl);
+
+RM = f2c*imdl.solve_use_matrix.RM(1:size(f2c,2),:);
+
+ReconstrMatrix= - ( RM(1:2:end,:) + RM(2:2:end,:) )';
+save ReconstrMatrixGREITt ReconstrMatrix -V6;
+
+</pre>
+
+<h3> 
+Test Simulations
+</h3>
+
+<pre>
+imdl = mk_common_model('c2c2',16);
+imdl.fwd_model.stimulation =  ...
+     mk_stim_patterns(16,1,[0,1],[0,1],{'rotate_meas','no_meas_current'},1);
+img = mk_image(imdl);     vh = fwd_solve( img );
+img.elem_data(290) = 1.1; vi = fwd_solve( img );
+
+clf;subplot(221);
+show_fem(img); title('Test Object');
+print_convert GREIT_AUSPEX03a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/GREIT_AUSPEX03a.png">
+<br><i>Figure:</i>
+Simulation with target to test AUSPEX matrix
+</center>
+
+<h3> 
+Test of GREIT/AUSPEX matrices
+</h3>
+
+<pre>
+s=1;
+fnames = {'ReconstrMatrixGREITc.mat','ReconstrMatrixGREITt.mat'};
+for i=1:length(fnames);
+   load(fnames{i});
+   imdl = mk_common_gridmdl('b2d',ReconstrMatrix');
+
+   imgr= inv_solve(imdl, vh, vi);
+   subplot(2,2,s+0); show_fem(imgr);
+   title('Test Object Reconstruction');
+   
+   imgr.elem_data = mean(ReconstrMatrix==0)';
+   subplot(2,2,s+1); show_fem(imgr);
+   title('Domain Boundary');
+s=s+2;end
+print_convert GREIT_AUSPEX04a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/GREIT_AUSPEX04a.png">
+<br><i>Figure:</i>
+<i>Left</i>Reconstructions.
+<i>Right</i>Reconstruction Domain
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

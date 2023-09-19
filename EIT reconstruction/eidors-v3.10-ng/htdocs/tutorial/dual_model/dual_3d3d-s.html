@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 3D-3D Dual Models</h2>
+
+<p>Application of 3D-3D dual models has many advantages. One can easily change inverse model resolution to fit number of unknowns to the power of his computer. It very natural to limit space where the image is reconstructed only to the area of interest, and maybe the most important "inverse crime" won't be ever commited.
+</p>
+
+<p>
+This tutorial is based on classical tank problem, where forward problem is solved using fine mesh (Netgen generated)
+with 36,000 elements and inverse problem is based on very coarse mesh with 688 elements.
+</p>
+
+Source code: <a href="dual_3d3d.m">dual_3d3d.m</a>
+<pre>
+% Dual model 3d-3d image reconstruction demo
+%
+% (C) 2009, Bartosz Sawicki
+% Licenced under the GPLv2 or later
+% $Id: dual_3d3d.m 4839 2015-03-30 07:44:50Z aadler $
+
+%% Create forward, fine tank model
+electrodes_per_plane = 16;
+number_of_planes = 2;
+tank_radius = 0.2;
+tank_height = 0.5;
+fine_mdl = ng_mk_cyl_models([tank_height,tank_radius],...
+    [electrodes_per_plane,0.15,0.35],[0.01]);
+
+% Determine stimulation paterns
+stim_pat = mk_stim_patterns(electrodes_per_plane, number_of_planes, ...
+              '{ad}','{ad}',{'meas_current'});
+
+% Parameters for forward model
+fine_mdl.stimulation= stim_pat;
+fine_mdl.solve=      'fwd_solve_1st_order';
+fine_mdl.system_mat= 'system_mat_1st_order';
+fine_mdl.jacobian=   'jacobian_adjoint';
+fine_mdl = mdl_normalize(fine_mdl,0);
+
+          
+%% Solve homogeneous model 
+disp('Homogeneous model');
+
+% Every cells has the same material
+homg_img= mk_image(fine_mdl, 1 );
+
+homg_data=fwd_solve( homg_img);
+
+
+%% Create inclusion and solve inhomogenous model
+disp('Inhomogeneous model');
+
+% Parameters of spherical inclusion
+center = [0.10, 0, 0.2];
+radius = 0.05;
+inclusion_material = 10;
+
+inhomg_img = create_inclusion(homg_img, center, radius, inclusion_material);
+
+show_fem( inhomg_img );
+print_convert dual_3d3d01a.png '-density 80'
+
+inhomg_data=fwd_solve( inhomg_img);
+
+
+%% Create coarse model for inverse problem
+
+coarse_mdl_maxh = 0.07; % maximum element size 
+coarse_mdl = ng_mk_cyl_models([tank_height,tank_radius,coarse_mdl_maxh],[0],[]);
+
+
+%% Create inverse model
+disp('Inverse model')
+
+inv3d.name=  'Dual 3d-3d EIT inverse';
+inv3d.fwd_model= fine_mdl;
+
+disp('Calculating coarse2fine mapping ...');
+inv3d.fwd_model.coarse2fine = ...
+       mk_coarse_fine_mapping( fine_mdl, coarse_mdl);
+disp('   ... done');
+
+% Parameters for inverse model
+inv3d.solve= @eidors_default;
+inv3d.hyperparameter.value = .01;
+inv3d.R_prior= @prior_laplace;
+inv3d.jacobian_bkgnd.value= 1;
+inv3d.reconst_type= 'difference';
+
+inv3d= eidors_obj('inv_model', inv3d);
+
+recon_img= inv_solve( inv3d, homg_data, inhomg_data);
+
+show_fem( recon_img );
+print_convert dual_3d3d02a.png '-density 80'
+
+
+%% Show results on coarse mesh
+
+coarse_recon_img= mk_image(coarse_mdl, recon_img.elem_data);
+
+show_fem( coarse_recon_img );              
+print_convert dual_3d3d02b.png '-density 80'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/dual_3d3d01a.png">
+<br><i> Figure:</i>
+Netgen generated mesh for tank problem, with a 2&times;16 electrodes. Mesh consists of 36,000 elements.
+Single spherical inclusion was applied.
+</center>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/dual_3d3d02b.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/dual_3d3d02a.png">
+<br><i> Figure:</i>
+Results of reconstruction. On the left results shown on coarse mesh used in inverse problem. On the right solution projected into fine, forward mesh.
+</center>
+
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+

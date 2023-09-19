@@ -1,0 +1,469 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Compare selection of hyperparameters for Total Variation
+</h2>
+
+Total Variation typically uses a GN step to initialize the
+first iteration. We thus have a hyperparameter for the
+GN step (&alpha;<sub>1</sub>), and another for the GN interations
+(&alpha;<sub>2</sub>).
+
+<h3>Simluation object</H3>
+
+Simulate shape with edges 
+<pre>
+% TV: Create object $Id: TV_hyperparams01.m 3365 2012-07-02 08:05:40Z aadler $
+
+imb=  mk_common_model('c2c2',16);
+img= mk_image(imb.fwd_model, 1);
+
+vh= fwd_solve( img );
+
+img.elem_data([25,37,49:50,65:66,81:83,101:103,121:124])=2;
+img.elem_data([95,98:100,79,80,76,63,64,60,48,45,36,33,22])=2;
+    
+vi= fwd_solve( img );
+
+subplot(221)
+show_fem(img);
+axis equal; axis off;
+print_convert TV_hyperparams01a.png '-density 100';
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/TV_hyperparams01a.png">
+<br><i> Figure:</i>
+Shape that is to be reconstructed (generated on 576 element mesh)
+</center>
+
+<h3>Create TV reconstruction model</H3>
+<pre>
+% TV: Reconstruction model $Id: TV_hyperparams02.m 3428 2012-07-02 20:56:41Z bgrychtol $
+
+maxit=20;  % max number of iterations
+imdl=mk_common_model('b2c0',16);
+
+invtv= eidors_obj('inv_model', 'EIT inverse');
+invtv.reconst_type= 'difference';
+invtv.jacobian_bkgnd.value= 1;
+
+invtv.fwd_model=                  imdl.fwd_model;
+invtv.solve=                      @inv_solve_TV_pdipm;
+invtv.R_prior=                    @prior_TV;
+invtv.parameters.term_tolerance=  1e-6;
+invtv.parameters.keep_iterations= 1;
+invtv.parameters.max_iterations=  maxit;
+
+subplot(221)
+show_fem(invtv.fwd_model);
+axis equal; axis off;
+print_convert TV_hyperparams02a.png '-density 100';
+
+
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/TV_hyperparams02a.png">
+<br><i> Figure:</i>
+Reconstruction model (256 elements)
+</center>
+
+<h3>Reconstruction with no noise</H3>
+<pre>
+% Iterate over params $Id: TV_hyperparams03.m 3428 2012-07-02 20:56:41Z bgrychtol $
+name_base = 'tv_hp_00_img-a1=%3.1f-a2=%3.1f.jpg';
+alpha1list= [1.5:0.5:4.5];
+alpha2list= [3.5:1.0:9.5];
+for alpha2= alpha2list
+   for alpha1= alpha1list
+      invtv.hyperparameter.value =   10^-alpha2;
+      invtv.inv_solve_TV_pdipm.alpha1= 10^-alpha1;
+      imgs= inv_solve(invtv,vh,vi);
+      imgs.elem_data= imgs.elem_data(:,[1,2,5,maxit]);
+      imgs.calc_colours.window_range=.2;
+      imgs.calc_colours.clim=1.2;
+      out_img= show_slices(imgs);
+      imwrite(out_img, colormap, sprintf(name_base,alpha1,alpha2) );
+    end
+end
+
+</pre>
+
+<p><B> To display these results, create an html table with matlab</B>
+<pre>
+% Generate HTML frame to view $Id: TV_hyperparams04.m 2639 2011-07-12 07:39:06Z bgrychtol $
+
+fid= fopen('TV-params-NSR=0.html','w');
+
+a=sprintf('%calpha;',38); % alpha
+m=sprintf('%cminus;',38); % alpha
+s=sprintf('%c',60); % less than 
+e=sprintf('%c',62); % greater than
+tr= [s,'TR',e]; etr= [s,'/TR',e];
+th= [s,'TH',e]; eth= [s,'/TH',e];
+td= [s,'TD',e]; etd= [s,'/TD',e];
+sub=[s,'SUB',e];esub=[s,'/SUB',e];
+sup=[s,'SUP',e];esup=[s,'/SUP',e];
+
+
+fprintf(fid,[s,'TABLE',e,tr,th]);
+for alpha1= alpha1list
+   fprintf(fid,[th,a,sub,'1',esub,'=10',sup,m,'%3.1f',esup],alpha1);
+end
+fprintf(fid,'\n');
+
+for alpha2= alpha2list
+   fprintf(fid,['\n',tr,'\n',th,a,sub,'2',esub,'=10', ...
+                sup,m,'%3.1f',esup,'\n'],alpha2);
+   for alpha1= alpha1list
+      fprintf(fid,[td,s,'img src="%s"',e,'\n'], sprintf(name_base,alpha1,alpha2) );
+   end
+end
+
+fprintf(fid,['\n',s,'/TABLE',e,'\n']);
+fclose(fid);
+
+</pre>
+
+<H3>Reconstruction Results (No Noise) 
+(GN param = &alpha;<sub>1</sub>, TV param= &alpha;<sub>2</sub>)</H3>
+<center>
+<TABLE><TR><TH><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;1.5</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;2.0</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;2.5</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;3.0</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;3.5</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;4.0</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;4.5</SUP>
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;3.5</SUP>
+<TD><img src="tv_hp_00_img-a1=1.5-a2=3.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.0-a2=3.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.5-a2=3.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.0-a2=3.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.5-a2=3.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.0-a2=3.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.5-a2=3.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;4.5</SUP>
+<TD><img src="tv_hp_00_img-a1=1.5-a2=4.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.0-a2=4.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.5-a2=4.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.0-a2=4.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.5-a2=4.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.0-a2=4.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.5-a2=4.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;5.5</SUP>
+<TD><img src="tv_hp_00_img-a1=1.5-a2=5.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.0-a2=5.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.5-a2=5.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.0-a2=5.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.5-a2=5.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.0-a2=5.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.5-a2=5.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;6.5</SUP>
+<TD><img src="tv_hp_00_img-a1=1.5-a2=6.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.0-a2=6.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.5-a2=6.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.0-a2=6.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.5-a2=6.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.0-a2=6.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.5-a2=6.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;7.5</SUP>
+<TD><img src="tv_hp_00_img-a1=1.5-a2=7.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.0-a2=7.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.5-a2=7.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.0-a2=7.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.5-a2=7.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.0-a2=7.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.5-a2=7.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;8.5</SUP>
+<TD><img src="tv_hp_00_img-a1=1.5-a2=8.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.0-a2=8.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.5-a2=8.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.0-a2=8.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.5-a2=8.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.0-a2=8.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.5-a2=8.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;9.5</SUP>
+<TD><img src="tv_hp_00_img-a1=1.5-a2=9.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.0-a2=9.5.jpg">
+<TD><img src="tv_hp_00_img-a1=2.5-a2=9.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.0-a2=9.5.jpg">
+<TD><img src="tv_hp_00_img-a1=3.5-a2=9.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.0-a2=9.5.jpg">
+<TD><img src="tv_hp_00_img-a1=4.5-a2=9.5.jpg">
+
+</TABLE>
+
+</center>
+
+
+<h3>Reconstruction with 20db SNR noise</H3>
+<p><B> Add Noise</B>
+<pre>
+% Add noise $Id: TV_hyperparams05.m 1535 2008-07-26 15:36:27Z aadler $
+
+sig= sqrt(norm(vi.meas - vh.meas));
+m= size(vi.meas,1);
+vi.meas = vi.meas + .01*sig*randn(m,1);
+
+</pre>
+
+<p><B> Calculations</B>
+
+<pre>
+% Iterate over params $Id: TV_hyperparams06.m 3428 2012-07-02 20:56:41Z bgrychtol $
+name_base= 'tv_hp_20_img-a1=%3.1f-a2=%3.1f.jpg';
+
+alpha1list= [1.5:0.5:4.5];
+alpha2list= [3.5:1.0:9.5];
+for alpha2= alpha2list
+   for alpha1= alpha1list
+      invtv.hyperparameter.value =   10^-alpha2;
+      invtv.inv_solve_TV_pdipm.alpha1= 10^-alpha1;
+      imgs= inv_solve(invtv,vh,vi);
+      imgs.elem_data= imgs.elem_data(:,[1,2,5,maxit]);
+      imgs.calc_colours.window_range=.2;
+      imgs.calc_colours.clim=1.2;
+      out_img= show_slices(imgs);
+      imwrite(out_img, colormap, sprintf(name_base,alpha1,alpha2) );
+    end
+end
+
+</pre>
+
+<p><B> To display these results, create an html table with matlab</B>
+<pre>
+% Generate HTML frame to view $Id: TV_hyperparams07.m 2733 2011-07-13 21:04:58Z anon-eidors $
+
+fid= fopen('TV-params-NSR=0.01.html','w');
+
+
+a=sprintf('%calpha;',38); % alpha
+m=sprintf('%cminus;',38); % alpha
+s=sprintf('%c',60); % less than 
+e=sprintf('%c',62); % greater than
+tr= [s,'TR',e]; etr= [s,'/TR',e];
+th= [s,'TH',e]; eth= [s,'/TH',e];
+td= [s,'TD',e]; etd= [s,'/TD',e];
+sub=[s,'SUB',e];esub=[s,'/SUB',e];
+sup=[s,'SUP',e];esup=[s,'/SUP',e];
+
+
+fprintf(fid,[s,'TABLE',e,tr,th]);
+for alpha1= alpha1list
+   fprintf(fid,[th,a,sub,'1',esub,'=10',sup,m,'%3.1f',esup],alpha1);
+end
+fprintf(fid,'\n');
+
+for alpha2= alpha2list
+   fprintf(fid,['\n',tr,'\n',th,a,sub,'2',esub,'=10', ...
+                sup,m,'%3.1f',esup,'\n'],alpha2);
+   for alpha1= alpha1list
+      fprintf(fid,[td,s,'img src="%s"',e,'\n'], sprintf(name_base,alpha1,alpha2) );
+   end
+end
+
+fprintf(fid,['\n',s,'/TABLE',e,'\n']);
+fclose(fid);
+
+</pre>
+
+<H3>Reconstruction Results (20dB SNR) 
+(GN param = &alpha;<sub>1</sub>, TV param= &alpha;<sub>2</sub>)</H3>
+<center>
+<TABLE><TR><TH><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;1.5</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;2.0</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;2.5</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;3.0</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;3.5</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;4.0</SUP><TH>&alpha;<SUB>1</SUB>=10<SUP>&minus;4.5</SUP>
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;3.5</SUP>
+<TD><img src="tv_hp_20_img-a1=1.5-a2=3.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.0-a2=3.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.5-a2=3.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.0-a2=3.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.5-a2=3.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.0-a2=3.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.5-a2=3.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;4.5</SUP>
+<TD><img src="tv_hp_20_img-a1=1.5-a2=4.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.0-a2=4.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.5-a2=4.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.0-a2=4.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.5-a2=4.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.0-a2=4.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.5-a2=4.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;5.5</SUP>
+<TD><img src="tv_hp_20_img-a1=1.5-a2=5.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.0-a2=5.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.5-a2=5.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.0-a2=5.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.5-a2=5.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.0-a2=5.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.5-a2=5.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;6.5</SUP>
+<TD><img src="tv_hp_20_img-a1=1.5-a2=6.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.0-a2=6.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.5-a2=6.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.0-a2=6.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.5-a2=6.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.0-a2=6.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.5-a2=6.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;7.5</SUP>
+<TD><img src="tv_hp_20_img-a1=1.5-a2=7.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.0-a2=7.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.5-a2=7.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.0-a2=7.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.5-a2=7.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.0-a2=7.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.5-a2=7.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;8.5</SUP>
+<TD><img src="tv_hp_20_img-a1=1.5-a2=8.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.0-a2=8.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.5-a2=8.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.0-a2=8.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.5-a2=8.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.0-a2=8.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.5-a2=8.5.jpg">
+
+<TR>
+<TH>&alpha;<SUB>2</SUB>=10<SUP>&minus;9.5</SUP>
+<TD><img src="tv_hp_20_img-a1=1.5-a2=9.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.0-a2=9.5.jpg">
+<TD><img src="tv_hp_20_img-a1=2.5-a2=9.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.0-a2=9.5.jpg">
+<TD><img src="tv_hp_20_img-a1=3.5-a2=9.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.0-a2=9.5.jpg">
+<TD><img src="tv_hp_20_img-a1=4.5-a2=9.5.jpg">
+
+</TABLE>
+
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

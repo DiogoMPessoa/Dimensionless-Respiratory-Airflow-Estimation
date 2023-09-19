@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Dual Models using a rectangular mesh of a volume slice
+</h2>
+
+If we wish to reconstruct a slice of a volume onto
+a rectangular mesh, that can be done using the
+following dual model scheme.
+A common use of dual models is to allow the forward
+model to represent the entire space, while the
+reconstruction model represents a slice through
+the volume at the place of interest. 
+
+<h3> 
+Rectangular mesh represented as a triangular FEM
+</h3>
+<p>
+The rectangular mesh is represented as a triangular
+FEM where each square pixel includes two triangular
+elements. The model is parametrized such that 
+both elements in each pixel have the same parameter
+<pre>
+% Make square mesh $Id: square_mesh01.m 2663 2011-07-12 18:40:31Z aadler $
+
+% Create square mesh model
+imdl= mk_common_model('c2s',16);
+s_mdl= rmfield(imdl.fwd_model,{'electrode','stimulation'});
+
+% assign one parameter to each square
+e= size(s_mdl.elems,1);
+params= ceil(( 1:e )/2);
+s_mdl.coarse2fine = sparse(1:e,params,1,e,max(params));
+
+show_fem(s_mdl)
+
+% Show parameter numbers
+   numeros= reshape(sprintf('%3d',params),3,e)';
+   xc=mean(reshape(s_mdl.nodes(s_mdl.elems,1),e,3),2);
+   yc=mean(reshape(s_mdl.nodes(s_mdl.elems,2),e,3),2);
+   text(xc,yc,numeros,'FontSize',7, ...
+            'HorizontalAlignment','center');
+
+print_convert square_mesh01a.png '-density 75'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/other_models/square_mesh01a.png">
+<br><i> Figure:</i>
+32&times;32 rectangular mesh representing a square
+pixels in the space. The parameterization is chosen
+so the parameter is the same for both elements
+in each pixel.
+</center>
+
+<h3> 
+Dual mesh correspondance
+</h3>
+<p>
+First, we select the vertical extent of the
+coarse mesh (<i>z</i><sub>depth</sub>=0.1). 
+This can be shown as follows:
+<pre>
+% Mesh Correspondance $Id: square_mesh02.m 1535 2008-07-26 15:36:27Z aadler $
+
+% Create grid based on mesh points
+nn= 16; nl= 1:nn+1;
+h0pts= s_mdl.nodes([nl,(nl-1)*(nn+1)+1],:);
+h1pts= s_mdl.nodes([nl + nn*(nn+1),nl*(nn+1)],:);
+
+z_depth= .1*ones(2*(nn+1),1);;
+% Add the third dimension
+v00pts= [h0pts, -z_depth]; v01pts= [h0pts, +z_depth];
+v10pts= [h1pts, -z_depth]; v11pts= [h1pts, +z_depth];
+
+xpts= [v00pts(:,1),v01pts(:,1),v11pts(:,1),v10pts(:,1),v00pts(:,1)]';
+ypts= [v00pts(:,2),v01pts(:,2),v11pts(:,2),v10pts(:,2),v00pts(:,2)]';
+zpts= [v00pts(:,3),v01pts(:,3),v11pts(:,3),v10pts(:,3),v00pts(:,3)]';
+subplot(121)
+plot3(xpts,ypts,zpts,'b');
+
+axis([-1.1,+1.1,-1.1,+1.1,-0.4,+0.4]);
+view(-47,28); axis square
+
+</pre>
+
+Next, we show the coarse and fine models
+and their relationship. 
+
+<pre>
+% Dual models $Id: square_mesh03.m 2663 2011-07-12 18:40:31Z aadler $
+
+f_mdl = mk_library_model('cylinder_16x1el_coarse');
+
+subplot(122)
+show_fem(f_mdl);  % fine model
+crop_model(gca, inline('x-z<-8','x','y','z'))
+
+% Map coarse model geometry
+zofs=1/3;
+hold on
+plot3(xpts*15,ypts*15,(zpts+zofs)*15,'b');
+hold off
+
+axis(15*[-1.1,+1.1,-1.1,+1.1,zofs-0.4,zofs+0.4]);
+view(-47,28); axis square
+
+print_convert square_mesh03a.png '-density 100'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/other_models/square_mesh03a.png">
+<br><i> Figure:</i>
+<i>Left</i>  coarse model with z<sub>depth</sub>=0.1
+<i>Right</i> correspondence between coarse and fine model.
+</center>
+
+<h3> 
+Simulation Data
+</h3>
+
+We simulate a ball moving in
+a helical path on a fine netgen model.
+<pre>
+% Simulate Moving Ball $Id: square_mesh04.m 2663 2011-07-12 18:40:31Z aadler $
+
+n_sims= 20;
+f_mdl = mk_library_model('cylinder_16x1el_vfine');
+f_mdl.stimulation = mk_stim_patterns(16,1,'{ad}','{ad}',{},1);
+[vh,vi,xyzr_pt]= simulate_3d_movement( n_sims, f_mdl);
+
+clf;
+show_fem(f_mdl)
+crop_model(gca, inline('x-z<-8','x','y','z'))
+
+hold on
+[xs,ys,zs]=sphere(10);
+for i=1:n_sims
+   xp=xyzr_pt(1,i); yp=xyzr_pt(2,i);
+   zp=xyzr_pt(3,i); rp=xyzr_pt(4,i);
+   hh=surf(rp*xs+xp, rp*ys+yp, rp*zs+zp);
+   set(hh,'EdgeColor',[.4,0,.4],'FaceColor',[.2,0,.2]);
+end
+zofs=1/3;
+plot3(xpts*15,ypts*15,(zpts+zofs)*15,'b');
+hold off
+
+axis equal
+view(-23,44)
+print_convert square_mesh04a.png '-density 75'
+view(-12,4)
+print_convert square_mesh04b.png '-density 75'
+
+
+</pre>
+<b>Note:</b> this stimulation requires at least 4GB memory
+and many minutes of CPU time to run. The calculated data
+are available 
+<a href = "http://eidors3d.sourceforge.net/tutorial/dual_model/square_mesh04_output.mat">here</a>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/other_models/square_mesh04a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/square_mesh04b.png">
+<br><i> Figure:</i>
+Two different views of netgen model of a
+16&times;1 electrode tank on which data
+are sumulated. The
+positions of the simulated conductive target moving in
+a helical path are shown in purple, and the plane of
+the reconstructed images are shown in blue.
+</center>
+
+<h3> 
+Reconstruct Images
+</h3>
+
+First, we reconstruct images on the rectangular
+mesh, using the coarse to fine mapping.
+<pre>
+% 2D solver $Id: square_mesh05.m 4839 2015-03-30 07:44:50Z aadler $
+
+% Create a new inverse model, and set
+% reconstruction model and fwd_model
+imdl= mk_common_model('c2c2',16); im_fm= imdl.fwd_model;
+imdl.rec_model= s_mdl;
+imdl.fwd_model= f_mdl;
+imdl.fwd_model.stimulation= im_fm.stimulation;
+imdl.fwd_model.meas_select= im_fm.meas_select;
+
+s_mdl.mk_coarse_fine_mapping.f2c_offset = [0,0,5];
+s_mdl.mk_coarse_fine_mapping.f2c_project = (1/15)*speye(3);
+s_mdl.mk_coarse_fine_mapping.z_depth = 0.1;
+c2f= mk_coarse_fine_mapping( f_mdl, s_mdl);
+imdl.fwd_model.coarse2fine = c2f;
+imdl.RtR_prior = @prior_gaussian_HPF;
+imdl.solve = @inv_solve_diff_GN_one_step;
+imdl.hyperparameter.value= 0.03;
+
+imgs= inv_solve(imdl, vh, vi);
+
+</pre>
+Next, we reconstruct images on a classic 2D
+circular FEM, and compare the images.
+<pre>
+% 2D solver $Id: square_mesh06.m 4839 2015-03-30 07:44:50Z aadler $
+
+% Create a classic 2D inverse model
+imdl= mk_common_model('c2c2',16);
+imdl.RtR_prior = @prior_gaussian_HPF;
+imdl.solve = @inv_solve_diff_GN_one_step;
+imdl.hyperparameter.value= 0.1;
+
+imgc= inv_solve(imdl, vh, vi);
+
+% Show on the mesh
+subplot(121); show_fem(imgs); axis equal; axis tight;
+subplot(122); show_fem(imgc); axis equal; axis tight;
+print_convert square_mesh06a.png
+
+% Show on a grid 
+subplot(121); show_slices(imgs)
+subplot(122); show_slices(imgc)
+print_convert square_mesh06b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/square_mesh06a.png">
+<br><i> Figure:</i>
+FEM and reconstructed image
+<i>Left</i> Reconstructed image on rectangular mesh (Dual mesh)
+<i>Right</i> Reconstructed image on 2D circular mesh
+</center>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/square_mesh06b.png">
+<br><i> Figure:</i>
+Reconstructed images
+<i>Left</i> Reconstructed image on rectangular mesh (Dual mesh)
+<i>Right</i> Reconstructed image on 2D circular mesh
+</center>
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

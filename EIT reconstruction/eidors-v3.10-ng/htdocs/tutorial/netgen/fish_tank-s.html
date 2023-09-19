@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+View of an electric fish in a tank
+</h2>
+
+Weakly electric fish use EIT to see their environment.
+Since they generate current (from head to tail) we can
+view them with other electrodes.
+The idea of this tutorial is to simulate a fish in tank,
+and then to see the world from their perspective (ie
+the voltage distribution on the body of the fish. 
+
+
+<h3>
+Model a 3D tank with 8 electrodes and an elliptical fish
+</h3>
+
+<pre>
+fx=0;fy=.7;fz=0.15;fl=20/75;fh=5/75;fw=5/75;
+fish = sprintf('ellipsoid(%f,%f,%f;%f,0,0;0,%f,0;0,0,%f)',fx,fy,fz,fl/2,fh/2,fw/2);
+shape_str = ['solid cyl    = cylinder (0,0,0; 0,0,1; 1.0); \n', ...
+             'solid tank   = orthobrick(-2,-2,0;2,2,0.3) and cyl; \n', ...
+             'solid obj1   = cylinder( -.3,.5,0; -.3,.5,1;0.1);\n' ...
+             'solid obj1t  = obj1 and tank; tlo obj1t;\n' ...
+             'solid fish   = ',fish,'; tlo fish;\n', ...
+             'solid mainobj= tank and not fish and not obj1 -maxh=0.3;\n'];
+
+% Electrodes on the head and tail
+elec_shape([1,2])=[0.01];
+elec_pos(1,:) = [ fx-fl/2,fy,fz,-1,0,0]; elec_obj{1} = 'fish';
+elec_pos(2,:) = [ fx+fl/2,fy,fz, 1,0,0]; elec_obj{2} = 'fish';
+
+% Electrodes on the tank
+n_elec = 8;
+th = linspace(0,2*pi,n_elec+1)'; th(end) = [];
+cs = [cos(th), sin(th)];
+elec_pos = [elec_pos;  cs, 0.2+0*th, cs, 0*th];
+for i=2+(1:n_elec);
+   elec_obj{i} = 'cyl';
+   elec_shape(i)=[0.05];
+end
+fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+
+show_fem(fmdl);view(90,20);
+print_convert fish_tank01a.png '-density 60'
+show_fem(fmdl);view(90,80);
+print_convert fish_tank01b.png '-density 60'
+axis([-.3,.3,.2,1,0,0.2])
+print_convert fish_tank01c.png '-density 60'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/fish_tank01a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/fish_tank01b.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/fish_tank01c.png">
+</center>
+
+<h3>
+Create stim_patterns and meas_patterns for the fish
+</h3>
+
+<pre>
+% Set stimulation (elecs 1,2 are the fish)
+fmdl.stimulation(1).stim_pattern = [1;-1;zeros(n_elec,1)];
+fmdl.stimulation(1).meas_pattern = sparse([ ...
+    0, 0, 1, 0, 0, 0,-1, 0, 0, 0;
+    0, 0, 0, 1, 0, 0, 0,-1, 0, 0;
+    0, 0, 0, 0, 1, 0, 0, 0,-1, 0;
+    0, 0, 0, 0, 0, 1, 0, 0, 0,-1]);
+
+img = mk_image( fmdl, 1);
+img.elem_data( fmdl.mat_idx{1} ) = 1.1;  % fish is conductive
+img.elem_data( fmdl.mat_idx{3} ) = 0.001;% target is non-conductive
+
+</pre>
+
+<h3>
+Solve for the voltage distribution in the tank
+</h3>
+
+<pre>
+img.fwd_solve.get_all_meas = 1;
+vv = fwd_solve(img);
+
+img_v = rmfield(img, 'elem_data');
+img_v.node_data = vv.volt(:,1);
+img_v.calc_colours.npoints = 128;
+
+show_slices(img_v,[inf,inf,fz/2]);
+print_convert fish_tank03a.png '-density 60'
+
+% slice in y between fish and target
+show_slices(img_v,[inf, mean([fy,0.5]),inf]);
+print_convert fish_tank03b.png '-density 60'
+
+</pre>
+
+
+<center>
+<img src="fish_tank03a.png">
+<img src="fish_tank03b.png">
+</center>
+
+<h3>
+Solve for the voltage distribution near the fish's head
+</h3>
+
+<pre>
+% zoom in on the voltage in a cut plane on the face
+img_v = rmfield(img, 'elem_data');
+img_v.node_data = vv.volt(:,1);
+img_v.calc_colours.npoints = 1000;
+
+show_slices(img_v,[fl/2-0.1,inf,inf]);
+axis([700,1000,400,600])
+print_convert fish_tank04a.png '-density 60'
+
+
+
+
+</pre>
+
+<center>
+<img src="fish_tank04a.png">
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

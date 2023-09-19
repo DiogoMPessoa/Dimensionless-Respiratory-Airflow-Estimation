@@ -1,0 +1,901 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of show_pseudosection</title>
+  <meta name="keywords" content="show_pseudosection">
+  <meta name="description" content="SHOW_PSEUDOSECTION: show a pseudo-section image of data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; show_pseudosection.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>show_pseudosection
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>SHOW_PSEUDOSECTION: show a pseudo-section image of data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function fwd_model= show_pseudosection( fwd_model, data, orientation) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">SHOW_PSEUDOSECTION: show a pseudo-section image of data
+
+ OPTIONS:
+   fwd_model - fwd model of the domain
+   data      - data to display
+
+ OPTIONS:
+ fwd_model.show_pseudosection.orientation - of the pseudo-section
+      orientation = 'horizontaldownward': section in +z direction from 
+         the electrode plane (default)
+      orientation = 'circularoutside': gallery outside electrode plane
+      orientation = 'vertical'
+      orientation = 'circularinside'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="show_pseudosection.html" class="code" title="function fwd_model= show_pseudosection( fwd_model, data, orientation)">show_pseudosection</a>	SHOW_PSEUDOSECTION: show a pseudo-section image of data</li><li><a href="../../../eidors/meshing/netgen/ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>	NG_MK_GEN_MODELS: create generic models using netgen</li><li><a href="../../../eidors/models/mk_c2f_circ_mapping.html" class="code" title="function [mapping failed] = mk_c2f_circ_mapping( mdl, xyzr );">mk_c2f_circ_mapping</a>	MK_C2F_CIRC_MAPPING: create a mapping matrix from circles/spheres to FEM</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>	STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="show_pseudosection.html" class="code" title="function fwd_model= show_pseudosection( fwd_model, data, orientation)">show_pseudosection</a>	SHOW_PSEUDOSECTION: show a pseudo-section image of data</li><li><a href="../../../eidors/solvers/inverse/inv_solve_abs_annealingMetropolis_params.html" class="code" title="function [img]= inv_solve_abs_annealingMetropolis_params(inv_model, data)">inv_solve_abs_annealingMetropolis_params</a>	INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method.</li><li><a href="../../../eidors/solvers/inverse/inv_solve_abs_annealingSimplex_params.html" class="code" title="function [img]= inv_solve_abs_annealingSimplex_params(inv_model, data)">inv_solve_abs_annealingSimplex_params</a>	INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [depth,location,electrodesLocation]= plotPseudoSectionHorizontalLayers(fmdl,data)</a></li><li><a href="#_sub2" class="code">function [depth,location,location34,electrodesLocation]= plotPseudoSectionProfileSpecificDown(fmdl,data)</a></li><li><a href="#_sub3" class="code">function [depth,location,L,d]= plotPseudoSectionProfileSpecificUp(fmdl,data)</a></li><li><a href="#_sub4" class="code">function [zps,xps]= plotPseudoSectionProfileDown(fmdl,data)</a></li><li><a href="#_sub5" class="code">function [xps,zps]= plotPseudoSectionProfileVert(fmdl,data)</a></li><li><a href="#_sub6" class="code">function [r_point,th_point]= plotPseudoSectionCircularIn(fmdl,data)</a></li><li><a href="#_sub7" class="code">function [dMN,th_point]= plotPseudoSectionCircularInVolcano(fmdl,data)</a></li><li><a href="#_sub8" class="code">function [r_point,th_point]= plotPseudoSectionCircularOut(fmdl,data)</a></li><li><a href="#_sub9" class="code">function [elec_posn,elecNumber] = electrodesPosition(fmdl)</a></li><li><a href="#_sub10" class="code">function [xposition_elec,yposition_elec,zposition_elec] = electrodesPositionABMN(elecNumber,elec_posn)</a></li><li><a href="#_sub11" class="code">function [A,r_bary,th_bary,r,xc,yc,TH,R] = polarPosition(elecNumber,elec_posn)</a></li><li><a href="#_sub12" class="code">function [th_bary,r_bary,th_bary34,r_bary34,r,xc,yc,barycenter_x34,barycenter_y34] = bary34(elecNumber,elec_posn)</a></li><li><a href="#_sub13" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function fwd_model= show_pseudosection( fwd_model, data, orientation)</a>
+0002 <span class="comment">%SHOW_PSEUDOSECTION: show a pseudo-section image of data</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% OPTIONS:</span>
+0005 <span class="comment">%   fwd_model - fwd model of the domain</span>
+0006 <span class="comment">%   data      - data to display</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% OPTIONS:</span>
+0009 <span class="comment">% fwd_model.show_pseudosection.orientation - of the pseudo-section</span>
+0010 <span class="comment">%      orientation = 'horizontaldownward': section in +z direction from</span>
+0011 <span class="comment">%         the electrode plane (default)</span>
+0012 <span class="comment">%      orientation = 'circularoutside': gallery outside electrode plane</span>
+0013 <span class="comment">%      orientation = 'vertical'</span>
+0014 <span class="comment">%      orientation = 'circularinside'</span>
+0015 
+0016 <span class="comment">% (C) 2005-2008 Nolwenn Lesparre. License: GPL version 2 or version 3</span>
+0017 <span class="comment">% $Id: show_pseudosection.m 5664 2017-12-12 15:14:20Z nolwenn85 $</span>
+0018 
+0019 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub13" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span> 
+0020 
+0021 <span class="keyword">if</span> ~isfield(fwd_model, <span class="string">'misc'</span>) || ~isfield(fwd_model.misc,<span class="string">'sizepoint'</span>)
+0022   <span class="keyword">if</span> size(fwd_model.electrode,2) &lt;= 16
+0023       fwd_model.misc.sizepoint= 500;
+0024   <span class="keyword">elseif</span> size(fwd_model.electrode,2) &lt;= 32
+0025       fwd_model.misc.sizepoint= 200;
+0026   <span class="keyword">else</span>
+0027       fwd_model.misc.sizepoint= 50;
+0028   <span class="keyword">end</span>
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">if</span> nargin&lt;3 <span class="comment">% otherwise orientation is specified</span>
+0032 <span class="keyword">try</span>
+0033    orientation= fwd_model.show_pseudosection.orientation;
+0034 <span class="keyword">catch</span>
+0035    orientation = <span class="string">'horizontaldownward'</span>;
+0036 <span class="keyword">end</span>
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="keyword">if</span> ~isfield(fwd_model,<span class="string">'show_pseudosection'</span>) || ~isfield(fwd_model.show_pseudosection,<span class="string">'fs'</span>)
+0040     fwd_model.show_pseudosection.fs=16;
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">if</span> iscell(orientation) 
+0044     <span class="keyword">if</span> strcmp(orientation{2},<span class="string">'yz'</span>)
+0045     fwd_model.nodes= fwd_model.nodes(:,[2 3 1]);
+0046     rotation= <span class="string">'yz'</span>;
+0047     <span class="keyword">elseif</span> strcmp(orientation{2},<span class="string">'xz'</span>)
+0048      fwd_model.nodes= fwd_model.nodes(:,[1 3 2]);
+0049      rotation= <span class="string">'xz'</span>;
+0050     <span class="keyword">end</span>
+0051     orientation= orientation{1};
+0052 <span class="keyword">end</span>
+0053 location34= [];
+0054 electrodesLocation= [];
+0055 <span class="keyword">switch</span>(upper(orientation))
+0056     <span class="keyword">case</span> <span class="string">'HORIZONTALDOWNWARD'</span>;  [depth,location]= <a href="#_sub4" class="code" title="subfunction [zps,xps]= plotPseudoSectionProfileDown(fmdl,data)">plotPseudoSectionProfileDown</a>(fwd_model,data);
+0057     <span class="keyword">case</span> <span class="string">'VERTICAL'</span>;            [depth,location]= <a href="#_sub5" class="code" title="subfunction [xps,zps]= plotPseudoSectionProfileVert(fmdl,data)">plotPseudoSectionProfileVert</a>(fwd_model,data);
+0058     <span class="keyword">case</span> <span class="string">'SPECIFICHORIZONTALDOWNWARD'</span>;  [depth,location,location34,electrodesLocation]= <a href="#_sub2" class="code" title="subfunction [depth,location,location34,electrodesLocation]= plotPseudoSectionProfileSpecificDown(fmdl,data)">plotPseudoSectionProfileSpecificDown</a>(fwd_model,data); 
+0059     <span class="keyword">case</span> <span class="string">'SPECIFICHORIZONTALUPWARD'</span>;  [depth,location,L,d]= <a href="#_sub3" class="code" title="subfunction [depth,location,L,d]= plotPseudoSectionProfileSpecificUp(fmdl,data)">plotPseudoSectionProfileSpecificUp</a>(fwd_model,data);
+0060     <span class="keyword">case</span> <span class="string">'CIRCULAROUTSIDE'</span>;     [depth,location]= <a href="#_sub8" class="code" title="subfunction [r_point,th_point]= plotPseudoSectionCircularOut(fmdl,data)">plotPseudoSectionCircularOut</a>(fwd_model,data);
+0061     <span class="keyword">case</span> <span class="string">'CIRCULARINSIDE'</span>;      [depth,location]= <a href="#_sub6" class="code" title="subfunction [r_point,th_point]= plotPseudoSectionCircularIn(fmdl,data)">plotPseudoSectionCircularIn</a>(fwd_model,data);
+0062     <span class="keyword">case</span> <span class="string">'CIRCULARVOLCANO'</span>;     [depth,location]= <a href="#_sub7" class="code" title="subfunction [dMN,th_point]= plotPseudoSectionCircularInVolcano(fmdl,data)">plotPseudoSectionCircularInVolcano</a>(fwd_model,data);
+0063     <span class="keyword">case</span> <span class="string">'HORIZONTALLAYERS'</span>;    [depth,location,electrodesLocation]= <a href="#_sub1" class="code" title="subfunction [depth,location,electrodesLocation]= plotPseudoSectionHorizontalLayers(fmdl,data)">plotPseudoSectionHorizontalLayers</a>(fwd_model,data);
+0064   <span class="keyword">otherwise</span>;
+0065     error(<span class="string">'No orientation of type &quot;%s&quot; available'</span>, upper(orientation));
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="keyword">if</span> exist(<span class="string">'rotation'</span>,<span class="string">'var'</span>) 
+0069     <span class="keyword">if</span> strcmp(rotation,<span class="string">'yz'</span>)
+0070     fwd_model.nodes= fwd_model.nodes(:,[3 1 2]);  
+0071     <span class="keyword">elseif</span> strcmp(rotation,<span class="string">'xz'</span>)
+0072      fwd_model.nodes= fwd_model.nodes(:,[1 2 3]);
+0073     <span class="keyword">end</span>
+0074 <span class="keyword">end</span>
+0075 
+0076 fwd_model.show_pseudosection.depth= depth;
+0077 fwd_model.show_pseudosection.location= location;
+0078 fwd_model.show_pseudosection.location34= location34;
+0079 fwd_model.show_pseudosection.electrodesLocation= electrodesLocation;
+0080 <span class="comment">% fwd_model.show_pseudosection.L= L;</span>
+0081 <span class="comment">% fwd_model.show_pseudosection.d= d;</span>
+0082 <span class="keyword">end</span>
+0083 
+0084 <a name="_sub1" href="#_subfunctions" class="code">function [depth,location,electrodesLocation]= plotPseudoSectionHorizontalLayers(fmdl,data)</a>
+0085    fs= fmdl.show_pseudosection.fs;
+0086    depthPrecision= fmdl.show_pseudosection.depthPrecision;
+0087    depthRatio= fmdl.show_pseudosection.depthRatio;
+0088    
+0089    xprecision= fmdl.show_pseudosection.xprecision;
+0090    yprecision= fmdl.show_pseudosection.yprecision;
+0091    locFun= fmdl.show_pseudosection.locFun;
+0092    locVar= fmdl.show_pseudosection.locVar;
+0093    
+0094    depthFun= fmdl.show_pseudosection.depthFun;
+0095    depthVar= fmdl.show_pseudosection.depthVar;
+0096       
+0097    <span class="keyword">if</span> ~isfield(fmdl.show_pseudosection,<span class="string">'uniqueDir'</span>);
+0098        uniqueDir= <span class="string">'x'</span>;
+0099    <span class="keyword">else</span>
+0100        uniqueDir= fmdl.show_pseudosection.uniqueDir;
+0101    <span class="keyword">end</span>
+0102    [elec_posn,elecNumber]= <a href="#_sub9" class="code" title="subfunction [elec_posn,elecNumber] = electrodesPosition(fmdl)">electrodesPosition</a>(fmdl);
+0103    <span class="keyword">if</span> isfield(fmdl,<span class="string">'misc'</span>) &amp;&amp; isfield(fmdl.misc,<span class="string">'elec_posn'</span>)
+0104        elec_posn= fmdl.misc.elec_posn;
+0105    <span class="keyword">end</span>
+0106    me= (mod(elec_posn,1));
+0107    me(me==0)= 1;
+0108    precision_position= min(me(:));
+0109    xposition_elec= reshape(elec_posn(elecNumber,1),[],4); 
+0110    yposition_elec= reshape(elec_posn(elecNumber,2),[],4); 
+0111    zposition_elec= reshape(elec_posn(elecNumber,3),[],4); 
+0112    zposition_elec= zposition_elec-min(zposition_elec(:));
+0113    
+0114     electrodesLocation= xposition_elec;
+0115    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'elecsUsed'</span>)
+0116        elecsUsed= fmdl.show_pseudosection.elecsUsed;
+0117    <span class="keyword">else</span>
+0118        elecsUsed= 1:4;
+0119    <span class="keyword">end</span>
+0120    
+0121    location12x= mean(xposition_elec(:,elecsUsed(1:2)),2);
+0122    location34x= mean(xposition_elec(:,elecsUsed(3:4)),2);
+0123    location1234x= mean(xposition_elec(:,elecsUsed(1:4)),2);
+0124    location12y= mean(yposition_elec(:,elecsUsed(1:2)),2);
+0125    location34y= mean(yposition_elec(:,elecsUsed(3:4)),2);
+0126    location1234y= mean(yposition_elec(:,elecsUsed(1:4)),2);
+0127    
+0128    depth12x= diff(xposition_elec(:,elecsUsed(1:2)),1,2);
+0129    depth34x= diff(xposition_elec(:,elecsUsed(3:4)),1,2);
+0130    depth12y= diff(yposition_elec(:,elecsUsed(1:2)),1,2);
+0131    depth34y= diff(yposition_elec(:,elecsUsed(3:4)),1,2);
+0132    
+0133    x= cell(length(locVar),1);
+0134    <span class="keyword">for</span> i= 1:length(locVar)
+0135         x{i}= eval(locVar{i});
+0136     <span class="keyword">end</span>
+0137    location= locFun(x);
+0138    
+0139    y= cell(length(depthVar),1);
+0140    <span class="keyword">for</span> i= 1:length(depthVar)
+0141         y{i}= eval(depthVar{i});
+0142     <span class="keyword">end</span>
+0143    depth= depthFun(y);
+0144    [LU,is,js]= unique(location);
+0145    dL= min(diff(LU));
+0146    <span class="keyword">for</span> j= 1:length(is)
+0147        locationis= location(js==j);
+0148        depthis= depth(js==j);
+0149        <span class="keyword">if</span> length(unique(depthis)) ~=length(depthis)
+0150            [depthisU,isl,jsl]= unique(depthis);
+0151            <span class="keyword">for</span> k= 1:length(isl)
+0152                <span class="keyword">if</span> length(find(jsl==k))&gt;1
+0153                    shift= (linspace(-dL/2,dL/2,length(find(jsl==k))))';
+0154                    locationis(jsl==k)= locationis(jsl==k)+shift;
+0155                <span class="keyword">end</span>
+0156            <span class="keyword">end</span>
+0157            location(js==j)= locationis;
+0158        <span class="keyword">end</span>
+0159    <span class="keyword">end</span>
+0160    
+0161    P= [depth location];
+0162    Pu= unique(P,<span class="string">'rows'</span>,<span class="string">'stable'</span>);
+0163    <span class="keyword">if</span> size(P,1)~= size(Pu,1)
+0164        disp(<span class="string">' '</span>)
+0165        disp(<span class="string">'P not unique !!!'</span>)
+0166        disp(<span class="string">' '</span>)
+0167        keyboard
+0168    <span class="keyword">end</span>
+0169       
+0170    scatter(location,depth,fmdl.misc.sizepoint,data,<span class="string">'filled'</span>,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>);
+0171    hold on; 
+0172    xlabel(<span class="string">'Distance (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0173    ylabel(<span class="string">'Distance (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)
+0174     axis equal; axis tight;
+0175    bx= get(gca,<span class="string">'xlim'</span>); by= get(gca,<span class="string">'ylim'</span>); 
+0176    set(gca,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'dataAspectRatio'</span>,[1 (by(2)-by(1))/(bx(2)-bx(1))*3 1])
+0177 <span class="keyword">end</span>
+0178 
+0179 
+0180 <a name="_sub2" href="#_subfunctions" class="code">function [depth,location,location34,electrodesLocation]= plotPseudoSectionProfileSpecificDown(fmdl,data)</a>
+0181    fs= fmdl.show_pseudosection.fs;
+0182    [elec_posn,elecNumber]= <a href="#_sub9" class="code" title="subfunction [elec_posn,elecNumber] = electrodesPosition(fmdl)">electrodesPosition</a>(fmdl);
+0183    xposition_elec= reshape(elec_posn(elecNumber,1),[],4); 
+0184    yposition_elec= reshape(elec_posn(elecNumber,2),[],4); 
+0185    zposition_elec= reshape(elec_posn(elecNumber,3),[],4); 
+0186    zposition_elec= zposition_elec-min(zposition_elec(:));
+0187    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'minx'</span>) &amp;&amp; isfield(fmdl.show_pseudosection,<span class="string">'maxx'</span>) &amp;&amp; <span class="keyword">...</span>
+0188        isfield(fmdl.show_pseudosection,<span class="string">'miny'</span>) &amp;&amp; isfield(fmdl.show_pseudosection,<span class="string">'maxy'</span>)
+0189        minx= fmdl.show_pseudosection.minx;
+0190        maxx= fmdl.show_pseudosection.maxx;
+0191        miny= fmdl.show_pseudosection.miny;
+0192        maxy= fmdl.show_pseudosection.maxy;
+0193    <span class="keyword">else</span>
+0194        xposition_elec= xposition_elec-min(xposition_elec(:));
+0195        yposition_elec= yposition_elec-min(yposition_elec(:));
+0196        minx= min(xposition_elec(:));
+0197        maxx= max(xposition_elec(:));
+0198        miny= min(yposition_elec(:));
+0199        maxy= max(yposition_elec(:));
+0200    <span class="keyword">end</span>
+0201 
+0202    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'xToDeduce'</span>) &amp;&amp; isfield(fmdl.show_pseudosection,<span class="string">'yToDeduce'</span>)
+0203        <span class="keyword">if</span> strcmp(fmdl.show_pseudosection.xToDeduce,<span class="string">'minx'</span>)
+0204            xToDeduce= minx;
+0205        <span class="keyword">elseif</span> strcmp(fmdl.show_pseudosection.xToDeduce,<span class="string">'maxx'</span>)
+0206            xToDeduce= maxx;
+0207        <span class="keyword">end</span>
+0208        <span class="keyword">if</span> strcmp(fmdl.show_pseudosection.yToDeduce,<span class="string">'miny'</span>)
+0209            yToDeduce= miny;
+0210        <span class="keyword">elseif</span> strcmp(fmdl.show_pseudosection.yToDeduce,<span class="string">'maxy'</span>)
+0211            yToDeduce= maxy;
+0212        <span class="keyword">end</span>
+0213    <span class="keyword">else</span>
+0214        xToDeduce= minx;
+0215        yToDeduce= miny;
+0216    <span class="keyword">end</span>
+0217    rposition_elec= sqrt((xposition_elec-xToDeduce).^2 + <span class="keyword">...</span>
+0218        (yposition_elec-yToDeduce).^2);
+0219    
+0220    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'elecsUsed'</span>)
+0221        elecsUsed= fmdl.show_pseudosection.elecsUsed;
+0222    <span class="keyword">else</span>
+0223        elecsUsed= 3:4;
+0224    <span class="keyword">end</span>
+0225    
+0226    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'dirAxis'</span>)
+0227        dirAxis= fmdl.show_pseudosection.dirAxis;
+0228    <span class="keyword">else</span>
+0229        dirAxis= <span class="string">'X'</span>;
+0230    <span class="keyword">end</span>
+0231    
+0232    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'depthRatio'</span>)
+0233        depthRatio= fmdl.show_pseudosection.depthRatio;
+0234    <span class="keyword">else</span>
+0235        depthRatio= 3;
+0236    <span class="keyword">end</span>
+0237    
+0238     <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'depthPrecision'</span>)
+0239        depthPrecision= fmdl.show_pseudosection.depthPrecision;
+0240    <span class="keyword">else</span>
+0241        depthPrecision= 1;
+0242     <span class="keyword">end</span>
+0243     
+0244     <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'depthLevel'</span>)
+0245        depthLevel= fmdl.show_pseudosection.depthLevel;
+0246    <span class="keyword">else</span>
+0247        depthLevel= 0;
+0248     <span class="keyword">end</span>
+0249    
+0250    <span class="keyword">switch</span> dirAxis
+0251        <span class="keyword">case</span> <span class="string">'X'</span>
+0252            location= mean(xposition_elec(:,elecsUsed),2);
+0253            depth12= -abs(xposition_elec(:,elecsUsed(1))-xposition_elec(:,elecsUsed(2)))/depthRatio;
+0254            depth34= -abs(xposition_elec(:,elecsUsed(3))-xposition_elec(:,elecsUsed(4)))/depthRatio;
+0255            electrodesLocation= unique(round(xposition_elec/depthPrecision)*depthPrecision);
+0256        <span class="keyword">case</span> <span class="string">'Y'</span>
+0257            location= mean(yposition_elec(:,elecsUsed),2);
+0258            depth= -abs(yposition_elec(:,elecsUsed(1))-yposition_elec(:,elecsUsed(2)))/depthRatio;
+0259            electrodesLocation= unique(round(yposition_elec/depthPrecision)*depthPrecision);
+0260        <span class="keyword">case</span> <span class="string">'Z'</span>
+0261            location= mean(zposition_elec(:,elecsUsed),2);
+0262            depth= -abs(zposition_elec(:,elecsUsed(1))-zposition_elec(:,elecsUsed(2)))/depthRatio;
+0263            electrodesLocation= unique(round(zposition_elec/depthPrecision)*depthPrecision);
+0264        <span class="keyword">case</span> <span class="string">'R'</span>
+0265            location= mean(rposition_elec(:,elecsUsed),2);
+0266            location12= mean(rposition_elec(:,elecsUsed(1:2)),2);
+0267            location34= mean(rposition_elec(:,elecsUsed(3:4)),2);
+0268            depth12= abs(rposition_elec(:,elecsUsed(1))-rposition_elec(:,elecsUsed(2)));
+0269            depth34= abs(rposition_elec(:,elecsUsed(3))-rposition_elec(:,elecsUsed(4)));
+0270            electrodesLocation= rposition_elec; <span class="comment">% unique(round(rposition_elec/depthPrecision)*depthPrecision);</span>
+0271    <span class="keyword">end</span>
+0272    
+0273    precision= floor(min(diff(unique(rposition_elec(:)))));
+0274   <span class="keyword">if</span> precision==0
+0275       precision= ceil(min(diff(unique(rposition_elec(:)))));
+0276   <span class="keyword">end</span>
+0277    
+0278    depth12= round(depth12/precision)*precision;
+0279    depth34= round(depth34/precision)*precision;
+0280    location12= round(location12/precision)*precision;
+0281    location34= round(location34/precision)*precision;
+0282 
+0283    miSdepth12= min(diff(unique(depth12)));
+0284    <span class="keyword">if</span> ~isempty(miSdepth12)
+0285        depth34reS= (depth34-min(depth34))/max(depth34)*miSdepth12;
+0286    <span class="keyword">else</span>
+0287        depth34reS= 0;
+0288    <span class="keyword">end</span>
+0289    depth= depth12 +depth34reS;
+0290    depth= round(-(depth)/depthRatio/precision)*precision;
+0291      
+0292    [depthU,is,js]= unique(depth);
+0293    <span class="keyword">for</span> j= 1:length(is)
+0294        changeDepth= 0;
+0295        clear locationis depthis
+0296        location34is= location34(js==j);
+0297        location12is= location12(js==j);
+0298        depthis= depth(js==j);
+0299        datais= data(js==j);
+0300        <span class="keyword">if</span> length(unique(location34is))==length(location34is)
+0301            locationis= location34is;
+0302        <span class="keyword">else</span>
+0303            [location34isU,isl,jsl]= unique(location34is);
+0304            <span class="keyword">for</span> k= 1:length(isl)
+0305                shift= (location12is(jsl==k)-mean(location12is(jsl==k)))/(min(depth34));
+0306                locationis(jsl==k)= round((location34is(jsl==k)+shift)/precision)*precision;
+0307            <span class="keyword">end</span>
+0308            <span class="keyword">if</span> length(unique(locationis))~=length(locationis)
+0309                depthisShifted= depth(js==j)*0;
+0310                <span class="keyword">for</span> k= 1:length(isl)
+0311                    shift= ((location12is(jsl==k)-mean(location12is(jsl==k)))/(min(depth34)*2));
+0312                    <span class="keyword">if</span> length(shift)==2 &amp;&amp; round(shift(1)/precision)*precision==0
+0313                        shift= ((location12is(jsl==k)-mean(location12is(jsl==k)))/(min(depth34)*2));
+0314                    <span class="keyword">end</span>
+0315                    <span class="keyword">if</span> length(shift)==3
+0316                        xtremeShift= min([abs(min(shift)) abs(max(shift))]);
+0317                        <span class="keyword">if</span> round(xtremeShift(1)/precision)*precision==0
+0318                            xtremeShift= max([abs(min(shift)) abs(max(shift))]);
+0319                        <span class="keyword">end</span>
+0320                        shift= [-xtremeShift 0 xtremeShift]';
+0321                    <span class="keyword">end</span>
+0322                    depthisShifted(jsl==k)= depthis(jsl==k)+shift;
+0323                    changeDepth= 1;
+0324                <span class="keyword">end</span>
+0325            <span class="keyword">end</span>
+0326        <span class="keyword">end</span>
+0327         location(js==j)= locationis;
+0328         <span class="keyword">if</span> changeDepth
+0329         depth(js==j)= depthisShifted;
+0330         <span class="keyword">end</span>
+0331    <span class="keyword">end</span>
+0332    
+0333    depth= depth+depthLevel;
+0334    scatter(location,depth,fmdl.misc.sizepoint,data,<span class="string">'filled'</span>,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>);
+0335    hold on;
+0336    xlabel(<span class="string">'Distance (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0337    ylabel(<span class="string">'Pseudo-depth (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)
+0338     axis equal; axis tight;
+0339    bx= get(gca,<span class="string">'xlim'</span>); by= get(gca,<span class="string">'ylim'</span>); 
+0340    set(gca,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'dataAspectRatio'</span>,[1 (by(2)-by(1))/(bx(2)-bx(1))*3 1])
+0341 <span class="keyword">end</span>
+0342 
+0343 <a name="_sub3" href="#_subfunctions" class="code">function [depth,location,L,d]= plotPseudoSectionProfileSpecificUp(fmdl,data)</a>
+0344    fs= fmdl.show_pseudosection.fs;
+0345    [elec_posn,elecNumber]= <a href="#_sub9" class="code" title="subfunction [elec_posn,elecNumber] = electrodesPosition(fmdl)">electrodesPosition</a>(fmdl);
+0346    xposition_elec= reshape(elec_posn(elecNumber,1),[],4); 
+0347    yposition_elec= reshape(elec_posn(elecNumber,2),[],4); 
+0348    zposition_elec= reshape(elec_posn(elecNumber,3),[],4); zposition_elec= zposition_elec-min(zposition_elec(:));
+0349    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'minx'</span>) &amp;&amp; isfield(fmdl.show_pseudosection,<span class="string">'maxx'</span>) &amp;&amp; <span class="keyword">...</span>
+0350        isfield(fmdl.show_pseudosection,<span class="string">'miny'</span>) &amp;&amp; isfield(fmdl.show_pseudosection,<span class="string">'maxy'</span>)
+0351        minx= fmdl.show_pseudosection.minx;
+0352        maxx= fmdl.show_pseudosection.maxx;
+0353        miny= fmdl.show_pseudosection.miny;
+0354        maxy= fmdl.show_pseudosection.maxy;
+0355    <span class="keyword">else</span>
+0356        xposition_elec= xposition_elec-min(xposition_elec(:));
+0357        yposition_elec= yposition_elec-min(yposition_elec(:));
+0358        minx= min(xposition_elec(:));
+0359        maxx= max(xposition_elec(:));
+0360        miny= min(yposition_elec(:));
+0361        maxy= max(yposition_elec(:));
+0362    <span class="keyword">end</span>
+0363    
+0364    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'xToDeduce'</span>) &amp;&amp; isfield(fmdl.show_pseudosection,<span class="string">'yToDeduce'</span>)
+0365        <span class="keyword">if</span> strcmp(fmdl.show_pseudosection.xToDeduce,<span class="string">'minx'</span>)
+0366            xToDeduce= minx;
+0367        <span class="keyword">elseif</span> strcmp(fmdl.show_pseudosection.xToDeduce,<span class="string">'maxx'</span>)
+0368            xToDeduce= maxx;
+0369        <span class="keyword">end</span>
+0370        <span class="keyword">if</span> strcmp(fmdl.show_pseudosection.yToDeduce,<span class="string">'miny'</span>)
+0371            yToDeduce= miny;
+0372        <span class="keyword">elseif</span> strcmp(fmdl.show_pseudosection.yToDeduce,<span class="string">'maxy'</span>)
+0373            yToDeduce= maxy;
+0374        <span class="keyword">end</span>
+0375    <span class="keyword">else</span>
+0376        xToDeduce= minx;
+0377        yToDeduce= miny;
+0378    <span class="keyword">end</span>
+0379    rposition_elec= sqrt((xposition_elec-xToDeduce).^2 + <span class="keyword">...</span>
+0380        (yposition_elec-yToDeduce).^2);
+0381      
+0382 <span class="comment">%    rposition_elec= sqrt((xposition_elec-min(xposition_elec(:))).^2 + ...</span>
+0383 <span class="comment">%        (yposition_elec-max(yposition_elec(:))).^2);</span>
+0384    
+0385    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'elecsUsed'</span>)
+0386        elecsUsed= fmdl.show_pseudosection.elecsUsed;
+0387    <span class="keyword">else</span>
+0388        elecsUsed= 3:4;
+0389    <span class="keyword">end</span>
+0390    
+0391    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'dirAxis'</span>)
+0392        dirAxis= fmdl.show_pseudosection.dirAxis;
+0393    <span class="keyword">else</span>
+0394        dirAxis= <span class="string">'X'</span>;
+0395    <span class="keyword">end</span>
+0396    
+0397    <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'depthRatio'</span>)
+0398        depthRatio= fmdl.show_pseudosection.depthRatio;
+0399    <span class="keyword">else</span>
+0400        depthRatio= 3;
+0401    <span class="keyword">end</span>
+0402    
+0403     <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'depthPrecision'</span>)
+0404        depthPrecision= fmdl.show_pseudosection.depthPrecision;
+0405    <span class="keyword">else</span>
+0406        depthPrecision= 1;
+0407     <span class="keyword">end</span>
+0408     
+0409     <span class="keyword">if</span> isfield(fmdl.show_pseudosection,<span class="string">'depthLevel'</span>)
+0410        depthLevel= fmdl.show_pseudosection.depthLevel;
+0411    <span class="keyword">else</span>
+0412        depthLevel= 0;
+0413     <span class="keyword">end</span>
+0414    
+0415    <span class="keyword">switch</span> dirAxis
+0416        <span class="keyword">case</span> <span class="string">'X'</span>
+0417            location= mean(xposition_elec(:,elecsUsed),2);
+0418            depth= abs(xposition_elec(:,elecsUsed(1))-xposition_elec(:,elecsUsed(2)))/depthRatio;
+0419            electrodesLocation= unique(round(xposition_elec/depthPrecision)*depthPrecision);
+0420        <span class="keyword">case</span> <span class="string">'Y'</span>
+0421            location= mean(yposition_elec(:,elecsUsed),2);
+0422            depth= abs(yposition_elec(:,elecsUsed(1))-yposition_elec(:,elecsUsed(2)))/depthRatio;
+0423            electrodesLocation= unique(round(yposition_elec/depthPrecision)*depthPrecision);
+0424        <span class="keyword">case</span> <span class="string">'Z'</span>
+0425            location= mean(zposition_elec(:,elecsUsed),2);
+0426            depth= abs(zposition_elec(:,elecsUsed(1))-zposition_elec(:,elecsUsed(2)))/depthRatio;
+0427            electrodesLocation= unique(round(zposition_elec/depthPrecision)*depthPrecision);
+0428        <span class="keyword">case</span> <span class="string">'R'</span>
+0429            location= mean(rposition_elec(:,elecsUsed),2);<span class="comment">%keyboard</span>
+0430            depth= abs(rposition_elec(:,elecsUsed(1))-rposition_elec(:,elecsUsed(2)))/depthRatio;
+0431            electrodesLocation= unique(round(rposition_elec/depthPrecision)*depthPrecision);
+0432    <span class="keyword">end</span>
+0433    L= (rposition_elec(:,2)-rposition_elec(:,1))/2;
+0434    d= (rposition_elec(:,4)-rposition_elec(:,3))/2;
+0435    
+0436    
+0437    depth= depth+depthLevel; 
+0438    P= depth+1i*location;
+0439    [Pu,iu,ju]= unique(round(P/depthPrecision)*depthPrecision);
+0440    
+0441    <span class="keyword">if</span> length(Pu) &lt; length(P)
+0442        lu= location(iu);
+0443        zu= depth(iu);
+0444        du= iu*0;
+0445        <span class="keyword">for</span> i= 1:length(Pu)
+0446            du(i)= mean(data(ju==i));
+0447        <span class="keyword">end</span>
+0448        <span class="keyword">if</span> length(fmdl.misc.sizepoint)&gt;length(Pu)
+0449            su= iu*0;
+0450 <span class="comment">%            misu= iu*0;</span>
+0451 <span class="comment">%            masu= iu*0;</span>
+0452            <span class="keyword">for</span> i= 1:length(Pu)
+0453            su(i)= min(fmdl.misc.sizepoint(ju==i));
+0454 <span class="comment">%            misu(i)= min(fmdl.misc.sizepoint(ju==i));</span>
+0455 <span class="comment">%            masu(i)= max(fmdl.misc.sizepoint(ju==i));</span>
+0456            <span class="keyword">end</span>
+0457            fmdl.misc.sizepoint= su;
+0458 <span class="comment">%            UU= [su misu masu masu-misu];</span>
+0459        <span class="keyword">end</span>
+0460    <span class="keyword">else</span>
+0461        lu= location;
+0462        zu= depth;
+0463        du= data;
+0464    <span class="keyword">end</span>
+0465    
+0466    [Puu]= unique(lu+1i*zu);
+0467    <span class="keyword">if</span> length(Puu) ~= length(lu)
+0468    keyboard    
+0469    <span class="keyword">end</span>
+0470    scatter(lu,zu,fmdl.misc.sizepoint,(du),<span class="string">'filled'</span>,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>);
+0471 <span class="comment">%    hold on; plot(electrodesLocation,electrodesLocation*0,'x','Color',[0 0.5 0])</span>
+0472    xlabel(<span class="string">'Distance (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0473    ylabel(<span class="string">'Pseudo-depth (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)
+0474 <span class="comment">%     axis equal; axis tight;</span>
+0475    set(gca,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>)
+0476 <span class="keyword">end</span>
+0477 
+0478 
+0479 
+0480 <a name="_sub4" href="#_subfunctions" class="code">function [zps,xps]= plotPseudoSectionProfileDown(fmdl,data)</a>
+0481    fs= fmdl.show_pseudosection.fs;
+0482    
+0483    [elec_posn,elecNumber]= <a href="#_sub9" class="code" title="subfunction [elec_posn,elecNumber] = electrodesPosition(fmdl)">electrodesPosition</a>(fmdl);
+0484    xposition_elec= reshape(elec_posn(elecNumber,1),[],4);
+0485    xps= mean(xposition_elec,2);
+0486    
+0487    AB= abs(xposition_elec(:,2)-xposition_elec(:,1));
+0488    MN= abs(xposition_elec(:,4)-xposition_elec(:,3));
+0489    AN= abs(xposition_elec(:,4)-xposition_elec(:,1));
+0490    BM= abs(xposition_elec(:,3)-xposition_elec(:,2));
+0491    AM= abs(xposition_elec(:,3)-xposition_elec(:,1));
+0492    BN= abs(xposition_elec(:,4)-xposition_elec(:,2));
+0493    
+0494    a= MN; <span class="comment">%max([AB MN AN BM AM BN ],[],2);</span>
+0495    zps= -a/3;
+0496    
+0497 <span class="comment">%    a= abs(elecNumber(:,1)-elecNumber(:,2));</span>
+0498 <span class="comment">%    de= elec_posn(1,1)-elec_posn(2,1);</span>
+0499 <span class="comment">%</span>
+0500 <span class="comment">%    % Identiy reciprocal data(elecNumber(:,1)-elecNumber(:,2)) &gt; abs(elecNumber(:,3)-elecNumber(:,4))</span>
+0501 <span class="comment">%    R= find(abs(elecNumber(:,1)-elecNumber(:,2)) &lt; abs(elecNumber(:,3)-elecNumber(:,4)));</span>
+0502 <span class="comment">%</span>
+0503 <span class="comment">%    if ~isempty(R)</span>
+0504 <span class="comment">%        xps(R)= (elec_posn(elecNumber(R,3),4)+elec_posn(elecNumber(R,4),4))/2;</span>
+0505 <span class="comment">%        a(R)= abs(elecNumber(R,3)-elecNumber(R,4));</span>
+0506 <span class="comment">%    end</span>
+0507      
+0508    P= zps+1i*xps;
+0509    [Pu,iu,ju]= unique(P);
+0510    
+0511    <span class="keyword">if</span> length(Pu) &lt; length(P)
+0512        xu= xps(iu);
+0513        zu= zps(iu);
+0514        du= iu*0;
+0515        <span class="keyword">for</span> i= 1:length(Pu)
+0516            du(i)= mean(data(ju==i));
+0517        <span class="keyword">end</span>
+0518    <span class="keyword">else</span>
+0519        xu= xps;
+0520        zu= zps;
+0521        du= data;
+0522    <span class="keyword">end</span>
+0523        
+0524    scatter(xu,zu,fmdl.misc.sizepoint,(du),<span class="string">'filled'</span>,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>);
+0525    xlabel(<span class="string">'Distance (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0526    ylabel(<span class="string">'Pseudo-depth (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0527    axis equal; axis tight;
+0528    bx= get(gca,<span class="string">'xlim'</span>); by= get(gca,<span class="string">'ylim'</span>);
+0529    set(gca,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'dataAspectRatio'</span>,[1 (by(2)-by(1))/(bx(2)-bx(1))*3 1])
+0530 
+0531 <span class="keyword">end</span>
+0532 
+0533 <a name="_sub5" href="#_subfunctions" class="code">function [xps,zps]= plotPseudoSectionProfileVert(fmdl,data)</a>
+0534    fs= fmdl.show_pseudosection.fs;
+0535    
+0536    [elec_posn,elecNumber]= <a href="#_sub9" class="code" title="subfunction [elec_posn,elecNumber] = electrodesPosition(fmdl)">electrodesPosition</a>(fmdl);
+0537   
+0538    zposition_elec= reshape(elec_posn(elecNumber,3),[],4);
+0539    zps= mean(zposition_elec,2);
+0540    
+0541    AB= abs(zposition_elec(:,2)-zposition_elec(:,1));
+0542    MN= abs(zposition_elec(:,4)-zposition_elec(:,3));
+0543    AN= abs(zposition_elec(:,4)-zposition_elec(:,1));
+0544    BM= abs(zposition_elec(:,3)-zposition_elec(:,2));
+0545    AM= abs(zposition_elec(:,3)-zposition_elec(:,1));
+0546    BN= abs(zposition_elec(:,4)-zposition_elec(:,2));
+0547    
+0548    a= max([AB MN AN BM AM BN ],[],2);
+0549    xps= a/3;
+0550       
+0551    P= zps+1i*xps;
+0552    [Pu,iu,ju]= unique(P);
+0553    
+0554    xu= xps(iu);
+0555    zu= zps(iu);
+0556    du= iu*0;
+0557    <span class="keyword">for</span> i= 1:length(Pu)
+0558        du(i)= mean(data(ju==i));
+0559    <span class="keyword">end</span>
+0560    
+0561    scatter(xu,zu,fmdl.misc.sizepoint,(du),<span class="string">'filled'</span>,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>); 
+0562    xlabel(<span class="string">'Pseudo distance (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0563    <span class="keyword">if</span> zps(1)&lt;0
+0564        ylabel(<span class="string">'Depth (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)
+0565    <span class="keyword">else</span>
+0566        ylabel(<span class="string">'Height (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)
+0567    <span class="keyword">end</span>
+0568    axis equal; axis tight;
+0569    set(gca,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>)
+0570 <span class="keyword">end</span>
+0571 
+0572 <a name="_sub6" href="#_subfunctions" class="code">function [r_point,th_point]= plotPseudoSectionCircularIn(fmdl,data)</a>
+0573 fs= fmdl.show_pseudosection.fs;
+0574 [elec_posn,elecNumber] = <a href="#_sub9" class="code" title="subfunction [elec_posn,elecNumber] = electrodesPosition(fmdl)">electrodesPosition</a>(fmdl);
+0575 [A,th_point,r,xc,yc] = <a href="#_sub11" class="code" title="subfunction [A,r_bary,th_bary,r,xc,yc,TH,R] = polarPosition(elecNumber,elec_posn)">polarPosition</a>(elecNumber,elec_posn);
+0576 a= max(A,[],2);
+0577 r_point= a/2;
+0578 r_point= (r-r_point/pi);<span class="comment">%*9*pi*r/10+pi*r/10;</span>
+0579 
+0580 [x_point,y_point]= pol2cart(th_point,r_point);
+0581 x_point= x_point+xc; y_point= y_point+yc;
+0582 
+0583 P= x_point+1i*y_point;
+0584 [Pu,iu,ju]= unique(P);
+0585    
+0586 xu= x_point(iu);
+0587 zu= y_point(iu);
+0588 du= iu*0;
+0589 <span class="keyword">for</span> i= 1:length(Pu)
+0590     du(i)= mean(data(ju==i));
+0591 <span class="keyword">end</span>
+0592    
+0593 scatter(xu,zu,fmdl.misc.sizepoint,(du),<span class="string">'filled'</span>,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>);  
+0594 xlabel(<span class="string">'X (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0595 ylabel(<span class="string">'Y (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)
+0596 axis equal; axis tight;
+0597 set(gca,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>)
+0598 <span class="keyword">end</span>
+0599 
+0600 <a name="_sub7" href="#_subfunctions" class="code">function [dMN,th_point]= plotPseudoSectionCircularInVolcano(fmdl,data)</a>
+0601 fs= fmdl.show_pseudosection.fs;
+0602 [elec_posn,elecNumber] = <a href="#_sub9" class="code" title="subfunction [elec_posn,elecNumber] = electrodesPosition(fmdl)">electrodesPosition</a>(fmdl);
+0603 [xposition_elec,yposition_elec,zposition_elec] = <a href="#_sub10" class="code" title="subfunction [xposition_elec,yposition_elec,zposition_elec] = electrodesPositionABMN(elecNumber,elec_posn)">electrodesPositionABMN</a>(elecNumber,elec_posn);
+0604 dMN= sqrt((xposition_elec(:,4)-xposition_elec(:,3)).^2 + <span class="keyword">...</span>
+0605     (yposition_elec(:,4)-yposition_elec(:,3)).^2 + (zposition_elec(:,4)-zposition_elec(:,3)).^2);
+0606 
+0607 [A,r_bary,th_point,r,xc,yc,TH,R] = <a href="#_sub11" class="code" title="subfunction [A,r_bary,th_bary,r,xc,yc,TH,R] = polarPosition(elecNumber,elec_posn)">polarPosition</a>(elecNumber,elec_posn);
+0608 [th_bary,r_bary,th_bary34,r_bary34,r,xc,yc,barycenter_x34,barycenter_y34] = <a href="#_sub12" class="code" title="subfunction [th_bary,r_bary,th_bary34,r_bary34,r,xc,yc,barycenter_x34,barycenter_y34] = bary34(elecNumber,elec_posn)">bary34</a>(elecNumber,elec_posn);
+0609 <span class="comment">% a= A(:,2);</span>
+0610 <span class="comment">% r_point= a;</span>
+0611 r= 400; 
+0612 r_point= (r-r_bary)/(max(r-r_bary)-min(r-r_bary))*(r-5);<span class="comment">%*9*pi*r/10+pi*r/10;</span>
+0613 r_point= r_point-min(r_point)+5;
+0614 [x_point,y_point]= pol2cart(th_bary34,r_point);
+0615 x_point= x_point+xc; y_point= y_point+yc;
+0616 P= x_point+1i*y_point;
+0617 [Pu,iu,ju]= unique(P);
+0618 xu= x_point(iu); zu= y_point(iu); du= iu*0;
+0619 <span class="keyword">for</span> i= 1:length(Pu);     du(i)= mean(data(ju==i)); <span class="keyword">end</span>
+0620 figure; scatter(xu,zu,fmdl.misc.sizepoint,(du),<span class="string">'filled'</span>,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>);  
+0621 text(xu(iu==1),zu(iu==1),<span class="string">'1'</span>)
+0622 hold on; plot(xposition_elec,yposition_elec,<span class="string">'kp'</span>)
+0623 xlabel(<span class="string">'X (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0624 ylabel(<span class="string">'Y (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)
+0625 axis equal; axis tight;
+0626 set(gca,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>)
+0627 <span class="keyword">end</span>
+0628 
+0629 <a name="_sub8" href="#_subfunctions" class="code">function [r_point,th_point]= plotPseudoSectionCircularOut(fmdl,data)</a>
+0630 fs= fmdl.show_pseudosection.fs;
+0631 [elec_posn,elecNumber] = <a href="#_sub9" class="code" title="subfunction [elec_posn,elecNumber] = electrodesPosition(fmdl)">electrodesPosition</a>(fmdl);
+0632 [A,r_bary,th_point,r,xc,yc] = <a href="#_sub11" class="code" title="subfunction [A,r_bary,th_bary,r,xc,yc,TH,R] = polarPosition(elecNumber,elec_posn)">polarPosition</a>(elecNumber,elec_posn);
+0633 a= max(A,[],2);
+0634 r_point= a/2;
+0635 r_point= (r+r_point);
+0636 [x_point,y_point]= pol2cart(th_point,r_point+r);
+0637 x_point= x_point+xc; y_point= y_point+yc;
+0638 
+0639 P= x_point+1i*y_point;
+0640 [Pu,iu,ju]= unique(P);
+0641    
+0642 xu= x_point(iu);
+0643 zu= y_point(iu);
+0644 du= iu*0;
+0645 <span class="keyword">for</span> i= 1:length(Pu)
+0646     du(i)= mean(data(ju==i));
+0647 <span class="keyword">end</span>
+0648    
+0649 scatter(xu,zu,fmdl.misc.sizepoint,(du),<span class="string">'filled'</span>,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>);  colorbar
+0650 xlabel(<span class="string">'X (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0651 ylabel(<span class="string">'Y (m)'</span>,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>)
+0652 axis equal; axis tight;
+0653 set(gca,<span class="string">'fontsize'</span>,fs,<span class="string">'fontname'</span>,<span class="string">'Times'</span>)
+0654 <span class="keyword">end</span>
+0655 
+0656 
+0657 <a name="_sub9" href="#_subfunctions" class="code">function [elec_posn,elecNumber] = electrodesPosition(fmdl)</a>
+0658     stim= fmdl.stimulation;
+0659     stimulationMatrix= [];
+0660     <span class="keyword">for</span> i = 1:length(stim);
+0661         nmp= size(stim(i).meas_pattern, 1);
+0662         [idxIN,idxJN]= find(stim(i).meas_pattern&lt;0);
+0663         [idxIP,idxJP]= find(stim(i).meas_pattern&gt;0);
+0664         stimulationMatrix= [stimulationMatrix; [ 0*(1:nmp)'+find(stim(i).stim_pattern&lt;0) <span class="keyword">...</span>
+0665             0*(1:nmp)'+find(stim(i).stim_pattern&gt;0)] idxJN(idxIN) idxJP(idxIP)];
+0666     <span class="keyword">end</span>
+0667 <span class="comment">%    A=  stimulationMatrix(:,1);</span>
+0668 <span class="comment">%    A=  stimulationMatrix(:,1);</span>
+0669 <span class="comment">%    A=  stimulationMatrix(:,1);</span>
+0670 <span class="comment">%    A=  stimulationMatrix(:,1);</span>
+0671 <span class="comment">%</span>
+0672 <span class="comment">%    A= zeros(length(fmdl.stimulation),1);</span>
+0673 <span class="comment">%    B= zeros(length(fmdl.stimulation),1);</span>
+0674 <span class="comment">%    M= zeros(length(fmdl.stimulation),1);</span>
+0675 <span class="comment">%    N= zeros(length(fmdl.stimulation),1);</span>
+0676 <span class="comment">%    for i=1:length(fmdl.stimulation)</span>
+0677 <span class="comment">%        A(i)= find(fmdl.stimulation(1,i).stim_pattern&lt;0);</span>
+0678 <span class="comment">%        B(i)= find(fmdl.stimulation(1,i).stim_pattern&gt;0);</span>
+0679 <span class="comment">%        M(i)= find(fmdl.stimulation(1,i).meas_pattern&lt;0);</span>
+0680 <span class="comment">%        N(i)= find(fmdl.stimulation(1,i).meas_pattern&gt;0);</span>
+0681 <span class="comment">%    end</span>
+0682 <span class="comment">%    elecNumber= [A B M N];</span>
+0683    
+0684    elecNumber= stimulationMatrix;
+0685    
+0686    elec_posn= zeros(length(fmdl.electrode),size(fmdl.nodes,2));
+0687    <span class="keyword">for</span> i=1:length(fmdl.electrode)
+0688    elec_posn(i,:)= mean(fmdl.nodes(fmdl.electrode(1,i).nodes,:),1);
+0689    <span class="keyword">end</span>
+0690    
+0691 <span class="keyword">end</span>
+0692 
+0693 <a name="_sub10" href="#_subfunctions" class="code">function [xposition_elec,yposition_elec,zposition_elec] = electrodesPositionABMN(elecNumber,elec_posn)</a>
+0694 xposition_elec= reshape(elec_posn(elecNumber,1),[],4);
+0695 yposition_elec= reshape(elec_posn(elecNumber,2),[],4);
+0696 zposition_elec= reshape(elec_posn(elecNumber,3),[],4);
+0697 <span class="keyword">end</span>
+0698 
+0699 <a name="_sub11" href="#_subfunctions" class="code">function [A,r_bary,th_bary,r,xc,yc,TH,R] = polarPosition(elecNumber,elec_posn)</a>
+0700 TH= elecNumber*0;
+0701 R= elecNumber*0;
+0702 
+0703 xposition_elec= reshape(elec_posn(elecNumber,1),[],4);
+0704 yposition_elec= reshape(elec_posn(elecNumber,2),[],4);
+0705 rx= (max(xposition_elec(:))-min(xposition_elec(:)))/2;
+0706 ry= (max(yposition_elec(:))-min(yposition_elec(:)))/2;
+0707 rmean= (rx+ry)/2;
+0708 
+0709 xc= mean(elec_posn(:,1)); yc= mean(elec_posn(:,2)); r = rmean;
+0710 
+0711 barycenter_x= mean(xposition_elec,2);
+0712 barycenter_y= mean(yposition_elec,2);
+0713 
+0714 [th_bary,r_bary]= cart2pol(barycenter_x-xc,barycenter_y-yc);
+0715 
+0716 <span class="keyword">for</span> i= 1:4
+0717     [TH(:,i),R(:,i)]= cart2pol(elec_posn(elecNumber(:,i),1)-xc,elec_posn(elecNumber(:,i),2)-yc);
+0718 <span class="keyword">end</span> 
+0719 
+0720 Arc_length_AB= (TH(:,2)-TH(:,1));
+0721 idx_discontinuity= find(TH(:,2)&gt;TH(:,1) &amp; TH(:,2)&lt;0);
+0722 Arc_length_AB(idx_discontinuity)= (-TH(idx_discontinuity,1)+TH(idx_discontinuity,2));
+0723 idx_discontinuity= find(TH(:,1)&gt;TH(:,2));
+0724 Arc_length_AB(idx_discontinuity)= (TH(idx_discontinuity,1)-TH(idx_discontinuity,2));
+0725 idx_discontinuity= find(TH(:,1)&gt;TH(:,2) &amp; TH(:,1)&lt;0);
+0726 Arc_length_AB(idx_discontinuity)= (-TH(idx_discontinuity,2)+TH(idx_discontinuity,1));
+0727 Arc_length_AB(Arc_length_AB&gt;=pi+0.005)= 2*pi-Arc_length_AB(Arc_length_AB&gt;=pi+0.005);
+0728 Arc_length_AB= Arc_length_AB.*(R(:,1)+R(:,2))/2;
+0729 
+0730 Arc_length_MN= (TH(:,4)-TH(:,3));
+0731 idx_discontinuity= find((TH(:,4)&gt;TH(:,3) &amp; TH(:,4)&lt;0));
+0732 Arc_length_MN(idx_discontinuity)= -TH(idx_discontinuity,3)+TH(idx_discontinuity,4);
+0733 idx_discontinuity= find((TH(:,4)&lt;TH(:,3) &amp; TH(:,4)&lt;0));
+0734 Arc_length_MN(idx_discontinuity)= +TH(idx_discontinuity,3)-TH(idx_discontinuity,4);
+0735 idx_discontinuity= find((TH(:,3)&gt;TH(:,4)) &amp; TH(:,3)&gt;0);
+0736 Arc_length_MN(idx_discontinuity)= TH(idx_discontinuity,3)-TH(idx_discontinuity,4);
+0737 <span class="comment">% idx_discontinuity= find((TH(:,3)&gt;TH(:,4)) &amp;  TH(:,3)&lt;0);</span>
+0738 <span class="comment">% Arc_length_MN(idx_discontinuity)= -TH(idx_discontinuity,3)+TH(idx_discontinuity,4);</span>
+0739 Arc_length_MN(Arc_length_MN&gt;=pi+0.005)= 2*pi-Arc_length_MN(Arc_length_MN&gt;=pi+0.005);
+0740 Arc_length_MN= Arc_length_MN.*(R(:,3)+R(:,4))/2;
+0741 
+0742 Arc_length_AM= (TH(:,3)-TH(:,1));
+0743 idx_discontinuity= find((TH(:,3)&gt;TH(:,1) &amp; TH(:,3)&lt;0));
+0744 Arc_length_AM(idx_discontinuity)= -TH(idx_discontinuity,1)+TH(idx_discontinuity,3);
+0745 idx_discontinuity= find((TH(:,1)&gt; TH(:,3)));
+0746 Arc_length_AM(idx_discontinuity)= TH(idx_discontinuity,1)-TH(idx_discontinuity,3);
+0747 idx_discontinuity= find((TH(:,1)&gt; TH(:,3) &amp; TH(:,1) &lt;0));
+0748 Arc_length_AM(idx_discontinuity)= -TH(idx_discontinuity,1)+TH(idx_discontinuity,3);
+0749 Arc_length_AM(Arc_length_AM&gt;=pi+0.005)= 2*pi-Arc_length_AM(Arc_length_AM&gt;=pi+0.005);
+0750 Arc_length_AM= Arc_length_AM.*(R(:,1)+R(:,3))/2;
+0751 
+0752 Arc_length_AN= (TH(:,4)-TH(:,1));
+0753 idx_discontinuity= find((TH(:,4)&gt;TH(:,1)&lt;0 &amp; TH(:,4)&lt;0));
+0754 Arc_length_AN(idx_discontinuity)= -TH(idx_discontinuity,1)+TH(idx_discontinuity,4);
+0755 idx_discontinuity= find((TH(:,1)&gt;TH(:,4)));
+0756 Arc_length_AN(idx_discontinuity)= TH(idx_discontinuity,1)-TH(idx_discontinuity,4);
+0757 idx_discontinuity= find((TH(:,1)&gt;TH(:,4) &amp; TH(:,1)&lt;0));
+0758 Arc_length_AN(idx_discontinuity)= TH(idx_discontinuity,4)-TH(idx_discontinuity,1);
+0759 Arc_length_AN(Arc_length_AN&gt;=pi+0.005)= 2*pi-Arc_length_AN(Arc_length_AN&gt;=pi+0.005);
+0760 Arc_length_AN= Arc_length_AN.*(R(:,1)+R(:,4))/2;
+0761 
+0762 Arc_length_NB= (TH(:,4)-TH(:,2));
+0763 idx_discontinuity= find((TH(:,4)&gt;TH(:,2)));
+0764 Arc_length_NB(idx_discontinuity)= -TH(idx_discontinuity,2)+TH(idx_discontinuity,4);
+0765 idx_discontinuity= find((TH(:,2)&gt; TH(:,4)));
+0766 Arc_length_NB(idx_discontinuity)= -TH(idx_discontinuity,4)+TH(idx_discontinuity,2);
+0767 idx_discontinuity= find((TH(:,2)&gt; TH(:,4) &amp;  TH(:,4)&lt;0));
+0768 Arc_length_NB(idx_discontinuity)= -TH(idx_discontinuity,4)+TH(idx_discontinuity,2);
+0769 Arc_length_NB(Arc_length_NB&gt;=pi+0.005)= 2*pi-Arc_length_NB(Arc_length_NB&gt;=pi+0.005);
+0770 Arc_length_NB= Arc_length_NB.*(R(:,2)+R(:,4))/2;
+0771 
+0772 Arc_length_BM= (TH(:,3)-TH(:,2));
+0773 idx_discontinuity= find((TH(:,3)&gt;TH(:,2) &amp; TH(:,2)&lt;0));
+0774 Arc_length_BM(idx_discontinuity)= -TH(idx_discontinuity,2)+TH(idx_discontinuity,3);
+0775 idx_discontinuity= find((TH(:,2)&gt; TH(:,3)));
+0776 Arc_length_BM(idx_discontinuity)= -TH(idx_discontinuity,3)+TH(idx_discontinuity,2);
+0777 idx_discontinuity= find((TH(:,2)&gt; TH(:,3)&amp; TH(:,3)&lt;0));
+0778 Arc_length_BM(idx_discontinuity)= TH(idx_discontinuity,3)-TH(idx_discontinuity,2);
+0779 Arc_length_BM(Arc_length_BM&gt;=pi+0.005)= 2*pi-Arc_length_BM(Arc_length_BM&gt;=pi+0.005);
+0780 Arc_length_BM= Arc_length_BM.*(R(:,2)+R(:,3))/2;
+0781 
+0782 A= [Arc_length_AB Arc_length_MN Arc_length_AM Arc_length_AN Arc_length_NB Arc_length_BM];
+0783 <span class="keyword">end</span>
+0784 
+0785 
+0786 
+0787 <a name="_sub12" href="#_subfunctions" class="code">function [th_bary,r_bary,th_bary34,r_bary34,r,xc,yc,barycenter_x34,barycenter_y34] = bary34(elecNumber,elec_posn)</a>
+0788 xposition_elec= reshape(elec_posn(elecNumber,1),[],4);
+0789 yposition_elec= reshape(elec_posn(elecNumber,2),[],4);
+0790 rx= (max(xposition_elec(:))-min(xposition_elec(:)))/2;
+0791 ry= (max(yposition_elec(:))-min(yposition_elec(:)))/2;
+0792 rmean= (rx+ry)/2;
+0793 
+0794 xc= mean(elec_posn(:,1)); yc= mean(elec_posn(:,2)); r = rmean;
+0795 
+0796 barycenter_x34= mean(xposition_elec(:,3:4),2);
+0797 barycenter_y34= mean(yposition_elec(:,3:4),2);
+0798 [th_bary34,r_bary34]= cart2pol(barycenter_x34-xc,barycenter_y34-yc);
+0799 
+0800 barycenter_x= mean(xposition_elec,2);
+0801 barycenter_y= mean(yposition_elec,2);
+0802 [th_bary,r_bary]= cart2pol(barycenter_x-xc,barycenter_y-yc);
+0803 
+0804 
+0805 <span class="keyword">end</span>
+0806 
+0807 <a name="_sub13" href="#_subfunctions" class="code">function do_unit_test</a>
+0808 shape_str = [<span class="string">'solid top    = plane(0,0,0;0,1,0);\n'</span> <span class="keyword">...</span>
+0809              <span class="string">'solid mainobj= top and orthobrick(-100,-200,-100;410,10,100) -maxh=20.0;\n'</span>];
+0810 e0 = linspace(0,310,64)';
+0811 elec_pos = [e0,0*e0,0*e0,1+0*e0,0*e0,0*e0];
+0812 elec_shape= [0.1,0.1,1];
+0813 elec_obj = <span class="string">'top'</span>;
+0814 fmdl = <a href="../../../eidors/meshing/netgen/ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>(shape_str, elec_pos, elec_shape, elec_obj);
+0815 
+0816 spacing= [1 1 1 2 3 3 4 4 5 6 6 7 8 8 9 10 10 11 12 12 13 14 14 15 16 17];
+0817 multiples= [1 2 3 2 1 5/3 1 2  1 1 7/6 1 1 10/8 1 1 12/10 1 1 13/12 1 1 15/14 1 1 1];
+0818 fmdl.stimulation= <a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 64, <span class="string">'DipoleDipole'</span>, {<span class="string">'spacings'</span>, spacing,<span class="string">'multiples'</span>,multiples} );
+0819 
+0820 img1= <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1);
+0821 vh1= <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img1);
+0822 normalisation= 1./vh1.meas;
+0823 I= speye(length(normalisation));
+0824 I(1:size(I,1)+1:size(I,1)*size(I,1))= normalisation;
+0825 
+0826 img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,0+ <a href="../../../eidors/models/mk_c2f_circ_mapping.html" class="code" title="function [mapping failed] = mk_c2f_circ_mapping( mdl, xyzr );">mk_c2f_circ_mapping</a>(fmdl,[100;-50;0;50])*100);
+0827 img.elem_data(img.elem_data==0)= 0.1;
+0828 dd  = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0829 subplot(221);
+0830 <a href="show_pseudosection.html" class="code" title="function fwd_model= show_pseudosection( fwd_model, data, orientation)">show_pseudosection</a>( fmdl, I*dd.meas )
+0831 
+0832 subplot(222);
+0833 fmdl.show_pseudosection.orientation = <span class="string">'horizontaldownward'</span>;
+0834 <a href="show_pseudosection.html" class="code" title="function fwd_model= show_pseudosection( fwd_model, data, orientation)">show_pseudosection</a>( fmdl, I*dd.meas )
+0835 
+0836 subplot(223);
+0837 fmdl.show_pseudosection.orientation = <span class="string">'vertical'</span>;
+0838 <a href="show_pseudosection.html" class="code" title="function fwd_model= show_pseudosection( fwd_model, data, orientation)">show_pseudosection</a>( fmdl, I*dd.meas )
+0839 
+0840 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

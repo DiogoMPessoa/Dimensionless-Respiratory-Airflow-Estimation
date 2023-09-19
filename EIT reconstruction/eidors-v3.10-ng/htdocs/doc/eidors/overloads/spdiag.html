@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of spdiag</title>
+  <meta name="keywords" content="spdiag">
+  <meta name="description" content="SPDIAG Sparse diagonal matrices and diagonals of a matrix.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">overloads</a> &gt; spdiag.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/overloads&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>spdiag
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SPDIAG Sparse diagonal matrices and diagonals of a matrix.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function S = spdiag(V,K) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">SPDIAG Sparse diagonal matrices and diagonals of a matrix.
+
+ This is a sparse version of matlab's diag command, see the
+ help of that command for its use.
+
+ See also: DIAG, SPDIAGS
+
+ (C) 2013 Andy Adler. License GPL v2 or v3</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/mdl_slice_mesher.html" class="code" title="function [nimg out] = mdl_slice_mesher(fmdl,level,varargin)">mdl_slice_mesher</a>	MDL_SLICE_MESHER A slice of a 3D FEM as a 2D FEM</li><li><a href="../../eidors/solvers/forward/system_mat_2p5d_fields.html" class="code" title="function FT= system_mat_2p5d_fields( fwd_model )">system_mat_2p5d_fields</a>	SYSTEM_MAT_2P5D_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="../../eidors/solvers/inverse/inv_solve_core.html" class="code" title="function img= inv_solve_core( inv_model, data0, data1);">inv_solve_core</a>	INV_SOLVE_CORE Solver using a generic iterative algorithm</li><li><a href="../../eidors/solvers/inverse/inv_solve_diff_pdipm.html" class="code" title="function img=inv_solve_diff_pdipm( inv_model, data1, data2)">inv_solve_diff_pdipm</a>	INV_SOLVE_DIFF_PDIPM inverse solver for difference data using Primal/Dual interior point method</li><li><a href="../../eidors/solvers/inverse/meas_icov_rm_elecs.html" class="code" title="function meas_icov = meas_icov_rm_elecs( imdl, elec_list)">meas_icov_rm_elecs</a>	MEAS_ICOV_RM_ELECS: remove electrodes from consideration</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function S = spdiag(V,K)</a>
+0002 <span class="comment">%SPDIAG Sparse diagonal matrices and diagonals of a matrix.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% This is a sparse version of matlab's diag command, see the</span>
+0005 <span class="comment">% help of that command for its use.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also: DIAG, SPDIAGS</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% (C) 2013 Andy Adler. License GPL v2 or v3</span>
+0010 
+0011 <span class="comment">% Matlab's spdiags is really annoying. This function provides</span>
+0012 <span class="comment">%  an interface like G-d intended</span>
+0013 
+0014 <span class="keyword">if</span> nargin == 1; K=0; <span class="keyword">end</span>
+0015 
+0016 N = length(V) + K;
+0017 V = [zeros(K,1);V(:)];
+0018 S = spdiags(V(:), K, N, N);
+0019 
+0020 
+0021 
+0022 
+0023 
+0024 
+0025 
+0026</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

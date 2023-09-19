@@ -1,0 +1,172 @@
+<html>
+<!-- Style file for all the nav-sidebars
+     $Id: header.html 1535 2008-07-26 15:36:27Z aadler $ -->
+<head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+</head>
+
+<body>
+
+<H2>Contributed EIT Data:</H2>
+   <table>
+   <tr><th valign="top"> Authors:
+       <td>
+GK Wolf, C G&oacute;mez-Laberge, JN Kheir, D Zurakowski, BK Walsh, A Adler, JH Arnold
+       <hr>
+   <tr><th valign="top"> Date:
+       <td> 2009 (data collection)
+       <hr>
+   <tr><th valign="top"> Brief Description:
+       <td> 
+EIT data were collected at Children's Hospital Boston in 2009 during a stepwise
+lung recruitment manoeuver and positive end-expiratory pressure (PEEP)
+titration of a patient with the acute respiratory distress syndrome as part of
+a clinical study (<a href="http://clinicaltrials.gov/ct2/show/NCT00830284?term=NCT00830284&rank=1"
+       >ClinicalTrials.gov identifier NCT00830284</a>).
+Directory structure is used by the accompanying software to recognize study
+codes, subject numbers, study dates, and EIT hardware. Filenames end with 'b'
+for baseline, 'c1'-'c4' for lung recruitment, and 'd1-d5' for PEEP titration.
+<p>
+Data were published in the following two papers:
+<ul>
+   <li>
+   C G&oacute;mez-Laberge, JH Arnold, GK Wolf (2012)
+<a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=06127914"
+>A Unified Approach for EIT Imaging of Regional Overdistension and Atelectasis
+in Acute Lung Injury</a>
+   <i>IEEE Trans Med Imag</i>, 31:834&minus;842
+
+   <li>
+   GK Wolf, C G&oacute;mez-Laberge, JN Kheir, D Zurakowski, BK Walsh, A Adler, JH Arnold (2012)
+   <a href="http://journals.lww.com/pccmjournal/Abstract/2012/09000/Reversal_of_dependent_lung_collapse_predicts.3.aspx"
+   >Reversal of Dependent Lung Collapse Predicts Response to Lung Recruitment
+in Children with Early Acute Lung Injury</a>
+   <i>Pediatr Crit Care Med</i>, 13:509&minus;515
+</ul>
+
+
+       <hr>
+   <tr><th valign="top"> License:
+       <td> Creative Commons Artistic License (with Attribution)
+       <hr>
+   <tr><th valign="top"> Attribution Requirement:
+       <td> 
+Use or presentation of these data must acknowledge
+the authors and cite these two publications:
+<ul>
+   <li>
+   C G&oacute;mez-Laberge, JH Arnold, GK Wolf.
+   A Unified Approach for EIT Imaging of Regional Overdistension and Atelectasis in Acute Lung Injury
+   <i>IEEE Trans Med Imag</i>, In Press 2012
+
+   <li>
+   GK Wolf, C G&oacute;mez-Laberge, JN Kheir, D Zurakowski, BK Walsh, A Adler, JH Arnold.
+   Reversal of Dependent Lung Collapse Predicts Response to Lung Recruitment in Children
+   with Early Acute Lung Injury
+   <i>Pediatr Crit Care Med</i>, In Press 2012
+</ul>
+       <hr>
+   <tr><th valign="top"> Format:
+       <td>
+Data were acquired with the Goe-MF II (CareFusion, San Diego, CA) EIT system,
+using 16 electrodes with adjacent current stimulation and measurement. Electrodes
+were placed equidistantly around the thorax at the level of the parasternal 6th intercostal space.
+Electrode #1 was placed on the sternum and subsequent electrodes (#2, #3, ...) were placed
+sequentially starting to the patient left of electrode #1.
+       <hr>
+   <tr><th valign="top"> Methods:
+       <td>
+Detailed methods are described in the referenced papers.
+The following figure illustrates the experimental protocol.
+(Source:
+   C G&oacute;mez-Laberge, <i>et al</i>, 2012)
+<br>
+<center>
+<a href = "http://eidors3d.sourceforge.net/data_contrib/cg-2012-ards-recruitment/cg_ards_recruitment_data.png"><img height= 300 src="cg_ards_recruitment_data.png"></a>
+</center>
+       <hr>
+   <tr><th valign="top"> Data:
+<td>
+
+Data for two patients and analysis software are contributed:
+<UL>
+<LI> Patient #1:
+            <a href = "http://eidors3d.sourceforge.net/data_contrib/cg-2012-ards-recruitment/cg_data_2012_p1.zip"
+            >Data (zip format)</a>
+<br>
+The patient details are as follows:
+Gender: F,
+Age: 5.9 years,
+Weight: 20kg,
+Condition: Primary ARDS triggered by parainfluenza pneumonia.
+<br>
+File details:
+<pre>
+        FILENAME                                       cmH<sub>2</sub>O        cmH<sub>2</sub>O
+STUDYNAME/SUBJECT_1/YYYYMMDD/Eit/Viasys/1001_b.get    PEEP=14   (P<sub>Plat</sub>&minus;PEEP) =5 
+STUDYNAME/SUBJECT_1/YYYYMMDD/Eit/Viasys/1001_c1.get   PEEP=15   (P<sub>Plat</sub>&minus;PEEP) =15
+STUDYNAME/SUBJECT_1/YYYYMMDD/Eit/Viasys/1001_c2.get   PEEP=20   (P<sub>Plat</sub>&minus;PEEP) =15
+STUDYNAME/SUBJECT_1/YYYYMMDD/Eit/Viasys/1001_c3.get   PEEP=25   (P<sub>Plat</sub>&minus;PEEP) =15
+STUDYNAME/SUBJECT_1/YYYYMMDD/Eit/Viasys/1001_c4.get   PEEP=30   (P<sub>Plat</sub>&minus;PEEP) =15
+STUDYNAME/SUBJECT_1/YYYYMMDD/Eit/Viasys/1001_d1.get   PEEP=20   (P<sub>Plat</sub>&minus;PEEP) =6
+STUDYNAME/SUBJECT_1/YYYYMMDD/Eit/Viasys/1001_d2.get   PEEP=18   (P<sub>Plat</sub>&minus;PEEP) =6
+STUDYNAME/SUBJECT_1/YYYYMMDD/Eit/Viasys/1001_d3.get   PEEP=16   (P<sub>Plat</sub>&minus;PEEP) =5
+STUDYNAME/SUBJECT_1/YYYYMMDD/Eit/Viasys/1001_d4.get   PEEP=14   (P<sub>Plat</sub>&minus;PEEP) =4
+</pre>
+<LI> Patient #7:
+            <a href = "http://eidors3d.sourceforge.net/data_contrib/cg-2012-ards-recruitment/cg_data_2012_p7.zip"
+            >Data (zip format)</a>
+<br>
+The patient details are as follows:
+Gender: F,
+Age: 13.9 years,
+Weight: 76kg,
+Condition: patient on ECMO suffering from secondary ARDS due to sepsis.
+<br>                                                                  
+File details:
+<pre>
+        FILENAME                                       cmH<sub>2</sub>O        cmH<sub>2</sub>O
+STUDYNAME/SUBJECT_7/YYYYMMDD/Eit/Viasys/1007_b2.get   PEEP=22   (P<sub>Plat</sub>&minus;PEEP) =16
+STUDYNAME/SUBJECT_7/YYYYMMDD/Eit/Viasys/1007_c1.get   PEEP=15   (P<sub>Plat</sub>&minus;PEEP) =15
+STUDYNAME/SUBJECT_7/YYYYMMDD/Eit/Viasys/1007_c2.get   PEEP=20   (P<sub>Plat</sub>&minus;PEEP) =15
+STUDYNAME/SUBJECT_7/YYYYMMDD/Eit/Viasys/1007_c3.get   PEEP=25   (P<sub>Plat</sub>&minus;PEEP) =15
+STUDYNAME/SUBJECT_7/YYYYMMDD/Eit/Viasys/1007_c4.get   PEEP=30   (P<sub>Plat</sub>&minus;PEEP) =15
+STUDYNAME/SUBJECT_7/YYYYMMDD/Eit/Viasys/1007_d1.get   PEEP=20   (P<sub>Plat</sub>&minus;PEEP) =17
+STUDYNAME/SUBJECT_7/YYYYMMDD/Eit/Viasys/1007_d2.get   PEEP=18   (P<sub>Plat</sub>&minus;PEEP) =15
+</pre>
+<LI>
+       <a href = "http://eidors3d.sourceforge.net/data_contrib/cg-2012-ards-recruitment/cg_2012_ards_recruitment_code.zip"
+            >Analysis software (m files in zip format)</a>
+</UL>
+
+       <hr>
+   <tr><th valign="top"> Images:
+       <td> See the 
+            <a href="../../tutorial/lung_EIT/cg_2012_ards_recruitment-s.html"
+            >Tutorial example using these data</a>
+       <hr>
+   </table>
+
+
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</body></html>
+

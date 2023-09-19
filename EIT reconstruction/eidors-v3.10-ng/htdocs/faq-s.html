@@ -1,0 +1,599 @@
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="./eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="./index-s.html"
+>Main</a><br>
+<a href="./docs-s.html"
+   >Documentation</a><br>
+<a href="./tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="./download-s.html"
+   >Download</a><br>
+<a href="./data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="./GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="./doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="./news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="./faq-s.html">FAQ</a><br>
+<a href="./programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+<h2>Frequently Asked Questions</h2>
+<ol>
+<p><li><b>
+What is EIDORS?
+</b><p>
+The goal of EIDORS is to promote collaboration between 
+groups working on Electrical Impedance Tomography (EIT) and Diffusion based
+Optical Tomography, in medical and industrial settings.
+
+<p><li id="maintainers"><b>
+    Where do I get help?
+<i>OR</i>
+I have an issue/bug/problem with doing xxx in EIDORS.
+</b><p>
+
+We're happy to help. To do that we need a bit of information and the
+context in which you are trying to solve your problem.
+First, please have a look through the
+<tt>eidors3d-help@lists.sourceforge.net</tt> 
+<a href="http://sourceforge.net/search/?group_id=100454&type_of_search=mlists"
+>mailing list archive</a>.
+Has your problem been observed before and solved. If this
+solves your problem, great.
+<p>
+If not, you may write an email to the mailing list.
+<a href="mailto:eidors3d-help@lists.sourceforge.net"><tt
+               >eidors3d-help@lists.sourceforge.net</tt></a>.
+Sign up for 
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"><tt>
+                 eidors3d-help</tt> here</a>.
+This way the broader EIDORS
+community will be able to help you resolve your issue,
+and when or if others run into the same issue, they'll be able
+to find your solution.
+In your email, you must provide
+<br>&minus;
+1. Background: What are you trying to achieve? What problem are you working on?
+<br>&minus;
+2. A clearly worded question or issue: What is the exact error
+message? What do you expect versus what you actually see occurring.
+<br>&minus;
+3. A script that will reproduce the issue. (file attached) (Is this
+script based on a tutorial from the EIDORS site? If so which one?)
+<br>&minus;
+4. A log of the output from EIDORS. (file attached)
+<br>&minus; 
+5. What version of EIDORS are you using, and what OS/Matlab version are you using?
+
+
+
+<p><li><b>
+How is EIDORS pronounced?
+</b><p>
+EIDORS is pronounced like eiderdown. 
+It sounds like <i>eye doors</i>.
+
+<p><li><b>
+What do I need to run EIDORS
+</b><p>
+You will need a modern windows, unix or mac computer,
+and Matlab (version &ge; 7.0). To be able to do
+fine 3D meshes you will need at least 2GB RAM (or more).
+For FEM meshing you will need
+<a href="http://sourceforge.net/projects/netgen-mesher/"
+ >Netgen</a>. 
+It is possible to use Matlab 6.5 with older versions
+(EIDORS &le; 3.4). EIDORS also supports modern versions
+of Octave (&ge; 3.4);
+
+<p><li><b>
+Can I use Octave instead of Matlab?
+</b><p>
+Partially. Many EIDORS functions work well in Octave;
+however, there are some missing capabilities. This
+is especially true of the graphical parts of EIDORS.
+If you are interested to help, we are actively looking
+for help with Octave support,
+
+
+<p><li><b>
+What is the logo?
+</b><p>
+The logo is a walrus. EIDORS images
+blobby objects in aqueous media; similarly, the walrus
+is a fat, blobby animal that lives in water.
+The original (high resolution) image of the one used here is from the
+NOAA. See <a href="http://www.photolib.noaa.gov/animals/anim0030.htm"
+>www.photolib.noaa.gov/animals/anim0030.htm</a>. For another
+great picture of fat waruses see this
+<a href="http://www.msn.co.uk/img/en/en-gb/portal/creaturecomforts/wallpaper_800x600_01.jpg">image</a>.
+
+
+<p><li id="maintainers"><b>
+    Whom should I blame or thank or contact for more information?
+</b><p>
+The current maintainers of EIDORS are
+<a href="mailto:&#97;dl&#101;r@sce.c&#97;rleton.c&#97;" >Andy Adler</a>
+and
+<a href="mailto:bill.lionh&#101;&#97;rt@manchester.ac.uk">Bill Lionheart</a>.
+Please contact them with suggestions, contribution of code,
+and contribution of sample data, meshes, and algorithms.
+
+<p><li><b>
+    How do I get started with EIDORS?
+</b><p>
+Step 1: Download
+<a href="http://sourceforge.net/projects/eidors3d/"
+   >EIDORS</a>
+<br>
+Step 2: Unzip the file and save it to a directory like
+   <tt>/path/to/eidors</tt>
+<br>
+Step 3: Start Matlab. Run this command:
+   <tt>&gt;&gt;run /path/to/eidors/startup.m</tt>
+
+<p><li><b>
+    Are there any prebuilt examples?
+</b><p>
+Yes, please look at the <a href="tutorial/index.html">tutorial</a>.
+
+<p><li><b>
+    Under what terms is EIDORS licenced
+</b><p>
+EIDORS is licenced under the GNU 
+<a href="http://www.gnu.org/licenses/gpl.html"
+    >General Public License</a>. Uses are free to
+use, modify, and distribute their modifications.
+All modifications must include the source code, or
+instructions on how to obtain it.
+
+<p><li><b>
+    May I include EIDORS in a commercial product
+</b><p>
+Yes. As long as you make the source code for EIDORS
+and all modifications you made to it available to 
+your clients.
+
+<p><li><b>
+    How should I refer to EIDORS in a scientific publication
+</b><p>
+Please quote the following paper
+<blockquote>
+Andy Adler, William R B Lionheart (2006)
+"Uses and abuses of EIDORS: An extensible software base for EIT",
+<i> Physiol. Meas.</i> 27:S25-S42, 2006
+</blockquote>
+
+<p><li><b>
+    Does EIDORS support 2D algorithms
+</b><p>
+Yes. Look at <tt>examples/image_2d_algs.m</tt>.
+
+<p><li><b>
+    Does EIDORS actually do diffuse optical tomography?
+</b><p>
+Not yet, but we intend it to. Please contact us if you are willing to help with this.
+
+<p><li><b>
+    Does EIDORS provide sample data
+</b><p>
+Yes. Look in the <tt>sample_data</tt> directory.
+We would love to have additional contributions of
+sample data from various experimental and clinical
+settings.
+<p>
+There are also many data sets provided in <a href="data_contrib-s.html">data_contrib</a>,
+covering many important studies in EIT.
+
+<p><li><b>
+    May I use EIDORS sample data to test my algorithm
+</b><p>
+Yes. However, if you publish your tests, you are generall
+required to refer to EIDORS in your publication. In general,
+you may simply list this paper in your
+references:
+<ul>
+   Adler and Lionheart (2005),
+  "Uses and abuses of EIDORS: An extensible software base for EIT"
+   Submitted to <i>Physiol. Meas.</i>, Nov. 2005
+</ul>
+However, certain data sets may require reference to a different
+paper. Please read the documentation for the particular data
+set.
+
+
+<p><li><b>
+    How do I use EIDORS to compare my idea to a 
+    published algorithm
+</b><p>
+Please remember that this is only a toolkit, and that the
+demonstration programs are only simple worked examples. They are
+not intended to be the state of the art in EIT reconstruction. By all
+means publish your improved reconstruction algorithms and compare them
+with the simple ones we demonstrate here. But please don't just run
+the demo code on your own data, using the tiny demo mesh, a randomly
+chosen regularization parameter and only one iteration of regularized
+Newton's method then compare this with your own highly optimised code
+and claim that your code is vastly superior than EIDORS' best shot
+(Yes, we exagerate, slightly).
+This is a toolkit of routines for you to build a code which suits your
+application.
+
+<p><li id="netgencompile"><b>
+Compiling Netgen under Linux
+</b><p>
+Over the years there have been a number of people who have asked for
+help compiling and installing Netgen. I had a script or two from years
+back that I have, at various times, suggested people use as a starting
+point for compiling under linux. It is, generally, not easy to
+successfully compile as there are a number of patches and the build
+options and dependencies can be a bit tricky to work through. I've
+recently gone back through my notes and those build scripts and got
+them fully operational again. There are now scripts available in my
+dev/a_boyle directory for three versions of netgen: 4.9.13, 5.3.1 and
+6.0_beta.</p>
+
+<p>All versions apply necessary patches, compile, install to a designated
+location (either local or system wide), and provide a netgen wrapper
+which sets necessary environment variables to allow netgen to run
+under Matlab/EIDORS. The builds have been tested on Gentoo
+(2017-04-25), Ubuntu (16.04) and will most likely work on other
+gnu/linux distributions. These are not for Mac or Windows.</p>
+
+<p><ol>
+<li><a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/dev/a_boyle/install-netgen-4.9.13">install-netgen-4.9.13</a></li>
+<li><a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/dev/a_boyle/install-netgen-5.3.1">install-netgen-5.3.1</a></li>
+<li><a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/dev/a_boyle/install-netgen-6.0-beta">install-netgen-6.0-beta</a></li>
+</ol></p>
+
+<p>Note that under Ubuntu, you need dependencies:<br/>
+<pre>
+$ sudo apt-get install libxmu-dev mesa-common-dev libglu1-mesa-dev libx11-dev
+</pre></p>
+
+<p>If you happen to be using Gentoo, there is an ebuild which automates
+the compile from source and installs into the system; these are the builds that
+I use (and maintain) in production.<br/>
+<a href="https://github.com/boyle/boyle-portage-tree/tree/master/sci-mathematics/netgen">Netgen ebuilds for Gentoo Linux</a></p>
+
+<p id="badnetgen4913"><b><em>Warning:</em></b> The 4.9.13 version of netgen will crash when it is executed due to a
+buffer overflow that is detected by modern compilers when meshing
+simple geometries. Versions 5.3.1 and 6.0_beta seem to work correctly
+for me.</p>
+
+<p>Good luck!</p>
+
+
+<p><li id="netgen"><b>
+    I'm struggling to use the EIDORS Netgen functions?
+</b><p>
+Netgen is a lovely tool, but it can be sensitive to many of
+it's parameters, especially those related to the placement of
+many electrodes. If you're having troubles, try these ideas:
+<ul>
+   <li> Try building a model without electrodes
+         (for example, instead of
+		 <tt>ng_mk_extruded_model({300,a,[3,10],25},<u>[16,1,150]</u>,[1]);</tt>,
+		 set the underlined field to <tt>[0 0]</tt> (0 electrodes and 0 planes) ).
+   <li> If building without electrodes works, try modifying the placement parameter
+		(e.g. set the underlined field to <tt>[16,1.05,150]</tt>). This will move 
+		the electrodes slightly.
+   <li> Alternatively, you can make the boundary smoother/nicer by interpolating, e.g.
+		<pre>
+		trunk = [x1 y1; ...; xn yn];
+		pp= fourier_fit(trunk); 
+		sp = linspace(0,1,51);sp(end)=[]; 
+		smoother_trunk = fourier_fit(pp, sp);</pre>
+		Changing the starting point (0) in the linspace call will shift the points along
+		the contour, worth trying.
+   <li> Netgen seems to have a problem with electrodes that <i>almost</i> exactly point at each other.
+		This is usually manifested by a number of "Intersection" messages followed by "Error in surface
+		generation" or hang up during surface generation. In the worst case it will hang up or crash already
+		at the "Find Points" stage. The solution is to make the offending electrodes point <i>exactly</i> at 
+		each other. In the ng_mk_extruded_model function, the electrodes are perpendicular to the side on which
+		their center lies. However, you can discretise the angle into N possible values by specifying a 5th
+		parameter to the elec_shape (3rd) input, as in:<br>
+		<pre>fmdl = ng_mk_extruded_model({300,a,[3,10],25},[16,1,150],<u>[1,0,0,0,N]</u>);</pre>
+		Values of N between 6 and 67 have proven useful at times. You should settle for the highest number that works
+		for your shape, as discretization in general distorts electrode shape.
+   <li> Try building your model without internal structures, e.g.<br>
+		<pre>fmdl = ng_mk_extruded_model({2,trunk ,[4,50],.1},[electh,1+0*electh],[0.1 0 0.05]);</pre>
+		instead of <br>
+		<pre>fmdl = ng_mk_extruded_model(<u>{2,{trunk,lung} ,[4,50],.1}</u>,[electh,1+0*electh],[0.1 0 0.05]);</pre>
+		If that works, refine the internal shapes.
+   <li> Try a smaller mesh density (larger last parameter in the underlined field above).
+   <li> Try a smaller electrode density (larger, or none, last parameter in the [0.1 0 0.05] electrode shape field above)
+   <li> If all else fails, locate the .geo file created by the function you called and examine it with Netgen GUI.
+		Location of the .geo file is one of the first things Netgen prints out. On Windows, this will be something like:<br>
+		<tt> Load geometry file C:\DOCUME~1\Username\LOCALS~1\Temp\tp054957.geo</tt><br>
+		Corresponding to the path C:\Documents and Settings\Username\Local Settings\Temp\tp054957.geo	
+</ul>
+<!--
+<p><li><b>
+    How do I use EIDORS as a framework to develop my
+    <i>new fangled</i> algorithm / idea?
+</b><p>
+-->
+
+<p><li><b>
+    What if I notice a bug?
+</b><p>
+You may write an email to the <a href="#maintainers">maintainers</a>.
+
+<p><li><b>
+    I need some features that are missing in EIDORS?
+</b><p>
+Please note that EIDORS is a volunteer project by some
+very busy people. You are welcome to make suggestions
+for new features, but we may not be able to 
+find the time to implement them.
+<p>
+Good options are: 1) implement new features yourself,
+and contribute them to EIDORS3D, or 2) find a source
+of funds to pay for the features you need. In either case,
+you are welcome to contact the 
+<a href="#maintainers">maintainers</a> to discuss.
+
+<!--
+<p><li><b>
+</b><br>
+-->
+
+</ol>
+
+<h2>Errors and Solutions</h2>
+<ol>
+<p><li><b>
+<tt>"??? Undefined command/function 'eidors_msg'."</tt> 
+</b><p>
+This error occurs because the functions are not part of the Matlab path. 
+Use the command: 
+<pre>
+  &gt;&gt;run <i>path/to/eidors/</i>startup.m
+</pre>
+<p>
+
+<p><li><b>
+Matlab prints ugly bitmapped figures rather than vector graphics
+</b><p>
+Matlab seems to try to guess what the user wants. At any rate,
+it often gets the choice wrong. To force vector graphics,
+use the '-painters' option. One useful trick to control the
+size of generated figures is to use the 'PaperPosition'
+property. Another useful trick to crop postscript figures
+is to use the
+<a href="http://www.imagemagick.org">imagemagick</a>
+<tt>convert</tt> utility.
+<pre>
+  &gt;&gt; set(gcf, 'PaperPosition', [0.25,2.5, width, height]);
+  &gt;&gt; print( gcf, '-depsc2','-painters', 'temp.eps')
+  &gt;&gt; system('convert -crop 0x0 temp.eps output.eps');
+</pre>
+
+<p><li><b>
+<tt>"Warning: RGB color data not yet supported in Painter's mode."</tt>
+</b><p>
+This is a limitation of Matlab. RGB data cannot be exported to postscript
+files. This can be solved by using colourmaps instead. 
+Try this:
+<pre>
+  &gt;&gt;calc_colours('mapped_colour',256);
+</pre>
+
+<p><li><b>
+<tt>"??? Invalid MEX-file ..."</tt> error on Linux
+</b><p>
+Sometimes one can get linux errors of the form 
+<br><tt>
+??? Invalid MEX-file '/home/andy/work/eidors3d/eidors_var_id.mexglx': libstdc++.so.6: cannot open shared object file: No such file or directory.
+</tt>
+or
+<br><tt>
+??? Invalid MEX-file '/home/andy/work/eidors3d/eidors_var_id.mexglx':
+[...]/../sys/os/ glnx86/libgcc_s.so.1:
+version `GCC_3.3' not found (required by /usr/lib/libstdc++.so.6).
+</tt>
+These errors are can occur when the linux version on which EIDORS is run
+is different from that on which the mex file was built.
+The easiest solution is to recompile the mex file, as follows:
+<pre>
+  &gt;&gt; mex eidors_var_id.cpp
+</pre>
+
+<p><li><b>
+Using Netgen
+</b><p>
+EIDORS can use netgen to create some fairly impressive 3D meshes.
+See the <a href="./examples/">examples</a>.
+Netgen usage with EIDORS is fairly easy under windows. You need to
+<ol>
+   <li> Download and install the windows binary from
+        <a href="http://sourceforge.net/projects/netgen-mesher/"
+                >http://sourceforge.net/projects/netgen-mesher/</a>
+   <li> Run an example which calls netgen (ie <tt>call_netgen.m</tt>)
+   <li> Enter a path to the netgen binary <u>without spaces</u>
+        (ie for C:\Program Files\netgen write C:/Progra~1/netgen)
+</ol>
+
+<p><li><b>
+<tt>mk_stim_patterns</tt> question
+</b><p>
+is the code
+<center><tt>
+stim= mk_stim_patterns(16, 1, '{ad}','{ad}', {}, 10);
+</tt></center>
+equivalent to
+<center> <tt> 
+stim= mk_stim_patterns(8, 2, '{ad}','{ad}', {}, 10);
+</tt></center>
+
+No, each ring is treated separately, so that, for example
+<pre>
+&gt;&gt; stim= mk_stim_patterns(4, 2, '{ad}','{ad}', {}, 10);
+&gt;&gt; full([stim(:).stim_pattern])
+ans = -10     0     0    10     0     0     0     0
+       10   -10     0     0     0     0     0     0
+        0    10   -10     0     0     0     0     0
+        0     0    10   -10     0     0     0     0
+        0     0     0     0   -10     0     0    10
+        0     0     0     0    10   -10     0     0
+        0     0     0     0     0    10   -10     0
+        0     0     0     0     0     0    10   -10
+
+&gt;&gt; stim= mk_stim_patterns(8, 1, '{ad}','{ad}', {}, 10);
+&gt;&gt; full([stim(:).stim_pattern])
+ans = -10     0     0     0     0     0     0    10
+       10   -10     0     0     0     0     0     0
+        0    10   -10     0     0     0     0     0
+        0     0    10   -10     0     0     0     0
+        0     0     0    10   -10     0     0     0
+        0     0     0     0    10   -10     0     0
+        0     0     0     0     0    10   -10     0
+        0     0     0     0     0     0    10   -10
+</pre>
+
+<p><li><b>
+<tt>Errors with <tt>print_convert</tt>
+</b><p>
+<tt>print_convert</tt> gives the error:
+<pre>
+ EIDORS:[This function requires the ImageMagick convert program  be
+ installed and on the path. On windows, we recommend you install it as
+ part of cygwin (www.cygwin.com)]
+</pre>
+
+This may be a path issue. Try
+<pre>
+&gt;&gt; !convert -help
+</pre>
+if you get <tt>Invalid drive specification.</tt>, then you need
+to edit the path so that <tt>C:\cygwin\bin</tt> is before
+<tt>C:\windows\system32</tt>.
+
+
+
+
+
+<p><li><b>
+Compiling Netgen under linux
+</b><p>
+The following script describes how to compile netgen and its
+dependencies under linux:
+
+<table border="1"><tr><td><pre>
+# Ubuntu/Debian
+   sudo apt-get install tk-dev tcl-dev libglu1-mesa-dev libtogl-dev
+   (cd /usr/lib/x86_64-linux-gnu/ && sudo ln -s libXmu.so.6 libXmu.so )
+
+# Create a src dir
+cd $HOME && mkdir -p src && cd src
+# Download the latest Netgen 
+wget http://downloads.sf.net/project/netgen-mesher/netgen-mesher/5.0/netgen-5.0.0.tar.gz
+# Unzip
+tar xfz netgen-5,0.0.tar.gz && cd netgen-5.0.0
+# Configure and Make
+./configure
+make
+sudo make install
+# That should work and install netgen to /opt/netgen/bin
+# Set the environment variable to
+NETGENDIR=/opt/netgen/bin
+
+# if you don't have root permissions on the machine, then use
+./configure --prefix=$HOME/local
+# then add the directory to your path
+export PATH=$PATH:$HOME/local
+</pre></table>
+
+<p><li><b>
+Printing (including print_convert) gives tiny fonts on Ubuntu
+</b><p>
+
+This is similar to the issue discussed 
+<a href="http://stackoverflow.com/questions/13148818/cannot-change-font-size-type-in-plots">here</a>.
+
+<table border="1"><tr><td><pre>
+# Install these fonts
+sudo apt-get install xfonts-75dpi xfonts-100dpi
+# Restart the x server. 
+# Or, if you're using vncserver, kill and restart the vncserver
+</pre></table>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-05-15 16:26:04 -0400 (Mon, 15 May 2017) $ by $Author: alistair_boyle $
+</small>
+</body>
+
+</html>
+

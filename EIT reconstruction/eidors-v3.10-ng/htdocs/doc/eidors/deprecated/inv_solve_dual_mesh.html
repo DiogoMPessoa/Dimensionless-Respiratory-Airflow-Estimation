@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of inv_solve_dual_mesh</title>
+  <meta name="keywords" content="inv_solve_dual_mesh">
+  <meta name="description" content="INV_SOLVE_DUAL_MESH using a coarse and fine mesh">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; inv_solve_dual_mesh.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>inv_solve_dual_mesh
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>INV_SOLVE_DUAL_MESH using a coarse and fine mesh</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function img= inv_solve_dual_mesh( inv_model, voltage) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> INV_SOLVE_DUAL_MESH using a coarse and fine mesh
+ img= inv_solve_dual_mesh( inv_model, data1)
+ img        =&gt; output image (or vector of images)
+ inv_model  =&gt; inverse model struct
+ data1      =&gt; EIT data object</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="edge_refined_elem_mapper.html" class="code" title="function [index_simp]=edge_refined_elem_mapper( mdl_coarse, mdl_dense)">edge_refined_elem_mapper</a>	EDGE_REFINED_ELEM_MAPPER: map elements from coarse to dense model</li><li><a href="edge_refined_node_mapper.html" class="code" title="function [index_vtx] = edge_refined_node_mapper(mdl_coarse, mdl_dense);">edge_refined_node_mapper</a>	EDGE_REFINED_NODE_MAPPER:</li><li><a href="fem_master_full.html" class="code" title="function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);">fem_master_full</a>	function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);</li><li><a href="forward_solver.html" class="code" title="function [V] = forward_solver(E,I,tol,pp,V, compat_param);">forward_solver</a>	[V] = forward_solver(E,I,tol,pp,V);</li><li><a href="get_3d_meas.html" class="code" title="function [voltageH,voltageV,indH,indV,df] = get_3d_meas(elec,vtx,V,Ib,no_pl);">get_3d_meas</a>	GET_3D_MEAS: extracts multiplane voltage measurements from a calculated</li><li><a href="jacobian_3d_with_fields.html" class="code" title="function [J] = jacobian_3d_with_fields(V,Ela,D,I,elec,vtx,simp,gnd_ind,mat_ref,zc,v_f,df,tol,sym);">jacobian_3d_with_fields</a>	JACOBIAN_3D_WITH_FIELDS: calculate jacobian_3d, but accept V fields as</li><li><a href="m_3d_fields.html" class="code" title="function [v_f] = m_3d_fields(vtx,el_no,m_ind,E,tol,gnd_ind,v_f);">m_3d_fields</a>	function [v_f] = m_3d_fields(vtx,el_no,m_ind,E,tol,gnd_ind,v_f);</li><li><a href="np_fwd_parameters.html" class="code" title="function param = np_fwd_parameters( fwd_model )">np_fwd_parameters</a>	NP_FWD_PARAMETERS: data= np_fwd_solve( fwd_model )</li><li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>	RtR = calc_RtR_prior( inv_model )</li><li><a href="../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>	CALC_HYPERPARAMETER: calculate hyperparameter value</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function voltH = elec_volts( Vfwd, fwd_model)</a></li><li><a href="#_sub2" class="code">function [V_coarse] = mapvd(V_dense,index_vtx,elec,vtx_coarse,vtx_dense);</a></li><li><a href="#_sub3" class="code">function [v_f_coarse] = mapvm(v_f_dense,index_vtx,indH_dense,vtx_coarse,vtx_dense);</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function img= inv_solve_dual_mesh( inv_model, voltage)</a>
+0002 <span class="comment">% INV_SOLVE_DUAL_MESH using a coarse and fine mesh</span>
+0003 <span class="comment">% img= inv_solve_dual_mesh( inv_model, data1)</span>
+0004 <span class="comment">% img        =&gt; output image (or vector of images)</span>
+0005 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0006 <span class="comment">% data1      =&gt; EIT data object</span>
+0007 <span class="comment">%</span>
+0008 
+0009 <span class="comment">% (C) 2005 David Stephenson. License: GPL version 2 or version 3</span>
+0010 <span class="comment">% $Id: inv_solve_dual_mesh.m 3060 2012-06-06 16:37:38Z aadler $</span>
+0011 
+0012 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'INV_SOLVE_DUAL_MESH is deprecated as of 06-Jun-2012. INV_SOLVE now does this.'</span>);
+0013 
+0014 M_dense= inv_model.fwd_model;
+0015 <span class="comment">% Load parameters</span>
+0016 M_coarse= inv_model.inv_solve_dual_mesh.coarse_mdl;
+0017 <span class="comment">%mapper_func= inv_model.inv_solve_dual_mesh.mapper_func;</span>
+0018 
+0019 [index_simp]=<a href="edge_refined_elem_mapper.html" class="code" title="function [index_simp]=edge_refined_elem_mapper( mdl_coarse, mdl_dense)">edge_refined_elem_mapper</a>( M_coarse, M_dense);
+0020 c2d_elem= index_simp(:,1);
+0021 [index_vtx]=<a href="edge_refined_node_mapper.html" class="code" title="function [index_vtx] = edge_refined_node_mapper(mdl_coarse, mdl_dense);">edge_refined_node_mapper</a>( M_coarse, M_dense);
+0022 d2c_node= index_vtx(:,1);
+0023 
+0024 <span class="comment">%FIXME: create parameters</span>
+0025 tol_for= 1e-5;
+0026 tol_inv= 1e-5;
+0027 
+0028 tfac= <a href="../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>(inv_model);
+0029 IM_coarse= inv_model; IM_coarse.fwd_model= M_coarse;
+0030 RtR= <a href="../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>( IM_coarse );
+0031 
+0032 <span class="comment">% Initial conductivity estimate</span>
+0033 mat_ref_coarse = ones(size(M_coarse.elems,1),1);
+0034 mat_ref_coarse(:)= inv_model.jacobian_bkgnd.value;
+0035 mat_ref_dense= mat_ref_coarse( c2d_elem );
+0036 <span class="comment">% Initial estimate - homogeneous background coarse mesh</span>
+0037 sol_upd_dense= mat_ref_dense;
+0038 sol_upd_coarse = mat_ref_coarse;
+0039 
+0040 index_simp=<a href="edge_refined_elem_mapper.html" class="code" title="function [index_simp]=edge_refined_elem_mapper( mdl_coarse, mdl_dense)">edge_refined_elem_mapper</a>(M_coarse,M_dense);
+0041 
+0042 <span class="comment">% create dense model</span>
+0043 img_dense= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'image'</span>, <span class="string">'dense image'</span>);
+0044 img_dense.elem_data= mat_ref_dense;
+0045 img_dense.fwd_model= M_dense;
+0046 pdense= <a href="np_fwd_parameters.html" class="code" title="function param = np_fwd_parameters( fwd_model )">np_fwd_parameters</a>( M_dense );
+0047 vtx_dense      = pdense.vtx;
+0048 simp_dense     = pdense.simp;
+0049 gnd_ind_dense  = pdense.gnd_ind;
+0050 elec_dense     = pdense.elec;
+0051 I_dense        = pdense.I;
+0052 Ib_dense       = pdense.Ib;
+0053 df_dense       = pdense.df;
+0054 elec_dense     = pdense.elec;
+0055 zc             = pdense.zc;
+0056 perm_sym       = pdense.perm_sym;
+0057 no_pl          = 1; <span class="comment">% FIXME</span>
+0058 el_no          = pdense.n_elec;
+0059 
+0060 <span class="comment">% create coarse model</span>
+0061 img_coarse= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'image'</span>, <span class="string">'coarse image'</span>);
+0062 img_coarse.elem_data= mat_ref_coarse;
+0063 img_coarse.fwd_model= M_coarse;
+0064 pcoarse= <a href="np_fwd_parameters.html" class="code" title="function param = np_fwd_parameters( fwd_model )">np_fwd_parameters</a>( M_coarse );
+0065 vtx_coarse      = pcoarse.vtx;
+0066 simp_coarse     = pcoarse.simp;
+0067 gnd_ind_coarse  = pcoarse.gnd_ind;
+0068 elec_coarse     = pcoarse.elec;
+0069 I_coarse        = pcoarse.I;
+0070 Ib_coarse       = pcoarse.Ib;
+0071 df_coarse       = pcoarse.df;
+0072 elec_coarse     = pcoarse.elec;
+0073 
+0074 <span class="comment">%Set the tolerance for the forward solver</span>
+0075 <span class="keyword">for</span> iter= 1:inv_model.parameters.max_iterations;
+0076    [E_dense,D_dense,Ela_dense,pp_dense] = <span class="keyword">...</span>
+0077    <a href="fem_master_full.html" class="code" title="function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);">fem_master_full</a>(vtx_dense,simp_dense,sol_upd_dense,gnd_ind_dense,elec_dense,zc,perm_sym);
+0078 
+0079    <span class="keyword">if</span> iter==1
+0080       <span class="comment">%sprintf('Current fields for iteration %d',i)</span>
+0081       [V_dense] = <a href="forward_solver.html" class="code" title="function [V] = forward_solver(E,I,tol,pp,V, compat_param);">forward_solver</a>(E_dense,I_dense,tol_for,pp_dense);
+0082       [viH,viV,indH_dense,indV,df] = <a href="get_3d_meas.html" class="code" title="function [voltageH,voltageV,indH,indV,df] = get_3d_meas(elec,vtx,V,Ib,no_pl);">get_3d_meas</a>(elec_dense,vtx_dense,V_dense,Ib_dense,no_pl);
+0083       dfv = df(1:2:end);
+0084       vi = (viH);
+0085       <span class="comment">%sprintf('Measurement fields for iteration %d',i)</span>
+0086       [v_f_dense] = <a href="m_3d_fields.html" class="code" title="function [v_f] = m_3d_fields(vtx,el_no,m_ind,E,tol,gnd_ind,v_f);">m_3d_fields</a>(vtx_dense,el_no,indH_dense,E_dense,tol_for,gnd_ind_dense);
+0087    <span class="keyword">else</span>
+0088       <span class="comment">%sprintf('Current fields for iteration %d',i)</span>
+0089       [V_dense] = <a href="forward_solver.html" class="code" title="function [V] = forward_solver(E,I,tol,pp,V, compat_param);">forward_solver</a>(E_dense,I_dense,tol_for,pp_dense,V_dense);
+0090       [viH,viV,indH_dense,indV,df] = <a href="get_3d_meas.html" class="code" title="function [voltageH,voltageV,indH,indV,df] = get_3d_meas(elec,vtx,V,Ib,no_pl);">get_3d_meas</a>(elec_dense,vtx_dense,V_dense,Ib_dense,no_pl);
+0091       dfv = df(1:2:end);
+0092       vi = (viH);
+0093       <span class="comment">%sprintf('Measurement fields for iteration %d',i)</span>
+0094       [v_f_dense] = <a href="m_3d_fields.html" class="code" title="function [v_f] = m_3d_fields(vtx,el_no,m_ind,E,tol,gnd_ind,v_f);">m_3d_fields</a>(vtx_dense,el_no,indH_dense,E_dense,tol_for,gnd_ind_dense,v_f_dense);
+0095    <span class="keyword">end</span>
+0096 
+0097 
+0098    <span class="comment">%% DENSE MESH TO COARSE MESH HERE for scaler potentials</span>
+0099 
+0100    [V_coarse] = <a href="#_sub2" class="code" title="subfunction [V_coarse] = mapvd(V_dense,index_vtx,elec,vtx_coarse,vtx_dense);">mapvd</a>(V_dense,index_vtx,elec_dense,vtx_coarse,vtx_dense);
+0101 
+0102    [v_f_coarse] = <a href="#_sub3" class="code" title="subfunction [v_f_coarse] = mapvm(v_f_dense,index_vtx,indH_dense,vtx_coarse,vtx_dense);">mapvm</a>(v_f_dense,index_vtx,indH_dense,vtx_coarse,vtx_dense);
+0103 
+0104    [viH,viV,indH_coarse,indV,df_coarse] = <a href="get_3d_meas.html" class="code" title="function [voltageH,voltageV,indH,indV,df] = get_3d_meas(elec,vtx,V,Ib,no_pl);">get_3d_meas</a>(elec_coarse,vtx_coarse,V_coarse,Ib_coarse,no_pl); <span class="comment">% for dfv_coarse in Jacobian calculation</span>
+0105 
+0106    dfv_coarse = df_coarse(1:2:end);
+0107 
+0108    [E_coarse,D_coarse,Ela_coarse,pp_coarse] = <a href="fem_master_full.html" class="code" title="function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);">fem_master_full</a>(vtx_coarse,simp_coarse,mat_ref_coarse,gnd_ind_coarse,elec_coarse,zc,perm_sym);  <span class="comment">% for D in Jacobian calculation</span>
+0109 
+0110    [J_coarse] = <a href="jacobian_3d_with_fields.html" class="code" title="function [J] = jacobian_3d_with_fields(V,Ela,D,I,elec,vtx,simp,gnd_ind,mat_ref,zc,v_f,df,tol,sym);">jacobian_3d_with_fields</a>(V_coarse,Ela_coarse,D_coarse,I_coarse,elec_coarse,vtx_coarse,simp_coarse,gnd_ind_coarse,sol_upd_coarse,zc,v_f_coarse,dfv_coarse,tol_for,perm_sym);
+0111 
+0112    sol_coarse = (J_coarse.'*J_coarse + tfac^2*RtR)\ (J_coarse.' * (voltage - vi));
+0113 
+0114    <span class="comment">% COARSE MESH TO DENSE MESH HERE for conductivity</span>
+0115 
+0116    sol_dense=sol_coarse(c2d_elem);
+0117 
+0118    sol_upd_dense = sol_upd_dense + sol_dense;
+0119    sol_upd_coarse = sol_upd_coarse + sol_coarse;
+0120 
+0121    sol_coarse = sol_upd_coarse;
+0122    sol_dense = sol_upd_dense;
+0123 
+0124    sol_array(:,iter)=sol_coarse;
+0125 
+0126    sprintf(<span class="string">'Error norm at iteration %d is %f'</span>,iter,norm(voltage - vi))
+0127 
+0128 <span class="keyword">end</span>
+0129 
+0130 
+0131 <span class="comment">% create a data structure to return</span>
+0132 img.name= <span class="string">'solved by inv_solve_trunc_iterative'</span>;
+0133 img.elem_data = sol_array;
+0134 img.fwd_model= M_dense;
+0135 
+0136 <a name="_sub1" href="#_subfunctions" class="code">function voltH = elec_volts( Vfwd, fwd_model)</a>
+0137    p = <a href="np_fwd_parameters.html" class="code" title="function param = np_fwd_parameters( fwd_model )">np_fwd_parameters</a>( fwd_model);
+0138    Velec=Vfwd( p.n_node+(1:p.n_elec),:);
+0139    voltH = zeros( p.n_meas, 1 );
+0140    idx=0;
+0141    <span class="keyword">for</span> i=1:p.n_stim
+0142       meas_pat= fwd_model.stimulation(i).meas_pattern;
+0143       n_meas  = size(meas_pat,1);
+0144       voltH( idx+(1:n_meas) ) = meas_pat*Velec(:,i);
+0145       idx= idx+ n_meas;
+0146    <span class="keyword">end</span>
+0147 
+0148 <a name="_sub2" href="#_subfunctions" class="code">function [V_coarse] = mapvd(V_dense,index_vtx,elec,vtx_coarse,vtx_dense);</a>
+0149 
+0150 <span class="comment">% This function maps the scaler potential field</span>
+0151 <span class="comment">% from the dense mesh to the coarse</span>
+0152 <span class="comment">% mesh using verticies extraction.</span>
+0153 
+0154    <span class="keyword">for</span> j=1:size(elec,1);
+0155 
+0156       <span class="keyword">for</span> i=1:size(vtx_coarse,1);
+0157 
+0158          V_coarse(i,j)=V_dense((index_vtx(i,1)),j);
+0159 
+0160       <span class="keyword">end</span>
+0161 
+0162    <span class="keyword">end</span>
+0163 
+0164    V_coarse_elec=V_dense((size(vtx_dense,1)+1):(size(V_dense,1)),:);
+0165 
+0166    V_coarse=[V_coarse;V_coarse_elec];
+0167 
+0168 <span class="comment">% This function maps the scaler potential field</span>
+0169 <span class="comment">% from the dense mesh to the coarse</span>
+0170 <span class="comment">% mesh using verticies extraction.</span>
+0171 <a name="_sub3" href="#_subfunctions" class="code">function [v_f_coarse] = mapvm(v_f_dense,index_vtx,indH_dense,vtx_coarse,vtx_dense);</a>
+0172 
+0173 
+0174    <span class="keyword">for</span> j=1:size(indH_dense,1);
+0175 
+0176       <span class="keyword">for</span> i=1:size(vtx_coarse,1);
+0177 
+0178          v_f_coarse(i,j)=v_f_dense((index_vtx(i,1)),j);
+0179 
+0180       <span class="keyword">end</span>
+0181 
+0182    <span class="keyword">end</span>
+0183 
+0184    v_f_coarse_elec=v_f_dense((size(vtx_dense,1)+1):(size(v_f_dense,1)),:);
+0185 
+0186    v_f_coarse=[v_f_coarse;v_f_coarse_elec];</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

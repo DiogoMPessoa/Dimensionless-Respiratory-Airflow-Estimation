@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>GREIT Reconstruction for a pig thorax geometry</h2>
+
+Reconstruction of experimental data onto a pig thorax shape. 
+
+<a href="../..//data_contrib/if-experimental-lung-injury/if-experimental-lung-injury-s.html">
+Data used</a> are from the study:
+<ul>
+I. Frerichs,
+G. Hahn,
+T. Schr&ouml;der,
+G. Hellige
+<a href="http://www.springerlink.com/content/yt01jjp4d8tj3e65/"
+   >Electrical impedance tomography in
+    monitoring experimental lung injury </a>
+  <i>Intensive Care Med.</i> 24:829-836, 1998.
+</ul>
+
+
+The <tt>CT3</tt> image is available 
+<a href = "http://eidors3d.sourceforge.net/tutorial/GREIT/CT3.mat">here</a>.
+
+
+<h3> 
+Forward Model
+</h3>
+
+<pre>
+load CT3
+
+trunk = trunk*.01;
+lung  = lung*.01; lung = flipud(lung(1:3:end,:)); % need counterclockwise shapes
+elec_pos = elec_pos*.01;
+
+% Calculate electrode angles
+pp= fourier_fit(trunk); sp = linspace(0,1,51);sp(end)=[]; centroid = mean(fourier_fit(pp, sp));
+elec_pos = elec_pos - ones(size(elec_pos,1),1) * centroid;
+electh= atan2(elec_pos(:,2),elec_pos(:,1))*180/pi; 
+
+% Build a fwd model
+[stim,meas_sel] = mk_stim_patterns(16,1,[0,1],[0,1],{'no_meas_current'}, 1);
+fmdl = ng_mk_extruded_model({2,{trunk,lung} ,[4,50],.1},[electh,1+0*electh],[0.1]);
+fmdl.name = 'trunk_and_lungs';
+fmdl.stimulation = stim;
+fmdl.meas_select = meas_sel;
+fmdl = mdl_normalize(fmdl, 1);
+fmdl.electrode(2:16) =  fmdl.electrode(16:-1:2); %flip electrodes to match 
+fmdl.nodes = fmdl.nodes*diag([-1,-1,1]);
+
+img = mk_image(fmdl,1);
+img.elem_data( fmdl.mat_idx{2} ) = 0.25;
+
+show_fem(img);
+print_convert pig_ex_fmdl.png '-density 75';
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/pig_ex_fmdl.png">
+<br><i>Figure:</i>
+Forward model used for training GREIT using
+lung shaped contrasting regions
+</center>
+
+<h3> 
+Training GREIT
+</h3>
+
+<pre>
+%% Train GREIT
+opt.imgsz = [64 64]; % 64-by-64 image (yes, we can do that now)
+opt.distr = 3; % non-random, uniform
+opt.Nsim = 500; % 500 hundred targets to train on, seems enough
+opt.target_size = 0.01; %small targets
+opt.target_offset = 0;
+opt.noise_figure = 0.5; % this is key!
+imdl=mk_GREIT_model(img, 0.25, [], opt);
+
+</pre>
+
+<h3> 
+Reconstruct Images
+</h3>
+
+<pre>
+%% Read in the data
+ctrl = eidors_readdata('2-control.RAW');
+inj  = eidors_readdata('2-injury.RAW');
+
+ex_ctrl = ctrl(:,101);
+in_ctrl = ctrl(:,103);
+
+ex_inj = inj(:,99);
+in_inj = inj(:,101);
+
+%% Reconstruct
+img_ctrl = inv_solve(imdl, ex_ctrl, in_ctrl);
+img_ctrl.calc_colours.ref_level=0;
+show_fem(img_ctrl); axis off
+opt.resolution = 60;
+print_convert('pig_control.png',opt);
+
+
+img_inj = inv_solve(imdl, ex_inj, in_inj);
+img_inj.calc_colours.ref_level=0;
+show_fem(img_inj); axis off
+print_convert('pig_injury.png',opt);
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/pig_control.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/pig_injury.png">
+<br><i>Figure:</i>
+<i>Left</i> Ventilation image of control animal
+<i>Right</i> Ventilation image of animal after left lung injury
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-04-04 14:21:51 -0400 (Tue, 04 Apr 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

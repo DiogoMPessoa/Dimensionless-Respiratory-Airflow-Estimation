@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of call_netgen</title>
+  <meta name="keywords" content="call_netgen">
+  <meta name="description" content="CALL_NETGEN: call netgen to create a vol_file from a geo_file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">netgen</a> &gt; call_netgen.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/netgen&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>call_netgen
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>CALL_NETGEN: call netgen to create a vol_file from a geo_file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function status= call_netgen(geo_file, vol_file, msz_file, finelevel) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> CALL_NETGEN: call netgen to create a vol_file from a geo_file
+ status= call_netgen(geo_file, vol_file, msz_file, finelevel)
+  staus = 0 -&gt; success , negative -&gt; failure
+
+ geo_file = geometry file (input)
+ vol_file = FEM mesh file (output)
+ msz_file = Meshsize file in netgen format
+
+ Finelevel controls the fineness of the mesh
+   default is '' -&gt; coarse
+   valid values are 'fine' or 'veryfine'
+ 
+ Finelevel can also be set using eidors_default
+   eidors_default call_netgen_finelevel 'fine'
+
+ To debug the shapes and view the netgen interface, use
+   eidors_debug on call_netgen</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../../eidors/interface/system_cmd.html" class="code" title="function [status,result] = system_cmd( cmd )">system_cmd</a>	SYSTEM_CMD: issue system commands, and try to compensate for</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>	EIDORS_DEBUG Global managment of debug flags</li><li><a href="../../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>	EIDORS_DEFAULT Default function handler.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>	NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface</li><li><a href="ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="ng_mk_ellip_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_ellip_models(ellip_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_ellip_models</a>	NG_MAKE_ELLIP_MODELS: create elliptical models using netgen</li><li><a href="ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>	NG_MAKE_EXTRUDED_MODEL: create extruded models using netgen</li><li><a href="ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>	NG_MK_GEN_MODELS: create generic models using netgen</li><li><a href="ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>	NG_MK_GEOMETRIC_MODELS: create geometric mesh models using Netgen. Body</li><li><a href="../../../eidors/models/mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li><li><a href="../../../eidors/models/place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function status= call_netgen(geo_file, vol_file, msz_file, finelevel)</a>
+0002 <span class="comment">% CALL_NETGEN: call netgen to create a vol_file from a geo_file</span>
+0003 <span class="comment">% status= call_netgen(geo_file, vol_file, msz_file, finelevel)</span>
+0004 <span class="comment">%  staus = 0 -&gt; success , negative -&gt; failure</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% geo_file = geometry file (input)</span>
+0007 <span class="comment">% vol_file = FEM mesh file (output)</span>
+0008 <span class="comment">% msz_file = Meshsize file in netgen format</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Finelevel controls the fineness of the mesh</span>
+0011 <span class="comment">%   default is '' -&gt; coarse</span>
+0012 <span class="comment">%   valid values are 'fine' or 'veryfine'</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Finelevel can also be set using eidors_default</span>
+0015 <span class="comment">%   eidors_default call_netgen_finelevel 'fine'</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% To debug the shapes and view the netgen interface, use</span>
+0018 <span class="comment">%   eidors_debug on call_netgen</span>
+0019 
+0020 <span class="comment">% $Id: call_netgen.m 6032 2019-12-30 16:05:32Z aadler $</span>
+0021 <span class="comment">% (C) 2006 Andy Adler. Licensed under GPL V2</span>
+0022 
+0023 <span class="keyword">if</span> nargin&lt;3
+0024    msz_file= <span class="string">''</span>;
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="keyword">if</span> ~isempty(msz_file)
+0028    <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'call_netgen: Warning. Using an *.msz file. This often fails.'</span>);
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">if</span> nargin&lt;4
+0032    <span class="comment">%  finelevel= '-veryfine';</span>
+0033    <span class="comment">%  finelevel= '-fine';</span>
+0034    finelevel= <a href="../../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>(<span class="string">'get'</span>,<span class="string">'call_netgen_finelevel'</span>);
+0035 <span class="keyword">end</span>
+0036 
+0037 islinux = isunix;
+0038 
+0039 <span class="comment">% Netgen executable filename</span>
+0040 cache_path = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(<span class="string">'cache_path'</span>);
+0041 <span class="keyword">if</span>  islinux
+0042    ng_name = <span class="string">'netgen'</span>;
+0043 <span class="keyword">else</span>
+0044    ng_name = [cache_path,<span class="string">'/ng'</span>];
+0045 <span class="keyword">end</span>
+0046  
+0047 <span class="keyword">while</span>( 1 )
+0048    
+0049    fid= fopen(<span class="string">'ng.opt'</span>,<span class="string">'a'</span>); <span class="comment">%create ng.opt file in local dir</span>
+0050    <span class="keyword">if</span> fid==-1
+0051       error([<span class="string">'Netgen requires writing files in the current directory(%s). '</span>, <span class="keyword">...</span>
+0052          <span class="string">'Unfortunately, you don''t have permission. '</span> <span class="keyword">...</span>
+0053          <span class="string">'Your options are: 1) change your working directory to one in which you have write permission, or '</span> <span class="keyword">...</span>
+0054          <span class="string">'2) change the permissions on the current working directory.'</span>], pwd);
+0055    <span class="keyword">end</span>
+0056    <span class="keyword">if</span> ~isempty(msz_file)
+0057       <span class="comment">%     fprintf(fid,'options.segmentsperedge 5\n'); % Another</span>
+0058       <span class="comment">%                                                   potentially useful parameter</span>
+0059       <span class="comment">%                                                   except netgen ignores it</span>
+0060       fprintf(fid,<span class="string">'options.meshsizefilename= %s\n'</span>,msz_file);
+0061    <span class="keyword">end</span>
+0062    fclose(fid);
+0063 
+0064    <span class="keyword">if</span> ~islinux
+0065       <span class="comment">% on Linux, Netgen runs in the current directory</span>
+0066       <span class="comment">% enforce this behaviour in Windows</span>
+0067       oldpath = getenv(<span class="string">'NETGEN_USER_DIR'</span>);
+0068       setenv(<span class="string">'NETGEN_USER_DIR'</span>, cd);
+0069    <span class="keyword">end</span>
+0070 
+0071    <span class="keyword">if</span> <a href="../../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>(<span class="string">'query'</span>,<span class="string">'call_netgen'</span>)
+0072       sys_cmd = sprintf(<span class="string">'&quot;%s&quot; %s  -geofile=%s  -meshfile=%s '</span>, <span class="keyword">...</span>
+0073          ng_name, finelevel,geo_file,vol_file);
+0074    <span class="keyword">else</span>
+0075       sys_cmd = sprintf(<span class="string">'&quot;%s&quot; %s -batchmode -geofile=&quot;%s&quot;  -meshfile=&quot;%s&quot; '</span>, <span class="keyword">...</span>
+0076          ng_name, finelevel,geo_file,vol_file);
+0077    <span class="keyword">end</span>
+0078    status= <a href="../../../eidors/interface/system_cmd.html" class="code" title="function [status,result] = system_cmd( cmd )">system_cmd</a>( sys_cmd );
+0079 
+0080    <span class="keyword">if</span> status==0; <span class="keyword">break</span>; <span class="keyword">end</span>
+0081    <span class="keyword">try</span>
+0082       <span class="keyword">if</span> islinux
+0083          <span class="keyword">global</span> eidors_objects;
+0084          ignore_errors = 0;
+0085          <span class="keyword">if</span> isfield(eidors_objects,<span class="string">'ng_ignore_errors'</span>);
+0086             ignore_errors = eidors_objects.ng_ignore_errors;
+0087          <span class="keyword">end</span>
+0088          fprintf([<span class="string">'It seems that netgen has not worked (on linux). '</span> <span class="keyword">...</span>
+0089             <span class="string">'Check that netgen is installed and on the path. '</span> <span class="keyword">...</span>
+0090             <span class="string">'Check the environment variable NETGENDIR is set. '</span> <span class="keyword">...</span>
+0091             <span class="string">' This can be set via the following commands:\n'</span> <span class="keyword">...</span>
+0092             <span class="string">'  setenv(''NETGENDIR'',''/path/to/netgen/bin'');\n'</span> <span class="keyword">...</span>
+0093             <span class="string">'  setenv(''PATH'',[''/path/to/netgen/bin:'',getenv(''PATH'')]);\n'</span> <span class="keyword">...</span>
+0094             <span class="string">'Please enter a new netgen file name\n'</span> ]);
+0095          <span class="keyword">if</span> ignore_errors == 1;
+0096             <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'Ignoring Netgen Error (as requested)'</span>,1);
+0097             <span class="keyword">break</span>;
+0098          <span class="keyword">end</span>
+0099          ng_name = input( <span class="keyword">...</span>
+0100            <span class="string">'netgen file name (with path)? [or i=ignore, e=error, a=always ignore]'</span>,<span class="string">'s'</span>);
+0101          <span class="keyword">if</span> strcmp(ng_name,<span class="string">'i'</span>); <span class="keyword">break</span>;<span class="keyword">end</span>
+0102          <span class="keyword">if</span> strcmp(ng_name,<span class="string">'a'</span>);
+0103              eidors_objects.ng_ignore_errors = 1;
+0104              <span class="keyword">break</span>;
+0105          <span class="keyword">end</span>
+0106          <span class="keyword">if</span> strcmp(ng_name,<span class="string">'e'</span>); error(<span class="string">'user requested'</span>),<span class="keyword">end</span>;
+0107       <span class="keyword">else</span> <span class="comment">% Windows</span>
+0108          <span class="comment">% Check for a version of netgen shipped with eidors</span>
+0109          <span class="comment">% Fixme if we ship a different version of netgen</span>
+0110          netgen_path = [<a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(<span class="string">'eidors_path'</span>),<span class="string">'/../Netgen-5.3_x64/bin'</span>];
+0111          <span class="keyword">if</span> exist(netgen_path)
+0112             fprintf(<span class="string">'Creating batch file to access Netgen.\n'</span>)
+0113             fid= fopen([cache_path, <span class="string">'/ng.bat'</span>],<span class="string">'w'</span>);
+0114             <span class="keyword">if</span> fid&lt;0; error(<span class="string">'Unable to write to %s'</span>,cache_path); <span class="keyword">end</span>
+0115             fprintf(fid,<span class="string">'set TCL_LIBRARY=%s/lib/tcl8.3\n'</span>, netgen_path); <span class="comment">% REQ for ng &lt;= 4.4</span>
+0116             fprintf(fid,<span class="string">'set TIX_LIBRARY=%s/lib/tix8.1\n'</span>, netgen_path); <span class="comment">% REQ for ng &lt;= 4.4</span>
+0117             fprintf(fid,<span class="string">'set NETGENDIR=%s\n'</span>, netgen_path); <span class="comment">% REQ for ng &gt;= 4.9</span>
+0118             fprintf(fid,<span class="string">'&quot;%s/netgen.exe&quot; %%*\n'</span>, netgen_path);
+0119             fclose(fid);
+0120          <span class="keyword">else</span>
+0121             fprintf([ <span class="keyword">...</span>
+0122                <span class="string">'Netgen call failed. Is netgen installed and on the search path?\n'</span> <span class="keyword">...</span>
+0123                <span class="string">'If you are running under windows, I can attempt to create\n'</span> <span class="keyword">...</span>
+0124                <span class="string">'a batch file to access netgen.\n'</span> <span class="keyword">...</span>
+0125                <span class="string">'Please enter the directory in which to find netgen.exe.\n'</span> <span class="keyword">...</span>
+0126                <span class="string">'A typical path is &quot;C:\\Program Files (x86)\\Netgen-5.0_x64\\bin&quot;\n'</span> <span class="keyword">...</span>
+0127                <span class="string">'If you don''t have a copy, download it from'</span> <span class="keyword">...</span>
+0128                <span class="string">'http://sourceforge.net/projects/netgen-mesher/ \n\n'</span>]);
+0129             netgen_path = input(<span class="string">'netgen_path? [or i=ignore, e=error] '</span>,<span class="string">'s'</span>);
+0130             <span class="keyword">if</span> strcmp(ng_name,<span class="string">'i'</span>); <span class="keyword">break</span>;<span class="keyword">end</span>
+0131             <span class="keyword">if</span> strcmp(ng_name,<span class="string">'e'</span>); error(<span class="string">'user requested'</span>),<span class="keyword">end</span>;
+0132             <span class="keyword">if</span> exist( sprintf(<span class="string">'%s/netgen.exe'</span>,netgen_path) , <span class="string">'file'</span> ) || <span class="keyword">...</span>
+0133                   exist( sprintf(<span class="string">'%s/bin/netgen.exe'</span>,netgen_path) , <span class="string">'file'</span> )
+0134                disp(<span class="string">'Found netgen version 4.4 or higher'</span>);
+0135                netgen_exe = netgen_path;
+0136                <span class="keyword">if</span> exist( sprintf(<span class="string">'%s/bin/netgen.exe'</span>,netgen_path) , <span class="string">'file'</span> )
+0137                   netgen_exe = [netgen_path <span class="string">'/bin'</span>];
+0138                <span class="keyword">end</span>
+0139                
+0140                fid= fopen([cache_path, <span class="string">'/ng.bat'</span>],<span class="string">'w'</span>);
+0141                <span class="keyword">if</span> fid&lt;0; error(<span class="string">'Unable to write to %s'</span>,cache_path); <span class="keyword">end</span>
+0142                fprintf(fid,<span class="string">'set TCL_LIBRARY=%s/lib/tcl8.3\n'</span>, netgen_path); <span class="comment">% REQ for ng &lt;= 4.4</span>
+0143                fprintf(fid,<span class="string">'set TIX_LIBRARY=%s/lib/tix8.1\n'</span>, netgen_path); <span class="comment">% REQ for ng &lt;= 4.4</span>
+0144                fprintf(fid,<span class="string">'set NETGENDIR=%s\n'</span>, netgen_path); <span class="comment">% REQ for ng &gt;= 4.9</span>
+0145                fprintf(fid,<span class="string">'&quot;%s/netgen.exe&quot; %%*\n'</span>, netgen_exe);
+0146                fclose(fid);
+0147             <span class="keyword">elseif</span> exist( sprintf(<span class="string">'%s/ng431.exe'</span>,netgen_path) , <span class="string">'file'</span> )
+0148                disp(<span class="string">'Found netgen version 4.3.1'</span>);
+0149                fid= fopen([cache_path, <span class="string">'/ng.bat'</span>],<span class="string">'w'</span>);
+0150                <span class="keyword">if</span> fid&lt;0; error(<span class="string">'Unable to write to %s'</span>,cache_path); <span class="keyword">end</span>
+0151                fprintf(fid,<span class="string">'set TCL_LIBRARY=%s/lib/tcl8.3\n'</span>, netgen_path);
+0152                fprintf(fid,<span class="string">'set TIX_LIBRARY=%s/lib/tcl8.2\n'</span>, netgen_path);
+0153                fprintf(fid,<span class="string">'&quot;%s/ng431.exe&quot; %%*\n'</span>, netgen_path);
+0154                fclose(fid);
+0155             <span class="keyword">else</span>
+0156                warning([<span class="string">'cannot find a version of netgen that I know about\n'</span> <span class="keyword">...</span>
+0157                   <span class="string">'Install netgen or check the path\n'</span>]);
+0158             <span class="keyword">end</span>
+0159          <span class="keyword">end</span>
+0160       <span class="keyword">end</span>
+0161    <span class="keyword">catch</span> e
+0162       <span class="keyword">if</span> strncmp(computer,<span class="string">'PC'</span>,2)
+0163          <span class="comment">% restore Netgen settings on Windows</span>
+0164          setenv(<span class="string">'NETGEN_USER_DIR'</span>, oldpath);
+0165       <span class="keyword">end</span>
+0166       rethrow(e)
+0167    <span class="keyword">end</span>
+0168 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

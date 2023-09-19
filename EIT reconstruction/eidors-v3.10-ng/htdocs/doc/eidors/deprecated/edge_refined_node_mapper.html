@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of edge_refined_node_mapper</title>
+  <meta name="keywords" content="edge_refined_node_mapper">
+  <meta name="description" content="EDGE_REFINED_NODE_MAPPER:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; edge_refined_node_mapper.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>edge_refined_node_mapper
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>EDGE_REFINED_NODE_MAPPER:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [index_vtx] = edge_refined_node_mapper(mdl_coarse, mdl_dense); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> EDGE_REFINED_NODE_MAPPER:
+      maps a dense mesh verticies array onto a more coarse mesh verticies
+      array.  The closest vertex on the dense mesh to the objective vertex on
+      the coarse mesh is found.
+
+ Usage:
+  [index_vtx] = edge_refined_node_mapper(mdl_coarse, mdl_dense);
+
+ mdl_coarse  = fwd_model of coarse mesh
+ mdl_dense   = fwd_model of dense mesh</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="inv_solve_dual_mesh.html" class="code" title="function img= inv_solve_dual_mesh( inv_model, voltage)">inv_solve_dual_mesh</a>	INV_SOLVE_DUAL_MESH using a coarse and fine mesh</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [index_vtx] = edge_refined_node_mapper(mdl_coarse, mdl_dense);</a>
+0002 <span class="comment">% EDGE_REFINED_NODE_MAPPER:</span>
+0003 <span class="comment">%      maps a dense mesh verticies array onto a more coarse mesh verticies</span>
+0004 <span class="comment">%      array.  The closest vertex on the dense mesh to the objective vertex on</span>
+0005 <span class="comment">%      the coarse mesh is found.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Usage:</span>
+0008 <span class="comment">%  [index_vtx] = edge_refined_node_mapper(mdl_coarse, mdl_dense);</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% mdl_coarse  = fwd_model of coarse mesh</span>
+0011 <span class="comment">% mdl_dense   = fwd_model of dense mesh</span>
+0012 
+0013 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'EDGE_REFINED_NODE_MAPPER is deprecated as of 06-Jun-2012. '</span>);
+0014 
+0015 index_vtx = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'get-cache'</span>, mdl_dense, <span class="string">'index_vtx'</span>, mdl_coarse);
+0016 <span class="keyword">if</span> ~isempty(index_vtx)
+0017    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'edge_refined_node_mapper: using cached value'</span>, 2);
+0018    <span class="keyword">return</span>
+0019 <span class="keyword">end</span>
+0020 
+0021 vtx_dense  = mdl_dense.nodes;
+0022 simp_dense = mdl_dense.elems;
+0023 vtx_coarse  = mdl_coarse.nodes;
+0024 simp_coarse = mdl_coarse.elems;
+0025 
+0026 index=zeros(size(vtx_coarse,1),2);
+0027 
+0028 
+0029 <span class="comment">% Down to business ...</span>
+0030 
+0031 h = waitbar(0,<span class="string">'Calculating Verticies Map'</span>);
+0032 
+0033 <span class="keyword">for</span> ic=1:size(vtx_coarse,1);   <span class="comment">% for all coarse verticies</span>
+0034 
+0035    waitbar(ic/size(vtx_coarse,1))
+0036 
+0037    dx=vtx_dense(:,1)-vtx_coarse(ic,1);   <span class="comment">% find the x co-ord difference</span>
+0038    dy=vtx_dense(:,2)-vtx_coarse(ic,2);   <span class="comment">% find the y co-ord difference</span>
+0039    dz=vtx_dense(:,3)-vtx_coarse(ic,3);   <span class="comment">% find the z co-ord difference</span>
+0040 
+0041    <span class="comment">% distance between points for each dense vertex and the ic'th coarse vertex</span>
+0042    dist=sqrt((dx.^2)+(dy.^2)+(dz.^2));
+0043 
+0044    [m,index(ic,1)]=min(dist);   <span class="comment">% index out the minimum distance from the dense mesh to the ic'th vertex</span>
+0045 
+0046    index(ic,2)=m;   <span class="comment">% write the actual minimum distance (as a quality control procedure)</span>
+0047 
+0048 <span class="keyword">end</span>
+0049 
+0050 close(h)
+0051 
+0052 index_vtx=index;
+0053 
+0054 <span class="comment">% Cache the restult - it depends on both dense and coarse mdl</span>
+0055 <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'set-cache'</span>, mdl_dense, <span class="string">'index_vtx'</span>, index_vtx, mdl_coarse);
+0056 <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'edge_refined_node_mapper: setting cached value'</span>, 2);
+0057 
+0058 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0059 <span class="comment">% This is part of the EIDORS suite.</span>
+0060 <span class="comment">% Copyright (c) D.R Stephenson 2004</span>
+0061 <span class="comment">% Copying permitted under terms of GNU GPL</span>
+0062 <span class="comment">% See enclosed file gpl.html for details.</span>
+0063 <span class="comment">% EIDORS 3D version XXX</span>
+0064 <span class="comment">% MATLAB Version 6.5.0.180913a (R13)</span>
+0065 <span class="comment">% MATLAB License Number: 1560</span>
+0066 <span class="comment">% Operating System: Microsoft Windows XP Version 5.1 (Build 2600: Service Pack 1)</span>
+0067 <span class="comment">% Java VM Version: Java 1.3.1_01 with Sun Microsystems Inc. Java HotSpot(TM) Client VM</span>
+0068 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

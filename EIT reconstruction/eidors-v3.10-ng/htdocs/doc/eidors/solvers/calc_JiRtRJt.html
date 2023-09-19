@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calc_JiRtRJt</title>
+  <meta name="keywords" content="calc_JiRtRJt">
+  <meta name="description" content="[JiRtRJt,iRtRJt] = calc_JiRtRJt( inv_model, varargin )">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">solvers</a> &gt; calc_JiRtRJt.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>calc_JiRtRJt
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[JiRtRJt,iRtRJt] = calc_JiRtRJt( inv_model, varargin )</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [JiRtRJt,iRtRJt] = calc_JiRtRJt( inv_model, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [JiRtRJt,iRtRJt] = calc_JiRtRJt( inv_model, varargin )
+ CALC_iRtR_PRIOR: calculate regularization matrix J*inv(R'*R)*J'
+   This is a model of the covariance of image elements
+   The image prior is matrix n_elem x n_elem 
+ 
+ calc_JiRtRJt can be called as
+    JiRtRJt= calc_JiRtRJt( inv_model, ... )
+
+ and will call the function inv_model.JiRtRJt
+ parameters to JiRtRJt should be passed in the field
+ inv_model.JiRtRJt_function_name.parameters
+
+ if JiRtRJt is a matrix, than calc_JiRtRJt will return that matrix
+
+ JiRtRJt         calculated regularization prior R
+ inv_model       is an inv_model structure
+ inv_model.JiRtRJt_func function to make calculation
+
+ TODO: think about how to implement this!!</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>	RtR = calc_RtR_prior( inv_model )</li><li><a href="calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>	CALC_JACOBIAN_BKGND: calculate background image around</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function JiRtRJt = calc_JiRtRJt_from_scratch(inv_model)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [JiRtRJt,iRtRJt] = calc_JiRtRJt( inv_model, varargin )</a>
+0002 <span class="comment">% [JiRtRJt,iRtRJt] = calc_JiRtRJt( inv_model, varargin )</span>
+0003 <span class="comment">% CALC_iRtR_PRIOR: calculate regularization matrix J*inv(R'*R)*J'</span>
+0004 <span class="comment">%   This is a model of the covariance of image elements</span>
+0005 <span class="comment">%   The image prior is matrix n_elem x n_elem</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% calc_JiRtRJt can be called as</span>
+0008 <span class="comment">%    JiRtRJt= calc_JiRtRJt( inv_model, ... )</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% and will call the function inv_model.JiRtRJt</span>
+0011 <span class="comment">% parameters to JiRtRJt should be passed in the field</span>
+0012 <span class="comment">% inv_model.JiRtRJt_function_name.parameters</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% if JiRtRJt is a matrix, than calc_JiRtRJt will return that matrix</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% JiRtRJt         calculated regularization prior R</span>
+0017 <span class="comment">% inv_model       is an inv_model structure</span>
+0018 <span class="comment">% inv_model.JiRtRJt_func function to make calculation</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% TODO: think about how to implement this!!</span>
+0021 
+0022 <span class="comment">% (C) 2006 Andy Adler. License: GPL version 2 or version 3</span>
+0023 <span class="comment">% $Id: calc_JiRtRJt.m 4832 2015-03-29 21:13:53Z bgrychtol-ipa $</span>
+0024 
+0025 <span class="keyword">if</span> isfield(inv_model,<span class="string">'JiRtRJt'</span>) 
+0026    <span class="keyword">if</span> isnumeric(inv_model.JiRtRJt)
+0027       JiRtRJt = inv_model.JiRtRJt;
+0028    <span class="keyword">else</span>
+0029       <span class="keyword">try</span> inv_model.JiRtRJt = str2func(inv_model.JiRtRJt); <span class="keyword">end</span>
+0030       JiRtRJt = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(inv_model.JiRtRJt,{inv_model});
+0031    <span class="keyword">end</span>
+0032    <span class="keyword">return</span>
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% try to calculate from scratch</span>
+0036 JiRtRJt = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction JiRtRJt = calc_JiRtRJt_from_scratch(inv_model)">calc_JiRtRJt_from_scratch</a>,{inv_model},<span class="string">'calc_JiRtRJt'</span>);
+0037 
+0038 
+0039 <a name="_sub1" href="#_subfunctions" class="code">function JiRtRJt = calc_JiRtRJt_from_scratch(inv_model)</a>
+0040    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>( <span class="keyword">...</span>
+0041       <span class="string">'calc_JiRtRJt: trying to calculate JiRtRJt from RtR_prior'</span>,2);
+0042    RtR_prior = <a href="calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>(inv_model);
+0043    <span class="comment">% regularize slightly so inverse exists</span>
+0044    <span class="comment">% This is very slow, but I can't think of a better idea</span>
+0045    RtR_p_reg = spdiags( spdiags(RtR_prior,0)*1.00001, 0, RtR_prior);
+0046 
+0047    img_bkgnd= <a href="calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>( inv_model );
+0048    J = <a href="calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>( img_bkgnd);
+0049 
+0050    JiRtRJt= J*(RtR_p_reg\J');</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

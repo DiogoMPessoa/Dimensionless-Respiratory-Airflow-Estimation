@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of iso_f_smooth</title>
+  <meta name="keywords" content="iso_f_smooth">
+  <meta name="description" content="function [Reg] = iso_f_smooth(simp,vtx,deg,w);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; iso_f_smooth.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>iso_f_smooth
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Reg] = iso_f_smooth(simp,vtx,deg,w);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Reg] = iso_f_smooth(simp,vtx,deg,w); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">function [Reg] = iso_f_smooth(simp,vtx,deg,w);
+
+Calculates a first order discrete Gaussian smoothing operator.
+
+simp = The simplices matrix.
+vtx  = The vertices matrix.
+deg  = 1 for nodes, 2 for edges and 3 for faces
+w    = smoothing weight, w=1...k, default value = 1
+Reg  = The first order smoothing regulariser.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="iso_f_smooth.html" class="code" title="function [Reg] = iso_f_smooth(simp,vtx,deg,w);">iso_f_smooth</a>	function [Reg] = iso_f_smooth(simp,vtx,deg,w);</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/models/mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>	MK_CIRC_TANK: make a cylindrical tank FEM geometry in 2D or 3D</li><li><a href="../../eidors/models/triarea3d.html" class="code" title="function [ta] = triarea3d(V);">triarea3d</a>	[ta] = triarea3d(V);</li><li><a href="../../eidors/solvers/inverse/prior_laplace.html" class="code" title="function Reg= prior_laplace( inv_model )">prior_laplace</a>	PRIOR_LAPLACE calculate image prior</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="iso_f_smooth.html" class="code" title="function [Reg] = iso_f_smooth(simp,vtx,deg,w);">iso_f_smooth</a>	function [Reg] = iso_f_smooth(simp,vtx,deg,w);</li><li><a href="iso_s_smooth.html" class="code" title="function [Reg] = iso_s_smooth(simp,vtx,deg,w);">iso_s_smooth</a>	function [Reg] = iso_s_smooth(simp,vtx,deg,w);</li><li><a href="np_calc_image_prior.html" class="code" title="function Reg= np_calc_image_prior( inv_model );">np_calc_image_prior</a>	NP_CALC_IMAGE_PRIOR calculate image prior</li><li><a href="../../eidors/examples/demo_complex.html" class="code" title="">demo_complex</a>	This demo function shows how the EIT problem can be formulated in a complex</li><li><a href="../../eidors/tests/demo_real_test.html" class="code" title="function ok= demo_real_test">demo_real_test</a>	Perform tests based on the demo_real function</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [dd] = db23d(x1,y1,z1,x2,y2,z2);</a></li><li><a href="#_sub2" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Reg] = iso_f_smooth(simp,vtx,deg,w);</a>
+0002 <span class="comment">%function [Reg] = iso_f_smooth(simp,vtx,deg,w);</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%Calculates a first order discrete Gaussian smoothing operator.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%simp = The simplices matrix.</span>
+0007 <span class="comment">%vtx  = The vertices matrix.</span>
+0008 <span class="comment">%deg  = 1 for nodes, 2 for edges and 3 for faces</span>
+0009 <span class="comment">%w    = smoothing weight, w=1...k, default value = 1</span>
+0010 <span class="comment">%Reg  = The first order smoothing regulariser.</span>
+0011 
+0012 <span class="keyword">if</span> ischar(simp) &amp;&amp; strcmp(simp,<span class="string">'UNIT_TEST'</span>); <a href="#_sub2" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0013 
+0014 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'ISO_F_SMOOTH is deprecated as of 06-Jun-2012. '</span>);
+0015 <span class="comment">% It is recommended to use the newer prior functions in EIDORS. These</span>
+0016 <span class="comment">% produce well documented prior matrices.</span>
+0017 
+0018 
+0019 
+0020 <span class="keyword">if</span> nargin&lt;2
+0021    w=1;
+0022 <span class="keyword">end</span>
+0023 <span class="keyword">if</span> w&lt;0
+0024    error(<span class="string">'Weight must be possitive'</span>);
+0025 <span class="keyword">end</span>
+0026 
+0027 ndsrch = [simp,(1:size(simp,1))'];
+0028 
+0029 Reg = spalloc(size(simp,1),size(simp,1),20*size(simp,1));
+0030 
+0031 <span class="keyword">for</span> i=1:size(ndsrch,1)
+0032 
+0033    t_id = ndsrch(i,1:size(simp,2));
+0034 
+0035    Xsimp = []; <span class="comment">%The vector of simp indices that share deg nodes with simp(i)</span>
+0036    XX = [];
+0037 
+0038    <span class="keyword">for</span> j = 1:length(t_id)
+0039 
+0040       t_nd = t_id(j);
+0041 
+0042       X1 = find(simp(:,1)==t_nd);
+0043       X2 = find(simp(:,2)==t_nd);
+0044       X3 = find(simp(:,3)==t_nd);
+0045       X4 = find(simp(:,4)==t_nd);
+0046 
+0047       <span class="comment">%The set of all indices containing the node t_nd</span>
+0048       XX = [XX;X1;X2;X3;X4];
+0049 
+0050    <span class="keyword">end</span> <span class="comment">%for j</span>
+0051 
+0052    <span class="keyword">if</span> deg == 1 <span class="comment">%Neigbouring nodes</span>
+0053       Xu = unique(XX);
+0054       Xsimp = [Xsimp;Xu];
+0055    <span class="keyword">end</span>
+0056 
+0057    <span class="keyword">if</span> deg == 2 <span class="comment">%Neihgouring edges</span>
+0058       Xs = sort(XX);
+0059       Xd = diff(Xs);
+0060       Xf = Xs(setdiff(1:length(Xd),find(Xd)));
+0061       Xu = unique(Xf);
+0062       Xsimp = [Xsimp;Xu];
+0063    <span class="keyword">end</span>
+0064 
+0065    <span class="keyword">if</span> deg == 3 <span class="comment">%Neihbouring faces</span>
+0066       Xs = sort(XX);
+0067       Xd = diff(Xs);
+0068       Xf = Xs(setdiff(1:length(Xd),find(Xd)));
+0069       Xq = diff(Xf);
+0070       Xz = Xf(setdiff(1:length(Xq),find(Xq)));
+0071       Xu = unique(Xz);
+0072       Xsimp = [Xsimp;Xu];
+0073    <span class="keyword">end</span>
+0074 
+0075    <span class="keyword">if</span> deg &gt; 3 || deg &lt; 1
+0076       error(<span class="string">'deg parameter can only be 1, 2 or 3'</span>)
+0077    <span class="keyword">end</span>
+0078 
+0079    <span class="comment">%Remove the i'th simplex from the list of its neighbours</span>
+0080    Xdif = setdiff(Xsimp,i);
+0081 
+0082    <span class="keyword">if</span> deg == 1
+0083       Reg(i,Xdif) = -1/w;
+0084    <span class="keyword">end</span>
+0085 
+0086    <span class="keyword">if</span> deg == 2
+0087       <span class="keyword">for</span> p=1:length(Xdif)
+0088          Intr = intersect(t_id,simp(Xdif(p),:)); <span class="comment">% 2 or 3 long vector</span>
+0089          dd=0;
+0090          <span class="keyword">for</span> h=1:length(Intr)-1
+0091             [da] = <a href="#_sub1" class="code" title="subfunction [dd] = db23d(x1,y1,z1,x2,y2,z2);">db23d</a>(vtx(Intr(h),1),vtx(Intr(h),2),vtx(Intr(h),3),<span class="keyword">...</span>
+0092             vtx(Intr(h+1),1),vtx(Intr(h+1),2),vtx(Intr(h+1),3));
+0093             dd = dd+da;
+0094          <span class="keyword">end</span>
+0095          Reg(i,Xdif(p)) = -w/dd;
+0096       <span class="keyword">end</span>
+0097    <span class="keyword">end</span>
+0098 
+0099    <span class="keyword">if</span> deg == 3
+0100       <span class="keyword">for</span> p=1:length(Xdif)
+0101          Intr = intersect(t_id,simp(Xdif(p),:)); <span class="comment">% 3 long vector</span>
+0102          [ta] = <a href="../../eidors/models/triarea3d.html" class="code" title="function [ta] = triarea3d(V);">triarea3d</a>(vtx(Intr,:));
+0103       <span class="keyword">end</span>
+0104       Reg(i,Xdif) = -w/ta;
+0105    <span class="keyword">end</span>
+0106 
+0107    Reg(i,i) = abs(sum(Reg(i,:)));
+0108 
+0109 <span class="keyword">end</span> <span class="comment">%for i'th simplex</span>
+0110 
+0111 
+0112 <a name="_sub1" href="#_subfunctions" class="code">function [dd] = db23d(x1,y1,z1,x2,y2,z2);</a>
+0113 <span class="comment">%Auxiliary function that caclulates the distance between</span>
+0114 <span class="comment">%two points or two sets of points in 3D</span>
+0115 <span class="comment">%</span>
+0116 <span class="comment">%(x1,y1,z1) = The coordinates of the first point(s) in 3D</span>
+0117 <span class="comment">%(x2,y2,z2) = The coordinates of the second point(s) in 3D</span>
+0118 <span class="comment">%dd         = Their distance(s)</span>
+0119 
+0120 dd = sqrt((x2 - x1).^2 + (y2 - y1).^2 + (z2 - z1).^2);
+0121 
+0122 
+0123 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0124 <span class="comment">% This is part of the EIDORS suite.</span>
+0125 <span class="comment">% Copyright (c) N. Polydorides 2003</span>
+0126 <span class="comment">% Copying permitted under terms of GNU GPL</span>
+0127 <span class="comment">% See enclosed file gpl.html for details.</span>
+0128 <span class="comment">% EIDORS 3D version 2.0</span>
+0129 <span class="comment">% MATLAB version 5.3 R11</span>
+0130 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0131 
+0132 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0133 <span class="comment">% This is part of the EIDORS suite.</span>
+0134 <span class="comment">% Copyright (c) N. Polydorides 2003</span>
+0135 <span class="comment">% Copying permitted under terms of GNU GPL</span>
+0136 <span class="comment">% See enclosed file gpl.html for details.</span>
+0137 <span class="comment">% EIDORS 3D version 2.0</span>
+0138 <span class="comment">% MATLAB version 5.3 R11</span>
+0139 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0140 
+0141 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test</a>
+0142    fmdl = <a href="../../eidors/models/mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(1,[0,.5],4);
+0143    simp = fmdl.elems;
+0144    vtx  = fmdl.nodes;
+0145 subplot(221)
+0146    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl,[1,1,1]);
+0147 
+0148    Ref = <a href="iso_f_smooth.html" class="code" title="function [Reg] = iso_f_smooth(simp,vtx,deg,w);">iso_f_smooth</a>(simp,vtx,1,1);
+0149    Ref = <a href="iso_f_smooth.html" class="code" title="function [Reg] = iso_f_smooth(simp,vtx,deg,w);">iso_f_smooth</a>(simp,vtx,2,1);
+0150    Ref = <a href="iso_f_smooth.html" class="code" title="function [Reg] = iso_f_smooth(simp,vtx,deg,w);">iso_f_smooth</a>(simp,vtx,3,1);
+0151 subplot(222); spy(Ref)
+0152    Rel = <a href="../../eidors/solvers/inverse/prior_laplace.html" class="code" title="function Reg= prior_laplace( inv_model )">prior_laplace</a>(fmdl);
+0153 subplot(224); spy(Rel);
+0154 
+0155 <span class="comment">%% The shapes should be the same but the</span>
+0156 <span class="comment">%% Matrices are not symmetric from iso_f_smooth</span>
+0157</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

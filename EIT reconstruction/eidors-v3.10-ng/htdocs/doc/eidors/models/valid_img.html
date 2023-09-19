@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of valid_img</title>
+  <meta name="keywords" content="valid_img">
+  <meta name="description" content="[pass, err_str] = valid_img(img)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; valid_img.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>valid_img
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[pass, err_str] = valid_img(img)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function pass = valid_img(img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [pass, err_str] = valid_img(img)
+
+ Confirms that a valid image structure exists or
+ explain why an image is not valid.
+
+ If called without an output argument (argout=0), will
+ error out if invalid. Otherwise the function is silent,
+ returning an explaination of failures in err_str.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="valid_fwd_model.html" class="code" title="function [pass, err_str] = valid_fwd_model(fmdl, type)">valid_fwd_model</a>	[pass, err_str] = valid_fwd_model(fmdl, [type])</li><li><a href="valid_inv_model.html" class="code" title="function [pass, err_str] = valid_inv_model(imdl)">valid_inv_model</a>	[pass, err_str] = valid_fwd_model(imdl)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function pass = valid_img(img)</a>
+0002 <span class="comment">% [pass, err_str] = valid_img(img)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Confirms that a valid image structure exists or</span>
+0005 <span class="comment">% explain why an image is not valid.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% If called without an output argument (argout=0), will</span>
+0008 <span class="comment">% error out if invalid. Otherwise the function is silent,</span>
+0009 <span class="comment">% returning an explaination of failures in err_str.</span>
+0010 
+0011 <span class="comment">% (C) 2015 Alistair Boyle. License: GPL version 2 or version 3</span>
+0012 <span class="comment">% $Id: valid_img.m 4986 2015-05-11 20:09:28Z aadler $</span>
+0013 
+0014 pass = 1;
+0015 err_str = <span class="string">''</span>;
+0016 
+0017 <span class="comment">% it's a struct with fields</span>
+0018 <span class="keyword">if</span> ~isstruct(img)
+0019    pass = 0;
+0020    err_str = [err_str <span class="string">'- not a struct\n'</span>];
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="comment">% required fields</span>
+0024 <span class="comment">%      field       type</span>
+0025 f = {<span class="string">'name'</span>,      <span class="string">'char'</span>, <span class="keyword">...</span>
+0026      <span class="string">'elem_data'</span>, <span class="string">'numeric'</span>, <span class="keyword">...</span>
+0027      <span class="string">'fwd_model'</span>, <span class="string">'struct'</span>, <span class="keyword">...</span>
+0028      <span class="string">'type'</span>,      <span class="string">'char'</span>};
+0029 <span class="comment">%     'inv_model', 'struct', ...</span>
+0030 <span class="keyword">for</span> i=1:length(f)/2
+0031    x=2*(i-1)+1;
+0032    y=x+1;
+0033    <span class="keyword">if</span> ~isfield(img, f{x})
+0034       pass = 0;
+0035       err_str = [err_str <span class="string">'- missing required field: '</span> f{x} <span class="string">'\n'</span>];
+0036    <span class="keyword">elseif</span> ~isa(img.(f{x}), f{y})
+0037       pass = 0;
+0038       err_str = [err_str <span class="string">'- required field '</span> f{x} <span class="string">' is not a '</span> f{y}'\n'];
+0039    <span class="keyword">end</span>
+0040 <span class="keyword">end</span>
+0041 <span class="comment">% check the fwd_model</span>
+0042 [pass_local, err_str_local] = <a href="valid_fwd_model.html" class="code" title="function [pass, err_str] = valid_fwd_model(fmdl, type)">valid_fwd_model</a>(img.fwd_model,<span class="string">'rec_model'</span>);
+0043 <span class="keyword">if</span> ~pass_local
+0044    pass = 0;
+0045    disp(err_str_local);
+0046    err_str_local = strrep(err_str_local, <span class="string">' &quot;'</span>, <span class="string">' &quot;fwd_model.'</span>);
+0047    err_str = [err_str err_str_local];
+0048 <span class="keyword">end</span>
+0049 clear err_str_local pass_local;
+0050 <span class="comment">% check for correct 'type'</span>
+0051 <span class="keyword">if</span> ~strcmp(img.type, <span class="string">'image'</span>)
+0052    pass = 0;
+0053    err_str = [err_str <span class="string">'- field &quot;type&quot; must be &quot;image&quot;\n'</span>];
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="comment">% optional fields</span>
+0057 <span class="comment">%      field       type</span>
+0058 f = {<span class="string">'inv_model'</span>, <span class="string">'struct'</span>};
+0059 <span class="keyword">for</span> i=1:length(f)/2
+0060    x=2*(i-1)+1;
+0061    y=x+1;
+0062    <span class="keyword">if</span> isfield(img, f{x}) &amp;&amp; ~isa(img.(f{x}), f{y})
+0063       pass = 0;
+0064       err_str = [err_str <span class="string">'- optional field '</span> f{x} <span class="string">' is not a '</span> f{y}'\n'];
+0065    <span class="keyword">end</span>
+0066 <span class="keyword">end</span>
+0067 <span class="comment">% check the inv_model</span>
+0068 <span class="keyword">if</span> isfield(img, <span class="string">'inv_model'</span>)
+0069    [pass_local, err_str_local] = <a href="valid_inv_model.html" class="code" title="function [pass, err_str] = valid_inv_model(imdl)">valid_inv_model</a>(img.inv_model);
+0070    <span class="keyword">if</span> ~pass_local
+0071       pass = 0;
+0072       disp(err_str_local);
+0073       err_str_local = strrep(err_str_local, <span class="string">' &quot;'</span>, <span class="string">' &quot;inv_model.'</span>);
+0074       err_str = [err_str err_str_local];
+0075    <span class="keyword">end</span>
+0076    clear err_str_local pass_local;
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="comment">% illegal fields</span>
+0080 <span class="comment">%      field       type</span>
+0081 f = {<span class="string">'imdl'</span>, <span class="string">'inv_mdl'</span>, <span class="string">'fmdl'</span>, <span class="string">'fwd_mdl'</span>};
+0082 <span class="keyword">for</span> i=1:length(f)
+0083    x=i;
+0084    <span class="keyword">if</span> isfield(img, f{x})
+0085       pass = 0;
+0086       err_str = [err_str <span class="string">'- illegal field &quot;'</span> f{x} <span class="string">'&quot; found\n'</span>];
+0087    <span class="keyword">end</span>
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="comment">% result</span>
+0091 <span class="keyword">if</span> ~pass
+0092    err_str = err_str(1:end-2); <span class="comment">% drop last \n</span>
+0093 <span class="keyword">end</span>
+0094 <span class="keyword">if</span> ( nargout == 0 ) &amp;&amp; ~pass
+0095    error(sprintf([<span class="string">'Reasons:\n'</span> err_str]));
+0096 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

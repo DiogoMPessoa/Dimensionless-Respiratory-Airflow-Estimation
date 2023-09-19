@@ -1,0 +1,556 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of spice_eit</title>
+  <meta name="keywords" content="spice_eit">
+  <meta name="description" content="Vn = spice_eit(netlist, [freq])">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; spice_eit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>spice_eit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Vn = spice_eit(netlist, [freq])</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Vn, In, nn] = spice_eit(netlist, freq) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Vn = spice_eit(netlist, [freq])
+ Modified Nodal Analysis (MNA) circuit solver
+ for (almost/simple) spice netlists
+ input
+   netlist - by cell array { [ part nodes...  args ], ... }
+             where parts are spice types:
+               &quot;Rn&quot; resistor; 2 nodes; args(1) = impedance
+               &quot;Ln&quot; inductor; 2 nodes; args(1) = inductance
+               &quot;Cn&quot; capacitor; 2 nodes; args(1) = capacitance
+               &quot;Vn&quot; voltage source; 2 nodes (-,+); args(1) = voltage
+               &quot;In&quot; current source; 2 nodes (-,+); args(1) = current
+               &quot;Hn&quot; current controlled voltage source, 4 nodes (-,+); args(1) = Vsrc, args(2) = gain
+               &quot;En&quot; voltage controlled voltage source, 4 nodes (-,+,d-,d+); args(1) = gain
+               &quot;Fn&quot; current controlled current source, 2 nodes (-,+); args(1) = Vsrc, args(2) = gain
+               &quot;Gn&quot; voltage controlled current source, 4 nodes (-,+,d-,d+); args(1) = gain
+   freq    - simulation frequency (default: 0 Hz, DC)
+   note: ground node is the lowest numbered node
+ output
+   Vn      - nodal voltages by row [node voltage]
+   nn      - node numbers
+
+ TODO reverse nodes for spice netlist (-,+) --&gt; (+,-)
+ TODO support DC voltage/current: [[DC] {value}]; currently supports {value}
+ TODO support AC voltage/current: [AC {mag} [{phase}]]
+
+ CITATION_REQUEST:
+ AUTHOR: A Boyle and A Adler
+ TITLE: Integrating Circuit Simulation with EIT FEM Models 
+ JOURNAL: 19th International Conference on Biomedical Applications of Electrical Impedance Tomography, Edinburgh, UK
+ YEAR: 2018</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function unittest()</a></li><li><a href="#_sub2" class="code">function print_netlist(desc,n)</a></li><li><a href="#_sub3" class="code">function pass=cmp(pass,str,X,Y,tol)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Vn, In, nn] = spice_eit(netlist, freq)</a>
+0002 <span class="comment">% Vn = spice_eit(netlist, [freq])</span>
+0003 <span class="comment">% Modified Nodal Analysis (MNA) circuit solver</span>
+0004 <span class="comment">% for (almost/simple) spice netlists</span>
+0005 <span class="comment">% input</span>
+0006 <span class="comment">%   netlist - by cell array { [ part nodes...  args ], ... }</span>
+0007 <span class="comment">%             where parts are spice types:</span>
+0008 <span class="comment">%               &quot;Rn&quot; resistor; 2 nodes; args(1) = impedance</span>
+0009 <span class="comment">%               &quot;Ln&quot; inductor; 2 nodes; args(1) = inductance</span>
+0010 <span class="comment">%               &quot;Cn&quot; capacitor; 2 nodes; args(1) = capacitance</span>
+0011 <span class="comment">%               &quot;Vn&quot; voltage source; 2 nodes (-,+); args(1) = voltage</span>
+0012 <span class="comment">%               &quot;In&quot; current source; 2 nodes (-,+); args(1) = current</span>
+0013 <span class="comment">%               &quot;Hn&quot; current controlled voltage source, 4 nodes (-,+); args(1) = Vsrc, args(2) = gain</span>
+0014 <span class="comment">%               &quot;En&quot; voltage controlled voltage source, 4 nodes (-,+,d-,d+); args(1) = gain</span>
+0015 <span class="comment">%               &quot;Fn&quot; current controlled current source, 2 nodes (-,+); args(1) = Vsrc, args(2) = gain</span>
+0016 <span class="comment">%               &quot;Gn&quot; voltage controlled current source, 4 nodes (-,+,d-,d+); args(1) = gain</span>
+0017 <span class="comment">%   freq    - simulation frequency (default: 0 Hz, DC)</span>
+0018 <span class="comment">%   note: ground node is the lowest numbered node</span>
+0019 <span class="comment">% output</span>
+0020 <span class="comment">%   Vn      - nodal voltages by row [node voltage]</span>
+0021 <span class="comment">%   nn      - node numbers</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% TODO reverse nodes for spice netlist (-,+) --&gt; (+,-)</span>
+0024 <span class="comment">% TODO support DC voltage/current: [[DC] {value}]; currently supports {value}</span>
+0025 <span class="comment">% TODO support AC voltage/current: [AC {mag} [{phase}]]</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% CITATION_REQUEST:</span>
+0028 <span class="comment">% AUTHOR: A Boyle and A Adler</span>
+0029 <span class="comment">% TITLE: Integrating Circuit Simulation with EIT FEM Models</span>
+0030 <span class="comment">% JOURNAL: 19th International Conference on Biomedical Applications of Electrical Impedance Tomography, Edinburgh, UK</span>
+0031 <span class="comment">% YEAR: 2018</span>
+0032 <span class="comment">%</span>
+0033 
+0034 <span class="comment">%  (C) 2017, 2018 A. Boyle, License: GPL version 2 or version 3</span>
+0035 
+0036 <span class="comment">% based on http://matlabbyexamples.blogspot.ca/2011/11/circuit-solver-using-matlab-programming.html</span>
+0037 <span class="comment">% and https://www.swarthmore.edu/NatSci/echeeve1/Ref/mna/MNA5.html</span>
+0038 <span class="comment">% and https://cseweb.ucsd.edu/classes/sp08/cse245/slides/let1.ppt</span>
+0039 <span class="comment">% and http://www.ecircuitcenter.com/SPICEsummary.htm</span>
+0040 <span class="comment">% and http://users.ecs.soton.ac.uk/mz/CctSim/chap1_4.htm</span>
+0041 <span class="comment">% and https://github.com/nik1106/MNA-MAT</span>
+0042 <span class="comment">%    (MNA-MAT is a different implementation of a spice-only linear simulator for DC/transient sims in matlab)</span>
+0043 <span class="comment">% and https://global.oup.com/us/companion.websites/fdscontent/uscompanion/us/static/companion.websites/9780199339136/Appendices/Appendix_B.pdf</span>
+0044 <span class="comment">% and http://www2.ensc.sfu.ca/~ljilja/papers/4C823d01.pdf</span>
+0045 <span class="comment">%    (non-linear components to ideal component circuits)</span>
+0046 
+0047 <span class="keyword">if</span> ischar(netlist) &amp;&amp; strcmp(netlist,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction unittest()">unittest</a>(); <span class="keyword">return</span>; <span class="keyword">end</span>
+0048 
+0049 <span class="keyword">if</span> nargin &lt; 2
+0050    freq = 0;
+0051 <span class="keyword">end</span>
+0052 w = 2*pi*freq;
+0053 s = j*w;
+0054 
+0055 <span class="comment">% collect nodes</span>
+0056 assert(iscell(netlist), <span class="string">'error: expected cell array for netlist'</span>);
+0057 nodes = zeros(length(netlist),2);
+0058 delM = zeros(length(netlist),1); <span class="comment">% init: tracking L -&gt; V converted inductors</span>
+0059 M = 0; <span class="comment">% number of voltage sources</span>
+0060 P = 0;
+0061 <span class="keyword">for</span> ii = 1:length(netlist)
+0062    tt = netlist{ii};
+0063    <span class="comment">% save node numbers for later</span>
+0064    assert(isnumeric([tt{2:3}]), <span class="string">'error: expected second and third field netlist to be node numbers'</span>);
+0065    nodes(ii,:) = uint32([tt{2:3}]);
+0066    id = tt{1};
+0067    assert(ischar(id),<span class="string">'error: expected first field of netlist to be a component identifier'</span>);
+0068    <span class="keyword">if</span> abs(s) == 0
+0069       <span class="comment">% convert inductors to shorts at f=0; avoids 'matrix singular' errors</span>
+0070       <span class="keyword">switch</span> id(1)
+0071       <span class="keyword">case</span> <span class="string">'L'</span>
+0072          id = [<span class="string">'Vshort_f0_'</span> id];
+0073          tt{1} = id; tt{4} = 0;
+0074          netlist{ii,1} = tt;
+0075          delM(M+1) = 1;
+0076       <span class="keyword">end</span>
+0077    <span class="keyword">end</span>
+0078    <span class="comment">% count voltage sources and components;</span>
+0079    <span class="comment">% this is a count of how many currents we will calculate</span>
+0080    <span class="keyword">if</span> any(strcmp(id(1), {<span class="string">'V'</span>,<span class="string">'E'</span>,<span class="string">'H'</span>}))
+0081       M = M +1;
+0082       Vidx{M} = id;
+0083    <span class="keyword">end</span>
+0084    <span class="comment">% extra entries in the sparse indices for large component stamps (dep. sources)</span>
+0085    <span class="keyword">switch</span> id(1)
+0086    <span class="keyword">case</span> <span class="string">'H'</span>
+0087       P = P+1;
+0088    <span class="keyword">case</span> <span class="string">'E'</span>
+0089       P = P+2;
+0090    <span class="keyword">end</span>
+0091 <span class="keyword">end</span>
+0092 nodes = uint32(nodes);
+0093 gnd = min(nodes(:));
+0094 delM = find(delM);
+0095 
+0096 <span class="comment">% remap node#s to be valid array indices</span>
+0097 [ii] = unique(sort(nodes(:)));
+0098 jj = [1:length(ii)]';
+0099 mn = min(nodes(:));
+0100 map(ii-mn+1) = jj;
+0101 rmap(jj) = ii;
+0102 
+0103 nodes = map(nodes - mn +1);
+0104 nodes = nodes -1; <span class="comment">% gnd -&gt; node#0</span>
+0105 
+0106 
+0107 <span class="comment">% save node numbers for output</span>
+0108 nn = rmap(2:end)';
+0109 
+0110 
+0111 <span class="comment">% build matrices</span>
+0112 L = size(nodes,1);
+0113 N = length(nn); <span class="comment">% number of nodes</span>
+0114 
+0115 <span class="comment">%print_netlist('exec',netlist);</span>
+0116 
+0117 Aii = ones(L*4+P,1); Ajj=Aii; Avv=Aii*0; <span class="comment">% init</span>
+0118 Bii = ones(L*2,1); Bjj=Bii; Bvv=Bii*0; <span class="comment">% init</span>
+0119 Mn = N+1;
+0120 Pn = L*4+1;
+0121 <span class="keyword">for</span> tt = 1:L
+0122    row = netlist{tt}; val = row{4}; id = row{1};
+0123    n1 = nodes(tt,1); n2 = nodes(tt,2);
+0124    <span class="keyword">switch</span>(id(1))
+0125    <span class="keyword">case</span> <span class="string">'V'</span> <span class="comment">% independent voltage source</span>
+0126       idx = [ ((tt-1)*4+1):((tt-1)*4+4) ];
+0127       <span class="comment">% no off-diagonal entries for nodes connected to gnd</span>
+0128       vp = +1; vn = -1;
+0129       <span class="keyword">if</span> n1 == 0
+0130          n1 = 1;
+0131          vn = 0;
+0132       <span class="keyword">elseif</span> n2 == 0
+0133          n2 = 1;
+0134          vp = 0;
+0135       <span class="keyword">end</span>
+0136       Aii(idx) = [ Mn Mn n1 n2 ];
+0137       Ajj(idx) = [ n1 n2 Mn Mn ];
+0138       Avv(idx) = [ vn vp vn vp ];
+0139       idx = (tt-1)*2+1;
+0140       Bii(idx) = [ Mn  ];
+0141       Bvv(idx) = [ val ];
+0142       Mn = Mn +1;
+0143       <span class="keyword">continue</span>;
+0144    <span class="keyword">case</span> <span class="string">'F'</span> <span class="comment">% current controlled current source (CCCS)</span>
+0145       <span class="comment">% from http://users.ecs.soton.ac.uk/mz/CctSim/chap1_4.htm</span>
+0146       Vsrc = row{4};
+0147       Mi = find(strcmp(Vsrc, Vidx)) + N; <span class="comment">% index of branch current</span>
+0148       assert(length(Mi) == 1,sprintf(<span class="string">'failed to find %s for %s'</span>,Vsrc,id));
+0149       gain = row{5}; assert(isnumeric(gain)); <span class="comment">% gain</span>
+0150       idx = [ ((tt-1)*4+1):((tt-1)*4+2) ];
+0151       <span class="comment">% nodes connected to gnd?</span>
+0152       d1 = 1; d2 = 1;
+0153       <span class="keyword">if</span> n1 == 0
+0154          n1 = 1;
+0155          d1 = 0;
+0156       <span class="keyword">end</span>
+0157       <span class="keyword">if</span> n2 == 0
+0158          n2 = 1;
+0159          d2 = 0;
+0160       <span class="keyword">end</span>
+0161       Aii(idx) = [  n1  n2 ];
+0162       Ajj(idx) = [  Mi  Mi ];
+0163       Avv(idx) = [ +d1 -d2 ]*gain;
+0164       <span class="keyword">continue</span>;
+0165    <span class="keyword">case</span> <span class="string">'G'</span> <span class="comment">% voltage controlled current source (VCCS)</span>
+0166       <span class="comment">% from https://cseweb.ucsd.edu/classes/sp08/cse245/slides/let1.ppt</span>
+0167       n1 = uint32(row{2}); <span class="comment">% n-</span>
+0168       n2 = uint32(row{3}); <span class="comment">% n+</span>
+0169       n3 = uint32(row{4}); <span class="comment">% diff-</span>
+0170       n4 = uint32(row{5}); <span class="comment">% diff+</span>
+0171       gain = row{6}; assert(isnumeric(gain)); <span class="comment">% gain</span>
+0172       idx = [ ((tt-1)*4+1):((tt-1)*4+4) ];
+0173       <span class="comment">% no off-diagonal entries for nodes connected to gnd</span>
+0174       d1 = 1; d2 = 1; d3 = 1; d4 = 1;
+0175       <span class="keyword">if</span> n1 == 0
+0176          n1 = 1;
+0177          d1 = 0;
+0178       <span class="keyword">end</span>
+0179       <span class="keyword">if</span> n2 == 0
+0180          n2 = 1;
+0181          d2 = 0;
+0182       <span class="keyword">end</span>
+0183       <span class="keyword">if</span> n3 == 0
+0184          n3 = 1;
+0185          d3 = 0;
+0186       <span class="keyword">end</span>
+0187       <span class="keyword">if</span> n4 == 0
+0188          n4 = 1;
+0189          d4 = 0;
+0190       <span class="keyword">end</span>
+0191       <span class="comment">% A = [G B;C D] --&gt; same as V; except C is changed</span>
+0192       <span class="comment">%            C  C  B  B</span>
+0193       Aii(idx) = [  n1     n2     n1     n2 ];
+0194       Ajj(idx) = [  n4     n3     n3     n4 ];
+0195       Avv(idx) = [ -d1*d4 -d2*d3 +d1*d3 +d2*d4 ]*gain;
+0196       <span class="keyword">continue</span>;
+0197    <span class="keyword">case</span> <span class="string">'E'</span> <span class="comment">% voltage controlled voltage source (VCVS)</span>
+0198       <span class="comment">% from http://users.ecs.soton.ac.uk/mz/CctSim/chap1_4.htm</span>
+0199       n1 = uint32(row{2}); <span class="comment">% n-</span>
+0200       n2 = uint32(row{3}); <span class="comment">% n+</span>
+0201       n3 = uint32(row{4}); <span class="comment">% diff-</span>
+0202       n4 = uint32(row{5}); <span class="comment">% diff+</span>
+0203       gain = row{6}; assert(isnumeric(gain)); <span class="comment">% gain</span>
+0204       idx = [ ((tt-1)*4+1):((tt-1)*4+4) Pn Pn+1 ];
+0205       <span class="comment">% no off-diagonal entries for nodes connected to gnd</span>
+0206       d1 = 1; d2 = 1; d3 = 1; d4 = 1;
+0207       <span class="keyword">if</span> n1 == 0
+0208          n1 = 1;
+0209          d1 = 0;
+0210       <span class="keyword">end</span>
+0211       <span class="keyword">if</span> n2 == 0
+0212          n2 = 1;
+0213          d2 = 0;
+0214       <span class="keyword">end</span>
+0215       <span class="keyword">if</span> n3 == 0
+0216          n3 = 1;
+0217          d3 = 0;
+0218       <span class="keyword">end</span>
+0219       <span class="keyword">if</span> n4 == 0
+0220          n4 = 1;
+0221          d4 = 0;
+0222       <span class="keyword">end</span>
+0223       <span class="comment">% A = [G B;C D] --&gt; same as V; except C is changed</span>
+0224       <span class="comment">%            C  C  B  B</span>
+0225       G = gain;
+0226       Aii(idx) = [  Mn  Mn  n1  n2  Mn    Mn   ];
+0227       Ajj(idx) = [  n1  n2  Mn  Mn  n3    n4   ];
+0228       Avv(idx) = [ -d1 +d2 -d1 +d2 +d3*G -d4*G ];
+0229       Pn = Pn +2;
+0230       Mn = Mn +1;
+0231       <span class="keyword">continue</span>;
+0232    <span class="keyword">case</span> <span class="string">'H'</span> <span class="comment">% current controlled voltage source (CCVS)</span>
+0233       <span class="comment">% from http://users.ecs.soton.ac.uk/mz/CctSim/chap1_4.htm</span>
+0234       Vsrc = row{4};
+0235       Mi = find(strcmp(Vsrc, Vidx)) + N; <span class="comment">% index of branch current</span>
+0236       assert(length(Mi) == 1,sprintf(<span class="string">'failed to find %s for %s'</span>,Vsrc,id));
+0237       gain = row{5}; assert(isnumeric(gain)); <span class="comment">% gain</span>
+0238       idx = [ ((tt-1)*4+1):((tt-1)*4+4) Pn ];
+0239       <span class="comment">% no off-diagonal entries for nodes connected to gnd</span>
+0240       d1 = 1; d2 = 1; d3 = 1; d4 = 1;
+0241       <span class="keyword">if</span> n1 == 0
+0242          n1 = 1;
+0243          d1 = 0;
+0244       <span class="keyword">end</span>
+0245       <span class="keyword">if</span> n2 == 0
+0246          n2 = 1;
+0247          d2 = 0;
+0248       <span class="keyword">end</span>
+0249       Aii(idx) = [  Mn  Mn  n1  n2  Mn   ];
+0250       Ajj(idx) = [  n1  n2  Mn  Mn  Mi   ];
+0251       Avv(idx) = [ -d1 +d2 -d1 +d2  gain ];
+0252       Pn = Pn +1;
+0253       Mn = Mn +1;
+0254       <span class="keyword">continue</span>;
+0255    <span class="keyword">case</span> <span class="string">'I'</span> <span class="comment">% independent current source</span>
+0256       idx = [ ((tt-1)*2+1):((tt-1)*2+2) ];
+0257       ip = val; in = -val;
+0258       <span class="keyword">if</span> n1 == 0
+0259          n1 = 1;
+0260          in = 0;
+0261       <span class="keyword">elseif</span> n2 == 0
+0262          n2 = 1;
+0263          ip = 0;
+0264       <span class="keyword">end</span>
+0265       Bii(idx) = [ n1 n2 ];
+0266       Bvv(idx) = [ in ip ];
+0267       <span class="keyword">continue</span>; 
+0268    <span class="keyword">case</span> <span class="string">'R'</span> <span class="comment">% resistor</span>
+0269       y = 1/val;
+0270    <span class="keyword">case</span> <span class="string">'C'</span> <span class="comment">% capacitor</span>
+0271       y = s*val;
+0272    <span class="keyword">case</span> <span class="string">'L'</span> <span class="comment">% inductor</span>
+0273       y = 1/(s*val);
+0274    <span class="keyword">otherwise</span>
+0275       error([<span class="string">'unhandled netlist component type: '</span> id]);
+0276    <span class="keyword">end</span>
+0277    <span class="keyword">if</span> n1 == n2; error(sprintf(<span class="string">'bad netlist @ line#%d: n1(%d)==n2(%d)'</span>,tt,n1,n2)); <span class="keyword">end</span>
+0278 
+0279    <span class="comment">% passive elements</span>
+0280    yn = -y; y1 = y; y2 = y;
+0281    <span class="comment">% no off-diagonal entries for nodes connected to gnd</span>
+0282    <span class="keyword">if</span> n1 == 0
+0283       n1 = 1;
+0284       yn = 0;
+0285       y1 = 0;
+0286    <span class="keyword">elseif</span> n2 == 0
+0287       n2 = 1;
+0288       yn = 0;
+0289       y2 = 0;
+0290    <span class="keyword">end</span>
+0291    idx = [ ((tt-1)*4+1):((tt-1)*4+4) ];
+0292    Aii(idx) = [n1 n2 n1 n2];
+0293    Ajj(idx) = [n2 n1 n1 n2];
+0294    Avv(idx) = [yn yn y1 y2];
+0295    <span class="comment">% ... sparse-ified</span>
+0296    <span class="comment">%A(n1,n2) = A(n1,n2)-y;</span>
+0297    <span class="comment">%A(n2,n1) = A(n2,n1)-y;</span>
+0298    <span class="comment">%A(n1,n1) = A(n1,n1)+y;</span>
+0299    <span class="comment">%A(n2,n2) = A(n2,n2)+y;</span>
+0300 <span class="keyword">end</span>
+0301 <span class="comment">% delete ground node</span>
+0302 <span class="comment">%idx = find(ii==gnd); ii(idx) = []; jj(idx) = []; vv(idx) = [];</span>
+0303 <span class="comment">%idx = find(jj==gnd); ii(idx) = []; jj(idx) = []; vv(idx) = [];</span>
+0304 <span class="comment">% build matrix</span>
+0305 A = <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(Aii,Ajj,Avv,N+M,N+M);
+0306 B = <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(Bii,Bjj,Bvv,N+M,1);
+0307 
+0308 <span class="comment">%AA=full(A)</span>
+0309 <span class="comment">%BB=full(B)</span>
+0310 
+0311 <span class="comment">% should be sparse and symmetric! check we use the right solver</span>
+0312 X = A\B;
+0313 Vn = full(X(1:N));
+0314 In = full(X(N+1:N+M));
+0315 In(delM) = [];
+0316 
+0317 <a name="_sub1" href="#_subfunctions" class="code">function unittest()</a>
+0318    pass = 1;
+0319    netlist_rlc = {{<span class="string">'R1'</span>, 0, 1, 1e3},
+0320                   {<span class="string">'L1'</span>, 0, 1, 1},
+0321                   {<span class="string">'C1'</span>, 0, 1, 5e-6},
+0322                   {<span class="string">'RC2'</span>, 2, 1, 1},
+0323                   {<span class="string">'R2'</span>, 3, 2, 1},
+0324                   {<span class="string">'V1'</span>, 0, 3, 1}};
+0325    tol = eps*10;
+0326    <span class="keyword">for</span> ii = 1:9
+0327       <span class="keyword">switch</span>(ii)
+0328       <span class="keyword">case</span> 1
+0329          desc = <span class="string">'voltage divider'</span>;
+0330          netlist = {{<span class="string">'R1'</span>, 1, 2, 1},
+0331                     {<span class="string">'R2'</span>, 0, 2, 1},
+0332                     {<span class="string">'V0'</span>, 0, 1, 2}};
+0333          Ev = [2,1]';
+0334          Ei = [-1]';
+0335          Enn = [1 2]';
+0336          freq = 0;
+0337       <span class="keyword">case</span> 2
+0338          desc = <span class="string">'resistor network; gnd = n#4'</span>;
+0339          <span class="comment">% from http://matlabbyexamples.blogspot.ca/2011/11/circuit-solver-using-matlab-programming.html</span>
+0340          netlist = {{<span class="string">'R1'</span>, 1, 2, 2},
+0341                     {<span class="string">'R2'</span>, 1, 3, 4},
+0342                     {<span class="string">'R3'</span>, 2, 3, 5.2},
+0343                     {<span class="string">'R4'</span>, 3, 4, 6},
+0344                     {<span class="string">'R5'</span>, 2, 4, 3},
+0345                     {<span class="string">'V1'</span>, 4, 1, 6},
+0346                     {<span class="string">'V0'</span>, 0, 4, 0}};
+0347          Ev = [6,3.6,3.6,0]';
+0348          Ei = [-1.8,0]';
+0349          Enn = [1 2 3 4]';
+0350          freq = 0;
+0351       <span class="keyword">case</span> 3
+0352          desc = <span class="string">'reactive elements, f=0'</span>;
+0353          netlist = netlist_rlc;
+0354          Ev = [0.0,0.5,1.0]';
+0355          Ei = [-0.5]';
+0356          Enn = [1 2 3]';
+0357          freq = 0;
+0358       <span class="keyword">case</span> 4
+0359          desc = <span class="string">'reactive elements, f=1'</span>;
+0360          netlist = netlist_rlc;
+0361          Ev = [0.90655 + 0.28793i;
+0362                0.95328 + 0.14397i;
+0363                1];
+0364          Ei = -0.04672 + 0.14397i;
+0365          Enn = [1 2 3]';
+0366          freq = 1;
+0367          tol = 6e-6;
+0368       <span class="keyword">case</span> 5
+0369          desc = <span class="string">'reactive elements, f=10'</span>;
+0370          netlist = netlist_rlc;
+0371          Ev = [0.99704 + 0.03105i;
+0372                0.99852 + 0.01552i;
+0373                1.0];
+0374          Ei = -0.00148 + 0.01552i;
+0375          Enn = [1 2 3]';
+0376          freq = 10;
+0377       <span class="keyword">case</span> 6
+0378          desc = <span class="string">'voltage controlled current source VCCS G'</span>;
+0379          netlist = {{<span class="string">'V1'</span>, 0, 1, 1},
+0380                     {<span class="string">'R1'</span>, 0, 1, 1},
+0381                     {<span class="string">'RL'</span>, 0, 2, 1},
+0382                     {<span class="string">'G1'</span>, 0, 2, 0, 1, 5}};
+0383          Ev = [1,-5]';
+0384          Ei = [-1]';
+0385          Enn = [1 2]';
+0386          freq = 0;
+0387       <span class="keyword">case</span> 7
+0388          desc = <span class="string">'current controlled current source CCCS F'</span>;
+0389          netlist = {{<span class="string">'V1'</span>, 0, 1, 1},
+0390                     {<span class="string">'R1'</span>, 0, 1, 1},
+0391                     {<span class="string">'RL'</span>, 0, 2, 1},
+0392                     {<span class="string">'F1'</span>, 0, 2, <span class="string">'V1'</span>, 5}};
+0393          Ev = [1,-5]';
+0394          Ei = [-1]';
+0395          Enn = [1 2]';
+0396          freq = 0;
+0397       <span class="keyword">case</span> 8
+0398          desc = <span class="string">'voltage controlled voltage source VCVS E'</span>;
+0399          netlist = {{<span class="string">'V1'</span>, 0, 1, 1},
+0400                     {<span class="string">'R1'</span>, 0, 1, 1},
+0401                     {<span class="string">'RL'</span>, 0, 2, 1},
+0402                     {<span class="string">'E1'</span>, 0, 2, 0, 1, 5}};
+0403          Ev = [1,+5]';
+0404          Ei = [-1,-5]';
+0405          Enn = [1 2]';
+0406          freq = 0;
+0407       <span class="keyword">case</span> 9
+0408          desc = <span class="string">'current controlled voltage source CCVS H'</span>;
+0409          netlist = {{<span class="string">'V1'</span>, 0, 1, 1},
+0410                     {<span class="string">'R1'</span>, 0, 1, 1},
+0411                     {<span class="string">'RL'</span>, 0, 2, 1},
+0412                     {<span class="string">'H1'</span>, 0, 2, <span class="string">'V1'</span>, 5}};
+0413          Ev = [1,+5]';
+0414          Ei = [-1,-5]';
+0415          Enn = [1 2]';
+0416          freq = 0;
+0417       <span class="keyword">otherwise</span>
+0418          error(<span class="string">'oops'</span>);
+0419       <span class="keyword">end</span>
+0420       desc = [sprintf(<span class="string">'#%d '</span>,ii) desc];
+0421 
+0422       disp(<span class="string">'-----------------------------------------'</span>);
+0423       <a href="#_sub2" class="code" title="subfunction print_netlist(desc,n)">print_netlist</a>(desc,netlist);
+0424       [v,i,nn]=csolve(netlist,freq);
+0425       pass=<a href="#_sub3" class="code" title="subfunction pass=cmp(pass,str,X,Y,tol)">cmp</a>(pass,<span class="string">'voltages'</span>,v,Ev,tol);
+0426       pass=<a href="#_sub3" class="code" title="subfunction pass=cmp(pass,str,X,Y,tol)">cmp</a>(pass,<span class="string">'currents'</span>,i,Ei,tol);
+0427       pass=<a href="#_sub3" class="code" title="subfunction pass=cmp(pass,str,X,Y,tol)">cmp</a>(pass,<span class="string">'node#s'</span>,nn,Enn);
+0428    <span class="keyword">end</span>
+0429    disp(<span class="string">'-----------------------------------------'</span>);
+0430    <span class="keyword">if</span> pass
+0431       disp(<span class="string">'overall: PASS'</span>);
+0432    <span class="keyword">else</span>
+0433       disp(<span class="string">'overall: FAIL'</span>);
+0434    <span class="keyword">end</span>
+0435 
+0436 <a name="_sub2" href="#_subfunctions" class="code">function print_netlist(desc,n)</a>
+0437    fprintf(<span class="string">'NETLIST: %s\n'</span>,desc);
+0438    <span class="keyword">for</span> ii =1:length(n)
+0439       nn = n{ii}; id = nn{1};
+0440       <span class="keyword">if</span> any(strcmp(id(1),{<span class="string">'G'</span>,<span class="string">'E'</span>}))
+0441          assert(length(nn) == 6,sprintf(<span class="string">'bad netlist, row#%d has %d elements'</span>,ii,length(nn)));
+0442          fprintf(<span class="string">'  %-5s (%2d,%2d)&lt;-(%2d,%2d)  %0.3f\n'</span>,nn{1},nn{2},nn{3},nn{4},nn{5},nn{6});
+0443       <span class="keyword">elseif</span> any(strcmp(id(1),{<span class="string">'F'</span>,<span class="string">'H'</span>}))
+0444          assert(length(nn) == 5,sprintf(<span class="string">'bad netlist, row#%d has %d elements'</span>,ii,length(nn)));
+0445          fprintf(<span class="string">'  %-5s (%2d,%2d)&lt;-(%-5s)  %0.3f\n'</span>,nn{1},nn{2},nn{3},nn{4},nn{5});
+0446       <span class="keyword">else</span>
+0447          assert(length(nn) == 4,sprintf(<span class="string">'bad netlist, row#%d has %d elements'</span>,ii,length(nn)));
+0448          fprintf(<span class="string">'  %-5s (%2d,%2d)           %0.3f\n'</span>,nn{1},nn{2},nn{3},nn{4});
+0449       <span class="keyword">end</span>
+0450    <span class="keyword">end</span>
+0451 
+0452 <a name="_sub3" href="#_subfunctions" class="code">function pass=cmp(pass,str,X,Y,tol)</a>
+0453    <span class="keyword">if</span> nargin &lt; 5
+0454       tol = 0;
+0455    <span class="keyword">end</span>
+0456    <span class="keyword">if</span> any(size(X) ~= size(Y))
+0457       fprintf(<span class="string">'TEST: %-30s fail; size mismatch (%d,%d)!=(%d,%d)\n'</span>,str,size(X),size(Y));
+0458       pass=0;
+0459       <span class="keyword">return</span>
+0460    <span class="keyword">end</span>
+0461    <span class="keyword">if</span> tol == 0
+0462       <span class="keyword">if</span> any(X ~= Y)
+0463          [ X Y ]
+0464          fprintf(<span class="string">'TEST: %-30s fail (%g)\n'</span>,str,abs(max(X(:)-Y(:))));
+0465          pass=0;
+0466          <span class="keyword">return</span>;
+0467       <span class="keyword">end</span>
+0468    <span class="keyword">else</span>
+0469       err=abs(X-Y);
+0470       err(err&lt;tol)=[];
+0471       <span class="keyword">if</span> length(err) &gt; 0
+0472          [ X Y ]
+0473          fprintf(<span class="string">'TEST: %-30s fail (%g, tol=%g)\n'</span>,str,norm(err),tol);
+0474          pass=0;
+0475          <span class="keyword">return</span>;
+0476       <span class="keyword">end</span>
+0477    <span class="keyword">end</span>
+0478    fprintf(<span class="string">'TEST: %-30s pass\n'</span>,str);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

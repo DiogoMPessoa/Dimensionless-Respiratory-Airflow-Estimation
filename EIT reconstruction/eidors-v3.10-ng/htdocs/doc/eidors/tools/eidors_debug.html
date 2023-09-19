@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of eidors_debug</title>
+  <meta name="keywords" content="eidors_debug">
+  <meta name="description" content="EIDORS_DEBUG Global managment of debug flags">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">tools</a> &gt; eidors_debug.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/tools&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>eidors_debug
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>EIDORS_DEBUG Global managment of debug flags</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function out = eidors_debug(command, fstr) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EIDORS_DEBUG Global managment of debug flags
+ eidors_debug('on','function') 
+     switches ON the debug flag for string constant 'function'
+ eidors_debug('off','function') 
+     switches OFF the debug flag for string constant 'function'
+ eidors_debug('off','all') 
+     switches OFF the debug flag for all functions
+ eidors_debug('query','function') 
+     returns the current state of the debug flag for 'function'
+ 
+ Note that 'function' can be any string constant (other than 'all'), but 
+ it is recommended to be an actual eidors function name. To enable 
+ debugging on selected parts of the code, follow this convention:
+    eidors_function:part1
+    eidors_function:subfunction
+    eidors_function:subfunction:part1
+
+ Example use in code (my_function.m):
+ if eidors_debug('query','my_function')
+     disp(val)
+ end</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>	EIDORS_DEBUG Global managment of debug flags</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/interface/system_cmd.html" class="code" title="function [status,result] = system_cmd( cmd )">system_cmd</a>	SYSTEM_CMD: issue system commands, and try to compensate for</li><li><a href="../../eidors/meshing/netgen/call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>	CALL_NETGEN: call netgen to create a vol_file from a geo_file</li><li><a href="../../eidors/meshing/netgen/ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>	NG_MK_GEOMETRIC_MODELS: create geometric mesh models using Netgen. Body</li><li><a href="../../eidors/models/convhulln_clean.html" class="code" title="function [K,V] = convhulln_clean(pts,p);">convhulln_clean</a>	CONVHULLN_CLEAN: run convhulln and catch errors</li><li><a href="../../eidors/models/mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="../../eidors/models/mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a>	MK_TET_C2F - calculate a coarse2fine mapping for two tet-based models.</li><li><a href="../../eidors/models/mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li><li><a href="../../eidors/models/mk_tri_c2f.html" class="code" title="function c2f = mk_tri_c2f(fmdl,rmdl,opt)">mk_tri_c2f</a>	MK_TRI_C2F - calculate a coarse2fine mapping for triangle-based models.</li><li><a href="../../eidors/models/place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li><li><a href="../../eidors/overloads/uniquetol.html" class="code" title="function out = uniquetol(in, tol, varargin)">uniquetol</a>	C = uniquetol(A,TOL):  unique values in A using tolerance TOL.</li><li><a href="eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>	EIDORS_DEBUG Global managment of debug flags</li><li><a href="progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>	PROGRESS_MSG Progress messages and timing.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function test</a></li><li><a href="#_sub2" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function out = eidors_debug(command, fstr)</a>
+0002 <span class="comment">%EIDORS_DEBUG Global managment of debug flags</span>
+0003 <span class="comment">% eidors_debug('on','function')</span>
+0004 <span class="comment">%     switches ON the debug flag for string constant 'function'</span>
+0005 <span class="comment">% eidors_debug('off','function')</span>
+0006 <span class="comment">%     switches OFF the debug flag for string constant 'function'</span>
+0007 <span class="comment">% eidors_debug('off','all')</span>
+0008 <span class="comment">%     switches OFF the debug flag for all functions</span>
+0009 <span class="comment">% eidors_debug('query','function')</span>
+0010 <span class="comment">%     returns the current state of the debug flag for 'function'</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Note that 'function' can be any string constant (other than 'all'), but</span>
+0013 <span class="comment">% it is recommended to be an actual eidors function name. To enable</span>
+0014 <span class="comment">% debugging on selected parts of the code, follow this convention:</span>
+0015 <span class="comment">%    eidors_function:part1</span>
+0016 <span class="comment">%    eidors_function:subfunction</span>
+0017 <span class="comment">%    eidors_function:subfunction:part1</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Example use in code (my_function.m):</span>
+0020 <span class="comment">% if eidors_debug('query','my_function')</span>
+0021 <span class="comment">%     disp(val)</span>
+0022 <span class="comment">% end</span>
+0023 
+0024 <span class="comment">% (C) 2013 Bartlomiej Grychtol.</span>
+0025 <span class="comment">% License: GPL version 2 or 3</span>
+0026 <span class="comment">% $Id: eidors_debug.m 4924 2015-05-07 23:09:59Z aadler $</span>
+0027 
+0028 
+0029 
+0030 <span class="keyword">if</span> ischar(command) &amp;&amp; strcmp(command, <span class="string">'UNIT_TEST'</span>), <a href="#_sub2" class="code" title="subfunction do_unit_test">do_unit_test</a>;<span class="keyword">return</span>; <span class="keyword">end</span>
+0031 
+0032 <span class="keyword">global</span> eidors_objects;
+0033 
+0034 <span class="keyword">if</span> ~isfield(eidors_objects, <span class="string">'debug_enabled_on'</span>)
+0035    eidors_objects.debug_enabled_on = {};
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">switch</span> command
+0039    <span class="keyword">case</span> <span class="string">'on'</span>
+0040       <span class="keyword">if</span> ~<a href="eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>(<span class="string">'query'</span>,fstr);
+0041          eidors_objects.debug_enabled_on{end+1} = fstr;
+0042       <span class="keyword">end</span>
+0043    <span class="keyword">case</span> <span class="string">'off'</span>
+0044       <span class="keyword">if</span> nargin==1 || strcmp(fstr, <span class="string">'all'</span>)
+0045          eidors_objects.debug_enabled_on = {};
+0046       <span class="keyword">else</span>
+0047          idx = strcmp(eidors_objects.debug_enabled_on, fstr);
+0048          eidors_objects.debug_enabled_on(idx) = [];
+0049       <span class="keyword">end</span>
+0050    <span class="keyword">case</span> <span class="string">'query'</span>
+0051       idx = strcmp(eidors_objects.debug_enabled_on, fstr);
+0052       out = any(idx);
+0053    <span class="keyword">otherwise</span>
+0054       error(<span class="string">'EIDORS:WrongInput'</span>,[<span class="string">'First input to eidors_debug must be '</span>, <span class="keyword">...</span>
+0055          <span class="string">'''on'',''off'' or ''query''.'</span>]);
+0056 <span class="keyword">end</span>
+0057 
+0058 <a name="_sub1" href="#_subfunctions" class="code">function test</a>
+0059 <span class="keyword">if</span> <a href="eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>(<span class="string">'query'</span>,<span class="string">'eidors_debug_test1'</span>)
+0060    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'TEST1'</span>,2);
+0061 <span class="keyword">end</span>
+0062 
+0063 <span class="keyword">if</span> <a href="eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>(<span class="string">'query'</span>,<span class="string">'eidors_debug_test2'</span>)
+0064    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'TEST2'</span>,2);
+0065 <span class="keyword">end</span>
+0066 
+0067 
+0068 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test</a>
+0069 <a href="eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a> on eidors_debug_test1
+0070 <a href="eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a> on eidors_debug_test2
+0071 <a href="#_sub1" class="code" title="subfunction test">test</a>
+0072 <a href="eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a> off eidors_debug_test1
+0073 <a href="#_sub1" class="code" title="subfunction test">test</a>
+0074 <a href="eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a> off all
+0075 <a href="#_sub1" class="code" title="subfunction test">test</a>
+0076 fprintf(<span class="string">'expected output:\n[%s]\n[%s]\n[%s]\n'</span>,  <span class="keyword">...</span>
+0077   <span class="string">'TEST1'</span>, <span class="keyword">...</span>
+0078   <span class="string">'TEST2'</span>, <span class="keyword">...</span>
+0079   <span class="string">'TEST2'</span>);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

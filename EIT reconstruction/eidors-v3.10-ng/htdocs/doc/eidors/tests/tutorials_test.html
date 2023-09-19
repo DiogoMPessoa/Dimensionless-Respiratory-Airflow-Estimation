@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of tutorials_test</title>
+  <meta name="keywords" content="tutorials_test">
+  <meta name="description" content="TUTORIAL_TEST: Run all tutorials">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">tests</a> &gt; tutorials_test.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/tests&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>tutorials_test
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>TUTORIAL_TEST: Run all tutorials</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [errors warnings] = tutorials_test(directory,tcount) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> TUTORIAL_TEST: Run all tutorials
+ [errors, warnings] = tutorial_test(directory) will run all *.m files in 
+ the specified directory (../../htdocs/tutorial/ if omitted). The status
+ of each file will be printed to the screen as well as in a
+ tutorial_status.txt file in the current directory (using the diary
+ functionality). Delete tutorial_status.txt between succesive calls to
+ avoid appending. 
+ OUTPUTS: 
+  errors -- a cell array containing the files that caused errors
+            (including the directory and the first error message)
+ warnings -- a cell array containing the files that caused warnings 
+            (including directories)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/graphics/matlab/calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>	[colours,scl_data]= calc_colours(img, set_value, do_colourbar)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function sl = skiplist</a></li><li><a href="#_sub2" class="code">function flag = isfunction(fname)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [errors warnings] = tutorials_test(directory,tcount)</a>
+0002 <span class="comment">% TUTORIAL_TEST: Run all tutorials</span>
+0003 <span class="comment">% [errors, warnings] = tutorial_test(directory) will run all *.m files in</span>
+0004 <span class="comment">% the specified directory (../../htdocs/tutorial/ if omitted). The status</span>
+0005 <span class="comment">% of each file will be printed to the screen as well as in a</span>
+0006 <span class="comment">% tutorial_status.txt file in the current directory (using the diary</span>
+0007 <span class="comment">% functionality). Delete tutorial_status.txt between succesive calls to</span>
+0008 <span class="comment">% avoid appending.</span>
+0009 <span class="comment">% OUTPUTS:</span>
+0010 <span class="comment">%  errors -- a cell array containing the files that caused errors</span>
+0011 <span class="comment">%            (including the directory and the first error message)</span>
+0012 <span class="comment">% warnings -- a cell array containing the files that caused warnings</span>
+0013 <span class="comment">%            (including directories)</span>
+0014 
+0015 <span class="comment">% (C) 2011 Bartlomiej Grychtol. License: GPL version 2 or version 3</span>
+0016 <span class="comment">% $Id: tutorials_test.m 4535 2014-04-28 00:56:46Z bgrychtol $</span>
+0017 
+0018 <span class="keyword">if</span> nargin&lt;1 || isempty(directory)
+0019     directory = <span class="string">'../../htdocs/tutorial/'</span>;
+0020     <span class="comment">%directory = cd;</span>
+0021 <span class="keyword">end</span>
+0022 diary tutorial_status.txt
+0023 
+0024 <span class="keyword">global</span> my_dir; my_dir = cd;
+0025 cd(directory);
+0026 <span class="keyword">global</span> tut_dir; tut_dir = cd;
+0027 <span class="keyword">global</span> D; D = genpath(<span class="string">'.'</span>);
+0028 <span class="keyword">global</span> d;
+0029 
+0030 warning off all
+0031 <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,0);
+0032 pause off
+0033 
+0034 <span class="comment">% a little consistency would have been nice!</span>
+0035 <span class="keyword">global</span> tut_dlm;
+0036 <span class="keyword">if</span> strcmp(computer,<span class="string">'PCWIN'</span>) || strcmp(computer,<span class="string">'PCWIN64'</span>)
+0037     tut_dlm = <span class="string">';'</span>;
+0038 <span class="keyword">else</span>
+0039     tut_dlm = <span class="string">':'</span>;
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">global</span> tut_count; tut_count = 0;
+0043 <span class="keyword">global</span> last_tut;
+0044 <span class="keyword">if</span> nargin &gt;1,
+0045     last_tut = tcount;
+0046 <span class="keyword">else</span> last_tut = 0;
+0047 <span class="keyword">end</span>
+0048 [d,D]= strtok(D,tut_dlm);
+0049 <span class="keyword">while</span> ~isempty(d)
+0050     <span class="keyword">if</span> ~isempty(strfind(d,<span class="string">'.svn'</span>)); 
+0051         [d,D]= strtok(D,tut_dlm); 
+0052         <span class="keyword">continue</span>; 
+0053     <span class="keyword">end</span>;
+0054     <span class="keyword">try</span>
+0055        cd(d);
+0056     <span class="keyword">catch</span>
+0057        keyboard
+0058     <span class="keyword">end</span>
+0059     <span class="keyword">global</span> F;F = dir(<span class="string">'*.m'</span>);
+0060     F = struct2cell(F); F = sortrows(F(1,:));<span class="comment">% assume sorted by name</span>
+0061     <span class="keyword">global</span> errors; errors={};
+0062     <span class="keyword">global</span> e_count; e_count = 1;
+0063     <span class="keyword">global</span> w_count; w_count = 1;
+0064     <span class="keyword">global</span> warnings; warnings={};
+0065 
+0066 
+0067     <span class="keyword">while</span> length(F) &gt; 0
+0068         evalin(<span class="string">'base'</span>,<span class="string">'clear'</span>);
+0069         <a href="../../eidors/graphics/matlab/calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>(<span class="string">'defaults'</span>);
+0070         clf; <span class="comment">% make sure pictures from previous tutorial don't affect</span>
+0071         tutname = F{1};
+0072         <span class="comment">%tutname(end-3) = [];</span>
+0073         tutname(end-3) = <span class="string">'*'</span>; <span class="comment">% assume tutorials differ by 2 chars</span>
+0074         tutname(end-2) = [];
+0075         T = dir(tutname);
+0076         <span class="keyword">if</span> any(strcmp( T(1).name, <a href="#_sub1" class="code" title="subfunction sl = skiplist">skiplist</a>)); 
+0077            F(1:length(T)) = []; 
+0078            <span class="keyword">continue</span>; 
+0079         <span class="keyword">end</span>
+0080         <span class="keyword">while</span> length(T) &gt; 0
+0081             <a href="../../eidors/graphics/matlab/calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>(<span class="string">'defaults'</span>);
+0082             <span class="keyword">if</span> length(T(1).name)&gt;length(tutname)+2 <span class="comment">% allow some leeway</span>
+0083                 T(1) = [];
+0084                 <span class="keyword">continue</span>
+0085             <span class="keyword">end</span>
+0086             name = T(1).name(1:end-2);
+0087             skip = 0;
+0088             <span class="keyword">if</span> <a href="#_sub2" class="code" title="subfunction flag = isfunction(fname)">isfunction</a>(name)
+0089                 skip = 1;
+0090             <span class="keyword">else</span>
+0091                 tut_count = tut_count +1;
+0092             <span class="keyword">end</span>
+0093             <span class="keyword">if</span> skip || tut_count &lt; last_tut 
+0094                 T(1) = [];
+0095                 F(1) = [];
+0096                 <span class="keyword">continue</span>
+0097             <span class="keyword">end</span>
+0098             fprintf([num2str(tut_count,<span class="string">'%04d'</span>) <span class="string">'  '</span> strrep(d,<span class="string">'\'</span>,<span class="string">'\\'</span>) <span class="string">'\\'</span> name]);
+0099             lastwarn(<span class="string">''</span>);
+0100             save tmp
+0101             <span class="keyword">try</span>
+0102               evalin(<span class="string">'base'</span>,sprintf(<span class="string">'evalc(''%s'');'</span>,name));
+0103 <span class="comment">%                 evalc(['evalin(''base'',''' name ''')'])</span>
+0104                 <span class="keyword">if</span> ~isempty(lastwarn)
+0105                     fprintf(<span class="string">' WARNING(S) = (%s)\n'</span>,lastwarn);
+0106                     warnings{w_count,1} = T(1).name;
+0107                     warnings{w_count,1} = d;
+0108                     w_count = w_count+1;
+0109                 <span class="keyword">else</span>
+0110                     fprintf(<span class="string">' OK\n'</span>);
+0111                 <span class="keyword">end</span>
+0112                 load tmp
+0113                 delete(<span class="string">'tmp.mat'</span>);
+0114                 <span class="keyword">global</span> warnings w_count;
+0115             <span class="keyword">catch</span>
+0116                 load tmp
+0117                 delete(<span class="string">'tmp.mat'</span>);
+0118                 errors{e_count,1} = T(1).name;
+0119                 L = lasterror();
+0120                 errors{e_count,2} = d;
+0121                 errors{e_count,3} = L.message;
+0122                 e_count = e_count + 1;
+0123                 fprintf(<span class="string">' ERROR = (%s)\n'</span>,L.message);
+0124             <span class="keyword">end</span>
+0125 
+0126             T(1) = [];
+0127             F(1) = [];
+0128 
+0129         <span class="keyword">end</span>
+0130         clear; clf; <span class="comment">%close all; %close all crashes vnc :(</span>
+0131         <span class="keyword">global</span> F tut_count e_count errors warnings w_count d D my_dir tut_dir tut_dlm last_tut
+0132     <span class="keyword">end</span>
+0133     cd(tut_dir);
+0134     [d,D]= strtok(D,tut_dlm);
+0135 <span class="keyword">end</span>
+0136 <span class="comment">% if numel(errors)&gt;0</span>
+0137 <span class="comment">%     errors</span>
+0138 <span class="comment">% end</span>
+0139 warning on all
+0140 <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,2);
+0141 pause on
+0142 clear <span class="keyword">global</span> F tut_count e_count errors warnings w_count
+0143 cd(my_dir)
+0144 diary off
+0145 
+0146 <a name="_sub1" href="#_subfunctions" class="code">function sl = skiplist</a>
+0147   sl = {<span class="string">'netgen_accuracy01.m'</span>, <span class="keyword">...</span>
+0148         <span class="string">'common_models01.m'</span>, <span class="keyword">...</span>
+0149         <span class="string">'Script_For_Tutorial.m'</span>};
+0150 <span class="comment">%     , ...</span>
+0151 <span class="comment">%         'cg_ards_recruitment_01.m'};</span>
+0152 
+0153 <a name="_sub2" href="#_subfunctions" class="code">function flag = isfunction(fname)</a>
+0154 fid = fopen([fname <span class="string">'.m'</span>]);
+0155 l = fgetl(fid);
+0156 fclose(fid);
+0157 t = strtok(l);
+0158 flag = strcmp(t,<span class="string">'function'</span>);
+0159</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

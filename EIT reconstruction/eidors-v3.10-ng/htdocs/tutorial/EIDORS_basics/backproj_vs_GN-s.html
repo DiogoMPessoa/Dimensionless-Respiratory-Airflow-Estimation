@@ -1,0 +1,388 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<H2>GN reconstruction vs Backprojection</H2>
+
+The most commonly used EIT reconstruction algorithm is
+the backprojection algorithm of Barber and Brown, as
+implemented in the Sheffield Mk I EIT system.
+<p>
+This tutorial explores the concept of reconstruction from
+electrical field projections, but does not implement the
+original backprojection algorithm.
+<p>
+The reconstruction matrix output by the original
+algorithm has been made available as part of
+EIDORS, 
+<a href="../../data_contrib/db_backproj_matrix/db_backproj_matrix-s.html" 
+   >here</a>
+
+<p>
+
+<h3> 
+Calculate the nodal voltage field
+</h3>
+
+<pre>
+%$Id: backproj_solve01.m 4067 2013-05-26 20:17:46Z bgrychtol $
+clf;
+imdl= mk_common_model('c2c',16);
+
+fmdl= imdl.fwd_model;
+    ee= fmdl.elems';
+    xx= reshape( fmdl.nodes(ee,1),3, []); 
+    yy= reshape( fmdl.nodes(ee,2),3, []); 
+
+for i=1:4
+   if     i==1; stim= [0,1];
+   elseif i==2; stim= [0,2];
+   elseif i==3; stim= [0,4];
+   elseif i==4; stim= [0,8];
+   end
+
+   fmdl.stimulation = mk_stim_patterns(16,1,stim,[0 1], {}, 1);
+   img= mk_image(fmdl, 1);
+   
+   node_v= calc_all_node_voltages( img );
+   zz{i}= reshape(     node_v(ee,4),3, []); 
+end
+
+for i=1:4
+   subplot(2,4,i); cla
+   patch(xx,yy,zz{i},zz{i}); view(0, 4); axis off
+end
+
+print_convert backproj_solve01a.png
+
+for i=1:4
+   subplot(2,4,i); cla
+   patch(xx,yy,zz{i},zz{i}); view(0,34); axis off
+end
+print_convert backproj_solve01b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/backproj_solve01a.png">
+<br>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/backproj_solve01b.png">
+<br><i> Figure:</i>
+Nodal voltages in a mesh with different stimulation patterns.
+<i>From Left to right:</i>
+Adjacent stimulation ([0 1]),
+45&deg; stimulation ([0 2]),
+90&deg; stimulation ([0 4]),
+180&deg; stimulation ([0 8])
+</center>
+
+<h3> 
+Calculate Equipotential lines 
+</h3>
+
+<pre>
+% $Id: backproj_solve02.m 3879 2013-04-18 09:26:22Z aadler $
+
+clf; img = {};
+% Solve voltage for 3 different models
+for idx=1:3
+  if     idx==1; mdltype= 'd2C2';
+  elseif idx==2; mdltype= 'd2d3c';
+  elseif idx==3; mdltype= 'd2T2';
+  end
+
+  pat = 4; % Stimulation pattern to show
+
+  imdl= mk_common_model(mdltype,16);
+  img{idx} = mk_image(imdl); 
+  stim = mk_stim_patterns(16,1,'{ad}','{mono}',{'meas_current','rotate_meas'},-1);
+  img{idx}.fwd_model.stimulation = stim(pat);
+  img{idx}.fwd_solve.get_all_meas = 1;
+end
+
+% Show raw voltage pattern
+for idx=1:3
+  vh = fwd_solve(img{idx});
+  imgn = rmfield(img{idx},'elem_data');
+  imgn.node_data= vh.volt;
+  subplot(2,3,idx); show_fem(imgn);
+end
+print_convert backproj_solve02a.png
+
+% Calculate Equipotential lines
+for idx=1:3
+  vh = fwd_solve(img{idx});
+  imgn = rmfield(img{idx},'elem_data');
+
+  imgn.node_data= zeros(size(vh.volt,1),1);
+  for v = 2:16
+     imgn.node_data(vh.volt > vh.meas(v)) = v;
+  end
+
+  subplot(2,3,idx); show_fem(imgn);
+end
+print_convert backproj_solve02b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/backproj_solve02a.png">
+<br>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/backproj_solve02b.png">
+<br><i> Figure:</i>
+Equipotential lines for adjacent stimulation
+<i>From Left to right:</i>
+1024 element circular mesh,
+6746 element electrode refined element circular mesh,
+1024 element mesh of human upper thorax
+</center>
+
+<h3> 
+Create 2D Model and simulate measurements
+</h3>
+
+Here, we reuse the model from the
+ <a href="./tutorial120-s.html">this tutorial</a>, below:
+
+<pre>
+% Compare 2D algorithms
+% $Id: tutorial120a.m 3273 2012-06-30 18:00:35Z aadler $
+
+imb=  mk_common_model('c2c',16);
+
+e= size(imb.fwd_model.elems,1);
+bkgnd= 1;
+
+% Solve Homogeneous model
+img= mk_image(imb.fwd_model, bkgnd);
+vh= fwd_solve( img );
+
+% Add Two triangular elements
+img.elem_data([25,37,49:50,65:66,81:83,101:103,121:124])=bkgnd * 2;
+img.elem_data([95,98:100,79,80,76,63,64,60,48,45,36,33,22])=bkgnd * 2;
+vi= fwd_solve( img );
+
+% Add -12dB SNR
+vi_n= vi; 
+nampl= std(vi.meas - vh.meas)*10^(-18/20);
+vi_n.meas = vi.meas + nampl *randn(size(vi.meas));
+
+show_fem(img);
+axis square; axis off
+print_convert('tutorial120a.png', '-density 60')
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/tutorial120a.png">
+<br><i> Figure:</i>
+Sample image to test 2D image reconstruction algorithms
+</center>
+
+<h3> 
+Image reconstruction with GN (NOSER) and Backprojection solvers
+</h3>
+
+
+<pre>
+% $Id: backproj_solve03.m 4839 2015-03-30 07:44:50Z aadler $
+
+tutorial120a; % get the model from a related tutorial
+
+% Gauss Newton Solver
+inv_GN= eidors_obj('inv_model','GN_solver','fwd_model', img.fwd_model);
+inv_GN.reconst_type= 'difference';
+inv_GN.solve= @inv_solve_diff_GN_one_step;
+inv_GN.RtR_prior= @prior_noser;
+inv_GN.jacobian_bkgnd.value= 1;
+inv_GN.hyperparameter.value= 0.2;
+
+imgr= inv_solve(inv_GN, vh,vi);
+imgr.calc_colours.ref_level=0;
+subplot(131); show_fem(imgr);
+axis equal; axis off
+
+% Backprojection Solver
+inv_BP= eidors_obj('inv_model','BP_solver','fwd_model', img.fwd_model);
+inv_BP.reconst_type= 'difference';
+inv_BP.solve= @inv_solve_backproj;
+inv_BP.inv_solve_backproj.type= 'naive';
+
+imgr= inv_solve(inv_BP, vh,vi);
+imgr.calc_colours.ref_level=0;
+subplot(132); show_fem(imgr);
+axis equal; axis off
+
+inv_BP.inv_solve_backproj.type= 'simple_filter';
+
+imgr= inv_solve(inv_BP, vh,vi);
+imgr.calc_colours.ref_level=0;
+subplot(133); show_fem(imgr);
+axis equal; axis off
+
+print_convert inv_solve_backproj03a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/backproj_solve03a.png">
+<br><i> Figure:</i>
+Reconstructions using:
+<i>Left:</i> GN Solver with NOSER Prior
+<i>Middle:</i> Naive Backprojection
+<i>Right:</i> Backprojection with a simple filter
+</center>
+
+<h3> 
+GN vs Sheffield Backprojection
+</h3>
+
+There are several different versions of the backprojection algorithm
+in existence. The matrix available with EIDORS and shown
+here is the version distributed
+with the Sheffield Mk I system, and is very similar to the algorithm
+distributed with the G&ouml;ttingen Goe MF II EIT system. Almost all clinical
+and experimental publications which mention "backprojection" use this
+version of the algorithm.
+<p>
+
+<pre>
+% Sheffield MKI backprojection $Id: backproj_solve04.m 4839 2015-03-30 07:44:50Z aadler $
+
+% Gauss Newton Solvers
+inv_mdl{1} = inv_GN;
+inv_mdl{1}.hyperparameter.value= 0.2;
+inv_mdl{2} = inv_GN;
+inv_mdl{2}.hyperparameter.value= 0.5;
+% Sheffield Backprojection solver
+inv_mdl{3} = mk_common_gridmdl('backproj');
+
+for loop=1:3
+   imgr= inv_solve(inv_mdl{loop}, vh,vi);
+   imgr.calc_colours.ref_level=0;
+   subplot(1,3,loop); show_fem(imgr);
+   axis equal; axis off
+end
+
+print_convert inv_solve_backproj04a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/backproj_solve04a.png">
+<br><i> Figure:</i>
+Reconstructions using:
+<i>Left:</i> GN Solver with NOSER Prior (small hyperparameter)
+<i>Middle:</i>GN Solver with NOSER Prior (larger hyperparameter)
+<i>Right:</i> Sheffield Mk I Backprojection
+</center>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

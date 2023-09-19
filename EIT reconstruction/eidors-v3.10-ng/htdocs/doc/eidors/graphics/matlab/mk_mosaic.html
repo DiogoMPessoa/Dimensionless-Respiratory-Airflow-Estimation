@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_mosaic</title>
+  <meta name="keywords" content="mk_mosaic">
+  <meta name="description" content="MK_MOSAIC Arrange multidimensional image matrix for display.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; mk_mosaic.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>mk_mosaic
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>MK_MOSAIC Arrange multidimensional image matrix for display.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function r_img = mk_mosaic(rimg, sep, vh, n_col) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MK_MOSAIC Arrange multidimensional image matrix for display.
+  M = MK_MOSAIC(rimg, sep, vh, n_col)
+  Input:
+   rimg - an HxWxN or HxWxNxM array of pictures of size HxW
+   sep  - (optional) spacing between adjecent pictures (in pixels)
+          default: 0
+   vh   - an Mx2 array of positions for individual HxWxN blocks 
+          (N can be 1) default: []
+   n_col- force number of columns, otherwise adjusted to create a
+          roughly square output
+
+ Output: A 2D array suitable for display with e.g. IMAGESC
+ 
+ This function is primarily used by SHOW_SLICES, but can also be called
+ directly.
+
+ See also: <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">SHOW_SLICES</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function r_img = mk_mosaic(rimg, sep, vh, n_col)</a>
+0002 <span class="comment">%MK_MOSAIC Arrange multidimensional image matrix for display.</span>
+0003 <span class="comment">%  M = MK_MOSAIC(rimg, sep, vh, n_col)</span>
+0004 <span class="comment">%  Input:</span>
+0005 <span class="comment">%   rimg - an HxWxN or HxWxNxM array of pictures of size HxW</span>
+0006 <span class="comment">%   sep  - (optional) spacing between adjecent pictures (in pixels)</span>
+0007 <span class="comment">%          default: 0</span>
+0008 <span class="comment">%   vh   - an Mx2 array of positions for individual HxWxN blocks</span>
+0009 <span class="comment">%          (N can be 1) default: []</span>
+0010 <span class="comment">%   n_col- force number of columns, otherwise adjusted to create a</span>
+0011 <span class="comment">%          roughly square output</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Output: A 2D array suitable for display with e.g. IMAGESC</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% This function is primarily used by SHOW_SLICES, but can also be called</span>
+0016 <span class="comment">% directly.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% See also: SHOW_SLICES</span>
+0019 
+0020 <span class="comment">% (C) 2005-2012 Andy Adler and Bartlomiej Grychtol</span>
+0021 <span class="comment">% License: GPL v2 or v3.</span>
+0022 <span class="comment">% $Id: mk_mosaic.m 3491 2012-07-04 09:41:05Z aadler $</span>
+0023 
+0024 <span class="comment">% jnk so that matab doesn't put larger dims in npy</span>
+0025 [npy,npx,jnk] = size(rimg);
+0026 n_frames = size(rimg,3);
+0027 n_levels = size(rimg,4);
+0028 
+0029 <span class="keyword">if</span> nargin &lt; 2
+0030     sep = 0;
+0031 <span class="keyword">end</span>
+0032 <span class="keyword">if</span> nargin &lt; 3
+0033     vh = [];
+0034 <span class="keyword">end</span>
+0035 <span class="keyword">if</span> nargin &lt; 4 
+0036     n_col = 0;
+0037 <span class="keyword">end</span>
+0038 <span class="keyword">if</span> nargin &gt; 2 &amp;&amp; ~isempty(vh)
+0039     img_cols = max( vh(:,1) );
+0040     img_rows = max( vh(:,2) );
+0041 <span class="keyword">else</span>
+0042     <span class="comment">% vertical slices must be kept together</span>
+0043     <span class="comment">% To nicely fill the image: img_cols ~ img_rows</span>
+0044     <span class="comment">% Thus,  n_frames/vert_rows ~ vert_rows*n_levels;</span>
+0045     <span class="comment">% or     vert_rows^2 ~ n_frames / n_levels</span>
+0046     vert_rows = ceil( sqrt(n_frames / n_levels) );
+0047     <span class="keyword">if</span> n_col &gt; 0
+0048         img_cols = n_col;
+0049     <span class="keyword">else</span> 
+0050         img_cols = ceil( n_frames/vert_rows );
+0051     <span class="keyword">end</span>
+0052     img_rows = ceil(n_frames*n_levels/img_cols);
+0053     img_rows = ceil(img_rows/n_levels)*n_levels; <span class="comment">% Ensure divisible by n_levels</span>
+0054 <span class="keyword">end</span>
+0055 <span class="comment">% here include the separation</span>
+0056 r_img = NaN*ones(img_rows*npy + (img_rows-1)*sep, <span class="keyword">...</span>
+0057                  img_cols*npx + (img_cols-1)*sep );
+0058 
+0059 idxx= (-npx:-1)+1;
+0060 idxy= (-npy:-1)+1;
+0061 imno= 1;
+0062 <span class="keyword">for</span> img_no = 1:n_frames
+0063    <span class="keyword">for</span> lev_no = 1:n_levels
+0064       <span class="keyword">if</span> ~isempty(vh) <span class="comment">%won't work for multiple image inputs</span>
+0065          i_col= vh( lev_no, 1) + img_no -1;
+0066          i_row= vh( lev_no, 2);
+0067       <span class="keyword">else</span>
+0068          i_col= rem( img_no-1, img_cols) + 1;
+0069          i_row= (ceil( img_no / img_cols) -1) * n_levels + lev_no ;
+0070       <span class="keyword">end</span>
+0071 <span class="comment">% disp([imno, vert_rows, img_cols, img_rows, img_no, lev_no, i_col, i_row]);</span>
+0072       r_img(i_row*npy + idxy + sep*(i_row-1), <span class="keyword">...</span>
+0073             i_col*npx + idxx + sep*(i_col-1)) = rimg(:,:,img_no,lev_no);
+0074       imno= imno + 1; 
+0075    <span class="keyword">end</span>
+0076 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

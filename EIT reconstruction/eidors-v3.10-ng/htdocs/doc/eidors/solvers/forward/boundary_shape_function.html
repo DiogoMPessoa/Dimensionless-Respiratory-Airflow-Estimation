@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of boundary_shape_function</title>
+  <meta name="keywords" content="boundary_shape_function">
+  <meta name="description" content="BOUNDSHAPEFUNC  Shape functions on the boundary in local coordiantes">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; boundary_shape_function.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>boundary_shape_function
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BOUNDSHAPEFUNC  Shape functions on the boundary in local coordiantes</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function shape=boundary_shape_function(type,x,y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BOUNDSHAPEFUNC  Shape functions on the boundary in local coordiantes
+SHAPE = boundshapefunc(TYPE,X,Y)
+
+NOTES - On boundary, dimension is smaller e.g. tri6 element, boundary has 
+3 node (quadratic) and is 1D
+
+INPUT:
+1. X, Y, Z - local coordinates
+2. TYPE - string describing different element typeswhat kind of element
+   'tri3' - Linear, 2 node 1D shape function 
+   'tri 6'- Quadratic, 3 node 1D shape function
+   'tet4' - Linear, 3 node triangle shape function
+   'tet10' - Quadratic, 6 node triangle shape function
+
+OUTPUT
+1. SHAPE - vector of shape functions on this segment of boundary
+
+M Crabb - 29.06.2012</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="system_mat_higher_order.html" class="code" title="function [s_mat]=system_mat_higher_order(fwd_model,img)">system_mat_higher_order</a>	Assemble the total stiffness matrix : s_mat.E=At;</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function shape = boundshapetri3(x,y)</a></li><li><a href="#_sub2" class="code">function shape = boundshapetri6(x,y)</a></li><li><a href="#_sub3" class="code">function shape = boundshapetri10(x,y)</a></li><li><a href="#_sub4" class="code">function shape = boundshapetet4(x,y)</a></li><li><a href="#_sub5" class="code">function shape = boundshapetet10(x,y)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function shape=boundary_shape_function(type,x,y)</a>
+0002 <span class="comment">%BOUNDSHAPEFUNC  Shape functions on the boundary in local coordiantes</span>
+0003 <span class="comment">%SHAPE = boundshapefunc(TYPE,X,Y)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%NOTES - On boundary, dimension is smaller e.g. tri6 element, boundary has</span>
+0006 <span class="comment">%3 node (quadratic) and is 1D</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%INPUT:</span>
+0009 <span class="comment">%1. X, Y, Z - local coordinates</span>
+0010 <span class="comment">%2. TYPE - string describing different element typeswhat kind of element</span>
+0011 <span class="comment">%   'tri3' - Linear, 2 node 1D shape function</span>
+0012 <span class="comment">%   'tri 6'- Quadratic, 3 node 1D shape function</span>
+0013 <span class="comment">%   'tet4' - Linear, 3 node triangle shape function</span>
+0014 <span class="comment">%   'tet10' - Quadratic, 6 node triangle shape function</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%OUTPUT</span>
+0017 <span class="comment">%1. SHAPE - vector of shape functions on this segment of boundary</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%M Crabb - 29.06.2012</span>
+0020 
+0021 <span class="keyword">if</span>(strcmp(type,<span class="string">'tri3'</span>))
+0022     shape = <a href="#_sub1" class="code" title="subfunction shape = boundshapetri3(x,y)">boundshapetri3</a>(x,y);
+0023 <span class="keyword">elseif</span>(strcmp(type,<span class="string">'tri6'</span>))
+0024     shape = <a href="#_sub2" class="code" title="subfunction shape = boundshapetri6(x,y)">boundshapetri6</a>(x,y);
+0025 <span class="keyword">elseif</span>(strcmp(type,<span class="string">'tri10'</span>))
+0026     shape = <a href="#_sub3" class="code" title="subfunction shape = boundshapetri10(x,y)">boundshapetri10</a>(x,y);
+0027 <span class="keyword">elseif</span>(strcmp(type,<span class="string">'tet4'</span>))
+0028     shape = <a href="#_sub4" class="code" title="subfunction shape = boundshapetet4(x,y)">boundshapetet4</a>(x,y);
+0029 <span class="keyword">elseif</span>(strcmp(type,<span class="string">'tet10'</span>))
+0030     shape = <a href="#_sub5" class="code" title="subfunction shape = boundshapetet10(x,y)">boundshapetet10</a>(x,y);
+0031 <span class="keyword">else</span>
+0032     error(<span class="string">'Incorrect number of input arguments'</span>)
+0033 <span class="keyword">end</span>
+0034 
+0035 
+0036 
+0037 <span class="comment">%1D Shape functions : Equidistant placed in region [-1,1]</span>
+0038 
+0039 <a name="_sub1" href="#_subfunctions" class="code">function shape = boundshapetri3(x,y)</a>
+0040 shape(1) = 0.5*(1-x);
+0041 shape(2) = 0.5*(1+x);
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">%Ordered correctly (vertex basis functions are first : (1,3,2) order)</span>
+0045 <a name="_sub2" href="#_subfunctions" class="code">function shape = boundshapetri6(x,y)</a>
+0046 shape(1) = 0.5*x*(x-1);
+0047 shape(2) = 0.5*x*(x+1);
+0048 shape(3) = (1-x)*(1+x);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="comment">%Ordered correctly (vertex basis functions are first : (1,3,4,2) order)</span>
+0052 <a name="_sub3" href="#_subfunctions" class="code">function shape = boundshapetri10(x,y)</a>
+0053 shape(1) = 0.0625*(1-x)*(3*x-1)*(3*x+1);
+0054 shape(2) = 0.0625*(1+x)*(3*x-1)*(3*x+1);
+0055 shape(3) = -0.5625*(1+x)*(3*x-1)*(1-x);
+0056 shape(4) = 0.5625*(1+x)*(3*x+1)*(1-x);
+0057 <span class="keyword">end</span>
+0058 
+0059 
+0060 
+0061 
+0062 
+0063 <span class="comment">%2D Shape functions : Place on the unit triangle [0,1]*[0,1] axes</span>
+0064 
+0065 <a name="_sub4" href="#_subfunctions" class="code">function shape = boundshapetet4(x,y)</a>
+0066 shape(1) = 1-x-y;
+0067 shape(2) = x;
+0068 shape(3) = y;
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="comment">%Ordered correctly (i.e. vertex basis function (first 3) are first)</span>
+0072 <a name="_sub5" href="#_subfunctions" class="code">function shape = boundshapetet10(x,y)</a>
+0073 shape(1) = (1-x-y)*(1-2*x-2*y);
+0074 shape(2) = x*(2*x-1);
+0075 shape(3) = y*(2*y-1);
+0076 shape(4) = 4*x*(1-x-y);
+0077 shape(5) = 4*y*(1-x-y);
+0078 shape(6) = 4*x*y;
+0079 <span class="keyword">end</span>
+0080 
+0081 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Gauss Newton solvers in 3D</h2>
+
+
+
+<h3> Simulation Model</H3>
+<pre>
+%Homogeneous and inclusion conductivity
+cond_h=1.0; cond_inc=2.0;
+cc.ref_level = cond_h; cc.clim = 0.6; cc.cb_shrink_move = [.3,.8,.00];
+
+
+%3D forward model without inclusion 
+mdl_h= ng_mk_cyl_models([1 .7],[16,.25,.75],[0.075,0.3]);
+
+e_idx = elec_rearrange([16,2],'square'); %Square electrode pattern
+mdl_h.electrode(e_idx) =  mdl_h.electrode;
+
+%3D forward model with inclusion 
+extra={'ball','solid ball = sphere(0.2,0.2,0.5;0.2);'};
+mdl_i= ng_mk_cyl_models([1 .7],[16,.25,.75],[0.075,0.3],extra);
+mdl_i.electrode(e_idx) =  mdl_i.electrode;
+
+%Stimulation patterns and add to models
+stim=mk_stim_patterns(32,1,[0,5],[0,5]); % skip 4
+mdl_h.stimulation=stim; mdl_i.stimulation=stim;
+
+%Create two images
+img_h= mk_image(mdl_h,cond_h); 
+img_i= mk_image(mdl_i,cond_h); img_i.elem_data(mdl_i.mat_idx{2}) = cond_inc;
+img_h.calc_colours = cc;
+img_i.calc_colours = cc;
+
+%Now get "real" voltages and add noise
+v_i=fwd_solve(img_i); v_i_n = add_noise( 20, v_i ); v_h=fwd_solve(img_h);
+
+%Plot actual and simulated voltage and show slice through 3D image
+%figure; hold on; plot(v_i.meas); plot(v_h.meas,'r'); hold off;
+clf; axes('position',[0.2,0.2,0.6,0.6]);
+
+show_3d_slices(img_i,0.6,0.3,0.3); view(-24,12);
+eidors_colourbar(img_i);
+print_convert compare_3D_abs_GN_01a.png
+
+show_fem_enhanced(img_i,[0,1]);
+print_convert compare_3D_abs_GN_01b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/compare_3D_abs_GN_01a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/compare_3D_abs_GN_01b.png">
+<br><i> Figure:</i>
+Simulation model
+</center>
+
+<h3> Reconstruction with GN solver</H3>
+<pre>
+%Inverse solution
+imdl = mk_common_model('b2c2',32); %generic mdl
+imdl.solve = @inv_solve_gn; %Default Gauss Newton solvers
+imdl.fwd_model = mdl_i;
+imdl.reconst_type = 'absolute';
+imdl.jacobian_bkgnd.value= cond_h;
+
+imdl.inv_solve_gn.max_iterations = 3 ; %Number of iterations
+
+cb.cb_shrink_move = [0.5,0.8,0.00];
+
+imdl.RtR_prior=@prior_noser;   hp = 1e-2;
+
+imdl.hyperparameter.value = hp;
+img   = inv_solve(imdl, v_i);     img.calc_colours = cc;
+img_n = inv_solve(imdl, v_i_n);   img_n.calc_colours = cc;
+
+clf; show_3d_slices(img,0.6,0.3,0.3);   eidors_colourbar(img);
+print_convert compare_3D_abs_GN_02a.png '-density 75'
+
+clf; show_3d_slices(img_n,0.6,0.3,0.3); eidors_colourbar(img_n);
+print_convert compare_3D_abs_GN_02b.png '-density 75'
+
+%img.show_slices.levels = [inf,inf,.5,1,1;inf,inf,0.6,2,1]; show_slices(img);
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/compare_3D_abs_GN_02a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/compare_3D_abs_GN_02b.png">
+<br><i> Figure:</i>
+<i>Left</i> Data without noise
+<i>Right</i> Data with noise
+</center>
+
+<h3> Reconstruction with GN solver with hyperparameter adjustment</H3>
+<pre>
+%Alternative Gauss Newton solver, changing prior at each iteration
+imdl.solve = @inv_solve_abs_GN_prior;
+imdl.hyperparameter.value = .01;
+img   = inv_solve(imdl, v_i);     img.calc_colours   = cc;
+img_n = inv_solve(imdl, v_i_n);  img_n.calc_colours = cc;
+vr_agn=fwd_solve(img); vr_agn_n=fwd_solve(img_n);
+
+clf; show_3d_slices(img,0.6,0.3,0.3); eidors_colourbar(img);
+print_convert compare_3D_abs_GN_03a.png '-density 75'
+
+clf; show_3d_slices(img_n,0.6,0.3,0.3);
+eidors_colourbar(setfield(img_n,'calc_colours',cb));
+print_convert compare_3D_abs_GN_03b.png '-density 75'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/compare_3D_abs_GN_03a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/compare_3D_abs_GN_03b.png">
+<br><i> Figure:</i>
+<i>Left</i> Data without noise
+<i>Right</i> Data with noise
+</center>
+
+<h3> Reconstruction with constrained GN solver</H3>
+<pre>
+%Constrained Gauss Newton solver
+imdl.solve = @inv_solve_gn;
+imdl.hyperparameter.value = hp;
+% limit conductivity to be greater than 0 with a log parametrization
+imdl.inv_solve_gn.elem_working = 'log_conductivity';
+
+img   = inv_solve(imdl, v_i);    img.calc_colours   = cc;
+img_n = inv_solve(imdl, v_i_n);  img_n.calc_colours = cc;
+
+clf; show_3d_slices(img,  0.6,0.3,0.3); eidors_colourbar(img);
+print_convert compare_3D_abs_GN_04a.png '-density 75'
+
+clf; show_3d_slices(img_n,0.6,0.3,0.3); eidors_colourbar(img_n);
+print_convert compare_3D_abs_GN_04b.png '-density 75'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/compare_3D_abs_GN_04a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/compare_3D_abs_GN_04b.png">
+<br><i> Figure:</i>
+<i>Left</i> Data without noise
+<i>Right</i> Data with noise
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

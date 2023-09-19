@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gmsh_mk_fwd_model</title>
+  <meta name="keywords" content="gmsh_mk_fwd_model">
+  <meta name="description" content="GMSH_MK_FWD_MODEL: create a fwd_model object from a Gmsh file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">gmsh</a> &gt; gmsh_mk_fwd_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/gmsh&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>gmsh_mk_fwd_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>GMSH_MK_FWD_MODEL: create a fwd_model object from a Gmsh file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [fwd_mdl, mat_indices]=gmsh_mk_fwd_model( vol_filename, name, eprefix,stim_pattern, z_contact) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> GMSH_MK_FWD_MODEL: create a fwd_model object from a Gmsh file
+ [fwd_mdl, mat_indices]= ...
+      gmsh_mk_fwd_model( vol_filename, centres, ...
+                       name, stim_pattern, z_contact)
+
+  vol_filename:      filename output from Gmsh
+  name:              name for object (if [] use vol_filename)
+  eprefix:           prefix used for names of electrodes
+                     (if [] or omitted use 'electrode-')
+  stim_pattern:      a stimulation pattern structure
+                     empty ([]) if stim_pattern is not available
+  z_contact:         vector or scalar electrode contact impedance
+
+  fwd_mdl:           eidors format fwd_model
+  mat_indices:       cell array of material indices from eidors</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="gmsh_read_mesh.html" class="code" title="function[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)">gmsh_read_mesh</a>	[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)</li><li><a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/gmsh_stl2tet.html" class="code" title="function mdl = gmsh_stl2tet(stlfile, maxh, extra)">gmsh_stl2tet</a>	GMSH_STL2TET creates a tetrahedral mesh from an stl file</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fwd_mdl= construct_fwd_model(srf,vtx,simp,bc, name,</a></li><li><a href="#_sub2" class="code">function mat_indices= mk_mat_indices( mat_ind);</a></li><li><a href="#_sub3" class="code">function electrodes = find_elec(phys_names,prefix,z_contact)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [fwd_mdl, mat_indices]= </a><span class="keyword">...</span>
+0002              gmsh_mk_fwd_model( vol_filename, name, eprefix,stim_pattern, z_contact)
+0003 <span class="comment">% GMSH_MK_FWD_MODEL: create a fwd_model object from a Gmsh file</span>
+0004 <span class="comment">% [fwd_mdl, mat_indices]= ...</span>
+0005 <span class="comment">%      gmsh_mk_fwd_model( vol_filename, centres, ...</span>
+0006 <span class="comment">%                       name, stim_pattern, z_contact)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  vol_filename:      filename output from Gmsh</span>
+0009 <span class="comment">%  name:              name for object (if [] use vol_filename)</span>
+0010 <span class="comment">%  eprefix:           prefix used for names of electrodes</span>
+0011 <span class="comment">%                     (if [] or omitted use 'electrode-')</span>
+0012 <span class="comment">%  stim_pattern:      a stimulation pattern structure</span>
+0013 <span class="comment">%                     empty ([]) if stim_pattern is not available</span>
+0014 <span class="comment">%  z_contact:         vector or scalar electrode contact impedance</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%  fwd_mdl:           eidors format fwd_model</span>
+0017 <span class="comment">%  mat_indices:       cell array of material indices from eidors</span>
+0018 
+0019 <span class="comment">% Gmsh mesher for EIDORS was based on Netgen interface.</span>
+0020 <span class="comment">% (C) 2009 Bartosz Sawicki. License: GPL version 2 or version 3</span>
+0021 <span class="comment">% Modified by James Snyder &amp; Bartlomiej Grychtol</span>
+0022 
+0023 <span class="keyword">if</span> isempty(name); 
+0024    name = [<span class="string">'fwd_mdl based on '</span>, vol_filename];
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="keyword">if</span> nargin &lt; 4
+0028     stim_pattern=[];
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">if</span> nargin&lt;3 || isempty(eprefix); 
+0032    eprefix = <span class="string">'electrode-'</span>;
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="keyword">if</span> nargin&lt;5
+0036    z_contact=0.01; <span class="comment">% singular if z_contact=0</span>
+0037 <span class="keyword">end</span>
+0038 
+0039 
+0040 <span class="comment">% Model Geometry</span>
+0041 [srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = <a href="gmsh_read_mesh.html" class="code" title="function[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)">gmsh_read_mesh</a>(vol_filename);
+0042 fwd_mdl= <a href="#_sub1" class="code" title="subfunction fwd_mdl= construct_fwd_model(srf,vtx,simp,bc, name, ">construct_fwd_model</a>(srf,vtx,simp,bc, name, <span class="keyword">...</span>
+0043                              stim_pattern, eprefix, z_contact, fc,phys_names);
+0044 mat_indices= <a href="#_sub2" class="code" title="subfunction mat_indices= mk_mat_indices( mat_ind);">mk_mat_indices</a>( mat_ind);
+0045 <span class="keyword">if</span> isempty(srf)
+0046    fwd_mdl.boundary = <a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(fwd_mdl);
+0047 <span class="keyword">end</span>
+0048 
+0049 fwd_mdl.mat_idx = mat_indices;
+0050 
+0051 <span class="comment">% build fwd_model structure</span>
+0052 <a name="_sub1" href="#_subfunctions" class="code">function fwd_mdl= construct_fwd_model(srf,vtx,simp,bc, name, </a><span class="keyword">...</span>
+0053     stim_pattern, eprefix, z_contact, fc, phys_names)
+0054     mdl.nodes    = vtx;
+0055     mdl.elems    = simp;
+0056     mdl.boundary = srf;
+0057     mdl.boundary_numbers=fc; 
+0058     mdl.gnd_node = 1;
+0059     mdl.name = name;
+0060     
+0061     <span class="comment">% Model Stimulation</span>
+0062     <span class="keyword">if</span> ~isempty(stim_pattern)
+0063         mdl.stimulation= stim_pattern;
+0064     <span class="keyword">end</span>
+0065     
+0066     <span class="comment">% Electrodes</span>
+0067     electrodes = <a href="#_sub3" class="code" title="subfunction electrodes = find_elec(phys_names,prefix,z_contact)">find_elec</a>(phys_names,eprefix,z_contact);
+0068     <span class="keyword">if</span> ~isempty(fieldnames(electrodes));
+0069         mdl.electrode =     electrodes;
+0070     <span class="keyword">end</span>
+0071     mdl.solve=          <span class="string">'eidors_default'</span>;
+0072     mdl.jacobian=       <span class="string">'eidors_default'</span>;
+0073     mdl.system_mat=     <span class="string">'eidors_default'</span>;
+0074 
+0075     fwd_mdl= <a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>, mdl);
+0076 
+0077 <span class="comment">% Output cell array of indices into each material type</span>
+0078 <span class="comment">%   array order is sorted by length of material type</span>
+0079 <a name="_sub2" href="#_subfunctions" class="code">function mat_indices= mk_mat_indices( mat_ind);</a>
+0080     <span class="comment">% find length of mat_indices</span>
+0081     <span class="comment">% test example: mat_ind=[10 12 14 14 12 12 14 12];</span>
+0082     sort_mi= sort(mat_ind(:));
+0083     find_mi= find( diff([-1e8;sort_mi]) );
+0084     len_mi = diff([find_mi;length(sort_mi)+1]);
+0085     [jnk,idxs]= sort(-len_mi); <span class="comment">%reverse sort</span>
+0086     l_idxs= length(idxs);
+0087     mat_indices= cell(1, l_idxs);
+0088     <span class="keyword">for</span> i= 1:l_idxs;
+0089         mat_idx_i= sort_mi(find_mi(idxs(i)));
+0090         mat_indices{i}= find(mat_ind == mat_idx_i);
+0091     <span class="keyword">end</span>
+0092 
+0093 <span class="comment">% Assumes that electrodes are numbered starting at 1, with prefix provided</span>
+0094 <a name="_sub3" href="#_subfunctions" class="code">function electrodes = find_elec(phys_names,prefix,z_contact)</a>
+0095 electrodes = struct();
+0096 phys_elecs = find(arrayfun(@(x)strncmp(x.name,prefix,length(prefix)),phys_names));
+0097 <span class="keyword">for</span> i = 1:length(phys_elecs)
+0098     cur_elec = arrayfun(@(x)strcmp(sprintf(<span class="string">'%s%d'</span>,prefix,i),x.name),phys_names(phys_elecs));
+0099     electrodes(i).nodes = unique(phys_names(phys_elecs(cur_elec)).nodes(:));
+0100     electrodes(i).z_contact = z_contact;
+0101 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

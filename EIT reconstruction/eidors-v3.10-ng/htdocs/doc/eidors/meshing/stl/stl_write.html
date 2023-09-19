@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stl_write</title>
+  <meta name="keywords" content="stl_write">
+  <meta name="description" content="STL_WRITE Create a text STL file from a patch struct">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">stl</a> &gt; stl_write.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/stl&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>stl_write
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>STL_WRITE Create a text STL file from a patch struct</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function stl_write(fv, name) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">STL_WRITE Create a text STL file from a patch struct
+ stl_write(fv, name) where:
+  fv is face-vertex structure array (fv.faces, fv.vertices)
+  name is the file name (character string), if no extension give, 'stl'
+  assumed.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/tools/cross3.html" class="code" title="function c = cross3(a,b)">cross3</a>	CROSS3  3D cross parallel cross product</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="stl_read.html" class="code" title="function mdl = stl_read(fname)">stl_read</a>	STL_READ  Read in an stl file and output an EIDORS model struct</li><li><a href="../../../eidors/models/mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li><li><a href="../../../eidors/models/place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function M=cross3(r,F)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function stl_write(fv, name)</a>
+0002 <span class="comment">%STL_WRITE Create a text STL file from a patch struct</span>
+0003 <span class="comment">% stl_write(fv, name) where:</span>
+0004 <span class="comment">%  fv is face-vertex structure array (fv.faces, fv.vertices)</span>
+0005 <span class="comment">%  name is the file name (character string), if no extension give, 'stl'</span>
+0006 <span class="comment">%  assumed.</span>
+0007 
+0008 <span class="comment">% (C) 2006 Eric Carlson: Public Domain</span>
+0009 <span class="comment">% Adapted by Bartlomiej Grychtol from:</span>
+0010 <span class="comment">% http://www.mathworks.com/matlabcentral/newsreader/view_thread/126215</span>
+0011 <span class="comment">% $Id: stl_write.m 3227 2012-06-29 21:53:39Z aadler $</span>
+0012 
+0013 <span class="keyword">if</span> (strcmp(name((end-3):end), <span class="string">'.stl'</span>))
+0014      label = name(1:(end-4));
+0015 <span class="keyword">else</span>
+0016      label = name;
+0017      name = sprintf(<span class="string">'%s.stl'</span>, name);
+0018 <span class="keyword">end</span>
+0019 v1 = fv.vertices(fv.faces(:,2),:)-fv.vertices(fv.faces(:,1),:);
+0020 v2 = fv.vertices(fv.faces(:,3),:)-fv.vertices(fv.faces(:,2),:);
+0021 Norms = <a href="../../../eidors/tools/cross3.html" class="code" title="function c = cross3(a,b)">cross3</a>(v1,v2);
+0022 clear v1 v2
+0023 v1(:,1:3) = fv.vertices(fv.faces(:,1),1:3);
+0024 v2(:,1:3) = fv.vertices(fv.faces(:,2),1:3);
+0025 v3(:,1:3) = fv.vertices(fv.faces(:,3),1:3);
+0026 fid = fopen(name,<span class="string">'w'</span>);
+0027 fprintf(fid,<span class="string">'solid %s\n'</span>,label);
+0028 nf = length(fv.faces); <span class="comment">%k = (1:nf)';</span>
+0029 <span class="keyword">for</span> k = 1:nf
+0030     fprintf(fid,<span class="string">'facet normal %5.5f %5.5f %5.5f\n outer loop\n vertex %5.5f %5.5f %5.5f\n vertex %5.5f %5.5f %5.5f\n vertex %5.5f %5.5f %5.5f\nendloop\n endfacet\n'</span>, <span class="keyword">...</span>
+0031         Norms(k,1),Norms(k,2),Norms(k,3), v1(k,1), v1(k,2), v1(k,3),v2(k,1), v2(k,2), v2(k,3),v3(k,1), v3(k,2), v3(k,3) );
+0032 <span class="keyword">end</span>
+0033 fprintf(fid,<span class="string">'endsolid %s\n'</span>,label);
+0034 fclose(fid);
+0035 
+0036 <a name="_sub1" href="#_subfunctions" class="code">function M=cross3(r,F)</a>
+0037 <span class="comment">% function to calculate normalized cross product rxF/|rxF|</span>
+0038 <span class="comment">% handles (same-size) arrays (n by 3) for r and F</span>
+0039 <span class="comment">%</span>
+0040        M = [(r(:,2).*F(:,3) - r(:,3).*F(:,2)) <span class="keyword">...</span>
+0041             (r(:,3).*F(:,1) - r(:,1).*F(:,3)) <span class="keyword">...</span>
+0042             (r(:,1).*F(:,2) - r(:,2).*F(:,1))];
+0043        M_mag = sqrt(sum((M.*M)')');
+0044        M(:,1) = M(:,1)./M_mag;
+0045        M(:,2) = M(:,2)./M_mag;
+0046        M(:,3) = M(:,3)./M_mag;</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

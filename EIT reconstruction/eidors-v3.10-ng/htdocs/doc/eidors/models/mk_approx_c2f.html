@@ -1,0 +1,384 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_approx_c2f</title>
+  <meta name="keywords" content="mk_approx_c2f">
+  <meta name="description" content="MK_APPROX_C2F: create a mapping matrix from coarse to fine FEM">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_approx_c2f.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_approx_c2f
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_APPROX_C2F: create a mapping matrix from coarse to fine FEM</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl ); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> MK_APPROX_C2F: create a mapping matrix from coarse to fine FEM
+ [c2f,out]= mk_coarse_fine_mapping( f_mdl, c_mdl );
+  
+ Parameters:
+    c_mdl is coarse fwd_model (no holes, see warning below)
+    f_mdl is fine fwd_model
+
+ C2F_ij is the fraction if f_mdl element i which is
+   contained in c_mdl element j. This is used to map
+   from data on the reconstruction model (c_mdl) to
+   the forward model f_mdl as 
+      elem_data_fine = Mapping*elem_data_coase
+
+ OUT_i is the fraction of f_mdl element i which is not
+   contained in any c_mdl element.
+
+ OPTIONS:
+ if the geometry of the fine and coarse models are not
+  aligned, then they can be translated and mapped using
+    coarse_xyz = (M* (fine_xyz - T)')'
+  where
+    T= c_mdl.mk_coarse_fine_mapping.f2c_offset (1xN_dims)
+    M= c_mdl.mk_coarse_fine_mapping.f2c_project (N_dimsxN_dims)
+  by default T= [0,0,0] and M=eye(3)
+
+ if c_mdl is 2D and f_mdl is 3D, then parameter
+     c_mdl.mk_coarse_fine_mapping.z_depth
+     indicates the +/- z_depth which elements in 2D are
+     considered to be extruded in 3D (default inf)
+
+ NOTES:
+ if c_mdl and f_mdl do not cover the same area, then 
+    sum(c2f') will not be 1. If all coarse elements cover
+    at least partially the fine ones, then this 
+    can be corrected by:
+      c2f = c2f./(sum(c2f,2) * ones(1,size(c2f,2)));
+ if not all coarse elements cover fine ones, then this
+    approach cannot be used. This will be fixed in a 
+    future release
+
+ WARNING:
+ If c_mdl is not simply connected, the results are wrong!
+
+ See also <a href="mk_c2f_circ_mapping.html" class="code" title="function [mapping failed] = mk_c2f_circ_mapping( mdl, xyzr );">MK_C2F_CIRC_MAPPING</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>	INTERP_MESH: calculate interpolation points onto mdl elements</li><li><a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>	MK_APPROX_C2F: create a mapping matrix from coarse to fine FEM</li><li><a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>	MK_CIRC_TANK: make a cylindrical tank FEM geometry in 2D or 3D</li><li><a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>	MK_COARSE_FINE_MAPPING: create a mapping matrix from coarse to fine FEM</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>	MK_APPROX_C2F: create a mapping matrix from coarse to fine FEM</li><li><a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a>	MK_TET_C2F - calculate a coarse2fine mapping for two tet-based models.</li><li><a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint_2p5d_1st_order.html" class="code" title="function J= jacobian_adjoint_2p5d_1st_order( fwd_model, img)">jacobian_adjoint_2p5d_1st_order</a>	JACOBIAN_ADJOINT_2P5D: J= jacobian_adjoint_2p5d_1st_order( img )</li><li><a href="../../eidors/solvers/forward/jacobian_movement_2p5d_1st_order.html" class="code" title="function J = jacobian_movement_2p5d_1st_order( fwd_model, img)">jacobian_movement_2p5d_1st_order</a>	JACOBIAN_MOVEMENT_2P5D: J = jacobian_movement_2p5d_1st_order( img )</li><li><a href="../../eidors/solvers/inverse/inv_solve_core.html" class="code" title="function img= inv_solve_core( inv_model, data0, data1);">inv_solve_core</a>	INV_SOLVE_CORE Solver using a generic iterative algorithm</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [mapping, outside] = mapping_calc(f_mdl, c_mdl)</a></li><li><a href="#_sub2" class="code">function c_obj = cache_obj(c_mdl, f_mdl)</a></li><li><a href="#_sub3" class="code">function c_elems = all_contained_elems( fm, cm, z_depth)</a></li><li><a href="#_sub4" class="code">function tsn= search_fm_pts_in_cm(cm, fm_pts, z_depth);</a></li><li><a href="#_sub5" class="code">function c_elems = contained_elems_i( fm, cm, idx, z_depth)</a></li><li><a href="#_sub6" class="code">function xyz = interpxyz( xyzmin, xyzmax, n_interp)</a></li><li><a href="#_sub7" class="code">function f_mdl= offset_and_project( f_mdl, c_mdl)</a></li><li><a href="#_sub8" class="code">function [c_mdl f_mdl] = assign_defaults( c_mdl, f_mdl )</a></li><li><a href="#_sub9" class="code">function do_unit_test</a></li><li><a href="#_sub10" class="code">function load</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );</a>
+0002 <span class="comment">% MK_APPROX_C2F: create a mapping matrix from coarse to fine FEM</span>
+0003 <span class="comment">% [c2f,out]= mk_coarse_fine_mapping( f_mdl, c_mdl );</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Parameters:</span>
+0006 <span class="comment">%    c_mdl is coarse fwd_model (no holes, see warning below)</span>
+0007 <span class="comment">%    f_mdl is fine fwd_model</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% C2F_ij is the fraction if f_mdl element i which is</span>
+0010 <span class="comment">%   contained in c_mdl element j. This is used to map</span>
+0011 <span class="comment">%   from data on the reconstruction model (c_mdl) to</span>
+0012 <span class="comment">%   the forward model f_mdl as</span>
+0013 <span class="comment">%      elem_data_fine = Mapping*elem_data_coase</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% OUT_i is the fraction of f_mdl element i which is not</span>
+0016 <span class="comment">%   contained in any c_mdl element.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% OPTIONS:</span>
+0019 <span class="comment">% if the geometry of the fine and coarse models are not</span>
+0020 <span class="comment">%  aligned, then they can be translated and mapped using</span>
+0021 <span class="comment">%    coarse_xyz = (M* (fine_xyz - T)')'</span>
+0022 <span class="comment">%  where</span>
+0023 <span class="comment">%    T= c_mdl.mk_coarse_fine_mapping.f2c_offset (1xN_dims)</span>
+0024 <span class="comment">%    M= c_mdl.mk_coarse_fine_mapping.f2c_project (N_dimsxN_dims)</span>
+0025 <span class="comment">%  by default T= [0,0,0] and M=eye(3)</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% if c_mdl is 2D and f_mdl is 3D, then parameter</span>
+0028 <span class="comment">%     c_mdl.mk_coarse_fine_mapping.z_depth</span>
+0029 <span class="comment">%     indicates the +/- z_depth which elements in 2D are</span>
+0030 <span class="comment">%     considered to be extruded in 3D (default inf)</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% NOTES:</span>
+0033 <span class="comment">% if c_mdl and f_mdl do not cover the same area, then</span>
+0034 <span class="comment">%    sum(c2f') will not be 1. If all coarse elements cover</span>
+0035 <span class="comment">%    at least partially the fine ones, then this</span>
+0036 <span class="comment">%    can be corrected by:</span>
+0037 <span class="comment">%      c2f = c2f./(sum(c2f,2) * ones(1,size(c2f,2)));</span>
+0038 <span class="comment">% if not all coarse elements cover fine ones, then this</span>
+0039 <span class="comment">%    approach cannot be used. This will be fixed in a</span>
+0040 <span class="comment">%    future release</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">% WARNING:</span>
+0043 <span class="comment">% If c_mdl is not simply connected, the results are wrong!</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% See also MK_C2F_CIRC_MAPPING</span>
+0046 
+0047 <span class="comment">% (C) 2007-2012 Andy Adler. License: GPL version 2 or version 3</span>
+0048 <span class="comment">% $Id: mk_approx_c2f.m 5880 2018-12-21 23:19:23Z aadler $</span>
+0049 
+0050 <span class="keyword">if</span> ischar(f_mdl) &amp;&amp; strcmp(f_mdl, <span class="string">'UNIT_TEST'</span>); <a href="#_sub9" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0051 
+0052 <span class="keyword">if</span> ischar(f_mdl) &amp;&amp; strcmp(f_mdl, <span class="string">'LOAD'</span>); <a href="#_sub10" class="code" title="subfunction load">load</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0053 
+0054 [c_mdl, f_mdl] = <a href="#_sub8" class="code" title="subfunction [c_mdl f_mdl] = assign_defaults( c_mdl, f_mdl )">assign_defaults</a>( c_mdl, f_mdl );
+0055 
+0056 copt.cache_obj = <a href="#_sub2" class="code" title="subfunction c_obj = cache_obj(c_mdl, f_mdl)">cache_obj</a>(c_mdl, f_mdl);
+0057 copt.fstr = <span class="string">'mk_coarse_fine_mapping'</span>;
+0058 
+0059 
+0060 [mapping, outside] = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction [mapping, outside] = mapping_calc(f_mdl, c_mdl)">mapping_calc</a>,{f_mdl,c_mdl},copt);
+0061 
+0062 
+0063 
+0064 <a name="_sub1" href="#_subfunctions" class="code">function [mapping, outside] = mapping_calc(f_mdl, c_mdl)</a>
+0065     f_mdl= <a href="#_sub7" class="code" title="subfunction f_mdl= offset_and_project( f_mdl, c_mdl)">offset_and_project</a>( f_mdl, c_mdl);
+0066     z_depth = c_mdl.mk_coarse_fine_mapping.z_depth;
+0067 
+0068     f_elems = <a href="#_sub3" class="code" title="subfunction c_elems = all_contained_elems( fm, cm, z_depth)">all_contained_elems</a>( f_mdl, c_mdl, z_depth);
+0069     mapping = <a href="#_sub5" class="code" title="subfunction c_elems = contained_elems_i( fm, cm, idx, z_depth)">contained_elems_i</a>( f_mdl, c_mdl, f_elems, z_depth);
+0070 
+0071     <span class="keyword">if</span> isfield(c_mdl,<span class="string">'coarse2fine'</span>)
+0072        mapping = mapping*c_mdl.coarse2fine;
+0073     <span class="keyword">end</span>
+0074 
+0075 
+0076 <span class="keyword">if</span> nargout&gt;1;
+0077   outside = 1 - sum(mapping,2);
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="comment">% Mapping depends only on nodes and elems - remove the other stuff</span>
+0081 <a name="_sub2" href="#_subfunctions" class="code">function c_obj = cache_obj(c_mdl, f_mdl)</a>
+0082    c_obj = {c_mdl.nodes, c_mdl.elems, c_mdl.mk_coarse_fine_mapping, <span class="keyword">...</span>
+0083             f_mdl.nodes, f_mdl.elems, f_mdl.interp_mesh};
+0084 
+0085 
+0086 <span class="comment">% find all elems of ff_mdl completely contained in cc_mdl</span>
+0087 <a name="_sub3" href="#_subfunctions" class="code">function c_elems = all_contained_elems( fm, cm, z_depth)</a>
+0088     [nf,ef]= size(fm.elems);
+0089     [nc,ec]= size(cm.elems);
+0090     fm_pts = zeros(nf*ef,3);
+0091     <span class="comment">% shrink pts slightly (s_fac) so they're not on the boundary</span>
+0092     <span class="comment">% by shrinking, we avoid cases where an element is</span>
+0093     <span class="comment">% only slighly intersecting another. This is beyond the</span>
+0094     <span class="comment">% resolution of the next step (interpolation) anyway</span>
+0095     s_fac= .9; <span class="comment">% .9999;</span>
+0096     <span class="keyword">for</span> dim= 1:ef-1 <span class="comment">% ef-1 is dimensions in fm</span>
+0097        <span class="comment">% fm_pts is local_nodes x elems x xyz</span>
+0098        fm_pt= reshape(fm.nodes(fm.elems,dim),nf,ef);
+0099        fm_ctr= mean(fm_pt,2)*ones(1,ef);
+0100        fm_pt = s_fac*(fm_pt-fm_ctr) + fm_ctr;
+0101        fm_pts(:,dim) = fm_pt(:);
+0102     <span class="keyword">end</span>
+0103 
+0104     tsn= <a href="#_sub4" class="code" title="subfunction tsn= search_fm_pts_in_cm(cm, fm_pts, z_depth);">search_fm_pts_in_cm</a>(cm, fm_pts, z_depth);
+0105     tsn= reshape( tsn, [], ef);
+0106     <span class="comment">% if all points are outside (NaN) then c_elems = -1</span>
+0107     <span class="comment">% if all points are in one elem   then c_elems = elem #</span>
+0108     <span class="comment">% if all points are in diff elems then c_elems = 0</span>
+0109     c_elems= all(diff(tsn,1,2)==0,2) .* tsn(:,1);
+0110     c_elems(all(tsn==-1,2))= -1; <span class="comment">% all points outside</span>
+0111 
+0112 
+0113 <span class="comment">% tsn = vector of length size(fm_pts,1)</span>
+0114 <span class="comment">% tsn(i) = elem in cm which contains point</span>
+0115 <span class="comment">% tsn(i) = -1 if point is outside cm (and z_depth, if appropriate)</span>
+0116 <a name="_sub4" href="#_subfunctions" class="code">function tsn= search_fm_pts_in_cm(cm, fm_pts, z_depth);</a>
+0117     dc= size(cm.elems,2)-1;  <span class="comment">%coarse dim</span>
+0118     df= size(fm_pts,2); <span class="comment">%fine dim</span>
+0119 
+0120     tsn= -ones(size(fm_pts,1),1);
+0121     not_oor= (tsn==-1); <span class="comment">% logical 1</span>
+0122 
+0123     <span class="keyword">if</span> dc==2  <span class="comment">%corse model is 2D</span>
+0124 
+0125        <span class="keyword">if</span> df==3
+0126        <span class="comment">% look for f_mdl z not out of range</span>
+0127           not_oor= not_oor &amp;  any( abs(fm_pts(:,3) ) &lt;= z_depth , 2);
+0128        <span class="keyword">end</span>
+0129        dims=1:2;
+0130 
+0131     <span class="keyword">elseif</span> dc==3 <span class="comment">%coarse model is 3D</span>
+0132 
+0133        dims=1:3; 
+0134 
+0135     <span class="keyword">else</span>
+0136        error(<span class="string">'coarse model must be 2 or 3D'</span>);
+0137     <span class="keyword">end</span>
+0138 
+0139     tsn(not_oor)= tsearchn(cm.nodes(:,dims), cm.elems, fm_pts(not_oor,dims));
+0140     tsn(isnan(tsn))= -1;
+0141 
+0142 <span class="comment">% find fraction of elem contained in cm</span>
+0143 <span class="comment">% idx is the index into which the elem is contained</span>
+0144 <span class="comment">% if idx &gt;= 1, the element is completely with in that coarse elem</span>
+0145 <span class="comment">% if idx == 0, the element is crosses several coarse elems</span>
+0146 <span class="comment">% if idx ==-1, the element is outside the coarse model</span>
+0147 <a name="_sub5" href="#_subfunctions" class="code">function c_elems = contained_elems_i( fm, cm, idx, z_depth)</a>
+0148    [nc,dc]= size(cm.elems);
+0149    [nf,df]= size(fm.elems);
+0150 
+0151    fidx= find(idx==0);
+0152    l_fidx= length(fidx);
+0153 
+0154    c_e_i= []; c_e_j=[]; c_e_v=[];
+0155 
+0156    <span class="comment">% lower density interpolation in higher dimentions, since</span>
+0157    <span class="comment">% the added dimensions will give extra interpolation points.</span>
+0158    n_interp = 7-df;
+0159    interp_mdl.type= <span class="string">'fwd_model'</span>;
+0160    interp_mdl.nodes= fm.nodes;
+0161    interp_mdl.elems= fm.elems(fidx,:);
+0162    interp_mdl.interp_mesh.n_interp = fm.interp_mesh.n_interp;
+0163  
+0164 
+0165    fm_pts = <a href="interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>( interp_mdl, n_interp);
+0166    l_interp = size(fm_pts,3);
+0167 
+0168    fm_pts = permute( fm_pts, [3,1,2]);
+0169    fm_pts = reshape(fm_pts, [], df-1);
+0170 
+0171    tsn= <a href="#_sub4" class="code" title="subfunction tsn= search_fm_pts_in_cm(cm, fm_pts, z_depth);">search_fm_pts_in_cm</a>(cm, fm_pts, z_depth);
+0172 
+0173    tsn_idx= ones(l_interp,1)*fidx(:)';
+0174    tsn_idx= tsn_idx(:);
+0175    <span class="comment">% find and isolate outside elements</span>
+0176    outside_idx= tsn==-1;
+0177    tsn(outside_idx) = [];
+0178    tsn_idx(outside_idx) = [];
+0179    
+0180    in_idx= find(idx&lt;=0);
+0181    ridx= 1:nf; ridx(in_idx)=[];
+0182    idx(in_idx)=[];
+0183 
+0184    <span class="comment">% first term is contribution from f_elems in one c_elem</span>
+0185    <span class="comment">% next term is contribution from f_elems in many c_elems, weighted</span>
+0186    c_elems = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(ridx,idx,1,nf,nc) +  <span class="keyword">...</span>
+0187              <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(tsn_idx,tsn,1,nf,nc)/l_interp;
+0188       
+0189 <span class="comment">% Do 3D interpolation of region xyzmin= [x,y,z] to xyzmax</span>
+0190 <span class="comment">%  with n_interp points in the minimum direction</span>
+0191 <a name="_sub6" href="#_subfunctions" class="code">function xyz = interpxyz( xyzmin, xyzmax, n_interp)</a>
+0192     xyzdelta= xyzmax - xyzmin;
+0193     xyz_interp = 1 + floor(n_interp * xyzdelta / max(xyzdelta) );
+0194     xspace = linspace(xyzmin(1), xyzmax(1), xyz_interp(1) );
+0195     yspace = linspace(xyzmin(2), xyzmax(2), xyz_interp(2) );
+0196     zspace = linspace(xyzmin(3), xyzmax(3), xyz_interp(3) );
+0197     [xx3,yy3,zz3] = ndgrid( xspace, yspace, zspace );
+0198     xyz= [xx3(:), yy3(:), zz3(:)];
+0199 
+0200 <span class="comment">% Offset and project f_mdl as required</span>
+0201 <a name="_sub7" href="#_subfunctions" class="code">function f_mdl= offset_and_project( f_mdl, c_mdl)</a>
+0202     [fn,fd]= size(f_mdl.nodes);
+0203     T= c_mdl.mk_coarse_fine_mapping.f2c_offset;
+0204     M= c_mdl.mk_coarse_fine_mapping.f2c_project;
+0205     
+0206     f_mdl.nodes= (M*( f_mdl.nodes - ones(fn,1)*T )')';
+0207 
+0208 <a name="_sub8" href="#_subfunctions" class="code">function [c_mdl f_mdl] = assign_defaults( c_mdl, f_mdl )</a>
+0209     [fn,fd]= size(f_mdl.nodes);
+0210     <span class="keyword">try</span>    
+0211         c_mdl.mk_coarse_fine_mapping.f2c_offset; <span class="comment">% test exist</span>
+0212     <span class="keyword">catch</span>
+0213         c_mdl.mk_coarse_fine_mapping.f2c_offset= zeros(1,fd);
+0214     <span class="keyword">end</span>
+0215     <span class="keyword">try</span>    
+0216         c_mdl.mk_coarse_fine_mapping.f2c_project;
+0217     <span class="keyword">catch</span>
+0218         c_mdl.mk_coarse_fine_mapping.f2c_project= speye(fd);
+0219     <span class="keyword">end</span>
+0220     <span class="keyword">try</span>    
+0221         c_mdl.mk_coarse_fine_mapping.z_depth;
+0222     <span class="keyword">catch</span>
+0223         c_mdl.mk_coarse_fine_mapping.z_depth= inf;
+0224     <span class="keyword">end</span>
+0225     <span class="keyword">try</span>    
+0226         f_mdl.interp_mesh.n_interp;
+0227     <span class="comment">% lower density interpolation in higher dimentions, since</span>
+0228     <span class="comment">% the added dimensions will give extra interpolation points.</span>
+0229     <span class="keyword">catch</span>
+0230         f_mdl.interp_mesh.n_interp = 7 - size(f_mdl.elems,2);
+0231     <span class="keyword">end</span>
+0232      
+0233     
+0234 <a name="_sub9" href="#_subfunctions" class="code">function do_unit_test</a>
+0235     fmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(2,[],2); fmdl.nodes = fmdl.nodes*2;
+0236     cmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(2,[],2); cmdl.nodes = cmdl.nodes*2;
+0237     c2f = <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>( fmdl, cmdl);
+0238     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t1'</span>,c2f,eye(16),1e-15)
+0239 
+0240     fmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(3,[],2);
+0241     fmdl.nodes = fmdl.nodes*3;
+0242     c2f = <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>( fmdl, cmdl);
+0243     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t2 analytic'</span>,c2f,[eye(16);zeros(20,16)],1e-15)
+0244     c2f = <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>( fmdl, cmdl);
+0245     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t2 approx'</span>,c2f,[eye(16);zeros(20,16)],1e-15)
+0246 
+0247     fmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(2,[],2); fmdl.nodes = fmdl.nodes*2;
+0248     cmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(1,[],2); cmdl.nodes = cmdl.nodes*1;
+0249     c2f = <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>( fmdl, cmdl);
+0250     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t3 analytic'</span>,c2f,[eye(4);zeros(12,4)],1e-15)
+0251     c2f = <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>( fmdl, cmdl);
+0252     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t3 approx'</span>,c2f,[eye(4);zeros(12,4)],1e-15)
+0253 
+0254     fac = 0.8;
+0255     cmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(1,[],2); cmdl.nodes = cmdl.nodes*fac;
+0256     c2f = <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>( fmdl, cmdl);
+0257     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t4 analytic'</span>,c2f,[eye(4)*fac^2;zeros(12,4)],1e-15)
+0258     c2f = <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>( fmdl, cmdl);
+0259     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t4 approx'</span>,c2f,[eye(4)*2/3;zeros(12,4)],1e-15)
+0260 
+0261     fac=1.2;
+0262     cmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(1,[],2); cmdl.nodes = cmdl.nodes*fac;
+0263     c2f = <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>( fmdl, cmdl);
+0264     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t5'</span>,c2f,[eye(4);eye(4)/3;kron(eye(4),[1;1])/15],1e-15);
+0265 
+0266     fmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(10,[],2);
+0267     cmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(8,[],2);
+0268     c2f = <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>( fmdl, cmdl);
+0269     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t6'</span>,sum(c2f'),ones(1,size(c2f,1)),1e-14);
+0270    
+0271     cmdl.nodes = cmdl.nodes*0.95;
+0272 <span class="comment">% show_fem(fmdl); hold on ; show_fem(cmdl); hold off</span>
+0273     c2f = <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>( fmdl, cmdl);
+0274 
+0275 <a name="_sub10" href="#_subfunctions" class="code">function load</a>
+0276 
+0277 <span class="comment">% Create forward, fine tank model</span>
+0278 electrodes_per_plane = 16;
+0279 number_of_planes = 2;
+0280 tank_radius = 0.2;
+0281 tank_height = 0.5;
+0282 fine_mdl = <a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>([tank_height,tank_radius],<span class="keyword">...</span>
+0283     [electrodes_per_plane,0.15,0.35],[0.01]);
+0284  
+0285 <span class="comment">% Create coarse model for inverse problem</span>
+0286 coarse_mdl_maxh = 0.07; <span class="comment">% maximum element size</span>
+0287 coarse_mdl = <a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>([tank_height,tank_radius,coarse_mdl_maxh],[0],[]);
+0288 
+0289 disp(<span class="string">'Calculating coarse2fine mapping ...'</span>);
+0290 inv3d.fwd_model.coarse2fine = <span class="keyword">...</span>
+0291        <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">mk_coarse_fine_mapping</a>( fine_mdl, coarse_mdl);
+0292 disp(<span class="string">'   ... done'</span>);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stim_pattern_geophys</title>
+  <meta name="keywords" content="stim_pattern_geophys">
+  <meta name="description" content="STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; stim_pattern_geophys.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stim_pattern_geophys
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns
+
+ stim= stim_pattern_geophys( n_elec, type, options_list )
+  n_elec = Number of electrodes (in single line)
+  type   = name of stimulation pattern (string)
+  options_list = options for the pattern
+
+  options = {'current', 0.1}  % 0.1 Amps current (default 1)
+  options = {'gain', 2.0}     % 2.0 gain         (default 1)
+  options = {'spacings',[1,2,3,4]} % list of spacings 'a'
+  options = {'multiples',[1,2,3,4]} % list of multiples 'n'
+  options = {'reciprocal_meas',1} % do reciprocal (default 0);
+  options = {'circumferential_meas',1} % do a circumferential protocol (default 0 = in line protocol);
+
+ Supported stimulation pattern types are:
+  'Wenner'       - a Wenner array
+   [0,3,1,2]*a + 1; % as [s+ s- m+ m-] --&gt;  s+  m+ m-  s-
+   same as Schlumberger with n=1
+ 'Schlumberger' - a Schlumberger array
+   [0,(2*n+1)*a,n*a,(n+1)*a]+1;
+ 'DipoleDipole' - a dipole-dipole array
+   [0,a,a+n*a,2*a+n*a]+1; % --&gt;  s+ s-  m+     m-</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>	STIM_MEAS_LIST: mk stimulation pattern from list of electrodes</li><li><a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>	STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/show_pseudosection.html" class="code" title="function fwd_model= show_pseudosection( fwd_model, data, orientation)">show_pseudosection</a>	SHOW_PSEUDOSECTION: show a pseudo-section image of data</li><li><a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>	STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns</li><li><a href="../../eidors/solvers/forward/fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>	FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</li><li><a href="../../eidors/solvers/forward/fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>	FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)</li><li><a href="../../eidors/solvers/forward/system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>	SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix</li><li><a href="../../eidors/solvers/inverse/inv_solve_abs_annealingMetropolis_params.html" class="code" title="function [img]= inv_solve_abs_annealingMetropolis_params(inv_model, data)">inv_solve_abs_annealingMetropolis_params</a>	INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method.</li><li><a href="../../eidors/solvers/inverse/inv_solve_abs_annealingSimplex_params.html" class="code" title="function [img]= inv_solve_abs_annealingSimplex_params(inv_model, data)">inv_solve_abs_annealingSimplex_params</a>	INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function pp= parse_options(opts)</a></li><li><a href="#_sub2" class="code">function stim = stim_pattern_wenner(n_elec, options)</a></li><li><a href="#_sub3" class="code">function stim = stim_pattern_schlumberger(n_elec, options)</a></li><li><a href="#_sub4" class="code">function stim = stim_pattern_dipoledipole(n_elec, options)</a></li><li><a href="#_sub5" class="code">function do_unit_test</a></li><li><a href="#_sub6" class="code">function unit_test_wenner</a></li><li><a href="#_sub7" class="code">function unit_test_schlumberger</a></li><li><a href="#_sub8" class="code">function unit_test_dipoledipole</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )</a>
+0002 <span class="comment">% STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% stim= stim_pattern_geophys( n_elec, type, options_list )</span>
+0005 <span class="comment">%  n_elec = Number of electrodes (in single line)</span>
+0006 <span class="comment">%  type   = name of stimulation pattern (string)</span>
+0007 <span class="comment">%  options_list = options for the pattern</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%  options = {'current', 0.1}  % 0.1 Amps current (default 1)</span>
+0010 <span class="comment">%  options = {'gain', 2.0}     % 2.0 gain         (default 1)</span>
+0011 <span class="comment">%  options = {'spacings',[1,2,3,4]} % list of spacings 'a'</span>
+0012 <span class="comment">%  options = {'multiples',[1,2,3,4]} % list of multiples 'n'</span>
+0013 <span class="comment">%  options = {'reciprocal_meas',1} % do reciprocal (default 0);</span>
+0014 <span class="comment">%  options = {'circumferential_meas',1} % do a circumferential protocol (default 0 = in line protocol);</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Supported stimulation pattern types are:</span>
+0017 <span class="comment">%  'Wenner'       - a Wenner array</span>
+0018 <span class="comment">%   [0,3,1,2]*a + 1; % as [s+ s- m+ m-] --&gt;  s+  m+ m-  s-</span>
+0019 <span class="comment">%   same as Schlumberger with n=1</span>
+0020 <span class="comment">% 'Schlumberger' - a Schlumberger array</span>
+0021 <span class="comment">%   [0,(2*n+1)*a,n*a,(n+1)*a]+1;</span>
+0022 <span class="comment">% 'DipoleDipole' - a dipole-dipole array</span>
+0023 <span class="comment">%   [0,a,a+n*a,2*a+n*a]+1; % --&gt;  s+ s-  m+     m-</span>
+0024 
+0025 <span class="comment">% (C) 2011 Andy Adler. License: GPL version 2 or version 3</span>
+0026 <span class="comment">% $Id: stim_pattern_geophys.m 5225 2016-05-08 06:35:38Z alistair_boyle $</span>
+0027 
+0028 <span class="keyword">if</span> ischar(n_elec) &amp;&amp; strcmp(n_elec,<span class="string">'UNIT_TEST'</span>); <a href="#_sub5" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0029 <span class="keyword">if</span> nargin&lt;3; options = {}; <span class="keyword">end</span>
+0030 options = <a href="#_sub1" class="code" title="subfunction pp= parse_options(opts)">parse_options</a>(options);
+0031 
+0032 <span class="keyword">switch</span>(upper(pat_type))
+0033     <span class="keyword">case</span> <span class="string">'WENNER'</span>;          S = <a href="#_sub2" class="code" title="subfunction stim = stim_pattern_wenner(n_elec, options)">stim_pattern_wenner</a>(n_elec, options);
+0034     <span class="keyword">case</span> <span class="string">'SCHLUMBERGER'</span>;    S = <a href="#_sub3" class="code" title="subfunction stim = stim_pattern_schlumberger(n_elec, options)">stim_pattern_schlumberger</a>(n_elec, options);
+0035     <span class="keyword">case</span> <span class="string">'DIPOLEDIPOLE'</span>;    S = <a href="#_sub4" class="code" title="subfunction stim = stim_pattern_dipoledipole(n_elec, options)">stim_pattern_dipoledipole</a>(n_elec, options);
+0036   <span class="keyword">otherwise</span>;
+0037     error(<span class="string">'No pattern of type &quot;%s&quot; available'</span>, upper(pat_type));
+0038 <span class="keyword">end</span>
+0039 stim = <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>( S, n_elec, options.current, options.gain); 
+0040 
+0041 <a name="_sub1" href="#_subfunctions" class="code">function pp= parse_options(opts)</a>
+0042 <span class="comment">% Set defaults here</span>
+0043 <span class="comment">%   pp.spacings = [1,2,4,8,16,32,64,128,256,1024,2048];</span>
+0044   pp.spacings= 1:256;
+0045   pp.multiples= ones(1,256);
+0046   pp.reciprocal_meas = 0;
+0047   pp.circumferential_meas = 0;
+0048   pp.current = 1;
+0049   pp.gain = 1;
+0050 
+0051   <span class="keyword">for</span> i= 1:2:length(opts)-1;
+0052     pp.( lower( opts{i} ) ) = opts{i+1};
+0053   <span class="keyword">end</span>
+0054 
+0055 <a name="_sub2" href="#_subfunctions" class="code">function stim = stim_pattern_wenner(n_elec, options)</a>
+0056   stim=[];
+0057   <span class="keyword">for</span> a= options.spacings;
+0058     block =  [0,3,1,2]*a + 1;
+0059     <span class="keyword">if</span> options.circumferential_meas 
+0060         <span class="keyword">if</span> max(block(1))&gt;n_elec
+0061            <span class="keyword">break</span>;
+0062         <span class="keyword">end</span>
+0063         n_meas= n_elec-1;
+0064     <span class="keyword">else</span>
+0065         <span class="keyword">if</span> max(block)&gt;n_elec
+0066            <span class="keyword">break</span>;
+0067         <span class="keyword">end</span>
+0068         n_meas= n_elec-max(block);
+0069     <span class="keyword">end</span> 
+0070     <span class="keyword">for</span> i=(0:n_meas)
+0071        stim = [stim; i+block];
+0072        <span class="keyword">if</span> options.reciprocal_meas
+0073           stim = [stim; i+block([3,4,1,2])];
+0074        <span class="keyword">end</span>
+0075     <span class="keyword">end</span>
+0076     <span class="keyword">if</span> options.circumferential_meas 
+0077        stim(stim&gt;n_elec)= stim(stim&gt;n_elec)-n_elec;
+0078        stim= reshape(stim,[],4);
+0079     <span class="keyword">end</span>
+0080 
+0081   <span class="keyword">end</span>
+0082 
+0083 <a name="_sub3" href="#_subfunctions" class="code">function stim = stim_pattern_schlumberger(n_elec, options)</a>
+0084   stim=[];
+0085   a= options.spacings;
+0086   n= options.multiples;
+0087   <span class="keyword">if</span> length(a)~=length(n)
+0088    error(<span class="string">'spacings and multiples must be vector with a same size'</span>);
+0089   <span class="keyword">end</span>
+0090   <span class="keyword">for</span> k= 1:length(a);
+0091       block =  [0,round((2*n(k)+1)*a(k)),round(n(k)*a(k)),round((n(k)+1)*a(k))]+1;
+0092     <span class="keyword">if</span> options.circumferential_meas 
+0093         <span class="keyword">if</span> max(block(1))&gt;n_elec
+0094            <span class="keyword">break</span>;
+0095         <span class="keyword">end</span>
+0096         n_meas= n_elec-1;
+0097     <span class="keyword">else</span>
+0098         <span class="keyword">if</span> max(block)&gt;n_elec
+0099            <span class="keyword">break</span>;
+0100         <span class="keyword">end</span>
+0101         n_meas= n_elec-max(block);
+0102     <span class="keyword">end</span> 
+0103     <span class="keyword">for</span> i=(0:n_meas)
+0104        stim = [stim; i+block];
+0105        <span class="keyword">if</span> options.reciprocal_meas
+0106           stim = [stim; i+block([3,4,1,2])];
+0107        <span class="keyword">end</span>
+0108     <span class="keyword">end</span>
+0109     <span class="keyword">if</span> options.circumferential_meas 
+0110        stim(stim&gt;n_elec)= stim(stim&gt;n_elec)-n_elec;
+0111        stim= reshape(stim,[],4);
+0112     <span class="keyword">end</span>
+0113   <span class="keyword">end</span>  
+0114   
+0115   
+0116 <a name="_sub4" href="#_subfunctions" class="code">function stim = stim_pattern_dipoledipole(n_elec, options)</a>
+0117   stim=[];
+0118   a= options.spacings;
+0119   n= options.multiples;
+0120   <span class="keyword">if</span> length(a)~=length(n)
+0121    error(<span class="string">'spacings and multiples must be vector with a same size'</span>);
+0122   <span class="keyword">end</span>
+0123   <span class="keyword">for</span> k= 1:length(a);
+0124       block =  [0,a(k),a(k)+n(k)*a(k),2*a(k)+n(k)*a(k)]+1;
+0125     <span class="keyword">if</span> options.circumferential_meas 
+0126         <span class="keyword">if</span> max(block(1))&gt;n_elec
+0127            <span class="keyword">break</span>;
+0128         <span class="keyword">end</span>
+0129         n_meas= n_elec-1;
+0130     <span class="keyword">else</span>
+0131         <span class="keyword">if</span> max(block)&gt;n_elec
+0132            <span class="keyword">break</span>;
+0133         <span class="keyword">end</span>
+0134         n_meas= n_elec-max(block);
+0135     <span class="keyword">end</span> 
+0136     <span class="keyword">for</span> i=(0:n_meas)
+0137        stim = [stim; i+block];
+0138        <span class="keyword">if</span> options.reciprocal_meas
+0139           stim = [stim; i+block([3,4,1,2])];
+0140        <span class="keyword">end</span>
+0141     <span class="keyword">end</span>
+0142     <span class="keyword">if</span> options.circumferential_meas
+0143        <span class="keyword">while</span> any(any(stim&gt;n_elec))
+0144           stim(stim&gt;n_elec)= stim(stim&gt;n_elec)-n_elec;
+0145        <span class="keyword">end</span>
+0146        stim= reshape(stim,[],4);
+0147     <span class="keyword">end</span>
+0148   <span class="keyword">end</span>  
+0149   
+0150 <a name="_sub5" href="#_subfunctions" class="code">function do_unit_test</a>
+0151   <a href="#_sub6" class="code" title="subfunction unit_test_wenner">unit_test_wenner</a>;
+0152   <a href="#_sub7" class="code" title="subfunction unit_test_schlumberger">unit_test_schlumberger</a>;
+0153   <a href="#_sub8" class="code" title="subfunction unit_test_dipoledipole">unit_test_dipoledipole</a>;
+0154 
+0155 <a name="_sub6" href="#_subfunctions" class="code">function unit_test_wenner</a>
+0156   stim= <a href="#_sub2" class="code" title="subfunction stim = stim_pattern_wenner(n_elec, options)">stim_pattern_wenner</a>( 13, <a href="#_sub1" class="code" title="subfunction pp= parse_options(opts)">parse_options</a>({}) ); 
+0157   test1= [1,4,2,3; 2,5,3,4;
+0158 3,6,4,5; 4,7,5,6; 5,8,6,7; 6,9,7,8; 7,10,8,9; 8,11,9,10;
+0159 9,12,10,11; 10,13,11,12; 1,7,3,5; 2,8,4,6; 3,9,5,7;
+0160 4,10,6,8; 5,11,7,9; 6,12,8,10; 7,13,9,11; 1,10,4,7; 2 11 5 8; 3 12 6 9;
+0161 4 13 7 10; 1,13,5,9];
+0162   <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'WENNER #1'</span>, stim, test1);
+0163   stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 13,<span class="string">'wenner'</span>, {});
+0164   <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'WENNER #2'</span>, stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>(test1));
+0165 
+0166 
+0167   stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'wenner'</span>, {<span class="string">'reciprocal_meas'</span>,0});
+0168   <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'WENNER #3a'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,4,2,3;2,5,3,4]));
+0169   stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'wenner'</span>, {<span class="string">'reciprocal_meas'</span>,1});
+0170   <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'WENNER #3b'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,4,2,3;2,3,1,4;2,5,3,4;3,4,2,5]));
+0171 
+0172   stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'wenner'</span>, {<span class="string">'current'</span>,0.1});
+0173   <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'WENNER #4a'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,4,2,3;2,5,3,4],5,0.1));
+0174   stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'wenner'</span>, {<span class="string">'gain'</span>,0.1});
+0175   <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'WENNER #4b'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,4,2,3;2,5,3,4],5,1,0.1));
+0176 
+0177   stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'wenner'</span>, {<span class="string">'spacings'</span>,[1,2,3]});
+0178   <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'WENNER #5a'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,4,2,3;2,5,3,4]));
+0179   stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 7,<span class="string">'wenner'</span>, {<span class="string">'spacings'</span>,[2,1,3]});
+0180   <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'WENNER #5b'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>(<span class="keyword">...</span>
+0181        [1,7,3,5; 1,4,2,3; 2,5,3,4; 3,6,4,5; 4,7,5,6]));
+0182   stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 8,<span class="string">'wenner'</span>, {<span class="string">'spacings'</span>,[1],<span class="string">'circumferential_meas'</span>,1});
+0183   <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'WENNER #5c'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>(<span class="keyword">...</span>
+0184        [1,4,2,3; 2,5,3,4; 3,6,4,5; 4,7,5,6;5,8,6,7;6,1,7,8;7,2,8,1;8,3,1,2]));
+0185   stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 8,<span class="string">'wenner'</span>, {<span class="string">'spacings'</span>,[1,2],<span class="string">'circumferential_meas'</span>,1});
+0186   <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'WENNER #5d'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>(<span class="keyword">...</span>
+0187        [1,4,2,3; 2,5,3,4; 3,6,4,5; 4,7,5,6;5,8,6,7;6,1,7,8;7,2,8,1;8,3,1,2;1,7,3,5;2,8,4,6;3,1,5,7;4,2,6,8;<span class="keyword">...</span>
+0188        5,3,7,1;6,4,8,2;7,5,1,3;8,6,2,4]));
+0189 
+0190 
+0191 <a name="_sub7" href="#_subfunctions" class="code">function unit_test_schlumberger</a>
+0192     stim= <a href="#_sub3" class="code" title="subfunction stim = stim_pattern_schlumberger(n_elec, options)">stim_pattern_schlumberger</a>( 13, <a href="#_sub1" class="code" title="subfunction pp= parse_options(opts)">parse_options</a>({}) );
+0193     test1= [1,4,2,3; 2,5,3,4;
+0194         3,6,4,5; 4,7,5,6; 5,8,6,7; 6,9,7,8; 7,10,8,9; 8,11,9,10;
+0195         9,12,10,11; 10,13,11,12; 1,7,3,5; 2,8,4,6; 3,9,5,7;
+0196         4,10,6,8; 5,11,7,9; 6,12,8,10; 7,13,9,11; 1,10,4,7; 2 11 5 8; 3 12 6 9;
+0197         4 13 7 10; 1,13,5,9];
+0198     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'SCHLUMBERGER #1'</span>, stim, test1);
+0199     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 13,<span class="string">'schlumberger'</span>, {});
+0200     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'SCHLUMBERGER #2'</span>, stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>(test1));
+0201 
+0202 
+0203     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'schlumberger'</span>, {<span class="string">'reciprocal_meas'</span>,0});
+0204     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'SCHLUMBERGER #3a'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,4,2,3;2,5,3,4]));
+0205     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'schlumberger'</span>, {<span class="string">'reciprocal_meas'</span>,1});
+0206     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'SCHLUMBERGER #3b'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,4,2,3;2,3,1,4;2,5,3,4;3,4,2,5]));
+0207 
+0208     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'schlumberger'</span>, {<span class="string">'current'</span>,0.1});
+0209     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'SCHLUMBERGER #4a'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,4,2,3;2,5,3,4],5,0.1));
+0210     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'schlumberger'</span>, {<span class="string">'gain'</span>,0.1});
+0211     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'SCHLUMBERGER #4b'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,4,2,3;2,5,3,4],5,1,0.1));
+0212 
+0213     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 6,<span class="string">'schlumberger'</span>, {<span class="string">'spacings'</span>,[1,1],<span class="string">'multiples'</span>,[1,2]});
+0214     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'SCHLUMBERGER #5a'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,4,2,3;2,5,3,4;3,6,4,5;1,6,3,4]));
+0215     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 11,<span class="string">'schlumberger'</span>, {<span class="string">'spacings'</span>,[1,2],<span class="string">'multiples'</span>,[3,2]});
+0216     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'SCHLUMBERGER #5b'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>(<span class="keyword">...</span>
+0217         [1,8,4,5;2,9,5,6;3,10,6,7;4,11,7,8;1,11,5,7]));
+0218    
+0219 <span class="comment">% options.spacing= [1 1 1 2 3 4 6 8 8 11 12 14 17];</span>
+0220 <span class="comment">% options.multiples= [1 2 3 2 5/3 6/4 7/6 1 10/8 1 13/12 15/14 1];</span>
+0221 
+0222 <a name="_sub8" href="#_subfunctions" class="code">function unit_test_dipoledipole</a>
+0223     stim= <a href="#_sub4" class="code" title="subfunction stim = stim_pattern_dipoledipole(n_elec, options)">stim_pattern_dipoledipole</a>( 13, <a href="#_sub1" class="code" title="subfunction pp= parse_options(opts)">parse_options</a>({}) );
+0224     test1= [1,2,3,4; 2,3,4,5;
+0225         3,4,5,6; 4,5,6,7; 5,6,7,8; 6,7,8,9; 7,8,9,10; 8,9,10,11;
+0226         9,10,11,12; 10,11,12,13; 1,3,5,7; 2,4,6,8; 3,5,7,9;
+0227         4,6,8,10; 5,7,9,11; 6,8,10,12; 7,9,11,13; 1,4,7,10; 2 5 8 11; 3 6 9 12;
+0228         4 7 10 13; 1,5,9,13];
+0229     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'DIPOLEDIPOLE #1'</span>, stim, test1);
+0230     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 13,<span class="string">'dipoledipole'</span>, {});
+0231     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'DIPOLEDIPOLE #2'</span>, stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>(test1));
+0232 
+0233 
+0234     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'dipoledipole'</span>, {<span class="string">'reciprocal_meas'</span>,0});
+0235     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'DIPOLEDIPOLE #3a'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,2,3,4;2,3,4,5]));
+0236     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'dipoledipole'</span>, {<span class="string">'reciprocal_meas'</span>,1});
+0237     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'DIPOLEDIPOLE #3b'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,2,3,4;3,4,1,2;2,3,4,5;4,5,2,3]));
+0238 
+0239     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'dipoledipole'</span>, {<span class="string">'current'</span>,0.1});
+0240     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'DIPOLEDIPOLE #4a'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,2,3,4;2,3,4,5],5,0.1));
+0241     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 5,<span class="string">'dipoledipole'</span>, {<span class="string">'gain'</span>,0.1});
+0242     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'DIPOLEDIPOLE #4b'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,2,3,4;2,3,4,5],5,1,0.1));
+0243 
+0244     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 6,<span class="string">'dipoledipole'</span>, {<span class="string">'spacings'</span>,[1,1],<span class="string">'multiples'</span>,[1,2]});
+0245     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'DIPOLEDIPOLE #5a'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,2,3,4;2,3,4,5;3,4,5,6;1,2,4,5;2,3,5,6]));
+0246     stim= <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>( 9,<span class="string">'dipoledipole'</span>, {<span class="string">'spacings'</span>,[1,2],<span class="string">'multiples'</span>,[3,2]});
+0247     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'DIPOLEDIPOLE #5b'</span>,stim, <a href="stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>(<span class="keyword">...</span>
+0248         [1,2,5,6;2,3,6,7;3,4,7,8;4,5,8,9;1,3,7,9]));
+0249     
+0250     
+0251</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

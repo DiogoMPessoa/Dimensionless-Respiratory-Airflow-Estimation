@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of crop_model</title>
+  <meta name="keywords" content="crop_model">
+  <meta name="description" content="CROP_MODEL: Crop away parts of a fem model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">meshing</a> &gt; crop_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>crop_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CROP_MODEL: Crop away parts of a fem model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle ); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> CROP_MODEL: Crop away parts of a fem model
+
+ USAGE #1: crop display to show model internals
+   crop_model( axis_handle, fcn_handle );
+
+   fcn_handle ==1 where model is *kept*
+ 
+   if axis_handle==[], then use the current axis
+   examples:
+     crop_model([],  inline('z==3','x','y','z'))
+     crop_model(gca, inline('x+y&gt;0','x','y','z'))
+     crop_model([],  @(x,y,z) z&lt;0);
+   if the fcn_handle is a string, a function with x,y,z is created
+     crop_model(gca, 'x+y&gt;0') % same as previous
+
+ USAGE #2: crop fwd_model to create new fwd_model
+   fmdl_new= crop_model( fwd_model, fcn_handle );
+ 
+   example:
+   fmdl2= crop_model(fmdl1, @(x,y,z) x+y&gt;0);
+
+  with two parameters output
+ [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );
+     c2f_idx maps each elemen in fmdl_new to fwd_model</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>	CROP_MODEL: Crop away parts of a fem model</li><li><a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>	CROP_MODEL: Crop away parts of a fem model</li><li><a href="join_models.html" class="code" title="function [fmdlo]= join_models(fmdl1, fmdl2, tol)">join_models</a>	JOIN_MODELS: Join two fmdl structures to create one</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function crop_graphics_model(axis_handle, fcn_handle);</a></li><li><a href="#_sub2" class="code">function [fmdl1,c2f_idx]= crop_fwd_model(fmdl0, fcn_handle);</a></li><li><a href="#_sub3" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );</a>
+0002 <span class="comment">% CROP_MODEL: Crop away parts of a fem model</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% USAGE #1: crop display to show model internals</span>
+0005 <span class="comment">%   crop_model( axis_handle, fcn_handle );</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   fcn_handle ==1 where model is *kept*</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   if axis_handle==[], then use the current axis</span>
+0010 <span class="comment">%   examples:</span>
+0011 <span class="comment">%     crop_model([],  inline('z==3','x','y','z'))</span>
+0012 <span class="comment">%     crop_model(gca, inline('x+y&gt;0','x','y','z'))</span>
+0013 <span class="comment">%     crop_model([],  @(x,y,z) z&lt;0);</span>
+0014 <span class="comment">%   if the fcn_handle is a string, a function with x,y,z is created</span>
+0015 <span class="comment">%     crop_model(gca, 'x+y&gt;0') % same as previous</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% USAGE #2: crop fwd_model to create new fwd_model</span>
+0018 <span class="comment">%   fmdl_new= crop_model( fwd_model, fcn_handle );</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   example:</span>
+0021 <span class="comment">%   fmdl2= crop_model(fmdl1, @(x,y,z) x+y&gt;0);</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%  with two parameters output</span>
+0024 <span class="comment">% [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );</span>
+0025 <span class="comment">%     c2f_idx maps each elemen in fmdl_new to fwd_model</span>
+0026 
+0027 <span class="comment">% (C) 2006-2008 Andy Adler. License: GPL version 2 or version 3</span>
+0028 <span class="comment">% $Id: crop_model.m 6030 2019-10-28 06:50:48Z aadler $</span>
+0029 
+0030 <span class="keyword">if</span> ischar(axis_handle) &amp;&amp; strcmp(axis_handle,<span class="string">'UNIT_TEST'</span>); <a href="#_sub3" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0031 
+0032 <span class="comment">% TODO (update 2 apr 2012):</span>
+0033 <span class="comment">%  - make crop_model work for 2D fems</span>
+0034 
+0035 <span class="keyword">if</span> isstr(fcn_handle)
+0036   fcn_handle = inline(fcn_handle,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>);
+0037 <span class="keyword">end</span>
+0038 
+0039 type= isfield(axis_handle, <span class="string">'type'</span>);
+0040 <span class="keyword">if</span> type; type = axis_handle.type; <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">if</span> isempty(axis_handle)
+0043    axis_handle= gca;
+0044    <a href="#_sub1" class="code" title="subfunction crop_graphics_model(axis_handle, fcn_handle);">crop_graphics_model</a>(axis_handle, fcn_handle);
+0045 <span class="keyword">elseif</span> ishandle( axis_handle )
+0046    <a href="#_sub1" class="code" title="subfunction crop_graphics_model(axis_handle, fcn_handle);">crop_graphics_model</a>(axis_handle, fcn_handle);
+0047 <span class="keyword">elseif</span> strcmp(type, <span class="string">'fwd_model'</span>);
+0048    [fmdl,c2f_idx]= <a href="#_sub2" class="code" title="subfunction [fmdl1,c2f_idx]= crop_fwd_model(fmdl0, fcn_handle);">crop_fwd_model</a>(axis_handle, fcn_handle);
+0049 <span class="keyword">elseif</span> strcmp(type, <span class="string">'image'</span>);
+0050    [fmdl_,c2f_idx]= <a href="#_sub2" class="code" title="subfunction [fmdl1,c2f_idx]= crop_fwd_model(fmdl0, fcn_handle);">crop_fwd_model</a>(axis_handle.fwd_model, fcn_handle);
+0051    fmdl = axis_handle; <span class="comment">% input parameter</span>
+0052    fmdl.fwd_model = fmdl_;
+0053    fmdl.elem_data = fmdl.elem_data(c2f_idx,:);
+0054 <span class="comment">%  keyboard</span>
+0055 <span class="keyword">else</span>
+0056    error(<span class="string">'Not sure how to process first parameter'</span>);
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="comment">% CROP GRAPHICS</span>
+0060 <a name="_sub1" href="#_subfunctions" class="code">function crop_graphics_model(axis_handle, fcn_handle);</a>
+0061    kk= get(axis_handle,<span class="string">'Children'</span>);
+0062    <span class="comment">% only the FEM frame</span>
+0063    <span class="comment">%k=kk( find( kk== min(kk) ));</span>
+0064 
+0065    <span class="keyword">for</span> k= kk(:)'
+0066       <span class="keyword">try</span>
+0067          x= get(k,<span class="string">'XData'</span>);
+0068          y= get(k,<span class="string">'YData'</span>);
+0069          z= get(k,<span class="string">'ZData'</span>);
+0070          c= get(k,<span class="string">'CData'</span>);
+0071          idx= ~all( feval(fcn_handle,x,y,z) );
+0072          <span class="keyword">if</span> any(size(c)&gt;[1,1])
+0073             set(k,<span class="string">'Xdata'</span>, x(:,idx), <span class="keyword">...</span>
+0074                   <span class="string">'Ydata'</span>, y(:,idx), <span class="keyword">...</span>
+0075                   <span class="string">'Zdata'</span>, z(:,idx), <span class="keyword">...</span>
+0076                   <span class="string">'Cdata'</span>, c(:,idx));
+0077          <span class="keyword">else</span>
+0078             set(k,<span class="string">'Xdata'</span>, x(:,idx), <span class="keyword">...</span>
+0079                   <span class="string">'Ydata'</span>, y(:,idx), <span class="keyword">...</span>
+0080                   <span class="string">'Zdata'</span>, z(:,idx));
+0081          <span class="keyword">end</span>
+0082       <span class="keyword">end</span>
+0083    <span class="keyword">end</span>
+0084 
+0085 <span class="comment">% CROP fwd_model</span>
+0086 <a name="_sub2" href="#_subfunctions" class="code">function [fmdl1,c2f_idx]= crop_fwd_model(fmdl0, fcn_handle);</a>
+0087    fmdl1= fmdl0;
+0088 
+0089 <span class="comment">% Find nodes to remove</span>
+0090    nodes= fmdl0.nodes;
+0091    [n,d]= size(nodes);
+0092    n2xyz= eye(d,3); 
+0093    xyz= nodes*n2xyz;
+0094 <span class="comment">% Keep these nodes</span>
+0095    idx0=  all( feval(fcn_handle,xyz(:,1), <span class="keyword">...</span>
+0096                                 xyz(:,2), <span class="keyword">...</span>
+0097                                 xyz(:,3)),2);
+0098 <span class="comment">% remove these nodes</span>
+0099    fmdl1.nodes(idx0,:) = [];
+0100 
+0101 <span class="comment">% renumber nodes, set unused ones to 0</span>
+0102    idx1= zeros(n,1);
+0103    idx1(~idx0)= 1:sum(~idx0);
+0104 
+0105    fmdl1.elems(:) = idx1(fmdl0.elems);
+0106    remove= any( fmdl1.elems == 0, 2);
+0107    fmdl1.elems(remove,:)= [];
+0108 <span class="comment">% c2f_idx maps each new elem to its original position</span>
+0109    c2f_idx= find(~remove);
+0110 
+0111    fmdl1.boundary(:) = idx1(fmdl0.boundary);
+0112    remove= any( fmdl1.boundary == 0, 2);
+0113    fmdl1.boundary(remove,:)= [];
+0114 
+0115 <span class="comment">% renumber nodes, set unused ones to 0</span>
+0116 <span class="keyword">if</span> isfield(fmdl1,<span class="string">'electrode'</span>);
+0117    n_elecs = length(fmdl1.electrode);
+0118    rm_elec_list = zeros(n_elecs,1);
+0119    <span class="keyword">for</span> i=1:n_elecs;
+0120       el_nodes= fmdl0.electrode(i).nodes;
+0121       el_nodes(:)= idx1(el_nodes);
+0122       <span class="keyword">if</span> any(el_nodes==0);
+0123          rm_elec_list(i) = 1;
+0124       <span class="keyword">end</span>
+0125       fmdl1.electrode(i).nodes= el_nodes;
+0126    <span class="keyword">end</span>
+0127    <span class="keyword">if</span> any(rm_elec_list)
+0128       str = sprintf(<span class="string">'%d,'</span>, find(rm_elec_list));
+0129       <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'crop_model: removing electrodes (%s)'</span>,str(1:end-1),1);
+0130       fmdl1.electrode = fmdl1.electrode( find(~rm_elec_list));
+0131    <span class="keyword">end</span>
+0132 <span class="keyword">end</span>
+0133 
+0134 
+0135 <a name="_sub3" href="#_subfunctions" class="code">function do_unit_test</a>
+0136    imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c0'</span>,8); fmdl= imdl.fwd_model;
+0137    fmdl = <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdl,inline(<span class="string">'x&lt;0'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0138    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-a2c0-01'</span>,length(fmdl.electrode),5);
+0139    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-a2c0-02'</span>,size(fmdl.elems),[32,3]);
+0140    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-a2c0-03'</span>,size(fmdl.nodes),[25,2]);
+0141 
+0142    fmdl = <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdl,<span class="string">'x&lt;0'</span>); <span class="comment">% verify it's same</span>
+0143    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-str-a2c0-01'</span>,length(fmdl.electrode),5);
+0144    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-str-a2c0-02'</span>,size(fmdl.elems),[32,3]);
+0145    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-str-a2c0-03'</span>,size(fmdl.nodes),[25,2]);
+0146 
+0147    imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]); fmdl= imdl.fwd_model;
+0148    fmdl = <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdl,inline(<span class="string">'x&lt;0'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0149    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-n3r2-01'</span>,length(fmdl.electrode),16);
+0150    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-n3r2-02'</span>,size(fmdl.elems),[342,4]);
+0151    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-n3r2-03'</span>,size(fmdl.nodes),[128,3]);
+0152    fmdl = <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdl,inline(<span class="string">'z&lt;2'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0153    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-n3r2-04'</span>,length(fmdl.electrode),8);
+0154    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-n3r2-05'</span>,size(fmdl.elems),[114,4]);
+0155    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop_model-n3r2-06'</span>,size(fmdl.nodes),[64,3]);
+0156 
+0157 
+0158 
+0159 
+0160    subplot(331)
+0161    imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]); fmdl= imdl.fwd_model;
+0162    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl);
+0163    subplot(332)
+0164    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl); hh= gca; 
+0165    subplot(333)
+0166    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl);
+0167    <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>([],inline(<span class="string">'z&lt;2'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0168    <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(hh,inline(<span class="string">'x&lt;0'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0169 
+0170    subplot(334)
+0171    fmdlc = fmdl;
+0172    fmdlc = <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(fmdlc,inline(<span class="string">'x&lt;0'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0173    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdlc);
+0174 
+0175    subplot(335)
+0176    img = <a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1); 
+0177    load(<span class="string">'datareal.mat'</span>,<span class="string">'A'</span>); img.elem_data(A)= 1.1;
+0178    imgs =  <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(img,<span class="string">'y-z&lt;-2.5'</span>);
+0179    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>( imgs );
+0180    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop img'</span>,find( imgs.elem_data&gt;1),[476;479; 482; 485])
+0181 
+0182    subplot(336)
+0183    img = <a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1); 
+0184    load(<span class="string">'datareal.mat'</span>,<span class="string">'A'</span>); img.elem_data(A)= 1.1;
+0185    imgs =  <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(img,@(x,y,z) y-z&lt;-2.5);
+0186    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>( imgs );
+0187    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'crop img'</span>,find( imgs.elem_data&gt;1),[476;479; 482; 485])
+0188 
+0189 
+0190 
+0191    subplot(337)
+0192    imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'d2c2'</span>); fmdl= imdl.fwd_model;
+0193    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl);
+0194    subplot(338)
+0195    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl); hh= gca; 
+0196    title(<span class="string">'expected fail'</span>);
+0197    subplot(339)
+0198    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl);
+0199    <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>([],inline(<span class="string">'y&lt;0'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0200    <a href="crop_model.html" class="code" title="function [fmdl,c2f_idx]= crop_model( axis_handle, fcn_handle );">crop_model</a>(hh,inline(<span class="string">'x&lt;0'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>));
+0201    title(<span class="string">'expected fail'</span>);
+0202    
+0203</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

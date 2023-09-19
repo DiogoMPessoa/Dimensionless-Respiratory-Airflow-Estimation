@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of jacobian_apparent_resistivity</title>
+  <meta name="keywords" content="jacobian_apparent_resistivity">
+  <meta name="description" content="jacobian_apparent_resistivity: Jacobian output as apparent resistivity">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; jacobian_apparent_resistivity.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>jacobian_apparent_resistivity
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>jacobian_apparent_resistivity: Jacobian output as apparent resistivity</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function J =jacobian_apparent_resistivity(fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> jacobian_apparent_resistivity: Jacobian output as apparent resistivity
+  This function is a wrapper to the calc_jacobian; however, the output
+  is converted into apparent resistivity units, rather than in
+  voltage units</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>	MDL_NORMALIZE Check or set the normalize_measurements flag on a model.</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>	EIDORS_DEFAULT Default function handler.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fctr = get_factor(img)</a></li><li><a href="#_sub2" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function J =jacobian_apparent_resistivity(fwd_model, img)</a>
+0002 <span class="comment">% jacobian_apparent_resistivity: Jacobian output as apparent resistivity</span>
+0003 <span class="comment">%  This function is a wrapper to the calc_jacobian; however, the output</span>
+0004 <span class="comment">%  is converted into apparent resistivity units, rather than in</span>
+0005 <span class="comment">%  voltage units</span>
+0006 
+0007 <span class="comment">% $Id: jacobian_apparent_resistivity.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0008 
+0009 <span class="comment">% correct input paralemeters if function was called with only img</span>
+0010 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub2" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0011 
+0012 <span class="keyword">if</span> nargin == 1
+0013    img= fwd_model;
+0014 <span class="keyword">elseif</span>  strcmp(getfield(warning(<span class="string">'query'</span>,<span class="string">'EIDORS:DeprecatedInterface'</span>),<span class="string">'state'</span>),<span class="string">'on'</span>)
+0015    warning(<span class="string">'EIDORS:DeprecatedInterface'</span>, <span class="keyword">...</span>
+0016       [<span class="string">'Calling JACOBIAN_APPARENT_RESISTIVITY with two arguments is deprecated and will cause'</span> <span class="keyword">...</span>
+0017        <span class="string">' an error in a future version. First argument ignored.'</span>]);
+0018 <span class="keyword">end</span>
+0019 fwd_model= img.fwd_model;
+0020 
+0021 <span class="keyword">if</span> <a href="../../../eidors/models/mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>(fwd_model)
+0022    error(<span class="string">'Cannot calculate apparent resistivity for normalized difference data'</span>);
+0023 <span class="keyword">end</span>
+0024 
+0025 
+0026 solver = @<a href="../../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>;
+0027 <span class="keyword">try</span>
+0028    solver = fwd_model.jacobian_apparent_resistivity.jacobian;
+0029 <span class="keyword">end</span>
+0030 
+0031 img.fwd_model.jacobian = solver;
+0032 
+0033 J = <a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>(img);
+0034 
+0035 fctr = <a href="#_sub1" class="code" title="subfunction fctr = get_factor(img)">get_factor</a>(img);
+0036 
+0037 J = fctr * J;
+0038 
+0039 <a name="_sub1" href="#_subfunctions" class="code">function fctr = get_factor(img)</a>
+0040 fctr = NaN;
+0041 <span class="keyword">try</span>
+0042    fctr = img.fwd_model.apparent_resistivity_factor;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> ischar(fctr), fctr = str2func(fcstr); <span class="keyword">end</span>;
+0046 
+0047 <span class="keyword">if</span> isa(fctr, <span class="string">'function_handle'</span>)
+0048    fctr = feval(fctr, img);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="keyword">if</span> isnan(fctr)
+0052    vh = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(<a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(img.fwd_model,1));
+0053    n = length(vh.meas);
+0054    fctr = spdiags(1./vh.meas,0,n,n);
+0055 <span class="keyword">end</span>
+0056 
+0057 
+0058 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test</a>
+0059    disp(<span class="string">'TODO: NEED TO WRITE TESTS'</span>);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

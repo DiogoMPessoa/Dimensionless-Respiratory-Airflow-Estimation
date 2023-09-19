@@ -1,0 +1,578 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calc_mesh_quality</title>
+  <meta name="keywords" content="calc_mesh_quality">
+  <meta name="description" content="CALC_MESH_QUALITY Various measures of mesh quality.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">meshing</a> &gt; calc_mesh_quality.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>calc_mesh_quality
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CALC_MESH_QUALITY Various measures of mesh quality.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Q mdl] = calc_mesh_quality(mdl, show) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CALC_MESH_QUALITY Various measures of mesh quality.
+  [Q MDL] = CALC_MESH_QUALITY(MDL) calculates several measures of mesh 
+  quality for the EIDORS fwd_model struct MDL and returns them in Q 
+  (described below).
+  [Q MDL] = CALC_MESH_QUALITY(MDL, SHOW) if SHOW is TRUE displays two 
+  figures with histograms of each measure.
+  
+   Q.tet.
+     NSR    - inradius to circumradius ratio (normalized shape ratio)
+                 n*r / R
+                where r = inradius; R = circumradius; n = dimensions [3,4]
+     mu     - inradius to longest edge ratio (L)                     [5]
+                 r / L
+     tau    - shortest to longest edge ratio                         [5]
+                 l/L
+     reg    - &quot;regularity&quot; of tetrahedron                      [6,p.151]
+                 4r/H
+                where H is the longest altitude
+     zeta   - measure relating volume and area                       [7]
+                 V^4 / ( SUM( Ai^2 ) ^3 )
+                where V = volume; Ai = area of face i
+     eta    - measure realting volume and edge length                [7]
+                 V^(2/3) / SUM( li^2 )
+                where li = length of edge i
+     alpha  - ratio of volume to mean edge length                    [6]
+                 V / (1/6 SUM( Ai ))
+                where Ai = area of face i
+     gamma  - ratio of volume to RMS edge length                     [8]
+                 V / SQRT( 1/6 SUM( Ai^2 ) )
+     min_angle - minimum dihedral angle
+
+  Q.tri.
+     NSR   - inradius to circumradius ratio (normalized shape ratio)
+                 n*r / R
+                where r = inradius; R = circumradius; n = dimensions [3,4]
+     mu    - inradius to longest edge ratio (L)                        [9]
+                 r / L       = tri_mu(mdl);
+     eta   - measure relating triangle area and edge length        [10,11]
+                 A / SUM( li^2) 
+     theta - measure relating shortest altitude and edge length        [2]
+                 h / SQRT( SUM ( li^2 ) )
+     iota  - measure relating triangle area and edge length           [12]
+                 A / SUM( li ) ^2
+     kappa - ratio of shortest altitude to longest edge             [2,13]
+                 h / L
+     min_angle - minimum angle
+
+  All the above measures are non-dimensional and scaled to be bounded 
+  between 0 (worst) and 1 (best), where a regular tetrahedron/triangle
+  scores 1.
+
+  Measures where implemented based on review articles of V. Phathasarahy
+  (1994) [1] and D. Field (2000) [2]. The references above indicate the
+  original sources, although those were not consulted.
+
+  Additionally, CALC_MESH_QUALITY returns the original MDL with several
+  useful fields added.
+
+  REFERENCES:
+  [1] Parthasarathy V (1994) &quot;A comparison of tetrahedron quality measures&quot; 
+      Finite Elem Anal Des 15:255–261
+  [2] Field D (2000) &quot;Qualitative measures for initial meshes&quot; Int J Numer
+      Meth Eng, 906:887–906
+  [3] Cavendish JC, Field DA, Frey WH (1985) &quot;An approach to automatic
+      three-dimensional finite element mesh generation&quot; Int J Numer Met 
+      Eng 21:329-47
+  [4] Field DA (1991) &quot;A generic Delaunay triangulation algorithm for
+      finite elemen meshes&quot; Adv Eng Softw 13:263-72
+  [5] Baker TJ (1989) &quot;Element quality in tetrahedral meshes&quot; Proc 7th Int
+      Conf on Finite Element Methods in Flow Problems, Huntsville, AL.
+      1018-24
+  [6] Dannelongue HH, Tanguy PA (1991) &quot;Three-dimensional adaptive finite 
+      element computations and applications to non-newtonian flows&quot; Int J 
+      Numer Meth Fl 13:145–165
+  [7] Cougny HL, Shephard MS, Georges MK (1990) &quot;Explicit node point
+      smoothing within Octree&quot; Report No. 10-1990, SCOREC, RPI, Troy, NY.
+  [8] Parthasarathy V, Kodiyalam (1991) &quot;A constrained optimization
+      approach to finite element mesh smoothing&quot; Finite Elem Anal Des
+      9:309-20
+  [9] Perronnet A (1992) &quot;Triangulation par arbre-4 de triangles equilateraux 
+      at maximisation de la qualite&quot; Publication du Laboratoire d’Analyse
+      Numerique, Universite Pierr it Marie Curie et Centre National de la
+      Recherche Scientifique
+ [10] Bhatia RP, Lawrence KL (1990) &quot;Two-dimensional finite element mesh 
+      generation based on stripwise automatic triangulation&quot; Comput Struct
+      36:309–319.
+ [11] Bank RE, Xu J (1996) &quot;An algorithm for coarsening unstructured 
+      meshes&quot; Numer Math 73:1–36
+ [12] Watabayshi GY, Galt JA (1986) &quot;An optimized triangular mesh system 
+      from random points&quot; in &quot;Numerical Grid Generation in Computational 
+      Fluid Dynamics&quot;,Hauser J, Taylor C. (eds). Pineridge Press: Swansea,
+      1986; 437–438
+ [13] Suhara J, Fukuda J (1972) &quot;Automatic mesh generation for finite 
+      element analysis&quot; on &quot;Advances in Computational Methods in 
+      Structural Mechanics and Design&quot; Oden JT, Clough RW, Yamamoto Y (eds).
+      University of Alabamal Press: Tuscaloosa, AL, 1972; 607–624
+
+ See also FIX_MODEL</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="calc_mesh_quality.html" class="code" title="function [Q mdl] = calc_mesh_quality(mdl, show)">calc_mesh_quality</a>	CALC_MESH_QUALITY Various measures of mesh quality.</li><li><a href="../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>	ELEM_DIM: dimension of elements in space (are elements in 2D or 3D space)</li><li><a href="../../eidors/models/fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>	FIX_MODEL: Add useful fields to a model</li><li><a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/tools/cross3.html" class="code" title="function c = cross3(a,b)">cross3</a>	CROSS3  3D cross parallel cross product</li><li><a href="../../eidors/tools/det3.html" class="code" title="function D = det3(a)">det3</a>	DET3  Parallel determinant for 3x3 matrices</li><li><a href="../../eidors/tools/dot3.html" class="code" title="function d = dot3(a,b)">dot3</a>	CROSS3  3D cross parallel cross product</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="calc_mesh_quality.html" class="code" title="function [Q mdl] = calc_mesh_quality(mdl, show)">calc_mesh_quality</a>	CALC_MESH_QUALITY Various measures of mesh quality.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [Q mdl] = do_quality_calc(mdl)</a></li><li><a href="#_sub2" class="code">function display_figs(Q);</a></li><li><a href="#_sub3" class="code">function a = tet_min_angle(mdl)</a></li><li><a href="#_sub4" class="code">function a = tri_min_angle(mdl)</a></li><li><a href="#_sub5" class="code">function k = tri_kappa(mdl)</a></li><li><a href="#_sub6" class="code">function i = tri_iota(mdl)</a></li><li><a href="#_sub7" class="code">function G = gamma(mdl)</a></li><li><a href="#_sub8" class="code">function A = alpha(mdl)</a></li><li><a href="#_sub9" class="code">function E = eta(mdl)</a></li><li><a href="#_sub10" class="code">function E = tri_eta(mdl)</a></li><li><a href="#_sub11" class="code">function Z = zeta(mdl)</a></li><li><a href="#_sub12" class="code">function S = S_measure(mdl)</a></li><li><a href="#_sub13" class="code">function R = R_star(mdl)</a></li><li><a href="#_sub14" class="code">function R = R_measure(mdl)</a></li><li><a href="#_sub15" class="code">function t = tau(mdl)</a></li><li><a href="#_sub16" class="code">function m = mu(mdl)</a></li><li><a href="#_sub17" class="code">function m = tri_mu(mdl)</a></li><li><a href="#_sub18" class="code">function t = tri_theta(mdl)</a></li><li><a href="#_sub19" class="code">function O = omega(mdl)</a></li><li><a href="#_sub20" class="code">function NSR = tet_normalized_shape_ratio(mdl)</a></li><li><a href="#_sub21" class="code">function NSR = tri_normalized_shape_ratio(mdl)</a></li><li><a href="#_sub22" class="code">function A = dihedral_angles(mdl)</a></li><li><a href="#_sub23" class="code">function A = solid_angles(mdl)</a></li><li><a href="#_sub24" class="code">function t = tri_angles(mdl)</a></li><li><a href="#_sub25" class="code">function R = circumsphere_radius(mdl)</a></li><li><a href="#_sub26" class="code">function H = tet_altitudes(mdl)</a></li><li><a href="#_sub27" class="code">function H = tri_altitudes(mdl)</a></li><li><a href="#_sub28" class="code">function R = circumcircle_radius(mdl)</a></li><li><a href="#_sub29" class="code">function R = incircle_radius(mdl)</a></li><li><a href="#_sub30" class="code">function R = insphere_radius(mdl)</a></li><li><a href="#_sub31" class="code">function A = elem_area(mdl)</a></li><li><a href="#_sub32" class="code">function V = elem_volume(mdl)</a></li><li><a href="#_sub33" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Q mdl] = calc_mesh_quality(mdl, show)</a>
+0002 <span class="comment">%CALC_MESH_QUALITY Various measures of mesh quality.</span>
+0003 <span class="comment">%  [Q MDL] = CALC_MESH_QUALITY(MDL) calculates several measures of mesh</span>
+0004 <span class="comment">%  quality for the EIDORS fwd_model struct MDL and returns them in Q</span>
+0005 <span class="comment">%  (described below).</span>
+0006 <span class="comment">%  [Q MDL] = CALC_MESH_QUALITY(MDL, SHOW) if SHOW is TRUE displays two</span>
+0007 <span class="comment">%  figures with histograms of each measure.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Q.tet.</span>
+0010 <span class="comment">%     NSR    - inradius to circumradius ratio (normalized shape ratio)</span>
+0011 <span class="comment">%                 n*r / R</span>
+0012 <span class="comment">%                where r = inradius; R = circumradius; n = dimensions [3,4]</span>
+0013 <span class="comment">%     mu     - inradius to longest edge ratio (L)                     [5]</span>
+0014 <span class="comment">%                 r / L</span>
+0015 <span class="comment">%     tau    - shortest to longest edge ratio                         [5]</span>
+0016 <span class="comment">%                 l/L</span>
+0017 <span class="comment">%     reg    - &quot;regularity&quot; of tetrahedron                      [6,p.151]</span>
+0018 <span class="comment">%                 4r/H</span>
+0019 <span class="comment">%                where H is the longest altitude</span>
+0020 <span class="comment">%     zeta   - measure relating volume and area                       [7]</span>
+0021 <span class="comment">%                 V^4 / ( SUM( Ai^2 ) ^3 )</span>
+0022 <span class="comment">%                where V = volume; Ai = area of face i</span>
+0023 <span class="comment">%     eta    - measure realting volume and edge length                [7]</span>
+0024 <span class="comment">%                 V^(2/3) / SUM( li^2 )</span>
+0025 <span class="comment">%                where li = length of edge i</span>
+0026 <span class="comment">%     alpha  - ratio of volume to mean edge length                    [6]</span>
+0027 <span class="comment">%                 V / (1/6 SUM( Ai ))</span>
+0028 <span class="comment">%                where Ai = area of face i</span>
+0029 <span class="comment">%     gamma  - ratio of volume to RMS edge length                     [8]</span>
+0030 <span class="comment">%                 V / SQRT( 1/6 SUM( Ai^2 ) )</span>
+0031 <span class="comment">%     min_angle - minimum dihedral angle</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%  Q.tri.</span>
+0034 <span class="comment">%     NSR   - inradius to circumradius ratio (normalized shape ratio)</span>
+0035 <span class="comment">%                 n*r / R</span>
+0036 <span class="comment">%                where r = inradius; R = circumradius; n = dimensions [3,4]</span>
+0037 <span class="comment">%     mu    - inradius to longest edge ratio (L)                        [9]</span>
+0038 <span class="comment">%                 r / L       = tri_mu(mdl);</span>
+0039 <span class="comment">%     eta   - measure relating triangle area and edge length        [10,11]</span>
+0040 <span class="comment">%                 A / SUM( li^2)</span>
+0041 <span class="comment">%     theta - measure relating shortest altitude and edge length        [2]</span>
+0042 <span class="comment">%                 h / SQRT( SUM ( li^2 ) )</span>
+0043 <span class="comment">%     iota  - measure relating triangle area and edge length           [12]</span>
+0044 <span class="comment">%                 A / SUM( li ) ^2</span>
+0045 <span class="comment">%     kappa - ratio of shortest altitude to longest edge             [2,13]</span>
+0046 <span class="comment">%                 h / L</span>
+0047 <span class="comment">%     min_angle - minimum angle</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">%  All the above measures are non-dimensional and scaled to be bounded</span>
+0050 <span class="comment">%  between 0 (worst) and 1 (best), where a regular tetrahedron/triangle</span>
+0051 <span class="comment">%  scores 1.</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">%  Measures where implemented based on review articles of V. Phathasarahy</span>
+0054 <span class="comment">%  (1994) [1] and D. Field (2000) [2]. The references above indicate the</span>
+0055 <span class="comment">%  original sources, although those were not consulted.</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">%  Additionally, CALC_MESH_QUALITY returns the original MDL with several</span>
+0058 <span class="comment">%  useful fields added.</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">%  REFERENCES:</span>
+0061 <span class="comment">%  [1] Parthasarathy V (1994) &quot;A comparison of tetrahedron quality measures&quot;</span>
+0062 <span class="comment">%      Finite Elem Anal Des 15:255–261</span>
+0063 <span class="comment">%  [2] Field D (2000) &quot;Qualitative measures for initial meshes&quot; Int J Numer</span>
+0064 <span class="comment">%      Meth Eng, 906:887–906</span>
+0065 <span class="comment">%  [3] Cavendish JC, Field DA, Frey WH (1985) &quot;An approach to automatic</span>
+0066 <span class="comment">%      three-dimensional finite element mesh generation&quot; Int J Numer Met</span>
+0067 <span class="comment">%      Eng 21:329-47</span>
+0068 <span class="comment">%  [4] Field DA (1991) &quot;A generic Delaunay triangulation algorithm for</span>
+0069 <span class="comment">%      finite elemen meshes&quot; Adv Eng Softw 13:263-72</span>
+0070 <span class="comment">%  [5] Baker TJ (1989) &quot;Element quality in tetrahedral meshes&quot; Proc 7th Int</span>
+0071 <span class="comment">%      Conf on Finite Element Methods in Flow Problems, Huntsville, AL.</span>
+0072 <span class="comment">%      1018-24</span>
+0073 <span class="comment">%  [6] Dannelongue HH, Tanguy PA (1991) &quot;Three-dimensional adaptive finite</span>
+0074 <span class="comment">%      element computations and applications to non-newtonian flows&quot; Int J</span>
+0075 <span class="comment">%      Numer Meth Fl 13:145–165</span>
+0076 <span class="comment">%  [7] Cougny HL, Shephard MS, Georges MK (1990) &quot;Explicit node point</span>
+0077 <span class="comment">%      smoothing within Octree&quot; Report No. 10-1990, SCOREC, RPI, Troy, NY.</span>
+0078 <span class="comment">%  [8] Parthasarathy V, Kodiyalam (1991) &quot;A constrained optimization</span>
+0079 <span class="comment">%      approach to finite element mesh smoothing&quot; Finite Elem Anal Des</span>
+0080 <span class="comment">%      9:309-20</span>
+0081 <span class="comment">%  [9] Perronnet A (1992) &quot;Triangulation par arbre-4 de triangles equilateraux</span>
+0082 <span class="comment">%      at maximisation de la qualite&quot; Publication du Laboratoire d’Analyse</span>
+0083 <span class="comment">%      Numerique, Universite Pierr it Marie Curie et Centre National de la</span>
+0084 <span class="comment">%      Recherche Scientifique</span>
+0085 <span class="comment">% [10] Bhatia RP, Lawrence KL (1990) &quot;Two-dimensional finite element mesh</span>
+0086 <span class="comment">%      generation based on stripwise automatic triangulation&quot; Comput Struct</span>
+0087 <span class="comment">%      36:309–319.</span>
+0088 <span class="comment">% [11] Bank RE, Xu J (1996) &quot;An algorithm for coarsening unstructured</span>
+0089 <span class="comment">%      meshes&quot; Numer Math 73:1–36</span>
+0090 <span class="comment">% [12] Watabayshi GY, Galt JA (1986) &quot;An optimized triangular mesh system</span>
+0091 <span class="comment">%      from random points&quot; in &quot;Numerical Grid Generation in Computational</span>
+0092 <span class="comment">%      Fluid Dynamics&quot;,Hauser J, Taylor C. (eds). Pineridge Press: Swansea,</span>
+0093 <span class="comment">%      1986; 437–438</span>
+0094 <span class="comment">% [13] Suhara J, Fukuda J (1972) &quot;Automatic mesh generation for finite</span>
+0095 <span class="comment">%      element analysis&quot; on &quot;Advances in Computational Methods in</span>
+0096 <span class="comment">%      Structural Mechanics and Design&quot; Oden JT, Clough RW, Yamamoto Y (eds).</span>
+0097 <span class="comment">%      University of Alabamal Press: Tuscaloosa, AL, 1972; 607–624</span>
+0098 <span class="comment">%</span>
+0099 <span class="comment">% See also FIX_MODEL</span>
+0100 
+0101 <span class="comment">% (C) 2013 Bartlomiej Grychtol. License: GPL v2 or v3.</span>
+0102 <span class="comment">% $Id: calc_mesh_quality.m 5467 2017-05-10 10:39:02Z aadler $</span>
+0103 
+0104 
+0105 <span class="keyword">if</span> ischar(mdl) &amp;&amp; strcmp(mdl, <span class="string">'UNIT_TEST'</span>), <a href="#_sub33" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0106 
+0107 <span class="keyword">if</span> nargin &lt; 2
+0108    show = 0;
+0109 <span class="keyword">end</span>
+0110 
+0111 opt.cache_obj = {mdl.nodes, mdl.elems};
+0112 opt.fstr      = <span class="string">'calc_mesh_quality'</span>;
+0113 [Q mdl] = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction [Q mdl] = do_quality_calc(mdl)">do_quality_calc</a>,{mdl},opt);
+0114 
+0115 <span class="keyword">if</span> show
+0116    <a href="#_sub2" class="code" title="subfunction display_figs(Q);">display_figs</a>(Q)
+0117 <span class="keyword">end</span>
+0118 
+0119 
+0120 <a name="_sub1" href="#_subfunctions" class="code">function [Q mdl] = do_quality_calc(mdl)</a>
+0121 
+0122 opt.elem2edge = 1;
+0123 opt.face2elem = 1;
+0124 opt.boundary  = 1;
+0125 opt.boundary_face = 1;
+0126 opt.normals   = 1;
+0127 opt.face_centre = 1;
+0128 opt.inner_normal = 1;
+0129 opt.face2edge = 1;
+0130 opt.face_area = 1;
+0131 opt.edge_length = 1;
+0132 mdl = <a href="../../eidors/models/fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>(mdl, opt);
+0133 
+0134 
+0135 <span class="comment">% tet properties</span>
+0136 <span class="keyword">if</span> <a href="../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>(mdl) == 3
+0137    mdl.max_edge_length = max(mdl.edge_length(mdl.elem2edge),[],2);
+0138    mdl.min_edge_length = min(mdl.edge_length(mdl.elem2edge),[],2);
+0139    mdl.elem_vol    = <a href="#_sub32" class="code" title="subfunction V = elem_volume(mdl)">elem_volume</a>(mdl);
+0140    mdl.elem_area   = <a href="#_sub31" class="code" title="subfunction A = elem_area(mdl)">elem_area</a>(mdl);
+0141    mdl.rad_insphere      = <a href="#_sub30" class="code" title="subfunction R = insphere_radius(mdl)">insphere_radius</a>(mdl);
+0142    mdl.rad_circumsphere  = <a href="#_sub25" class="code" title="subfunction R = circumsphere_radius(mdl)">circumsphere_radius</a>(mdl);
+0143    mdl.tet_alt     = <a href="#_sub26" class="code" title="subfunction H = tet_altitudes(mdl)">tet_altitudes</a>(mdl);
+0144    <span class="comment">% Note: The measure based on the minimum solid angle (sin(1/2 min angle)</span>
+0145    <span class="comment">% is bound between 0 and 1, but both 0 and 1 are degenerate, so measure is</span>
+0146    <span class="comment">% not calculated</span>
+0147    mdl.solid_angle    = <a href="#_sub23" class="code" title="subfunction A = solid_angles(mdl)">solid_angles</a>(mdl);
+0148    mdl.dihedral_angle = <a href="#_sub22" class="code" title="subfunction A = dihedral_angles(mdl)">dihedral_angles</a>(mdl);
+0149 <span class="keyword">end</span>
+0150 
+0151 <span class="comment">% tri properties</span>
+0152 mdl.rad_incircle     = <a href="#_sub29" class="code" title="subfunction R = incircle_radius(mdl)">incircle_radius</a>(mdl);
+0153 mdl.rad_circumcircle = <a href="#_sub28" class="code" title="subfunction R = circumcircle_radius(mdl)">circumcircle_radius</a>(mdl);
+0154 mdl.tri_alt          = <a href="#_sub27" class="code" title="subfunction H = tri_altitudes(mdl)">tri_altitudes</a>(mdl);
+0155 mdl.tri_angle        = <a href="#_sub24" class="code" title="subfunction t = tri_angles(mdl)">tri_angles</a>(mdl);
+0156 
+0157 <span class="comment">% TRI Quality measures</span>
+0158 Q.tri.NSR          = <a href="#_sub21" class="code" title="subfunction NSR = tri_normalized_shape_ratio(mdl)">tri_normalized_shape_ratio</a>(mdl);
+0159 Q.tri.mu           = <a href="#_sub17" class="code" title="subfunction m = tri_mu(mdl)">tri_mu</a>(mdl);
+0160 Q.tri.eta          = <a href="#_sub10" class="code" title="subfunction E = tri_eta(mdl)">tri_eta</a>(mdl);
+0161 Q.tri.theta        = <a href="#_sub18" class="code" title="subfunction t = tri_theta(mdl)">tri_theta</a>(mdl);
+0162 Q.tri.iota         = <a href="#_sub6" class="code" title="subfunction i = tri_iota(mdl)">tri_iota</a>(mdl);
+0163 Q.tri.kappa        = <a href="#_sub5" class="code" title="subfunction k = tri_kappa(mdl)">tri_kappa</a>(mdl);
+0164 Q.tri.min_angle    = <a href="#_sub4" class="code" title="subfunction a = tri_min_angle(mdl)">tri_min_angle</a>(mdl);
+0165 
+0166 <span class="comment">% only report measures for boundary triangles</span>
+0167 f = fieldnames(Q.tri);
+0168 <span class="keyword">for</span> i = 1:length(f)
+0169    Q.tri.(f{i}) = Q.tri.(f{i})(mdl.boundary_face);
+0170 <span class="keyword">end</span>
+0171 
+0172 
+0173 <span class="keyword">if</span> <a href="../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>(mdl) == 3
+0174    <span class="comment">% TET Quality measures</span>
+0175    Q.tet.NSR          = <a href="#_sub20" class="code" title="subfunction NSR = tet_normalized_shape_ratio(mdl)">tet_normalized_shape_ratio</a>(mdl);
+0176    <span class="comment">% this measure is not very sensitive and not bound between 0 and 1</span>
+0177    <span class="comment">% Q.omega        = omega(mdl);</span>
+0178    Q.tet.mu           = <a href="#_sub16" class="code" title="subfunction m = mu(mdl)">mu</a>(mdl);
+0179    Q.tet.tau          = <a href="#_sub15" class="code" title="subfunction t = tau(mdl)">tau</a>(mdl);
+0180    Q.tet.reg          = <a href="#_sub14" class="code" title="subfunction R = R_measure(mdl)">R_measure</a>(mdl);
+0181    <span class="comment">% These two measures from Field's paper are not scale invariant</span>
+0182    <span class="comment">% Q.R_star       = R_star(mdl);</span>
+0183    <span class="comment">% Q.S            = S_measure(mdl);</span>
+0184    Q.tet.zeta         = <a href="#_sub11" class="code" title="subfunction Z = zeta(mdl)">zeta</a>(mdl);
+0185    Q.tet.eta          = <a href="#_sub9" class="code" title="subfunction E = eta(mdl)">eta</a>(mdl);
+0186    Q.tet.alpha        = <a href="#_sub8" class="code" title="subfunction A = alpha(mdl)">alpha</a>(mdl);
+0187    Q.tet.gamma        = <a href="#_sub7" class="code" title="subfunction G = gamma(mdl)">gamma</a>(mdl);
+0188    Q.tet.min_angle    = <a href="#_sub3" class="code" title="subfunction a = tet_min_angle(mdl)">tet_min_angle</a>(mdl);
+0189 <span class="keyword">end</span>
+0190 
+0191 <a name="_sub2" href="#_subfunctions" class="code">function display_figs(Q);</a>
+0192 f = figure; set(f,<span class="string">'Name'</span>,<span class="string">'Surface triangle quality'</span>);
+0193 f = fieldnames(Q.tri);
+0194 <span class="keyword">for</span> i = 1:length(f)
+0195    subplot(3,3,i)
+0196    hist(Q.tri.(f{i}),100);
+0197    xlabel(strrep(f{i},<span class="string">'_'</span>,<span class="string">'\_'</span>));
+0198    axis tight
+0199    xlim([0 1]);
+0200 <span class="keyword">end</span>
+0201 <span class="keyword">if</span> ~isfield(Q,<span class="string">'tet'</span>), <span class="keyword">return</span>, <span class="keyword">end</span>;
+0202 f = figure;  set(f,<span class="string">'Name'</span>,<span class="string">'Tetrahedron quality'</span>);
+0203 f = fieldnames(Q.tet);
+0204 <span class="keyword">for</span> i = 1:length(f)
+0205    subplot(3,3,i)
+0206    hist(Q.tet.(f{i}),100);
+0207    xlabel(strrep(f{i},<span class="string">'_'</span>,<span class="string">'\_'</span>));
+0208    axis tight
+0209    xlim([0 1]);
+0210 <span class="keyword">end</span>
+0211 <span class="comment">% subplot(3,3,9)</span>
+0212 <span class="comment">% hist(180*real.dihedral_angle(:)/pi,100)</span>
+0213 <span class="comment">% xlabel('dihedral angle');</span>
+0214 <span class="comment">% xlim([0 180])</span>
+0215 
+0216 
+0217 <a name="_sub3" href="#_subfunctions" class="code">function a = tet_min_angle(mdl)</a>
+0218 a = min(mdl.dihedral_angle,[],2) / acos(1/3);
+0219 
+0220 <a name="_sub4" href="#_subfunctions" class="code">function a = tri_min_angle(mdl)</a>
+0221 a = 3*min(mdl.tri_angle,[],2)/pi;
+0222 
+0223 <a name="_sub5" href="#_subfunctions" class="code">function k = tri_kappa(mdl)</a>
+0224 k = 2/sqrt(3) * min(mdl.tri_alt,[],2) <span class="keyword">...</span>
+0225                ./ max(mdl.edge_length(mdl.face2edge),[],2);
+0226 
+0227 <a name="_sub6" href="#_subfunctions" class="code">function i = tri_iota(mdl)</a>
+0228 i = 12*sqrt(3)*mdl.face_area ./ sum(mdl.edge_length(mdl.face2edge),2).^2;
+0229 
+0230 <a name="_sub7" href="#_subfunctions" class="code">function G = gamma(mdl)</a>
+0231 G = 6 * sqrt(2) * mdl.elem_vol ./ sqrt(mean(mdl.edge_length(mdl.elem2edge).^2,2)).^3 ;
+0232 
+0233 <a name="_sub8" href="#_subfunctions" class="code">function A = alpha(mdl)</a>
+0234 A = 6 * sqrt(2) * mdl.elem_vol ./ mean(mdl.edge_length(mdl.elem2edge),2).^3 ;
+0235 
+0236 <a name="_sub9" href="#_subfunctions" class="code">function E = eta(mdl)</a>
+0237 E = 12 * (3*mdl.elem_vol).^(2/3) ./ sum(mdl.edge_length(mdl.elem2edge).^2,2);
+0238 
+0239 <a name="_sub10" href="#_subfunctions" class="code">function E = tri_eta(mdl)</a>
+0240 E = 4 * sqrt(3) * mdl.face_area ./ sum(mdl.edge_length(mdl.face2edge).^2,2);
+0241 
+0242 <a name="_sub11" href="#_subfunctions" class="code">function Z = zeta(mdl)</a>
+0243 Z = 3^7 * mdl.elem_vol.^4 ./ <span class="keyword">...</span>
+0244     sum(mdl.face_area(mdl.elem2face).^2 ,2).^3;
+0245 
+0246 <a name="_sub12" href="#_subfunctions" class="code">function S = S_measure(mdl)</a>
+0247 S = mdl.elem_vol ./ sum( mdl.edge_length(mdl.elem2edge).^2,2);
+0248 
+0249 <a name="_sub13" href="#_subfunctions" class="code">function R = R_star(mdl)</a>
+0250 R = sqrt(2)*mdl.elem_vol ./ sum(mdl.edge_length(mdl.elem2edge),2);
+0251 
+0252 <a name="_sub14" href="#_subfunctions" class="code">function R = R_measure(mdl)</a>
+0253 R = 4*mdl.rad_insphere ./ max(mdl.tet_alt,[],2);
+0254 
+0255 <a name="_sub15" href="#_subfunctions" class="code">function t = tau(mdl)</a>
+0256 t = mdl.min_edge_length ./ mdl.max_edge_length;
+0257 
+0258 <a name="_sub16" href="#_subfunctions" class="code">function m = mu(mdl)</a>
+0259 m = 2*sqrt(6)*mdl.rad_insphere./mdl.max_edge_length;
+0260 
+0261 <a name="_sub17" href="#_subfunctions" class="code">function m = tri_mu(mdl)</a>
+0262 m = 2*sqrt(3)*mdl.rad_incircle./ max(mdl.edge_length(mdl.face2edge),[],2);
+0263 
+0264 <a name="_sub18" href="#_subfunctions" class="code">function t = tri_theta(mdl)</a>
+0265 t = 2*min(mdl.tri_alt,[],2) ./ sqrt(sum(mdl.edge_length(mdl.face2edge).^2,2));
+0266 
+0267 <a name="_sub19" href="#_subfunctions" class="code">function O = omega(mdl)</a>
+0268 O = sqrt(3)*mdl.max_edge_length ./ (2*sqrt(2)*mdl.rad_circumsphere);
+0269 
+0270 <a name="_sub20" href="#_subfunctions" class="code">function NSR = tet_normalized_shape_ratio(mdl)</a>
+0271 NSR = 3 * (mdl.rad_insphere ./ mdl.rad_circumsphere);
+0272 
+0273 <a name="_sub21" href="#_subfunctions" class="code">function NSR = tri_normalized_shape_ratio(mdl)</a>
+0274 NSR = 2*mdl.rad_incircle./mdl.rad_circumcircle;
+0275 
+0276 <a name="_sub22" href="#_subfunctions" class="code">function A = dihedral_angles(mdl)</a>
+0277 v = nchoosek(1:4,2); <span class="comment">% choose 2 faces</span>
+0278 <span class="keyword">for</span> i = 1:6
+0279       N1 = mdl.normals(mdl.elem2face(:,v(i,1))         , :) <span class="keyword">...</span>
+0280             .* repmat(sign(mdl.inner_normal(:,v(i,1))-0.5),1,3);
+0281       N2 = mdl.normals(mdl.elem2face(:,v(i,2)), :) <span class="keyword">...</span>
+0282             .* repmat(sign(mdl.inner_normal(:,v(i,2))-0.5),1,3);
+0283       C  = <a href="../../eidors/tools/cross3.html" class="code" title="function c = cross3(a,b)">cross3</a>(N1, N2);
+0284       D  = -<a href="../../eidors/tools/dot3.html" class="code" title="function d = dot3(a,b)">dot3</a>  (N1, N2);
+0285       A(:,i) = atan2( sqrt(sum(C.^2,2)), D);
+0286 <span class="keyword">end</span>
+0287 
+0288 
+0289 <a name="_sub23" href="#_subfunctions" class="code">function A = solid_angles(mdl)</a>
+0290 <span class="keyword">for</span> i = 1:4
+0291    E = mdl.elems';
+0292    idx = 1:numel(E); idx(i:4:end) = [];
+0293    N = mdl.nodes(E(idx),:) - reshape(repmat(mdl.nodes(E(i:4:end),:)',3,1),3,[])';
+0294    nmrtr = abs(<a href="../../eidors/tools/det3.html" class="code" title="function D = det3(a)">det3</a>(N));
+0295    L = sqrt(sum(N.^2,2)); <span class="comment">% length of each vector</span>
+0296    dnmtr = L(1:3:end).*L(2:3:end).*L(3:3:end) <span class="keyword">...</span>
+0297       + <a href="../../eidors/tools/dot3.html" class="code" title="function d = dot3(a,b)">dot3</a>(N(1:3:<span class="keyword">end</span>,:), N(2:3:<span class="keyword">end</span>,:)) .* L(3:3:end) <span class="keyword">...</span>
+0298       + <a href="../../eidors/tools/dot3.html" class="code" title="function d = dot3(a,b)">dot3</a>(N(1:3:<span class="keyword">end</span>,:), N(3:3:<span class="keyword">end</span>,:)) .* L(2:3:end) <span class="keyword">...</span>
+0299       + <a href="../../eidors/tools/dot3.html" class="code" title="function d = dot3(a,b)">dot3</a>(N(2:3:<span class="keyword">end</span>,:), N(3:3:<span class="keyword">end</span>,:)) .* L(1:3:end);
+0300    
+0301    A(:,i) = atan2( nmrtr, dnmtr );
+0302 <span class="keyword">end</span>
+0303 idx = A&lt;0;
+0304 A(idx) = A(idx) + pi;
+0305 A = 2*A;
+0306 
+0307 <a name="_sub24" href="#_subfunctions" class="code">function t = tri_angles(mdl)</a>
+0308 v = 1:3;
+0309 L = mdl.edge_length(mdl.face2edge);
+0310 L2 = L.^2;
+0311 <span class="keyword">for</span> i = 1:3
+0312    t(:,i) = acos( (L2(:,v(1)) + L2(:,v(2)) - L2(:,v(3)) ) <span class="keyword">...</span>
+0313                     ./(2 .* L(:,v(1)) .* L(:,v(2)) ) );
+0314    v = circshift(v,[1 2]);
+0315 <span class="keyword">end</span>
+0316 
+0317 
+0318 <a name="_sub25" href="#_subfunctions" class="code">function R = circumsphere_radius(mdl)</a>
+0319 ne = size(mdl.elems,1);
+0320 E = mdl.elems';
+0321 idx = 1:numel(E); idx(1:4:end) = [];
+0322 N = mdl.nodes(E(idx),:) - reshape(repmat(mdl.nodes(E(1:4:end),:)',3,1),3,[])';
+0323 <span class="comment">% prepare a matrix for solving a system</span>
+0324 <span class="comment">% A = sparse(length(N),length(N));</span>
+0325 X = repmat((1:3*ne)',1,3);
+0326 T = reshape((1:3*ne)',3,[])';
+0327 Y(1:3:3*ne,1:3) = T;
+0328 Y(2:3:3*ne,1:3) = T;
+0329 Y(3:3:3*ne,1:3) = T;
+0330 A = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(X,Y,N);
+0331 B = sum(N.^2,2);
+0332 v = A\B;
+0333 V = reshape(v,3,[])';
+0334 R = 0.5 * sqrt(sum(V.^2,2));
+0335 C = mdl.nodes(E(1:4:end),:) + 0.5*V; <span class="comment">% center</span>
+0336 
+0337 
+0338 <a name="_sub26" href="#_subfunctions" class="code">function H = tet_altitudes(mdl)</a>
+0339 elem_sorted = sort(mdl.elems,2);
+0340 v = [4 3 2 1]; <span class="comment">% which vertex is not on the face</span>
+0341 <span class="keyword">for</span> i = 1:4 <span class="comment">% loop over vertices</span>
+0342       Nf = mdl.normals(mdl.elem2face(:,i),:);
+0343       Cf = mdl.face_centre(mdl.elem2face(:,i),:);
+0344       Pe = mdl.nodes(elem_sorted(:,v(i)), :);
+0345       H(:,i) = abs(<a href="../../eidors/tools/dot3.html" class="code" title="function d = dot3(a,b)">dot3</a>(Nf, Pe - Cf));
+0346 <span class="keyword">end</span>
+0347 
+0348 <a name="_sub27" href="#_subfunctions" class="code">function H = tri_altitudes(mdl)</a>
+0349 s = sum(mdl.edge_length(mdl.face2edge),2) / 2;
+0350 S = repmat(s,1,3);
+0351 nmrtr = 2*sqrt(s .* prod(S - mdl.edge_length(mdl.face2edge),2));
+0352 H = repmat(nmrtr,1,3) ./ mdl.edge_length(mdl.face2edge) ;
+0353 
+0354 
+0355 
+0356 <a name="_sub28" href="#_subfunctions" class="code">function R = circumcircle_radius(mdl)</a>
+0357 R = 0.25*prod(mdl.edge_length(mdl.face2edge),2) ./ mdl.face_area; 
+0358 
+0359 <a name="_sub29" href="#_subfunctions" class="code">function R = incircle_radius(mdl)</a>
+0360 R = 2*mdl.face_area ./ sum(mdl.edge_length(mdl.face2edge),2);
+0361 
+0362 <a name="_sub30" href="#_subfunctions" class="code">function R = insphere_radius(mdl)</a>
+0363 R = 3* mdl.elem_vol ./ mdl.elem_area;
+0364 
+0365 <a name="_sub31" href="#_subfunctions" class="code">function A = elem_area(mdl)</a>
+0366 A = sum(mdl.face_area(mdl.elem2face),2);
+0367 
+0368 <a name="_sub32" href="#_subfunctions" class="code">function V = elem_volume(mdl)</a>
+0369 E = mdl.elems';
+0370 idx = 1:numel(E); idx(1:4:end) = [];
+0371 N = mdl.nodes(E(idx),:) - reshape(repmat(mdl.nodes(E(1:4:end),:)',3,1),3,[])';
+0372 V = abs(<a href="../../eidors/tools/det3.html" class="code" title="function D = det3(a)">det3</a>(N))/6;
+0373 
+0374 <a name="_sub33" href="#_subfunctions" class="code">function do_unit_test</a>
+0375 
+0376 nodes = [0 0 0; 0 1 0; 1 1 0; 1 0 0;<span class="keyword">...</span>
+0377    0 0 1; 0 1 1; 1 1 1; 1 0 1];
+0378 elems = [1 2 3 6; 3 6 7 8; 1 5 6 8; 1 3 4 8; 1 3 6 8];
+0379 cube = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>,<span class="string">'cube'</span>,<span class="string">'nodes'</span>, nodes, <span class="string">'elems'</span>, elems);
+0380 <span class="comment">% note the the 5th element is a regular tet</span>
+0381 Q = <a href="calc_mesh_quality.html" class="code" title="function [Q mdl] = calc_mesh_quality(mdl, show)">calc_mesh_quality</a>(cube);
+0382 
+0383 <span class="keyword">if</span> 0
+0384    f = fieldnames(Q);
+0385    <span class="keyword">for</span> i = 1:length(f)
+0386       disp(f{i});
+0387       f2 = fieldnames(Q.(f{i}));
+0388       <span class="keyword">for</span> j = 1:length(f2)
+0389          disp([<span class="string">' .'</span> f2{j}]);
+0390          disp(Q.(f{i}).(f2{j})');
+0391       <span class="keyword">end</span>
+0392    <span class="keyword">end</span>
+0393 <span class="keyword">end</span>
+0394 
+0395 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tri.NSR'</span>, Q.tri.NSR, 0.828427124746190, 1e-8);
+0396 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tri.mu'</span>, Q.tri.mu, 0.717438935214301, 1e-8);
+0397 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tri.eta'</span>, Q.tri.eta, 0.866025403784439, 1e-8);
+0398 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tri.theta'</span>, Q.tri.theta, 0.707106781186547, 1e-8)
+0399 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tri.iota'</span>, Q.tri.iota, 0.891518811420827, 1e-8)
+0400 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tri.kappa'</span>, Q.tri.kappa, 0.577350269189626, 1e-8)
+0401 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tri.min_angle'</span>, Q.tri.min_angle, 0.750000000000000, 1e-8)
+0402 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tet.NSR'</span>, Q.tet.NSR(1:4), 0.732050807568877, 1e-8);
+0403 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tet.mu'</span>, Q.tet.mu(1:4), 0.732050807568877, 1e-8);
+0404 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tet.eta'</span>, Q.tet.eta(1:4), 0.839947366596582, 1e-8);
+0405 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'CUBE:tet.min_angle'</span>, Q.tet.min_angle(1:4), 0.776074828029885, 1e-8);
+0406 
+0407 
+0408 real = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'b3t2r'</span>,[16,1]); real = real.fwd_model;
+0409 [Q real] = <a href="calc_mesh_quality.html" class="code" title="function [Q mdl] = calc_mesh_quality(mdl, show)">calc_mesh_quality</a>(real, 1);
+0410 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'B3T2:tri.NSR'</span>,Q.tri.NSR(1:3), [0.828427124746190;
+0411    0.828051875000156; 0.828051875000156], 1e-8);
+0412 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'B3T2:tri.eta'</span>,Q.tri.eta(1:3), [0.866025403784439;
+0413    0.865565849069265; 0.865565849069265], 1e-8);
+0414 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'B3T2:tet.min_angle'</span>,Q.tet.min_angle(1:3), [0.638037414014943;
+0415    0.624804247692675; 0.638037414014943], 1e-8);
+0416 
+0417 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'B3T2:real.min_edge_length'</span>, real.min_edge_length(1:3), <span class="keyword">...</span>
+0418    [19.190248174528644;18.575016823680134;18.575016823680134], 1e-8);
+0419 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'B3T2:real.rad_incircle'</span>, real.rad_incircle(7:9), <span class="keyword">...</span>
+0420    [ 5.871326906131572; 5.440496467001706; 6.523833186814214], 1e-8);
+0421 
+0422 
+0423 shell = real; shell.elems = shell.boundary;
+0424 [Q shel] = <a href="calc_mesh_quality.html" class="code" title="function [Q mdl] = calc_mesh_quality(mdl, show)">calc_mesh_quality</a>(shell, 1);
+0425 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'SHELL:tri.kappa'</span>, Q.tri.kappa(1:3),  <span class="keyword">...</span>
+0426    [ 0.577350269189626; 0.577043899379510; 0.577350269189626], 1e-8);
+0427 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'SHELL:dihedral_angle'</span>, shell.dihedral_angle(1:2,1:3),  <span class="keyword">...</span>
+0428 [ 0.830397390875299, 1.570796326794897, 1.570796326794897;
+0429   1.570796326794897, 0.830397390875299, 1.570796326794897], 1e-8);
+0430 
+0431 real = <a href="../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>(<span class="string">'pig_23kg_16el'</span>);
+0432 [Q real] = <a href="calc_mesh_quality.html" class="code" title="function [Q mdl] = calc_mesh_quality(mdl, show)">calc_mesh_quality</a>(real, 1);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

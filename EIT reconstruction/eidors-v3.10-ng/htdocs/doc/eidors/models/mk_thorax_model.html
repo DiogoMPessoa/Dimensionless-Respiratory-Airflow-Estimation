@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_thorax_model</title>
+  <meta name="keywords" content="mk_thorax_model">
+  <meta name="description" content="MK_THORAX_MODEL FEM models of the thorax">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_thorax_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_thorax_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_THORAX_MODEL FEM models of the thorax</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function out = mk_thorax_model(str, elec_pos, elec_shape, maxh) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MK_THORAX_MODEL FEM models of the thorax
+
+ MK_THORAX_MODEL provides a shorthand to predefined thorax FEMs and 
+ for using contributed models with PLACE_ELEC_ON_SURF. You may be asked
+ to download missing files. 
+
+ MK_THORAX_MODEL(shapestr,elec_pos, elec_shape, maxh) where:
+  shapestr    - a string specifying the underlying model.
+                Run MK_THORAX_MODEL('list_shapes') for a list.
+  elec_pos    - a vector specifying electrode positions.
+                See PLACE_ELEC_ON_SURF for details.
+  elec_shape  - a vector specifying electrode shapes.
+                See PLACE_ELEC_ON_SURF for details.
+  This usage returns a fwd_model structure.
+
+ MK_THORAX_MODEL(modelstr) provides quick access to predefined models.
+ Run MK_THORAX_MODEL('list') for a list. This usage returns either a 
+ fwd_model or an image structure.
+
+ MK_THORAX_MODEL('list_shapes') lists available thorax shapes without 
+  electrodes.
+
+ MK_THORAX_MODEL('list') lists available predefined models.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/interface/get_contrib_data.html" class="code" title="function p = get_contrib_data( contrib , file )">get_contrib_data</a>	GET_CONTRIB_DATA Get files from the EIDORS data_contrib repository</li><li><a href="../../eidors/meshing/netgen/call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>	CALL_NETGEN: call netgen to create a vol_file from a geo_file</li><li><a href="../../eidors/meshing/netgen/ng_mk_fwd_model.html" class="code" title="function [fwd_mdl]=ng_mk_fwd_model( ng_vol_filename, centres,name, stim_pattern, z_contact, postprocmesh)">ng_mk_fwd_model</a>	NG_MK_FWD_MODEL: create a fwd_model object from a netgen vol file</li><li><a href="../../eidors/meshing/netgen/ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>	NG_WRITE_OPT Write an ng.opt file in current directory</li><li><a href="../../eidors/meshing/stl/stl_write.html" class="code" title="function stl_write(fv, name)">stl_write</a>	STL_WRITE Create a text STL file from a patch struct</li><li><a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>	FIX_MODEL: Add useful fields to a model</li><li><a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li><li><a href="mk_thorax_model_grychtol2016a.html" class="code" title="function img = mk_thorax_model_grychtol2016a(stimpat)">mk_thorax_model_grychtol2016a</a>	Builds the male thorax models from Grychtol, M�ler and Adler (2016)</li><li><a href="place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>	MK_LUNG_IMAGE create an image with lung and heart contrasts from a model</li><li><a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li><li><a href="mk_thorax_model_grychtol2016a.html" class="code" title="function img = mk_thorax_model_grychtol2016a(stimpat)">mk_thorax_model_grychtol2016a</a>	Builds the male thorax models from Grychtol, M�ler and Adler (2016)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function ls = list_basic_shapes</a></li><li><a href="#_sub2" class="code">function out = build_basic_model(str)</a></li><li><a href="#_sub3" class="code">function out = remesh_at_model(str)</a></li><li><a href="#_sub4" class="code">function mdl = fix_boundary(mdl)</a></li><li><a href="#_sub5" class="code">function ls = list_predef_models</a></li><li><a href="#_sub6" class="code">function out = build_predef_model(str)</a></li><li><a href="#_sub7" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)</a>
+0002 <span class="comment">%MK_THORAX_MODEL FEM models of the thorax</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% MK_THORAX_MODEL provides a shorthand to predefined thorax FEMs and</span>
+0005 <span class="comment">% for using contributed models with PLACE_ELEC_ON_SURF. You may be asked</span>
+0006 <span class="comment">% to download missing files.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% MK_THORAX_MODEL(shapestr,elec_pos, elec_shape, maxh) where:</span>
+0009 <span class="comment">%  shapestr    - a string specifying the underlying model.</span>
+0010 <span class="comment">%                Run MK_THORAX_MODEL('list_shapes') for a list.</span>
+0011 <span class="comment">%  elec_pos    - a vector specifying electrode positions.</span>
+0012 <span class="comment">%                See PLACE_ELEC_ON_SURF for details.</span>
+0013 <span class="comment">%  elec_shape  - a vector specifying electrode shapes.</span>
+0014 <span class="comment">%                See PLACE_ELEC_ON_SURF for details.</span>
+0015 <span class="comment">%  This usage returns a fwd_model structure.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% MK_THORAX_MODEL(modelstr) provides quick access to predefined models.</span>
+0018 <span class="comment">% Run MK_THORAX_MODEL('list') for a list. This usage returns either a</span>
+0019 <span class="comment">% fwd_model or an image structure.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% MK_THORAX_MODEL('list_shapes') lists available thorax shapes without</span>
+0022 <span class="comment">%  electrodes.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% MK_THORAX_MODEL('list') lists available predefined models.</span>
+0025 <span class="comment">%</span>
+0026 
+0027 <span class="comment">%</span>
+0028 <span class="comment">% See also: PLACE_ELEC_ON_SURF, MK_LIBRARY_MODEL</span>
+0029 
+0030 <span class="comment">% (C) 2015-2016 Bartlomiej Grychtol. License: GPL version 2 or 3</span>
+0031 <span class="comment">% $Id: mk_thorax_model.m 5903 2019-02-05 11:08:03Z aadler $</span>
+0032 
+0033 <span class="keyword">if</span> nargin&gt;0 &amp;&amp; ischar(str) 
+0034    <span class="keyword">switch</span>(str)
+0035       <span class="keyword">case</span> <span class="string">'UNIT_TEST'</span>;
+0036          <a href="#_sub7" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>;
+0037       <span class="keyword">case</span> <span class="string">'list_shapes'</span>
+0038          out = <a href="#_sub1" class="code" title="subfunction ls = list_basic_shapes">list_basic_shapes</a>; <span class="keyword">return</span>;
+0039       <span class="keyword">case</span> <span class="string">'list'</span>
+0040          out = <a href="#_sub5" class="code" title="subfunction ls = list_predef_models">list_predef_models</a>; <span class="keyword">return</span>;
+0041    <span class="keyword">end</span>
+0042 <span class="keyword">end</span>
+0043 <span class="keyword">if</span> ismember(str,<a href="#_sub5" class="code" title="subfunction ls = list_predef_models">list_predef_models</a>)
+0044    out = <a href="#_sub6" class="code" title="subfunction out = build_predef_model(str)">build_predef_model</a>(str);
+0045    <span class="keyword">return</span>
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="keyword">if</span> ~ismember(str, <a href="#_sub1" class="code" title="subfunction ls = list_basic_shapes">list_basic_shapes</a>)
+0049    error(<span class="string">'Shape str &quot;%s&quot; not understood.'</span>,str);
+0050 <span class="keyword">end</span>
+0051 
+0052 
+0053 
+0054 out = <a href="#_sub2" class="code" title="subfunction out = build_basic_model(str)">build_basic_model</a>(str);
+0055 <span class="keyword">if</span> nargin &gt; 1
+0056    out = <a href="place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>(out,elec_pos,elec_shape,[],maxh);
+0057    out = <a href="#_sub4" class="code" title="subfunction mdl = fix_boundary(mdl)">fix_boundary</a>(out);
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="keyword">end</span>
+0061 
+0062 <a name="_sub1" href="#_subfunctions" class="code">function ls = list_basic_shapes</a>
+0063    ls = {<span class="string">'male'</span>,<span class="string">'female'</span>};
+0064 <span class="keyword">end</span>
+0065 
+0066 <a name="_sub2" href="#_subfunctions" class="code">function out = build_basic_model(str)</a>
+0067 <span class="keyword">switch</span>(str)
+0068    <span class="keyword">case</span> {<span class="string">'male'</span>, <span class="string">'female'</span>}
+0069       out = <a href="#_sub3" class="code" title="subfunction out = remesh_at_model(str)">remesh_at_model</a>(str);
+0070 <span class="keyword">end</span>
+0071 <span class="keyword">end</span>
+0072 
+0073 <a name="_sub3" href="#_subfunctions" class="code">function out = remesh_at_model(str)</a>
+0074    tmpnm  = tempname;
+0075    
+0076    stlfile = [tmpnm <span class="string">'.stl'</span>];
+0077    volfile = [tmpnm <span class="string">'.vol'</span>];
+0078    
+0079    contrib = <span class="string">'at-thorax-mesh'</span>; file =  sprintf(<span class="string">'%s_t_mdl.mat'</span>,str);
+0080    load(<a href="../../eidors/interface/get_contrib_data.html" class="code" title="function p = get_contrib_data( contrib , file )">get_contrib_data</a>(contrib,file));
+0081    <span class="keyword">if</span> strcmp(str,<span class="string">'male'</span>)
+0082       fmdl.nodes = fmdl.nodes - 10; <span class="comment">% center the model</span>
+0083    <span class="keyword">end</span>
+0084    fmdl = <a href="#_sub4" class="code" title="subfunction mdl = fix_boundary(mdl)">fix_boundary</a>(fmdl);
+0085    STL.vertices = fmdl.nodes;
+0086    STL.faces    = fmdl.boundary;
+0087    <a href="../../eidors/meshing/stl/stl_write.html" class="code" title="function stl_write(fv, name)">stl_write</a>(STL,stlfile);
+0088    opt.stloptions.yangle = 55;
+0089    opt.stloptions.edgecornerangle = 5;
+0090    opt.meshoptions.fineness = 6;
+0091    opt.options.meshsize = 30;
+0092    opt.options.minmeshsize = 10;
+0093    opt.stloptions.resthsurfcurvfac = 2;
+0094    opt.stloptions.resthsurfcurvenable = 1;
+0095    opt.stloptions.chartangle = 30;
+0096    opt.stloptions.outerchartangle = 90;
+0097    <a href="../../eidors/meshing/netgen/ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>(opt);
+0098    <a href="../../eidors/meshing/netgen/call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>(stlfile,volfile);
+0099    out=<a href="../../eidors/meshing/netgen/ng_mk_fwd_model.html" class="code" title="function [fwd_mdl]=ng_mk_fwd_model( ng_vol_filename, centres,name, stim_pattern, z_contact, postprocmesh)">ng_mk_fwd_model</a>(volfile,[],[],[],[]);
+0100    delete(stlfile);
+0101    delete(volfile);
+0102    delete(<span class="string">'ng.opt'</span>);
+0103    
+0104    out = rmfield(out,<span class="keyword">...</span>
+0105       {<span class="string">'mat_idx'</span>,<span class="string">'np_fwd_solve'</span>,<span class="string">'boundary_numbers'</span>});
+0106    
+0107 <span class="keyword">end</span>
+0108 
+0109 <a name="_sub4" href="#_subfunctions" class="code">function mdl = fix_boundary(mdl)</a>
+0110     opt.elem2face  = 1;
+0111     opt.boundary_face = 1;
+0112     opt.inner_normal = 1;
+0113     mdl = <a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>(mdl,opt);
+0114     flip = mdl.elem2face(logical(mdl.boundary_face(mdl.elem2face).*mdl.inner_normal));
+0115     mdl.faces(flip,:) = mdl.faces(flip,[1 3 2]);
+0116     mdl.normals(flip,:) = -mdl.normals(flip,:);
+0117     mdl.boundary = mdl.faces(mdl.boundary_face,:);
+0118 <span class="keyword">end</span>
+0119 
+0120 <a name="_sub5" href="#_subfunctions" class="code">function ls = list_predef_models</a>
+0121    ls = {<span class="string">'adult_male_grychtol2016a_1x32'</span>
+0122          <span class="string">'adult_male_grychtol2016a_2x16'</span>};
+0123 <span class="keyword">end</span>
+0124 
+0125 <a name="_sub6" href="#_subfunctions" class="code">function out = build_predef_model(str)</a>
+0126    <span class="keyword">switch</span> str
+0127       <span class="keyword">case</span> <span class="string">'adult_male_grychtol2016a_1x32'</span>
+0128          out = <a href="mk_thorax_model_grychtol2016a.html" class="code" title="function img = mk_thorax_model_grychtol2016a(stimpat)">mk_thorax_model_grychtol2016a</a>(<span class="string">'1x32_ring'</span>);
+0129          
+0130       <span class="keyword">case</span> <span class="string">'adult_male_grychtol2016a_2x16'</span>
+0131          out = <a href="mk_thorax_model_grychtol2016a.html" class="code" title="function img = mk_thorax_model_grychtol2016a(stimpat)">mk_thorax_model_grychtol2016a</a>(<span class="string">'2x16_planar'</span>);
+0132    <span class="keyword">end</span>
+0133 <span class="keyword">end</span>
+0134 
+0135 
+0136 <a name="_sub7" href="#_subfunctions" class="code">function do_unit_test</a>
+0137    subplot(121)
+0138    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(<a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>(<span class="string">'male'</span>));
+0139    
+0140    subplot(122)
+0141    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(<a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>(<span class="string">'female'</span>));
+0142    
+0143 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

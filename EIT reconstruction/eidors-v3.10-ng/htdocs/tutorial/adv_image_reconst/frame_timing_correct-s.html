@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Correction for effect of serial data collection
+</h2>
+
+Most EIT systems use serial data collection which, if uncorrected, results in
+image distortion, particularly when breathing rates are high compared to the
+acquisition frame rate.
+
+This tutorial demonstrates use of the correction tool documented in the published papers
+<ul>
+<LI>
+Yerworth, R., Frerichs, I. &amp; Bayford, R., 2016. Analysis and compensation for errors in electrical impedance tomography images and ventilation-related measures. Journal of Clinical Monitoring and Computing, <a href="http://iopscience.iop.org/0967-3334/34/6/659/pdf/0967-3334_34_6_659.pdf">doi:10.1007/s10877-016-9920-y</a>
+<LI>
+Yerworth, R. &amp; Bayford, R. 2013. The effect of serial data collection on the accuracy of electrical impedance tomography images. Physiological Measurement 34:6 p659-669 
+</ul>
+This tool <tt>frame_timing_correct.m</tt> corrects serially collected *.get
+data so that each frame appears to come from an instantaneous point in time. 
+(future versions of the code will correct data from other data formats)
+
+<p>
+The original versions of this software and a compiled tool (for windows only) are
+ <a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/dev/r_yerworth/">available</a>
+
+<H3>
+Example
+</H3>
+Download example 
+<a href = "http://eidors3d.sourceforge.net/data_contrib/if-neonate-ventilated/if-neonate-ventilated.zip">data</a>
+set (<a
+ href="http://eidors3d.sourceforge.net/data_contrib/if-neonate-ventilated/index.shtml"
+>ventilated neonate</a>) and unzip to a known location.
+
+<H3>
+Correct using GUI
+</H3>
+
+<pre>
+frame_timing_correct_gui
+% Navigate to location of data
+%    Choose file nm18.get
+% New file is saved as [ORIGINALNAME].get = nm18-corrected.get
+% print_convert frame_timing_correct01a.jpg
+</pre>
+
+Outputs:   *_corrected.get &amp; associated *_corrected.prl files (if the original *.prl file is in the same directory). These can now be reconstructed with using your normal method.
+<p>
+The absolute percentage difference between original and corrected data as mean (+/- std) of all electrode combinations is displayed in a pop up box. 
+<p>
+ 
+In addition, the function checks for reciprocity errors. Reciprocity is a measure of the quality and reliability of the data, including the improvement in quality due to lag correction (see Reciprocity theory box, below). If any electrode combination has a median reciprocity error greater than a predetermined threshold a message box pops up, stating the percentage of electrode combinations affected, and optionally provides a graphical representation of the reciprocity errors (click display). 
+<p>
+              
+The threshold is currently set at the arbitrary value of 5%, based in experience that human data with errors less than this, on most electrode combinations, can usually be obtained.  
+The upper plot, of the graphical representation, is reciprocity errors as a function of time and would show, for example, an electrode developing a permanent or temporary fault during the experiment, and when this occurred.   The lower plot shows the mean (+/- std) for each electrode combination. Electrode combinations using the same drive pair are grouped together, and the x-axis is labelled to reflect this. The number of electrodes exceeding the threshold will always be zero or an even number, since each electrode combination has a reciprocal pair, and it is not know which of them is most accurate.
+
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/frame_timing_correct01a.jpg">
+<br><i> Figure:</i>
+In this example, all reciprocities are stable over time, with one pair of combinations at ~40% error and a few around 25%. 
+</center>
+
+<H3>
+Create inverse model of neonate using FEM model from EIDORS library
+</H3>
+
+<pre>
+fmdl = mk_library_model('neonate_16el_lungs');
+[fmdl.stimulation fmdl.meas_select] = mk_stim_patterns(16,1,'{ad}','{ad}',{'rotate_meas'});
+fmdl = mdl_normalize(fmdl, 1);  % Use normalized difference imaging
+opt.noise_figure = 0.2; opt.target_size = 0.1;
+opt.square_pixels = 1; opt.distr = 3;
+
+inv_mdl = mk_GREIT_model(fmdl, 0.25,5, opt); 
+
+</pre>
+
+<H3>
+Load original and corrected data, and reconstruct images of last breath, using the average of all frames as the reference.
+</H3>
+
+<pre>
+Original = eidors_readdata('nm18.get','GET-RAW');
+Orig_ref = mean(Original,2); % reference frame - average of all frames
+Orig_imag=inv_solve(inv_mdl,Original(:,691:717),Orig_ref); %reconstruct difference images
+
+%Corrected = eidors_readdata('nm18_corrected.get','GET-RAW');  % If using GUI
+Corrected = frame_timing_correct( Original, 'FFT');
+Corr_ref = mean(Corrected,2); % reference frame - average of all frames
+Corr_imag=inv_solve(inv_mdl,Corrected(:,691:717),Corr_ref); %reconstruct difference images
+
+</pre>
+
+<H3>
+Display images from last breath
+</H3>
+
+<pre>
+subplot(121);
+show_slices(Orig_imag); title 'Original'
+subplot(122);
+show_slices(Corr_imag); title 'Corrected'
+
+print_convert frame_timing_correct03a.jpg
+
+</pre>
+
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/frame_timing_correct03a.jpg">
+<br><i> Figure:</i>
+The first image is the top left, continuing in normal reading order to the
+bottom row, right hand image. Red indicates relative impedance increases
+(inspiration) and blue relative impedance decreases (expiration).  Changes in
+the upper left of each image occur sooner in the original than the corrected
+series, and the left and right sides appear more unbalanced in the original
+series. If a different reconstruction algorithm is used the images will be
+slightly different, but similar trends should be expected. 
+</center>
+
+<H3>
+Note on reciprocity:
+</H3>
+EIT images are reconstructed from sets of 4-electrode impedance measurements
+i.e. current is injected via one pair of electrodes (j,k)  and measured with a
+separate pair (m,n). Theoretically the same result would be obtained if the
+electrodes were reversed – i.e. injection m,n, measurement j,k. However this is
+not so in in practice due to non-idealities in the system and electrode/skin
+interface. The absolute difference between the two measurements is termed the
+reciprocity error and is normally expressed as a percentage relative to the
+mean of the two measurements.  Many EIT systems collect from all electrode
+combinations, enabling reciprocity to checked after data collection.
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-05-24 09:41:35 -0400 (Wed, 24 May 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

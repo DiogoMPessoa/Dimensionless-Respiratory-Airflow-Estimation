@@ -1,0 +1,550 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Using Netgen to create general (arbitrary) EIDORS Models
+</h2>
+
+EIDORS can use
+<a href="http://sourceforge.net/projects/netgen-mesher/">
+Netgen</a> to create sophisticated 2D and 3D models
+
+<p>
+Here are some examples of the varity of models which
+can be generated using the function: <tt>ng_mk_gen_models</tt>.
+<p>
+
+<h3>
+Shape 1
+</h3>
+<pre>
+ shape_str = ['solid cyl    = cylinder (0,0,0; 0,0,1; 1); \n', ...
+              'solid p1= plane(0,0,0;0,0.5,-1);\n' ...
+              'solid p2= plane(0,0,2;0.5,0, 1);\n' ...
+              'solid mainobj= p1 and p2 and cyl -maxh=0.3;\n'];
+ elec_pos = []; elec_shape = []; elec_obj = {};
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+ show_fem( fmdl );
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models01.png">
+</center>
+
+<h3>
+Shape 2
+</h3>
+<pre>
+ shape_str = ['solid cyl    = cylinder (0,0,0; 0,0,1; 1); \n', ...
+              'solid mainobj= plane(0,0,0;0,0,-1)\n' ...
+                        'and  plane(0,0,1.5;0.2,0.2,1)\n' ...
+                        'and  cyl -maxh=0.3;\n'];
+ elec_pos = [ -1,  0,  1,   1,  0,  0;
+               0, -1,1.2,   0,  1,  0]; 
+ elec_shape=[0.1,0,0;0.2,0.3,0.02];
+ elec_obj = 'cyl';
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+ show_fem( fmdl );
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models02.png">
+</center>
+
+<h3>
+Shape 3
+</h3>
+<pre>
+ shape_str = ['solid cyl    = cylinder (0,0,0; 0,0,1; 1); \n', ...
+              'solid mainobj= orthobrick(-2,-2,0;2,2,2) and cyl -maxh=0.3;\n'];
+ th = linspace(0,2*pi,15)'; th(end) = [];
+ cs = [cos(th), sin(th)];
+ elec_pos = [  cs, th/2/pi + 0.5, cs, 0*th];
+ elec_shape=[0.1];
+ elec_obj = 'cyl';
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+ show_fem( fmdl );
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models03.png">
+</center>
+
+<h3>
+Shape 4
+</h3>
+<pre>
+ shape_str = ['solid cyl    = cylinder (0,0,0; 0,0,1; 1); \n', ...
+              'solid mainobj= orthobrick(-2,-2,0;2,2,2) and cyl -maxh=0.3;\n'];
+ th = linspace(0,2*pi,15)'; th(end) = [];
+ cs = [cos(th), sin(th)];
+ elec_pos = [  cs, th/2/pi + 0.5, cs, 0*th];
+ elec_shape=[0.1*th/2/pi + 0.05];
+ elec_obj = 'cyl';
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+ show_fem( fmdl );
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models04.png">
+</center>
+
+<h3>
+Shape 5
+</h3>
+<pre>
+ shape_str = ['solid cyl    = cylinder (0,0,0; 1,0,0; 1); \n', ...
+              'solid mainobj= plane(0,0,0;-1,0,0)\n' ...
+                        'and  plane(2,0,0;1,0,0)\n' ...
+                        'and  plane(0,0,-0.5;0,0,-1)\n' ...
+                        'and  cyl -maxh=0.3;\n'];
+ elec_pos = [  1,  0,  1,   0,  0,  1;
+             1.2,  1,  0,   0,  1,  0]; 
+ elec_shape=[0.1];
+ elec_obj = 'cyl';
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+ show_fem( fmdl );
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models05.png">
+</center>
+
+<h3>
+Shape 6
+</h3>
+<pre>
+ shape_str = ['solid cyl    = cylinder (0,0,0; 0,0,1; 1); \n', ...
+              'solid bottom = plane(0,0,0;0,0,-1);\n' ...
+              'solid top    = plane(0,0,2;0,0,1);\n' ...
+              'solid mainobj= top and bottom and cyl -maxh=0.3;\n'];
+ elec_pos = [  1,  0,  1,   1,  0,  0;
+               0,  1,1.2,   0,  1,  0;
+               0.8,  0,  0, 0,  0, -1]; 
+ elec_shape=[0.1];
+ elec_obj = {'cyl','cyl','bottom'};
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+ show_fem( fmdl );
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models06.png">
+</center>
+
+<h3>
+Shape 7
+</h3>
+<pre>
+ shape_str = ['solid top    = plane(0,0,0;0,0,1);\n' ...
+              'solid mainobj= top and orthobrick(-2,-2,-2;2,2,0);\n'];
+ elec_pos = [  1,  0,  0,   0,  0,  1;
+               0,  0,  0,   0,  0,  1;
+              -1,  0,  0,   0,  0,  1];
+ elec_shape=[0.1];
+ elec_obj = 'top';
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+ show_fem( fmdl );
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models07.png">
+</center>
+
+<h3>
+Shape 8
+</h3>
+<pre>
+ shape_str = ['solid top    = plane(0,0,0;0,0,1);\n' ...
+              'solid cyl    = ellipticcylinder(0,0,0;2.5,0,0;0,1,0);\n' ...
+              'solid mainobj= top and cyl and orthobrick(-2,-2,-2;2,2,0);\n'];
+ elec_pos = [  1,  0,  0,   0,  0,  1;
+               0,  0,  0,   0,  0,  1;
+              -1,  0,  0,   0,  0,  1;
+               1, -1,-1.2,  0, -1,  0;
+               0, -1,-1.0,  0, -1,  0;
+              -1, -1,-0.8,  0, -1,  0];
+ elec_shape=[0.1];
+ elec_obj = {'top','top','top','cyl','cyl','cyl'};
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+ show_fem( fmdl );
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models08.png">
+</center>
+
+<h3>
+Shape 9
+</h3>
+<pre>
+ shape_str = ['solid top    = plane(0,0,0;0,0,1);\n' ...
+              'solid ball   = sphere(-1.25,0,-1;0.5); tlo ball;\n' ...
+              'solid mainobj= top and orthobrick(-2,-1,-2;2,1,0) and not ball -maxh=0.5;\n'];
+ elec_pos = linspace( -1.5,1.5,5)';
+ elec_pos = [  elec_pos, elec_pos*[0,0,0,0], elec_pos*0+1];
+ elec_shape=[0.3];
+ elec_obj = 'top';
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+
+ img = mk_image( fmdl, 1);
+ img.elem_data(fmdl.mat_idx{2}) = 1.1; 
+ show_fem( img );
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models09.png">
+</center>
+
+<h3>
+Shape 10
+</h3>
+<pre>
+ shape_str = ['solid top    = plane(0,0,0;0,0,1);\n' ...
+              'solid mainobj= top and orthobrick(-3,-3,-2;3,3,0) -maxh=0.5;\n'];
+ [elec_pos_x,elec_pos_y] = meshgrid(linspace( -1.5,1.5,5),linspace(-2,2,7));
+ elec_pos = [  elec_pos_x(:), elec_pos_y(:), ones(size(elec_pos_x(:)))*[0,0,0,1] ];
+ elec_shape=[0.2];
+ elec_obj = 'top';
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models10.png">
+</center>
+
+<h3>
+Shape 11
+</h3>
+
+This shape could represent an elliptical fish or submarine
+generating electrical signals in a tank with electrodes
+on the tank boundary.
+<pre>
+shape_str = ['solid cyl    = cylinder (0,0,0; 0,0,1; 1.0); \n', ...
+             'solid tank   = orthobrick(-2,-2,0;2,2,0.4) and cyl; \n', ...
+             'solid fish   = ellipsoid(0.2,0.2,0.2;0.2,0,0;0,0.1,0;0,0,0.1); tlo fish;\n', ...
+             'solid mainobj= tank and not fish -maxh=0.3;\n'];
+n_elec = 7;
+th = linspace(0,2*pi,n_elec+1)'; th(end) = [];
+cs = [cos(th), sin(th)];
+elec_pos = [  cs, 0.2+0*th, cs, 0*th];
+elec_shape=[0.05];
+for i=1:n_elec; elec_obj{i} = 'cyl'; end
+i=i+1;elec_pos(i,:) = [ 0  ,0.2,0.2,-1,0,0]; elec_obj{i} = 'fish';
+i=i+1;elec_pos(i,:) = [ 0.4,0.2,0.2, 1,0,0]; elec_obj{i} = 'fish';
+fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models11.png">
+<br>Tank with 7 electrodes on the boundary an two electrodes
+on the inclusion.
+</center>
+
+<h3>
+Shape 12
+</h3>
+
+<pre>
+shape_str = ['solid top     = ellipsoid(0,0,0; 0,0,1; 1,0,0; 0,1,0); \n' ...
+    'solid mainobj= top and orthobrick(-2,-2,0;2,2,2) -maxh=0.1;\n'];
+deg2rad = pi/180;
+th = (-70:20:70)'*deg2rad;
+elec_pos = [0*th,sin(th),cos(th),0*th,sin(th),cos(th); ...
+            sin(th),0*th,cos(th),sin(th),0*th,cos(th)];
+elec_shape=[0.05];
+elec_obj = 'top';
+fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models12.png">
+<br>Half sphere with top surface electrodes
+</center>
+
+<h3>
+Shape 13
+</h3>
+
+<pre>
+ shape_str = ['solid cyl    = cylinder (0,0,0; 0,1,0; 1); \n', ...
+              'solid bottom = plane(0, 0,0;0,-1,0);\n' ...
+              'solid top    = plane(0,10,0;0, 1,0);\n' ...
+              'solid cut1   = plane(0, 4,0;0,-1,0);\n' ...
+              'solid cut2   = plane(0, 6,0;0, 1,0);\n' ...
+              'solid ball   = cyl and cut1 and cut2;  tlo ball;\n' ...
+              'solid mainobj= ( top and (not cut2) and cyl ) or ' ...
+                      '(bottom      and (not cut1) and cyl ) -maxh=0.8;\n'];
+ elec_pos = [ 0, 10,  0, 0,  1,  0; 
+              0,  0,  0, 0, -1,  0]; 
+ elec_shape=[1.0];
+ elec_obj = {'top','bottom'};
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+ img  = mk_image(fmdl,1); 
+ img.elem_data(fmdl.mat_idx{2}) = 1.1;
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models13.png">
+<br>Fem model of a cylindrical resistor with electrodes at the ends
+</center>
+
+
+<h3>
+Shape 14
+</h3>
+
+<pre>
+shape_str = ['solid cyl    = cylinder (0,0,0; 0,1,0; 1); \n', ...
+             'solid bottom = plane(0, 0,0;0,-1,0);\n' ...
+             'solid top    = plane(0,15,0;0, 1,0);\n' ...
+             'solid cut1   = plane(0, 6,0;0,-1,0);\n' ...
+             'solid cut2   = plane(0, 9,0;0, 1,0);\n' ...
+             'solid rod   = cyl and (top and not cut2) or cyl and (bottom and not cut1);\n' ... 
+             'tlo rod -maxh=0.8;\n',...
+             'solid mainobj= orthobrick(-5,-5,-5;5,20,5) and not rod;\n'];
+
+elec_pos = [0,15, 0, 0, 1, 0; %top end electrode
+            0,13, 0,-1, 0, 0; %top cylinder electrode
+            0, 0, 0, 0,-1, 0; %bot end electrode
+            0, 2, 0, 1, 0, 0];%bot cylinder electrode
+elec_shape=[6,0,0];
+elec_obj = {'rod','rod','rod','rod'};
+[fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+img  = mk_image(fmdl,1); 
+
+% join electrodes
+fmdl.electrode(3).nodes = unique(horzcat(fmdl.electrode(3:4).nodes));
+fmdl.electrode(4) = [];
+fmdl.electrode(1).nodes = unique(horzcat(fmdl.electrode(1:2).nodes));
+fmdl.electrode(2) = [];
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models14.png">
+<br>Bare conductive wires within a tank
+</center>
+
+<h3>
+Shape 15
+</h3>
+<pre>
+shape_str = [ ...
+  'solid cyl     = cylinder (-2,0,0;-2,0,1; 0.1); \n', ...
+  'solid borehole= cyl and plane (0,0,-2;0,0,-1); \n', ...
+  'solid cel1= orthobrick(-10,-10,-1.1;10,10,-1.0) and cyl; tlo cel1 -maxh=0.5;\n' ...
+  'solid cel2= orthobrick(-10,-10,-1.6;10,10,-1.5) and cyl; tlo cel2 -maxh=0.5;\n' ...
+  'solid top    = plane(0,0,0;0,0,1);\n' ...
+  'solid top_obj= top and orthobrick(-5,-5,-5;5,5,0) -maxh=0.5;\n' ...
+  'solid mainobj= top_obj and not borehole;\n'];
+[elec_pos_x,elec_pos_y] = meshgrid(linspace( -1.5,1.5,3),linspace(-2,2,4));
+elec_pos = [  elec_pos_x(:), elec_pos_y(:), ones(size(elec_pos_x(:)))*[0,0,0,1] ];
+elec_shape=[0.1];
+elec_obj = repmat({'top'}, 1, size(elec_pos,1));
+elec_pos(end+1,:) = [-2.0,0,-1.05,0,0,1]; elec_obj(end+1)   = {'cel1'};
+elec_pos(end+1,:) = [-2.0,0,-1.55,0,0,1]; elec_obj(end+1)   = {'cel2'};
+[fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+</pre>
+
+To crop the model, use the code
+<pre>
+crop_model([], inline('z<-2 | abs(x)>2.5 | abs(y)>2.5','x','y','z'));
+axis([-2.5,2.5,-2.5,2.5,-2,0]);
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models15.png"><img src="netgen_gen_models15a.png">
+<br>Surface electrodes and ring electrodes on a borehole
+</center>
+
+<h3>
+Shape 16
+</h3>
+<pre>
+ shape_str = ['solid top    = plane( 0, 0, 0; 0, 0, 1);\n' ...
+              'solid bot    = plane( 0, 0,-1; 0, 0,-1);\n' ...
+              'solid xmax   = plane( 3, 0, 0; 1, 0, 0);\n' ...
+              'solid xmin   = plane(-3, 0, 0;-1, 0, 0);\n' ...
+              'solid ymax   = plane( 0, 2, 0; 0, 2, 0);\n' ...
+              'solid ymin   = plane( 0,-2, 0; 0,-2, 0);\n' ...
+              'solid mainobj= top and bot and xmax and xmin and ymax and ymin;'];
+ elec_pos = [  1, -2,  0,   0,  1,  0;
+               0, -2,  0,   0,  1,  0;
+              -1, -2,  0,   0,  1,  0;
+              -1,  2,  0,   0, -1,  0;
+              -3,  1,  0,  -1,  0,  0];
+ elec_shape=[0.4,1,0.05];
+ elec_obj = {'ymin', 'ymin', 'ymin','ymax','xmin'};
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+</pre>
+To crop the <i>z</i>=0 layer, use
+<pre>
+ fmdl = mdl2d_from3d(fmdl);
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models16.png"><img src="netgen_gen_models16a.png">
+<br>A 2D slice of a model on the <i>z</i>=0 plane
+</center>
+
+<h3>
+Shape 17
+</h3>
+<pre>
+ shape_str = [ ...
+  'solid cyl    = cylinder (0,0,0; 0,0,1; 1); \n', ...
+  'solid mainobj= plane(0,0,0;0,0,-1)\n' ...
+        'and  plane(0,0,2;0,0,1)\n' ...
+        'and  cyl -maxh=0.3;\n' ...
+  'solid in_elec = sphere(0,-1,1;0.2)' ...
+        'and not    sphere(0,-1,1;0.15) -maxh=0.05;\n' ...
+        'solid in_elec0= in_elec  and mainobj;\n' ...
+        'tlo in_elec0 cyl;\n' ...
+  'solid out_elec = sphere(0,-1,1;0.4)' ...
+        'and not    sphere(0,-1,1;0.35) -maxh=0.05;\n' ...
+        'solid out_elec0= out_elec  and mainobj;\n' ...
+        'tlo out_elec0 cyl;\n'];
+ % Find a background electrode (for all) first. This will stop errors in the next
+ elec_pos = [  0, -1,   0, NaN,NaN,NaN;
+               1,  0,   1,   1,  0,  0;
+               0,  1, 1.2,   0,  1,  0;
+               0, -1, 1.2, NaN,NaN,NaN;
+               0, -1, 1.4, NaN,NaN,NaN];
+ elec_shape=[0.1];
+ elec_obj = 'cyl';
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+ % Throw away the first electrode (background). We don't need it
+ fmdl.electrode = fmdl.electrode(2:end);
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models17.png">
+<br>
+Complex electrodes defined from intersection with spheres
+</center>
+
+<h3>
+Shape 18
+</h3>
+<pre>
+shape_str= [ ...
+ 'solid top    = plane(0,0,0;0,1,0);\n' ...
+ 'solid cut2d  = plane(0,0,0;0,0,1) -maxh=0.15;\n' ...
+ 'solid mainobj= top and cut2d and orthobrick(-2,-2,-1;2,2,1);\n'];
+x_elec_pos = linspace(-1.5,1.5,5);
+elec_pos = x_elec_pos(:)*[1,0,0,0,0,0];
+elec_pos(:,5) = 1;
+elec_shape=[0.05];
+elec_obj = 'top';
+fmdl3= ng_mk_gen_models(shape_str, ...
+         elec_pos, elec_shape, elec_obj);
+   subplot(121); show_fem(fmdl3);
+
+fmdl2 = mdl2d_from3d( fmdl3);
+   subplot(122); show_fem_enhanced( fmdl2);
+gridx= linspace(-2.0,2.0,15);
+gridy= linspace(-2.0,0,7);
+[cmdl,c2f]= mk_grid_model(fmdl2,gridx,gridy);
+fmdl2.coarse2fine = c2f;
+hold on; hh=show_fem(cmdl);
+set(hh,'LineWidth',2,'EdgeColor',[.5,.7,1],'FaceAlpha',0);
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/netgen_gen_models18.png">
+<br>
+Grid model on onto a 2D model from a <i>z</i>=0 slice of a 3D model
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2018-11-10 07:39:55 -0500 (Sat, 10 Nov 2018) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

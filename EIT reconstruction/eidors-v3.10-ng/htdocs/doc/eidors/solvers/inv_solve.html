@@ -1,0 +1,502 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of inv_solve</title>
+  <meta name="keywords" content="inv_solve">
+  <meta name="description" content="INV_SOLVE: calculate imag from an inv_model and data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">solvers</a> &gt; inv_solve.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>inv_solve
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>INV_SOLVE: calculate imag from an inv_model and data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function img = inv_solve( inv_model, data1, data2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> INV_SOLVE: calculate imag from an inv_model and data
+ 
+ inv_solve can be called as
+     img= inv_solve( inv_model, data1, data2)
+   if inv_model.reconst_type = 'difference'
+ or
+     img= inv_solve( inv_model, data )
+   if inv_model.reconst_type = 'static'
+
+   if inv_model.reconst_to = 'nodes' then output
+      img.node_data has output data
+   else   reconst_to = 'elems' (DEFAULT) then output to
+      img.elem_data has output data
+
+ in each case it will call the inv_model.solve
+
+ data      is a measurement data structure
+ inv_model is a inv_model structure
+ img       is an image structure
+           or a vector of images is data1 or data2 are vectors
+
+ For difference EIT:
+ data1      =&gt; difference data at earlier time (ie homogeneous)
+ data2      =&gt; difference data at later time   (ie inhomogeneous)
+
+ data can be:
+   - an EIDORS data object
+
+   - an M x S matrix, where M is the total number
+         of measurements expected by inv_model
+
+   - an M x S matrix, where M is n_elec^2
+        when not using data from current injection
+        electrodes, it is common to be given a full
+        measurement set.  For example, 16 electrodes give
+        208 measures, but 256 measure sets are common.
+        Data will be selected based on fwd_model.meas_select.
+
+ If S &gt; 1 for both data1 and data2 then the matrix sizes must be equal
+
+ Parameters:
+   inv_model.inv_solve.select_parameters: indices of parameters to return
+                         DEFAULT: return all paramteres
+  Scale solution (to correct for amplitude or other defects)
+   inv_model.inv_solve.scale_solution.offset
+   inv_model.inv_solve.scale_solution.scale
+  Disable solution error calculations
+   inv_model.inv_solve.calc_solution_error = 0</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="../../eidors/models/interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>	INTERP_MESH: calculate interpolation points onto mdl elements</li><li><a href="../../eidors/models/mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>	MDL_NORMALIZE Check or set the normalize_measurements flag on a model.</li><li><a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>	SELECT_IMDL: select pre-packaged inverse model features</li><li><a href="../../eidors/models/simulate_movement.html" class="code" title="function [vh,vi,xyzr,c2f]= simulate_movement( img, xyzr, value );">simulate_movement</a>	SIMULATE_MOVEMENT simulate small conductivity perturbations</li><li><a href="../../eidors/models/supported_params.html" class="code" title="function list = supported_params">supported_params</a>	</li><li><a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../eidors/solvers/inverse/calc_solution_error.html" class="code" title="function [e res] = calc_solution_error(imgc, imdl, vh, vi)">calc_solution_error</a>	CALC_SOLUTION_ERROR Calculate residuals for a solution</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>	EIDORS_DEFAULT Default function handler.</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>	[V] = LEFT_DIVIDE(E,I,tol,pp,V);</li><li><a href="../../eidors/deprecated/calc_noise_params.html" class="code" title="function params = calc_noise_params(imdl, vh, vi )">calc_noise_params</a>	params = GREIT_noise_params(imdl, homg_voltage, sig_voltage)</li><li><a href="../../eidors/deprecated/manchester_tomography.html" class="code" title="function manchester_tomography( example_no)">manchester_tomography</a>	Example to show reconstructions from</li><li><a href="../../eidors/examples/cheating_2d.html" class="code" title="function out=cheating_2d( figno, rand_seed )">cheating_2d</a>	code to simulate inverse crimes in EIT</li><li><a href="../../eidors/examples/compare_2d_algs.html" class="code" title="function [imgr, img]= compare_2d_algs(option,shape);">compare_2d_algs</a>	Compare different 2D reconstructions</li><li><a href="../../eidors/examples/compare_3d_algs.html" class="code" title="function imgr= compare_3d_algs( algno )">compare_3d_algs</a>	Compare different 3D reconstructions</li><li><a href="../../eidors/examples/demo_2d_simdata.html" class="code" title="">demo_2d_simdata</a>	Example of using EIDORS to simulate 2D data and to</li><li><a href="../../eidors/examples/demo_3d_simdata.html" class="code" title="">demo_3d_simdata</a>	How to make simulation data using EIDORS3D</li><li><a href="../../eidors/examples/demo_real.html" class="code" title="function [inhomg_img, demo_img] = demo_real;">demo_real</a>	[inhomg_img, demo_img] = demo_real;</li><li><a href="../../eidors/examples/image_2d_algs.html" class="code" title="">image_2d_algs</a>	Based on the 'bubble' data from Eidors2D, use several</li><li><a href="../../eidors/examples/moving_tank_objs.html" class="code" title="function imgs= moving_tank_objs(data_sel, inv_sel, options)">moving_tank_objs</a>	MOVING_TANK_OBJS: create movies of objects moving in tanks</li><li><a href="../../eidors/examples/resistor_model.html" class="code" title="function resistor_model;">resistor_model</a>	DEMO to show really simple application of EIDORS framework</li><li><a href="../../eidors/graphics/matlab/show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>	show_3d_slices(img, z_cuts, x_cuts, y_cuts, any_cuts)</li><li><a href="../../eidors/interface/eidors_saveimg.html" class="code" title="function eidors_saveimg( img, fname, format, pp )">eidors_saveimg</a>	EIDORS saveimg - save reconstructed image files in formats</li><li><a href="../../eidors/interface/sigmatome2_filter.html" class="code" title="function [Filter, stim_pattern]= sigmatome2_filter(test);">sigmatome2_filter</a>	SIGMATOME2_FILTER:  Hardware filter and stim_patterns for Sigmatome II device</li><li><a href="../../eidors/models/GREIT3D_distribution.html" class="code" title="function [imdl,distr] = GREIT3D_distribution(fmdl, vopt)">GREIT3D_distribution</a>	GREIT3D_distribution: create target distributions for 3D GREIT</li><li><a href="../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="../../eidors/models/mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>	SELECT_IMDL: select pre-packaged inverse model features</li><li><a href="../../eidors/models/simulate_2d_movement.html" class="code" title="function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">simulate_2d_movement</a>	SIMULATE_2D_MOVEMENT simulate rotational movement in 2D</li><li><a href="../../eidors/models/simulate_3d_movement.html" class="code" title="function [vh,vi,xyzr_pt]= simulate_3d_movement( n_sims, fmdl, rad_pr,movefcn )">simulate_3d_movement</a>	SIMULATE_3D_MOVEMENT simulate rotational movement in 3D</li><li><a href="../../eidors/models/solve_RM_2Dslice.html" class="code" title="function imdl = solve_RM_2Dslice(imdl, sel_fcn)">solve_RM_2Dslice</a>	SOLVE_RM_2DSLICE: cut slices out of a 3D model</li><li><a href="../../eidors/models/test_GREIT_model.html" class="code" title="">test_GREIT_model</a>	</li><li><a href="../../eidors/solvers/forward/jacobian_movement.html" class="code" title="function J = jacobian_movement(fwd_model, img)">jacobian_movement</a>	JACOBIAN_MOVEMENT   Computes the Jacobian matrix for conductivity and</li><li><a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../eidors/solvers/inverse/GREIT_desired_img_FEMmesh.html" class="code" title="function PSF= GREIT_desired_img_FEMmesh(xyc, radius, opt)">GREIT_desired_img_FEMmesh</a>	GREIT_DESIRED_IMG_FEMmesh  GREIT onto a FEM mesh</li><li><a href="../../eidors/solvers/inverse/calc_lambda_regtools.html" class="code" title="function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)">calc_lambda_regtools</a>	% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)</li><li><a href="../../eidors/solvers/inverse/calc_noise_figure.html" class="code" title="function [NF,SE] = calc_noise_figure( inv_model, hp, iterations)">calc_noise_figure</a>	CALC_NOISE_FIGURE: calculate the noise amplification (NF) of an algorithm</li><li><a href="../../eidors/solvers/inverse/inv_solve_TSVD.html" class="code" title="function sol = inv_solve_TSVD(inv_model, data1, data2)">inv_solve_TSVD</a>	INV_SOLVE_TSVD: inverse solver based on truncatated SVD</li><li><a href="../../eidors/solvers/inverse/inv_solve_abs_annealingMetropolis_params.html" class="code" title="function [img]= inv_solve_abs_annealingMetropolis_params(inv_model, data)">inv_solve_abs_annealingMetropolis_params</a>	INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method.</li><li><a href="../../eidors/solvers/inverse/inv_solve_abs_annealingSimplex_params.html" class="code" title="function [img]= inv_solve_abs_annealingSimplex_params(inv_model, data)">inv_solve_abs_annealingSimplex_params</a>	INV_SOLVE_ABS_ANNEALINGSIMPLEX_PARAMS absolute solver using the simplex annealing method.</li><li><a href="../../eidors/solvers/inverse/inv_solve_cg.html" class="code" title="function img= inv_solve_cg( inv_model, data1, data2);">inv_solve_cg</a>	function img= inv_solve_cg( inv_model, data1);</li><li><a href="../../eidors/solvers/inverse/inv_solve_conj_grad.html" class="code" title="function img= inv_solve_conj_grad( inv_model, data1, data2)">inv_solve_conj_grad</a>	INV_SOLVE_CONJ_GRAD inverse solver based on the CG</li><li><a href="../../eidors/solvers/inverse/inv_solve_core.html" class="code" title="function img= inv_solve_core( inv_model, data0, data1);">inv_solve_core</a>	INV_SOLVE_CORE Solver using a generic iterative algorithm</li><li><a href="../../eidors/solvers/inverse/inv_solve_gn.html" class="code" title="function img= inv_solve_gn( inv_model, data1, data2);">inv_solve_gn</a>	function img= inv_solve_gn( inv_model, data1);</li><li><a href="../../eidors/solvers/inverse/inv_solve_time_prior.html" class="code" title="function img= inv_solve_time_prior( inv_model, data1, data2)">inv_solve_time_prior</a>	INV_SOLVE_TIME_PRIOR inverse solver to account for time differences</li><li><a href="../../eidors/tests/demo_real_test2.html" class="code" title="function ok= demo_real_test2">demo_real_test2</a>	Perform tests based on the demo_real function with new structs</li><li><a href="../../eidors/tests/demo_real_test3.html" class="code" title="function ok= demo_real_test3">demo_real_test3</a>	Perform tests based on the demo_real function with new structs</li><li><a href="../../eidors/tests/test_colour_direction.html" class="code" title="">test_colour_direction</a>	Test colour mapping</li><li><a href="../../eidors/tools/test_performance.html" class="code" title="function [r, params] =  test_performance( imdls, fmdl );">test_performance</a>	TEST_PERFORMANCE: test of difference reconstruction algorithms</li><li><a href="../../eidors/tools/test_performance_img.html" class="code" title="function [params_img] =  test_performance_img( imdls, fmdl );">test_performance_img</a>	TEST_PERFORMANCE: test of difference reconstruction algorithms</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function print_hello(solver)</a></li><li><a href="#_sub2" class="code">function opts = parse_parameters( imdl )</a></li><li><a href="#_sub3" class="code">function imdl = deprecate_imdl_parameters(imdl)</a></li><li><a href="#_sub4" class="code">function mdl = prepare_model( mdl )</a></li><li><a href="#_sub5" class="code">function check_parametrization_handling(inv_model,imgc)</a></li><li><a href="#_sub6" class="code">function b = has_params(s)</a></li><li><a href="#_sub7" class="code">function nf= num_frames(d0)</a></li><li><a href="#_sub8" class="code">function d2= filt_data(inv_model, d0, data_width )</a></li><li><a href="#_sub9" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function img = inv_solve( inv_model, data1, data2)</a>
+0002 <span class="comment">% INV_SOLVE: calculate imag from an inv_model and data</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% inv_solve can be called as</span>
+0005 <span class="comment">%     img= inv_solve( inv_model, data1, data2)</span>
+0006 <span class="comment">%   if inv_model.reconst_type = 'difference'</span>
+0007 <span class="comment">% or</span>
+0008 <span class="comment">%     img= inv_solve( inv_model, data )</span>
+0009 <span class="comment">%   if inv_model.reconst_type = 'static'</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   if inv_model.reconst_to = 'nodes' then output</span>
+0012 <span class="comment">%      img.node_data has output data</span>
+0013 <span class="comment">%   else   reconst_to = 'elems' (DEFAULT) then output to</span>
+0014 <span class="comment">%      img.elem_data has output data</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% in each case it will call the inv_model.solve</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% data      is a measurement data structure</span>
+0019 <span class="comment">% inv_model is a inv_model structure</span>
+0020 <span class="comment">% img       is an image structure</span>
+0021 <span class="comment">%           or a vector of images is data1 or data2 are vectors</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% For difference EIT:</span>
+0024 <span class="comment">% data1      =&gt; difference data at earlier time (ie homogeneous)</span>
+0025 <span class="comment">% data2      =&gt; difference data at later time   (ie inhomogeneous)</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% data can be:</span>
+0028 <span class="comment">%   - an EIDORS data object</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%   - an M x S matrix, where M is the total number</span>
+0031 <span class="comment">%         of measurements expected by inv_model</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%   - an M x S matrix, where M is n_elec^2</span>
+0034 <span class="comment">%        when not using data from current injection</span>
+0035 <span class="comment">%        electrodes, it is common to be given a full</span>
+0036 <span class="comment">%        measurement set.  For example, 16 electrodes give</span>
+0037 <span class="comment">%        208 measures, but 256 measure sets are common.</span>
+0038 <span class="comment">%        Data will be selected based on fwd_model.meas_select.</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% If S &gt; 1 for both data1 and data2 then the matrix sizes must be equal</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">% Parameters:</span>
+0043 <span class="comment">%   inv_model.inv_solve.select_parameters: indices of parameters to return</span>
+0044 <span class="comment">%                         DEFAULT: return all paramteres</span>
+0045 <span class="comment">%  Scale solution (to correct for amplitude or other defects)</span>
+0046 <span class="comment">%   inv_model.inv_solve.scale_solution.offset</span>
+0047 <span class="comment">%   inv_model.inv_solve.scale_solution.scale</span>
+0048 <span class="comment">%  Disable solution error calculations</span>
+0049 <span class="comment">%   inv_model.inv_solve.calc_solution_error = 0</span>
+0050 
+0051 <span class="comment">% (C) 2005-2010 Andy Adler. License: GPL version 2 or version 3</span>
+0052 <span class="comment">% $Id: inv_solve.m 5910 2019-02-13 14:56:26Z aadler $</span>
+0053 
+0054 <span class="keyword">if</span> ischar(inv_model) &amp;&amp; strcmp(inv_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub9" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0055 
+0056 inv_model = <a href="#_sub4" class="code" title="subfunction mdl = prepare_model( mdl )">prepare_model</a>( inv_model );
+0057 opts = <a href="#_sub2" class="code" title="subfunction opts = parse_parameters( imdl )">parse_parameters</a>( inv_model );
+0058 
+0059 <a href="#_sub1" class="code" title="subfunction print_hello(solver)">print_hello</a>(inv_model.solve);
+0060 <span class="keyword">try</span> inv_model.solve = str2func(inv_model.solve); <span class="keyword">end</span>
+0061 
+0062 <span class="keyword">if</span> opts.abs_solve
+0063    <span class="keyword">if</span> nargin~=2;
+0064       error(<span class="string">'only one data set is allowed for a static reconstruction'</span>);
+0065    <span class="keyword">end</span>
+0066    
+0067    fdata = <a href="#_sub8" class="code" title="subfunction d2= filt_data(inv_model, d0, data_width )">filt_data</a>(inv_model,data1);
+0068 
+0069    imgc= <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>( inv_model.solve, {inv_model, fdata}, <span class="string">'inv_solve'</span>);
+0070 
+0071 <span class="keyword">else</span>
+0072    <span class="keyword">if</span> nargin~=3;
+0073       error(<span class="string">'two data sets are required for a difference reconstruction'</span>);
+0074    <span class="keyword">end</span>
+0075 
+0076    <span class="comment">% expand data sets if one is provided that is longer</span>
+0077    data_width= max(<a href="#_sub7" class="code" title="subfunction nf= num_frames(d0)">num_frames</a>(data1), <a href="#_sub7" class="code" title="subfunction nf= num_frames(d0)">num_frames</a>(data2));
+0078 
+0079    fdata1 = <a href="#_sub8" class="code" title="subfunction d2= filt_data(inv_model, d0, data_width )">filt_data</a>( inv_model, data1, data_width );
+0080    fdata2 = <a href="#_sub8" class="code" title="subfunction d2= filt_data(inv_model, d0, data_width )">filt_data</a>( inv_model, data2, data_width );
+0081    <span class="comment">% TODO: Check if solver can handle being called with multiple data</span>
+0082    imgc= <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>( inv_model.solve, {inv_model, fdata1, fdata2},<span class="string">'inv_solve'</span>);
+0083    
+0084 
+0085 <span class="keyword">end</span>
+0086 
+0087 <a href="#_sub5" class="code" title="subfunction check_parametrization_handling(inv_model,imgc)">check_parametrization_handling</a>(inv_model,imgc);
+0088      
+0089 img = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'image'</span>, imgc );
+0090 <span class="comment">% img = data_mapper(img,1);</span>
+0091 <span class="keyword">if</span> ~isfield(img,<span class="string">'current_params'</span>) <span class="comment">% current_params is Bartek's units conversion control for img.elem_data.</span>
+0092 
+0093   img.current_params = [];
+0094 <span class="keyword">end</span>
+0095 
+0096 <span class="comment">% If we reconstruct with a different 'rec_model' then</span>
+0097 <span class="comment">%  put this into the img</span>
+0098 <span class="keyword">if</span> isfield(inv_model,<span class="string">'rec_model'</span>)
+0099    img.fwd_model= inv_model.rec_model;
+0100 <span class="keyword">end</span>
+0101 
+0102 
+0103 <span class="keyword">if</span> opts.select_parameters;
+0104    img.elem_data = img.elem_data( opts.select_parameters, :);
+0105 <span class="keyword">end</span>
+0106 
+0107 <span class="keyword">if</span> ~opts.reconst_to_elems
+0108   img.node_data= img.elem_data;
+0109   img = rmfield(img,<span class="string">'elem_data'</span>);
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">% Scale if required</span>
+0113 <span class="keyword">try</span>; img.elem_data = opts.offset + opts.scale * img.elem_data; <span class="keyword">end</span>
+0114 <span class="keyword">try</span>; img.node_data = opts.offset + opts.scale * img.node_data; <span class="keyword">end</span>
+0115 
+0116 <span class="comment">% MATLAB IS SUPER SUPER STUPID HERE. YOU CAN'T ASSIGN IF FIELDS ARE IN</span>
+0117 <span class="comment">%  A DIFFERENT ORDER. Example</span>
+0118 <span class="comment">%&gt;&gt; A.a= 1; A.b= 2; B.b= 3; B.a = 3; A(2) = B</span>
+0119 <span class="comment">%??? Subscripted assignment between dissimilar structures.</span>
+0120 img.info.error = NaN;
+0121 img = orderfields(img);
+0122 
+0123 <span class="comment">% calculate residuals</span>
+0124 <span class="keyword">try</span> 
+0125    do_calc = inv_model.inv_solve.calc_solution_error;
+0126 <span class="keyword">catch</span>
+0127    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'inv_solve: not calculting solution residual'</span>,3);
+0128    do_calc = false;
+0129 <span class="keyword">end</span>
+0130 <span class="keyword">if</span> ~do_calc;
+0131    <span class="keyword">return</span>;
+0132 <span class="keyword">end</span>
+0133 <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'inv_solve: Calculating solution residual (inv_model.inv_solve.calc_solution_error = 0 to disable)'</span>,2);
+0134 <span class="keyword">try</span>
+0135    <span class="keyword">if</span> opts.abs_solve
+0136       img.info.error = <a href="../../eidors/solvers/inverse/calc_solution_error.html" class="code" title="function [e res] = calc_solution_error(imgc, imdl, vh, vi)">calc_solution_error</a>( imgc, inv_model, fdata);
+0137    <span class="keyword">else</span>
+0138       img.info.error = <a href="../../eidors/solvers/inverse/calc_solution_error.html" class="code" title="function [e res] = calc_solution_error(imgc, imdl, vh, vi)">calc_solution_error</a>( imgc, inv_model, fdata1, fdata2 );
+0139    <span class="keyword">end</span>
+0140    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'inv_solve: Solution Error: %f'</span>, img.info.error,  2);
+0141 <span class="keyword">catch</span>
+0142    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'inv_solve: Solution Error calculation failed.'</span>,2);
+0143 <span class="keyword">end</span>
+0144 
+0145 <a name="_sub1" href="#_subfunctions" class="code">function print_hello(solver)</a>
+0146     <span class="keyword">if</span> isa(solver,<span class="string">'function handle'</span>)
+0147         solver = func2str(solver);
+0148     <span class="keyword">end</span>
+0149     <span class="keyword">if</span> strcmp(solver, <span class="string">'eidors_default'</span>);
+0150         solver = <a href="../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>(<span class="string">'get'</span>,<span class="string">'inv_solve'</span>);
+0151     <span class="keyword">end</span>
+0152     <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'inv_solve: %s'</span>, solver,3);
+0153 
+0154 
+0155 <a name="_sub2" href="#_subfunctions" class="code">function opts = parse_parameters( imdl )</a>
+0156    <span class="keyword">if</span>  strcmp(imdl.reconst_type,<span class="string">'static'</span>) || <span class="keyword">...</span>
+0157        strcmp(imdl.reconst_type,<span class="string">'absolute'</span>)
+0158       opts.abs_solve = 1;
+0159    <span class="keyword">elseif</span> strcmp(imdl.reconst_type,<span class="string">'difference'</span>)
+0160       opts.abs_solve = 0;
+0161    <span class="keyword">else</span>
+0162       error(<span class="string">'inv_model.reconst_type (%s) not understood'</span>, imdl.reconst_type); 
+0163    <span class="keyword">end</span>
+0164 
+0165    opts.select_parameters = [];
+0166    <span class="keyword">try</span>
+0167       opts.select_parameters = imdl.inv_solve.select_parameters;
+0168    <span class="keyword">end</span>
+0169 
+0170    opts.reconst_to_elems = 1;
+0171    <span class="keyword">try</span> <span class="keyword">if</span> strcmp( imdl.reconst_to, <span class="string">'nodes'</span> )
+0172       opts.reconst_to_elems = 0;
+0173    <span class="keyword">end</span>; <span class="keyword">end</span>
+0174    
+0175    opts.scale  = 1;
+0176    <span class="keyword">try</span> opts.scale = imdl.inv_solve.scale_solution.scale; <span class="keyword">end</span>
+0177 
+0178    opts.offset = 0;
+0179    <span class="keyword">try</span> opts.offset = imdl.inv_solve.scale_solution.offset; <span class="keyword">end</span>
+0180 
+0181 <a name="_sub3" href="#_subfunctions" class="code">function imdl = deprecate_imdl_parameters(imdl)</a>
+0182    <span class="keyword">if</span> isfield(imdl, <span class="string">'parameters'</span>)
+0183       <span class="keyword">if</span> isstruct(imdl.parameters)
+0184 <span class="comment">%          disp(imdl)</span>
+0185 <span class="comment">%          disp(imdl.parameters)</span>
+0186 <span class="comment">%          warning('EIDORS:deprecatedParameters','INV_SOLVE inv_model.parameters.* are deprecated in favor of inv_model.inv_solve.* as of 30-Apr-2014.');</span>
+0187 
+0188          <span class="keyword">if</span> ~isfield(imdl, <span class="string">'inv_solve'</span>)
+0189             imdl.inv_solve = imdl.parameters;
+0190          <span class="keyword">else</span> <span class="comment">% we merge</span>
+0191             <span class="comment">% merge struct trick from:</span>
+0192             <span class="comment">%  http://stackoverflow.com/questions/38645</span>
+0193             A = imdl.parameters;
+0194             B = imdl.inv_solve;
+0195             M = [fieldnames(A)' fieldnames(B)'; struct2cell(A)' struct2cell(B)'];
+0196             <span class="keyword">try</span> <span class="comment">% assumes no collisions</span>
+0197                imdl.inv_solve=struct(M{:});
+0198             <span class="keyword">catch</span> <span class="comment">% okay, collisions - do unique to resolve them</span>
+0199                [tmp, rows] = unique(M(1,:), <span class="string">'last'</span>);
+0200                M=M(:,rows);
+0201                imdl.inv_solve=struct(M{:});
+0202             <span class="keyword">end</span>
+0203          <span class="keyword">end</span>
+0204          imdl = rmfield(imdl, <span class="string">'parameters'</span>);
+0205          imdl.parameters = imdl.inv_solve; <span class="comment">% backwards compatible!</span>
+0206       <span class="keyword">else</span>
+0207          error(<span class="string">'unexpected inv_model.parameters where parameters is not a struct... i do not know what to do'</span>);
+0208       <span class="keyword">end</span>
+0209    <span class="keyword">end</span>
+0210 
+0211 <a name="_sub4" href="#_subfunctions" class="code">function mdl = prepare_model( mdl )</a>
+0212     fmdl = mdl.fwd_model;
+0213     fmdl = <a href="../../eidors/models/mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>(fmdl,<a href="../../eidors/models/mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>(fmdl));
+0214     <span class="keyword">if</span> ~isfield(fmdl,<span class="string">'elems'</span>);
+0215         <span class="keyword">return</span>;
+0216     <span class="keyword">end</span>
+0217 
+0218     fmdl.elems  = double(fmdl.elems);
+0219     fmdl.n_elem = size(fmdl.elems,1);
+0220     fmdl.n_node = size(fmdl.nodes,1);
+0221     <span class="keyword">if</span> isfield(fmdl,<span class="string">'electrode'</span>);
+0222         fmdl.n_elec = length(fmdl.electrode);
+0223     <span class="keyword">else</span>
+0224         fmdl.n_elec = 0;
+0225     <span class="keyword">end</span>
+0226 
+0227     mdl.fwd_model= fmdl;
+0228     <span class="keyword">if</span> ~isfield(mdl,<span class="string">'reconst_type'</span>);
+0229         mdl.reconst_type= <span class="string">'difference'</span>;
+0230     <span class="keyword">end</span>
+0231 
+0232     <span class="comment">% warn if we have deprecated inv_model.parameters laying about</span>
+0233     mdl = <a href="#_sub3" class="code" title="subfunction imdl = deprecate_imdl_parameters(imdl)">deprecate_imdl_parameters</a>(mdl);
+0234 
+0235 <a name="_sub5" href="#_subfunctions" class="code">function check_parametrization_handling(inv_model,imgc)</a>
+0236 <span class="keyword">if</span> isfield(inv_model, <span class="string">'jacobian_bkgnd'</span>) &amp;&amp; <span class="keyword">...</span><span class="comment"> </span>
+0237     <a href="#_sub6" class="code" title="subfunction b = has_params(s)">has_params</a>(inv_model.jacobian_bkgnd) &amp;&amp; ~<a href="#_sub6" class="code" title="subfunction b = has_params(s)">has_params</a>(imgc)
+0238    <span class="keyword">if</span> isa(inv_model.solve,<span class="string">'function_handle'</span>)
+0239       solver = func2str(inv_model.solve);
+0240    <span class="keyword">else</span>
+0241       solver = inv_model.solve;
+0242    <span class="keyword">end</span>
+0243    <span class="keyword">if</span> strcmp(solver,<span class="string">'eidors_default'</span>);
+0244       solver = <a href="../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>(<span class="string">'get'</span>,<span class="string">'inv_solve'</span>);
+0245    <span class="keyword">end</span>
+0246    warning(<span class="string">'EIDORS:ParamsObliviousSolver'</span>,<span class="keyword">...</span>
+0247       [<span class="string">'The solver %s did not handle the parametrization data properly.\n'</span><span class="keyword">...</span>
+0248        <span class="string">'The results may be incorrect. Please check the code to verify.'</span>], <span class="keyword">...</span>
+0249        solver);
+0250 <span class="keyword">end</span>
+0251          
+0252     
+0253 <a name="_sub6" href="#_subfunctions" class="code">function b = has_params(s)</a>
+0254 b = false;
+0255 <span class="keyword">if</span> isstruct(s)
+0256    b = any(ismember(fieldnames(s),<a href="../../eidors/models/supported_params.html" class="code" title="function list = supported_params">supported_params</a>));
+0257 <span class="keyword">end</span>
+0258 
+0259 
+0260 <span class="comment">% TODO: this code really needs to be cleaned, but not before eidors 3.4</span>
+0261 <a name="_sub7" href="#_subfunctions" class="code">function nf= num_frames(d0)</a>
+0262    <span class="keyword">if</span> isnumeric( d0 )
+0263       nf= size(d0,2);
+0264    <span class="keyword">elseif</span> d0(1).type == <span class="string">'data'</span>;
+0265       nf= size( horzcat( d0(:).meas ), 2);
+0266    <span class="keyword">else</span>
+0267       error(<span class="string">'Problem calculating number of frames. Expecting numeric or data object'</span>);
+0268    <span class="keyword">end</span>
+0269    
+0270 <span class="comment">% test for existance of meas_select and filter data</span>
+0271 <a name="_sub8" href="#_subfunctions" class="code">function d2= filt_data(inv_model, d0, data_width )</a>
+0272    <span class="keyword">if</span> ~isnumeric( d0 )
+0273        <span class="comment">% we probably have a 'data' object</span>
+0274 
+0275        d1 = [];
+0276        <span class="keyword">for</span> i=1:length(d0)
+0277           <span class="keyword">if</span> strcmp( d0(i).type, <span class="string">'data'</span> )
+0278               d1 = [d1, d0(i).meas];
+0279           <span class="keyword">else</span>
+0280               error(<span class="string">'expecting an object of type data'</span>);
+0281           <span class="keyword">end</span>
+0282        <span class="keyword">end</span>
+0283 
+0284    <span class="keyword">else</span>
+0285       <span class="comment">% we have a matrix of data. Hope for the best</span>
+0286       d1 = d0;
+0287    <span class="keyword">end</span>
+0288 
+0289    d1= double(d1); <span class="comment">% ensure we can do math on our object</span>
+0290 
+0291    <span class="keyword">if</span> isfield(inv_model.fwd_model,<span class="string">'meas_select'</span>) &amp;&amp; <span class="keyword">...</span>
+0292      ~isempty(inv_model.fwd_model.meas_select)
+0293       <span class="comment">% we have a meas_select parameter that isn []</span>
+0294 
+0295       meas_select= inv_model.fwd_model.meas_select;
+0296       <span class="keyword">if</span>     size(d1,1) == length(meas_select)
+0297          d2= d1(meas_select,:);
+0298       <span class="keyword">elseif</span> size(d1,1) == sum(meas_select==1)
+0299          d2= d1;
+0300       <span class="keyword">else</span>
+0301          error(<span class="string">'inconsistent difference data: (%d ~= %d). Maybe check fwd_model.meas_select'</span>,  <span class="keyword">...</span>
+0302                size(d1,1), length(meas_select));
+0303       <span class="keyword">end</span>
+0304    <span class="keyword">else</span>
+0305       d2= d1;
+0306    <span class="keyword">end</span>
+0307 
+0308    <span class="keyword">if</span> nargin==3 <span class="comment">% expand to data width</span>
+0309       d2_width= size(d2,2);
+0310       <span class="keyword">if</span> d2_width == data_width
+0311          <span class="comment">% ok</span>
+0312       <span class="keyword">elseif</span> d2_width == 1
+0313          d2= d2(:,ones(1,data_width));
+0314       <span class="keyword">else</span>
+0315          error(<span class="string">'inconsistent difference data: (%d ~= %d)'</span>,  <span class="keyword">...</span>
+0316                d2_width, data_width);
+0317       <span class="keyword">end</span>
+0318    <span class="keyword">end</span>
+0319 
+0320 <span class="comment">% Test code</span>
+0321 <a name="_sub9" href="#_subfunctions" class="code">function do_unit_test</a>
+0322    k=0; N=5; nd = 5;
+0323 
+0324    imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'d2c2'</span>,16);
+0325    imdl = <a href="../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>( imdl, {<span class="string">'Choose NF=2.5'</span>});
+0326    mvx = linspace(-0.8,0.8,nd);
+0327    [vh,vi] = <a href="../../eidors/models/simulate_movement.html" class="code" title="function [vh,vi,xyzr,c2f]= simulate_movement( img, xyzr, value );">simulate_movement</a>(<a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl), [mvx;0*mvx;0.05+0*mvx]);
+0328 
+0329    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl,vh,vi); img.show_slices.img_cols = 5;
+0330    k=k+1; subplot(N,1,k); <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img);
+0331    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 1a'</span>, mean(img.elem_data), 3e-3, 1e-3);
+0332    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 1b'</span>,  std(img.elem_data), 1.5e-2, 1e-2);
+0333 
+0334    vhm= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'data'</span>,<span class="string">'nn'</span>,<span class="string">'meas'</span>,vh);
+0335    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl,vhm,vi);
+0336    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 2a'</span>, mean(img.elem_data), 3e-3, 1e-3);
+0337    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 2b'</span>,  std(img.elem_data), 1.5e-2, 1e-2);
+0338 
+0339    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl,vh*ones(1,nd),vi);
+0340    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 3a'</span>, mean(img.elem_data), 3e-3, 1e-3);
+0341    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 3b'</span>,  std(img.elem_data), 1.5e-2, 1e-2);
+0342 
+0343    vim= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'data'</span>,<span class="string">'nn'</span>,<span class="string">'meas'</span>,vi);
+0344    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl,vhm,vim);
+0345    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 4a'</span>, mean(img.elem_data), 3e-3, 1e-3);
+0346    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 4b'</span>,  std(img.elem_data), 1.5e-2, 1e-2);
+0347 
+0348    vhm= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'data'</span>,<span class="string">'nn'</span>,<span class="string">'meas'</span>,vh*ones(1,nd));
+0349    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl,vhm,vi);
+0350    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 5a'</span>, mean(img.elem_data), 3e-3, 1e-3);
+0351    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 5b'</span>,  std(img.elem_data), 1.5e-2, 1e-2);
+0352 
+0353    vhm(1)= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'data'</span>,<span class="string">'nn'</span>,<span class="string">'meas'</span>,vh*ones(1,2));
+0354    vhm(2)= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'data'</span>,<span class="string">'nn'</span>,<span class="string">'meas'</span>,vh*ones(1,nd-2));
+0355    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl,vhm,vi);
+0356    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 6a'</span>, mean(img.elem_data), 3e-3, 1e-3);
+0357    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 6b'</span>,  std(img.elem_data), 1.5e-2, 1e-2);
+0358 
+0359    vim(1)= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'data'</span>,<span class="string">'nn'</span>,<span class="string">'meas'</span>,vi(:,1:3));
+0360    vim(2)= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'data'</span>,<span class="string">'nn'</span>,<span class="string">'meas'</span>,vi(:,4:end));
+0361    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl,vhm,vim);
+0362    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 7a'</span>, mean(img.elem_data), 3e-3, 1e-3);
+0363    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 7b'</span>,  std(img.elem_data), 1.5e-2, 1e-2);
+0364 
+0365    im2 = imdl; im2.inv_solve.select_parameters = 1:5;
+0366    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(im2,vh,vi);
+0367    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 10'</span>, size(img.elem_data), [5,nd]);
+0368 
+0369 
+0370    im2 = imdl;
+0371    im2.inv_solve.scale_solution.offset = 1;
+0372    im2.inv_solve.scale_solution.scale = 2;
+0373    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(im2,vh,vi); img.show_slices.img_cols = 5;
+0374    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 20a'</span>, mean(img.elem_data), 1.006, 2e-3);
+0375    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 20b'</span>,  std(img.elem_data), 3e-2, 1e-2);
+0376    im2.inv_solve.calc_solution_error = 1;
+0377    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(im2,vh,vi);
+0378    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 20e'</span>, mean(img.elem_data), 1.006, 2e-3);
+0379    
+0380    im2.inv_solve.scale_solution.offset = 0;
+0381    d = <a href="../../eidors/models/interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>( imdl.fwd_model); d= sqrt(sum(d.^2,2));
+0382    im2.inv_solve.scale_solution.scale = spdiags(1-d,0,length(d),length(d));
+0383    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl,vh,vi); img.show_slices.img_cols = 5;
+0384    k=k+1; subplot(N,1,k); <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img);
+0385 
+0386    im2 = <a href="../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>(imdl, {<span class="string">'Nodal GN dif'</span>} );
+0387    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(im2,vh,vi);
+0388    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 30a'</span>, mean(img.node_data), 3e-3, 1e-3);
+0389    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 30b'</span>,  std(img.node_data), 1.5e-2, 1e-2);
+0390 
+0391    im2.inv_solve.scale_solution.offset = 1;
+0392    im2.inv_solve.scale_solution.scale = 2;
+0393    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(im2,vh,vi); img.show_slices.img_cols = 5;
+0394    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 31a'</span>, mean(img.node_data), 1.006, 2e-3);
+0395    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 31b'</span>,  std(img.node_data), 3e-2, 1.5e-2);
+0396 
+0397    im2 = <a href="../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>(imdl, {<span class="string">'Basic GN abs'</span>} );
+0398    im2.inv_solve.calc_solution_error = 0; <span class="comment">% ensure accepted</span>
+0399    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(im2,vi(:,1));
+0400    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 40a'</span>, mean(img.elem_data), 1.004, 1e-3);
+0401    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 40b'</span>,  std(img.elem_data), 1.5e-2, 1e-2);
+0402    im2.inv_solve.calc_solution_error = 1;
+0403    img= <a href="inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(im2,vi(:,1));
+0404    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'inv_solve: 40e'</span>, mean(img.elem_data), 1.004, 1e-3);
+0405 
+0406</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

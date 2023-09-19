@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>GREIT Reconstruction in 3D &minus; </h2>
+
+This tutorial shows how to reproduce the 
+2&times;16 electrode and 
+1&times;32 electrode belt images 
+from the following paper:
+<blockquote>
+Grychtol et al,
+<a href="http://www.sce.carleton.ca/faculty/adler/publications/2017/grychtol-eit2017-two-planes.pdF"
+>Focusing EIT reconstructions using two electrode planes</a>
+p. 17 Conf. EIT 2017, Dartmouth, NH, USA, June 21&minus;24, 2017.
+</blockquote>
+
+Data for this tutorial are available here:
+<a href = "http://eidors3d.sourceforge.net/tutorial/GREIT/horse-breathing3D2D.mat"><tt
+      >horse-breathing3D2D.mat</tt></a>
+
+<center>
+<a href = "http://eidors3d.sourceforge.net/tutorial/GREIT/horse-3D-EIT-belt.jpg"><img width=500 src="horse-3D-EIT-belt.jpg"></a>
+<br><i>Figure:</i>
+Standing horse with an electrode belt allowing
+2&times;16 electrode and 
+1&times;32 electrode belt EIT data recording
+</center>
+
+
+<h3>GREIT 3D software</h3>
+
+Code for Reconstruction using GREIT is in EIDORS v3.9.1.
+If you have an older version (EIDORS v3.9) you will
+need the following two files:
+<ul>
+<li> <a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/eidors/models/solve_RM_2Dslice.m?format=raw"><tt>solve_RM_2Dslice.m</tt></a>
+<li> <a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/eidors/models/GREIT3D_distribution.m?format=raw"><tt>GREIT3D_distribution</tt></a>
+</ul>
+
+This code is also very slow to calculate. The actual 
+reconstruction is fast. There are numerous improvements 
+possible, and they're being worked on.
+
+<h3> 3D FEM for 1&times;32 electrode belt </h3>
+<pre>
+% Model of 32x1 electrode belt
+fmdl= ng_mk_ellip_models([4,0.8,1.1,.5],[32,2.0],[0.05]);
+% Swisstom BBVet stimulation pattern
+skip4 = {32,1,[0,5],[0,5],{'no_meas_current_next1'},1};
+[fmdl.stimulation,fmdl.meas_select] = mk_stim_patterns(skip4{:});
+
+</pre>
+<h3> 3D GREIT reconstruction with 1&times;32 electrode belt</h3>
+<pre>
+vopt.imgsz = [32 32];
+vopt.square_pixels = true;
+vopt.zvec = linspace(-1,1,10)*1.125 + 2;
+vopt.save_memory = 1;
+opt.noise_figure = 1.0;
+
+% GREIT 3D with a 1x32 electrode layout
+[imdl,opt.distr] = GREIT3D_distribution(fmdl, vopt);
+imdl2a= mk_GREIT_model(imdl, 0.20, [], opt);
+
+</pre>
+<h3> 2D GREIT reconstruction with 1&times;32 electrode belt</h3>
+<pre>
+% 2D GREIT model
+clear opt;
+opt.imgsz = [32 32];
+opt.square_pixels = true;
+opt.noise_figure = 0.5;
+img = mk_image(fmdl,1);
+imdl2b= mk_GREIT_model(img, 0.25, [], opt);
+
+</pre>
+<h3> 3D FEM for 2&times;16 electrode belt </h3>
+<pre>
+fmdl= ng_mk_ellip_models([4,0.8,1.1,.5],[16,1.7,2.3],[0.05]);
+[fmdl.stimulation,fmdl.meas_select] = mk_stim_patterns(skip4{:});
+
+% "Square" electrode layout
+idx = reshape(1:32,2,[])';
+idx(2:2:end,:) = fliplr(idx(2:2:end,:));
+extraflip= [4:12]; % This belt was made slightly differently
+idx(extraflip,:) = fliplr(idx(extraflip,:));
+fmdl.electrode(idx) = fmdl.electrode(:);
+
+</pre>
+<h3> 3D GREIT reconstruction with 2&times;16 electrode belt</h3>
+<pre>
+vopt.imgsz = [32 32];
+vopt.square_pixels = true;
+vopt.zvec = linspace(-1,1,10)*1.125+2;
+vopt.save_memory = 1;
+opt.noise_figure = 1.0;
+
+% GREIT 3D with 2x16 electrode belt
+[imdl,opt.distr] = GREIT3D_distribution(fmdl, vopt);
+imdl3= mk_GREIT_model(imdl, 0.20, [], opt);
+
+</pre>
+<h3> Load data and reconstruct images</H3>
+Using data: <a href = "http://eidors3d.sourceforge.net/tutorial/GREIT/horse-breathing3D2D.mat"><tt
+      >horse-breathing3D2D.mat</tt></a>
+<pre>
+load horse-breathing3D2D.mat
+
+for i=1:3; switch i;
+   case 1; imdl = imdl3;  vv= horse3d; % 2 planes, 3D GREIT
+   case 2; imdl = imdl2a; vv= horse2d; % 1 plane, 3D GREIT
+   case 3; imdl = imdl2b; vv= horse2d; % 1 plane, 2D GREIT
+   end
+  
+   img = inv_solve(imdl,vv(:,1),vv(:,2:end));
+   img.calc_colours.ref_level = 0;
+   subplot(121);
+   show_slices(img,[inf,inf,2]);
+
+   subplot(122);
+   img.elem_data = img.elem_data(:,6);
+   if i<3; show_3d_slices(img,[1.6,2.0,2.4],[],[0.4]);
+   else;   show_slices(img);
+   end;    view(-20,20);
+
+   print_convert(sprintf('GREIT3D_horse06%c.jpg',64+i));
+end
+
+
+</pre>
+
+<center>
+<table border="1">
+<tr><td>Belt<td>3D<td>Image
+<tr><td> 2&times;16 <td> &#10004; <td>
+   <img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/GREIT3D_horse06A.jpg">
+<tr><td> 1&times;32 <td> &#10004; <td>
+   <img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/GREIT3D_horse06B.jpg">
+<tr><td> 1&times;32 <td>          <td>
+   <img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/GREIT3D_horse06C.jpg">
+</table>
+<br><i>Figure:</i>
+Reconstructed images of two tidal breaths
+for two different electrode belts
+</center>
+
+<p>
+<small>
+    Last Modified: $Date: 2018-06-14 10:44:51 -0400 (Thu, 14 Jun 2018) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

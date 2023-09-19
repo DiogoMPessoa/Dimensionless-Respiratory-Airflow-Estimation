@@ -1,0 +1,341 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of show_slices</title>
+  <meta name="keywords" content="show_slices">
+  <meta name="description" content="out_img = show_slices (img, levels ) show slices at levels of an">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; show_slices.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>show_slices
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>out_img = show_slices (img, levels ) show slices at levels of an</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function out_img= show_slices( img, levels ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> out_img = show_slices (img, levels ) show slices at levels of an
+             using a fast rendering algorithm
+ img    = EIDORS image struct, or a array of structs
+          or output of CALC_SLICES (or equivalent multi-dimensional
+          picture array to be processed by mk_mosaic
+ out_img= matrix in the current colormap which we can use image(out_img);
+
+ PARAMETERS:
+  levels = Matrix [Lx3] of L image levels
+           each row of the matrix specifies the intercepts
+           of the slice on the x, y, z axis. To specify a z=2 plane
+           parallel to the x,y: use levels= [inf,inf,2]
+  
+  if levels is [L x 5] then levels= [x,y,z,h,v] where,
+           x,y,z specify the axes intercepts, and 
+           h,v   specify the horizontal, vertical position
+                 of that slice in the output image
+ 
+ IMAGE PARAMETERS:
+   img.show_slices.levels (same as above);
+   img.show_slices.img_cols = number of columns in image
+   img.show_slices.sep = number of pixels between the individual images
+   img.calc_colours.npoints = pixel width/height to map to
+   img.get_img_data.frame_select = which frames of image to display
+   img.show_slices.axes_msm = use mdl_slice_mapper for x,y axes
+        %% Example
+        img.fwd_model.mdl_slice_mapper = struct('level',[inf,0,inf], ...
+          'x_pts', linspace(-2,2,50), 'y_pts',linspace(2,10,100));
+        img.show_slices.axes_msm = true; show_slices(img);
+   img.show_slices.contour_levels = true =&gt; Do a contour on the image
+   img.show_slices.contour_levels = #    =&gt; Put this many contour lines
+   img.show_slices.contour_levels = vector =&gt; Put contours at these locations
+   img.show_slices.contour_properties =&gt; e.g. {'Color',[0,0,0],'LineWidth',2}
+
+ if levels is scalar, then make levels equispaced horizontal
+          cuts through the object
+
+ Show slices is roughly equivalent to:
+   rimg = calc_slices(img,levels); 
+   rimg = calc_colours(rimg,img); image(rimg);
+
+ See also: <a href="calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">CALC_SLICES</a>, <a href="mk_mosaic.html" class="code" title="function r_img = mk_mosaic(rimg, sep, vh, n_col)">MK_MOSAIC</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>	[colours,scl_data]= calc_colours(img, set_value, do_colourbar)</li><li><a href="calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>	calc_slices (img, levels, clim  ) show slices at levels of an</li><li><a href="mk_mosaic.html" class="code" title="function r_img = mk_mosaic(rimg, sep, vh, n_col)">mk_mosaic</a>	MK_MOSAIC Arrange multidimensional image matrix for display.</li><li><a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>	CALC_JACOBIAN_BKGND: calculate background image around</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/deprecated/manchester_tomography.html" class="code" title="function manchester_tomography( example_no)">manchester_tomography</a>	Example to show reconstructions from</li><li><a href="../../../eidors/examples/cheating_2d.html" class="code" title="function out=cheating_2d( figno, rand_seed )">cheating_2d</a>	code to simulate inverse crimes in EIT</li><li><a href="../../../eidors/examples/compare_2d_algs.html" class="code" title="function [imgr, img]= compare_2d_algs(option,shape);">compare_2d_algs</a>	Compare different 2D reconstructions</li><li><a href="../../../eidors/examples/compare_3d_algs.html" class="code" title="function imgr= compare_3d_algs( algno )">compare_3d_algs</a>	Compare different 3D reconstructions</li><li><a href="../../../eidors/examples/demo_2d_simdata.html" class="code" title="">demo_2d_simdata</a>	Example of using EIDORS to simulate 2D data and to</li><li><a href="../../../eidors/examples/demo_3d_simdata.html" class="code" title="">demo_3d_simdata</a>	How to make simulation data using EIDORS3D</li><li><a href="../../../eidors/examples/ex_fwd3d_high_order.html" class="code" title="">ex_fwd3d_high_order</a>	Make common model, and make an image</li><li><a href="animate_reconstructions.html" class="code" title="function fname_out= animate_reconstructions(fname, imgs);">animate_reconstructions</a>	animate_reconstructions(fname, imgs);</li><li><a href="eidors_colourbar.html" class="code" title="function hh= eidors_colourbar(max_scale,ref_lev, cb_shrink_move, greyscale)">eidors_colourbar</a>	EIDORS_COLOURBAR - create an eidors colourbar with scaling to image</li><li><a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>	MDL_SLICE_MAPPER: map pixels to FEM elements or nodes</li><li><a href="print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>	PRINT_CONVERT: print figures with anti-aliasing and trim them</li><li><a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="show_slices_move.html" class="code" title="function show_slices_move( img, move, move_scale )">show_slices_move</a>	SHOW_SLICES_MOVE   Shows planar slices of a 3D FEM with movement vectors</li><li><a href="../../../eidors/interface/eidors_saveimg.html" class="code" title="function eidors_saveimg( img, fname, format, pp )">eidors_saveimg</a>	EIDORS saveimg - save reconstructed image files in formats</li><li><a href="../../../eidors/interface/find_frc.html" class="code" title="function [eexpi,einsp]= find_frc( imgs, ROI, frate, name, ok, remove_pts)">find_frc</a>	FIND_FRC: find candidates for FRC</li><li><a href="../../../eidors/interface/sigmatome2_filter.html" class="code" title="function [Filter, stim_pattern]= sigmatome2_filter(test);">sigmatome2_filter</a>	SIGMATOME2_FILTER:  Hardware filter and stim_patterns for Sigmatome II device</li><li><a href="../../../eidors/models/GREIT3D_distribution.html" class="code" title="function [imdl,distr] = GREIT3D_distribution(fmdl, vopt)">GREIT3D_distribution</a>	GREIT3D_distribution: create target distributions for 3D GREIT</li><li><a href="../../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="../../../eidors/models/mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>	MK_PIXEL_SLICE create a pixel model to reconstruct on</li><li><a href="../../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>	SELECT_IMDL: select pre-packaged inverse model features</li><li><a href="../../../eidors/models/simulate_2d_movement.html" class="code" title="function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">simulate_2d_movement</a>	SIMULATE_2D_MOVEMENT simulate rotational movement in 2D</li><li><a href="../../../eidors/models/simulate_3d_movement.html" class="code" title="function [vh,vi,xyzr_pt]= simulate_3d_movement( n_sims, fmdl, rad_pr,movefcn )">simulate_3d_movement</a>	SIMULATE_3D_MOVEMENT simulate rotational movement in 3D</li><li><a href="../../../eidors/models/solve_RM_2Dslice.html" class="code" title="function imdl = solve_RM_2Dslice(imdl, sel_fcn)">solve_RM_2Dslice</a>	SOLVE_RM_2DSLICE: cut slices out of a 3D model</li><li><a href="../../../eidors/solvers/forward/jacobian_adjoint_higher_order.html" class="code" title="function J = jacobian_adjoint_higher_order(fwd_model,img)">jacobian_adjoint_higher_order</a>	Find the Jacobian associated with an image (and forward model)</li><li><a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../../eidors/solvers/inverse/calc_lambda_regtools.html" class="code" title="function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)">calc_lambda_regtools</a>	% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)</li><li><a href="../../../eidors/solvers/inverse/inv_solve_TSVD.html" class="code" title="function sol = inv_solve_TSVD(inv_model, data1, data2)">inv_solve_TSVD</a>	INV_SOLVE_TSVD: inverse solver based on truncatated SVD</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function out_img= show_slices( img, levels )</a>
+0002 <span class="comment">% out_img = show_slices (img, levels ) show slices at levels of an</span>
+0003 <span class="comment">%             using a fast rendering algorithm</span>
+0004 <span class="comment">% img    = EIDORS image struct, or a array of structs</span>
+0005 <span class="comment">%          or output of CALC_SLICES (or equivalent multi-dimensional</span>
+0006 <span class="comment">%          picture array to be processed by mk_mosaic</span>
+0007 <span class="comment">% out_img= matrix in the current colormap which we can use image(out_img);</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% PARAMETERS:</span>
+0010 <span class="comment">%  levels = Matrix [Lx3] of L image levels</span>
+0011 <span class="comment">%           each row of the matrix specifies the intercepts</span>
+0012 <span class="comment">%           of the slice on the x, y, z axis. To specify a z=2 plane</span>
+0013 <span class="comment">%           parallel to the x,y: use levels= [inf,inf,2]</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%  if levels is [L x 5] then levels= [x,y,z,h,v] where,</span>
+0016 <span class="comment">%           x,y,z specify the axes intercepts, and</span>
+0017 <span class="comment">%           h,v   specify the horizontal, vertical position</span>
+0018 <span class="comment">%                 of that slice in the output image</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% IMAGE PARAMETERS:</span>
+0021 <span class="comment">%   img.show_slices.levels (same as above);</span>
+0022 <span class="comment">%   img.show_slices.img_cols = number of columns in image</span>
+0023 <span class="comment">%   img.show_slices.sep = number of pixels between the individual images</span>
+0024 <span class="comment">%   img.calc_colours.npoints = pixel width/height to map to</span>
+0025 <span class="comment">%   img.get_img_data.frame_select = which frames of image to display</span>
+0026 <span class="comment">%   img.show_slices.axes_msm = use mdl_slice_mapper for x,y axes</span>
+0027 <span class="comment">%        %% Example</span>
+0028 <span class="comment">%        img.fwd_model.mdl_slice_mapper = struct('level',[inf,0,inf], ...</span>
+0029 <span class="comment">%          'x_pts', linspace(-2,2,50), 'y_pts',linspace(2,10,100));</span>
+0030 <span class="comment">%        img.show_slices.axes_msm = true; show_slices(img);</span>
+0031 <span class="comment">%   img.show_slices.contour_levels = true =&gt; Do a contour on the image</span>
+0032 <span class="comment">%   img.show_slices.contour_levels = #    =&gt; Put this many contour lines</span>
+0033 <span class="comment">%   img.show_slices.contour_levels = vector =&gt; Put contours at these locations</span>
+0034 <span class="comment">%   img.show_slices.contour_properties =&gt; e.g. {'Color',[0,0,0],'LineWidth',2}</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% if levels is scalar, then make levels equispaced horizontal</span>
+0037 <span class="comment">%          cuts through the object</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% Show slices is roughly equivalent to:</span>
+0040 <span class="comment">%   rimg = calc_slices(img,levels);</span>
+0041 <span class="comment">%   rimg = calc_colours(rimg,img); image(rimg);</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">% See also: CALC_SLICES, MK_MOSAIC</span>
+0044 
+0045 <span class="comment">% (C) 2005-2008 Andy Adler. License: GPL version 2 or version 3</span>
+0046 <span class="comment">% $Id: show_slices.m 6046 2019-12-31 20:10:42Z aadler $</span>
+0047 
+0048 <span class="keyword">if</span> ischar(img) &amp;&amp; strcmp(img,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0049 
+0050 sep = 0;
+0051 <span class="keyword">try</span> sep = img(1).show_slices.sep;
+0052 <span class="keyword">end</span>
+0053 
+0054 
+0055 <span class="comment">% TODO: because we wanted (back in 2005) to let show_slices</span>
+0056 <span class="comment">% handle lots of different scenarios (calling with images and</span>
+0057 <span class="comment">% without. It is now crufty ... and should be changed.</span>
+0058 do_calc_slices = 0;
+0059 <span class="keyword">try</span> <span class="keyword">if</span> strcmp(img(1).type,<span class="string">'image'</span>); do_calc_slices= 1; <span class="keyword">end</span>;<span class="keyword">end</span> 
+0060 
+0061 <span class="keyword">if</span> nargin&lt;=1;
+0062    <span class="keyword">try</span>   
+0063        levels = img(1).show_slices.levels;
+0064    <span class="keyword">catch</span>
+0065        levels = [];
+0066    <span class="keyword">end</span>
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="keyword">if</span> isempty(levels) &amp;&amp; do_calc_slices <span class="comment">%&amp;&amp; size(img(1).fwd_model.nodes,2)==2</span>
+0070    levels= [Inf,Inf,0];
+0071 <span class="keyword">end</span>
+0072 
+0073 vh = [];
+0074 <span class="keyword">if</span> size(levels,2) == 5
+0075    vh = levels(:,4:5);
+0076    levels = levels(:,1:3);
+0077 <span class="keyword">elseif</span> size(levels)== [1,1]
+0078    <span class="keyword">if</span> size(img(1).fwd_model.nodes,2) == 2 <span class="comment">% Can't do horiz slices for 2D model</span>
+0079       <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'Can''t do horizontal slices for 2D model. Showing 2D slice'</span>);
+0080       levels= [Inf,Inf,0];
+0081    <span class="keyword">else</span>
+0082       zmax= max(img(1).fwd_model.nodes(:,3));
+0083       zmin= min(img(1).fwd_model.nodes(:,3));
+0084       levels = linspace(zmax,zmin, levels+2);
+0085       levels = levels(2:end-1)';
+0086       levels = [(1+0*levels)*[Inf,Inf], levels];
+0087    <span class="keyword">end</span>
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="keyword">if</span> do_calc_slices
+0091    rimg= <a href="calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>( img, levels(:,1:3) );
+0092 <span class="keyword">else</span>
+0093    rimg= img;
+0094 <span class="keyword">end</span>
+0095 <span class="comment">% Eventualy we need to add a filter control to do this -aa'19</span>
+0096 <span class="comment">%if 0</span>
+0097 <span class="comment">%   filt = ones(5);</span>
+0098 <span class="comment">%    filt = conv2(filt,filt);</span>
+0099 <span class="comment">%   rnimg = rimg;</span>
+0100 <span class="comment">%   rimg(isnan(rimg)) = 0;</span>
+0101 <span class="comment">%   rimg = conv2(rimg, filt,'same') / sum(filt(:));</span>
+0102 <span class="comment">%   rimg(isnan(rnimg)) = NaN;</span>
+0103 <span class="comment">%end</span>
+0104 
+0105 n_col = 0;
+0106 <span class="keyword">try</span>  n_col = img(1).show_slices.img_cols;
+0107 <span class="keyword">end</span>
+0108 
+0109 r_img = <a href="mk_mosaic.html" class="code" title="function r_img = mk_mosaic(rimg, sep, vh, n_col)">mk_mosaic</a>(rimg, sep, vh, n_col);
+0110 
+0111 c_img = <a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>( r_img, img);
+0112 out_img= reshape(c_img, size(r_img,1), size(r_img,2) ,[]);
+0113 
+0114 
+0115 axes_msm = false;
+0116 <span class="keyword">try</span> axes_msm = img.show_slices.axes_msm; <span class="keyword">end</span>
+0117 
+0118 <span class="keyword">if</span> ~axes_msm
+0119    image(out_img);
+0120    axis image
+0121    axis off
+0122    axis equal
+0123    axis tight
+0124 <span class="keyword">else</span>
+0125    msm = img.fwd_model.mdl_slice_mapper;
+0126    image(msm.x_pts, msm.y_pts, out_img);
+0127    set(gca,<span class="string">'Ydir'</span>,<span class="string">'normal'</span>);
+0128 <span class="keyword">end</span>
+0129 
+0130 <span class="comment">% Do a contour plot?</span>
+0131 <span class="keyword">if</span> isfield(img(1),<span class="string">'show_slices'</span>) &amp;&amp; isfield(img(1).show_slices,<span class="string">'contour_levels'</span>);
+0132    clevs = img.show_slices.contour_levels;
+0133    <span class="keyword">if</span> isfield(img.show_slices,<span class="string">'contour_properties'</span>);
+0134       contour_properties = img.show_slices.contour_properties;
+0135    <span class="keyword">else</span>
+0136       contour_properties = {<span class="string">'Color'</span>,[0.2,0.2,0.3]};
+0137    <span class="keyword">end</span>
+0138 
+0139    <span class="keyword">if</span> ~axes_msm;
+0140       msm.x_pts = 1:size(rimg,2);
+0141       msm.y_pts = 1:size(rimg,1);
+0142    <span class="keyword">end</span>
+0143    ish= ishold;
+0144    <span class="keyword">if</span> isnumeric(clevs)
+0145       <span class="keyword">if</span> ~ish; hold on; <span class="keyword">end</span> 
+0146       contour(msm.x_pts, msm.y_pts, rimg, clevs, contour_properties{:});
+0147       <span class="keyword">if</span> ~ish; hold off; <span class="keyword">end</span> 
+0148    <span class="keyword">elseif</span> clevs <span class="comment">% true but not numeric</span>
+0149       <span class="keyword">if</span> ~ish; hold on; <span class="keyword">end</span> 
+0150       contour(msm.x_pts, msm.y_pts, rimg, contour_properties{:});
+0151       <span class="keyword">if</span> ~ish; hold off; <span class="keyword">end</span> 
+0152    <span class="keyword">else</span>
+0153       error(<span class="string">'img.show_slices.contour_levels parameter not understood'</span>);
+0154    <span class="keyword">end</span>
+0155 <span class="keyword">end</span>
+0156 
+0157 <span class="keyword">if</span> nargout==0; clear(<span class="string">'out_img'</span>); <span class="keyword">end</span>
+0158 
+0159 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0160    clf; sp=0;
+0161 
+0162    img=<a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2t3'</span>,8)); 
+0163    img.elem_data=toeplitz(1:size(img.fwd_model.elems,1),1);
+0164    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img) 
+0165 
+0166    img.calc_colours.npoints= 128;
+0167    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img) 
+0168 
+0169    img.calc_colours.npoints= 32;
+0170    img.elem_data=toeplitz(1:size(img.fwd_model.elems,1),1:3);
+0171    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img) 
+0172 
+0173 
+0174    img.show_slices.img_cols= 1;
+0175    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img) 
+0176 
+0177    imgn = rmfield(img,<span class="string">'elem_data'</span>);
+0178    imgn.node_data=toeplitz(1:size(img.fwd_model.nodes,1),1);
+0179 
+0180    img.elem_data = img.elem_data(:,1);
+0181    img.fwd_model.mdl_slice_mapper.npx = 10;
+0182    img.fwd_model.mdl_slice_mapper.npy = 20;
+0183    img.fwd_model.mdl_slice_mapper.level = [inf,inf,0];
+0184    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img);
+0185 
+0186    img.elem_data = img.elem_data(:,1);
+0187    img.fwd_model.mdl_slice_mapper.x_pts = linspace(-100,100,20);
+0188    img.fwd_model.mdl_slice_mapper.y_pts = linspace(-150,150,30);
+0189    img.fwd_model.mdl_slice_mapper.level = [inf,inf,0];
+0190    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img);
+0191 
+0192    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgn) 
+0193 
+0194    imgn.fwd_model.mdl_slice_mapper.x_pts = linspace(-100,100,20);
+0195    imgn.fwd_model.mdl_slice_mapper.y_pts = linspace(-150,150,30);
+0196    imgn.fwd_model.mdl_slice_mapper.level = [inf,inf,0];
+0197    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgn) 
+0198 
+0199 
+0200 <span class="comment">% 3D images</span>
+0201    img=<a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2])); 
+0202    img.calc_colours.npoints= 16;
+0203    img.elem_data=toeplitz(1:size(img.fwd_model.elems,1),1);
+0204    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img,2) 
+0205 
+0206 
+0207    img.elem_data=img.elem_data*[1:3];
+0208    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img,2) 
+0209 
+0210    img.elem_data=img.elem_data(:,1:2);
+0211    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img,[inf,inf,1;0,inf,inf;0,1,inf]);
+0212 
+0213    img.show_slices.sep = 5;
+0214    img.fwd_model.mdl_slice_mapper.x_pts = linspace(-1,1,20);
+0215    img.fwd_model.mdl_slice_mapper.y_pts = linspace(-1,1,30);
+0216    img.fwd_model.mdl_slice_mapper.level = [inf,inf,0];
+0217 
+0218    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img,2) 
+0219 
+0220 
+0221    img.elem_data = img.elem_data(:,1);
+0222    levels=[inf,inf,1,1,1;
+0223            0,inf,inf,2,1;
+0224            0,1,inf,3,1];
+0225    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img,levels) 
+0226 
+0227    levels=[inf,inf,1,1,1;
+0228            0,inf,inf,2,2;
+0229            0,1,inf,  1,3];
+0230    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img,levels) 
+0231 
+0232    img.elem_data = img.elem_data(:,[1,1]);
+0233    levels=[inf,inf,1,1,1;
+0234            0,inf,inf,2,1;
+0235            0,1,inf,  3,1];
+0236    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img,levels) 
+0237    
+0238    m = <a href="calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>(img,levels);
+0239    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(m) 
+0240    
+0241    img.elem_data = img.elem_data(:,1);
+0242    img.show_slices.contour_levels = true;
+0243    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img) 
+0244 
+0245    img.fwd_model.mdl_slice_mapper = struct(<span class="string">'level'</span>,[inf,inf,1], <span class="keyword">...</span>
+0246      <span class="string">'x_pts'</span>, linspace(-1,1,50), <span class="string">'y_pts'</span>,linspace(-2,2,100));
+0247    img.show_slices.axes_msm = true;
+0248    img.show_slices.contour_properties = {<span class="string">'LineWidth'</span>,2};
+0249    img.show_slices.contour_levels = 1:300;
+0250    sp=sp+1;subplot(4,5,sp); <a href="show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img) 
+0251</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

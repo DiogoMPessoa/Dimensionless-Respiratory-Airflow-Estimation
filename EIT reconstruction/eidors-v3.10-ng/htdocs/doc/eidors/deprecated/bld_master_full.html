@@ -1,0 +1,283 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of bld_master_full</title>
+  <meta name="keywords" content="bld_master_full">
+  <meta name="description" content="function [Ef,D,Ela] = bld_master_full(vtx,simp,mat,elec,zc);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; bld_master_full.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>bld_master_full
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Ef,D,Ela] = bld_master_full(vtx,simp,mat,elec,zc);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Ef,D,Ela] = bld_master_full(vtx,simp,mat,elec,zc); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">function [Ef,D,Ela] = bld_master_full(vtx,simp,mat,elec,zc);
+
+System matrix assembling based on the complete electrode model. 
+This function is called within fem_master_full.
+
+
+
+Ef   = The UNreferenced system matrix.
+D    = The sgradients of the shape functions over each element.
+Ela  = Normalised volums of the elements
+vtx  = The vertices matrix. The coordinates of the nodes in 3D.
+simp = The simplices matrix. Unstructured tetrahedral.
+mat  = As for MATerial information. The conductivity vector.(isotropic)
+elec = The matrix that holds the boundary faces assigned as electrodes. Its typical
+       dimensions are [number of electrodes x 3*number of faces per electrode].
+zc   = The array of electrode contact impedances.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="bld_master.html" class="code" title="function [Ef,D,Ela] = bld_master(vtx,simp,mat_ref);">bld_master</a>	function [Ef,D,Ela] = bld_master(vtx,simp,mat_ref);</li><li><a href="../../eidors/models/triarea3d.html" class="code" title="function [ta] = triarea3d(V);">triarea3d</a>	[ta] = triarea3d(V);</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="fem_master_full.html" class="code" title="function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);">fem_master_full</a>	function [E,D,Ela,pp] = fem_master_full(vtx,simp,mat,gnd_ind,elec,zc,perm_sym);</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [Ef,D,Ela] = bld_master_full_2d(vtx,simp,mat,elec,zc);</a></li><li><a href="#_sub2" class="code">function [Ef,D,Ela] = bld_master_full_3d(vtx,simp,mat,elec,zc);</a></li><li><a href="#_sub3" class="code">function [dist] = db2p(xa,ya,xb,yb);</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Ef,D,Ela] = bld_master_full(vtx,simp,mat,elec,zc);</a>
+0002 <span class="comment">%function [Ef,D,Ela] = bld_master_full(vtx,simp,mat,elec,zc);</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%System matrix assembling based on the complete electrode model.</span>
+0005 <span class="comment">%This function is called within fem_master_full.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%Ef   = The UNreferenced system matrix.</span>
+0010 <span class="comment">%D    = The sgradients of the shape functions over each element.</span>
+0011 <span class="comment">%Ela  = Normalised volums of the elements</span>
+0012 <span class="comment">%vtx  = The vertices matrix. The coordinates of the nodes in 3D.</span>
+0013 <span class="comment">%simp = The simplices matrix. Unstructured tetrahedral.</span>
+0014 <span class="comment">%mat  = As for MATerial information. The conductivity vector.(isotropic)</span>
+0015 <span class="comment">%elec = The matrix that holds the boundary faces assigned as electrodes. Its typical</span>
+0016 <span class="comment">%       dimensions are [number of electrodes x 3*number of faces per electrode].</span>
+0017 <span class="comment">%zc   = The array of electrode contact impedances.</span>
+0018 
+0019 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'BLD_MASTER_FULL is deprecated as of 07-Jun-2012. '</span>);
+0020 
+0021 dimen= size(vtx,2);
+0022 <span class="keyword">if</span> dimen==2
+0023    [Ef,D,Ela] = <a href="#_sub1" class="code" title="subfunction [Ef,D,Ela] = bld_master_full_2d(vtx,simp,mat,elec,zc);">bld_master_full_2d</a>(vtx,simp,mat,elec,zc);
+0024 <span class="keyword">elseif</span> dimen==3
+0025    [Ef,D,Ela] = <a href="#_sub2" class="code" title="subfunction [Ef,D,Ela] = bld_master_full_3d(vtx,simp,mat,elec,zc);">bld_master_full_3d</a>(vtx,simp,mat,elec,zc);
+0026 <span class="keyword">else</span>
+0027    error(<span class="string">'not 2d or 3d'</span>);
+0028 <span class="keyword">end</span>
+0029 
+0030 <a name="_sub1" href="#_subfunctions" class="code">function [Ef,D,Ela] = bld_master_full_2d(vtx,simp,mat,elec,zc);</a>
+0031 
+0032 [vr, vc] = size(vtx);
+0033 [sr, sc] = size(simp);
+0034 [er, ec] = size(elec);
+0035 
+0036 
+0037 <span class="keyword">if</span> length(mat) ~= sr
+0038    error(<span class="string">'Invalid conductivity information for this mesh'</span>);
+0039 <span class="keyword">end</span>
+0040 
+0041 
+0042 <span class="keyword">if</span> length(zc) == er
+0043 
+0044 
+0045 <span class="comment">%The column vector zc with the contact impedances in [Ohms] is required</span>
+0046 
+0047 [E,D,Ela] = <a href="bld_master.html" class="code" title="function [Ef,D,Ela] = bld_master(vtx,simp,mat_ref);">bld_master</a>(vtx,simp,mat);
+0048 
+0049 
+0050 E = full(E);
+0051 
+0052 Ef = spalloc(vr+er,vr+er, er * vr);
+0053 
+0054 Ef(1:vr,1:vr) = E;
+0055 
+0056 
+0057 <span class="keyword">while</span> length(zc) ~= er
+0058       disp(sprintf(<span class="string">'Please enter the correct zc column vector with length: %d'</span>,er));
+0059       <span class="comment">%[zc] = contact_impedance;</span>
+0060 <span class="keyword">end</span>
+0061 
+0062 
+0063 <span class="keyword">for</span> q=1:er
+0064    
+0065    tang_dist = 0;
+0066    
+0067    q_th_ele = elec(q,:);  <span class="comment">% Select the row of nodes corresponding to the current electrode</span>
+0068    
+0069    q_th_ele_zf = nonzeros(q_th_ele)'; <span class="comment">% Extract the dummy &quot;zero&quot; nodal numbers</span>
+0070    
+0071    <span class="keyword">for</span> w=1:2:length(q_th_ele_zf)
+0072       
+0073       m = q_th_ele_zf(w);
+0074       n = q_th_ele_zf(w+1);
+0075       
+0076       <span class="comment">% This way m &amp; n nodes belong to the edge tangent to the electrode and also at the same simplex.</span>
+0077       
+0078       <span class="comment">% We now evaluate the distance &quot;tangential contact&quot; between m &amp; n</span>
+0079       
+0080       xm = vtx(m,1);
+0081       ym = vtx(m,2); <span class="comment">% m node coords</span>
+0082       xn = vtx(n,1);  
+0083       yn = vtx(n,2); <span class="comment">% n node coords</span>
+0084       
+0085       [dist] = <a href="#_sub3" class="code" title="subfunction [dist] = db2p(xa,ya,xb,yb);">db2p</a>(xm,ym,xn,yn); <span class="comment">% distance mn</span>
+0086       
+0087       cali_dist = dist ./ zc(q);  <span class="comment">% coeficient for the distance mn</span>
+0088       
+0089       tang_dist = tang_dist + cali_dist;
+0090       
+0091       <span class="comment">% Start modifying &quot;expanding&quot; the E master matrix</span>
+0092       
+0093       Ef(m,vr+q) = Ef(m,vr+q) - cali_dist/2 ; <span class="comment">% Kv -&gt; Ec  -&gt; Vertical bar</span>
+0094       Ef(n,vr+q) = Ef(n,vr+q) - cali_dist/2 ; <span class="comment">% Kv -&gt; Ec</span>
+0095       
+0096       Ef(vr+q,m) = Ef(vr+q,m) - cali_dist/2 ; <span class="comment">% Kv' -&gt; Ec' -&gt; Horizontal bar</span>
+0097       Ef(vr+q,n) = Ef(vr+q,n) - cali_dist/2 ; <span class="comment">% Kv' -&gt; Ec'</span>
+0098       
+0099       
+0100       Ef(m,m) = Ef(m,m) + cali_dist/3; <span class="comment">% Kz -&gt; E -&gt; Main bar</span>
+0101       Ef(n,n) = Ef(n,n) + cali_dist/3; <span class="comment">% Kz -&gt; E</span>
+0102       Ef(m,n) = Ef(m,n) + cali_dist/6; <span class="comment">% Kz -&gt; E</span>
+0103       Ef(n,m) = Ef(n,m) + cali_dist/6; <span class="comment">% Kz -&gt; E</span>
+0104       
+0105    <span class="keyword">end</span> <span class="comment">% dealing with this electrode</span>
+0106    
+0107    Ef(vr+q,vr+q) = Ef(vr+q,vr+q) + tang_dist;
+0108    
+0109 <span class="keyword">end</span> <span class="comment">%for the whole set of electrodes</span>
+0110 
+0111 <span class="keyword">end</span>
+0112 
+0113 <a name="_sub2" href="#_subfunctions" class="code">function [Ef,D,Ela] = bld_master_full_3d(vtx,simp,mat,elec,zc);</a>
+0114 [vr, vc] = size(vtx);
+0115 [sr, sc] = size(simp);
+0116 [er, ec] = size(elec);
+0117 
+0118 
+0119 <span class="keyword">if</span> length(mat) ~= sr
+0120    error(<span class="string">'Invalid conductivity information for this mesh'</span>);
+0121 <span class="keyword">end</span>
+0122 
+0123 
+0124 [Ef,D,Ela] = <a href="bld_master.html" class="code" title="function [Ef,D,Ela] = bld_master(vtx,simp,mat_ref);">bld_master</a>(vtx,simp,mat);
+0125 
+0126 
+0127 <span class="comment">% Add zeros so Ef is of size (vr+er) x (vr+er)</span>
+0128 [Ef_i, Ef_j, Ef_s]= find( Ef );
+0129 Ef = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(Ef_i, Ef_j, Ef_s, vr+er, vr+er);
+0130 
+0131 
+0132 <span class="comment">%Up to this point we have calculated the master matrix without the influence of contact impedance.</span>
+0133 
+0134 <span class="comment">%The column vector zc with the contact</span>
+0135 <span class="comment">%impedances in [Ohms] is required</span>
+0136 <span class="keyword">if</span> length(zc) ~= er
+0137       error(sprintf(<span class="string">'zc (=%d) should be equal to er (=%d)'</span>,length(zc),er));
+0138 <span class="keyword">end</span>
+0139 
+0140 
+0141 <span class="keyword">for</span> q=1:er
+0142    
+0143    tang_area = 0;
+0144    
+0145    q_th_ele = nonzeros(elec(q,:));  <span class="comment">% Select the row of nodes corresponding to the current electrode</span>
+0146    
+0147    <span class="keyword">if</span> length(q_th_ele) ==1 <span class="comment">% check if point electrode</span>
+0148       m = q_th_ele;
+0149       cali_area = 1 / zc(q);
+0150    
+0151       tang_area = tang_area + cali_area;
+0152       
+0153       Ef(m,vr+q) = Ef(m,vr+q) - cali_area/2 ; 
+0154       Ef(vr+q,m) = Ef(vr+q,m) - cali_area/2 ; 
+0155       
+0156       Ef(m,m) = Ef(m,m) + cali_area/2;
+0157 
+0158    <span class="keyword">else</span> <span class="comment">% not point electrode - use complete electrode model</span>
+0159    <span class="keyword">for</span> w=1:3:length(q_th_ele)
+0160       
+0161       m = q_th_ele(w);
+0162       n = q_th_ele(w+1);
+0163       l = q_th_ele(w+2);
+0164       
+0165         
+0166       <span class="comment">% This way m &amp; n nodes belong to the edge tangential to the electrode</span>
+0167       <span class="comment">% and also at the same simplex.</span>
+0168       <span class="comment">% We will now evaluate the distance &quot;tangential contact area&quot; between m,n &amp; l</span>
+0169       Are = <a href="../../eidors/models/triarea3d.html" class="code" title="function [ta] = triarea3d(V);">triarea3d</a>(vtx([m n l],:));
+0170           
+0171     <span class="comment">% area mnl</span>
+0172       
+0173       cali_area = (2*Are) ./ zc(q);  <span class="comment">% coefficient for the area mnl</span>
+0174       <span class="comment">%|J_k| = 2*Are</span>
+0175       
+0176       tang_area = tang_area + cali_area;
+0177       
+0178       <span class="comment">% Start modifying &quot;expanding&quot; the E master matrix</span>
+0179       
+0180       Ef(m,vr+q) = Ef(m,vr+q) - cali_area/6 ; <span class="comment">% Kv -&gt; Ec  -&gt; Vertical bar</span>
+0181       Ef(n,vr+q) = Ef(n,vr+q) - cali_area/6 ; 
+0182       Ef(l,vr+q) = Ef(l,vr+q) - cali_area/6 ;
+0183             
+0184       Ef(vr+q,m) = Ef(vr+q,m) - cali_area/6 ; <span class="comment">% Kv' -&gt; Ec' -&gt; Horizontal bar</span>
+0185       Ef(vr+q,n) = Ef(vr+q,n) - cali_area/6 ; 
+0186       Ef(vr+q,l) = Ef(vr+q,l) - cali_area/6 ;
+0187       
+0188       Ef(m,m) = Ef(m,m) + cali_area/12; <span class="comment">% Kz -&gt; E -&gt; Main bar</span>
+0189       Ef(m,n) = Ef(m,n) + cali_area/24;       
+0190       Ef(m,l) = Ef(m,l) + cali_area/24;
+0191       
+0192       Ef(n,m) = Ef(n,m) + cali_area/24;
+0193       Ef(n,n) = Ef(n,n) + cali_area/12; 
+0194       Ef(n,l) = Ef(n,l) + cali_area/24;
+0195       
+0196       Ef(l,m) = Ef(l,m) + cali_area/24;
+0197       Ef(l,n) = Ef(l,n) + cali_area/24;
+0198       Ef(l,l) = Ef(l,l) + cali_area/12;
+0199     
+0200       
+0201    <span class="keyword">end</span> <span class="comment">% dealing with this electrode</span>
+0202    <span class="keyword">end</span> <span class="comment">% point electrode</span>
+0203    Ef(vr+q,vr+q) = Ef(vr+q,vr+q) + 0.5*tang_area;
+0204    
+0205 <span class="keyword">end</span> <span class="comment">%for the whole set of electrodes</span>
+0206 
+0207 <span class="comment">% calculate distance between two points</span>
+0208 <a name="_sub3" href="#_subfunctions" class="code">function [dist] = db2p(xa,ya,xb,yb);</a>
+0209 
+0210    dist = sqrt((xb - xa).^2 + (yb - ya).^2);
+0211 
+0212 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0213 <span class="comment">% This is part of the EIDORS suite.</span>
+0214 <span class="comment">% Copyright (c) N. Polydorides 2003</span>
+0215 <span class="comment">% Copying permitted under terms of GNU GPL</span>
+0216 <span class="comment">% See enclosed file gpl.html for details.</span>
+0217 <span class="comment">% EIDORS 3D version 2.0</span>
+0218 <span class="comment">% MATLAB version 5.3 R11</span>
+0219 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

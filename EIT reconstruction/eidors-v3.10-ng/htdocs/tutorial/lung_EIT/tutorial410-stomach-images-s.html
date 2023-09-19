@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Using EIDORS to image gastric emptying</h2>
+
+<h3> 
+2D EIT for imaging of gastric emptying
+</h3>
+
+These data were gathered by asking volunteers to drink
+Bovril (salty soup mix) and taking EIT images at the
+level of the stomach. These experiments were part
+of 
+<ul>Trudelle, St&eacute;phane,
+&Eacute;valuation de la vidange gastrique par 
+tomographie d'imp&eacute;dance &eacute;lectrique,
+Thesis (M.Sc.A.)--&Eacute;cole polytechnique de Montr&eacute;al
+</ul>
+The protocol is similar to 
+<ul>
+A. Adler, R. Guardo, Y. Berthiaume
+<a href="http://www.sce.carleton.ca/faculty/adler/publications/1994/adler-cmbs94-gastric-emptying.pdf">
+Imaging of Gastric Emptying with Electrical Impedance Tomography</a>
+Canadian Medical and Biolological Eng. Soc., Vancouver, Canada,
+ May 1994. 20:14-15.
+</ul>
+
+<h3>
+Step 1: Create models
+</h3>
+Use mk_common_model to create a thorax shaped
+model with 16 electrodes. Ensure the model
+uses 1) Correct stimulation patterns (adjacent is default),
+2) Normalized difference imaging
+
+<pre>
+% Lung images
+% $Id: tutorial410a.m 3340 2012-07-01 21:25:30Z bgrychtol $
+
+% 2D Model
+imdl= mk_common_model('c2t3',16);
+
+
+% most EIT systems image best with normalized difference
+imdl.fwd_model = mdl_normalize(imdl.fwd_model, 1);
+imdl.RtR_prior= @prior_gaussian_HPF;
+
+% electrodes start on back (dorsal), then do this
+imdl.fwd_model.electrode([9:16,1:8])=  ...
+   imdl.fwd_model.electrode;
+
+
+subplot(221);
+show_fem(imdl.fwd_model);
+
+axis equal
+print_convert tutorial410a.png;
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial410a.png">
+<br><i> Figure:</i>
+2D FEM of thorax (units in mm). Electrode #1
+(<font color="#00B300"><b>o</b></font>)
+and electrode #2 
+(<font color="#008000"><b>o</b></font>)
+are shown in different colours than the others
+(<font color="#004D00"><b>o</b></font>).
+</center>
+
+<H3>
+Image reconstruction
+</H3>
+
+<pre>
+% Abdomen Images  $Id: tutorial410b.m 4839 2015-03-30 07:44:50Z aadler $
+
+load montreal_data_1995
+imdl.hyperparameter.value=.2;
+vh= zc_h_stomach_pre; % abdomen before fluid
+vi= zc_stomach_0_5_60min; % each 5 minutes after drink
+img= inv_solve(imdl, vh, vi);
+
+clf; show_slices(img)
+axis equal
+
+print_convert tutorial410b.png;
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial410b.png">
+<br><i> Figure:</i>
+Image slices of the abdomen every five minutes after 
+drink. Image progression
+is from left to right, top to bottom. 
+</center>
+
+<H3>
+Calculate signal as a function of time
+</H3>
+
+<pre>
+% Abdomen Images  $Id: tutorial410c.m 3273 2012-06-30 18:00:35Z aadler $
+
+raster_img= calc_slices(img);
+raster_img(isnan(raster_img))=0;
+% define roi as whole image
+s_ri = size(raster_img);
+roi = ones(s_ri(1:2));
+
+for i= 1:s_ri(3)
+  sig(i)= sum(sum(raster_img(:,:,i) .* roi));
+end
+
+subplot(221)
+plot( ((1:s_ri(3))-1)*5, sig/sig(1))
+xlabel('minutes after drink')
+ylabel('normalized conductivity');
+
+print_convert tutorial410c.png '-density 150';
+
+</pre>
+
+<center>
+<img src="tutorial410c.png">
+<br><i> Figure:</i>
+Normalized image in stomach as a function of time.
+</center>
+
+<H3>
+Different algorithms for stomach images
+</H3>
+
+<pre>
+% Abdomen Images $Id: tutorial410d.m 4839 2015-03-30 07:44:50Z aadler $
+
+load montreal_data_1995
+vh= zc_h_stomach_pre; % abdomen before fluid
+vi= zc_stomach_0_5_60min(:,1); % right after drink
+
+% GN solution - Gaussian prior
+imdl.RtR_prior= @prior_gaussian_HPF;
+imdl.solve=     @inv_solve_diff_GN_one_step;
+imdl.hyperparameter.value=.1;
+img= inv_solve(imdl, vh, vi);
+
+subplot(221); show_fem(img); axis equal; axis off
+
+% GN solution - Noser prior
+imdl.RtR_prior= @prior_noser;
+imdl.solve=     @inv_solve_diff_GN_one_step;
+imdl.hyperparameter.value=.3;
+img= inv_solve(imdl, vh, vi);
+
+subplot(222); show_fem(img); axis equal; axis off
+
+% GN solution - Noser prior
+imdl= rmfield(imdl,'RtR_prior');
+imdl.R_prior=   @prior_TV;
+imdl.solve=     @inv_solve_TV_pdipm;
+imdl.hyperparameter.value=3e-4;
+img= inv_solve(imdl, vh, vi);
+
+subplot(223); show_fem(img); axis equal; axis off
+
+% GN solution - Noser prior
+imdl.R_prior=   @prior_TV;
+imdl.solve=     @inv_solve_TV_pdipm;
+imdl.hyperparameter.value=3e-3;
+img= inv_solve(imdl, vh, vi);
+
+subplot(224); show_fem(img); axis equal; axis off
+
+
+print_convert tutorial410d.png '-density 150';
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial410d.png">
+<br><i> Figure:</i>
+<i>Top Left</i>: Gauss-Newton Reconstruction with Gaussian HPF prior
+<i>Top Right</i>: Gauss-Newton Reconstruction with Laplacian filter
+<i>Bottom Left</i>: Total Variation Reconstruction (hp=1e-3)
+<i>Bottom Right</i>: Total Variation Reconstruction (hp=1e-4)
+</center>
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

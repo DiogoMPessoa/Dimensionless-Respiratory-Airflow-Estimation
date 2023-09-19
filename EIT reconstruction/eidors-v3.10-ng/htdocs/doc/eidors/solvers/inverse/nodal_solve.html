@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of nodal_solve</title>
+  <meta name="keywords" content="nodal_solve">
+  <meta name="description" content="NODAL_SOLVE inverse solver using approach of Adler&amp;Guardo 1996">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; nodal_solve.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>nodal_solve
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>NODAL_SOLVE inverse solver using approach of Adler&amp;Guardo 1996</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function img= nodal_solve( inv_model, data1, data2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> NODAL_SOLVE inverse solver using approach of Adler&amp;Guardo 1996
+ img= nodal_solve( inv_model, data1, data2)
+ img        =&gt; output image (or vector of images)
+ inv_model  =&gt; inverse model struct
+ data1      =&gt; differential data at earlier time
+ data2      =&gt; differential data at later time
+
+ both data1 and data2 may be matrices (MxT) each of
+  M measurements at T times
+ if either data1 or data2 is a vector, then it is expanded
+  to be the same size matrix</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>	RtR = calc_RtR_prior( inv_model )</li><li><a href="../../../eidors/solvers/calc_difference_data.html" class="code" title="function dva = calc_difference_data( data1, data2, fwd_model)">calc_difference_data</a>	CALC_DIFFERENCE_DATA: calculate difference data between</li><li><a href="../../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>	CALC_HYPERPARAMETER: calculate hyperparameter value</li><li><a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>	CALC_JACOBIAN_BKGND: calculate background image around</li><li><a href="../../../eidors/solvers/calc_meas_icov.html" class="code" title="function meas_icov = calc_meas_icov( inv_model )">calc_meas_icov</a>	meas_icov = calc_meas_icov( inv_model )</li><li><a href="get_RM.html" class="code" title="function [RM, J, RtR, W, Jfine] = get_RM(inv_model)">get_RM</a>	% GET_RM: obtains the reconstruction matrix from a given inverse model</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/select_imdl.html" class="code" title="function inv_mdl= select_imdl( mdl, options )">select_imdl</a>	SELECT_IMDL: select pre-packaged inverse model features</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function one_step_inv = get_RM( inv_model );</a></li><li><a href="#_sub2" class="code">function [e2n, Ne, Nn] = elem2node( elems )</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function img= nodal_solve( inv_model, data1, data2)</a>
+0002 <span class="comment">% NODAL_SOLVE inverse solver using approach of Adler&amp;Guardo 1996</span>
+0003 <span class="comment">% img= nodal_solve( inv_model, data1, data2)</span>
+0004 <span class="comment">% img        =&gt; output image (or vector of images)</span>
+0005 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0006 <span class="comment">% data1      =&gt; differential data at earlier time</span>
+0007 <span class="comment">% data2      =&gt; differential data at later time</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% both data1 and data2 may be matrices (MxT) each of</span>
+0010 <span class="comment">%  M measurements at T times</span>
+0011 <span class="comment">% if either data1 or data2 is a vector, then it is expanded</span>
+0012 <span class="comment">%  to be the same size matrix</span>
+0013 
+0014 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0015 <span class="comment">% $Id: nodal_solve.m 4833 2015-03-29 21:32:08Z bgrychtol-ipa $</span>
+0016 
+0017 
+0018 dv = <a href="../../../eidors/solvers/calc_difference_data.html" class="code" title="function dva = calc_difference_data( data1, data2, fwd_model)">calc_difference_data</a>( data1, data2, inv_model.fwd_model);
+0019 
+0020 sol = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="get_RM.html" class="code" title="function [RM, J, RtR, W, Jfine] = get_RM(inv_model)">get_RM</a>, inv_model, <span class="string">'nodal_solve'</span> ) * dv;
+0021 
+0022 <span class="comment">% create a data structure to return</span>
+0023 img.name= <span class="string">'solved by nodal_solve'</span>;
+0024 img.node_data = sol;
+0025 img.fwd_model= inv_model.fwd_model;
+0026 
+0027 <a name="_sub1" href="#_subfunctions" class="code">function one_step_inv = get_RM( inv_model );</a>
+0028    fwd_model= inv_model.fwd_model;
+0029 
+0030    img_bkgnd= <a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>( inv_model );
+0031    J = <a href="../../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>(img_bkgnd);
+0032 
+0033    RtR = <a href="../../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>( inv_model );
+0034    W   = <a href="../../../eidors/solvers/calc_meas_icov.html" class="code" title="function meas_icov = calc_meas_icov( inv_model )">calc_meas_icov</a>( inv_model );
+0035    hp  = <a href="../../../eidors/solvers/calc_hyperparameter.html" class="code" title="function hyperparameter = calc_hyperparameter( inv_model )">calc_hyperparameter</a>( inv_model );
+0036 
+0037    [e2n,Ne, Nn] = <a href="#_sub2" class="code" title="subfunction [e2n, Ne, Nn] = elem2node( elems )">elem2node</a>( fwd_model.elems );
+0038    <span class="keyword">if</span> size(J,2) == Ne;
+0039       J= J*e2n;
+0040    <span class="keyword">end</span>
+0041    <span class="keyword">if</span> size(RtR,2) == Ne;
+0042       RtR = e2n'*RtR*e2n;
+0043       RtR = RtR +  1e-4*spdiags(diag(RtR),0,Nn,Nn); <span class="comment">%Need just a little regularization</span>
+0044    <span class="keyword">end</span>
+0045 
+0046    one_step_inv= (J'*W*J +  hp^2*RtR)\J'*W;
+0047 
+0048 <a name="_sub2" href="#_subfunctions" class="code">function [e2n, Ne, Nn] = elem2node( elems )</a>
+0049    [Ne,d] = size(elems);
+0050    elemo = (1:Ne)'*ones(1,d);
+0051    e2n = <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(elemo,elems,1/d); 
+0052    Nn = size(e2n,2);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

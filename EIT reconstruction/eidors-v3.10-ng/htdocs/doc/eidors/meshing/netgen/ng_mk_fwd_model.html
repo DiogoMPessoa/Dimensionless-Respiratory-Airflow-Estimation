@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ng_mk_fwd_model</title>
+  <meta name="keywords" content="ng_mk_fwd_model">
+  <meta name="description" content="NG_MK_FWD_MODEL: create a fwd_model object from a netgen vol file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">netgen</a> &gt; ng_mk_fwd_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/netgen&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>ng_mk_fwd_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>NG_MK_FWD_MODEL: create a fwd_model object from a netgen vol file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [fwd_mdl]=ng_mk_fwd_model( ng_vol_filename, centres,name, stim_pattern, z_contact, postprocmesh) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> NG_MK_FWD_MODEL: create a fwd_model object from a netgen vol file
+ [fwd_mdl]= ...
+      ng_mk_fwd_model( ng_vol_filename, centres, ...
+                       name, stim_pattern, z_contact)
+
+  ng_vol_filename:   filename output from netgen
+  name:              name for object (if [] use ng_vol_filename)
+  centres:           matrix of N x [x,y,z] electrode centres
+                     centres can also be a Nx1 cell matrix of
+                     functions which are 1 inside the electrode and 0 outside
+  stim_pattern:      a stimulation pattern structure
+                     empty ([]) if stim_pattern is not available
+  z_contact:         vector or scalar electrode contact impedance
+
+  fwd_mdl:           eidors format fwd_model
+  fwd_mdl.mat_idx:   cell array of indices into netgen material properties
+ (C) 2006 Andy Adler. (C) 2013 Alistair Boyle. License: GPL version 2 or version 3
+ $Id: ng_mk_fwd_model.m 5908 2019-02-12 07:23:19Z aadler $</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="ng_read_mesh.html" class="code" title="function[srf,vtx,fc,bc,simp,edg,mat_ind] = ng_read_mesh(filename)">ng_read_mesh</a>	[srf,vtx,fc,bc,simp,edg,mat_ind] = ng_read_mesh(filename)</li><li><a href="ng_tank_find_elec.html" class="code" title="function [elec,sels, electrodes] = ng_tank_find_elec(srf,vtx,fc,centres)">ng_tank_find_elec</a>	[elec,sels, electrodes] = ng_tank_find_elec(srf,vtx,fc,centres);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>	NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface</li><li><a href="ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="ng_mk_ellip_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_ellip_models(ellip_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_ellip_models</a>	NG_MAKE_ELLIP_MODELS: create elliptical models using netgen</li><li><a href="ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>	NG_MAKE_EXTRUDED_MODEL: create extruded models using netgen</li><li><a href="ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>	NG_MK_GEN_MODELS: create generic models using netgen</li><li><a href="../../../eidors/models/mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li><li><a href="../../../eidors/models/place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fwd_mdl= construct_fwd_model(srf,vtx,simp,bc, name,</a></li><li><a href="#_sub2" class="code">function [mat_idx] = mk_mat_indices( mat_ind);</a></li><li><a href="#_sub3" class="code">function gnd_node=    find_centre_node(vtx);</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [fwd_mdl]= </a><span class="keyword">...</span>
+0002              ng_mk_fwd_model( ng_vol_filename, centres, <span class="keyword">...</span>
+0003                               name, stim_pattern, z_contact, postprocmesh)
+0004 <span class="comment">% NG_MK_FWD_MODEL: create a fwd_model object from a netgen vol file</span>
+0005 <span class="comment">% [fwd_mdl]= ...</span>
+0006 <span class="comment">%      ng_mk_fwd_model( ng_vol_filename, centres, ...</span>
+0007 <span class="comment">%                       name, stim_pattern, z_contact)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%  ng_vol_filename:   filename output from netgen</span>
+0010 <span class="comment">%  name:              name for object (if [] use ng_vol_filename)</span>
+0011 <span class="comment">%  centres:           matrix of N x [x,y,z] electrode centres</span>
+0012 <span class="comment">%                     centres can also be a Nx1 cell matrix of</span>
+0013 <span class="comment">%                     functions which are 1 inside the electrode and 0 outside</span>
+0014 <span class="comment">%  stim_pattern:      a stimulation pattern structure</span>
+0015 <span class="comment">%                     empty ([]) if stim_pattern is not available</span>
+0016 <span class="comment">%  z_contact:         vector or scalar electrode contact impedance</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%  fwd_mdl:           eidors format fwd_model</span>
+0019 <span class="comment">%  fwd_mdl.mat_idx:   cell array of indices into netgen material properties</span>
+0020 <span class="comment">% (C) 2006 Andy Adler. (C) 2013 Alistair Boyle. License: GPL version 2 or version 3</span>
+0021 <span class="comment">% $Id: ng_mk_fwd_model.m 5908 2019-02-12 07:23:19Z aadler $</span>
+0022 
+0023 <span class="keyword">if</span> isempty(name); 
+0024    name = [<span class="string">'MDL from'</span>, ng_vol_filename];
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="keyword">if</span> nargin&lt;5
+0028    z_contact=0.01; <span class="comment">% singular if z_contact=0</span>
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="comment">% Model Geometry</span>
+0032 [srf,vtx,fc,bc,simp,edg,mat_ind] = <a href="ng_read_mesh.html" class="code" title="function[srf,vtx,fc,bc,simp,edg,mat_ind] = ng_read_mesh(filename)">ng_read_mesh</a>(ng_vol_filename);
+0033 <span class="keyword">if</span> isempty(vtx); 
+0034    error(<span class="string">'EIDORS: ng_mk_fwd_model: Netgen meshing failed. Stopping'</span>);
+0035 <span class="keyword">end</span>
+0036 <span class="keyword">if</span> nargin&gt;=6
+0037     N_elec = max(size(centres));
+0038     [srf,vtx,fc,bc,simp,edg,mat_ind] = feval(postprocmesh,<span class="keyword">...</span>
+0039         srf,vtx,fc,bc,simp,edg,mat_ind, N_elec);
+0040 <span class="keyword">end</span>
+0041 fwd_mdl= <a href="#_sub1" class="code" title="subfunction fwd_mdl= construct_fwd_model(srf,vtx,simp,bc, name, ">construct_fwd_model</a>(srf,vtx,simp,bc, name, <span class="keyword">...</span>
+0042                              stim_pattern, centres, z_contact,fc);
+0043 
+0044 [fwd_mdl.mat_idx] = <a href="#_sub2" class="code" title="subfunction [mat_idx] = mk_mat_indices( mat_ind);">mk_mat_indices</a>(mat_ind);
+0045 
+0046 <span class="keyword">if</span> ~isfield(fwd_mdl,<span class="string">'normalize_measurements'</span>)
+0047    fwd_mdl.normalize_measurements = 0;
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="comment">% build fwd_model structure</span>
+0051 <a name="_sub1" href="#_subfunctions" class="code">function fwd_mdl= construct_fwd_model(srf,vtx,simp,bc, name, </a><span class="keyword">...</span>
+0052                        stim_pattern, centres, z_contact,fc)
+0053 mdl.nodes    = vtx;
+0054 mdl.elems    = simp;
+0055 mdl.boundary = srf;
+0056 mdl.boundary_numbers=fc;    
+0057 mdl.gnd_node=    <a href="#_sub3" class="code" title="subfunction gnd_node=    find_centre_node(vtx);">find_centre_node</a>(vtx);
+0058 mdl.np_fwd_solve.perm_sym =     <span class="string">'{n}'</span>;
+0059 mdl.name = name;
+0060 
+0061 <span class="comment">% Model Stimulation</span>
+0062 <span class="keyword">if</span> ~isempty(stim_pattern)
+0063    mdl.stimulation= stim_pattern;
+0064 <span class="keyword">end</span>
+0065 
+0066 nelec= size(centres,1);
+0067 <span class="keyword">if</span> nelec&gt;0
+0068    <span class="comment">% Electrodes</span>
+0069    [elec,sels,electrodes] = <a href="ng_tank_find_elec.html" class="code" title="function [elec,sels, electrodes] = ng_tank_find_elec(srf,vtx,fc,centres)">ng_tank_find_elec</a>(srf,vtx,bc,centres);
+0070    <span class="keyword">if</span> size(elec,1) ~= nelec
+0071       error(<span class="string">'Failed to find all the electrodes'</span>)
+0072    <span class="keyword">end</span>
+0073 
+0074    <span class="comment">% set the z_contact</span>
+0075    z_contact= z_contact.*ones(nelec,1);
+0076    <span class="keyword">for</span> i=1:nelec
+0077       electrodes(i).z_contact= z_contact(i);
+0078    <span class="keyword">end</span>
+0079 
+0080    mdl.electrode =     electrodes;
+0081 <span class="keyword">end</span>
+0082 
+0083 mdl.solve=      <span class="string">'eidors_default'</span>;
+0084 mdl.jacobian=   <span class="string">'eidors_default'</span>;
+0085 mdl.system_mat= <span class="string">'eidors_default'</span>;
+0086 
+0087 fwd_mdl= <a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>, mdl);
+0088 
+0089 <span class="comment">% Output mat_idx cell array of indices into each material</span>
+0090 <span class="comment">% typei. Array order is the order of the specified material</span>
+0091 <span class="comment">% (netgen 'tlo' statements in the .geo file).</span>
+0092 <a name="_sub2" href="#_subfunctions" class="code">function [mat_idx] = mk_mat_indices( mat_ind);</a>
+0093   <span class="comment">% find length of mat_indices</span>
+0094   <span class="comment">% test example: mat_ind=[10 12 14 14 12 12 14 12];</span>
+0095 
+0096   <span class="keyword">if</span> isempty(mat_ind)
+0097      mat_idx = [];
+0098      <span class="keyword">return</span>
+0099   <span class="keyword">end</span>
+0100   mat_indices = unique( mat_ind );
+0101   <span class="keyword">for</span> i= 1:length(mat_indices);
+0102      mat_idx{i}= find(mat_ind == mat_indices(i));
+0103   <span class="keyword">end</span>
+0104 
+0105 <a name="_sub3" href="#_subfunctions" class="code">function gnd_node=    find_centre_node(vtx);</a>
+0106   <span class="comment">%distance from zero</span>
+0107   d = sum( vtx.^2, 2);
+0108   [jnk,gnd_node] = min(d);
+0109   gnd_node= gnd_node(1);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

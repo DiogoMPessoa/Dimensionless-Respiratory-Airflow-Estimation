@@ -1,0 +1,937 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_geophysics_model</title>
+  <meta name="keywords" content="mk_geophysics_model">
+  <meta name="description" content="imdl = mk_geophysics_model(str, ne, [option])">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_geophysics_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_geophysics_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>imdl = mk_geophysics_model(str, ne, [option])</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function imdl = mk_geophysics_model(str, ne, opt); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> imdl = mk_geophysics_model(str, ne, [option])
+
+ ne  - number of electrodes, 5 metre spacing (+5,+10,...)
+       and 0.1 metre diameter
+         OR
+       a list of electrode locations in the x-dimension or a 2- or
+       3-dimensional array, one electrode per row, missing columns
+       will be set to zero
+       ne = 16
+       ne = [4 6 10 20] % 1d: (x)
+       ne = [0 1; 2 1.5; 3 1.2; 7 2.5] % 2d: (x,y)
+       ne = [0 0.1 1; 2 -0.1 1.5; 3 -0.15 1.2; 7 0 2.5] % 3d: (x,y,z)
+ str - model, x = see hmax_rec
+       h2x -   2D half-space, linear CEM array (2d fwd)
+       h2p5x - 2.5D half-space, linear CEM array (2d fwd + Fourier y-dimension)
+       h3x   - 3D half-space, linear CEM array (3d fwd)
+       h22x  - 2D half-space, linear CEM array (2d fwd, 2d rec)
+       h32x  - 2D half-space, linear CEM array (3d fwd, 2d rec)
+       h33x  - 2D half-space, linear CEM array (3d fwd, 3d rec)
+       H2x -   2D half-space, linear PEM array (2d fwd)
+       H2p5x - 2.5D half-space, linear PEM array (2d fwd + Fourier y-dimension)
+       H3x   - 3D half-space, linear PEM array (3d fwd)
+       H22x  - 2D half-space, linear PEM array (2d fwd, 2d rec)
+       H32x  - 2D half-space, linear PEM array (3d fwd, 2d rec)
+       H33x  - 2D half-space, linear PEM array (3d fwd, 3d rec)
+ opt - override default configuration options (optional cell array)
+       'hmax_fwd' - fine reconstruction mesh density, given an
+                    array width xw, and electrode spacing es
+                    Note that for ne=16, 'A' and 'a' are equivalent.
+                ['a' : hmax_fwd=xw/1;    ['A' : hmax_fwd=es*16;
+                 'b' : hmax_fwd=xw/2;     'B' : hmax_fwd=es*8;
+                 'c' : hmax_fwd=xw/4;     'C' : hmax_fwd=es*4;
+                 ...                       ...
+                 'z' : hmax_fwd=xw/2^25]  'Z' : hmax_fwd=es*2^-21]
+       'hmax_fwd_inner'
+                  - reconstruction model mesh density for the inner region
+                    [default: 1/2 of the outer region density hmax_fwd]
+       'hmax_rec' - reconstruction model mesh density [hmax_fwd*2]
+       'elec_width' - electrode width [0.1 m]
+                    width = 0 requests a PEM, rather than CEM
+       'z_contact' - electrode contact impedance [0.01 \Ohm.m]
+       'elec_spacing' - distance between electrode centers [5 m]
+       'extend_x' - extra mesh in the principle axis of the
+                    electrode array, multiple of array width [1]
+       'extend_y' - extra mesh in the minor axis of the
+                    electrode array, multiple of array width
+                    (3D models only) [1]
+       'extend_z' - extra depth of model, multiple of array width [1]
+       'extend_inner_x'
+                  - inner (denser) mesh, multiple of array width [3/5]
+       'extend_inner_y'
+                  - inner (denser) mesh, multiple of array width [3/5]
+                    (3D models only)
+       'extend_inner_z'
+                  - inner (denser) mesh, multiple of array width [2/5]
+       'skip_c2f' - skip building the rec_model to fwd_model mapping [0]
+       'threshold' - threshold for electrode placement errors [1e-12]
+                    if error exceeds threshold, mash nodes by cubic interp
+                    maintaining the side and lower boundaries of the
+                    model... the nodes will be mashed until the electrodes
+                    conform to the requested electrode positions,
+                    correcting for Netgen inaccuracies and lack of
+                    vertical profile (Inf = disable node mashing)
+       'build_stim' - use stim_pattern_geophys to build a standard geophysics
+                      stim/meas sequence and add it to the model, based on the
+                      number of electrodes, and assuming a co-linear array;
+                      set to 'none' to skip this step
+                      [default: 'Wenner']
+       'extra_ng_code' - pass extra netgen code, any 'tlo' are subtracted from
+                      the inner region, units are scaled, so left to right-most
+                      electrodes are -1 to +1
+                      [default: {}]
+
+ The linear electrode array runs in the +X direction at Z=0. For
+ the 3D model, the Y-axis is perpendicular to the electrode array.
+
+ (C) 2015--2017 A. Boyle
+ License: GPL version 2 or version 3</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/meshing/netgen/ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>	NG_MK_GEN_MODELS: create generic models using netgen</li><li><a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>	MK_APPROX_C2F: create a mapping matrix from coarse to fine FEM</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="mk_fmdl_from_nodes.html" class="code" title="function mdl= mk_fmdl_from_nodes( vtx, elec_nodes, z_contact, name)">mk_fmdl_from_nodes</a>	MK_FMDL_FROM_NODES: create fmdl from nodes</li><li><a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>	STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns</li><li><a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="../../eidors/solvers/forward/fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>	FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</li><li><a href="../../eidors/solvers/forward/fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>	FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint_2p5d_1st_order.html" class="code" title="function J= jacobian_adjoint_2p5d_1st_order( fwd_model, img)">jacobian_adjoint_2p5d_1st_order</a>	JACOBIAN_ADJOINT_2P5D: J= jacobian_adjoint_2p5d_1st_order( img )</li><li><a href="../../eidors/solvers/forward/system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>	SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix</li><li><a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="../../eidors/solvers/forward/fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>	FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</li><li><a href="../../eidors/solvers/forward/fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>	FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint_2p5d_1st_order.html" class="code" title="function J= jacobian_adjoint_2p5d_1st_order( fwd_model, img)">jacobian_adjoint_2p5d_1st_order</a>	JACOBIAN_ADJOINT_2P5D: J= jacobian_adjoint_2p5d_1st_order( img )</li><li><a href="../../eidors/solvers/forward/jacobian_movement_2p5d_1st_order.html" class="code" title="function J = jacobian_movement_2p5d_1st_order( fwd_model, img)">jacobian_movement_2p5d_1st_order</a>	JACOBIAN_MOVEMENT_2P5D: J = jacobian_movement_2p5d_1st_order( img )</li><li><a href="../../eidors/solvers/forward/system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>	SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix</li><li><a href="../../eidors/solvers/forward/system_mat_2p5d_fields.html" class="code" title="function FT= system_mat_2p5d_fields( fwd_model )">system_mat_2p5d_fields</a>	SYSTEM_MAT_2P5D_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="../../eidors/solvers/forward/update_system_mat_fields.html" class="code" title="function FC1 = update_system_mat_fields( fwd_model0, fwd_model1 )">update_system_mat_fields</a>	SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="../../eidors/solvers/inverse/inv_solve_core.html" class="code" title="function img= inv_solve_core( inv_model, data0, data1);">inv_solve_core</a>	INV_SOLVE_CORE Solver using a generic iterative algorithm</li><li><a href="../../eidors/solvers/inverse/inv_solve_gn.html" class="code" title="function img= inv_solve_gn( inv_model, data1, data2);">inv_solve_gn</a>	function img= inv_solve_gn( inv_model, data1);</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function imdl=mk_model(str,ne,opt,SALT);</a></li><li><a href="#_sub2" class="code">function s = a2s(a)</a></li><li><a href="#_sub3" class="code">function [R,X,var] = rot_line_to_xaxis(xyz)</a></li><li><a href="#_sub4" class="code">function r = range(a)</a></li><li><a href="#_sub5" class="code">function [mdl2,idx2] = copy_mdl2d_from3d(mdl3,idx3,sel);</a></li><li><a href="#_sub6" class="code">function mdl = convert_cem2pem(mdl, xyzc)</a></li><li><a href="#_sub7" class="code">function D2 = pdist(X)</a></li><li><a href="#_sub8" class="code">function [mdl, c] = shift_electrode_positions(mdl, dx)</a></li><li><a href="#_sub9" class="code">function [mdl, c] = correct_electrode_positions(mdl, xyzc)</a></li><li><a href="#_sub10" class="code">function   mdl = mash_nodes(mdl, method, idm, dim, elec_true)</a></li><li><a href="#_sub11" class="code">function err = mdl_elec_err(mdl, xyzc)</a></li><li><a href="#_sub12" class="code">function do_unit_test</a></li><li><a href="#_sub13" class="code">function xyz = unit_test_elec_pos(imdl, R, X)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function imdl = mk_geophysics_model(str, ne, opt);</a>
+0002 <span class="comment">% imdl = mk_geophysics_model(str, ne, [option])</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% ne  - number of electrodes, 5 metre spacing (+5,+10,...)</span>
+0005 <span class="comment">%       and 0.1 metre diameter</span>
+0006 <span class="comment">%         OR</span>
+0007 <span class="comment">%       a list of electrode locations in the x-dimension or a 2- or</span>
+0008 <span class="comment">%       3-dimensional array, one electrode per row, missing columns</span>
+0009 <span class="comment">%       will be set to zero</span>
+0010 <span class="comment">%       ne = 16</span>
+0011 <span class="comment">%       ne = [4 6 10 20] % 1d: (x)</span>
+0012 <span class="comment">%       ne = [0 1; 2 1.5; 3 1.2; 7 2.5] % 2d: (x,y)</span>
+0013 <span class="comment">%       ne = [0 0.1 1; 2 -0.1 1.5; 3 -0.15 1.2; 7 0 2.5] % 3d: (x,y,z)</span>
+0014 <span class="comment">% str - model, x = see hmax_rec</span>
+0015 <span class="comment">%       h2x -   2D half-space, linear CEM array (2d fwd)</span>
+0016 <span class="comment">%       h2p5x - 2.5D half-space, linear CEM array (2d fwd + Fourier y-dimension)</span>
+0017 <span class="comment">%       h3x   - 3D half-space, linear CEM array (3d fwd)</span>
+0018 <span class="comment">%       h22x  - 2D half-space, linear CEM array (2d fwd, 2d rec)</span>
+0019 <span class="comment">%       h32x  - 2D half-space, linear CEM array (3d fwd, 2d rec)</span>
+0020 <span class="comment">%       h33x  - 2D half-space, linear CEM array (3d fwd, 3d rec)</span>
+0021 <span class="comment">%       H2x -   2D half-space, linear PEM array (2d fwd)</span>
+0022 <span class="comment">%       H2p5x - 2.5D half-space, linear PEM array (2d fwd + Fourier y-dimension)</span>
+0023 <span class="comment">%       H3x   - 3D half-space, linear PEM array (3d fwd)</span>
+0024 <span class="comment">%       H22x  - 2D half-space, linear PEM array (2d fwd, 2d rec)</span>
+0025 <span class="comment">%       H32x  - 2D half-space, linear PEM array (3d fwd, 2d rec)</span>
+0026 <span class="comment">%       H33x  - 2D half-space, linear PEM array (3d fwd, 3d rec)</span>
+0027 <span class="comment">% opt - override default configuration options (optional cell array)</span>
+0028 <span class="comment">%       'hmax_fwd' - fine reconstruction mesh density, given an</span>
+0029 <span class="comment">%                    array width xw, and electrode spacing es</span>
+0030 <span class="comment">%                    Note that for ne=16, 'A' and 'a' are equivalent.</span>
+0031 <span class="comment">%                ['a' : hmax_fwd=xw/1;    ['A' : hmax_fwd=es*16;</span>
+0032 <span class="comment">%                 'b' : hmax_fwd=xw/2;     'B' : hmax_fwd=es*8;</span>
+0033 <span class="comment">%                 'c' : hmax_fwd=xw/4;     'C' : hmax_fwd=es*4;</span>
+0034 <span class="comment">%                 ...                       ...</span>
+0035 <span class="comment">%                 'z' : hmax_fwd=xw/2^25]  'Z' : hmax_fwd=es*2^-21]</span>
+0036 <span class="comment">%       'hmax_fwd_inner'</span>
+0037 <span class="comment">%                  - reconstruction model mesh density for the inner region</span>
+0038 <span class="comment">%                    [default: 1/2 of the outer region density hmax_fwd]</span>
+0039 <span class="comment">%       'hmax_rec' - reconstruction model mesh density [hmax_fwd*2]</span>
+0040 <span class="comment">%       'elec_width' - electrode width [0.1 m]</span>
+0041 <span class="comment">%                    width = 0 requests a PEM, rather than CEM</span>
+0042 <span class="comment">%       'z_contact' - electrode contact impedance [0.01 \Ohm.m]</span>
+0043 <span class="comment">%       'elec_spacing' - distance between electrode centers [5 m]</span>
+0044 <span class="comment">%       'extend_x' - extra mesh in the principle axis of the</span>
+0045 <span class="comment">%                    electrode array, multiple of array width [1]</span>
+0046 <span class="comment">%       'extend_y' - extra mesh in the minor axis of the</span>
+0047 <span class="comment">%                    electrode array, multiple of array width</span>
+0048 <span class="comment">%                    (3D models only) [1]</span>
+0049 <span class="comment">%       'extend_z' - extra depth of model, multiple of array width [1]</span>
+0050 <span class="comment">%       'extend_inner_x'</span>
+0051 <span class="comment">%                  - inner (denser) mesh, multiple of array width [3/5]</span>
+0052 <span class="comment">%       'extend_inner_y'</span>
+0053 <span class="comment">%                  - inner (denser) mesh, multiple of array width [3/5]</span>
+0054 <span class="comment">%                    (3D models only)</span>
+0055 <span class="comment">%       'extend_inner_z'</span>
+0056 <span class="comment">%                  - inner (denser) mesh, multiple of array width [2/5]</span>
+0057 <span class="comment">%       'skip_c2f' - skip building the rec_model to fwd_model mapping [0]</span>
+0058 <span class="comment">%       'threshold' - threshold for electrode placement errors [1e-12]</span>
+0059 <span class="comment">%                    if error exceeds threshold, mash nodes by cubic interp</span>
+0060 <span class="comment">%                    maintaining the side and lower boundaries of the</span>
+0061 <span class="comment">%                    model... the nodes will be mashed until the electrodes</span>
+0062 <span class="comment">%                    conform to the requested electrode positions,</span>
+0063 <span class="comment">%                    correcting for Netgen inaccuracies and lack of</span>
+0064 <span class="comment">%                    vertical profile (Inf = disable node mashing)</span>
+0065 <span class="comment">%       'build_stim' - use stim_pattern_geophys to build a standard geophysics</span>
+0066 <span class="comment">%                      stim/meas sequence and add it to the model, based on the</span>
+0067 <span class="comment">%                      number of electrodes, and assuming a co-linear array;</span>
+0068 <span class="comment">%                      set to 'none' to skip this step</span>
+0069 <span class="comment">%                      [default: 'Wenner']</span>
+0070 <span class="comment">%       'extra_ng_code' - pass extra netgen code, any 'tlo' are subtracted from</span>
+0071 <span class="comment">%                      the inner region, units are scaled, so left to right-most</span>
+0072 <span class="comment">%                      electrodes are -1 to +1</span>
+0073 <span class="comment">%                      [default: {}]</span>
+0074 <span class="comment">%</span>
+0075 <span class="comment">% The linear electrode array runs in the +X direction at Z=0. For</span>
+0076 <span class="comment">% the 3D model, the Y-axis is perpendicular to the electrode array.</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">% (C) 2015--2017 A. Boyle</span>
+0079 <span class="comment">% License: GPL version 2 or version 3</span>
+0080 
+0081 <span class="comment">% model: 64 electrode, 2d half-space</span>
+0082 <span class="comment">% Once upon a time, this code started out from the following tutorial.</span>
+0083 <span class="comment">% model from http://eidors3d.sourceforge.net/tutorial/other_models/square_mesh.shtml</span>
+0084 
+0085 <span class="keyword">if</span> ischar(str) &amp;&amp; strcmp(str,<span class="string">'UNIT_TEST'</span>); <a href="#_sub12" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0086 copt.fstr = <span class="string">'mk_geophysics_model'</span>;
+0087 <span class="keyword">if</span> nargin &lt; 3
+0088    opt = {};
+0089 <span class="keyword">end</span>
+0090 SALT=<span class="string">'z$Id: mk_geophysics_model.m 5903 2019-02-05 11:08:03Z aadler $'</span>; <span class="comment">% stick a key in the model 'save' file, so we can expire them when the model definitions age</span>
+0091 imdl = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction imdl=mk_model(str,ne,opt,SALT);">mk_model</a>,{str, ne, opt, SALT}, copt);
+0092 
+0093 <a name="_sub1" href="#_subfunctions" class="code">function imdl=mk_model(str,ne,opt,SALT);</a>
+0094 <span class="keyword">if</span> str(1) ~= <span class="string">'h'</span> &amp;&amp; str(1) ~= <span class="string">'H'</span>
+0095    error([str <span class="string">': I only know how to build linear half-space models: h***'</span>]);
+0096 <span class="keyword">end</span>
+0097 
+0098 MDL_2p5D_CONFIG = 0;
+0099 <span class="keyword">switch</span> str(2:end-1)
+0100    <span class="keyword">case</span> {<span class="string">'2'</span>, <span class="string">'3'</span>} <span class="comment">% simple meshes</span>
+0101       FMDL_DIM = str(2) - <span class="string">'0'</span>;
+0102       CMDL_DIM = 0; <span class="comment">% no cmdl</span>
+0103    <span class="keyword">case</span> <span class="string">'2p5'</span> <span class="comment">% 2.5D Fourier transformed</span>
+0104       FMDL_DIM = 2;
+0105       CMDL_DIM = 0; <span class="comment">% no cmdl</span>
+0106       MDL_2p5D_CONFIG = 1;
+0107    <span class="keyword">case</span> {<span class="string">'22'</span>, <span class="string">'33'</span>, <span class="string">'32'</span>} <span class="comment">% dual meshes</span>
+0108       FMDL_DIM = str(2) - <span class="string">'0'</span>;
+0109       CMDL_DIM = str(3) - <span class="string">'0'</span>;
+0110    <span class="keyword">otherwise</span>
+0111       error([str <span class="string">': unrecognized model type'</span>]);
+0112 <span class="keyword">end</span>
+0113 assert(CMDL_DIM ~= 3, <span class="string">'3d rec_model not yet tested'</span>);
+0114 
+0115 skip_c2f = 0;
+0116 <span class="keyword">if</span> str(1) == <span class="string">'h'</span>
+0117    elec_width = 0.1;
+0118 <span class="keyword">else</span> <span class="comment">% str(1) == 'H'</span>
+0119    elec_width = 0;
+0120 <span class="keyword">end</span>
+0121 z_contact= 0.01;
+0122 nodes_per_elec= 3; <span class="comment">%floor(elec_width/hmax_rec*10);</span>
+0123 elec_spacing= 5.0;
+0124 threshold = 1e-12;
+0125 save_model_to_disk = (length(ne) == 1) &amp;&amp; (length(opt) == 0);
+0126 
+0127 extend_x = 1;
+0128 extend_y = 1;
+0129 extend_z = 1;
+0130 extend_inner_x = 3/5;
+0131 extend_inner_y = 3/5;
+0132 extend_inner_z = 2/5;
+0133 build_stim = <span class="string">'Wenner'</span>;
+0134 extra_ng_code = <span class="string">''</span>;
+0135 <span class="keyword">if</span> length(opt) &gt; 0 <span class="comment">% allow overriding the default values</span>
+0136    assert(round(length(opt)/2)*2 == length(opt),<span class="string">'option missing value?'</span>);
+0137    expect = {<span class="string">'hmax_rec'</span>,<span class="string">'hmax_fwd'</span>, <span class="string">'hmax_fwd_inner'</span>, <span class="keyword">...</span>
+0138              <span class="string">'elec_width'</span>,<span class="string">'z_contact'</span>,<span class="string">'elec_spacing'</span>,<span class="keyword">...</span>
+0139              <span class="string">'extend_x'</span>, <span class="string">'extend_y'</span>, <span class="string">'extend_z'</span>, <span class="keyword">...</span>
+0140              <span class="string">'extend_inner_x'</span>, <span class="string">'extend_inner_y'</span>, <span class="string">'extend_inner_z'</span>, <span class="keyword">...</span>
+0141              <span class="string">'skip_c2f'</span>, <span class="string">'threshold'</span>, <span class="string">'build_stim'</span>, <span class="string">'extra_ng_code'</span>};
+0142    opts = struct(opt{:})
+0143    <span class="keyword">for</span> i = fieldnames(opts)'
+0144       assert(any(strcmp(i,expect)), [<span class="string">'unexpected option: '</span>,i{:}]);
+0145       eval([i{:} <span class="string">' = opts.(i{:});'</span>]);
+0146    <span class="keyword">end</span>
+0147    <span class="keyword">if</span> (str(1) == <span class="string">'H'</span>) &amp;&amp; isfield(opts, <span class="string">'elec_width'</span>)
+0148       error(<span class="string">'requested &quot;H&quot; PEM model but configured &quot;elec_width&quot; option'</span>);
+0149    <span class="keyword">end</span>
+0150 <span class="keyword">end</span>
+0151 <span class="keyword">if</span> length(ne) == 1 <span class="comment">% ne: number of electrodes</span>
+0152    xw=(ne-1)*elec_spacing; <span class="comment">% array width</span>
+0153    <span class="comment">%xs=-(ne-1)*elec_spacing/2; % array centered</span>
+0154    xs=+5; <span class="comment">% array at left-most at +5</span>
+0155    xyz = xs+([1:ne]'-1)*elec_spacing;
+0156 <span class="keyword">else</span>
+0157    xyz = ne; <span class="comment">% must be a set of coordinates for the electrodes...</span>
+0158 <span class="keyword">end</span>
+0159 <span class="keyword">if</span> size(xyz,1) == 1
+0160    xyz = xyz'; <span class="comment">% flip to column</span>
+0161 <span class="keyword">end</span>
+0162 xyz = [xyz zeros(size(xyz,1),3-size(xyz,2))]; <span class="comment">% [x 0 0] or [ x y 0 ] or [ x y z ]</span>
+0163 ne=size(xyz,1);
+0164 [R, X] = <a href="#_sub3" class="code" title="subfunction [R,X,var] = rot_line_to_xaxis(xyz)">rot_line_to_xaxis</a>(xyz);
+0165 <span class="comment">% % rescale, centre electrodes so NetGen can be happy</span>
+0166 xyzc = (xyz - X)*R; <span class="comment">% centre and scale electrodes: -1 to +1 y-axis</span>
+0167 <span class="comment">% xyzc = xyz; % centre and scale electrodes: -1 to +1 y-axis</span>
+0168 xw=max(xyzc(:,1))-min(xyzc(:,1));
+0169 xs=min(xyzc(:,1));
+0170 elec_spacing = min(min(<a href="#_sub7" class="code" title="subfunction D2 = pdist(X) ">pdist</a>(xyzc) + diag(inf*(1:size(xyzc,1))))); <span class="comment">% min spacing btw elec</span>
+0171 
+0172 <span class="keyword">if</span> ~exist(<span class="string">'hmax_fwd'</span>,<span class="string">'var'</span>)
+0173    <span class="keyword">if</span> str(end)-<span class="string">'a'</span> &gt;= 0
+0174       hmax_fwd = xw*2^-(str(end)-<span class="string">'a'</span>);
+0175    <span class="keyword">else</span>
+0176       hmax_fwd = elec_spacing*2^-(str(end)-<span class="string">'A'</span>-4);
+0177    <span class="keyword">end</span>
+0178 <span class="keyword">end</span>
+0179 <span class="keyword">if</span> ~exist(<span class="string">'hmax_rec'</span>,<span class="string">'var'</span>) <span class="comment">% allow hmax_rec to depend on configured hmax_fwd</span>
+0180    hmax_rec=hmax_fwd*2.01; <span class="comment">% avoid parametrization aliasing</span>
+0181 <span class="keyword">end</span>
+0182 <span class="keyword">if</span> ~exist(<span class="string">'hmax_fwd_inner'</span>,<span class="string">'var'</span>) <span class="comment">% allow hmax_rec to depend on configured hmax_fwd</span>
+0183    hmax_fwd_inner=hmax_fwd/2.0;
+0184 <span class="keyword">end</span>
+0185 
+0186 <span class="keyword">if</span> save_model_to_disk
+0187    isOctave = exist(<span class="string">'OCTAVE_VERSION'</span>);
+0188    <span class="keyword">if</span> isOctave
+0189       octavestr=<span class="string">'-octave-'</span>;
+0190    <span class="keyword">else</span>
+0191       octavestr=<span class="string">'-'</span>;
+0192    <span class="keyword">end</span>
+0193    <span class="comment">% NOTE models are stored in the directory specified by eidors_cache('cache_path')</span>
+0194    filename=fullfile(<a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(<span class="string">'cache_path'</span>),sprintf(<span class="string">'mk_geophysics_model%simdl-%s-%03del.mat'</span>,octavestr,str,ne));
+0195    <span class="keyword">if</span> exist(filename, <span class="string">'file'</span>) == 2
+0196       tmp = whos(<span class="string">'-file'</span>,filename,<span class="string">'SALT'</span>);
+0197       <span class="keyword">if</span> length(tmp) &gt; 0
+0198          tmp = load(filename,<span class="string">'SALT'</span>);
+0199          fSALT = tmp.SALT;
+0200       <span class="keyword">else</span>
+0201          fSALT = <span class="string">'deadbeef'</span>;
+0202       <span class="keyword">end</span>
+0203       <span class="keyword">if</span> strcmp(fSALT, SALT)
+0204          tmp=load(filename,<span class="string">'imdl'</span>);
+0205          imdl = tmp.imdl;
+0206          <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(sprintf(<span class="string">'%s: %s, %d electrode model loaded from file'</span>,filename,str,ne));
+0207          <span class="keyword">return</span>
+0208       <span class="keyword">end</span> <span class="comment">% hmm, the SALT doesn't match so we go back to generating a new model from scratch</span>
+0209    <span class="keyword">end</span>
+0210 <span class="keyword">end</span>
+0211 
+0212 assert(extend_x&gt;0,<span class="string">'extend_x must be &gt; 0'</span>);
+0213 assert(extend_y&gt;0,<span class="string">'extend_y must be &gt; 0'</span>);
+0214 assert(extend_z&gt;-1,<span class="string">'extend_z must be &gt; -1'</span>);
+0215 
+0216 <span class="comment">% Calculate cmdl, fmdl and inner fmdl (fmdlin) min/max coordinates.</span>
+0217 <span class="comment">% After rescaling (normalizing), electrode major axis is along the x-axis, and</span>
+0218 <span class="comment">% the electrode array will be 2 units long (-1,+1).</span>
+0219 fmdlbox =   [-(1+2*extend_x)        +(1+2*extend_x);
+0220              -(1+2*extend_y)        +(1+2*extend_y);
+0221              -(2+2*extend_z)        +3];
+0222 fmdlinbox = [-(1+2*extend_inner_x)  +(1+2*extend_inner_x);
+0223              -(1+2*extend_inner_y)  +(1+2*extend_inner_y);
+0224              -(2+2*extend_inner_z)  +2];
+0225 cmdlbox = fmdlbox;
+0226 
+0227 assert(all(fmdlbox(:,1) &lt;= fmdlinbox(:,1)), <span class="string">'oops, inner mesh must be smaller than outer mesh'</span>);
+0228 assert(all(fmdlbox(:,2) &gt;= fmdlinbox(:,2)), <span class="string">'oops, inner mesh must be smaller than outer mesh'</span>);
+0229 assert(all(fmdlbox(:,1) &lt;= cmdlbox(:,1)), <span class="string">'oops, reconstruction mesh must be smaller than forward mesh'</span>);
+0230 assert(all(fmdlbox(:,2) &gt;= cmdlbox(:,2)), <span class="string">'oops, reconstruction mesh must be smaller than forward mesh'</span>);
+0231 
+0232 <span class="comment">% build shape string for NetGen</span>
+0233 <span class="keyword">if</span> elec_width ~= 0
+0234    elec_shape = [elec_width*norm(R)/2, 0, elec_width*norm(R)/2/(nodes_per_elec-1)]; <span class="comment">% CEM, circular, maxh</span>
+0235    elec_pos   = [ xyzc(:,1:FMDL_DIM), repmat([zeros(1,3-FMDL_DIM+2) 1],ne,1) ]; <span class="comment">% p(x,y,z=0), n(0,0,1)</span>
+0236    cem2pem = 0;
+0237 <span class="keyword">else</span>
+0238    <span class="keyword">if</span> FMDL_DIM == 3
+0239       elec_width = elec_spacing/2;
+0240       elec_shape = [elec_width, elec_width, hmax_fwd_inner]; <span class="comment">% PEM, sz, maxh</span>
+0241       elec_pos   = [ xyzc, repmat([0 0 1],ne,1) ]; <span class="comment">% p(x,y,z=0), n(0,0,1)</span>
+0242       elec_pos(:,1) = elec_pos(:,1) + elec_width/2;
+0243       elec_pos(:,2) = elec_pos(:,2) + elec_width/2;
+0244       cem2pem = 1;
+0245    <span class="keyword">else</span> <span class="comment">% FMDL_DIM == 2</span>
+0246       elec_width = elec_spacing/2;
+0247       elec_shape = [elec_width, elec_width, hmax_fwd_inner]; <span class="comment">% rectangular CEM-&gt;PEM, maxh</span>
+0248       elec_pos   = [ xyzc(:,1:2), repmat([0 0 0 1],ne,1) ]; <span class="comment">% p(x,y,z=0), n(0,0,1)</span>
+0249       elec_pos(:,1) = elec_pos(:,1) + elec_width/2;
+0250       cem2pem = 1;
+0251    <span class="keyword">end</span>
+0252 <span class="keyword">end</span>
+0253 skip_tlo = <span class="string">''</span>;
+0254 <span class="keyword">for</span> idx = strfind(extra_ng_code, <span class="string">'tlo '</span>)
+0255    sc = strfind(extra_ng_code, <span class="string">';'</span>); <span class="comment">% semicolons</span>
+0256    sc = min(sc + (sc&lt;idx)*1e10);
+0257    tlo = extra_ng_code(idx+4:sc-1);
+0258    skip_tlo = [skip_tlo <span class="string">' and (not '</span> tlo <span class="string">')'</span>];
+0259 <span class="keyword">end</span>
+0260 elec_pos(:,FMDL_DIM) = 0; <span class="comment">% flatten electrode positions onto the &quot;ps&quot; plane</span>
+0261 <span class="keyword">if</span> FMDL_DIM == 3
+0262    shape_str = [<span class="keyword">...</span>
+0263                 sprintf(<span class="string">'solid ps = plane(%s);\n'</span>, <a href="#_sub2" class="code" title="subfunction s = a2s(a)">a2s</a>([0 0 0; 0 0 1])), <span class="keyword">...</span>
+0264                 sprintf(<span class="string">'solid bi = orthobrick(%s);\n'</span>, <a href="#_sub2" class="code" title="subfunction s = a2s(a)">a2s</a>(fmdlinbox')), <span class="keyword">...</span>
+0265                 sprintf(<span class="string">'solid bo = orthobrick(%s);\n'</span>, <a href="#_sub2" class="code" title="subfunction s = a2s(a)">a2s</a>(fmdlbox')), <span class="keyword">...</span>
+0266                 extra_ng_code, <span class="keyword">...</span>
+0267                 sprintf(<span class="string">'solid ri = bi and ps%s -maxh=%f;\n'</span>, skip_tlo, hmax_fwd_inner), <span class="keyword">...</span>
+0268                 sprintf(<span class="string">'solid ro = bo and ps and (not bi) -maxh=%f;\n'</span>, hmax_fwd), <span class="keyword">...</span>
+0269                 sprintf(<span class="string">'solid mainobj = ri;\n'</span>)];
+0270    <span class="comment">% Note that ri must be the 'mainobj' so that it can intersect with the electrodes</span>
+0271    <span class="comment">% additional top level objects for netgen</span>
+0272 <span class="keyword">else</span> <span class="comment">% netgen 2d model</span>
+0273    <span class="comment">% to create the 2D slice we need to give NetGen something to work with</span>
+0274    <span class="comment">%Need some width to let netgen work, but not too much so</span>
+0275    <span class="comment">% that it meshes the entire region</span>
+0276    sw = <a href="#_sub4" class="code" title="subfunction r = range(a)">range</a>(fmdlinbox(1,:)) / 5; <span class="comment">% initial estimate</span>
+0277    sw = min(sw,2*hmax_fwd); <span class="comment">% coarse model slice width</span>
+0278    ri2d = fmdlinbox'; ri2d(:,2) = [-sw 0 ];
+0279    ro2d = fmdlbox'; ro2d(:,2) = [-sw 0 ];
+0280    shape_str = [<span class="keyword">...</span>
+0281                 sprintf(<span class="string">'solid ps = plane(%s);\n'</span>, <a href="#_sub2" class="code" title="subfunction s = a2s(a)">a2s</a>([0 0 0; 0 0 1])), <span class="keyword">...</span>
+0282                 sprintf(<span class="string">'solid bi = orthobrick(%s);\n'</span>, <a href="#_sub2" class="code" title="subfunction s = a2s(a)">a2s</a>(ri2d)), <span class="keyword">...</span>
+0283                 sprintf(<span class="string">'solid bo = orthobrick(%s);\n'</span>, <a href="#_sub2" class="code" title="subfunction s = a2s(a)">a2s</a>(ro2d)), <span class="keyword">...</span>
+0284                 extra_ng_code, <span class="keyword">...</span>
+0285                 sprintf(<span class="string">'solid ri = bi and ps%s -maxh=%f;\n'</span>, skip_tlo, hmax_fwd_inner), <span class="keyword">...</span>
+0286                 sprintf(<span class="string">'solid ro = bo and ps and (not bi) -maxh=%f;\n'</span>, hmax_fwd), <span class="keyword">...</span>
+0287                 sprintf(<span class="string">'solid mainobj = ri;\n'</span>)];
+0288 <span class="keyword">end</span>
+0289 <span class="comment">% fprintf('SHAPE_STR: %s', shape_str); elec_pos</span>
+0290 elec_obj = <span class="string">'ps'</span>;
+0291 [fmdl, mat_idx] = <a href="../../eidors/meshing/netgen/ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>(shape_str, elec_pos, elec_shape, elec_obj, <span class="string">'tlo ro'</span>);
+0292 <span class="keyword">if</span> FMDL_DIM == 2 <span class="comment">% 2D</span>
+0293    <span class="comment">% now convert the roughly 2D slice into a true 2D plane</span>
+0294    [fmdl, mat_idx] = <a href="#_sub5" class="code" title="subfunction [mdl2,idx2] = copy_mdl2d_from3d(mdl3,idx3,sel);">copy_mdl2d_from3d</a>(fmdl, mat_idx, <span class="string">'y'</span>);
+0295 <span class="keyword">else</span> <span class="comment">% 3D</span>
+0296    <span class="keyword">if</span> CMDL_DIM ~= 0
+0297       <span class="comment">% c2f</span>
+0298       cmdl.mk_coarse_fine_mapping.f2c_offset  = [0 0 0];
+0299       cmdl.mk_coarse_fine_mapping.f2c_project = [1 0 0; 0 0 1; 0 1 0];
+0300       <span class="comment">% duplicate parameters since mk_analytic/approx_c2f have different names...</span>
+0301       cmdl.mk_analytic_c2f.f2c_offset  = cmdl.mk_coarse_fine_mapping.f2c_offset;
+0302       cmdl.mk_analytic_c2f.f2c_project = cmdl.mk_coarse_fine_mapping.f2c_project;
+0303    <span class="keyword">end</span>
+0304 <span class="keyword">end</span>
+0305 
+0306 <span class="keyword">if</span> cem2pem
+0307    fmdl = <a href="#_sub6" class="code" title="subfunction mdl = convert_cem2pem(mdl, xyzc)">convert_cem2pem</a>(fmdl, xyzc);
+0308 <span class="keyword">end</span>
+0309 
+0310 <span class="comment">% 2d cmdl</span>
+0311 xllim = fmdlbox(1,1);
+0312 xrlim = fmdlbox(1,2);
+0313 zdepth = fmdlbox(3,1);
+0314 xr=max(floor((xrlim-xllim)/hmax_rec/2),1)*2+1; <span class="comment">% odd number</span>
+0315 yr=max(floor(-zdepth/hmax_rec/2),1)*2+1; <span class="comment">% odd number</span>
+0316 [x,y] = meshgrid( linspace(xllim,xrlim,xr), linspace(zdepth,0,yr));
+0317 vtx= [x(:),y(:)];
+0318 <span class="keyword">if</span> CMDL_DIM ~= 0
+0319    cmdl= <a href="mk_fmdl_from_nodes.html" class="code" title="function mdl= mk_fmdl_from_nodes( vtx, elec_nodes, z_contact, name)">mk_fmdl_from_nodes</a>( vtx,{vtx(1,:)}, z_contact, <span class="string">'sq_m2'</span>);
+0320 <span class="keyword">end</span>
+0321 
+0322 <span class="comment">% stick electrode nodes into cmdl so that show_fem will plot them</span>
+0323 <span class="keyword">for</span> i=1:ne
+0324    n=fmdl.electrode(i).nodes;
+0325    nn=length(n);
+0326    nx=fmdl.nodes(n,:);
+0327 
+0328    fmdl.electrode(i).z_contact = z_contact;
+0329    <span class="keyword">if</span> CMDL_DIM ~= 0
+0330       nnc = length(cmdl.nodes);
+0331       cmdl.nodes = [cmdl.nodes; nx(:,[1 FMDL_DIM])];
+0332       cmdl.electrode(i).nodes = (nnc+1):(nnc+nn);
+0333       cmdl.electrode(i).z_contact = z_contact;
+0334    <span class="keyword">end</span>
+0335 <span class="keyword">end</span>
+0336 
+0337 <span class="comment">% fix electrode locations if necessary</span>
+0338 elec_err = sqrt(sum(<a href="#_sub11" class="code" title="subfunction err = mdl_elec_err(mdl, xyzc)">mdl_elec_err</a>(fmdl, xyzc).^2,2));
+0339 <span class="keyword">if</span> max(elec_err) &gt; threshold <span class="comment">% put electrodes in the right place</span>
+0340    [fmdl, cf] = <a href="#_sub9" class="code" title="subfunction [mdl, c] = correct_electrode_positions(mdl, xyzc)">correct_electrode_positions</a>(fmdl, xyzc);
+0341 
+0342    <span class="keyword">if</span> CMDL_DIM ~= 0
+0343       [cmdl, cc] = <a href="#_sub9" class="code" title="subfunction [mdl, c] = correct_electrode_positions(mdl, xyzc)">correct_electrode_positions</a>(cmdl, xyzc);
+0344    <span class="keyword">end</span>
+0345 <span class="keyword">end</span>
+0346 <span class="comment">% save functions for later use</span>
+0347 fmdl.mv_elec = @<a href="#_sub8" class="code" title="subfunction [mdl, c] = shift_electrode_positions(mdl, dx)">shift_electrode_positions</a>;
+0348 
+0349 <span class="comment">% reverse the centre and scaling</span>
+0350 nn = size(fmdl.nodes,1);
+0351 Xn = repmat(X(1,:), nn, 1);
+0352 fmdl.nodes = ([fmdl.nodes zeros(nn,3-FMDL_DIM)]/ R) + Xn;
+0353 fmdl.nodes = fmdl.nodes(:,1:FMDL_DIM);
+0354 
+0355 <span class="keyword">if</span> CMDL_DIM ~= 0
+0356    nn = size(cmdl.nodes,1);
+0357    Xn = repmat(X(1,:), nn, 1);
+0358    <span class="keyword">if</span> CMDL_DIM ~= FMDL_DIM <span class="comment">% 2D</span>
+0359       cmdl.nodes = ([cmdl.nodes(:,1) zeros(nn,1) cmdl.nodes(:,2:end)]/ R) + Xn;
+0360       cmdl.nodes = cmdl.nodes(:,[1 3])/R([1 3],[1 3]);
+0361    <span class="keyword">else</span> <span class="comment">% CMDL_DIM == FMDL_DIM</span>
+0362       cmdl.nodes = ([cmdl.nodes zeros(nn,3-CMDL_DIM)]/ R) + Xn;
+0363       cmdl.nodes = cmdl.nodes(:,1:CMDL_DIM);
+0364    <span class="keyword">end</span>
+0365 <span class="keyword">end</span>
+0366 
+0367 <span class="comment">% check that all electrodes were found</span>
+0368 <span class="keyword">for</span> i = 1:length(fmdl.electrode)
+0369    nn = fmdl.electrode(i).nodes;
+0370    assert(length(nn(:)) &gt; 0, sprintf(<span class="string">'electrode#%d: failed to find nodes'</span>,i));
+0371 <span class="keyword">end</span>
+0372 
+0373 <span class="comment">% show_fem(fmdl); xlabel('x'); ylabel('y'); zlabel('z');</span>
+0374 
+0375 <span class="comment">% TODO ... Actually we want a node in the middle: the boundary is bad too...</span>
+0376 [~, gn] = min(fmdl.nodes(:,end));
+0377 fmdl.gnd_node = gn; <span class="comment">% make sure the ground node is away from surface electrodes</span>
+0378 <span class="keyword">if</span> CMDL_DIM ~= 0
+0379    [~, gn] = min(cmdl.nodes(:,end));
+0380    cmdl.gnd_node = gn; <span class="comment">% make sure the ground node is away from surface electrodes</span>
+0381 <span class="keyword">end</span>
+0382 
+0383 
+0384 imdl= <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2d0c'</span>,4); <span class="comment">% 2d model</span>
+0385 imdl.fwd_model = fmdl;
+0386 imdl.name = [<span class="string">'EIDORS mk_geophysics_model '</span> str];
+0387 imdl.fwd_model.name = [<span class="string">'EIDORS mk_geophysics_model fwd model '</span> str];
+0388 <span class="keyword">if</span> CMDL_DIM ~= 0
+0389    imdl.rec_model.name = [<span class="string">'EIDORS mk_geophysics_model rec model '</span> str];
+0390    imdl.rec_model = cmdl;
+0391    <span class="comment">% EIDORS &quot;analytic_c2f&quot; gets stuck, do an approximate one</span>
+0392    <span class="comment">%eidors_default('set','mk_coarse_fine_mapping','mk_analytic_c2f');</span>
+0393    <span class="comment">%eidors_default('set','mk_coarse_fine_mapping','mk_approx_c2f');</span>
+0394    <span class="comment">%[c2f,out] = mk_coarse_fine_mapping(fmdl,cmdl);</span>
+0395    <span class="keyword">if</span> ~skip_c2f
+0396       [c2f,out] = <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">mk_approx_c2f</a>(fmdl,cmdl);
+0397       imdl.fwd_model.coarse2fine = c2f;
+0398       imdl.fwd_model.background = out;
+0399    <span class="keyword">end</span>
+0400 <span class="keyword">end</span>
+0401 
+0402 <span class="keyword">if</span> MDL_2p5D_CONFIG
+0403    imdl.fwd_model.jacobian   = @<a href="../../eidors/solvers/forward/jacobian_adjoint_2p5d_1st_order.html" class="code" title="function J= jacobian_adjoint_2p5d_1st_order( fwd_model, img)">jacobian_adjoint_2p5d_1st_order</a>;
+0404    imdl.fwd_model.solve      = @<a href="../../eidors/solvers/forward/fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>;
+0405    imdl.fwd_model.system_mat = @<a href="../../eidors/solvers/forward/system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>;
+0406    imdl.fwd_model.jacobian_adjoint_2p5d_1st_order.k = [0 3];
+0407    imdl.fwd_model.fwd_solve_2p5d_1st_order.k = [0 3];
+0408 <span class="keyword">end</span>
+0409 
+0410 <span class="keyword">if</span> ~strcmp(build_stim,<span class="string">'none'</span>)
+0411    imdl.fwd_model.stimulation = <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>(length(imdl.fwd_model.electrode), build_stim);
+0412 <span class="keyword">end</span>
+0413 
+0414 <span class="keyword">if</span> save_model_to_disk
+0415    save(filename,<span class="string">'imdl'</span>,<span class="string">'SALT'</span>);
+0416 <span class="keyword">end</span>
+0417 
+0418 <span class="comment">% convert 2x3 array to &quot;x1,y1,z1;x2,y2,z2&quot; string</span>
+0419 <span class="comment">% convert 1x3 array to &quot;x1,y1,z1&quot; string</span>
+0420 <span class="comment">% if 1x1 array, then use xy_ctr=x1,y1 and [0 0 1]=x2,y2,z2 (z+)</span>
+0421 <a name="_sub2" href="#_subfunctions" class="code">function s = a2s(a)</a>
+0422 <span class="keyword">if</span> length(a(:)) == 3
+0423    s = sprintf(<span class="string">'%f,%f,%f'</span>, <span class="keyword">...</span>
+0424                a(1), a(2), a(3));
+0425 <span class="keyword">else</span>
+0426    s = sprintf(<span class="string">'%f,%f,%f;%f,%f,%f'</span>, <span class="keyword">...</span>
+0427                 a(1,1), a(1,2), a(1,3), <span class="keyword">...</span>
+0428                a(2,1), a(2,2), a(2,3));
+0429 <span class="keyword">end</span>
+0430 
+0431 <span class="comment">% returns R rotation/scaling and X0 offset</span>
+0432 <span class="comment">% xyz1 = R * xyz + X; % rotate and scale to +/- 1</span>
+0433 <a name="_sub3" href="#_subfunctions" class="code">function [R,X,var] = rot_line_to_xaxis(xyz)</a>
+0434 x = xyz(:,1); y=xyz(:,2); z=xyz(:,3);
+0435 
+0436 <span class="comment">% fit line to points</span>
+0437 <span class="comment">% http://www.mathworks.com/matlabcentral/newsreader/view_thread/32502</span>
+0438 p = mean(xyz);
+0439 [U,S,V] = svd([x-p(1), y-p(2), z-p(3)]);
+0440 <span class="keyword">if</span> V(<span class="keyword">end</span>,1) ~= 0
+0441    N=1/V(<span class="keyword">end</span>,1)*V(:,1);
+0442 <span class="keyword">else</span>
+0443    N=V(:,1);
+0444 <span class="keyword">end</span>
+0445 A=p' + dot( xyz(1,  :) - p, N ) * N/norm(N)^2;
+0446 B=p' + dot( xyz(<span class="keyword">end</span>,:) - p, N ) * N/norm(N)^2;
+0447 
+0448 <span class="comment">% rotate line to +y-axis</span>
+0449 a = N/norm(N);
+0450 b = [ 1 0 0 ]'; <span class="comment">% +x</span>
+0451 <span class="comment">% http://math.stackexchange.com/questions/180418/calculate-rotation-matrix-to-align-vector-a-to-vector-b-in-3d</span>
+0452 v = cross(a, b);
+0453 s = norm(v); c = dot(a, b); <span class="comment">% sin, cos</span>
+0454 xt = @(v) [   0  -v(3)  v(2); <span class="keyword">...</span><span class="comment"> % skew symmetric cross-product of v</span>
+0455             v(3)    0  -v(1); <span class="keyword">...</span><span class="comment"> % diagnoal is the scaling identity matrix</span>
+0456            -v(2)  v(1)    0];
+0457 <span class="keyword">if</span> abs(s) &lt; eps*1e3
+0458    R = eye(3);
+0459 <span class="keyword">else</span>
+0460    R = (eye(3) + xt(v) + xt(v)^2 * (1-c)/s^2);
+0461    R=R'; <span class="comment">% for right multiply: xyz*R</span>
+0462 <span class="keyword">end</span>
+0463 
+0464 X = repmat(p, size(xyz,1), 1);
+0465 R = R / max(<a href="#_sub4" class="code" title="subfunction r = range(a)">range</a>((xyz-X)*R)) * 2;
+0466 
+0467 DEBUG=0;
+0468 <span class="keyword">if</span> DEBUG
+0469    clf;
+0470    subplot(211);
+0471    plot3(x,y,z,<span class="string">'bo'</span>);
+0472    hold on;
+0473    plot3(x(1),y(1),z(1),<span class="string">'go'</span>);
+0474    plot3(p(1),p(2),p(3),<span class="string">'ro'</span>);
+0475    plot3([A(1),B(1)],[A(2),B(2)],[A(3),B(3)]);
+0476    grid; axis equal; hold off;
+0477    xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'y'</span>); zlabel(<span class="string">'z'</span>);
+0478    title(<span class="string">'pre-rotation'</span>);
+0479    subplot(212);
+0480    xx = (xyz-X)*R;
+0481    plot3(xx(:,1), xx(:,2), xx(:,3),<span class="string">'bo'</span>);
+0482    hold on;
+0483    plot3(xx(1,1), xx(1,2), xx(1,3),<span class="string">'go'</span>);
+0484    plot3(0,0,0,<span class="string">'ro'</span>);
+0485    grid; axis equal; hold off;
+0486    xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'y'</span>); zlabel(<span class="string">'z'</span>);
+0487    title(<span class="string">'post-rotation'</span>);
+0488 <span class="keyword">end</span>
+0489 
+0490 <span class="comment">% the (max-min) range of a variable's values</span>
+0491 <a name="_sub4" href="#_subfunctions" class="code">function r = range(a)</a>
+0492 r = max(a(:))-min(a(:));
+0493 
+0494 <a name="_sub5" href="#_subfunctions" class="code">function [mdl2,idx2] = copy_mdl2d_from3d(mdl3,idx3,sel);</a>
+0495 <span class="comment">% AB: taken from EIDORS function ng_mk_gen_models() subfunction of the same name</span>
+0496 <span class="comment">% AB: NEW: sel = 'x', 'y' or 'z' -- default was Z, we want X</span>
+0497    <span class="keyword">if</span> sel == <span class="string">'x'</span>
+0498       <span class="comment">% swap Z and X</span>
+0499       T = [ 0 0 1; 0 1 0; 1 0 0 ];
+0500    <span class="keyword">elseif</span> sel == <span class="string">'y'</span>
+0501       <span class="comment">% swap Z and Y</span>
+0502       T = [ 1 0 0; 0 0 1; 0 1 0 ];
+0503    <span class="keyword">elseif</span> sel == <span class="string">'z'</span>
+0504       T = eye(3);
+0505    <span class="keyword">else</span>
+0506       error(<span class="string">'sel must be &quot;x&quot;, &quot;y&quot; or &quot;z&quot;'</span>);
+0507    <span class="keyword">end</span>
+0508    mdl3.nodes = mdl3.nodes * T; <span class="comment">% AB: SWAP axes</span>
+0509 
+0510    <span class="comment">% set name</span>
+0511    mdl2 = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>,sprintf(<span class="string">'%s 2D'</span>,mdl3.name));
+0512 
+0513    <span class="comment">% set nodes</span>
+0514    [bdy,idx] = <a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(mdl3.elems);
+0515    vtx = mdl3.nodes;
+0516    z_vtx = reshape(vtx(bdy,3), size(bdy) );
+0517    z_vtx_thres = max(z_vtx(:))-10*eps*<a href="#_sub4" class="code" title="subfunction r = range(a)">range</a>(z_vtx(:));
+0518    lay0  = find( all(z_vtx &gt;= z_vtx_thres, 2) );
+0519    bdy0  = bdy( lay0, :);
+0520 
+0521    vtx0  = unique(bdy0(:));
+0522    mdl2.nodes = vtx(vtx0,1:2);
+0523 
+0524    <span class="comment">% set elems</span>
+0525    nmap  = zeros(size(vtx,1),1); nmap(vtx0) = 1:length(vtx0);
+0526    bdy0  = reshape(nmap(bdy0), size(bdy0) ); <span class="comment">% renumber to new scheme</span>
+0527    mdl2.elems = bdy0;
+0528 
+0529    <span class="comment">% set boundary</span>
+0530    mdl2.boundary = <a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>( mdl2.elems);
+0531 
+0532    <span class="comment">% set gnd_node</span>
+0533    mdl2.gnd_node = nmap(mdl3.gnd_node);
+0534 
+0535    <span class="comment">% set material indices</span>
+0536    <span class="comment">% TODO: vectorize code</span>
+0537    idx2 = {};
+0538    idx0  = idx( lay0, :);
+0539    <span class="keyword">for</span> i=1:size(idx3,2)
+0540       idx2{i} = [];
+0541       ii = 1;
+0542       <span class="keyword">for</span> j=1:size(idx3{i},1)
+0543          idx_tmp = find( idx0==idx3{i}(j) );
+0544          <span class="keyword">if</span> not(isempty(idx_tmp))
+0545             idx2{i}(ii,1) = idx_tmp(1,1);
+0546             ii = ii + 1;
+0547          <span class="keyword">end</span>
+0548       <span class="keyword">end</span>
+0549    <span class="keyword">end</span>
+0550 
+0551    <span class="comment">% set electrode</span>
+0552    <span class="keyword">if</span> isfield(mdl3,<span class="string">'electrode'</span>)
+0553       mdl2.electrode = mdl3.electrode;
+0554       <span class="keyword">for</span> i=1:length(mdl2.electrode);
+0555          nn = mdl3.nodes(mdl3.electrode(i).nodes,:);
+0556          enodes = nmap( mdl2.electrode(i).nodes );
+0557          enodes(enodes==0) = []; <span class="comment">% Remove 3D layers</span>
+0558          mdl2.electrode(i).nodes = enodes(:)';
+0559       <span class="keyword">end</span>
+0560    <span class="keyword">end</span>
+0561 
+0562    ignore = {<span class="string">'electrode'</span>, <span class="string">'nodes'</span>, <span class="string">'boundary'</span>, <span class="string">'elems'</span>, <span class="string">'gnd_node'</span>, <span class="string">'boundary_numbers'</span>, <span class="string">'mat_idx'</span>};
+0563    <span class="keyword">for</span> n=fieldnames(mdl3)'
+0564       <span class="keyword">if</span> ~any(strcmp(n,ignore))
+0565          mdl2.(n{:}) = mdl3.(n{:});
+0566       <span class="keyword">end</span>
+0567    <span class="keyword">end</span>
+0568 
+0569 <a name="_sub6" href="#_subfunctions" class="code">function mdl = convert_cem2pem(mdl, xyzc)</a>
+0570    <span class="keyword">if</span> ~isfield(mdl, <span class="string">'electrode'</span>)
+0571       <span class="keyword">return</span>;
+0572    <span class="keyword">end</span>
+0573    nd = size(mdl.nodes,2); <span class="comment">% number of dimensions</span>
+0574    <span class="keyword">for</span> i=1:length(mdl.electrode)
+0575       en = mdl.electrode(i).nodes;
+0576       nn = mdl.nodes(en,:); <span class="comment">% all nodes for this electrode</span>
+0577       <span class="keyword">if</span> nd == 2
+0578          np = xyzc(i,[1 3]); <span class="comment">% true elec location (2d)</span>
+0579       <span class="keyword">else</span>
+0580          np = xyzc(i,:); <span class="comment">% true elec location (3d)</span>
+0581       <span class="keyword">end</span>
+0582       D = <a href="#_sub7" class="code" title="subfunction D2 = pdist(X) ">pdist</a>([np; nn]);
+0583       [~,idx] = min(D(1,2:end)); <span class="comment">% closest CEM node to ideal PEM location</span>
+0584       mdl.electrode(i).nodes = en(idx);
+0585       <span class="comment">% NOTE: used to bump node's location but now we place a corner of the</span>
+0586       <span class="comment">% square electrode at precisely the correct location</span>
+0587       <span class="comment">%mdl.nodes(en,:) = np; % shift PEM node to true location</span>
+0588    <span class="keyword">end</span>
+0589 
+0590 <a name="_sub7" href="#_subfunctions" class="code">function D2 = pdist(X) </a><span class="comment">% row vectors</span>
+0591    <span class="keyword">if</span> nargin == 2; error(<span class="string">'only supports Euclidean distances'</span>); <span class="keyword">end</span>
+0592    <span class="comment">%D2 = bsxfun(@plus, dot(X, X, 1)', dot(Y, Y, 1)) - 2*(X'*Y) % 1d</span>
+0593    D2 = bsxfun(@minus, X, permute(X,[3 2 1]));
+0594    D2 = squeeze(sqrt(sum(D2.^2,2)));
+0595 
+0596 <a name="_sub8" href="#_subfunctions" class="code">function [mdl, c] = shift_electrode_positions(mdl, dx)</a>
+0597    <span class="keyword">for</span> i = 1:length(mdl.electrode)
+0598       en = mdl.electrode(i).nodes;
+0599       ex = mdl.nodes(en,:);
+0600       ep(i,:) = (max(ex,[],1) + min(ex,[],1))/2; <span class="comment">% mid-point</span>
+0601    <span class="keyword">end</span>
+0602    [mdl, c] = <a href="#_sub9" class="code" title="subfunction [mdl, c] = correct_electrode_positions(mdl, xyzc)">correct_electrode_positions</a>(mdl, ep + dx);
+0603 
+0604 <a name="_sub9" href="#_subfunctions" class="code">function [mdl, c] = correct_electrode_positions(mdl, xyzc)</a>
+0605    <span class="comment">%eidors_msg('correct_electrode_positions');</span>
+0606    nd = size(mdl.nodes,2);
+0607    c = 0; err = 1;
+0608    <span class="keyword">while</span> max(err) &gt; eps
+0609       <span class="keyword">for</span> n = 1:nd
+0610          <span class="keyword">switch</span>(n)
+0611             <span class="keyword">case</span> 1
+0612                mdl = <a href="#_sub10" class="code" title="subfunction   mdl = mash_nodes(mdl, method, idm, dim, elec_true)">mash_nodes</a>(mdl, <span class="string">'shift_all'</span>,     1, 1, xyzc); <span class="comment">% X (downslope)</span>
+0613             <span class="keyword">case</span> 2 <span class="comment">% 2d: Y, 3d: Z</span>
+0614                mdl = <a href="#_sub10" class="code" title="subfunction   mdl = mash_nodes(mdl, method, idm, dim, elec_true)">mash_nodes</a>(mdl, <span class="string">'shift_surface'</span>, 1, nd, xyzc); <span class="comment">% Y or Z (vertical)</span>
+0615             <span class="keyword">case</span> 3 <span class="comment">% note: we only do this for 3d</span>
+0616                mdl = <a href="#_sub10" class="code" title="subfunction   mdl = mash_nodes(mdl, method, idm, dim, elec_true)">mash_nodes</a>(mdl, <span class="string">'shift_middle'</span>,  1, 2, xyzc); <span class="comment">% Y (cross-slope)</span>
+0617             <span class="keyword">otherwise</span>
+0618                error(<span class="string">'duh!'</span>);
+0619          <span class="keyword">end</span>
+0620       <span class="keyword">end</span>
+0621       err = sqrt(sum(<a href="#_sub11" class="code" title="subfunction err = mdl_elec_err(mdl, xyzc)">mdl_elec_err</a>(mdl, xyzc).^2,2));
+0622       c=c+1;
+0623       <span class="keyword">if</span> c &gt;= 100
+0624          <span class="keyword">break</span>;
+0625       <span class="keyword">end</span>
+0626    <span class="keyword">end</span>
+0627 
+0628 <a name="_sub10" href="#_subfunctions" class="code">function   mdl = mash_nodes(mdl, method, idm, dim, elec_true)</a>
+0629    elec_err = <a href="#_sub11" class="code" title="subfunction err = mdl_elec_err(mdl, xyzc)">mdl_elec_err</a>(mdl, elec_true);
+0630    err = elec_err(:,dim);
+0631 
+0632    <span class="comment">% add borders for electrode positions at</span>
+0633    <span class="comment">% the volume boundary and 50% of the edge to electrode distance</span>
+0634    xq = mdl.nodes(:,idm);
+0635    x = [min(xq); <span class="keyword">...</span>
+0636         mean([min(xq) min(elec_true(:,idm))]); <span class="keyword">...</span>
+0637         elec_true(:,idm);
+0638         mean([max(xq) max(elec_true(:,idm))]); <span class="keyword">...</span>
+0639         max(xq)];
+0640    v = [0; 0; err; 0; 0];
+0641 
+0642    <span class="comment">% scale error to match the electrode locations</span>
+0643    interp_method = <span class="string">'linear'</span>;
+0644    <span class="keyword">if</span> strcmp(method, <span class="string">'shift_surface'</span>)
+0645          interp_method = <span class="string">'pchip'</span>;
+0646    <span class="keyword">end</span>
+0647    vq = interp1(x, v, xq, interp_method, <span class="string">'extrap'</span>);
+0648 
+0649    <span class="keyword">switch</span> method
+0650       <span class="keyword">case</span> <span class="string">'shift_all'</span>
+0651          vqs = 1;
+0652       <span class="keyword">case</span> <span class="string">'shift_middle'</span>
+0653          yq = mdl.nodes(:,dim);
+0654          yqr = max(yq)-min(yq); <span class="comment">% range</span>
+0655          yqm = (max(yq) + min(yq))/2; <span class="comment">% middle = (max + min)/2</span>
+0656          vqs = 1-abs(yq-yqm)./(yqr/2); <span class="comment">% scale the shift depending on x's distance from midline</span>
+0657       <span class="keyword">case</span> <span class="string">'shift_surface'</span> <span class="comment">% assumes positive surface</span>
+0658          yq = mdl.nodes(:,dim);
+0659          yqr = max(yq) - min(yq);
+0660          yqm = min(yq); <span class="comment">% min</span>
+0661          vqs = abs(yq - yqm)./yqr; <span class="comment">% scale by distance from surface</span>
+0662       <span class="keyword">otherwise</span>
+0663          error([<span class="string">'unrecognized method: '</span>,method]);
+0664    <span class="keyword">end</span>
+0665    mdl.nodes(:,dim) = mdl.nodes(:,dim) + (vq .* vqs);
+0666 
+0667 <span class="comment">% calculate the error in electrode position for the fwd_model</span>
+0668 <a name="_sub11" href="#_subfunctions" class="code">function err = mdl_elec_err(mdl, xyzc)</a>
+0669    <span class="keyword">if</span> ~isfield(mdl, <span class="string">'electrode'</span>)
+0670       error(<span class="string">'electrodes not available on this model, must supply positional error'</span>);
+0671    <span class="keyword">end</span>
+0672 
+0673    nel=length(mdl.electrode); <span class="comment">% number of electrodes</span>
+0674    nd=size(mdl.nodes,2); <span class="comment">% number of dimensions</span>
+0675 
+0676    eu = ones(nel,nd)*NaN; <span class="comment">% init</span>
+0677    <span class="keyword">for</span> i=1:length(mdl.electrode)
+0678       nn = mdl.nodes(mdl.electrode(i).nodes,:); <span class="comment">% nodes per electrode</span>
+0679       eu(i,:) = (max(nn,[],1) + min(nn,[],1))./2; <span class="comment">% approx centre of each electrode</span>
+0680    <span class="keyword">end</span>
+0681    err = xyzc(:,1:nd) - eu;
+0682 
+0683 <a name="_sub12" href="#_subfunctions" class="code">function do_unit_test</a>
+0684    ne = 16;
+0685    imdl = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2p5a'</span>, ne);
+0686    imdl.fwd_model.stimulation = <a href="stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>(ne, <span class="string">'Wenner'</span>);
+0687    img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl.fwd_model, 1);
+0688    img.fwd_solve.get_all_meas = 1;
+0689    vh = <a href="../../eidors/solvers/forward/fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>(img);
+0690    vd = <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0691 clf; h=plot([vh.meas vd.meas],<span class="string">'o--'</span>); legend(<span class="string">'analytic'</span>,<span class="string">'FEM'</span>); set(gca,<span class="string">'box'</span>,<span class="string">'off'</span>); set(h,<span class="string">'LineWidth'</span>,2);
+0692 
+0693    imdl1 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2a'</span>,[1:6]);
+0694    imdl2 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2a'</span>,[1:6]');
+0695    imdl3 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2a'</span>,[1:6]'*[1 0]);
+0696    imdl3Hnm2d = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H2a'</span>,[1:6],{<span class="string">'threshold'</span>,Inf}); <span class="comment">% try without mashing nodes, no veritcal geometry... electrodes should be precisely located if the electrodes were correctly placed</span>
+0697    imdl3Hnm3d = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H3a'</span>,[1:6],{<span class="string">'threshold'</span>,Inf}); <span class="comment">% try without mashing nodes, no veritcal geometry... electrodes should be precisely located if the electrodes were correctly placed</span>
+0698    imdl4 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2a'</span>,[1:6]'*[1 0] + ([1:6]*0+2)'*[0 1]);
+0699    R = @(x) [cosd(x) -sind(x); sind(x) cosd(x)]; <span class="comment">% rotation matrix</span>
+0700    X = [0 2];
+0701    imdl5 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2a'</span>,([1:6]'*[1 0] + ([1:6]*0+1)'*X)*R(-135));
+0702    elec_pos_2d = [1 1; 2 2; 3 1; 4 1.5];
+0703    elec_pos_3d = [1 0 0; 2 0.5 1; 3 -0.5 2.5; 10 0 3];
+0704    imdl2dc = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2a'</span>, elec_pos_2d); <span class="comment">% 2D complete electrode model</span>
+0705    imdl3dc = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h3a'</span>, elec_pos_3d); <span class="comment">% 3D complete electrode model</span>
+0706    imdl2dp = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H2a'</span>, elec_pos_2d); <span class="comment">% 2D point electrode model</span>
+0707    imdl3dp = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H3a'</span>, elec_pos_3d); <span class="comment">% 3D point electrode model</span>
+0708    imdl2df = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H2a'</span>, elec_pos_2d, {<span class="string">'threshold'</span>, Inf}); <span class="comment">% 2D point electrode model... without mashing</span>
+0709    imdl3df = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H3a'</span>, elec_pos_3d, {<span class="string">'threshold'</span>, Inf}); <span class="comment">% 3D point electrode model... without mashing</span>
+0710 
+0711    <span class="comment">% dual meshes</span>
+0712    imdlh32 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h32a'</span>, elec_pos_3d);
+0713    imdlh22 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h22a'</span>, elec_pos_2d);
+0714    imdlH32 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H32a'</span>, elec_pos_3d);
+0715    imdlH22 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H22a'</span>, elec_pos_2d);
+0716 
+0717    <span class="comment">% std dual meshes w/ 16 elec</span>
+0718    imdlh32_16 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h32a'</span>, 16);
+0719    imdlh22_16 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h22a'</span>, 16);
+0720    imdlH32_16 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H32a'</span>, 16);
+0721    imdlH22_16 = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H22a'</span>, 16);
+0722 
+0723 <span class="keyword">if</span> 0
+0724    <span class="comment">% Nolwenn's grid</span>
+0725    [yy,xx] = meshgrid(0:3:24, [0 4:2:20*2 20*2+4]); <span class="comment">% 9 x 21 grid</span>
+0726    xyz = [xx(:) yy(:) zeros(length(yy(:)),1)];
+0727 
+0728    <span class="comment">% test grid</span>
+0729    <span class="comment">% 1. bad electrodes ... ? fixme?</span>
+0730    <span class="comment">% 2. mash_nodes breaks for co-located nodes in any particular dimension... need 2d interp?</span>
+0731    [yy,xx]=meshgrid(1:3,1:3); xyz = [xx(:) yy(:) zeros(length(yy(:)),1)]; <span class="comment">% 3 x 3 grid</span>
+0732    imdl = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'H3a'</span>,xyz);
+0733    <span class="comment">% TODO add 'g3a' and 'G3a' types?</span>
+0734 <span class="keyword">end</span>
+0735 
+0736    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'h2a halfspace vs default TEST'</span>, norm(vh.meas - vd.meas), 0, 4e-3);
+0737    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'1d elec list equivalence (row/col)'</span>,<a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl1), <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl2));
+0738    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'1d vs. 2d elec list equivalence'</span>,<a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl1), <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl3));
+0739    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2D PEM w/o node mashing, no vertical relief'</span>,[1:6]'*[1 0], <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl3Hnm2d), eps);
+0740    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2D PEM *is* PEM'</span>,length(imdl3Hnm2d.fwd_model.electrode(1).nodes),1)
+0741    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3D PEM w/o node mashing, no vertical relief'</span>,[1:6]'*[1 0 0], <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl3Hnm3d), eps);
+0742    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3D PEM *is* PEM'</span>,length(imdl3Hnm3d.fwd_model.electrode(1).nodes),1)
+0743    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'1d vs. 2d + y=2 elec list equivalence'</span>,<a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl1), <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl4)-([1:6]*0+2)'*[0 1]);
+0744    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'1d vs. 2d + y=2 - 135 deg elec eq'</span>, <span class="keyword">...</span>
+0745                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl1), <span class="keyword">...</span>
+0746                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl5, R(135), -X), eps*10);
+0747    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2d with vertical geometry (mash nodes) CEM'</span>, <span class="keyword">...</span>
+0748                  elec_pos_2d, <span class="keyword">...</span>
+0749                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl2dc), 0.01);
+0750    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3d with vertical geometry (mash nodes) CEM'</span>, <span class="keyword">...</span>
+0751                  elec_pos_3d, <span class="keyword">...</span>
+0752                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl3dc), 0.001);
+0753    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2d with vertical geometry (mash nodes) PEM'</span>, <span class="keyword">...</span>
+0754                  elec_pos_2d, <span class="keyword">...</span>
+0755                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl2dp), 10*eps);
+0756    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3d with vertical geometry (mash nodes) PEM'</span>, <span class="keyword">...</span>
+0757                  elec_pos_3d, <span class="keyword">...</span>
+0758                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl3dp), 10*eps);
+0759    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2d with vertical geometry (w/o mash nodes) PEM'</span>, <span class="keyword">...</span>
+0760                  elec_pos_2d, <span class="keyword">...</span>
+0761                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl2df), -10*eps);
+0762    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3d with vertical geometry (w/o mash nodes) PEM'</span>, <span class="keyword">...</span>
+0763                  elec_pos_3d, <span class="keyword">...</span>
+0764                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdl3df), -10*eps);
+0765 
+0766    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'h32a dual 3d/2d'</span>, <span class="keyword">...</span>
+0767                  elec_pos_3d, <span class="keyword">...</span>
+0768                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdlh32), 0.001);
+0769    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'H32a dual 3d/2d'</span>, <span class="keyword">...</span>
+0770                  elec_pos_3d, <span class="keyword">...</span>
+0771                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdlH32), 10*eps);
+0772    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'h22a dual 2d/2d'</span>, <span class="keyword">...</span>
+0773                  elec_pos_2d, <span class="keyword">...</span>
+0774                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdlh22), 0.002);
+0775    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'H22a dual 2d/2d'</span>, <span class="keyword">...</span>
+0776                  elec_pos_2d, <span class="keyword">...</span>
+0777                  <a href="#_sub13" class="code" title="subfunction xyz = unit_test_elec_pos(imdl, R, X)">unit_test_elec_pos</a>(imdlH22), 10*eps);
+0778 
+0779 clf; subplot(221); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdl1.fwd_model); title(<span class="string">'models match? A'</span>);
+0780      subplot(222); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdl5.fwd_model); title(<span class="string">'models match? C'</span>);
+0781      subplot(223); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdl2dc.fwd_model); title(<span class="string">'2d deformations'</span>);
+0782      subplot(224); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdl3dc.fwd_model); title(<span class="string">'3d deformations'</span>); view([0 -1 0.01]);
+0783 
+0784 <span class="keyword">if</span> 1
+0785    clf; subplot(221); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdlh22.fwd_model);
+0786         subplot(222); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdlh32.fwd_model);
+0787         subplot(223); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdlH22.fwd_model);
+0788         subplot(224); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdlH32.fwd_model);
+0789 <span class="keyword">end</span>
+0790 
+0791 <span class="keyword">if</span> 0
+0792    clf; subplot(221); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdlh22.rec_model);
+0793         subplot(222); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdlh32.rec_model);
+0794         subplot(223); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdlH22.rec_model);
+0795         subplot(224); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdlH32.rec_model);
+0796 <span class="keyword">end</span>
+0797 
+0798    imdl = <a href="mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2p5a'</span>, ne, {<span class="string">'extra_ng_code'</span>, <span class="string">'solid tt = orthobrick(-1,-1,-1;-0.5,0,-0.5);\ntlo tt;\n'</span>});
+0799    clf; <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdl.fwd_model);
+0800    <span class="comment">% Note: this just has to be swallowed safely...</span>
+0801 
+0802 <a name="_sub13" href="#_subfunctions" class="code">function xyz = unit_test_elec_pos(imdl, R, X)</a>
+0803    <span class="keyword">if</span> nargin &lt; 2; R = 1; <span class="keyword">end</span>
+0804    <span class="keyword">if</span> nargin &lt; 3; X = 0; <span class="keyword">end</span>
+0805    fmdl = imdl.fwd_model;
+0806    xyz = zeros(length(fmdl.electrode),size(fmdl.nodes,2))*NaN;
+0807    <span class="keyword">for</span> i = 1:length(fmdl.electrode)
+0808       nn = fmdl.nodes(fmdl.electrode(i).nodes,:);
+0809       xyz(i,:) = (max(nn,[],1) + min(nn,[],1))/2;
+0810       xyz(i,:) = xyz(i,:)*R + X;
+0811    <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

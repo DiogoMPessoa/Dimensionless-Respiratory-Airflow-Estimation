@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of point_in_triangle</title>
+  <meta name="keywords" content="point_in_triangle">
+  <meta name="description" content="POINT_IN_TRIANGLE tests points for membership in triangles">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; point_in_triangle.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>point_in_triangle
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>POINT_IN_TRIANGLE tests points for membership in triangles</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function out = point_in_triangle(P,E,V,epsilon, str) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">POINT_IN_TRIANGLE tests points for membership in triangles
+ POINT_IN_TRIANGLE(P, E, V)
+ POINT_IN_TRIANGLE(P, E, V, epsilon)
+ Inputs:
+   P       - [p x 2] or [p x 3] list of point coordinates
+   V       - [v x 2] or [v x 3] list of triangle vertices
+   E       - [e x 3] matrix specifying the vertices V consituting each of the
+               e triangles
+   epsilon - threshold to counteract numerical instability:
+               epsilon &gt; 0 makes the triangle bigger so points on edges
+                   and vertices are correctly classified as inside. May
+                   contain false positives.
+               epsilon = 0 may miss some points on edges and vertices due 
+                   to numerical issues.
+               epsilon &lt; 0 makes the trianle smaller so points on edges
+                   and vertices are classified as outside. May miss more
+                   points than intended.
+               Default: epsilon = eps
+
+ POINT_IN_TRIANGLE(..., 'match') specifies that each point is to be tested
+   only against its corresponding triangle (number of points must equal
+   number of triangles). Option has no effect in 2D.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>	MK_PIXEL_SLICE create a pixel model to reconstruct on</li><li><a href="mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a>	MK_TET_C2F - calculate a coarse2fine mapping for two tet-based models.</li><li><a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li><li><a href="mk_tri_c2f.html" class="code" title="function c2f = mk_tri_c2f(fmdl,rmdl,opt)">mk_tri_c2f</a>	MK_TRI_C2F - calculate a coarse2fine mapping for triangle-based models.</li><li><a href="place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function out = test(u,v,epsilon)</a></li><li><a href="#_sub2" class="code">function [u, v] = point_in_triangle_3d_wrapper(P,E,V, match)</a></li><li><a href="#_sub3" class="code">function [u, v] = point_in_triangle_3d(p, E, V)</a></li><li><a href="#_sub4" class="code">function out = point_in_triangle_2d(P,E,V,epsilon)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function out = point_in_triangle(P,E,V,epsilon, str)</a>
+0002 <span class="comment">%POINT_IN_TRIANGLE tests points for membership in triangles</span>
+0003 <span class="comment">% POINT_IN_TRIANGLE(P, E, V)</span>
+0004 <span class="comment">% POINT_IN_TRIANGLE(P, E, V, epsilon)</span>
+0005 <span class="comment">% Inputs:</span>
+0006 <span class="comment">%   P       - [p x 2] or [p x 3] list of point coordinates</span>
+0007 <span class="comment">%   V       - [v x 2] or [v x 3] list of triangle vertices</span>
+0008 <span class="comment">%   E       - [e x 3] matrix specifying the vertices V consituting each of the</span>
+0009 <span class="comment">%               e triangles</span>
+0010 <span class="comment">%   epsilon - threshold to counteract numerical instability:</span>
+0011 <span class="comment">%               epsilon &gt; 0 makes the triangle bigger so points on edges</span>
+0012 <span class="comment">%                   and vertices are correctly classified as inside. May</span>
+0013 <span class="comment">%                   contain false positives.</span>
+0014 <span class="comment">%               epsilon = 0 may miss some points on edges and vertices due</span>
+0015 <span class="comment">%                   to numerical issues.</span>
+0016 <span class="comment">%               epsilon &lt; 0 makes the trianle smaller so points on edges</span>
+0017 <span class="comment">%                   and vertices are classified as outside. May miss more</span>
+0018 <span class="comment">%                   points than intended.</span>
+0019 <span class="comment">%               Default: epsilon = eps</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% POINT_IN_TRIANGLE(..., 'match') specifies that each point is to be tested</span>
+0022 <span class="comment">%   only against its corresponding triangle (number of points must equal</span>
+0023 <span class="comment">%   number of triangles). Option has no effect in 2D.</span>
+0024 
+0025 
+0026 <span class="comment">% (C) 2012-2015 Bartlomiej Grychtol</span>
+0027 <span class="comment">% License: GPL version 2 or 3</span>
+0028 <span class="comment">% $Id: point_in_triangle.m 5034 2015-05-26 15:09:20Z bgrychtol $</span>
+0029 
+0030 <span class="keyword">switch</span> nargin
+0031     <span class="keyword">case</span> {1 2 3}
+0032         epsilon = eps;
+0033         str = [];
+0034     <span class="keyword">case</span> 4
+0035         <span class="keyword">if</span> ischar(epsilon)
+0036             str = epsilon;
+0037             epsilon = eps;
+0038         <span class="keyword">else</span>
+0039             str = [];
+0040         <span class="keyword">end</span>
+0041 <span class="keyword">end</span>
+0042 
+0043 
+0044 match = strcmp(str,<span class="string">'match'</span>);
+0045 
+0046 <span class="keyword">switch</span> size(P,2)
+0047     <span class="keyword">case</span> 2
+0048         out = <a href="#_sub4" class="code" title="subfunction out = point_in_triangle_2d(P,E,V,epsilon)">point_in_triangle_2d</a>(P,E,V,epsilon);
+0049 
+0050    <span class="keyword">case</span> 3
+0051         [u, v] = <a href="#_sub2" class="code" title="subfunction [u, v] = point_in_triangle_3d_wrapper(P,E,V, match)">point_in_triangle_3d_wrapper</a>(P,E,V,match);
+0052         out= <a href="#_sub1" class="code" title="subfunction out = test(u,v,epsilon)">test</a>(u,v,epsilon);
+0053         
+0054     <span class="keyword">otherwise</span>
+0055         error(<span class="string">'EIDORS:WrongInput'</span>,<span class="string">'Points must be 2D or 3D'</span>);
+0056 <span class="keyword">end</span>
+0057 
+0058 
+0059 <a name="_sub1" href="#_subfunctions" class="code">function out = test(u,v,epsilon)</a>
+0060    out = u &gt;= -epsilon &amp; v &gt;= -epsilon &amp; (u+v-epsilon) &lt;= 1;
+0061 
+0062 <a name="_sub2" href="#_subfunctions" class="code">function [u, v] = point_in_triangle_3d_wrapper(P,E,V, match)</a>
+0063     nPts = size(P,1);
+0064     nTri = size(E,1);
+0065     
+0066     <span class="keyword">if</span> nPts == 1 || match
+0067         [u, v] = <a href="#_sub3" class="code" title="subfunction [u, v] = point_in_triangle_3d(p, E, V)">point_in_triangle_3d</a>(P,E,V);
+0068     <span class="keyword">else</span>
+0069         u = zeros(nPts, nTri);
+0070         v = zeros(nPts, nTri);
+0071         <span class="keyword">for</span> i = 1:nPts
+0072             [u(i,:), v(i,:)] = <a href="#_sub3" class="code" title="subfunction [u, v] = point_in_triangle_3d(p, E, V)">point_in_triangle_3d</a>(P(i,:),E,V);
+0073         <span class="keyword">end</span>
+0074 
+0075     <span class="keyword">end</span>
+0076 
+0077 <span class="comment">%-------------------------------------------------------------------------%</span>
+0078 <span class="comment">% Decide if point P is in triangles E indexing nodes V in 3D</span>
+0079 <a name="_sub3" href="#_subfunctions" class="code">function [u, v] = point_in_triangle_3d(p, E, V)</a>
+0080 <span class="comment">%http://www.blackpawn.com/texts/pointinpoly/default.html</span>
+0081 <span class="comment">% vectors</span>
+0082 v0 = V(E(:,3),:) - V(E(:,1),:);
+0083 v1 = V(E(:,2),:) - V(E(:,1),:);
+0084 v2 = bsxfun(@minus,p, V(E(:,1),:));
+0085 
+0086 <span class="comment">% dot products</span>
+0087 dot00 = dot(v0, v0, 2);
+0088 dot01 = dot(v0, v1, 2);
+0089 dot02 = dot(v0, v2, 2);
+0090 dot11 = dot(v1, v1, 2);
+0091 dot12 = dot(v1, v2, 2);
+0092 
+0093 <span class="comment">% barycentric coordinates</span>
+0094 invDenom = 1 ./ (dot00 .* dot11 - dot01 .* dot01);
+0095 u = (dot11 .* dot02 - dot01 .* dot12) .* invDenom;
+0096 v = (dot00 .* dot12 - dot01 .* dot02) .* invDenom;
+0097 
+0098 
+0099 <span class="comment">%-------------------------------------------------------------------------%</span>
+0100 <span class="comment">% Decide if points P are in triangles E indexing nodes V in 2D</span>
+0101 <a name="_sub4" href="#_subfunctions" class="code">function out = point_in_triangle_2d(P,E,V,epsilon)</a>
+0102     X = reshape(V(E,1),size(E));
+0103     Y = reshape(V(E,2),size(E));
+0104     T = [ bsxfun(@minus, X(:,1:2), X(:,3)) bsxfun(@minus, Y(:,1:2), Y(:,3))];
+0105     invdetT = 1./(T(:,1).*T(:,4) - T(:,2).*T(:,3));
+0106     y23 = Y(:,2) - Y(:,3);
+0107     y31 = Y(:,3) - Y(:,1);
+0108     x32 = X(:,3) - X(:,2);
+0109     x13 = X(:,1) - X(:,3);
+0110     nPts = size(P,1);
+0111     out = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(size(E,1),nPts);
+0112     <span class="keyword">for</span> i = 1:nPts
+0113        p1X = P(i,1) - X(:,3);
+0114        p2Y = P(i,2) - Y(:,3);
+0115        u = (y23 .* p1X + x32 .* p2Y) .* invdetT;
+0116        v = (y31 .* p1X + x13 .* p2Y) .* invdetT;
+0117        out(:,i) = <a href="#_sub1" class="code" title="subfunction out = test(u,v,epsilon)">test</a>(u,v,epsilon);
+0118     <span class="keyword">end</span>
+0119     out = out';
+0120     
+0121 <span class="comment">%     u = ( repmat(Y(:,2)-Y(:,3),1,nPts).*bsxfun(@minus,P(:,1)',X(:,3)) ...</span>
+0122 <span class="comment">%         + repmat(X(:,3)-X(:,2),1,nPts).*bsxfun(@minus,P(:,2)',Y(:,3)) )...</span>
+0123 <span class="comment">%         .* repmat(invdetT,1,nPts);</span>
+0124 <span class="comment">%     v = ( repmat(Y(:,3)-Y(:,1),1,nPts).*bsxfun(@minus,P(:,1)',X(:,3)) ...</span>
+0125 <span class="comment">%         + repmat(X(:,1)-X(:,3),1,nPts).*bsxfun(@minus,P(:,2)',Y(:,3)) )...</span>
+0126 <span class="comment">%         .* repmat(invdetT,1,nPts);</span>
+0127 <span class="comment">%     u = u';</span>
+0128 <span class="comment">%     v = v';</span>
+0129 <span class="comment">%</span>
+0130</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

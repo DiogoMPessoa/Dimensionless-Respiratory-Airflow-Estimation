@@ -1,0 +1,456 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gmsh_read_mesh</title>
+  <meta name="keywords" content="gmsh_read_mesh">
+  <meta name="description" content="[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">gmsh</a> &gt; gmsh_read_mesh.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/gmsh&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>gmsh_read_mesh
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)
+ Function to read in a mesh model from Gmsh and saves it in
+ five arrays; surface (srf), veritices (vtx), face no. (fc)
+ volume (simp) and edges (edg)
+
+ srf        = The surfaces indices into vtx
+ simp       = The volume indices into vtx
+ vtx        = The vertices matrix
+ fc         = A one column matrix containing the face numbers
+ edg        = Edge segment information
+ filename   = Name of file containing NetGen .vol information
+ mat_ind    = Material index
+ phys_names = Structure of &quot;Physical&quot; entities in the mesh
+              .dim   = dimension
+              .name  = name (string)
+              .tag   = physical tag
+              .nodes = N-x-dim array of indices into vtx
+ 
+ This mostly works on GMSH v2. I very basic (and probably
+   buggy GMSH v4 reader is now included)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="gmsh_read_mesh.html" class="code" title="function[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)">gmsh_read_mesh</a>	[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="create_circle_mesh_gmsh.html" class="code" title="function mdl = create_circle_mesh_gmsh(basename, center, rad, elem_size )">create_circle_mesh_gmsh</a>	Create a 2D Circular FEM using GMSH</li><li><a href="gmsh_mk_fwd_model.html" class="code" title="function [fwd_mdl, mat_indices]=gmsh_mk_fwd_model( vol_filename, name, eprefix,stim_pattern, z_contact)">gmsh_mk_fwd_model</a>	GMSH_MK_FWD_MODEL: create a fwd_model object from a Gmsh file</li><li><a href="gmsh_read_mesh.html" class="code" title="function[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)">gmsh_read_mesh</a>	[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function mat = get_lines_with_nodes( fid, gmshformat )</a></li><li><a href="#_sub2" class="code">function gmshformat = parse_format( fid);</a></li><li><a href="#_sub3" class="code">function n_rows = parse_rows(tline, gmshformat);</a></li><li><a href="#_sub4" class="code">function names = parse_names( fid, gmshformat )</a></li><li><a href="#_sub5" class="code">function elements = parse_elements( fid, gmshformat )</a></li><li><a href="#_sub6" class="code">function elements = parse_v4_elements(fid,n_rows);</a></li><li><a href="#_sub7" class="code">function elements = parse_v2_elements(fid,n_rows);</a></li><li><a href="#_sub8" class="code">function do_unit_test</a></li><li><a href="#_sub9" class="code">function t = gmshv4file; t=[</a></li><li><a href="#_sub10" class="code">function t = gmshv2file; t=[</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)</a>
+0002 <span class="comment">%[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)</span>
+0003 <span class="comment">% Function to read in a mesh model from Gmsh and saves it in</span>
+0004 <span class="comment">% five arrays; surface (srf), veritices (vtx), face no. (fc)</span>
+0005 <span class="comment">% volume (simp) and edges (edg)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% srf        = The surfaces indices into vtx</span>
+0008 <span class="comment">% simp       = The volume indices into vtx</span>
+0009 <span class="comment">% vtx        = The vertices matrix</span>
+0010 <span class="comment">% fc         = A one column matrix containing the face numbers</span>
+0011 <span class="comment">% edg        = Edge segment information</span>
+0012 <span class="comment">% filename   = Name of file containing NetGen .vol information</span>
+0013 <span class="comment">% mat_ind    = Material index</span>
+0014 <span class="comment">% phys_names = Structure of &quot;Physical&quot; entities in the mesh</span>
+0015 <span class="comment">%              .dim   = dimension</span>
+0016 <span class="comment">%              .name  = name (string)</span>
+0017 <span class="comment">%              .tag   = physical tag</span>
+0018 <span class="comment">%              .nodes = N-x-dim array of indices into vtx</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% This mostly works on GMSH v2. I very basic (and probably</span>
+0021 <span class="comment">%   buggy GMSH v4 reader is now included)</span>
+0022 
+0023 <span class="comment">% $Id: gmsh_read_mesh.m 6043 2019-12-31 17:27:26Z aadler $</span>
+0024 <span class="comment">% (C) 2009 Bartosz Sawicki. Licensed under GPL V2</span>
+0025 <span class="comment">% Modified by James Snyder &lt;jbsnyder@fanplastic.org&gt;</span>
+0026 
+0027 <span class="keyword">if</span> ischar(filename) &amp;&amp; strcmp(filename,<span class="string">'UNIT_TEST'</span>); <a href="#_sub8" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0028 
+0029 fid = fopen(filename,<span class="string">'r'</span>);
+0030 phys_names = [];
+0031 <span class="keyword">while</span> 1
+0032     tline = fgetl(fid);
+0033     <span class="keyword">if</span> ~ischar(tline); fclose(fid); <span class="keyword">break</span>; <span class="keyword">end</span>
+0034 
+0035     <span class="keyword">if</span> strcmp(tline,<span class="string">'$MeshFormat'</span>)
+0036        gmshformat = <a href="#_sub2" class="code" title="subfunction gmshformat = parse_format( fid);">parse_format</a>( fid);
+0037     <span class="keyword">elseif</span> strcmp(tline,<span class="string">'$Elements'</span>)
+0038        elements= <a href="#_sub5" class="code" title="subfunction elements = parse_elements( fid, gmshformat )">parse_elements</a>( fid, gmshformat );
+0039     <span class="keyword">elseif</span> strcmp(tline,<span class="string">'$Nodes'</span>)
+0040        nodes= <a href="#_sub1" class="code" title="subfunction mat = get_lines_with_nodes( fid, gmshformat )">get_lines_with_nodes</a>( fid, gmshformat );
+0041     <span class="keyword">elseif</span> strcmp(tline,<span class="string">'$PhysicalNames'</span>)
+0042        phys_names= <a href="#_sub4" class="code" title="subfunction names = parse_names( fid, gmshformat )">parse_names</a>( fid, gmshformat );
+0043     <span class="keyword">end</span>
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="keyword">if</span> ~isempty(phys_names)
+0047     <span class="keyword">for</span> i = 1:length(phys_names)
+0048         tmpelements = find(arrayfun(@(x)x.phys_tag==phys_names(i).tag,elements));
+0049         phys_names(i).nodes = cat(1,elements(tmpelements).simp);
+0050     <span class="keyword">end</span>
+0051 <span class="keyword">end</span>
+0052 
+0053 edg = [];
+0054 bc = [];
+0055 mat_ind = [];
+0056 
+0057 <span class="comment">% Select 2d vs 3d model by checking if Z is all the same</span>
+0058 <span class="keyword">if</span> length( unique( nodes(:,4) ) ) &gt; 1 
+0059     vtx = nodes(:,2:4);
+0060     <span class="comment">% Type 2: 3-node triangle</span>
+0061 keyboard
+0062     tri = find(arrayfun(@(x)x.type==2,elements));
+0063     <span class="comment">% Type 4: 4-node tetrahedron</span>
+0064     tet = find(arrayfun(@(x)x.type==4,elements));
+0065     simp = cat(1,elements(tet).simp);
+0066     srf = cat(1,elements(tri).simp);
+0067 <span class="keyword">else</span>
+0068     vtx = nodes(:,2:3);
+0069     tri = find(arrayfun(@(x)x.type==2,elements));
+0070     simp = cat(1,elements(tri).simp);
+0071     srf = [];
+0072 <span class="keyword">end</span>
+0073 
+0074 elemtags = cat(1,elements.phys_tag);
+0075 fc = elemtags(tri,1);
+0076 <span class="keyword">end</span>
+0077 
+0078 
+0079 <a name="_sub1" href="#_subfunctions" class="code">function mat = get_lines_with_nodes( fid, gmshformat )</a>
+0080    tline = fgetl(fid);
+0081    n_rows = <a href="#_sub3" class="code" title="subfunction n_rows = parse_rows(tline, gmshformat);">parse_rows</a>(tline,gmshformat);
+0082    <span class="keyword">switch</span> floor(gmshformat)
+0083 <span class="comment">% Line Format:</span>
+0084 <span class="comment">% node-number x-coord y-coord z-coord</span>
+0085      <span class="keyword">case</span> 2; mat= fscanf(fid,<span class="string">'%f'</span>,[4,n_rows])';
+0086      <span class="keyword">case</span> 4; mat= zeros(n_rows,4);
+0087         <span class="keyword">while</span> (true)
+0088           tline = fgetl(fid);
+0089           n = sscanf(tline, <span class="string">'%d'</span>)';
+0090           n_block = n(4);
+0091           <span class="keyword">for</span> b = 1:n_block;
+0092              tline = fgetl(fid);
+0093              el= sscanf(tline, <span class="string">'%f'</span>)';
+0094              mat(el(1),:) = el(1:end);
+0095           <span class="keyword">end</span>
+0096           <span class="keyword">if</span> (el(1) == n_rows); <span class="keyword">break</span>; <span class="keyword">end</span> <span class="comment">% got them all</span>
+0097       <span class="keyword">end</span>
+0098       tline = fgetl(fid); <span class="comment">% get the EndElements</span>
+0099 
+0100      <span class="keyword">otherwise</span>; error(<span class="string">'cant parse gmsh file of this format'</span>);
+0101    <span class="keyword">end</span>
+0102 <span class="keyword">end</span>
+0103 
+0104 <a name="_sub2" href="#_subfunctions" class="code">function gmshformat = parse_format( fid);</a>
+0105    tline = fgetl(fid);
+0106    rawformat = sscanf(tline,<span class="string">'%f'</span>);
+0107    tline = fgetl(fid); <span class="comment">% should be EndMeshFormat</span>
+0108    gmshformat = rawformat(1);
+0109 <span class="keyword">end</span>
+0110 
+0111 <a name="_sub3" href="#_subfunctions" class="code">function n_rows = parse_rows(tline, gmshformat);</a>
+0112    n_rows = sscanf(tline,<span class="string">'%d'</span>);
+0113    <span class="keyword">switch</span> floor(gmshformat)
+0114      <span class="keyword">case</span> 2; n_rows = n_rows(1);
+0115      <span class="keyword">case</span> 4; n_rows = n_rows(2);
+0116      <span class="keyword">otherwise</span>; error(<span class="string">'cant parse gmsh file of this format'</span>);
+0117    <span class="keyword">end</span>
+0118 <span class="keyword">end</span>
+0119 
+0120 <a name="_sub4" href="#_subfunctions" class="code">function names = parse_names( fid, gmshformat )</a>
+0121 <span class="comment">% Line Format:</span>
+0122 <span class="comment">% physical-dimension physical-number &quot;physical-name&quot;</span>
+0123 tline = fgetl(fid);
+0124 n_rows = <a href="#_sub3" class="code" title="subfunction n_rows = parse_rows(tline, gmshformat);">parse_rows</a>(tline,gmshformat);
+0125 names = struct(<span class="string">'tag'</span>,{},<span class="string">'dim'</span>,{},<span class="string">'name'</span>,{});
+0126 <span class="keyword">for</span> i = 1:n_rows
+0127     tline = fgetl(fid);
+0128     <span class="keyword">if</span> exist(<span class="string">'OCTAVE_VERSION'</span>)
+0129         parts = strsplit(tline,<span class="string">' '</span>);
+0130     <span class="keyword">else</span>
+0131         parts = regexp(tline,<span class="string">' '</span>,<span class="string">'split'</span>);
+0132     <span class="keyword">end</span>
+0133     nsz = size(names,2)+1;
+0134     names(nsz).dim = str2double( parts(1) );
+0135     names(nsz).tag = str2double( parts(2) );
+0136     tname = parts(3);
+0137     names(nsz).name = strrep(tname{1},<span class="string">'&quot;'</span>,<span class="string">''</span>);
+0138 <span class="keyword">end</span>
+0139 <span class="keyword">end</span>
+0140 
+0141 <a name="_sub5" href="#_subfunctions" class="code">function elements = parse_elements( fid, gmshformat )</a>
+0142    tline = fgetl(fid);
+0143    n_rows = <a href="#_sub3" class="code" title="subfunction n_rows = parse_rows(tline, gmshformat);">parse_rows</a>(tline,gmshformat);
+0144    <span class="keyword">switch</span> floor(gmshformat)
+0145      <span class="keyword">case</span> 2; elements = <a href="#_sub7" class="code" title="subfunction elements = parse_v2_elements(fid,n_rows);">parse_v2_elements</a>(fid,n_rows);
+0146      <span class="keyword">case</span> 4; elements = <a href="#_sub6" class="code" title="subfunction elements = parse_v4_elements(fid,n_rows);">parse_v4_elements</a>(fid,n_rows);
+0147      <span class="keyword">otherwise</span> error(<span class="string">'cant parse this file type'</span>);
+0148    <span class="keyword">end</span>
+0149 <span class="keyword">end</span>
+0150 
+0151 <a name="_sub6" href="#_subfunctions" class="code">function elements = parse_v4_elements(fid,n_rows);</a>
+0152 <span class="comment">% http://gmsh.info/doc/texinfo/gmsh.html#MSH-file-format</span>
+0153 <span class="comment">% Partial implementation ... look here</span>
+0154    elements = struct(<span class="string">'simp'</span>,{},<span class="string">'type'</span>,{},<span class="string">'phys_tag'</span>,{});
+0155    <span class="keyword">while</span> (true)
+0156        tline = fgetl(fid);
+0157        n = sscanf(tline, <span class="string">'%d'</span>)';
+0158        n_block = n(4);
+0159        n_type = n(2);
+0160        <span class="keyword">for</span> b = 1:n_block;
+0161           tline = fgetl(fid);
+0162           el= sscanf(tline, <span class="string">'%d'</span>)';
+0163           <span class="keyword">if</span> n_type&gt;1; <span class="comment">%not interested in points</span>
+0164              elements(end+1) = struct( <span class="keyword">...</span>
+0165               <span class="string">'simp'</span>,el(2:end),<span class="string">'type'</span>,n_type, <span class="keyword">...</span>
+0166               <span class="string">'phys_tag'</span>,0);
+0167           <span class="keyword">end</span>
+0168        <span class="keyword">end</span>
+0169        <span class="keyword">if</span> (el(1) == n_rows); <span class="keyword">break</span>; <span class="keyword">end</span> <span class="comment">% got them all</span>
+0170    <span class="keyword">end</span>
+0171    tline = fgetl(fid); <span class="comment">% get the EndElements</span>
+0172 <span class="keyword">end</span>
+0173 
+0174 <a name="_sub7" href="#_subfunctions" class="code">function elements = parse_v2_elements(fid,n_rows);</a>
+0175 <span class="comment">% Line Format:</span>
+0176 <span class="comment">% elm-number elm-type number-of-tags &lt; tag &gt; ... node-number-list</span>
+0177 elements(n_rows).simp = [];
+0178 elements(n_rows).phys_tag = [];
+0179 elements(n_rows).geom_tag = [];
+0180 elements(n_rows).type = [];
+0181 
+0182 <span class="keyword">for</span> i = 1:n_rows
+0183     tline = fgetl(fid);
+0184     n = sscanf(tline, <span class="string">'%d'</span>)';
+0185 <span class="comment">%     nsz = size(elements,2)+1;</span>
+0186     elements(i).simp = n(n(3) + 4:end);
+0187     <span class="comment">%</span>
+0188     elements(i).type = n(2);
+0189     <span class="keyword">if</span> n(3) &gt; 0 <span class="comment">% get tags if they exist</span>
+0190         <span class="comment">% By default, first tag is number of parent physical entity</span>
+0191         <span class="comment">% second is parent elementary geometrical entity</span>
+0192         <span class="comment">% third is number of parent mesh partitions followed by</span>
+0193         <span class="comment">% partition ids</span>
+0194         tags = n(4:3+n(3));
+0195         <span class="keyword">if</span> length(tags) &gt;= 1
+0196             elements(i).phys_tag = tags(1);
+0197             <span class="keyword">if</span> length(tags) &gt;= 2
+0198                 elements(i).geom_tag = tags(2);
+0199             <span class="keyword">end</span>
+0200         <span class="keyword">end</span>
+0201     <span class="keyword">end</span>
+0202 <span class="keyword">end</span>
+0203 <span class="keyword">end</span>
+0204 
+0205 <a name="_sub8" href="#_subfunctions" class="code">function do_unit_test</a>
+0206    tmpnam = tempname;
+0207 
+0208    fid = fopen(tmpnam,<span class="string">'w'</span>);
+0209    fprintf(fid,gmshv4file);
+0210    fclose(fid);
+0211    [srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = <a href="gmsh_read_mesh.html" class="code" title="function[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)">gmsh_read_mesh</a>(tmpnam);
+0212     <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'v4 vtx '</span>,vtx(2:3,:),[1,0;-1,0])
+0213     <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'v4 simp'</span>,simp(2:3,:),[3,7,12; 12, 7,14]);
+0214 
+0215    fid = fopen(tmpnam,<span class="string">'w'</span>);
+0216    fprintf(fid,gmshv2file);
+0217    fclose(fid);
+0218    [srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = <a href="gmsh_read_mesh.html" class="code" title="function[srf,vtx,fc,bc,simp,edg,mat_ind,phys_names] = gmsh_read_mesh(filename)">gmsh_read_mesh</a>(tmpnam);
+0219     <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'v2 vtx '</span>,vtx(2:3,:),[1,0;-1,0])
+0220     <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'v2 simp'</span>,simp(2:3,:),[2,4,15; 14,17,19]);
+0221     
+0222 <span class="keyword">end</span>
+0223 
+0224 <span class="comment">% Example of gmsh v4 file</span>
+0225 <a name="_sub9" href="#_subfunctions" class="code">function t = gmshv4file; t=[ </a><span class="keyword">...</span>
+0226 <span class="string">'$MeshFormat\n'</span> <span class="keyword">...</span>
+0227 <span class="string">'4 0 8\n'</span> <span class="keyword">...</span>
+0228 <span class="string">'$EndMeshFormat\n'</span> <span class="keyword">...</span>
+0229 <span class="string">'$Entities\n'</span> <span class="keyword">...</span>
+0230 <span class="string">'3 2 1 0\n'</span> <span class="keyword">...</span>
+0231 <span class="string">'1 0 0 0 0 0 0 0 \n'</span> <span class="keyword">...</span>
+0232 <span class="string">'2 1 0 0 1 0 0 0 \n'</span> <span class="keyword">...</span>
+0233 <span class="string">'3 -1 0 0 -1 0 0 0 \n'</span> <span class="keyword">...</span>
+0234 <span class="string">'1 -1 0 0 1 0.984807753012208 0 0 2 2 -3 \n'</span> <span class="keyword">...</span>
+0235 <span class="string">'2 -1 -0.984807753012208 0 1 0 0 0 2 3 -2 \n'</span> <span class="keyword">...</span>
+0236 <span class="string">'4 -1 -0.984807753012208 0 1 0.984807753012208 0 0 2 1 2 \n'</span> <span class="keyword">...</span>
+0237 <span class="string">'$EndEntities\n'</span> <span class="keyword">...</span>
+0238 <span class="string">'$Nodes\n'</span> <span class="keyword">...</span>
+0239 <span class="string">'6 14\n'</span> <span class="keyword">...</span>
+0240 <span class="string">'1 0 0 1\n'</span> <span class="keyword">...</span>
+0241 <span class="string">'1 0 0 0\n'</span> <span class="keyword">...</span>
+0242 <span class="string">'2 0 0 1\n'</span> <span class="keyword">...</span>
+0243 <span class="string">'2 1 0 0\n'</span> <span class="keyword">...</span>
+0244 <span class="string">'3 0 0 1\n'</span> <span class="keyword">...</span>
+0245 <span class="string">'3 -1 0 0\n'</span> <span class="keyword">...</span>
+0246 <span class="string">'1 1 0 3\n'</span> <span class="keyword">...</span>
+0247 <span class="string">'4 0.7071067795891069 0.7071067827839882 0\n'</span> <span class="keyword">...</span>
+0248 <span class="string">'5 -4.62506049552981e-09 1 0\n'</span> <span class="keyword">...</span>
+0249 <span class="string">'6 -0.7071067828954029 0.7071067794776923 0\n'</span> <span class="keyword">...</span>
+0250 <span class="string">'2 1 0 3\n'</span> <span class="keyword">...</span>
+0251 <span class="string">'7 -0.7071067795891069 -0.7071067827839882 0\n'</span> <span class="keyword">...</span>
+0252 <span class="string">'8 4.62506049552981e-09 -1 0\n'</span> <span class="keyword">...</span>
+0253 <span class="string">'9 0.7071067828954029 -0.7071067794776923 0\n'</span> <span class="keyword">...</span>
+0254 <span class="string">'4 2 0 5\n'</span> <span class="keyword">...</span>
+0255 <span class="string">'10 -7.225004064876332e-18 5.806922560102616e-17 0\n'</span> <span class="keyword">...</span>
+0256 <span class="string">'11 0.4208610471654206 -0.174326352879787 0\n'</span> <span class="keyword">...</span>
+0257 <span class="string">'12 -0.4208610471654206 0.1743263528797871 0\n'</span> <span class="keyword">...</span>
+0258 <span class="string">'13 0.1601886191568594 0.3867295406713929 0\n'</span> <span class="keyword">...</span>
+0259 <span class="string">'14 -0.1601886191568594 -0.3867295406713928 0\n'</span> <span class="keyword">...</span>
+0260 <span class="string">'$EndNodes\n'</span> <span class="keyword">...</span>
+0261 <span class="string">'$Elements\n'</span> <span class="keyword">...</span>
+0262 <span class="string">'6 27\n'</span> <span class="keyword">...</span>
+0263 <span class="string">'1 0 15 1\n'</span> <span class="keyword">...</span>
+0264 <span class="string">'1 1 \n'</span> <span class="keyword">...</span>
+0265 <span class="string">'2 0 15 1\n'</span> <span class="keyword">...</span>
+0266 <span class="string">'2 2 \n'</span> <span class="keyword">...</span>
+0267 <span class="string">'3 0 15 1\n'</span> <span class="keyword">...</span>
+0268 <span class="string">'3 3 \n'</span> <span class="keyword">...</span>
+0269 <span class="string">'1 1 1 4\n'</span> <span class="keyword">...</span>
+0270 <span class="string">'4 2 4 \n'</span> <span class="keyword">...</span>
+0271 <span class="string">'5 4 5 \n'</span> <span class="keyword">...</span>
+0272 <span class="string">'6 5 6 \n'</span> <span class="keyword">...</span>
+0273 <span class="string">'7 6 3 \n'</span> <span class="keyword">...</span>
+0274 <span class="string">'2 1 1 4\n'</span> <span class="keyword">...</span>
+0275 <span class="string">'8 3 7 \n'</span> <span class="keyword">...</span>
+0276 <span class="string">'9 7 8 \n'</span> <span class="keyword">...</span>
+0277 <span class="string">'10 8 9 \n'</span> <span class="keyword">...</span>
+0278 <span class="string">'11 9 2 \n'</span> <span class="keyword">...</span>
+0279 <span class="string">'4 2 2 16\n'</span> <span class="keyword">...</span>
+0280 <span class="string">'12 2 4 11 \n'</span> <span class="keyword">...</span>
+0281 <span class="string">'13 3 7 12 \n'</span> <span class="keyword">...</span>
+0282 <span class="string">'14 12 7 14 \n'</span> <span class="keyword">...</span>
+0283 <span class="string">'15 11 4 13 \n'</span> <span class="keyword">...</span>
+0284 <span class="string">'16 5 6 12 \n'</span> <span class="keyword">...</span>
+0285 <span class="string">'17 8 9 11 \n'</span> <span class="keyword">...</span>
+0286 <span class="string">'18 8 11 14 \n'</span> <span class="keyword">...</span>
+0287 <span class="string">'19 5 12 13 \n'</span> <span class="keyword">...</span>
+0288 <span class="string">'20 10 11 13 \n'</span> <span class="keyword">...</span>
+0289 <span class="string">'21 10 12 14 \n'</span> <span class="keyword">...</span>
+0290 <span class="string">'22 4 5 13 \n'</span> <span class="keyword">...</span>
+0291 <span class="string">'23 7 8 14 \n'</span> <span class="keyword">...</span>
+0292 <span class="string">'24 12 10 13 \n'</span> <span class="keyword">...</span>
+0293 <span class="string">'25 11 10 14 \n'</span> <span class="keyword">...</span>
+0294 <span class="string">'26 6 3 12 \n'</span> <span class="keyword">...</span>
+0295 <span class="string">'27 9 2 11 \n'</span> <span class="keyword">...</span>
+0296 <span class="string">'$EndElements\n'</span>];
+0297 <span class="keyword">end</span>
+0298 
+0299 <span class="comment">% Example of gmsh v2 file</span>
+0300 <a name="_sub10" href="#_subfunctions" class="code">function t = gmshv2file; t=[ </a><span class="keyword">...</span>
+0301 <span class="string">'$MeshFormat\n'</span> <span class="keyword">...</span>
+0302 <span class="string">'2.2 0 8\n'</span> <span class="keyword">...</span>
+0303 <span class="string">'$EndMeshFormat\n'</span> <span class="keyword">...</span>
+0304 <span class="string">'$Nodes\n'</span> <span class="keyword">...</span>
+0305 <span class="string">'26\n'</span> <span class="keyword">...</span>
+0306 <span class="string">'1 0 0 0\n'</span> <span class="keyword">...</span>
+0307 <span class="string">'2 1 0 0\n'</span> <span class="keyword">...</span>
+0308 <span class="string">'3 -1 0 0\n'</span> <span class="keyword">...</span>
+0309 <span class="string">'4 0.8660254037855228 0.4999999999981222 0\n'</span> <span class="keyword">...</span>
+0310 <span class="string">'5 0.500000000002617 0.8660254037829277 0\n'</span> <span class="keyword">...</span>
+0311 <span class="string">'6 3.95800631512864e-12 1 0\n'</span> <span class="keyword">...</span>
+0312 <span class="string">'7 -0.4999999999980611 0.866025403785558 0\n'</span> <span class="keyword">...</span>
+0313 <span class="string">'8 -0.8660254037843073 0.5000000000002276 0\n'</span> <span class="keyword">...</span>
+0314 <span class="string">'9 -0.8660254037855228 -0.4999999999981222 0\n'</span> <span class="keyword">...</span>
+0315 <span class="string">'10 -0.500000000002617 -0.8660254037829277 0\n'</span> <span class="keyword">...</span>
+0316 <span class="string">'11 -3.95800631512864e-12 -1 0\n'</span> <span class="keyword">...</span>
+0317 <span class="string">'12 0.4999999999980611 -0.866025403785558 0\n'</span> <span class="keyword">...</span>
+0318 <span class="string">'13 0.8660254037843073 -0.5000000000002276 0\n'</span> <span class="keyword">...</span>
+0319 <span class="string">'14 5.368222989669768e-17 1.262108679519644e-17 0\n'</span> <span class="keyword">...</span>
+0320 <span class="string">'15 0.5000000000000001 0.1339745962149803 0\n'</span> <span class="keyword">...</span>
+0321 <span class="string">'16 -0.5 -0.1339745962149803 0\n'</span> <span class="keyword">...</span>
+0322 <span class="string">'17 0.133974596217502 0.5000000000002625 0\n'</span> <span class="keyword">...</span>
+0323 <span class="string">'18 -0.133974596217502 -0.5000000000002626 0\n'</span> <span class="keyword">...</span>
+0324 <span class="string">'19 -0.3660254037841135 0.3660254037850291 0\n'</span> <span class="keyword">...</span>
+0325 <span class="string">'20 0.3660254037841134 -0.3660254037850291 0\n'</span> <span class="keyword">...</span>
+0326 <span class="string">'21 0.6830127018922291 -0.1830127018925211 0\n'</span> <span class="keyword">...</span>
+0327 <span class="string">'22 -0.683012701892229 0.1830127018925211 0\n'</span> <span class="keyword">...</span>
+0328 <span class="string">'23 0.5000000000014104 0.4999999999990732 0\n'</span> <span class="keyword">...</span>
+0329 <span class="string">'24 -0.5000000000014104 -0.4999999999990732 0\n'</span> <span class="keyword">...</span>
+0330 <span class="string">'25 -0.1830127018901805 0.6830127018929458 0\n'</span> <span class="keyword">...</span>
+0331 <span class="string">'26 0.1830127018901805 -0.6830127018929458 0\n'</span> <span class="keyword">...</span>
+0332 <span class="string">'$EndNodes\n'</span> <span class="keyword">...</span>
+0333 <span class="string">'$Elements\n'</span> <span class="keyword">...</span>
+0334 <span class="string">'51\n'</span> <span class="keyword">...</span>
+0335 <span class="string">'1 15 2 0 1 1\n'</span> <span class="keyword">...</span>
+0336 <span class="string">'2 15 2 0 2 2\n'</span> <span class="keyword">...</span>
+0337 <span class="string">'3 15 2 0 3 3\n'</span> <span class="keyword">...</span>
+0338 <span class="string">'4 1 2 0 1 2 4\n'</span> <span class="keyword">...</span>
+0339 <span class="string">'5 1 2 0 1 4 5\n'</span> <span class="keyword">...</span>
+0340 <span class="string">'6 1 2 0 1 5 6\n'</span> <span class="keyword">...</span>
+0341 <span class="string">'7 1 2 0 1 6 7\n'</span> <span class="keyword">...</span>
+0342 <span class="string">'8 1 2 0 1 7 8\n'</span> <span class="keyword">...</span>
+0343 <span class="string">'9 1 2 0 1 8 3\n'</span> <span class="keyword">...</span>
+0344 <span class="string">'10 1 2 0 2 3 9\n'</span> <span class="keyword">...</span>
+0345 <span class="string">'11 1 2 0 2 9 10\n'</span> <span class="keyword">...</span>
+0346 <span class="string">'12 1 2 0 2 10 11\n'</span> <span class="keyword">...</span>
+0347 <span class="string">'13 1 2 0 2 11 12\n'</span> <span class="keyword">...</span>
+0348 <span class="string">'14 1 2 0 2 12 13\n'</span> <span class="keyword">...</span>
+0349 <span class="string">'15 1 2 0 2 13 2\n'</span> <span class="keyword">...</span>
+0350 <span class="string">'16 2 2 0 4 3 9 16\n'</span> <span class="keyword">...</span>
+0351 <span class="string">'17 2 2 0 4 2 4 15\n'</span> <span class="keyword">...</span>
+0352 <span class="string">'18 2 2 0 4 14 17 19\n'</span> <span class="keyword">...</span>
+0353 <span class="string">'19 2 2 0 4 14 18 20\n'</span> <span class="keyword">...</span>
+0354 <span class="string">'20 2 2 0 4 5 6 17\n'</span> <span class="keyword">...</span>
+0355 <span class="string">'21 2 2 0 4 10 11 18\n'</span> <span class="keyword">...</span>
+0356 <span class="string">'22 2 2 0 4 7 8 19\n'</span> <span class="keyword">...</span>
+0357 <span class="string">'23 2 2 0 4 12 13 20\n'</span> <span class="keyword">...</span>
+0358 <span class="string">'24 2 2 0 4 14 16 18\n'</span> <span class="keyword">...</span>
+0359 <span class="string">'25 2 2 0 4 14 15 17\n'</span> <span class="keyword">...</span>
+0360 <span class="string">'26 2 2 0 4 14 19 16\n'</span> <span class="keyword">...</span>
+0361 <span class="string">'27 2 2 0 4 14 20 15\n'</span> <span class="keyword">...</span>
+0362 <span class="string">'28 2 2 0 4 6 7 25\n'</span> <span class="keyword">...</span>
+0363 <span class="string">'29 2 2 0 4 11 12 26\n'</span> <span class="keyword">...</span>
+0364 <span class="string">'30 2 2 0 4 2 21 13\n'</span> <span class="keyword">...</span>
+0365 <span class="string">'31 2 2 0 4 3 22 8\n'</span> <span class="keyword">...</span>
+0366 <span class="string">'32 2 2 0 4 9 24 16\n'</span> <span class="keyword">...</span>
+0367 <span class="string">'33 2 2 0 4 4 23 15\n'</span> <span class="keyword">...</span>
+0368 <span class="string">'34 2 2 0 4 17 25 19\n'</span> <span class="keyword">...</span>
+0369 <span class="string">'35 2 2 0 4 18 26 20\n'</span> <span class="keyword">...</span>
+0370 <span class="string">'36 2 2 0 4 3 16 22\n'</span> <span class="keyword">...</span>
+0371 <span class="string">'37 2 2 0 4 2 15 21\n'</span> <span class="keyword">...</span>
+0372 <span class="string">'38 2 2 0 4 9 10 24\n'</span> <span class="keyword">...</span>
+0373 <span class="string">'39 2 2 0 4 4 5 23\n'</span> <span class="keyword">...</span>
+0374 <span class="string">'40 2 2 0 4 15 20 21\n'</span> <span class="keyword">...</span>
+0375 <span class="string">'41 2 2 0 4 16 19 22\n'</span> <span class="keyword">...</span>
+0376 <span class="string">'42 2 2 0 4 5 17 23\n'</span> <span class="keyword">...</span>
+0377 <span class="string">'43 2 2 0 4 10 18 24\n'</span> <span class="keyword">...</span>
+0378 <span class="string">'44 2 2 0 4 8 22 19\n'</span> <span class="keyword">...</span>
+0379 <span class="string">'45 2 2 0 4 13 21 20\n'</span> <span class="keyword">...</span>
+0380 <span class="string">'46 2 2 0 4 15 23 17\n'</span> <span class="keyword">...</span>
+0381 <span class="string">'47 2 2 0 4 16 24 18\n'</span> <span class="keyword">...</span>
+0382 <span class="string">'48 2 2 0 4 6 25 17\n'</span> <span class="keyword">...</span>
+0383 <span class="string">'49 2 2 0 4 11 26 18\n'</span> <span class="keyword">...</span>
+0384 <span class="string">'50 2 2 0 4 12 20 26\n'</span> <span class="keyword">...</span>
+0385 <span class="string">'51 2 2 0 4 7 19 25\n'</span> <span class="keyword">...</span>
+0386 <span class="string">'$EndElements\n'</span>];
+0387 <span class="keyword">end</span>
+0388</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

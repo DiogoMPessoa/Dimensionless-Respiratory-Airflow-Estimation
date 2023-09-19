@@ -1,0 +1,376 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_lung_image</title>
+  <meta name="keywords" content="mk_lung_image">
+  <meta name="description" content="MK_LUNG_IMAGE create an image with lung and heart contrasts from a model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_lung_image.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_lung_image
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_LUNG_IMAGE create an image with lung and heart contrasts from a model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function img = mk_lung_image(mdl, opt, cmd) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MK_LUNG_IMAGE create an image with lung and heart contrasts from a model
+ MK_LUNG_IMAGE defines the lungs, heart and diaphragm as ellipsoids and
+ creates an image with these organs out of the supplied eidors fwd_model.
+
+ Typical usage:
+
+ IMG = MK_LUNG_IMAGE(MDL) uses default options for shape, position and
+  contrast. 
+ IMG = MK_LUNG_IMAGE(MDL, OPT) uses the specified options (see below).
+ IMG = MK_LUNG_IMAGE(MDL, OPT, 'show') also generate a figure with 4 views
+  of the produced image
+
+ Additional utilities:
+
+ OPT = MK_LUNG_IMAGE(MDL,'options') returns the default options for the 
+  given model, and does not generate an image.
+ MK_LUNG_IMAGE(MDL, OPT, 'diagnostic') shows the supplied model together 
+  with the organ ellipsoids as defined by the supplied options. This usage
+  has no return parameters.
+
+ The options input OPT is a struct with the following fields and defaults:
+             bkgnd_val: 1          - image value for the background
+              lung_val: 0.2000     - image value for the lungs
+             heart_val: 1.5000     - image value for the hearts
+      left_lung_center: ctr + [  .24    0   -1/3]*scale
+     right_lung_center: ctr + [ -.24    0   -1/3]*scale
+          heart_center: ctr + [ 0.07  -1/6     0]*scale
+      diaphragm_center: ctr + [ 0     -1/4  -2/3]*scale
+            heart_axes: [ 1/6  1/5   1/4 ]*scale
+        left_lung_axes: [ 8/30 1/3  25/30]*scale
+       right_lung_axes: [ 8/30 1/3  25/30]*scale
+        diaphragm_axes: [22/30 19/30  2/5]*scale
+ where ctr is the center of the bounding box of the model, and scale is 
+ the smaller of the bounding box's x dimension divided by 7/6 and its y 
+ dimension. Each organ is an ellipsoid with the corresponding center and
+ axes. 
+ NOTE that only options that deviate from defaults need be specified.
+
+ Example:
+    mdl = mk_thorax_model('female');       % female thorax
+    img = mk_lung_image(mdl);
+    subplot(131)
+    show_fem(img) 
+    % it seems that the heart definition goes outside the model
+    % let's correct the default options
+    opt = mk_lung_image(mdl, 'options');   % get default options 
+    corr = 20;
+    opt.heart_center(2)        = opt.heart_center(2)      + corr;
+    opt.left_lung_center(2)    = opt.left_lung_center(2)  + corr;
+    opt.right_lung_center(2)   = opt.right_lung_center(2) + corr;
+    opt.diaphragm_center(2)    = opt.diaphragm_center(2)  + corr;
+    img = mk_lung_image(mdl, opt);
+    subplot(132)
+    show_fem(img)
+    % it's hard to tell because the model has very big elements.
+    % let's make a diagnostic plot to verify the organ definitions fit inside 
+    % the model (independent of model maxh)
+    subplot(133)
+    mk_lung_image(mdl,opt,'diagnostic');  
+
+ CITATION_REQUEST:
+ AUTHOR: Bartlomiej Grychtol, Beat M�ler and Andy Adler
+ TITLE: 3D EIT image reconstruction with GREIT
+ JOURNAL: Physiological Measurement
+ VOL: 37
+ YEAR: 2016
+
+ See also: <a href="elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">ELEM_SELECT</a>, <a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">MK_THORAX_MODEL</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/meshing/netgen/ng_mk_ellip_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_ellip_models(ellip_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_ellip_models</a>	NG_MAKE_ELLIP_MODELS: create elliptical models using netgen</li><li><a href="elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>	ELEM_SELECT: select element fractions inside a function</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>	MK_LUNG_IMAGE create an image with lung and heart contrasts from a model</li><li><a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li><li><a href="../../eidors/tools/citeme.html" class="code" title="function citeme(fname)">citeme</a>	CITEME Display citation requests</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>	MK_LUNG_IMAGE create an image with lung and heart contrasts from a model</li><li><a href="mk_thorax_model_grychtol2016a.html" class="code" title="function img = mk_thorax_model_grychtol2016a(stimpat)">mk_thorax_model_grychtol2016a</a>	Builds the male thorax models from Grychtol, M�ler and Adler (2016)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function elem_data = define_elem_data(mdl, opt)</a></li><li><a href="#_sub2" class="code">function show_organs(mdl, opt)</a></li><li><a href="#_sub3" class="code">function show4views(img)</a></li><li><a href="#_sub4" class="code">function opt = parse_opt(fmdl,opt)</a></li><li><a href="#_sub5" class="code">function s = set_default(s, fname, defval)</a></li><li><a href="#_sub6" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function img = mk_lung_image(mdl, opt, cmd)</a>
+0002 <span class="comment">%MK_LUNG_IMAGE create an image with lung and heart contrasts from a model</span>
+0003 <span class="comment">% MK_LUNG_IMAGE defines the lungs, heart and diaphragm as ellipsoids and</span>
+0004 <span class="comment">% creates an image with these organs out of the supplied eidors fwd_model.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Typical usage:</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% IMG = MK_LUNG_IMAGE(MDL) uses default options for shape, position and</span>
+0009 <span class="comment">%  contrast.</span>
+0010 <span class="comment">% IMG = MK_LUNG_IMAGE(MDL, OPT) uses the specified options (see below).</span>
+0011 <span class="comment">% IMG = MK_LUNG_IMAGE(MDL, OPT, 'show') also generate a figure with 4 views</span>
+0012 <span class="comment">%  of the produced image</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Additional utilities:</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% OPT = MK_LUNG_IMAGE(MDL,'options') returns the default options for the</span>
+0017 <span class="comment">%  given model, and does not generate an image.</span>
+0018 <span class="comment">% MK_LUNG_IMAGE(MDL, OPT, 'diagnostic') shows the supplied model together</span>
+0019 <span class="comment">%  with the organ ellipsoids as defined by the supplied options. This usage</span>
+0020 <span class="comment">%  has no return parameters.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% The options input OPT is a struct with the following fields and defaults:</span>
+0023 <span class="comment">%             bkgnd_val: 1          - image value for the background</span>
+0024 <span class="comment">%              lung_val: 0.2000     - image value for the lungs</span>
+0025 <span class="comment">%             heart_val: 1.5000     - image value for the hearts</span>
+0026 <span class="comment">%      left_lung_center: ctr + [  .24    0   -1/3]*scale</span>
+0027 <span class="comment">%     right_lung_center: ctr + [ -.24    0   -1/3]*scale</span>
+0028 <span class="comment">%          heart_center: ctr + [ 0.07  -1/6     0]*scale</span>
+0029 <span class="comment">%      diaphragm_center: ctr + [ 0     -1/4  -2/3]*scale</span>
+0030 <span class="comment">%            heart_axes: [ 1/6  1/5   1/4 ]*scale</span>
+0031 <span class="comment">%        left_lung_axes: [ 8/30 1/3  25/30]*scale</span>
+0032 <span class="comment">%       right_lung_axes: [ 8/30 1/3  25/30]*scale</span>
+0033 <span class="comment">%        diaphragm_axes: [22/30 19/30  2/5]*scale</span>
+0034 <span class="comment">% where ctr is the center of the bounding box of the model, and scale is</span>
+0035 <span class="comment">% the smaller of the bounding box's x dimension divided by 7/6 and its y</span>
+0036 <span class="comment">% dimension. Each organ is an ellipsoid with the corresponding center and</span>
+0037 <span class="comment">% axes.</span>
+0038 <span class="comment">% NOTE that only options that deviate from defaults need be specified.</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% Example:</span>
+0041 <span class="comment">%    mdl = mk_thorax_model('female');       % female thorax</span>
+0042 <span class="comment">%    img = mk_lung_image(mdl);</span>
+0043 <span class="comment">%    subplot(131)</span>
+0044 <span class="comment">%    show_fem(img)</span>
+0045 <span class="comment">%    % it seems that the heart definition goes outside the model</span>
+0046 <span class="comment">%    % let's correct the default options</span>
+0047 <span class="comment">%    opt = mk_lung_image(mdl, 'options');   % get default options</span>
+0048 <span class="comment">%    corr = 20;</span>
+0049 <span class="comment">%    opt.heart_center(2)        = opt.heart_center(2)      + corr;</span>
+0050 <span class="comment">%    opt.left_lung_center(2)    = opt.left_lung_center(2)  + corr;</span>
+0051 <span class="comment">%    opt.right_lung_center(2)   = opt.right_lung_center(2) + corr;</span>
+0052 <span class="comment">%    opt.diaphragm_center(2)    = opt.diaphragm_center(2)  + corr;</span>
+0053 <span class="comment">%    img = mk_lung_image(mdl, opt);</span>
+0054 <span class="comment">%    subplot(132)</span>
+0055 <span class="comment">%    show_fem(img)</span>
+0056 <span class="comment">%    % it's hard to tell because the model has very big elements.</span>
+0057 <span class="comment">%    % let's make a diagnostic plot to verify the organ definitions fit inside</span>
+0058 <span class="comment">%    % the model (independent of model maxh)</span>
+0059 <span class="comment">%    subplot(133)</span>
+0060 <span class="comment">%    mk_lung_image(mdl,opt,'diagnostic');</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% CITATION_REQUEST:</span>
+0063 <span class="comment">% AUTHOR: Bartlomiej Grychtol, Beat M�ler and Andy Adler</span>
+0064 <span class="comment">% TITLE: 3D EIT image reconstruction with GREIT</span>
+0065 <span class="comment">% JOURNAL: Physiological Measurement</span>
+0066 <span class="comment">% VOL: 37</span>
+0067 <span class="comment">% YEAR: 2016</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">% See also: ELEM_SELECT, MK_THORAX_MODEL</span>
+0070 
+0071 <span class="comment">% (C) 2015-2016 Bartlomiej Grychtol. License: GPL version 2 or 3</span>
+0072 <span class="comment">% $Id: mk_lung_image.m 5424 2017-04-25 17:45:19Z aadler $</span>
+0073 
+0074 <a href="../../eidors/tools/citeme.html" class="code" title="function citeme(fname)">citeme</a>(mfilename);
+0075 
+0076 <span class="keyword">if</span> nargin&gt;0 &amp;&amp; ischar(mdl) &amp;&amp; strcmp(mdl,<span class="string">'UNIT_TEST'</span>)
+0077    <a href="#_sub6" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>;
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="keyword">if</span> nargin == 1, opt = struct; <span class="keyword">end</span>
+0081 returnopt = false;
+0082 <span class="keyword">if</span> nargin == 2 &amp;&amp; ischar(opt) &amp;&amp; strcmp(opt,<span class="string">'options'</span>)
+0083    returnopt = true;
+0084    clear opt;
+0085    opt = struct;
+0086 <span class="keyword">end</span>
+0087 opt = <a href="#_sub4" class="code" title="subfunction opt = parse_opt(fmdl,opt)">parse_opt</a>(mdl,opt);
+0088 <span class="keyword">if</span> returnopt
+0089    img = opt;
+0090    <span class="keyword">return</span>
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="keyword">if</span> nargin == 3 &amp;&amp; ischar(cmd) &amp;&amp; strcmp(cmd, <span class="string">'diagnostic'</span>)
+0094    <a href="#_sub2" class="code" title="subfunction show_organs(mdl, opt)">show_organs</a>(mdl,opt);
+0095    <span class="keyword">return</span>
+0096 <span class="keyword">end</span>
+0097 
+0098 elem_data = <a href="#_sub1" class="code" title="subfunction elem_data = define_elem_data(mdl, opt)">define_elem_data</a>(mdl, opt);
+0099 
+0100 img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(mdl,elem_data);
+0101 
+0102 <span class="keyword">if</span> nargin==3 &amp;&amp; ischar(cmd) &amp;&amp; strcmp(cmd, <span class="string">'show'</span>)
+0103    <a href="#_sub3" class="code" title="subfunction show4views(img)">show4views</a>(img);
+0104 <span class="keyword">end</span>
+0105 <span class="keyword">end</span>
+0106 
+0107 <a name="_sub1" href="#_subfunctions" class="code">function elem_data = define_elem_data(mdl, opt)</a>
+0108 
+0109    el_str = <span class="string">'(x-%f).^2/%f^2 + (y-%f).^2/%f^2 + (z-%f).^2/%f^2 &lt;= 1'</span>;
+0110    pack = @(x,y) mat2cell(reshape([x' y']',1,[])',ones(1, 2*numel(x)))';
+0111 
+0112 
+0113    args = pack(opt.left_lung_center, opt.left_lung_axes);
+0114    ll_str = sprintf(el_str, args{:});
+0115    ll_fcn = inline(ll_str,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>);
+0116    left_lung = <a href="elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>(mdl,ll_fcn);
+0117 
+0118    args = pack(opt.right_lung_center, opt.right_lung_axes);
+0119    rl_str = sprintf(el_str, args{:});
+0120    rl_fcn = inline(rl_str,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>);
+0121    right_lung = <a href="elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>(mdl,rl_fcn);
+0122 
+0123    lung = min(1,left_lung + right_lung);
+0124 
+0125    args = pack(opt.diaphragm_center, opt.diaphragm_axes);
+0126    dia_str = sprintf(el_str, args{:});
+0127    dia_fcn = inline(dia_str,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>);
+0128    diaphragm = <a href="elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>(mdl,dia_fcn);
+0129 
+0130    lung = max(0,lung - diaphragm);
+0131 
+0132    args = pack(opt.heart_center, opt.heart_axes);
+0133    hrt_str = sprintf(el_str, args{:});
+0134    hrt_fcn = inline(hrt_str,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>);
+0135    heart = <a href="elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>(mdl, hrt_fcn);
+0136 
+0137    lung = max(0, lung - heart);
+0138 
+0139    elem_data = <span class="keyword">...</span>
+0140        opt.bkgnd_val <span class="keyword">...</span>
+0141        - (opt.bkgnd_val-opt.lung_val)*lung <span class="keyword">...</span>
+0142        - (opt.bkgnd_val-opt.heart_val)*heart;
+0143 <span class="keyword">end</span>
+0144 
+0145 <a name="_sub2" href="#_subfunctions" class="code">function show_organs(mdl, opt)</a>
+0146    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(mdl)
+0147    hold on
+0148    pack = @(x) mat2cell(x',ones(1,numel(x)))';
+0149    args = pack([opt.left_lung_center opt.left_lung_axes]);
+0150    [x y z] = ellipsoid(args{:});
+0151    surf(x,y,z,<span class="string">'FaceColor'</span>,<span class="string">'b'</span>);
+0152 
+0153    args = pack([opt.right_lung_center opt.right_lung_axes]);
+0154    [x y z] = ellipsoid(args{:});
+0155    surf(x,y,z,<span class="string">'FaceColor'</span>,<span class="string">'b'</span>);
+0156 
+0157    args = pack([opt.heart_center opt.heart_axes]);
+0158    [x y z] = ellipsoid(args{:});
+0159    surf(x,y,z,<span class="string">'FaceColor'</span>,<span class="string">'r'</span>);
+0160 
+0161 
+0162    args = pack([opt.diaphragm_center opt.diaphragm_axes]);
+0163    [x y z] = ellipsoid(args{:});
+0164    surf(x,y,z,<span class="string">'FaceColor'</span>,<span class="string">'g'</span>);
+0165    hold off
+0166 <span class="keyword">end</span>
+0167 
+0168 <a name="_sub3" href="#_subfunctions" class="code">function show4views(img)</a>
+0169     subplot(221)
+0170     h = <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0171     set(h,<span class="string">'linewidth'</span>,.1)
+0172     subplot(222)
+0173     h = <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0174     set(h,<span class="string">'linewidth'</span>,.1)
+0175     view([0 90])
+0176     subplot(223)
+0177     h = <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0178     set(h,<span class="string">'linewidth'</span>,.1)
+0179     view([90,0])
+0180     subplot(224)
+0181     h = <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0182     set(h,<span class="string">'linewidth'</span>,.1)
+0183     view([0 0])
+0184 <span class="keyword">end</span>
+0185 
+0186 <a name="_sub4" href="#_subfunctions" class="code">function opt = parse_opt(fmdl,opt)</a>
+0187    minnode = min(fmdl.nodes);
+0188    maxnode = max(fmdl.nodes);
+0189    bb = maxnode-minnode;
+0190    scale = min( bb(1:2) ./ [7/6 1]); <span class="comment">% the default values below fit a model of these proportions best</span>
+0191    ctr = minnode + bb/2;
+0192 
+0193    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'bkgnd_val'</span>,          1  );
+0194    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'lung_val'</span> ,           .2);
+0195    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'heart_val'</span>,          1.5);
+0196     
+0197    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'left_lung_center'</span>,  ctr + [  .24    0   -1/3]*scale);
+0198    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'right_lung_center'</span>, ctr + [ -.24    0   -1/3]*scale);
+0199    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'heart_center'</span>,      ctr + [ 0.07  -1/6     0]*scale);
+0200    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'diaphragm_center'</span>,  ctr + [ 0     -1/4  -2/3]*scale);
+0201    
+0202    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'heart_axes'</span>,        [ 1/6  1/5   1/4 ]*scale);
+0203    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'left_lung_axes'</span> ,   [ 8/30 1/3  25/30]*scale);
+0204    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'right_lung_axes'</span>,   [ 8/30 1/3  25/30]*scale);
+0205    opt = <a href="#_sub5" class="code" title="subfunction s = set_default(s, fname, defval)">set_default</a>(opt, <span class="string">'diaphragm_axes'</span>,    [22/30 19/30  2/5]*scale);
+0206 <span class="keyword">end</span>
+0207 
+0208 <a name="_sub5" href="#_subfunctions" class="code">function s = set_default(s, fname, defval)</a>
+0209    <span class="keyword">if</span> ~isfield(s,fname)
+0210        s.(fname) = defval;
+0211    <span class="keyword">end</span>
+0212 <span class="keyword">end</span>
+0213 
+0214 
+0215 <a name="_sub6" href="#_subfunctions" class="code">function do_unit_test</a>
+0216 mdl = <a href="../../eidors/meshing/netgen/ng_mk_ellip_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_ellip_models(ellip_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_ellip_models</a>([400 180 150 10],4,10);
+0217 img = <a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>(mdl);
+0218 subplot(231)
+0219 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0220 
+0221 <span class="comment">% sclaing should have no effect</span>
+0222 mdl.nodes = 3*mdl.nodes;
+0223 img = <a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>(mdl);
+0224 subplot(232)
+0225 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0226 
+0227 <span class="comment">% shorter model should show a &quot;slice&quot;</span>
+0228 mdl = <a href="../../eidors/meshing/netgen/ng_mk_ellip_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_ellip_models(ellip_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_ellip_models</a>([200 180 150 10],4,10);
+0229 img = <a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>(mdl);
+0230 subplot(233)
+0231 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0232 
+0233 <span class="comment">% it should still fit into the male torso</span>
+0234 mdl = <a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>(<span class="string">'male'</span>);
+0235 img = <a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>(mdl);
+0236 subplot(234)
+0237 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0238 
+0239 <span class="comment">% the female model seems to need adjustements</span>
+0240 mdl = <a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>(<span class="string">'female'</span>);       <span class="comment">% female thorax</span>
+0241 opt = <a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>(mdl, <span class="string">'options'</span>);   <span class="comment">%</span>
+0242 corr = 20;
+0243 opt.heart_center(2)        = opt.heart_center(2)      + corr;
+0244 opt.left_lung_center(2)    = opt.left_lung_center(2)  + corr;
+0245 opt.right_lung_center(2)   = opt.right_lung_center(2) + corr;
+0246 opt.diaphragm_center(2)    = opt.diaphragm_center(2)  + corr;
+0247 subplot(235)
+0248 <span class="comment">% make a diagnostic plot to verify the organ definitions fit inside the</span>
+0249 <span class="comment">% model (independent of model maxh)</span>
+0250 <a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>(mdl,opt,<span class="string">'diagnostic'</span>);  
+0251 <span class="comment">% show_fem(img);</span>
+0252 
+0253 <span class="keyword">return</span>
+0254 
+0255 mdl = <a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>(<span class="string">'grychtol2016a_male_thorax'</span>);
+0256 img = <a href="mk_lung_image.html" class="code" title="function img = mk_lung_image(mdl, opt, cmd)">mk_lung_image</a>(mdl);
+0257 subplot(236)
+0258 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0259 
+0260 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of simulate_2d_movement</title>
+  <meta name="keywords" content="simulate_2d_movement">
+  <meta name="description" content="SIMULATE_2D_MOVEMENT simulate rotational movement in 2D">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; simulate_2d_movement.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>simulate_2d_movement
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SIMULATE_2D_MOVEMENT simulate rotational movement in 2D</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SIMULATE_2D_MOVEMENT simulate rotational movement in 2D
+ [vh,vi,xyr_pt]= simulate_2d_movement( n_points, model, rad_pr, movefcn )
+
+ the target starts at (rad_pr(1),0) and rotates around 
+  clockwise
+ 
+   rad_pr = [path_radius, target_radius] = [2/3, .05] (default)
+ 
+   n_points = number of points to simulate (default = 200)
+
+   model = fwd_model to simulate 
+         (default use internal, or if model= []);
+
+   movefcn = 1 (Default)  radial motion where the target starts
+     at (rad_pr(1),0) and rotates clockwise
+   movefcn = 2 movement from centre to outward on to
+     at (rad_pr(1),0) on x-axis
+
+   For these movefcn values, the start and end of the complete
+      movement may be specified as [movefcn, mv_start, mv_end].
+      default values are [movefcn, 0, 1] (ie. the complete movement)
+
+   movefcn = FUCN NAME or FUNC HANDLE
+      the function must accept the following parameters
+      [xp,yp] = movefcn(f_frac, radius);
+
+ OUTPUT:
+   vh - homogeneous measurements M x 1
+   vi - target simulations       M x n_points
+   xyr_pt - x y and radius of each point 3 x n_points
+
+ For small targets it is more accurate and much faster to
+  use the function: simulate_movement.m</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>	INTERP_MESH: calculate interpolation points onto mdl elements</li><li><a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>	MK_CIRC_TANK: make a cylindrical tank FEM geometry in 2D or 3D</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>	MK_STIM_PATTERNS: create an EIDORS stimulation pattern structure</li><li><a href="simulate_2d_movement.html" class="code" title="function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">simulate_2d_movement</a>	SIMULATE_2D_MOVEMENT simulate rotational movement in 2D</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="simulate_2d_movement.html" class="code" title="function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">simulate_2d_movement</a>	SIMULATE_2D_MOVEMENT simulate rotational movement in 2D</li><li><a href="../../eidors/solvers/inverse/inv_solve_time_prior.html" class="code" title="function img= inv_solve_time_prior( inv_model, data1, data2)">inv_solve_time_prior</a>	INV_SOLVE_TIME_PRIOR inverse solver to account for time differences</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [vh,vi,xyr_pt]= do_simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )</a></li><li><a href="#_sub2" class="code">function [xp,yp] = rotation_path(f_frac, radius);</a></li><li><a href="#_sub3" class="code">function [xp,yp] = straight_out(f_frac, radius);</a></li><li><a href="#_sub4" class="code">function [EPTR,VOL]= img_mapper2(NODE, ELEM, npx, npy );</a></li><li><a href="#_sub5" class="code">function mdl_2d= mk_fwd_model(n_circles, n_elec)</a></li><li><a href="#_sub6" class="code">function do_unit_test</a></li><li><a href="#_sub7" class="code">function [xp,yp] = test_movefcn(f_frac, radius);</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )</a>
+0002 <span class="comment">% SIMULATE_2D_MOVEMENT simulate rotational movement in 2D</span>
+0003 <span class="comment">% [vh,vi,xyr_pt]= simulate_2d_movement( n_points, model, rad_pr, movefcn )</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% the target starts at (rad_pr(1),0) and rotates around</span>
+0006 <span class="comment">%  clockwise</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   rad_pr = [path_radius, target_radius] = [2/3, .05] (default)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   n_points = number of points to simulate (default = 200)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   model = fwd_model to simulate</span>
+0013 <span class="comment">%         (default use internal, or if model= []);</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   movefcn = 1 (Default)  radial motion where the target starts</span>
+0016 <span class="comment">%     at (rad_pr(1),0) and rotates clockwise</span>
+0017 <span class="comment">%   movefcn = 2 movement from centre to outward on to</span>
+0018 <span class="comment">%     at (rad_pr(1),0) on x-axis</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   For these movefcn values, the start and end of the complete</span>
+0021 <span class="comment">%      movement may be specified as [movefcn, mv_start, mv_end].</span>
+0022 <span class="comment">%      default values are [movefcn, 0, 1] (ie. the complete movement)</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   movefcn = FUCN NAME or FUNC HANDLE</span>
+0025 <span class="comment">%      the function must accept the following parameters</span>
+0026 <span class="comment">%      [xp,yp] = movefcn(f_frac, radius);</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% OUTPUT:</span>
+0029 <span class="comment">%   vh - homogeneous measurements M x 1</span>
+0030 <span class="comment">%   vi - target simulations       M x n_points</span>
+0031 <span class="comment">%   xyr_pt - x y and radius of each point 3 x n_points</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% For small targets it is more accurate and much faster to</span>
+0034 <span class="comment">%  use the function: simulate_movement.m</span>
+0035 
+0036 <span class="comment">% (C) 2005-2009 Andy Adler. Licensed under GPL v2 or v3</span>
+0037 <span class="comment">% $Id: simulate_2d_movement.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0038 
+0039 <span class="keyword">if</span> nargin&gt;=1 &amp;&amp; ischar(n_sims) &amp;&amp; strcmp(n_sims,<span class="string">'UNIT_TEST'</span>); <a href="#_sub6" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0040 
+0041 <span class="keyword">if</span> nargin &lt;1
+0042    n_sims = 200;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> nargin&lt;2 || isempty(fmdl) <span class="comment">% create our own fmdl</span>
+0046    n_circles = 36;
+0047    n_elec= 16;
+0048    fmdl= <a href="#_sub5" class="code" title="subfunction mdl_2d= mk_fwd_model(n_circles, n_elec)">mk_fwd_model</a>(n_circles, n_elec);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="keyword">if</span> nargin&lt;3; rad_pr= []; <span class="keyword">end</span>
+0052 <span class="keyword">if</span> nargin&lt;4; movefcn= 1; <span class="keyword">end</span>
+0053 
+0054 copt.cache_obj = {n_sims,fmdl, rad_pr, movefcn};
+0055 copt.fstr = <span class="string">'simulate_2d_movement'</span>;
+0056 [vh,vi,xyr_pt]= <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction [vh,vi,xyr_pt]= do_simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">do_simulate_2d_movement</a>,{n_sims, fmdl, rad_pr, movefcn},copt );
+0057 
+0058 
+0059 <a name="_sub1" href="#_subfunctions" class="code">function [vh,vi,xyr_pt]= do_simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )</a>
+0060 <span class="keyword">if</span> isempty(rad_pr)
+0061    radius= 2/3;
+0062    rp= .05;
+0063 <span class="keyword">else</span>
+0064    radius= rad_pr(1);
+0065    rp=     rad_pr(2);
+0066 <span class="keyword">end</span>
+0067 
+0068     mv_start = 0;
+0069     mv_end   = 1;
+0070 <span class="keyword">if</span> isnumeric(movefcn)
+0071    <span class="keyword">if</span> length(movefcn)&gt;=2; mv_start = movefcn(2); <span class="keyword">end</span>
+0072    <span class="keyword">if</span> length(movefcn)&gt;=3; mv_end   = movefcn(3); <span class="keyword">end</span>
+0073    <span class="keyword">if</span>     movefcn(1)==1
+0074       movefcn = @<a href="#_sub2" class="code" title="subfunction [xp,yp] = rotation_path(f_frac, radius);">rotation_path</a>;
+0075    <span class="keyword">elseif</span> movefcn(1)==2
+0076       movefcn = @<a href="#_sub3" class="code" title="subfunction [xp,yp] = straight_out(f_frac, radius);">straight_out</a>;
+0077    <span class="keyword">else</span>
+0078       error(<span class="string">'value of movefcn not understood'</span>);
+0079    <span class="keyword">end</span>
+0080 <span class="keyword">else</span>
+0081    <span class="comment">% assume movefcn is a function</span>
+0082 <span class="keyword">end</span>
+0083 
+0084     n_elems= size(fmdl.elems,1);
+0085     img= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'image'</span>,<span class="string">'simulate_movement'</span>, <span class="keyword">...</span>
+0086                     <span class="string">'fwd_model'</span>, fmdl, <span class="keyword">...</span>
+0087                     <span class="string">'elem_data'</span>, ones(n_elems,1) );
+0088     vh= <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0089 
+0090 <span class="keyword">if</span> 0
+0091     np= 256;
+0092     maxxy= max(fmdl.nodes);
+0093     minxy= min(fmdl.nodes);
+0094     [x,y]=meshgrid( linspace(minxy(1),maxxy(1),np), <span class="keyword">...</span>
+0095                     linspace(minxy(2),maxxy(2),np) );
+0096     [eptr,vol]= <a href="#_sub4" class="code" title="subfunction [EPTR,VOL]= img_mapper2(NODE, ELEM, npx, npy );">img_mapper2</a>(fmdl.nodes', fmdl.elems', np, np);
+0097 <span class="keyword">else</span>
+0098 
+0099     mdl_pts = <a href="interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>( fmdl, 8); <span class="comment">% 45 per elem</span>
+0100     x= squeeze( mdl_pts(:,1,:) );
+0101     y= squeeze( mdl_pts(:,2,:) );
+0102 <span class="keyword">end</span>
+0103 
+0104     <span class="comment">% there is a faster way to do this with sparse, but it is confusing</span>
+0105 <span class="comment">%   eptr_n= zeros(n_elems,1);</span>
+0106 <span class="comment">%   for i=1:n_elems; eptr_n(i) = sum( eptr(:)==i ); end</span>
+0107 <span class="comment">%   eptr_n= sparse( eptr(:)+1,1,1, n_elems+1, 1);</span>
+0108 <span class="comment">%   eptr_n= full(eptr_n(2:end));</span>
+0109     
+0110     target_conductivity= .1;
+0111  
+0112     <span class="keyword">for</span> i=1:n_sims
+0113        f_frac= mv_start + ( (i-1)/n_sims ) * (mv_end - mv_start);
+0114        fprintf(<span class="string">'simulating %d / %d (f_frac=%0.2f) \n'</span>,i,n_sims, f_frac);
+0115 
+0116       [xp,yp]= feval(movefcn, f_frac, radius);
+0117 
+0118 <span class="keyword">if</span> 0
+0119        xyr_pt(:,i)= [xp;-yp;rp]; <span class="comment">% -y because images and axes are reversed</span>
+0120        ff= find( (x(:)-xp).^2 + (y(:)-yp).^2 &lt;= rp^2 )';
+0121        obj_n= <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>( eptr(ff)+1,1,1, n_elems+1, 1);
+0122        obj_n= full(obj_n(2:end));
+0123 <span class="comment">%      img.elem_data= 1 + target_conductivity * (obj_n./eptr_n);</span>
+0124        img.elem_data= 1 + target_conductivity * (obj_n./vol);
+0125 <span class="keyword">else</span>
+0126        xyr_pt(:,i)= [xp;yp;rp];
+0127        ff=  (x-xp).^2 + (y-yp).^2 &lt;= rp^2;
+0128        img.elem_data= 1 + target_conductivity * mean(ff,2);
+0129 <span class="keyword">end</span>
+0130 
+0131        vi(i)= <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>( img );
+0132 <span class="comment">%show_fem(img);drawnow; keyboard</span>
+0133     <span class="keyword">end</span>
+0134 
+0135 <span class="comment">% convert to data matrix</span>
+0136 vi= [vi(:).meas]; 
+0137 vh= [vh(:).meas];
+0138 
+0139 <span class="comment">%   movefcn = 1 (Default)  rotational motion where the target starts</span>
+0140 <span class="comment">%     at (rad_pr(1),0) and rotates clockwise</span>
+0141 <span class="comment">% calculate x,y position of point, given f_frac of path</span>
+0142 <a name="_sub2" href="#_subfunctions" class="code">function [xp,yp] = rotation_path(f_frac, radius);</a>
+0143    xp= radius * cos(f_frac*2*pi);
+0144    yp= radius * sin(f_frac*2*pi);
+0145 
+0146 <a name="_sub3" href="#_subfunctions" class="code">function [xp,yp] = straight_out(f_frac, radius);</a>
+0147    xp= radius*f_frac;
+0148    yp= 0;
+0149 
+0150 <span class="comment">% THis is the code copied from calc_slices</span>
+0151 <span class="comment">% Search through each element and find the points which</span>
+0152 <span class="comment">% are in that element</span>
+0153 <a name="_sub4" href="#_subfunctions" class="code">function [EPTR,VOL]= img_mapper2(NODE, ELEM, npx, npy );</a>
+0154   xmin = min(NODE(1,:));    xmax = max(NODE(1,:));
+0155   xmean= mean([xmin,xmax]); xrange= xmax-xmin;
+0156 
+0157   ymin = min(NODE(2,:));    ymax = max(NODE(2,:));
+0158   ymean= mean([ymin,ymax]); yrange= ymax-ymin;
+0159 
+0160   range= max([xrange, yrange]);
+0161   [x y]=meshgrid( <span class="keyword">...</span>
+0162       linspace( xmean - range*0.50, xmean + range*0.50, npx ), <span class="keyword">...</span>
+0163       linspace( ymean + range*0.50, ymean - range*0.50, npy ) );
+0164   v_yx= [-y(:) x(:)];
+0165   turn= [0 -1 1;1 0 -1;-1 1 0];
+0166   EPTR=zeros(npy,npx);
+0167   <span class="comment">% for each element j, we get points on the simplex a,b,c</span>
+0168   <span class="comment">%   area A = abc</span>
+0169   <span class="comment">%   for each candidate point d,</span>
+0170   <span class="comment">%      area AA = abd + acd + bcd</span>
+0171   <span class="comment">%      d is in j if AA = A</span>
+0172   e= size(ELEM,2);
+0173   VOL= zeros(e,1);
+0174   <span class="keyword">for</span> j= 1:e
+0175     <span class="comment">% calculate area of three subtrianges to each candidate point.</span>
+0176     xy= NODE(:,ELEM(:,j))';
+0177     <span class="comment">% come up with a limited set of candidate points which</span>
+0178     <span class="comment">% may be within the simplex</span>
+0179     endr=find( y(:)&lt;=max(xy(:,2)) &amp; y(:)&gt;=min(xy(:,2)) <span class="keyword">...</span>
+0180              &amp; x(:)&lt;=max(xy(:,1)) &amp; x(:)&gt;=min(xy(:,1)) );
+0181     <span class="comment">% a is determinant of matrix [i,j,k, xy]</span>
+0182     a= xy([2;3;1],1).*xy([3;1;2],2)- xy([3;1;2],1).*xy([2;3;1],2);
+0183     VOL(j)= abs(sum(a));
+0184 
+0185     aa= sum(abs(ones(length(endr),1)*a'+ <span class="keyword">...</span>
+0186                 v_yx(endr,:)*xy'*turn)');
+0187     endr( abs( ( VOL(j)-aa ) ./ VOL(j) ) &gt;1e-8)=[];
+0188     EPTR(endr)= j;
+0189   <span class="keyword">end</span> <span class="comment">%for j=1:ELEM</span>
+0190 
+0191 
+0192 <a name="_sub5" href="#_subfunctions" class="code">function mdl_2d= mk_fwd_model(n_circles, n_elec)</a>
+0193     <span class="comment">%TODO: is there a mk_common_model call that can replace all that?</span>
+0194     params= <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(n_circles, [], n_elec); 
+0195     n_rings= 1;
+0196     options= {<span class="string">'no_meas_current'</span>,<span class="string">'no_rotate_meas'</span>,<span class="string">'do_redundant'</span>};
+0197     [st, els]= <a href="mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(n_elec, n_rings, <span class="string">'{ad}'</span>,<span class="string">'{ad}'</span>, options, 10);
+0198     params.stimulation= st;
+0199     params.meas_select= els;
+0200     params.solve=      <span class="string">'eidors_default'</span>;
+0201     params.system_mat= <span class="string">'eidors_default'</span>;
+0202     params.jacobian=   <span class="string">'eidors_default'</span>;
+0203     params.normalize_measurements= 0;
+0204     mdl_2d   = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>, params);
+0205 
+0206 <a name="_sub6" href="#_subfunctions" class="code">function do_unit_test</a>
+0207    N_TEST = 5;
+0208    imdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>( <span class="string">'c2c2'</span>, 16 );
+0209    [vh,vi,xyr_pt]=<a href="simulate_2d_movement.html" class="code" title="function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">simulate_2d_movement</a>(N_TEST);
+0210    subplot(421);
+0211    imgs = <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0212    imgs.show_slices.img_cols = N_TEST; <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgs);
+0213 
+0214    [vh,vi,xyr_pt]=<a href="simulate_2d_movement.html" class="code" title="function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">simulate_2d_movement</a>(N_TEST, [], [0.3,0.01],1);
+0215    subplot(422);
+0216    imgs = <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0217    imgs.show_slices.img_cols = N_TEST; <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgs);
+0218 
+0219    [vh,vi,xyr_pt]=<a href="simulate_2d_movement.html" class="code" title="function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">simulate_2d_movement</a>(N_TEST, [], [0.9,0.01],2);
+0220    subplot(423);
+0221    imgs = <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0222    imgs.show_slices.img_cols = N_TEST; <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgs);
+0223    
+0224    [vh,vi,xyr_pt]=<a href="simulate_2d_movement.html" class="code" title="function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">simulate_2d_movement</a>(N_TEST, [], [],[1,0.5,0.4]);
+0225    subplot(424);
+0226    imgs = <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0227    imgs.show_slices.img_cols = N_TEST; <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgs);
+0228 
+0229    [vh,vi,xyr_pt]=<a href="simulate_2d_movement.html" class="code" title="function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">simulate_2d_movement</a>(N_TEST, [], [],@<a href="#_sub7" class="code" title="subfunction [xp,yp] = test_movefcn(f_frac, radius);">test_movefcn</a>);
+0230    subplot(425);
+0231    imgs = <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0232    imgs.show_slices.img_cols = N_TEST; <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgs);
+0233 
+0234    fmdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,16); fmdl= fmdl.fwd_model;
+0235    fmdl.nodes = fmdl.nodes*1.5;
+0236    [vh,vi,xyr_pt]=<a href="simulate_2d_movement.html" class="code" title="function [vh,vi,xyr_pt]= simulate_2d_movement( n_sims, fmdl, rad_pr, movefcn )">simulate_2d_movement</a>(N_TEST, fmdl, [],@<a href="#_sub7" class="code" title="subfunction [xp,yp] = test_movefcn(f_frac, radius);">test_movefcn</a>);
+0237    subplot(426);
+0238    imgs = <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0239    imgs.show_slices.img_cols = N_TEST; <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgs);
+0240 
+0241 <a name="_sub7" href="#_subfunctions" class="code">function [xp,yp] = test_movefcn(f_frac, radius);</a>
+0242   ff = radius/sqrt(2);
+0243   xp= ff*f_frac; yp= ff*f_frac;</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

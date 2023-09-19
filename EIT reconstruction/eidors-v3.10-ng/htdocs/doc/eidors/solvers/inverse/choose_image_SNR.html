@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of choose_image_SNR</title>
+  <meta name="keywords" content="choose_image_SNR">
+  <meta name="description" content="% CHOOSE_IMAGE_SNR: choose hyperparameter based on image SNR calculation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; choose_image_SNR.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>choose_image_SNR
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>% CHOOSE_IMAGE_SNR: choose hyperparameter based on image SNR calculation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function HP = choose_image_SNR(imdl) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% CHOOSE_IMAGE_SNR: choose hyperparameter based on image SNR calculation
+ as proposed by Braun et al. in:
+ F Braun et al., A Versatile Noise Performance Metric for Electrical
+ Impedance Tomography Algorithms, IEEE Trans. Biomed. Eng. 2017 (submitted).
+
+   HP = choose_image_SNR(imdl)
+
+ Output:
+   HP   - hyperparameter selected to achieve the desired image SNR
+
+ Input:
+   imdl            - inverse model (EIDORS struct)
+      imdl.hyperparameter.image_SNR - desired target image SNR
+
+ NOTE
+  This script was adapted from the function CHOOSE_NOISE_FIGURE
+
+
+ See also: <a href="calc_image_SNR.html" class="code" title="function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)">CALC_IMAGE_SNR</a>, <a href="choose_noise_figure.html" class="code" title="function HP= choose_noise_figure( inv_model );">CHOOSE_NOISE_FIGURE</a>
+
+ Fabian Braun, December 2016</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="calc_image_SNR.html" class="code" title="function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)">calc_image_SNR</a>	% CALC_IMAGE_SNR: Calculates the signal-to-noise ratio (SNR) in the image</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>	MK_GN_MODEL: make EIDORS inverse models using the GREIT approach</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function HP = HP_for_SNR_search(SnrGoal,imdl,hpInitValue)</a></li><li><a href="#_sub2" class="code">function [hp, x, y] = search1(SnrGoal, imdl, hp)</a></li><li><a href="#_sub3" class="code">function [hp, Snr] =search2(SnrGoal, imdl, dx)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function HP = choose_image_SNR(imdl)</a>
+0002 <span class="comment">%% CHOOSE_IMAGE_SNR: choose hyperparameter based on image SNR calculation</span>
+0003 <span class="comment">% as proposed by Braun et al. in:</span>
+0004 <span class="comment">% F Braun et al., A Versatile Noise Performance Metric for Electrical</span>
+0005 <span class="comment">% Impedance Tomography Algorithms, IEEE Trans. Biomed. Eng. 2017 (submitted).</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   HP = choose_image_SNR(imdl)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Output:</span>
+0010 <span class="comment">%   HP   - hyperparameter selected to achieve the desired image SNR</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Input:</span>
+0013 <span class="comment">%   imdl            - inverse model (EIDORS struct)</span>
+0014 <span class="comment">%      imdl.hyperparameter.image_SNR - desired target image SNR</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% NOTE</span>
+0017 <span class="comment">%  This script was adapted from the function CHOOSE_NOISE_FIGURE</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% See also: CALC_IMAGE_SNR, CHOOSE_NOISE_FIGURE</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Fabian Braun, December 2016</span>
+0023 <span class="comment">%</span>
+0024 
+0025 <span class="comment">% (C) 2016 Fabian Braun. License: GPL version 2 or version 3</span>
+0026 <span class="comment">% $Id: choose_image_SNR.m 5424 2017-04-25 17:45:19Z aadler $</span>
+0027 
+0028 
+0029 <span class="keyword">if</span> ~isfield(imdl.hyperparameter, <span class="string">'SNR_func'</span>)
+0030     imdl.hyperparameter.SNR_func = @<a href="calc_image_SNR.html" class="code" title="function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)">calc_image_SNR</a>;
+0031 <span class="keyword">end</span>
+0032 
+0033 SnrGoal = imdl.hyperparameter.image_SNR;
+0034 assert(SnrGoal &gt; 0, <span class="string">'SNR is expected to be greater than zero!'</span>);
+0035 
+0036 hpInitValue = 1E-1;
+0037 <span class="keyword">try</span> <span class="comment">% remove the value field</span>
+0038    hpInitValue = imdl.hyperparameter.value;
+0039    imdl.hyperparameter = rmfield(imdl.hyperparameter,<span class="string">'value'</span>);
+0040 <span class="keyword">end</span>
+0041 
+0042 copt.boost_priority = 3;
+0043 copt.fstr = <span class="string">'choose_image_SNR'</span>;
+0044 HP = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction HP = HP_for_SNR_search(SnrGoal,imdl,hpInitValue)">HP_for_SNR_search</a>,{SnrGoal,imdl,hpInitValue},copt);
+0045 
+0046 
+0047 
+0048 <a name="_sub1" href="#_subfunctions" class="code">function HP = HP_for_SNR_search(SnrGoal,imdl,hpInitValue)</a>
+0049    llv = <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>);
+0050    <span class="keyword">if</span> llv==3; <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,2); <span class="keyword">end</span> <span class="comment">% HIDE A LOT OF MESSAGES</span>
+0051 
+0052    <span class="keyword">if</span> true
+0053        <span class="comment">% new version first finding maximal possible SNR</span>
+0054        <span class="comment">% first of all look for maximal possible SNR</span>
+0055        <span class="comment">% we can't go higher, for once &quot;the sky is the limit&quot; does not apply :-)</span>
+0056        fms_opts.MaxIter = 15;
+0057        fms_opts.TolFun = 0.01 * SnrGoal;   <span class="comment">% we don't need to be more accurate</span>
+0058        [HpMaxSnr, NegSnrMax] = fminsearch(@(x) -<a href="calc_image_SNR.html" class="code" title="function [SNRmean, SE, debug] = calc_image_SNR(imdl, hyperparameter, doPlot)">calc_image_SNR</a>(imdl, x), hpInitValue, fms_opts);
+0059        <span class="comment">% TODO: how to ensure we won't fall into a local extremum?</span>
+0060        
+0061        assert(SnrGoal &lt;= abs(NegSnrMax), <span class="keyword">...</span>
+0062             sprintf(<span class="string">'Desired SNR (%0.4d) exceeds maximal possible SNR of %0.4d!'</span>, SnrGoal, abs(NegSnrMax)));
+0063    <span class="keyword">else</span>
+0064        <span class="comment">% old version with very dummy initialization</span>
+0065        HpMaxSnr = hpInitValue;
+0066    <span class="keyword">end</span>
+0067    
+0068    <span class="comment">% now go and start from this to find best one</span>
+0069    [hp, x, y] = <a href="#_sub2" class="code" title="subfunction [hp, x, y] = search1(SnrGoal, imdl, hp)">search1</a>(SnrGoal, imdl, -log10(HpMaxSnr));
+0070    <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'Crossed target value, now refining search in this region...'</span>, 2);
+0071 
+0072    dx= hp-linspace(-0.7,0.7,5);
+0073    [hp, Snr] = <a href="#_sub3" class="code" title="subfunction [hp, Snr] =search2(SnrGoal, imdl, dx)">search2</a>(SnrGoal, imdl, dx);
+0074 
+0075    dx= hp-linspace(-0.2,0.2,5);
+0076    [hp, Snr] = <a href="#_sub3" class="code" title="subfunction [hp, Snr] =search2(SnrGoal, imdl, dx)">search2</a>(SnrGoal,imdl, dx);
+0077 
+0078    dx= hp-linspace(-0.1,0.1,5); 
+0079    [hp, Snr] = <a href="#_sub3" class="code" title="subfunction [hp, Snr] =search2(SnrGoal, imdl, dx)">search2</a>(SnrGoal,imdl, dx);
+0080 
+0081    dx= hp-linspace(-0.05,0.05,21);
+0082    [hp, Snr] = <a href="#_sub3" class="code" title="subfunction [hp, Snr] =search2(SnrGoal, imdl, dx)">search2</a>(SnrGoal,imdl, dx);
+0083    
+0084    <span class="comment">% TODO: verify that SNR = f(lambda) has positive derivative</span>
+0085    <span class="comment">% else we're in the wrong range (after SNR max)</span>
+0086 
+0087    HP= 10^-hp;
+0088    assert(HP &lt; HpMaxSnr, <span class="string">'Something went wrong we''re on the wrong side of the curve!'</span>);
+0089    <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,llv); <span class="comment">%% Reset log_level</span>
+0090    
+0091    <span class="comment">% TODO: check that we achieved our goal without too much deviation</span>
+0092   
+0093 <a name="_sub2" href="#_subfunctions" class="code">function [hp, x, y] = search1(SnrGoal, imdl, hp)</a>
+0094   [Snr,SE]=imdl.hyperparameter.SNR_func(imdl, 10^(-hp));
+0095   hpInitial = hp;
+0096   SnrInitial = Snr;
+0097   y = Snr;
+0098   x = 10^(-hp);
+0099    <span class="keyword">if</span>     Snr &gt; SnrGoal; 
+0100        dir = 1;   <span class="comment">% we're too high &gt;&gt; decrease hp</span>
+0101    <span class="keyword">elseif</span> Snr &lt; SnrGoal; 
+0102        dir = -1;  <span class="comment">% we're too low &gt;&gt; increase hp</span>
+0103        warning(<span class="string">'this should not happen!!!'</span>);
+0104    <span class="keyword">else</span>   dir = 0; <span class="keyword">end</span>
+0105    
+0106 <span class="comment">%    slope = dir;</span>
+0107    <span class="keyword">while</span>  (dir*Snr+3*SE &gt; dir*SnrGoal)<span class="comment">% || (sign(slope) ~= dir)</span>
+0108      hp= hp+0.5*dir;
+0109      [Snr,SE]=imdl.hyperparameter.SNR_func( imdl, 10^(-hp));
+0110      y = [y Snr];
+0111      x = [x 10^(-hp)];
+0112 <span class="comment">%      slope = (Snr - SnrInitial)/(10^(-hp) - 10^(-hpInitial));</span>
+0113      
+0114      <span class="keyword">if</span> Snr &lt; 0     <span class="comment">% TODO: verify that this approach works in all situations</span>
+0115        <span class="comment">% NO GOOD: we're getting in the negative t-Value zone</span>
+0116        <span class="comment">% --&gt; fall back to initial hp and inverse direction</span>
+0117        hp = hpInitial;
+0118        dir = -dir;
+0119        Snr = inf;
+0120        <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'Falling back to initial hp and reversing search direction due to negative SNRs.'</span>, 2);
+0121      <span class="keyword">end</span>
+0122    <span class="keyword">end</span>
+0123 
+0124 <a name="_sub3" href="#_subfunctions" class="code">function [hp, Snr] =search2(SnrGoal, imdl, dx)</a>
+0125    hp = [];
+0126    it = 0;
+0127    Snr = zeros(1,length(dx));
+0128    <span class="keyword">while</span> isempty(hp) &amp;&amp; it &lt; 2  <span class="comment">% TODO: one could increase the number of iterations and reduce Nnoise in calc_image_SNR</span>
+0129        it = it+1;
+0130        <span class="comment">%if it &gt; 1 keyboard, end</span>
+0131        <span class="keyword">for</span> k=1:length(dx)
+0132            Snr(k)=Snr(k)+imdl.hyperparameter.SNR_func( imdl, 10^-dx(k));
+0133        <span class="keyword">end</span>
+0134        <span class="keyword">if</span> 0 <span class="comment">% TODO: validate which behaviour is more accurate!</span>
+0135          log_snr = log10(Snr/it);
+0136          p= polyfit( dx, log_snr-log10(SnrGoal), 3);
+0137        <span class="keyword">else</span>
+0138          p= polyfit( dx, (Snr/it)-SnrGoal, 3);
+0139        <span class="keyword">end</span>
+0140        hp = roots(p);
+0141        <span class="comment">%eliminate complex roots</span>
+0142        hp = hp(imag(hp)==0);
+0143        <span class="comment">%eliminate out of range roots</span>
+0144        hp = hp( hp&lt;max(dx) &amp; hp&gt;min(dx) );  <span class="comment">%USE if poly&gt;1</span>
+0145        <span class="comment">% pick the root with the smallest derivative</span>
+0146        <span class="keyword">if</span> numel(hp) &gt;1
+0147            p2 = p.*(numel(p)-1:-1:0); p2(end) = [];
+0148            [jnk, pos] = min(abs(polyval(p2,hp)));
+0149            hp = hp(pos);
+0150        <span class="keyword">end</span>
+0151        
+0152        <span class="keyword">if</span> 0  <span class="comment">% visualize for debug purposes</span>
+0153         figure(); subplot(121);
+0154         plot(dx, Snr-SnrGoal, <span class="string">':.'</span>)
+0155         hold on;
+0156         xs = linspace(min(dx), max(dx), 100);
+0157         plot(xs, polyval(p, xs), <span class="string">'r'</span>)
+0158         
+0159         subplot(122);
+0160         plot(dx, log10(Snr/it)-log10(SnrGoal))
+0161        <span class="keyword">end</span>
+0162    <span class="keyword">end</span>
+0163    <span class="keyword">if</span> isempty(hp)
+0164        <span class="comment">%fallback</span>
+0165        [jnk,idx] = min(abs((Snr/it)-SnrGoal));
+0166 <span class="comment">%        [jnk,idx] = min(abs(log_snr-log10(SnrGoal)));</span>
+0167        hp = dx(idx);
+0168    <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

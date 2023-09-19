@@ -1,0 +1,379 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_pixel_slice</title>
+  <meta name="keywords" content="mk_pixel_slice">
+  <meta name="description" content="MK_PIXEL_SLICE create a pixel model to reconstruct on">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_pixel_slice.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_pixel_slice
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_PIXEL_SLICE create a pixel model to reconstruct on</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [imdl fmdl] = mk_pixel_slice(imdl,level,opt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MK_PIXEL_SLICE create a pixel model to reconstruct on
+ OUT = MK_PIXEL_SLICE(MDL, LEVEL, OPT) creates a slice of pixels as a
+ model to reconstruct on. 
+
+ Inputs:
+  MDL   = an EIDORS forward or inverse model structure
+  LEVEL = either a vector of x-,y-, and z-intercepts of the cut plane or
+          a single value interpreted as the height of a single cut in the
+          z plane (by default, a horizontal slice at the average electrode
+          height will be created)
+  OPT   = an option structure with the following fields and defaults:
+     opt.imgsz = [32 32];    % dimensions of the pixel grid
+     opt.square_pixels = 0;  % adjust imgsz to get square pixels
+     opt.do_coarse2fine = 1; % calcuate c2f on the forward model
+     opt.z_depth = inf;      % z_depth to use with mk_coarse_fine_mapping
+
+ Output depends on the type of model suplied. If MDL is a fwd_model
+ structure then OUT is a rec_model. If MDL is an inv_model, then OUT is a
+ modified version of it, with the pixel slice in inv_model.rec_model and
+ updated inv_model.fwd_model.coarse2fine
+ 
+ [OUT FMDL] = MK_PIXEL_SLICE(MDL, ...) also returns the forward model
+ structure with the coarse2fine field.
+
+ See also <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">MK_COARSE_FINE_MAPPING</a>, <a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">MK_GRID_MODEL</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>	calc_slices (img, levels, clim  ) show slices at levels of an</li><li><a href="../../eidors/graphics/matlab/mdl_slice_mesher.html" class="code" title="function [nimg out] = mdl_slice_mesher(fmdl,level,varargin)">mdl_slice_mesher</a>	MDL_SLICE_MESHER A slice of a 3D FEM as a 2D FEM</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>	MK_PIXEL_SLICE create a pixel model to reconstruct on</li><li><a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>	POINT_IN_TRIANGLE tests points for membership in triangles</li><li><a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>	MK_PIXEL_SLICE create a pixel model to reconstruct on</li><li><a href="../../eidors/solvers/inverse/mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>	MK_GN_MODEL: make EIDORS inverse models using the GREIT approach</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [rmdl fmdl] = do_pixel_slice(fmdl, opt);</a></li><li><a href="#_sub2" class="code">function mat_idx = calc_mat_idx(rmdl,fmdl,ff,opt)</a></li><li><a href="#_sub3" class="code">function opt = parse_opts(fmdl, opt)</a></li><li><a href="#_sub4" class="code">function [NODE R T] = level_model( fwd_model, level )</a></li><li><a href="#_sub5" class="code">function elec_lev = get_elec_level(fmdl)</a></li><li><a href="#_sub6" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)</a>
+0002 <span class="comment">%MK_PIXEL_SLICE create a pixel model to reconstruct on</span>
+0003 <span class="comment">% OUT = MK_PIXEL_SLICE(MDL, LEVEL, OPT) creates a slice of pixels as a</span>
+0004 <span class="comment">% model to reconstruct on.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Inputs:</span>
+0007 <span class="comment">%  MDL   = an EIDORS forward or inverse model structure</span>
+0008 <span class="comment">%  LEVEL = either a vector of x-,y-, and z-intercepts of the cut plane or</span>
+0009 <span class="comment">%          a single value interpreted as the height of a single cut in the</span>
+0010 <span class="comment">%          z plane (by default, a horizontal slice at the average electrode</span>
+0011 <span class="comment">%          height will be created)</span>
+0012 <span class="comment">%  OPT   = an option structure with the following fields and defaults:</span>
+0013 <span class="comment">%     opt.imgsz = [32 32];    % dimensions of the pixel grid</span>
+0014 <span class="comment">%     opt.square_pixels = 0;  % adjust imgsz to get square pixels</span>
+0015 <span class="comment">%     opt.do_coarse2fine = 1; % calcuate c2f on the forward model</span>
+0016 <span class="comment">%     opt.z_depth = inf;      % z_depth to use with mk_coarse_fine_mapping</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Output depends on the type of model suplied. If MDL is a fwd_model</span>
+0019 <span class="comment">% structure then OUT is a rec_model. If MDL is an inv_model, then OUT is a</span>
+0020 <span class="comment">% modified version of it, with the pixel slice in inv_model.rec_model and</span>
+0021 <span class="comment">% updated inv_model.fwd_model.coarse2fine</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% [OUT FMDL] = MK_PIXEL_SLICE(MDL, ...) also returns the forward model</span>
+0024 <span class="comment">% structure with the coarse2fine field.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% See also MK_COARSE_FINE_MAPPING, MK_GRID_MODEL</span>
+0027 
+0028 <span class="comment">% (C) 2013 Bartlomiej Grychtol. License: GPL version 2 or 3</span>
+0029 <span class="comment">% $Id: mk_pixel_slice.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0030 
+0031 <span class="keyword">if</span> ischar(imdl) &amp;&amp; strcmp(imdl,<span class="string">'UNIT_TEST'</span>),<a href="#_sub6" class="code" title="subfunction do_unit_test">do_unit_test</a>;<span class="keyword">return</span>;<span class="keyword">end</span>;
+0032 
+0033 <span class="keyword">switch</span>(imdl.type)
+0034     <span class="keyword">case</span> <span class="string">'inv_model'</span>
+0035         fmdl = imdl.fwd_model;
+0036     <span class="keyword">case</span> <span class="string">'fwd_model'</span>
+0037         fmdl = imdl;
+0038     <span class="keyword">otherwise</span>
+0039         error(<span class="string">'An EIDORS inverse or forward model struct required'</span>);
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">if</span> nargin &lt; 2, opt = struct; <span class="keyword">end</span>
+0043 <span class="keyword">if</span> nargin &gt; 1 
+0044    <span class="keyword">if</span> ~isstruct(level)
+0045       opt.level = level;
+0046    <span class="keyword">else</span>
+0047       opt = level;
+0048    <span class="keyword">end</span>
+0049 <span class="keyword">end</span>
+0050 opt = <a href="#_sub3" class="code" title="subfunction opt = parse_opts(fmdl, opt)">parse_opts</a>(fmdl,opt);
+0051 
+0052 [rmdl fmdl] = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction [rmdl fmdl] = do_pixel_slice(fmdl, opt);">do_pixel_slice</a>,{fmdl, opt},<span class="string">'mk_pixel_slice'</span>);
+0053 
+0054 <span class="keyword">switch</span> imdl.type
+0055    <span class="keyword">case</span> <span class="string">'inv_model'</span>
+0056       imdl.rec_model = rmdl;
+0057       imdl.fwd_model = fmdl;
+0058    <span class="keyword">case</span> <span class="string">'fwd_model'</span>
+0059       imdl = rmdl;
+0060 <span class="keyword">end</span>
+0061 
+0062 <a name="_sub1" href="#_subfunctions" class="code">function [rmdl fmdl] = do_pixel_slice(fmdl, opt);</a>
+0063 tmp = fmdl;
+0064 [NODES R T]=<a href="#_sub4" class="code" title="subfunction [NODE R T] = level_model( fwd_model, level )">level_model</a>(fmdl,opt.level);
+0065 tmp.nodes = NODES';
+0066 slc = <a href="../../eidors/graphics/matlab/mdl_slice_mesher.html" class="code" title="function [nimg out] = mdl_slice_mesher(fmdl,level,varargin)">mdl_slice_mesher</a>(tmp,[inf inf 0]);
+0067 slc = slc.fwd_model;
+0068 mingrid = min(slc.nodes);
+0069 maxgrid = max(slc.nodes);
+0070 bnd = <a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(slc);
+0071 <span class="comment">% contour_boundary = order_loop(slc.nodes(unique(bnd),:));</span>
+0072 
+0073 <span class="keyword">if</span> opt.square_pixels ==1
+0074     mdl_sz = maxgrid - mingrid;
+0075     mdl_AR = mdl_sz(1)/mdl_sz(2);
+0076     img_AR = opt.imgsz(1)/opt.imgsz(2);
+0077     <span class="keyword">if</span> mdl_AR &lt; img_AR
+0078         delta = (mdl_sz(2) * img_AR - mdl_sz(1)) /2;
+0079         mingrid(1) = mingrid(1) - delta;
+0080         maxgrid(1) = maxgrid(1) + delta;
+0081     <span class="keyword">elseif</span> mdl_AR &gt; img_AR
+0082         delta = (mdl_sz(1)/img_AR - mdl_sz(2)) / 2;
+0083         mingrid(2) = mingrid(2) - delta;
+0084         maxgrid(2) = maxgrid(2) + delta;
+0085     <span class="keyword">end</span>
+0086 <span class="keyword">end</span>
+0087 
+0088 xgrid = linspace(mingrid(1),maxgrid(1),opt.imgsz(1)+1);
+0089 ygrid = linspace(mingrid(2),maxgrid(2),opt.imgsz(2)+1);
+0090 rmdl = <a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>([],xgrid,ygrid);
+0091 x_pts = xgrid(1:end-1) + 0.5*diff(xgrid);
+0092 y_pts = ygrid(1:end-1) + 0.5*diff(ygrid);
+0093 <span class="comment">% y_pts = fliplr(y_pts); %medical</span>
+0094 
+0095 <span class="comment">% NOTE: This controls the image resolution. If you want higher res, you</span>
+0096 <span class="comment">% need to either specify it in opt.imgsz or manually overwrite (or remove)</span>
+0097 <span class="comment">% the imdl.rec_model.mdl_slice_mapper.</span>
+0098 rmdl.mdl_slice_mapper.x_pts = x_pts;
+0099 rmdl.mdl_slice_mapper.y_pts = y_pts;
+0100 rmdl.mdl_slice_mapper.level = opt.level;
+0101 rmdl.mdl_slice_mapper.model_2d = 1;
+0102 x_avg = conv2(xgrid, [1,1]/2,<span class="string">'valid'</span>);
+0103 y_avg = conv2(ygrid, [1,1]/2,<span class="string">'valid'</span>);
+0104 [x,y] = ndgrid( x_avg, y_avg);
+0105 
+0106 <span class="comment">% 20141119: The inpolygon approach fails on non-simply-connected domains</span>
+0107 <span class="comment">% inside = inpolygon(x(:),y(:),contour_boundary(:,1),contour_boundary(:,2) );</span>
+0108 P = [x(:) y(:)]; <span class="comment">% P(end,3) = 0;</span>
+0109 inside = any(<a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>(P, slc.elems, slc.nodes(:,1:2)),2);
+0110 <span class="comment">% inside = full(inside);</span>
+0111 
+0112 ff = find(~inside);
+0113 
+0114 <span class="keyword">if</span> opt.do_coarse2fine
+0115 <span class="comment">%     rmdl.mk_coarse_fine_mapping.z_depth = opt.z_depth;</span>
+0116 <span class="comment">%     fmdl.coarse2fine = mk_coarse_fine_mapping(tmp,rmdl);</span>
+0117 <span class="comment">%     fmdl.coarse2fine(:,ff) = [];</span>
+0118     <span class="keyword">if</span> isinf(opt.z_depth)
+0119        zgrid = [min(tmp.nodes(:,3))-1 max(tmp.nodes(:,3))+1];
+0120     <span class="keyword">else</span>
+0121        zgrid = [-opt.z_depth opt.z_depth];
+0122     <span class="keyword">end</span>
+0123     [jnk, fmdl.coarse2fine] = <a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>(tmp,xgrid,ygrid,zgrid);
+0124     fmdl.coarse2fine(:,ff);
+0125 <span class="keyword">end</span>
+0126 
+0127 rmdl.elems([2*ff, 2*ff-1],:)= [];
+0128 rmdl.coarse2fine([2*ff, 2*ff-1],:)= [];
+0129 rmdl.coarse2fine(:,ff)= [];
+0130 <span class="comment">% rmdl.boundary = find_boundary(rmdl);</span>
+0131 <span class="comment">% show individual elements (more like how the 2d grid models display)</span>
+0132 rmdl.boundary = rmdl.elems;
+0133 rmdl.inside   = inside; <span class="comment">% the inside array is useful in other functions</span>
+0134 
+0135 
+0136 <span class="keyword">if</span> isfield(fmdl,<span class="string">'mat_idx'</span>)
+0137    rmdl.mat_idx = <a href="#_sub2" class="code" title="subfunction mat_idx = calc_mat_idx(rmdl,fmdl,ff,opt)">calc_mat_idx</a>(rmdl,fmdl,ff,opt);
+0138 <span class="keyword">end</span>
+0139 
+0140 <span class="comment">% map electrodes</span>
+0141 rmdl.nodes(:,3) = 0;
+0142 rmdl.nodes =  (R\rmdl.nodes' + T'*ones(1,length(rmdl.nodes)))';
+0143 slc.nodes =  (R\slc.nodes' + T'*ones(1,length(slc.nodes)))';
+0144 
+0145 isf = ~isinf(opt.level);
+0146 <span class="keyword">if</span> nnz(isf) == 1
+0147    rmdl.nodes(:,isf) = opt.level(:,isf);
+0148 <span class="keyword">end</span>
+0149 
+0150 <span class="keyword">if</span> isfield(slc, <span class="string">'electrode'</span>)
+0151    <span class="keyword">for</span> i = flipud(1:numel(slc.electrode))
+0152         tmp = rmfield(slc.electrode(i), <span class="string">'nodes'</span>);
+0153         x_elec = slc.nodes( [slc.electrode(i).nodes], 1);
+0154         y_elec = slc.nodes( [slc.electrode(i).nodes], 2);
+0155         z_elec = slc.nodes( [slc.electrode(i).nodes], 3);
+0156         tmp.pos       = [x_elec, y_elec, z_elec];
+0157         elec(i) = tmp;
+0158     <span class="keyword">end</span>
+0159     rmdl.electrode = elec;
+0160 <span class="keyword">end</span>
+0161    
+0162 
+0163 rmdl.show_slices.levels = opt.level;
+0164       
+0165 
+0166 <a name="_sub2" href="#_subfunctions" class="code">function mat_idx = calc_mat_idx(rmdl,fmdl,ff,opt)</a>
+0167    <span class="comment">% calculate mat_idx for the rec_model</span>
+0168    fmdl.mdl_slice_mapper = rmfield(rmdl.mdl_slice_mapper,<span class="string">'model_2d'</span>);
+0169    fmdl.mdl_slice_mapper.level = opt.level;
+0170    img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,0);
+0171    <span class="keyword">for</span> i = 1:length(fmdl.mat_idx);
+0172       img.elem_data(fmdl.mat_idx{i}) = i;
+0173    <span class="keyword">end</span>
+0174    slice = <a href="../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>(img,opt.level);
+0175    slice = slice';
+0176    mat = reshape([slice(:)'; slice(:)'],1,[]);
+0177    mat([2*ff, 2*ff-1])= [];
+0178    mat_idx = cell(max(mat),1);
+0179    <span class="keyword">for</span> i = 1:max(mat)
+0180       mat_idx(i) = {find(mat==i)'};
+0181    <span class="keyword">end</span>
+0182 
+0183 
+0184  <a name="_sub3" href="#_subfunctions" class="code">function opt = parse_opts(fmdl, opt)</a>
+0185     <span class="keyword">if</span> ~isfield(opt, <span class="string">'imgsz'</span>),     
+0186         opt.imgsz = [32 32]; 
+0187     <span class="keyword">end</span>
+0188     <span class="keyword">if</span> ~isfield(opt, <span class="string">'square_pixels'</span>)
+0189         opt.square_pixels = 0;
+0190     <span class="keyword">end</span>
+0191     <span class="keyword">if</span> ~isfield(opt, <span class="string">'level'</span>)
+0192         opt.level = <a href="#_sub5" class="code" title="subfunction elec_lev = get_elec_level(fmdl)">get_elec_level</a>(fmdl);
+0193     <span class="keyword">else</span>
+0194         <span class="keyword">if</span> numel(opt.level) ==1
+0195             opt.level = [inf inf opt.level];
+0196         <span class="keyword">end</span>
+0197     <span class="keyword">end</span>
+0198     <span class="keyword">if</span> ~isfield(opt, <span class="string">'do_coarse2fine'</span>)
+0199         opt.do_coarse2fine = 1;
+0200     <span class="keyword">end</span>
+0201     <span class="keyword">if</span> ~isfield(opt, <span class="string">'z_depth'</span>)
+0202         opt.z_depth = inf;
+0203     <span class="keyword">end</span>
+0204     
+0205  <a name="_sub4" href="#_subfunctions" class="code">function [NODE R T] = level_model( fwd_model, level )</a>
+0206 
+0207    vtx= fwd_model.nodes;
+0208    [nn, dims] = size(vtx);
+0209    <span class="keyword">if</span> dims ==2 <span class="comment">% 2D case</span>
+0210        NODE= vtx';
+0211        <span class="keyword">return</span>;
+0212    <span class="keyword">end</span>
+0213 
+0214    <span class="comment">% Infinities tend to cause issues -&gt; replace with realmax</span>
+0215    <span class="comment">% Don't need to worry about the sign of the inf</span>
+0216    level( isinf(level) | isnan(level) ) = realmax;
+0217    level( level==0 ) =     1e-10; <span class="comment">%eps;</span>
+0218 
+0219    <span class="comment">% Step 1: Choose a centre point in the plane</span>
+0220    <span class="comment">%  Weight the point by it's inv axis coords</span>
+0221    invlev= 1./level;
+0222    ctr= invlev / sum( invlev.^2 );
+0223 
+0224    <span class="comment">% Step 2: Choose basis vectors in the plane</span>
+0225    <span class="comment">%  First is the axis furthest from ctr</span>
+0226    [jnk, s_ax]= sort( - abs(level - ctr) );
+0227    v1= [0,0,0]; v1(s_ax(1))= level(s_ax(1));
+0228    v1= v1 - ctr;
+0229    v1= v1 / norm(v1);
+0230 
+0231    <span class="comment">% Step 3: Get off-plane vector, by cross product</span>
+0232    v2= [0,0,0]; v2(s_ax(2))= level(s_ax(2));
+0233    v2= v2 - ctr;
+0234    v2= v2 / norm(v2);
+0235    v3= cross(v1,v2);
+0236 
+0237    <span class="comment">% Step 4: Get orthonormal basis. Replace v2</span>
+0238    v2= cross(v1,v3);
+0239 
+0240    <span class="comment">% Step 5: Get bases to point in 'positive directions'</span>
+0241    v1= v1 * (1-2*(sum(v1)&lt;0));
+0242    v2= v2 * (1-2*(sum(v2)&lt;0));
+0243    v3= v3 * (1-2*(sum(v3)&lt;0));
+0244    
+0245    R = [v1;v2;v3];
+0246    T = ctr;
+0247 
+0248    NODE= R * (vtx' - T'*ones(1,nn) );
+0249 
+0250 <a name="_sub5" href="#_subfunctions" class="code">function elec_lev = get_elec_level(fmdl)</a>
+0251     z_elec= fmdl.nodes( [fmdl.electrode(:).nodes], 3);
+0252     min_e = min(z_elec); max_e = max(z_elec);
+0253     elec_lev = [inf,inf,mean([min_e,max_e])];
+0254 
+0255     
+0256 <a name="_sub6" href="#_subfunctions" class="code">function do_unit_test</a>
+0257     imdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]);
+0258     opt.square_pixels = 1;
+0259     opt.imgsz = [16 16];
+0260     mdl = <a href="mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>(imdl.fwd_model,[inf 2 2.5], opt);
+0261     img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(mdl,1);
+0262     
+0263     subplot(231)
+0264     <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imdl.fwd_model);
+0265     view([-50 10])
+0266 
+0267     subplot(232)
+0268     <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0269     zlim([0 3]);
+0270     ylim([-1 1])
+0271     xlim([-1 1]);
+0272     view([-50 10])
+0273     
+0274     subplot(233)
+0275     <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img);
+0276     
+0277     subplot(234)
+0278     imdl = <a href="mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>(imdl);
+0279     img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl.rec_model,1);
+0280     <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0281     zlim([0 3]);
+0282     ylim([-1 1])
+0283     xlim([-1 1]);
+0284     view([-50 10])
+0285     
+0286     subplot(235)
+0287     mdl = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>(<span class="string">'pig_23kg_16el_lungs'</span>);
+0288     img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(mdl,1);
+0289     <span class="keyword">for</span> i = 1:length(mdl.mat_idx)
+0290        img.elem_data(mdl.mat_idx{i}) = i;
+0291     <span class="keyword">end</span>
+0292     <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img)
+0293     view(2)
+0294     
+0295     subplot(236)
+0296     clear opt
+0297     opt.imgsz = [64 64];
+0298     opt.square_pixels = 1;
+0299     opt.do_coarse2fine = 0;
+0300     mdl = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>(<span class="string">'pig_23kg_16el_lungs'</span>);
+0301     rmdl = <a href="mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>(mdl,opt);
+0302     img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(rmdl,1);
+0303     <span class="keyword">for</span> i = 1:length(rmdl.mat_idx)
+0304        img.elem_data(rmdl.mat_idx{i}) = i;
+0305     <span class="keyword">end</span>
+0306     <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(img);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

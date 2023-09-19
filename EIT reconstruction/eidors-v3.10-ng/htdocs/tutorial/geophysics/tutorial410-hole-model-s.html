@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Using EIDORS to image geophysics</h2>
+
+<h3> 
+Borehole model
+</h3>
+
+Files needed for this tutorial are here:
+<ul>
+<li> <a href="./Anneau1_Decembre2004_wen32_1.m">Anneau1_Decembre2004_wen32_1.m</a>
+<li> <a href="./Anneau1_Janvier2005_wen64_1.m">Anneau1_Janvier2005_wen64_1.m</a>
+<li> <a href="./Anneau1_Juillet2004_wen32_1.m">Anneau1_Juillet2004_wen32_1.m</a>
+<li> <a href="./dg_calc_jacobian.m">dg_calc_jacobian.m</a>
+<li> <a href="./dg_calc_system_mat.m">dg_calc_system_mat.m</a>
+<li> <a href="./dg_downhill_simplex_nr.m">dg_downhill_simplex_nr.m</a>
+<li> <a href="./dg_fwd_parameters.m">dg_fwd_parameters.m</a>
+<li> <a href="./dg_fwd_solve.m">dg_fwd_solve.m</a>
+<li> <a href="./dg_gallery_penalty_simplex.m">dg_gallery_penalty_simplex.m</a>
+<li> <a href="./dg_show_gallery_models.m">dg_show_gallery_models.m</a>
+<li> <a href="./Electrode_Positions_Ring1_EZG04.m">Electrode_Positions_Ring1_EZG04.m</a>
+<li> <a href="./elems_2Dto3D.m">elems_2Dto3D.m</a>
+<li> <a href="./gallery_gradient.m">gallery_gradient.m</a>
+<li> <a href="./lance_inversions_MontTerri.m">lance_inversions_MontTerri.m</a>
+<li> <a href="./mk_2Dto3D_mapping.m">mk_2Dto3D_mapping.m</a>
+<li> <a href="./mk_Coarse2DtoFine3D_mapping.m">mk_Coarse2DtoFine3D_mapping.m</a>
+<li> <a href="./mk_data_tomel.m">mk_data_tomel.m</a>
+<li> <a href="./mk_gallery.m">mk_gallery.m</a>
+<li> <a href="./mk_Pilot2DtoFine3D_mapping.m">mk_Pilot2DtoFine3D_mapping.m</a>
+<li> <a href="./mk_stim_patterns_tomel.m">mk_stim_patterns_tomel.m</a>
+</ul>
+
+<h4>
+Create 3D FEM model of the gallery and load homogeneous model
+</h4>
+<pre>
+% Create 3D FEM model of the gallery
+% $Id: tutorial410a.m 4093 2013-05-27 22:21:23Z bgrychtol $
+n_rings= 9;
+factor= 2;
+levels= [-6 -4 -2.5 -1.5 -1 -0.5 -0.25 0 0.25 0.5 1 1.5 2.5 4 6];
+
+Electrode_Positions_Ring1_EZG04;
+elec_posn= EZG04_Ring1;
+
+Anneau1_Juillet2004_wen32_1;
+data_tomel= Data_Ring1_July2004_Wen32_1;
+real_data= mk_data_tomel(data_tomel,'Mont-Terri data','Wenner protocol');
+
+gallery_3D_fwd = mk_gallery(elec_posn,data_tomel,n_rings,factor,levels);
+gallery_3D_fwd.solve = 'fwd_solve_1st_order';
+gallery_3D_fwd.system_mat = 'system_mat_1st_order';
+gallery_3D_fwd.jacobian = 'jacobian_adjoint';
+
+
+subplot(121)
+show_fem(gallery_3D_fwd); axis square; view(0.,15.);
+subplot(122)
+show_fem(gallery_3D_fwd); axis square; view(0.,75);
+print_convert tutorial410a.png '-density 100';
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial410a.png">
+<br><i> Figure:</i>
+3D FEM of gallery from two viewing angles
+</center>
+
+<h4>
+Create forward model. Calculate the difference (residual) between the
+gallery data and a homogeneous forward model.
+</h4>
+<pre>
+% Reconstruct data on Gallery
+% $Id: tutorial410b.m 4088 2013-05-27 15:32:00Z bgrychtol $
+
+% homogeneous starting model
+background_resistivity= 15.0; % Unit is Ohm.m
+background_conductivity= 1./background_resistivity;
+
+gallery_3D_img= mk_image( gallery_3D_fwd, background_conductivity);
+
+% build the parameter-to-elements mapping
+%USE: sparse pilot-point parameterization
+sparsity = 1;
+gallery_3D_img= mk_Pilot2DtoFine3D_mapping(gallery_3D_img,sparsity);
+gallery_3D_img.fwd_model.coarse2fine = kron(ones(42,1), speye(1024));
+
+gallery_3D_img.rec_model.type = 'fwd_model';
+gallery_3D_img.rec_model.name = '2d';
+gallery_3D_img.rec_model.elems = gallery_3D_img.fwd_model.misc.model2d.elems;
+gallery_3D_img.rec_model.nodes = gallery_3D_img.fwd_model.misc.model2d.nodes;
+
+%disp(['Computing the CC and SS matrices = ' gallery_3D_img.fwd_model.misc.compute_CCandSS]);
+%[ref_data,gallery_3D_img]= fwd_solve_1st_order(gallery_3D_img);
+[ref_data]= fwd_solve(gallery_3D_img);
+residuals= real_data.meas-ref_data.meas;
+
+%% plot the data
+subplot(211);
+plot([ref_data.meas,real_data.meas]);
+% print_convert tutorial410b.png '-density 75';
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial410b.png">
+<br><i> Figure:</i>
+Electrode data: <i>blue</i> simulation, <i>green</i> measurement
+</center>
+
+<h4>
+Reconstruct image and show residual.
+</h4>
+<pre>
+% Reconstruct data on Gallery
+% $Id: tutorial410c.m 4093 2013-05-27 22:21:23Z bgrychtol $
+
+n_iter=10;
+
+gallery_3D_img.fwd_model.misc.compute_CCandSS='n';
+for k= 1:n_iter
+    eidors_msg('Iteration number %d',k,1);
+    jacobian = calc_jacobian(gallery_3D_img);
+    ref_data= fwd_solve(gallery_3D_img);
+    residuals= real_data.meas-ref_data.meas;
+    svj= svd(jacobian);
+    % compute pseudo-inverse using only the largest singular values
+    delta_params= pinv(jacobian,svj(1)/20.)*residuals;
+    delta_params= delta_params.*gallery_3D_img.params_mapping.perturb;
+    gallery_3D_img.params_mapping.params= gallery_3D_img.params_mapping.params + delta_params;
+end
+
+%% Solve final model and display results
+ref_data= fwd_solve(gallery_3D_img);
+
+subplot(211)
+plot([ref_data.meas,real_data.meas]);
+% print_convert tutorial410c.png '-density 75';
+
+</pre>
+
+<center>
+<img src="tutorial410c.png">
+<br><i> Figure:</i>
+Electrode data: <i>blue</i> simulation, <i>green</i> measurement
+</center>
+
+<h4>
+Show reconstructed images
+</h4>
+<pre>
+% Show images $Id: tutorial410d.m 4088 2013-05-27 15:32:00Z bgrychtol $
+
+subplot(121)
+axis square; view(30.,80.);
+show_fem(gallery_3D_img);
+
+subplot(122)
+gallery_3D_resist= gallery_3D_img; % Create resistivity image
+gallery_3D_resist.elem_data= 1./gallery_3D_img.elem_data;
+show_slices(gallery_3D_resist,[inf,inf,0]);
+
+% print_convert tutorial410d.png;
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial410d.png">
+<br><i> Figure:</i>
+Reconstructed images:
+ <i>right</i>: 3D,
+ <i>left</i>: slice through centre
+</center>
+
+
+<!--
+<pre>
+Anneau1_Juillet2004_wen32_1   
+%Anneau1_Decembre2004_wen32_1
+%Anneau1_Janvier2005_wen64_1
+Electrode_Positions_Ring1_EZG04
+gallery_gradient(EZG04_Ring1,Data_Ring1_July2004_Wen32_1,2,9,'R2Jul2004Wenner1')
+</pre>
+-->
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

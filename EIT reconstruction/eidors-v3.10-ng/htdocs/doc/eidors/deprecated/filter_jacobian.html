@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of filter_jacobian</title>
+  <meta name="keywords" content="filter_jacobian">
+  <meta name="description" content="FILTER_JACOBIAN: J= filter_jacobian( fwd_model, img)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; filter_jacobian.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>filter_jacobian
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FILTER_JACOBIAN: J= filter_jacobian( fwd_model, img)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function J= filter_jacobian( varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FILTER_JACOBIAN: J= filter_jacobian( fwd_model, img)
+
+ Filter a jacobian matrix by a specified filter function
+ INPUT:
+  fwd_model = forward model
+  fwd_model.filter_jacobian.jacobian = actual jacobian function (J0)
+  fwd_model.filter_jacobian.filter   = Filter Matrix (F)
+  img = image background for jacobian calc
+ OUTPUT:
+  J         = Jacobian matrix = F*J0</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/solvers/forward/jacobian_filtered.html" class="code" title="function J= jacobian_filtered( fwd_model, img)">jacobian_filtered</a>	JACOBIAN_FILTERED: J= jacobian_filtered( fwd_model, img)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function J= filter_jacobian( varargin)</a>
+0002 <span class="comment">% FILTER_JACOBIAN: J= filter_jacobian( fwd_model, img)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Filter a jacobian matrix by a specified filter function</span>
+0005 <span class="comment">% INPUT:</span>
+0006 <span class="comment">%  fwd_model = forward model</span>
+0007 <span class="comment">%  fwd_model.filter_jacobian.jacobian = actual jacobian function (J0)</span>
+0008 <span class="comment">%  fwd_model.filter_jacobian.filter   = Filter Matrix (F)</span>
+0009 <span class="comment">%  img = image background for jacobian calc</span>
+0010 <span class="comment">% OUTPUT:</span>
+0011 <span class="comment">%  J         = Jacobian matrix = F*J0</span>
+0012 
+0013 <span class="comment">% (C) 2009 Andy Adler. License: GPL version 2 or version 3</span>
+0014 <span class="comment">% $Id: filter_jacobian.m 3289 2012-07-01 10:40:31Z aadler $</span>
+0015 
+0016 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'FILTER_JACOBIAN is deprecated as of 08-Jun-2012. Use JACOBIAN_FILTERED instead.'</span>);
+0017 
+0018 <span class="keyword">if</span> isfield(inv_model,<span class="string">'filter_jacobian'</span>);
+0019   inv_model.jacobian_filtered = inv_model.filter_jacobian;
+0020 <span class="keyword">end</span>
+0021 
+0022 J = <a href="../../eidors/solvers/forward/jacobian_filtered.html" class="code" title="function J= jacobian_filtered( fwd_model, img)">jacobian_filtered</a>(varargin{:});
+0023</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

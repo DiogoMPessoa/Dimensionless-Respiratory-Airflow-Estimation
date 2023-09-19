@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of aa_calc_system_mat</title>
+  <meta name="keywords" content="aa_calc_system_mat">
+  <meta name="description" content="AA_CALC_SYSTEM_MAT: SS= aa_calc_system_mat( fwd_model, img)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; aa_calc_system_mat.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>aa_calc_system_mat
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>AA_CALC_SYSTEM_MAT: SS= aa_calc_system_mat( fwd_model, img)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function s_mat= aa_calc_system_mat( fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> AA_CALC_SYSTEM_MAT: SS= aa_calc_system_mat( fwd_model, img)
+ Calc system matrix for Andy Adler's EIT code
+ fwd_model = forward model
+ img       = image background for system matrix calc
+ s_mat.E = CC' * SS * conductivites * CC;
+ where:
+   SS  = Unconnected system Matrix
+   CC  = Connectivity Matrix</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>	ELEM_DIM: dimension of elements in space (are elements in 2D or 3D space)</li><li><a href="../../eidors/solvers/forward/system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>	SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s_mat= aa_calc_system_mat( fwd_model, img)</a>
+0002 <span class="comment">% AA_CALC_SYSTEM_MAT: SS= aa_calc_system_mat( fwd_model, img)</span>
+0003 <span class="comment">% Calc system matrix for Andy Adler's EIT code</span>
+0004 <span class="comment">% fwd_model = forward model</span>
+0005 <span class="comment">% img       = image background for system matrix calc</span>
+0006 <span class="comment">% s_mat.E = CC' * SS * conductivites * CC;</span>
+0007 <span class="comment">% where:</span>
+0008 <span class="comment">%   SS  = Unconnected system Matrix</span>
+0009 <span class="comment">%   CC  = Connectivity Matrix</span>
+0010 
+0011 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0012 <span class="comment">% $Id: aa_calc_system_mat.m 3087 2012-06-07 18:11:42Z aadler $</span>
+0013 
+0014 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'AA_CALC_SYSTEM_MAT is deprecated as of 07-Jun-2012. Use SYSTEM_MAT_1ST_ORDER instead.'</span>);
+0015 
+0016 FC= <a href="../../eidors/solvers/forward/system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>( fwd_model);
+0017 lFC= size(FC,1);
+0018 
+0019 elem_sigma = kron( img.elem_data(:), ones(<a href="../../eidors/models/elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>(fwd_model),1) );
+0020 
+0021 ES= ones(lFC,1);
+0022 ES(1:length(elem_sigma))= elem_sigma;
+0023 ES= spdiags(ES,0,lFC,lFC);
+0024 
+0025 s_mat.E= FC' * ES * FC;
+0026</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

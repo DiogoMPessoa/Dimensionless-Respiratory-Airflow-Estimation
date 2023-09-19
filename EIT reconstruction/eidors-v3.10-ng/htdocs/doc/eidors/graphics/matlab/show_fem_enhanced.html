@@ -1,0 +1,852 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of show_fem_enhanced</title>
+  <meta name="keywords" content="show_fem_enhanced">
+  <meta name="description" content="SHOW_FEM: show the EIDORS3D finite element model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; show_fem_enhanced.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>show_fem_enhanced
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>SHOW_FEM: show the EIDORS3D finite element model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function hh = show_fem_enhanced(mdl, options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SHOW_FEM: show the EIDORS3D finite element model
+ hh = show_fem(mdl, options)
+ mdl is an EIDORS3D 'model' or 'image' structure
+ hh = handle to the plotted model
+
+ options may be specified by a list (for compatibility purposes)
+
+ options specifies a set of options
+   options(1) =&gt; show colourbar
+   options(2) =&gt; show numbering on electrodes
+   options(3) =&gt; number elements (==1) or nodes (==2);
+
+ for detailed control of colours, use the following fields (default values
+ are indicated in parenthesis)
+
+     options.viewpoint.az (-37.5)
+     options.viewpoint.el (30.0)
+ 
+     options.edge.color ([0 0 0])
+     options.edge.width (0.5)
+     options.edge.significant.show (true)
+     options.edge.significant.color ([0 0 0])
+     options.edge.significant.width (2)
+     options.edge.significant.angle (45)
+     options.edge.significant.viewpoint_dependent.show (true)
+     options.edge.significant.viewpoint_dependent.color ([0 0 0])
+     options.edge.significant.viewpoint_dependent.width (2)
+     options.edge.significant.viewpoint_dependent.callback (true)
+  
+     options.colorbar.show (false)
+ 
+     options.electrode.number.show (false)
+     options.electrode.number.font_size (10)
+     options.electrode.number.font_weight ('bold')
+     options.electrode.number.color ([.6 0 0])
+     options.electrode.number.background_color ('none')
+     options.electrode.number.scale_position (1.15)
+ 
+     options.element.number.show (false)
+     options.element.number.font_size (7)
+     options.element.number.font_weight ('normal')
+     options.element.number.color ([0 0 0])
+     options.element.number.background_color ('none')
+
+     options.node.number.show (false)
+     options.node.number.font_size (7)
+     options.node.number.font_weight ('normal')
+     options.node.number.color ([0 0 0.5])
+     options.node.number.background_color ([1 1 1])
+
+ EXAMPLES
+   mdl = mk_common_model('c2C2',8);
+   img = mk_image(mdl, linspace(-3,3,num_elems(mdl)));
+   
+ SET PARAMETERS
+   img.show_fem.electrode.number.scale_position= 1.01;
+   img.show_fem.electrode.number.show =1;
+   show_fem(img)
+
+ SET OPTIONS
+   opts.colorbar.show = 1;
+   show_fem(img.opts)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>	[colours,scl_data]= calc_colours(img, set_value, do_colourbar)</li><li><a href="eidors_colourbar.html" class="code" title="function hh= eidors_colourbar(max_scale,ref_lev, cb_shrink_move, greyscale)">eidors_colourbar</a>	EIDORS_COLOURBAR - create an eidors colourbar with scaling to image</li><li><a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../../eidors/models/interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>	INTERP_MESH: calculate interpolation points onto mdl elements</li><li><a href="../../../eidors/models/mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>	MDL_DIM: dimension of model space (are nodes in 2D or 3D space)</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>	NUM_ELEMS: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>	NUM_NODES: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>	CALC_JACOBIAN_BKGND: calculate background image around</li><li><a href="../../../eidors/solvers/get_img_data.html" class="code" title="function [img_data, n_images]= get_img_data(img)">get_img_data</a>	GET_IMG_DATA: get parameter data from eidors image object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/meshing/netgen/ng_mk_geometric_models.html" class="code" title="function [fmdl, mat_idx] = ng_mk_geometric_models(body_geometry, electrode_geometry)">ng_mk_geometric_models</a>	NG_MK_GEOMETRIC_MODELS: create geometric mesh models using Netgen. Body</li><li><a href="../../../eidors/models/elec_rearrange.html" class="code" title="function [elec_idx, new_fmdl] = elec_rearrange( pattern, newarrange, fwd_model )">elec_rearrange</a>	ELEC_REARRANGE: rearrange electrodes for given pattern</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [img, mdl, opts] = proc_params(mdl, src_opts)</a></li><li><a href="#_sub2" class="code">function refresh_current_axis(obj, evd)</a></li><li><a href="#_sub3" class="code">function hh = draw_all(img, mdl, opts)</a></li><li><a href="#_sub4" class="code">function hh = draw_fem(img, mdl, opts)</a></li><li><a href="#_sub5" class="code">function draw_numbers(positions, opts)</a></li><li><a href="#_sub6" class="code">function hh = draw_markers(points, colour, marker_size)</a></li><li><a href="#_sub7" class="code">function hh = draw_edges(edges, vertices, width_data, color_data)</a></li><li><a href="#_sub8" class="code">function hh = draw_triangles(faces, vertices, color_data, alpha_data,</a></li><li><a href="#_sub9" class="code">function colour = electr_colour(e, colormap_width)</a></li><li><a href="#_sub10" class="code">function mdl = find_sub_elements(mdl)</a></li><li><a href="#_sub11" class="code">function dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)</a></li><li><a href="#_sub12" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function hh = show_fem_enhanced(mdl, options)</a>
+0002 <span class="comment">% SHOW_FEM: show the EIDORS3D finite element model</span>
+0003 <span class="comment">% hh = show_fem(mdl, options)</span>
+0004 <span class="comment">% mdl is an EIDORS3D 'model' or 'image' structure</span>
+0005 <span class="comment">% hh = handle to the plotted model</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% options may be specified by a list (for compatibility purposes)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% options specifies a set of options</span>
+0010 <span class="comment">%   options(1) =&gt; show colourbar</span>
+0011 <span class="comment">%   options(2) =&gt; show numbering on electrodes</span>
+0012 <span class="comment">%   options(3) =&gt; number elements (==1) or nodes (==2);</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% for detailed control of colours, use the following fields (default values</span>
+0015 <span class="comment">% are indicated in parenthesis)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%     options.viewpoint.az (-37.5)</span>
+0018 <span class="comment">%     options.viewpoint.el (30.0)</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%     options.edge.color ([0 0 0])</span>
+0021 <span class="comment">%     options.edge.width (0.5)</span>
+0022 <span class="comment">%     options.edge.significant.show (true)</span>
+0023 <span class="comment">%     options.edge.significant.color ([0 0 0])</span>
+0024 <span class="comment">%     options.edge.significant.width (2)</span>
+0025 <span class="comment">%     options.edge.significant.angle (45)</span>
+0026 <span class="comment">%     options.edge.significant.viewpoint_dependent.show (true)</span>
+0027 <span class="comment">%     options.edge.significant.viewpoint_dependent.color ([0 0 0])</span>
+0028 <span class="comment">%     options.edge.significant.viewpoint_dependent.width (2)</span>
+0029 <span class="comment">%     options.edge.significant.viewpoint_dependent.callback (true)</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%     options.colorbar.show (false)</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%     options.electrode.number.show (false)</span>
+0034 <span class="comment">%     options.electrode.number.font_size (10)</span>
+0035 <span class="comment">%     options.electrode.number.font_weight ('bold')</span>
+0036 <span class="comment">%     options.electrode.number.color ([.6 0 0])</span>
+0037 <span class="comment">%     options.electrode.number.background_color ('none')</span>
+0038 <span class="comment">%     options.electrode.number.scale_position (1.15)</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%     options.element.number.show (false)</span>
+0041 <span class="comment">%     options.element.number.font_size (7)</span>
+0042 <span class="comment">%     options.element.number.font_weight ('normal')</span>
+0043 <span class="comment">%     options.element.number.color ([0 0 0])</span>
+0044 <span class="comment">%     options.element.number.background_color ('none')</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">%     options.node.number.show (false)</span>
+0047 <span class="comment">%     options.node.number.font_size (7)</span>
+0048 <span class="comment">%     options.node.number.font_weight ('normal')</span>
+0049 <span class="comment">%     options.node.number.color ([0 0 0.5])</span>
+0050 <span class="comment">%     options.node.number.background_color ([1 1 1])</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% EXAMPLES</span>
+0053 <span class="comment">%   mdl = mk_common_model('c2C2',8);</span>
+0054 <span class="comment">%   img = mk_image(mdl, linspace(-3,3,num_elems(mdl)));</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">% SET PARAMETERS</span>
+0057 <span class="comment">%   img.show_fem.electrode.number.scale_position= 1.01;</span>
+0058 <span class="comment">%   img.show_fem.electrode.number.show =1;</span>
+0059 <span class="comment">%   show_fem(img)</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">% SET OPTIONS</span>
+0062 <span class="comment">%   opts.colorbar.show = 1;</span>
+0063 <span class="comment">%   show_fem(img.opts)</span>
+0064 
+0065 <span class="comment">% (C) 2015 Herve Gagnon. License: GPL version 2 or version 3</span>
+0066 <span class="comment">% $Id: show_fem_enhanced.m 5875 2018-12-21 18:06:06Z aadler $</span>
+0067 
+0068 <span class="comment">% TESTS</span>
+0069 <span class="keyword">switch</span> nargin
+0070     <span class="keyword">case</span> 0
+0071         error(<span class="string">'Insufficient parameters for show_fem'</span>);
+0072     <span class="keyword">case</span> 1
+0073         <span class="keyword">if</span> ischar(mdl) &amp;&amp; strcmp(mdl,<span class="string">'UNIT_TEST'</span>); 
+0074             <a href="#_sub12" class="code" title="subfunction do_unit_test">do_unit_test</a>; 
+0075             <span class="keyword">return</span>; 
+0076         <span class="keyword">end</span>
+0077         <span class="keyword">if</span> (isstruct(mdl) &amp;&amp; isfield(mdl, <span class="string">'show_fem'</span>))
+0078             options = mdl.show_fem;
+0079         <span class="keyword">else</span>
+0080             options = [];
+0081         <span class="keyword">end</span>
+0082     <span class="keyword">case</span> 2
+0083         <span class="comment">% No special processing</span>
+0084     <span class="keyword">otherwise</span>
+0085         error(<span class="string">'Too many parameters for show_fem'</span>);
+0086 <span class="keyword">end</span>
+0087 
+0088 [img, mdl, opts] = <a href="#_sub1" class="code" title="subfunction [img, mdl, opts] = proc_params(mdl, src_opts)">proc_params</a>(mdl, options);
+0089 
+0090 <span class="keyword">if</span> ~ishold
+0091     cla;
+0092 <span class="keyword">end</span>
+0093 
+0094 mdl = <a href="#_sub10" class="code" title="subfunction mdl = find_sub_elements(mdl)">find_sub_elements</a>(mdl);
+0095 
+0096 <span class="comment">% Convert nodes to 3D if necessary.</span>
+0097 mdl.nodes = mdl.nodes*eye(size(mdl.nodes, 2), 3);
+0098 
+0099 hh = <a href="#_sub3" class="code" title="subfunction hh = draw_all(img, mdl, opts)">draw_all</a>(img, mdl, opts);
+0100 
+0101 <span class="comment">% Setup callback function.</span>
+0102 <span class="keyword">if</span> (opts.edge.significant.viewpoint_dependent.callback)
+0103     <span class="keyword">if</span> ~exist(<span class="string">'OCTAVE_VERSION'</span>); <span class="comment">%octave's not compativble (4.4.1)</span>
+0104     h3d = rotate3d;
+0105     set(gca, <span class="string">'UserData'</span>, struct(<span class="string">'name'</span>, <span class="string">'show_fem_data'</span>, <span class="string">'img'</span>, img, <span class="string">'mdl'</span>, mdl, <span class="string">'opts'</span>, opts));
+0106     set(h3d, <span class="string">'ActionPostCallback'</span> , @<a href="#_sub2" class="code" title="subfunction refresh_current_axis(obj, evd)">refresh_current_axis</a>)
+0107     <span class="keyword">end</span>
+0108 <span class="keyword">end</span>
+0109 
+0110 <span class="keyword">if</span> (nargout == 0)
+0111     clear hh; 
+0112 <span class="keyword">end</span>
+0113 
+0114 <a name="_sub1" href="#_subfunctions" class="code">function [img, mdl, opts] = proc_params(mdl, src_opts)</a>
+0115 
+0116     <span class="comment">% Assign default viewpoint option values.</span>
+0117     opts.viewpoint.az = -37.5;
+0118     opts.viewpoint.el =  30.0;
+0119 
+0120     <span class="comment">% Assign default edge option values.</span>
+0121     opts.edge.color   = [0 0 0];
+0122     opts.edge.width   = 0.5;
+0123     opts.edge.significant.show  = true;
+0124     opts.edge.significant.color = [0 0 0];
+0125     opts.edge.significant.width = 2;
+0126     opts.edge.significant.angle = 45;
+0127     opts.edge.significant.viewpoint_dependent.show     = true;
+0128     opts.edge.significant.viewpoint_dependent.color    = [0 0 0];
+0129     opts.edge.significant.viewpoint_dependent.width    = 2;
+0130     opts.edge.significant.viewpoint_dependent.callback = true;
+0131  
+0132     <span class="comment">% Assign default colorbar option values.</span>
+0133     opts.colorbar.show = false;
+0134 
+0135     <span class="comment">% Assign default electrode option values.</span>
+0136     opts.electrode.number.show             = false;
+0137     opts.electrode.number.font_size        = 10;
+0138     opts.electrode.number.font_weight      = <span class="string">'bold'</span>;
+0139     opts.electrode.number.color            = [.6 0 0];
+0140     opts.electrode.number.background_color = <span class="string">'none'</span>;
+0141     opts.electrode.number.scale_position   = 1.15;
+0142 
+0143     <span class="comment">% Assign default element option values.</span>
+0144     opts.element.number.show             = false;
+0145     opts.element.number.font_size        = 7;
+0146     opts.element.number.font_weight      = <span class="string">'normal'</span>;
+0147     opts.element.number.color            = [0 0 0];
+0148     opts.element.number.background_color = <span class="string">'none'</span>;
+0149 
+0150     <span class="comment">% Assign default node option values.</span>
+0151     opts.node.number.show             = false;
+0152     opts.node.number.font_size        = 7;
+0153     opts.node.number.font_weight      = <span class="string">'normal'</span>;
+0154     opts.node.number.color            = [0 0 0.5];
+0155     opts.node.number.background_color = [1 1 1];
+0156 
+0157     <span class="comment">% Override some defaults in 2D</span>
+0158     <span class="keyword">if</span> <a href="../../../eidors/models/mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>( mdl ) == 2
+0159        opts.viewpoint.az = 0;
+0160        opts.viewpoint.el = 90;
+0161        opts.electrode.number.scale_position= 1.05;
+0162     <span class="keyword">end</span>
+0163     
+0164     <span class="keyword">if</span> (nargin == 2)
+0165         <span class="keyword">if</span> (isstruct(src_opts))
+0166             opts = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts, src_opts, <span class="string">'viewpoint'</span>, <span class="string">'az'</span>);
+0167             opts = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts, src_opts, <span class="string">'viewpoint'</span>, <span class="string">'el'</span>);
+0168             opts = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts, src_opts, <span class="string">'edge'</span>, <span class="string">'color'</span>);
+0169             opts = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts, src_opts, <span class="string">'edge'</span>, <span class="string">'width'</span>);
+0170             
+0171             <span class="keyword">if</span> (isfield(src_opts, <span class="string">'edge'</span>))
+0172                 opts.edge = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.edge, src_opts.edge, <span class="string">'significant'</span>, <span class="string">'show'</span>);
+0173                 opts.edge = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.edge, src_opts.edge, <span class="string">'significant'</span>, <span class="string">'color'</span>);
+0174                 opts.edge = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.edge, src_opts.edge, <span class="string">'significant'</span>, <span class="string">'width'</span>);
+0175                 opts.edge = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.edge, src_opts.edge, <span class="string">'significant'</span>, <span class="string">'angle'</span>);
+0176                 <span class="keyword">if</span> (isfield(src_opts.edge, <span class="string">'significant'</span>))
+0177                     opts.edge.significant = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.edge.significant, src_opts.edge.significant, <span class="string">'viewpoint_dependent'</span>, <span class="string">'show'</span>);
+0178                     opts.edge.significant = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.edge.significant, src_opts.edge.significant, <span class="string">'viewpoint_dependent'</span>, <span class="string">'color'</span>);
+0179                     opts.edge.significant = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.edge.significant, src_opts.edge.significant, <span class="string">'viewpoint_dependent'</span>, <span class="string">'width'</span>);
+0180                     opts.edge.significant = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.edge.significant, src_opts.edge.significant, <span class="string">'viewpoint_dependent'</span>, <span class="string">'callback'</span>);
+0181                 <span class="keyword">end</span>
+0182             <span class="keyword">end</span>
+0183 
+0184             opts = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts, src_opts, <span class="string">'colorbar'</span>, <span class="string">'show'</span>);
+0185 
+0186             <span class="keyword">if</span> (isfield(src_opts, <span class="string">'electrode'</span>))
+0187                 opts.electrode = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.electrode, src_opts.electrode, <span class="string">'number'</span>, <span class="string">'show'</span>);
+0188                 opts.electrode = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.electrode, src_opts.electrode, <span class="string">'number'</span>, <span class="string">'font_size'</span>);
+0189                 opts.electrode = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.electrode, src_opts.electrode, <span class="string">'number'</span>, <span class="string">'font_weight'</span>);
+0190                 opts.electrode = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.electrode, src_opts.electrode, <span class="string">'number'</span>, <span class="string">'color'</span>);
+0191                 opts.electrode = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.electrode, src_opts.electrode, <span class="string">'number'</span>, <span class="string">'background_color'</span>);
+0192                 opts.electrode = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.electrode, src_opts.electrode, <span class="string">'number'</span>, <span class="string">'scale_position'</span>);                
+0193             <span class="keyword">end</span>
+0194             
+0195             <span class="keyword">if</span> (isfield(src_opts, <span class="string">'element'</span>))
+0196                 opts.element = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.element, src_opts.element, <span class="string">'number'</span>, <span class="string">'show'</span>);
+0197                 opts.element = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.element, src_opts.element, <span class="string">'number'</span>, <span class="string">'font_size'</span>);
+0198                 opts.element = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.element, src_opts.element, <span class="string">'number'</span>, <span class="string">'font_weight'</span>);
+0199                 opts.element = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.element, src_opts.element, <span class="string">'number'</span>, <span class="string">'color'</span>);
+0200                 opts.element = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.element, src_opts.element, <span class="string">'number'</span>, <span class="string">'background_color'</span>);               
+0201             <span class="keyword">end</span>
+0202 
+0203             <span class="keyword">if</span> (isfield(src_opts, <span class="string">'node'</span>))
+0204                 opts.node = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.node, src_opts.node, <span class="string">'number'</span>, <span class="string">'show'</span>);
+0205                 opts.node = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.node, src_opts.node, <span class="string">'number'</span>, <span class="string">'font_size'</span>);
+0206                 opts.node = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.node, src_opts.node, <span class="string">'number'</span>, <span class="string">'font_weight'</span>);
+0207                 opts.node = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.node, src_opts.node, <span class="string">'number'</span>, <span class="string">'color'</span>);
+0208                 opts.node = <a href="#_sub11" class="code" title="subfunction dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)">copy_field</a>(opts.node, src_opts.node, <span class="string">'number'</span>, <span class="string">'background_color'</span>);               
+0209             <span class="keyword">end</span>
+0210             
+0211             
+0212         <span class="keyword">else</span> <span class="comment">% Support options from old version of show_fem for compatibility.</span>
+0213             <span class="comment">% fill in default options</span>
+0214             optionstr = zeros(1, 100);
+0215             optionstr(1:length(src_opts)) = src_opts;
+0216 
+0217             opts.colorbar.show         = optionstr(1);
+0218             opts.electrode.number.show = optionstr(2);
+0219             <span class="keyword">switch</span> optionstr(3)
+0220                 <span class="keyword">case</span> 1
+0221                     opts.element.number.show = 1;
+0222                 <span class="keyword">case</span> 2
+0223                     opts.node.number.show = 1;
+0224                 <span class="keyword">case</span> 3
+0225                     opts.element.number.show = 1;
+0226                     opts.node.number.show = 1;
+0227             <span class="keyword">end</span>
+0228         <span class="keyword">end</span>
+0229     <span class="keyword">end</span>
+0230 
+0231     <span class="comment">% Display first image if several images are available.</span>
+0232     <span class="keyword">if</span> (numel(mdl) &gt; 1)
+0233         <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'warning: show_fem only shows first image'</span>,1);
+0234         mdl = mdl(1);
+0235     <span class="keyword">end</span>
+0236  
+0237     <span class="comment">% if we have an img input, define mdl</span>
+0238     <span class="keyword">if</span> strcmp(mdl(1).type , <span class="string">'image'</span> )
+0239         img = mdl;
+0240         mdl = img.fwd_model;
+0241     <span class="keyword">else</span>
+0242         img = [];
+0243     <span class="keyword">end</span>
+0244 
+0245 <a name="_sub2" href="#_subfunctions" class="code">function refresh_current_axis(obj, evd)</a>
+0246 UserData = get(gca, <span class="string">'UserData'</span>);
+0247 <span class="keyword">if</span> (all(isfield(UserData, {<span class="string">'name'</span>, <span class="string">'img'</span>, <span class="string">'mdl'</span>, <span class="string">'opts'</span>})) &amp;&amp; <span class="keyword">...</span>
+0248         strcmp(UserData.name, <span class="string">'show_fem_data'</span>))
+0249     [az, el] = view(gca);
+0250     <span class="keyword">if</span> (az ~= UserData.opts.viewpoint.az || el ~= UserData.opts.viewpoint.el)
+0251         UserData.opts.viewpoint.az = az;
+0252         UserData.opts.viewpoint.el = el;
+0253         cla;
+0254         <a href="#_sub3" class="code" title="subfunction hh = draw_all(img, mdl, opts)">draw_all</a>(UserData.img, UserData.mdl, UserData.opts);
+0255         set(gca, <span class="string">'UserData'</span>, UserData);
+0256     <span class="keyword">end</span>
+0257 <span class="keyword">end</span>
+0258 
+0259 <a name="_sub3" href="#_subfunctions" class="code">function hh = draw_all(img, mdl, opts)</a>
+0260 
+0261     hh = <a href="#_sub4" class="code" title="subfunction hh = draw_fem(img, mdl, opts)">draw_fem</a>(img, mdl, opts);
+0262 
+0263     <span class="comment">% Number elements if necessary.</span>
+0264     <span class="keyword">if</span> (opts.element.number.show)
+0265         <a href="#_sub5" class="code" title="subfunction draw_numbers(positions, opts)">draw_numbers</a>(<a href="../../../eidors/models/interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>(mdl), opts.element.number);
+0266     <span class="keyword">end</span>
+0267 
+0268     <span class="comment">% Number nodes if necessary.</span>
+0269     <span class="keyword">if</span> (opts.node.number.show)
+0270         <a href="#_sub5" class="code" title="subfunction draw_numbers(positions, opts)">draw_numbers</a>(mdl.nodes, opts.node.number);
+0271     <span class="keyword">end</span>
+0272 
+0273     <span class="comment">% Number electrodes if necessary.</span>
+0274     <span class="keyword">if</span> (opts.electrode.number.show &amp;&amp; isfield(mdl, <span class="string">'electrode'</span>))
+0275         n_elec = numel(mdl.electrode);
+0276         mesh_center = ones(n_elec, 1)*mean(mdl.nodes, 1);
+0277 
+0278         elec_pos = zeros(n_elec, size(mesh_center, 2));
+0279 
+0280         <span class="keyword">for</span> i = 1:n_elec
+0281             <span class="keyword">if</span> (isfield(mdl.electrode(i), <span class="string">'nodes'</span>))
+0282                 elec_pos(i, :) = mean(mdl.nodes(mdl.electrode(i).nodes, :), 1);
+0283             <span class="keyword">elseif</span> (isfield(mdl.electrode(i), <span class="string">'pos'</span>))
+0284                 elec_pos(i, :) = mean(mdl.electrode(i).pos, 1)*eye(size(<span class="keyword">...</span>
+0285                                                         elec_pos(i, :), 2), 3);
+0286             <span class="keyword">end</span>
+0287         <span class="keyword">end</span>
+0288 
+0289         <a href="#_sub5" class="code" title="subfunction draw_numbers(positions, opts)">draw_numbers</a>(opts.electrode.number.scale_position*(elec_pos - mesh_center) + mesh_center, opts.electrode.number);
+0290     <span class="keyword">end</span>
+0291 
+0292     <span class="keyword">if</span> (size(mdl.elems, 2) == 4)  
+0293         view(opts.viewpoint.az, opts.viewpoint.el);
+0294     <span class="keyword">end</span>
+0295 
+0296     axis image;
+0297     
+0298 <a name="_sub4" href="#_subfunctions" class="code">function hh = draw_fem(img, mdl, opts)</a>
+0299     
+0300     <span class="comment">% Assign colors and alpha to elements.</span>
+0301     <span class="keyword">if</span> (size(mdl.elems, 2) == 4)
+0302         <span class="keyword">if</span> ~isempty(img)
+0303             elems = mdl.sub_elements;
+0304             electrode_field = <span class="string">'sub_elements'</span>;
+0305         <span class="keyword">else</span>
+0306             elems = mdl.boundary;
+0307             electrode_field = <span class="string">'boundary'</span>;
+0308         <span class="keyword">end</span>
+0309         triangle_alpha = 0.5*ones(size(elems, 1), 1);
+0310         triangle_edge_color = <span class="string">'none'</span>;
+0311         triangle_edge_width = 0.5;
+0312         
+0313         <span class="comment">% Color mesh edges.</span>
+0314         edge_edges = mdl.boundary_edges;
+0315         edge_width = ones(size(edge_edges, 1), 1)*opts.edge.width;
+0316         edge_color = ones(size(edge_edges, 1), 1)*opts.edge.color;
+0317         
+0318         <span class="keyword">if</span> opts.edge.significant.show
+0319             <span class="keyword">if</span> opts.edge.significant.viewpoint_dependent.show 
+0320                 <span class="keyword">if</span> exist(<span class="string">'viewmtx'</span>)
+0321                 <span class="comment">% Highlight profile of boundary according to viewing angle.</span>
+0322                 T = viewmtx(opts.viewpoint.az, opts.viewpoint.el);
+0323                 <span class="keyword">else</span> <span class="comment">% octave doesn't have viewmtx yet</span>
+0324                 T = ones(4);
+0325                 <span class="keyword">end</span>
+0326                 transformed_boundary_normal_vector = mdl.boundary_normal_vector*T(1:3,1:3)';
+0327                 boundary_edges_idx2 = (transformed_boundary_normal_vector(mdl.edge2boundary(:, 1), 3).*transformed_boundary_normal_vector(mdl.edge2boundary(:, 2), 3) &lt;= 0);
+0328 
+0329                 edge_width(boundary_edges_idx2)    = opts.edge.significant.viewpoint_dependent.width;
+0330                 edge_color(boundary_edges_idx2, :) = ones(sum(boundary_edges_idx2), 1)*opts.edge.significant.viewpoint_dependent.color;
+0331             <span class="keyword">end</span>
+0332 
+0333             <span class="comment">% Highlight significant edges where boundary shape bends more than</span>
+0334             <span class="comment">% 45 degrees.</span>
+0335             boundary_edges_idx = dot(mdl.boundary_normal_vector(<span class="keyword">...</span>
+0336                                      mdl.edge2boundary(:, 1), :), <span class="keyword">...</span>
+0337                                      mdl.boundary_normal_vector(<span class="keyword">...</span>
+0338                                      mdl.edge2boundary(:, 2), :), 2) <span class="keyword">...</span>
+0339                                      &lt;= cosd(opts.edge.significant.angle);
+0340             edge_width(boundary_edges_idx)    = opts.edge.significant.width;
+0341             edge_color(boundary_edges_idx, :) = ones(sum(boundary_edges_idx), 1)*opts.edge.significant.color;
+0342         <span class="keyword">end</span>
+0343     <span class="keyword">else</span>
+0344         elems = mdl.elems;
+0345         electrode_field = <span class="string">'boundary'</span>;
+0346         triangle_alpha = ones(size(elems, 1), 1);
+0347         triangle_edge_color = opts.edge.color;
+0348         triangle_edge_width = opts.edge.width;
+0349         
+0350         <span class="comment">% Highlight mesh boundary.</span>
+0351         <span class="keyword">if</span> opts.edge.significant.show
+0352             edge_edges = mdl.boundary;
+0353             edge_width = opts.edge.significant.width*ones(size(edge_edges, 1), 1);
+0354             edge_color = ones(size(edge_edges, 1), 1)*opts.edge.significant.color;
+0355         <span class="keyword">else</span>
+0356             edge_edges = [];
+0357         <span class="keyword">end</span>
+0358     <span class="keyword">end</span>
+0359     
+0360     <span class="keyword">if</span> ~isempty(img)
+0361         <span class="keyword">if</span> (size(mdl.elems, 2) == 4)
+0362             triangle_color = <a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>(mdl.element2sub_element*<span class="keyword">...</span>
+0363                                 <a href="../../../eidors/solvers/get_img_data.html" class="code" title="function [img_data, n_images]= get_img_data(img)">get_img_data</a>(img), img);
+0364 
+0365             factor = 3/8;
+0366             
+0367             alpha_map = zeros(size(colormap, 1), 1);
+0368             alpha = linspace(0, 1, round(size(colormap, 1)*factor))';
+0369             alpha_map(1:size(alpha, 1)) = alpha(end:-1:1);
+0370             alpha_map(end:-1:(end-size(alpha, 1)+1)) = alpha(end:-1:1);
+0371             
+0372             factor = 3/8;
+0373             alpha_map2 = ones(size(colormap, 1), 1);
+0374             alpha2 = linspace(0, 1, round(size(colormap, 1)*factor))';
+0375             alpha_map2((1:size(alpha2, 1)) + size(colormap, 1)/2) = alpha2;
+0376             alpha_map2((end:-1:(end-size(alpha2, 1)+1)) - size(colormap, 1)/2) = alpha2;
+0377             
+0378             factor = 3/8;
+0379             alpha_map3 = ones(size(colormap, 1), 1);
+0380             alpha3 = linspace(0, 1, round(size(colormap, 1)*factor))';
+0381             idx1 = (size(colormap, 1)/2 - size(alpha3, 1))/2;
+0382             alpha_map3((-idx1:idx1) + size(colormap, 1)/2) = 0;
+0383             alpha_map3((1:size(alpha3, 1)) + size(colormap, 1)/2 + (size(colormap, 1)/2 - size(alpha3, 1))/2) = alpha3;
+0384             alpha_map3((end:-1:(end-size(alpha3, 1)+1)) - size(colormap, 1)/2 - (size(colormap, 1)/2 - size(alpha3, 1))/2) = alpha3;
+0385     
+0386             triangle_alpha = alpha_map3(triangle_color);
+0387             
+0388             <span class="comment">% Restore transparency for boundary elements;</span>
+0389             alpha_idx =  triangle_alpha(mdl.boundary_to_sub_element_idx, :) &lt; 0.5;
+0390             triangle_alpha(mdl.boundary_to_sub_element_idx(alpha_idx), :) = 0.5;
+0391         <span class="keyword">else</span>
+0392             triangle_color = <a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>(img);
+0393         <span class="keyword">end</span>
+0394         triangle_color = squeeze(triangle_color(:, 1, :));
+0395     <span class="keyword">else</span>
+0396         triangle_color = ones(size(elems, 1), 1)*[1 1 1];
+0397     <span class="keyword">end</span>
+0398     
+0399     <span class="comment">% Assign colors for electrodes.</span>
+0400     marker_position = [];
+0401     marker_color    = [];
+0402     
+0403     <span class="keyword">if</span> (isfield(mdl, <span class="string">'electrode'</span>))
+0404         <span class="keyword">for</span> i = 1:numel(mdl.electrode)
+0405             <span class="keyword">if</span> (isfield(mdl.electrode(i), electrode_field) &amp;&amp; <span class="keyword">...</span>
+0406                     ~isempty(mdl.electrode(i).(electrode_field)))
+0407                 
+0408                 <span class="keyword">if</span> (size(mdl.elems, 2) == 4)
+0409                     triangle_color(<span class="keyword">...</span>
+0410                         mdl.electrode(i).(electrode_field), :) = <span class="keyword">...</span>
+0411                         ones(numel(mdl.electrode(i).(electrode_field)), <span class="keyword">...</span>
+0412                         1)*<a href="#_sub9" class="code" title="subfunction colour = electr_colour(e, colormap_width)">electr_colour</a>(i, size(triangle_color, 2));
+0413 
+0414                     triangle_alpha(mdl.electrode(i).(electrode_field), <span class="keyword">...</span>
+0415                                                                     :) = 1;
+0416                     <span class="comment">% Highlight electrode edges.</span>
+0417                     boundary_edges = [mdl.electrode(i).boundary_inner_edges;
+0418                                       mdl.electrode(i).boundary_outer_edges];
+0419                     edge_color(boundary_edges, :) = 0.5*ones(size(<span class="keyword">...</span>
+0420                         boundary_edges, 1), 1)*<a href="#_sub9" class="code" title="subfunction colour = electr_colour(e, colormap_width)">electr_colour</a>(i, 3);
+0421                     edge_width(mdl.electrode(i).boundary_outer_edges) = 1;
+0422                 <span class="keyword">else</span>
+0423 
+0424                     edge_width(mdl.electrode(i).(electrode_field), :) = 3;
+0425                     edge_color(mdl.electrode(i).(electrode_field), :) = <span class="keyword">...</span>
+0426                         ones(numel(mdl.electrode(i).(electrode_field)), <span class="keyword">...</span>
+0427                         1)*<a href="#_sub9" class="code" title="subfunction colour = electr_colour(e, colormap_width)">electr_colour</a>(i, 3);
+0428                 <span class="keyword">end</span>
+0429             <span class="keyword">else</span>
+0430                 <span class="keyword">if</span> (isfield(mdl.electrode(i), <span class="string">'nodes'</span>))
+0431                     marker_position(end + 1, :) = mean(mdl.nodes(<span class="keyword">...</span>
+0432                                             mdl.electrode(i).nodes, :), 1);
+0433                 <span class="keyword">elseif</span> (isfield(mdl.electrode(i), <span class="string">'pos'</span>))
+0434                     marker_position(end + 1, :) = mean(<span class="keyword">...</span>
+0435                                                mdl.electrode(i).pos, 1)*<span class="keyword">...</span>
+0436                                   eye(size(marker_position(<span class="keyword">end</span>, :), 2), 3);
+0437                 <span class="keyword">end</span>
+0438                 marker_color(end + 1, :) = <a href="#_sub9" class="code" title="subfunction colour = electr_colour(e, colormap_width)">electr_colour</a>(i, 3);
+0439             <span class="keyword">end</span>
+0440         <span class="keyword">end</span>
+0441     <span class="keyword">end</span>
+0442 
+0443     <span class="comment">% Draw triangles</span>
+0444     hh = <a href="#_sub8" class="code" title="subfunction hh = draw_triangles(faces, vertices, color_data, alpha_data, ">draw_triangles</a>(elems, mdl.nodes, <span class="keyword">...</span>
+0445                       triangle_color, triangle_alpha, <span class="keyword">...</span>
+0446                       triangle_edge_color, triangle_edge_width);
+0447 
+0448     <span class="comment">% Draw edges if necessary</span>
+0449     <span class="keyword">if</span> (~isempty(edge_edges))
+0450         <a href="#_sub7" class="code" title="subfunction hh = draw_edges(edges, vertices, width_data, color_data)">draw_edges</a>(edge_edges, mdl.nodes, edge_width, edge_color);
+0451     <span class="keyword">end</span>
+0452                   
+0453     <span class="comment">% Draw markers if necessary.</span>
+0454     <span class="keyword">if</span> (~isempty(marker_position))
+0455         <a href="#_sub6" class="code" title="subfunction hh = draw_markers(points, colour, marker_size)">draw_markers</a>(marker_position, marker_color, 9);
+0456     <span class="keyword">end</span>
+0457 
+0458     <span class="keyword">if</span> opts.colorbar.show &amp;&amp; ~isempty( img )
+0459 <span class="comment">%       psave = get(gca,'position');</span>
+0460         <a href="eidors_colourbar.html" class="code" title="function hh= eidors_colourbar(max_scale,ref_lev, cb_shrink_move, greyscale)">eidors_colourbar</a>( img ); 
+0461 <span class="comment">%       set(gca,'position',psave); %%% Reset axes after colourbar and move</span>
+0462     <span class="keyword">end</span>
+0463     
+0464 <a name="_sub5" href="#_subfunctions" class="code">function draw_numbers(positions, opts)</a>
+0465     text(positions(:,1), positions(:,2), positions(:,3), <span class="keyword">...</span>
+0466         arrayfun(@(x){int2str(x)}, 1:size(positions, 1)), <span class="keyword">...</span>
+0467         <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0468         <span class="string">'VerticalAlignment'</span>,   <span class="string">'middle'</span>, <span class="keyword">...</span>
+0469         <span class="string">'FontSize'</span>,            opts.font_size, <span class="keyword">...</span>
+0470         <span class="string">'FontWeight'</span>,          opts.font_weight, <span class="keyword">...</span>
+0471         <span class="string">'Color'</span>,               opts.color, <span class="keyword">...</span>
+0472         <span class="string">'BackgroundColor'</span>,     opts.background_color);
+0473 
+0474 <a name="_sub6" href="#_subfunctions" class="code">function hh = draw_markers(points, colour, marker_size)</a>
+0475     [unique_colour, unused, colour_idx] = unique(colour, <span class="string">'rows'</span>);
+0476     
+0477     <span class="keyword">for</span> i = 1:size(unique_colour, 1)
+0478         points_idx = colour_idx == i;
+0479         hh = line(points(points_idx, 1), points(points_idx, 2), <span class="keyword">...</span>
+0480                   points(points_idx, 3), <span class="keyword">...</span>
+0481                   <span class="string">'LineStyle'</span>, <span class="string">'none'</span>, <span class="keyword">...</span>
+0482                   <span class="string">'Marker'</span>, <span class="string">'o'</span>, <span class="string">'MarkerSize'</span>, marker_size, <span class="keyword">...</span>
+0483                   <span class="string">'MarkerFaceColor'</span>, unique_colour(i, :), <span class="keyword">...</span>
+0484                   <span class="string">'MarkerEdgeColor'</span>, unique_colour(i, :));
+0485     <span class="keyword">end</span>
+0486         
+0487 <a name="_sub7" href="#_subfunctions" class="code">function hh = draw_edges(edges, vertices, width_data, color_data)</a>
+0488     [unique_width_color_data, unused, width_color_idx] = <span class="keyword">...</span><span class="comment"> </span>
+0489                                    unique([width_data color_data], <span class="string">'rows'</span>);                            
+0490     <span class="keyword">for</span> i = 1:size(unique_width_color_data, 1)
+0491         <span class="keyword">if</span> (unique_width_color_data(i, 1) &gt; 0)
+0492             edge_idx = (width_color_idx == i);
+0493             points_list = [];
+0494             points_list(1:3:3*size(edges(edge_idx, :), 1), :) = <span class="keyword">...</span>
+0495                                            vertices(edges(edge_idx, 1), :);
+0496             points_list(2:3:3*size(edges(edge_idx, :), 1), :) = <span class="keyword">...</span>
+0497                                            vertices(edges(edge_idx, 2), :);
+0498             points_list(3:3:3*size(edges(edge_idx, :), 1), :) = <span class="keyword">...</span>
+0499                                        nan(size(edges(edge_idx, :), 1), 3);
+0500             hh = line(points_list(:, 1), points_list(:, 2), <span class="keyword">...</span>
+0501                       points_list(:, 3), <span class="string">'LineWidth'</span>, <span class="keyword">...</span>
+0502                       unique_width_color_data(i, 1), <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+0503                       <span class="string">'Color'</span>, unique_width_color_data(i, 2:end));
+0504         <span class="keyword">end</span>
+0505     <span class="keyword">end</span>
+0506 
+0507 <a name="_sub8" href="#_subfunctions" class="code">function hh = draw_triangles(faces, vertices, color_data, alpha_data, </a><span class="keyword">...</span>
+0508                              edge_color, edge_width)
+0509                          
+0510     <span class="keyword">if</span> (size(color_data, 1) == 1)
+0511         color_data = ones(size(faces, 1), 1)*color_data;
+0512         face_color = <span class="string">'flat'</span>;
+0513     <span class="keyword">elseif</span> (size(color_data, 1) == size(faces, 1))
+0514         face_color = <span class="string">'flat'</span>;
+0515     <span class="keyword">elseif</span> (size(color_data, 1) == size(vertices, 1))
+0516         face_color = <span class="string">'interp'</span>;        
+0517     <span class="keyword">else</span>
+0518         <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'warning: color data and mesh do not match. Showing grey'</span>, 1);
+0519         color_data = 0.5*ones(size(faces, 1), 3);
+0520         face_color = <span class="string">'flat'</span>;      
+0521     <span class="keyword">end</span>
+0522     
+0523     <span class="keyword">if</span> (size(alpha_data, 1) == 1)
+0524         alpha_data = ones(size(faces, 1), 1)*alpha_data;
+0525         face_color = <span class="string">'flat'</span>;
+0526     <span class="keyword">elseif</span> (size(alpha_data, 1) == size(faces, 1))
+0527         face_alpha = <span class="string">'flat'</span>;
+0528     <span class="keyword">elseif</span> (size(alpha_data, 1) == size(vertices, 1))
+0529         face_alpha = <span class="string">'interp'</span>;          
+0530     <span class="keyword">else</span>
+0531         <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'warning: alpha data and mesh do not match. Showing opaque'</span>, 1);
+0532         alpha_data = 1;
+0533         face_alpha = <span class="string">'flat'</span>;        
+0534     <span class="keyword">end</span>
+0535 
+0536     hh = patch(<span class="string">'Faces'</span>, faces, <span class="string">'Vertices'</span>, vertices, <span class="keyword">...</span>
+0537                <span class="string">'AlphaDataMapping'</span>, <span class="string">'none'</span>, <span class="keyword">...</span>
+0538                <span class="string">'CDataMapping'</span>, <span class="string">'direct'</span>, <span class="keyword">...</span>
+0539                <span class="string">'FaceVertexCData'</span>, color_data, <span class="keyword">...</span>
+0540                <span class="string">'FaceVertexAlphaData'</span>, alpha_data, <span class="keyword">...</span>
+0541                <span class="string">'FaceColor'</span>, face_color, <span class="string">'FaceAlpha'</span>, face_alpha, <span class="keyword">...</span>
+0542                <span class="string">'EdgeColor'</span>, edge_color, <span class="string">'FaceLighting'</span>, <span class="string">'flat'</span>, <span class="keyword">...</span>
+0543                <span class="string">'LineWidth'</span>, edge_width);
+0544 
+0545 <a name="_sub9" href="#_subfunctions" class="code">function colour = electr_colour(e, colormap_width)</a>
+0546     <span class="keyword">switch</span> (e)
+0547         <span class="keyword">case</span> 1
+0548             desired_colour = [0 .7 0]; <span class="comment">% light green electrode #1</span>
+0549         <span class="keyword">case</span> 2
+0550             desired_colour = [0 .5 0]; <span class="comment">% mid-green electrode #2</span>
+0551         <span class="keyword">otherwise</span>
+0552             desired_colour = [0 .3 0]; <span class="comment">% dark green</span>
+0553     <span class="keyword">end</span>
+0554 
+0555     <span class="keyword">switch</span>(colormap_width)
+0556         <span class="keyword">case</span> 1
+0557             map = colormap;
+0558             colormap_idx = find(all(map == ones(size(map, 1), 1)* <span class="keyword">...</span>
+0559                                                        desired_colour, 2));
+0560             <span class="keyword">if</span> ~isempty(colormap_idx)
+0561                 colour = colormap_idx;
+0562             <span class="keyword">else</span>
+0563                 map = [map; desired_colour];
+0564                 colormap(map);
+0565                 colour = size(map, 1);
+0566             <span class="keyword">end</span>
+0567         <span class="keyword">case</span> 3 
+0568             colour = desired_colour;
+0569         <span class="keyword">otherwise</span>
+0570             error(<span class="string">'Invalid colormap width.'</span>);
+0571     <span class="keyword">end</span>
+0572     
+0573 <a name="_sub10" href="#_subfunctions" class="code">function mdl = find_sub_elements(mdl)</a>
+0574     <span class="keyword">if</span> (~isfield(mdl, <span class="string">'sub_elements'</span>))
+0575         <span class="comment">% Number of nodes per elements.</span>
+0576         n_nodes_per_elem = size(mdl.elems, 2);
+0577         
+0578         <span class="comment">% Find sub-elements.</span>
+0579         combos= nchoosek(1:n_nodes_per_elem, n_nodes_per_elem - 1);
+0580         mdl.sub_elements = sort( <span class="keyword">...</span>
+0581                            reshape(mdl.elems(:, combos')', <span class="keyword">...</span>
+0582                                    n_nodes_per_elem - 1, []), <span class="keyword">...</span>
+0583                                  1)';
+0584                        
+0585         <span class="comment">% Vector that associates each sub-element with</span>
+0586         <span class="comment">% corresponding element.</span>
+0587         sub_element_idx = reshape(ones(n_nodes_per_elem, 1) <span class="keyword">...</span>
+0588                                            *(1:size(mdl.elems, 1)),[] , 1);
+0589                                        
+0590         sub_element_other_node_idx = reshape((n_nodes_per_elem:-1:1)'<span class="keyword">...</span>
+0591                                      *ones(1, size(mdl.elems, 1)), [] , 1);
+0592                                  
+0593         sub_element_other_node = mdl.elems(sub2ind(size(mdl.elems), sub_element_idx, sub_element_other_node_idx));
+0594                        
+0595         <span class="comment">% Remove duplicate sub-elements.</span>
+0596         <span class="comment">% Previously specified &quot;SPORTED&quot; but that is default, and not</span>
+0597         <span class="comment">%   available in older versions</span>
+0598         [mdl.sub_elements, ia, ic] = unique(<span class="keyword">...</span>
+0599                                        mdl.sub_elements, <span class="string">'rows'</span>);
+0600                                    
+0601          sub_element_other_node = sub_element_other_node(ia, :);                    
+0602                                 
+0603         <span class="comment">% Compute a matrix that converts a property defined on the elements</span>
+0604         <span class="comment">% to a property defined on the sub-elements.</span>
+0605         mdl.element2sub_element = <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(ic, sub_element_idx, <span class="keyword">...</span>
+0606                              ones(n_nodes_per_elem*size(mdl.elems, 1), 1));
+0607                          
+0608         <span class="comment">% Normalize each row to one to account for boundary sub-elements</span>
+0609         <span class="comment">% and internal sub-elements.</span>
+0610         mdl.element2sub_element = spdiags(1./sum(<span class="keyword">...</span>
+0611                                      mdl.element2sub_element, 2), <span class="keyword">...</span>
+0612                                     0, size(mdl.sub_elements, 1), <span class="keyword">...</span>
+0613                       size(mdl.sub_elements, 1))*mdl.element2sub_element;
+0614                   
+0615         <span class="comment">% Extract boundary from sub-elements.</span>
+0616         mdl.boundary = mdl.sub_elements;
+0617         boundary_other_node = sub_element_other_node;
+0618         mdl.boundary_to_sub_element_idx = (1:size(mdl.sub_elements, 1))';
+0619 
+0620         sorted_ic = sort(ic);
+0621 
+0622         mdl.boundary(sorted_ic(diff(sorted_ic) == 0), :) = [];
+0623         boundary_other_node(sorted_ic(diff(sorted_ic) == 0), :) = [];
+0624         mdl.boundary_to_sub_element_idx(sorted_ic(diff(sorted_ic) == 0)) = [];
+0625       
+0626         <span class="keyword">if</span> (size(mdl.boundary, 2) == 3)
+0627             <span class="comment">% Compute normal vectors.</span>
+0628             Node1 = mdl.nodes(mdl.boundary(:, 1), :);
+0629             Node2 = mdl.nodes(mdl.boundary(:, 2), :);
+0630             Node3 = mdl.nodes(mdl.boundary(:, 3), :);
+0631             Node4 = mdl.nodes(boundary_other_node, :);
+0632             mdl.boundary_normal_vector = cross(Node1 - Node2, <span class="keyword">...</span>
+0633                                                Node3 - Node2, 2);
+0634  
+0635             <span class="comment">% Normalize normal vectors.</span>
+0636             norm = 1./sqrt(sum(mdl.boundary_normal_vector <span class="keyword">...</span>
+0637                                          .*mdl.boundary_normal_vector, 2));
+0638             mdl.boundary_normal_vector = mdl.boundary_normal_vector <span class="keyword">...</span>
+0639                                                         .*[norm norm norm];
+0640               
+0641             <span class="comment">% Check if normal is outward. If not, invert direction.</span>
+0642             normal_vector_idx = dot(mdl.boundary_normal_vector, <span class="keyword">...</span>
+0643                                                      Node4 - Node2, 2) &gt; 0;
+0644             mdl.boundary_normal_vector(normal_vector_idx, :) = <span class="keyword">...</span>
+0645                          -mdl.boundary_normal_vector(normal_vector_idx, :);
+0646                                                     
+0647             <span class="comment">% Find boundary edges.</span>
+0648             mdl.boundary_edges = sort(reshape(mdl.boundary(:, <span class="keyword">...</span>
+0649                                             nchoosek(1:3, 2)')', 2, []), 1)';
+0650 
+0651             <span class="comment">% Vector that associates each edge with its</span>
+0652             <span class="comment">% corresponding two boundary elements.</span>
+0653             sub_boundary_edges_idx = reshape(ones(3, 1) <span class="keyword">...</span>
+0654                                        *(1:size(mdl.boundary, 1)), [] , 1);
+0655 
+0656             [mdl.boundary_edges, sorted_idx] = sortrows(mdl.boundary_edges);
+0657 
+0658             mdl.boundary_edges = mdl.boundary_edges(1:2:<span class="keyword">end</span>, :);
+0659 
+0660             mdl.edge2boundary = reshape(sub_boundary_edges_idx(<span class="keyword">...</span>
+0661                                                       sorted_idx), 2, [])';               
+0662         <span class="keyword">end</span>
+0663 
+0664         <span class="comment">% Extract electrode boundary if necessary.</span>
+0665         <span class="keyword">if</span> (isfield(mdl, <span class="string">'electrode'</span>))
+0666             <span class="keyword">for</span> i = 1:numel(mdl.electrode)
+0667                 mdl.electrode(i).boundary = find(all(ismember(<span class="keyword">...</span>
+0668                                 mdl.boundary, mdl.electrode(i).nodes), 2));
+0669                 mdl.electrode(i).sub_elements = <span class="keyword">...</span>
+0670                                     mdl.boundary_to_sub_element_idx( <span class="keyword">...</span>
+0671                                                 mdl.electrode(i).boundary);
+0672                 
+0673                 <span class="comment">% Find electrode edges.</span>
+0674                 <span class="keyword">if</span> (isfield(mdl, <span class="string">'boundary_edges'</span>))
+0675                     edge_candidates = sum(ismember(mdl.edge2boundary, <span class="keyword">...</span>
+0676                                             mdl.electrode(i).boundary), 2);
+0677                     mdl.electrode(i).boundary_inner_edges = find(<span class="keyword">...</span>
+0678                                                      edge_candidates == 2);
+0679                     mdl.electrode(i).boundary_outer_edges = find(<span class="keyword">...</span>
+0680                                                      edge_candidates == 1);                                           
+0681                 <span class="keyword">end</span>
+0682             <span class="keyword">end</span>
+0683         <span class="keyword">end</span>
+0684     <span class="keyword">end</span>
+0685    
+0686 <a name="_sub11" href="#_subfunctions" class="code">function dest_struct = copy_field(dest_struct, src_struct, parent_field_name, child_field_name)</a>
+0687     <span class="keyword">if</span> (isfield(src_struct, parent_field_name) &amp;&amp; <span class="keyword">...</span>
+0688         isfield(dest_struct, parent_field_name) &amp;&amp; <span class="keyword">...</span>
+0689         isfield(src_struct.(parent_field_name), child_field_name))
+0690             dest_struct.(parent_field_name).(child_field_name) = <span class="keyword">...</span>
+0691                 src_struct.(parent_field_name).(child_field_name);
+0692     <span class="keyword">end</span>
+0693 
+0694 <span class="comment">% TESTS:</span>
+0695 <a name="_sub12" href="#_subfunctions" class="code">function do_unit_test</a>
+0696    ver= <a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'interpreter_version'</span>);
+0697    clf
+0698 
+0699    img=<a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c0'</span>,8)); 
+0700    img.elem_data= 3*sin(linspace(-2,2,<a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(img))');
+0701    subplot(3,4,1); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img.fwd_model,[0,0,1]) 
+0702    title(<span class="string">'regular mesh numbered'</span>);
+0703 
+0704 <span class="keyword">if</span> ~ver.isoctave 
+0705    imgn = rmfield(img,<span class="string">'elem_data'</span>);
+0706    imgn.node_data= 3*sin(linspace(-5,5,<a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(img))');
+0707    subplot(3,4,9); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imgn) 
+0708    title(<span class="string">'interpolated node colours'</span>);
+0709 <span class="keyword">end</span>
+0710 
+0711    img2(1) = img; img2(2) = img;
+0712    subplot(3,4,2); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img,[1]);
+0713    title(<span class="string">'colours with legend'</span>);
+0714    subplot(3,4,3); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img2,[0,1]);
+0715    title(<span class="string">'colours with legend'</span>);
+0716    img.calc_colours.mapped_colour = 0; <span class="comment">% USE RGB colours</span>
+0717    subplot(3,4,4); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img,[0,1,1]);
+0718    title(<span class="string">'RGB colours'</span>);
+0719    subplot(3,4,4); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0720    title(<span class="string">'RGB colours'</span>);
+0721 
+0722    img.elem_data = [1:10];
+0723    subplot(3,4,12);<a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img); <span class="comment">%Should show grey</span>
+0724    title(<span class="string">'error -&gt; show grey'</span>);
+0725 
+0726 <span class="keyword">if</span> ~ver.isoctave
+0727    imgn.calc_colours.mapped_colour = 0; <span class="comment">% USE RGB colours</span>
+0728    subplot(3,4,10);<a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imgn,[0,1]) 
+0729    title(<span class="string">'interpolated node colours'</span>);
+0730 
+0731 
+0732    subplot(3,4,11);hh=<a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(imgn); set(hh,<span class="string">'EdgeColor'</span>,[0,0,1]);
+0733    title(<span class="string">'with edge colours'</span>);
+0734 
+0735 <span class="keyword">end</span>
+0736 
+0737    img3=<a href="../../../eidors/solvers/calc_jacobian_bkgnd.html" class="code" title="function img_bkgnd = calc_jacobian_bkgnd( inv_model )">calc_jacobian_bkgnd</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]));
+0738    img3.elem_data= randn(828,1);                       
+0739    subplot(3,4,5); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img3.fwd_model) 
+0740    subplot(3,4,6); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img3,[1])
+0741    subplot(3,4,7); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img3,[1,1])
+0742    subplot(3,4,8); <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img3,[1,1,1])</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

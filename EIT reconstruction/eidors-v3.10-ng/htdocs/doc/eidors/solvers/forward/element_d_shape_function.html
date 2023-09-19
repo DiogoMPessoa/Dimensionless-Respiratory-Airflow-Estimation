@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of element_d_shape_function</title>
+  <meta name="keywords" content="element_d_shape_function">
+  <meta name="description" content="DELEMSHAPEFUNC">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; element_d_shape_function.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>element_d_shape_function
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>DELEMSHAPEFUNC</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function dshape = element_d_shape_function(type,x,y,z) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">DELEMSHAPEFUNC  
+Derivative of shape functions of elements in local coordiantes. The basis 
+functions are for an anti-clockwise vertex arrangement triangle (or in 3D
+anti-clockwise to the point of looking INTO triangle from a vertex)
+DSHAPE = dshapefunc(TYPE,X,Y,Z)
+
+INPUT:
+1. X, Y, Z - local coordinates
+2. TYPE - string describing different element typeswhat kind of element
+   'tri3'  - Linear, 3 node triangle 
+   'tri6'  - Quadratic, 6 node triangle
+   'tri10' - Cubic, 10 node triangle
+   'tet4'  - Linear, 4 node tetrahedral
+   'tet10' - Quadratic, 10 node tetrahedral
+
+OUTPUT
+1. DELEMSHAPEFUNC - matrix of shape function derivatives size(ndim,nshape)
+              - using convention : dshape(i,j) = d shape_{j} / d x_{i}
+
+M Crabb - 29.06.2012</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="system_mat_higher_order.html" class="code" title="function [s_mat]=system_mat_higher_order(fwd_model,img)">system_mat_higher_order</a>	Assemble the total stiffness matrix : s_mat.E=At;</li><li><a href="../../../eidors/solvers/forward/tools-beta/calc_error_norms_for_square_domain.html" class="code" title="function [L2_tot_error,H1semi_tot_error,H1_tot_error,I_err,U_errS,U_errM,U_errSM,timing_solver,DOF]=error_2D_squ_CEM(img,eletype,plot_on)">calc_error_norms_for_square_domain</a>	Get forward model of the img and the conductivity per element</li><li><a href="../../../eidors/solvers/forward/tools-beta/calc_mass_stiffness.html" class="code" title="function [Agal,elemstiff]=mc_calc_stiffness2(fwd_model,img)">calc_mass_stiffness</a>	STIFFNESS MATRIX PART</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function dshape = delemshapetri3(x,y,z)</a></li><li><a href="#_sub2" class="code">function dshape = delemshapetri6(x,y,z)</a></li><li><a href="#_sub3" class="code">function dshape=delemshapetri10(x,y,z)</a></li><li><a href="#_sub4" class="code">function dshape = delemshapetet4(x,y,z)</a></li><li><a href="#_sub5" class="code">function dshape = delemshapetet10(x,y,z)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function dshape = element_d_shape_function(type,x,y,z)</a>
+0002 <span class="comment">%DELEMSHAPEFUNC</span>
+0003 <span class="comment">%Derivative of shape functions of elements in local coordiantes. The basis</span>
+0004 <span class="comment">%functions are for an anti-clockwise vertex arrangement triangle (or in 3D</span>
+0005 <span class="comment">%anti-clockwise to the point of looking INTO triangle from a vertex)</span>
+0006 <span class="comment">%DSHAPE = dshapefunc(TYPE,X,Y,Z)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%INPUT:</span>
+0009 <span class="comment">%1. X, Y, Z - local coordinates</span>
+0010 <span class="comment">%2. TYPE - string describing different element typeswhat kind of element</span>
+0011 <span class="comment">%   'tri3'  - Linear, 3 node triangle</span>
+0012 <span class="comment">%   'tri6'  - Quadratic, 6 node triangle</span>
+0013 <span class="comment">%   'tri10' - Cubic, 10 node triangle</span>
+0014 <span class="comment">%   'tet4'  - Linear, 4 node tetrahedral</span>
+0015 <span class="comment">%   'tet10' - Quadratic, 10 node tetrahedral</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%OUTPUT</span>
+0018 <span class="comment">%1. DELEMSHAPEFUNC - matrix of shape function derivatives size(ndim,nshape)</span>
+0019 <span class="comment">%              - using convention : dshape(i,j) = d shape_{j} / d x_{i}</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%M Crabb - 29.06.2012</span>
+0022 
+0023 <span class="keyword">if</span>(strcmp(type,<span class="string">'tri3'</span>))
+0024     dshape = <a href="#_sub1" class="code" title="subfunction dshape = delemshapetri3(x,y,z)">delemshapetri3</a>(x,y,z);
+0025 <span class="keyword">elseif</span>(strcmp(type,<span class="string">'tri6'</span>))
+0026     dshape = <a href="#_sub2" class="code" title="subfunction dshape = delemshapetri6(x,y,z)">delemshapetri6</a>(x,y,z);
+0027 <span class="keyword">elseif</span>(strcmp(type,<span class="string">'tri10'</span>))
+0028     dshape = <a href="#_sub3" class="code" title="subfunction dshape=delemshapetri10(x,y,z)">delemshapetri10</a>(x,y,z);
+0029 <span class="keyword">elseif</span>(strcmp(type,<span class="string">'tet4'</span>))
+0030     dshape = <a href="#_sub4" class="code" title="subfunction dshape = delemshapetet4(x,y,z)">delemshapetet4</a>(x,y,z);
+0031 <span class="keyword">elseif</span>(strcmp(type,<span class="string">'tet10'</span>))
+0032     dshape = <a href="#_sub5" class="code" title="subfunction dshape = delemshapetet10(x,y,z)">delemshapetet10</a>(x,y,z);
+0033 <span class="keyword">else</span>
+0034     error(<span class="string">'Incorrect number of input arguments'</span>)
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">%TRIANGLE - USING [0,1]*[0,1] UNIT REFERENCE TRIANGLE</span>
+0038 
+0039 <a name="_sub1" href="#_subfunctions" class="code">function dshape = delemshapetri3(x,y,z)</a>
+0040 dshape(1,1) = -1; dshape(1,2) = 1; dshape(1,3) = 0;
+0041 dshape(2,1) = -1; dshape(2,2) = 0; dshape(2,3) = 1;
+0042 <span class="keyword">end</span>
+0043 
+0044 <a name="_sub2" href="#_subfunctions" class="code">function dshape = delemshapetri6(x,y,z)</a>
+0045 dshape(1,1) = -3 + 4*x + 4*y; dshape(2,1) = -3 + 4*x + 4*y;
+0046 dshape(1,2) = 4*x - 1;        dshape(2,2) = 0;
+0047 dshape(1,3) = 0;              dshape(2,3) = 4*y-1;
+0048 dshape(1,4) = 4 - 8*x - 4*y;  dshape(2,4) = -4*x;
+0049 dshape(1,5) = 4*y;            dshape(2,5) = 4*x; 
+0050 dshape(1,6) = -4*y;           dshape(2,6) = 4 - 4*x - 8*y;
+0051 <span class="keyword">end</span>
+0052 
+0053 <a name="_sub3" href="#_subfunctions" class="code">function dshape=delemshapetri10(x,y,z)</a>
+0054 dshape(1,1) = 0.5*(36*x+36*y-27*x*x-27*y*y-54*x*y-11); dshape(2,1) = 0.5*(36*x+36*y-27*x*x-27*y*y-54*x*y-11);
+0055 dshape(1,2) = 13.5*x*x-9*x+1;                          dshape(2,2) = 0;
+0056 dshape(1,3) = 0;                                       dshape(2,3) = 13.5*y*y-9*y+1;
+0057 dshape(1,4) = 4.5*(2-10*x+9*x*x+12*x*y-5*y+3*y*y);     dshape(2,4) = 4.5*(6*x*x-5*x+6*x*y);
+0058 dshape(1,5) = 4.5*(y-6*x*y-9*x*x+8*x-1);               dshape(2,5) = 4.5*x*(1-3*x);
+0059 dshape(1,6) = 27*x*y-4.5*y;                            dshape(2,6) = 4.5*x*(3*x-1);
+0060 dshape(1,7) = 4.5*y*(3*y-1);                           dshape(2,7) = 27*x*y-4.5*x;
+0061 dshape(1,8) = 4.5*y*(1-3*y);                           dshape(2,8) = 4.5*(x-6*x*y-9*y*y+8*y-1);
+0062 dshape(1,9) = 4.5*(6*x*y-5*y+6*y*y);                   dshape(2,9) = 4.5*(2-5*x+3*x*x+12*x*y-10*y+9*y*y);
+0063 dshape(1,10) = 27*y-54*x*y-27*y*y;                     dshape(2,10) = 27*x-54*x*y-27*x*x;
+0064 <span class="keyword">end</span>
+0065 
+0066 
+0067 
+0068 
+0069 
+0070 
+0071 <span class="comment">%TETRAHEDRON - USING [0,1]*[0,1]*[0,1] UNIT REFERENCE TETRAHEDRON</span>
+0072 
+0073 <a name="_sub4" href="#_subfunctions" class="code">function dshape = delemshapetet4(x,y,z)</a>
+0074 dshape(1,1) = -1; dshape(2,1) = -1; dshape(3,1) = -1;
+0075 dshape(1,2) = 1;  dshape(2,2) = 0;  dshape(3,2) = 0;
+0076 dshape(1,3) = 0;  dshape(2,3) = 1;  dshape(3,3) = 0;
+0077 dshape(1,4) = 0;  dshape(2,4) = 0;  dshape(3,4) = 1;
+0078 <span class="keyword">end</span>
+0079 
+0080 <a name="_sub5" href="#_subfunctions" class="code">function dshape = delemshapetet10(x,y,z)</a>
+0081 dshape(1,1) = -3 + 4*x + 4*y + 4*z; dshape(2,1) = -3 + 4*x + 4*y + 4*z; dshape(3,1) = -3 + 4*x + 4*y + 4*z;
+0082 dshape(1,2) = 4*x - 1;              dshape(2,2) = 0;                    dshape(3,2) = 0; 
+0083 dshape(1,3) = 0;                    dshape(2,3) = 4*y-1;                dshape(3,3) = 0;
+0084 dshape(1,4) = 0;                    dshape(2,4) = 0;                    dshape(3,4) = 4*z - 1;
+0085 dshape(1,5) = 4 - 8*x - 4*y - 4*z;  dshape(2,5) = -4*x;                 dshape(3,5) = -4*x;
+0086 dshape(1,6) = -4*y;                 dshape(2,6) = 4 - 4*x - 8*y - 4*z;  dshape(3,6) = -4*y;
+0087 dshape(1,7)= -4*z;                  dshape(2,7)= -4*z;                  dshape(3,7) = 4 - 4*x - 4*y - 8*z;
+0088 dshape(1,8) = 4*y;                  dshape(2,8) = 4*x;                  dshape(3,8) = 0;
+0089 dshape(1,9) = 0;                    dshape(2,9) = 4*z;                  dshape(3,9) = 4*y;
+0090 dshape(1,10) = 4*z;                 dshape(2,10) = 0;                   dshape(3,10) = 4*x;
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

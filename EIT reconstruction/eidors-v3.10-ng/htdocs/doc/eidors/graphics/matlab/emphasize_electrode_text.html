@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of emphasize_electrode_text</title>
+  <meta name="keywords" content="emphasize_electrode_text">
+  <meta name="description" content="EMPHASIZE_ELECTRODE_TEXT: ephazise the electrode">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; emphasize_electrode_text.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>emphasize_electrode_text
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>EMPHASIZE_ELECTRODE_TEXT: ephazise the electrode</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function emphasize_electrode_text(elecs); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> EMPHASIZE_ELECTRODE_TEXT: ephazise the electrode
+   text on a &quot;show_fem&quot; plot
+ emphasize_electrode_text(elecs)
+   elecs =&gt; which elecs to emphasize (default, all)
+
+ (C) 2005-2018 Andy Adler. License: GPL version 2 or version 3
+ $Id: emphasize_electrode_text.m 6047 2019-12-31 20:15:47Z aadler $</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="emphasize_electrode_text.html" class="code" title="function emphasize_electrode_text(elecs);">emphasize_electrode_text</a>	EMPHASIZE_ELECTRODE_TEXT: ephazise the electrode</li><li><a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="emphasize_electrode_text.html" class="code" title="function emphasize_electrode_text(elecs);">emphasize_electrode_text</a>	EMPHASIZE_ELECTRODE_TEXT: ephazise the electrode</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function emphasize_electrode_text(elecs);</a>
+0002 <span class="comment">% EMPHASIZE_ELECTRODE_TEXT: ephazise the electrode</span>
+0003 <span class="comment">%   text on a &quot;show_fem&quot; plot</span>
+0004 <span class="comment">% emphasize_electrode_text(elecs)</span>
+0005 <span class="comment">%   elecs =&gt; which elecs to emphasize (default, all)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% (C) 2005-2018 Andy Adler. License: GPL version 2 or version 3</span>
+0008 <span class="comment">% $Id: emphasize_electrode_text.m 6047 2019-12-31 20:15:47Z aadler $</span>
+0009 
+0010 <span class="comment">% FIXME: the view matrix is not easy to interpret. Fix dirn</span>
+0011 
+0012 <span class="keyword">if</span> (nargin&gt;=1) &amp;&amp; ischar(elecs) &amp;&amp; strcmp(elecs,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0013 
+0014 hh = get(gca,<span class="string">'Children'</span>); axis vis3d
+0015 
+0016 bgcolour = [1,1,1];
+0017 <span class="comment">% Don't really understand the view matrix</span>
+0018 <span class="comment">%tmp = inv(view);</span>
+0019  tmp = view;
+0020 dirn = tmp(1:3,3); dirn =  dirn'/norm(dirn);
+0021 
+0022 <span class="keyword">if</span> nargin==0;
+0023   elecs= 1:length(hh)'; <span class="comment">% all of them</span>
+0024 <span class="keyword">end</span>
+0025 
+0026 k=0;<span class="keyword">for</span> hi = hh(:)'; k=k+1;
+0027   <span class="keyword">if</span> ~strcmp(get(hi,<span class="string">'Type'</span>),<span class="string">'text'</span>); 
+0028      <span class="keyword">continue</span>;
+0029   <span class="keyword">end</span>
+0030   <span class="keyword">if</span> ~any(str2num(get(hi,<span class="string">'String'</span>))==elecs);
+0031       <span class="keyword">continue</span>;
+0032   <span class="keyword">end</span>
+0033   set(hi, <span class="string">'BackgroundColor'</span>, bgcolour);
+0034   set(hi, <span class="string">'FontSize'</span>, 12);
+0035   pn = get(hi, <span class="string">'Position'</span>);
+0036   set(hi, <span class="string">'Position'</span>, pn + dirn*10);
+0037 <span class="keyword">end</span>
+0038 
+0039 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0040   fmdl = getfield(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]),<span class="string">'fwd_model'</span>);
+0041   subplot(221);
+0042   <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl,[0,1]); view(0,0);
+0043   <a href="emphasize_electrode_text.html" class="code" title="function emphasize_electrode_text(elecs);">emphasize_electrode_text</a>();
+0044   subplot(222);
+0045   <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl,[0,1]); view(0,80);
+0046   <a href="emphasize_electrode_text.html" class="code" title="function emphasize_electrode_text(elecs);">emphasize_electrode_text</a>();
+0047   subplot(223);
+0048   <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl,[0,1]); view(50,80);
+0049   <a href="emphasize_electrode_text.html" class="code" title="function emphasize_electrode_text(elecs);">emphasize_electrode_text</a>();</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

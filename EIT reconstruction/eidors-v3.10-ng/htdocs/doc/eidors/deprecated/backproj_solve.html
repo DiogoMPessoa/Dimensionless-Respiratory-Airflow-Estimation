@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of backproj_solve</title>
+  <meta name="keywords" content="backproj_solve">
+  <meta name="description" content="BACKPROJ_SOLVE inverse solver using backprojection">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; backproj_solve.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>backproj_solve
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>BACKPROJ_SOLVE inverse solver using backprojection</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function img= backproj_solve( varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> BACKPROJ_SOLVE inverse solver using backprojection
+ NOTE: This is the beginnings of an attempt to reproduce
+  the backprojection algorithm implemented in the
+  Sheffield MKI EIT system. It is far from complete.
+
+ If you wish to use the actual algorithm, use the
+  function &quot;mk_common_gridmdl('backproj')&quot;
+
+ img= backproj_solve( inv_model, data1, data2)
+ img        =&gt; output image (or vector of images)
+ inv_model  =&gt; inverse model struct
+ data1      =&gt; differential data at earlier time
+ data2      =&gt; differential data at later time
+
+ inv_model.backproj_solve.type = 'naive' (DEFAULT)
+    use naive (unfiltered algorithm)
+ inv_model.backproj_solve.type = 'filtered' (NOT IMPLEMENTED YET)
+    ref: Barber DC Brown BH, &quot;fast reconstruction of resistance
+         images&quot;, clin Phys Physiol Mes, pp 47-54, vol 8,sup A,1987
+
+ both data1 and data2 may be matrices (MxT) each of
+  M measurements at T times
+ if either data1 or data2 is a vector, then it is expanded
+  to be the same size matrix</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/solvers/inverse/inv_solve_backproj.html" class="code" title="function img= inv_solve_backproj( inv_model, data1, data2)">inv_solve_backproj</a>	INV_SOLVE_BACKPROJ inverse solver using backprojection</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function img= backproj_solve( varargin)</a>
+0002 <span class="comment">% BACKPROJ_SOLVE inverse solver using backprojection</span>
+0003 <span class="comment">% NOTE: This is the beginnings of an attempt to reproduce</span>
+0004 <span class="comment">%  the backprojection algorithm implemented in the</span>
+0005 <span class="comment">%  Sheffield MKI EIT system. It is far from complete.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% If you wish to use the actual algorithm, use the</span>
+0008 <span class="comment">%  function &quot;mk_common_gridmdl('backproj')&quot;</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% img= backproj_solve( inv_model, data1, data2)</span>
+0011 <span class="comment">% img        =&gt; output image (or vector of images)</span>
+0012 <span class="comment">% inv_model  =&gt; inverse model struct</span>
+0013 <span class="comment">% data1      =&gt; differential data at earlier time</span>
+0014 <span class="comment">% data2      =&gt; differential data at later time</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% inv_model.backproj_solve.type = 'naive' (DEFAULT)</span>
+0017 <span class="comment">%    use naive (unfiltered algorithm)</span>
+0018 <span class="comment">% inv_model.backproj_solve.type = 'filtered' (NOT IMPLEMENTED YET)</span>
+0019 <span class="comment">%    ref: Barber DC Brown BH, &quot;fast reconstruction of resistance</span>
+0020 <span class="comment">%         images&quot;, clin Phys Physiol Mes, pp 47-54, vol 8,sup A,1987</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% both data1 and data2 may be matrices (MxT) each of</span>
+0023 <span class="comment">%  M measurements at T times</span>
+0024 <span class="comment">% if either data1 or data2 is a vector, then it is expanded</span>
+0025 <span class="comment">%  to be the same size matrix</span>
+0026 
+0027 <span class="comment">% (C) 2007 Andy Adler. License: GPL version 2 or version 3</span>
+0028 <span class="comment">% $Id: backproj_solve.m 3103 2012-06-08 14:42:16Z bgrychtol $</span>
+0029 
+0030 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'BACKPROJ_SOLVE is deprecated as of 08-Jun-2012. Use INV_SOLVE_BACKPROJ instead.'</span>);
+0031 
+0032 img = <a href="../../eidors/solvers/inverse/inv_solve_backproj.html" class="code" title="function img= inv_solve_backproj( inv_model, data1, data2)">inv_solve_backproj</a>(varargin{:});</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

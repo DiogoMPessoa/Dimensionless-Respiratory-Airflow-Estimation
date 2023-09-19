@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_voxel_volume</title>
+  <meta name="keywords" content="mk_voxel_volume">
+  <meta name="description" content="MK_VOXEL_VOLUME create a voxel model to reconstruct on">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_voxel_volume.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_voxel_volume
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_VOXEL_VOLUME create a voxel model to reconstruct on</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [imdl, fmdl] = mk_voxel_volume(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MK_VOXEL_VOLUME create a voxel model to reconstruct on
+ OUT = MK_VOXEL_VOLUME(MDL)
+ OUT = MK_VOXEL_VOLUME(MDL, OPT)
+
+ Inputs:
+  MDL   = an EIDORS forward or inverse model structure
+  OPT   = an option structure with the following fields and defaults:
+     opt.imgsz = [32 32 4]; % X, Y and Z dimensions of the voxel grid
+     opt.xvec  = []          % Specific X cut-planes between voxels
+                             % A scalar means the number of planes
+                             % Takes precedence over other options
+     opt.yvec  = []          % Specific Y cut-planes between voxels
+                             % A scalar means the number of planes
+                             % Takes precedence over other options
+     opt.zvec  = []          % Specific Z cut-planes between voxels
+                             % A scalar means the number of planes
+                             % Takes precedence over other options
+     opt.square_pixels = 0;  % adjust imgsz to get square pixels (in XY)
+     opt.cube_voxels = 0;    % adjust imgsz to get cube voxels (in XYZ)  
+     opt.prune_model = true  % removes voxels outside the supplied MDL
+                             % This runs mk_grid_c2f. For simple
+                             % geometries, such a cylinder, it is much
+                             % quicker to set to false and prune manually.
+     opt.save_memory         % passed to mk_grid_c2f
+
+ Output depends on the type of model supplied. If MDL is a fwd_model
+ structure then OUT is a rec_model. If MDL is an inv_model, then OUT is a
+ modified version of it, with the voxel volume in inv_model.rec_model and
+ updated inv_model.fwd_model.coarse2fine
+ 
+ [OUT FMDL] = MK_VOXEL_VOLUME(MDL, ...) also returns the forward model
+ structure with the coarse2fine field.
+
+ See also <a href="mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">MK_PIXEL_SLICE</a>, <a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">MK_GRID_MODEL</a>, <a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">MK_GRID_C2F</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="mk_voxel_volume.html" class="code" title="function [imdl, fmdl] = mk_voxel_volume(varargin)">mk_voxel_volume</a>	MK_VOXEL_VOLUME create a voxel model to reconstruct on</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>	show_3d_slices(img, z_cuts, x_cuts, y_cuts, any_cuts)</li><li><a href="GREIT3D_distribution.html" class="code" title="function [imdl,distr] = GREIT3D_distribution(fmdl, vopt)">GREIT3D_distribution</a>	GREIT3D_distribution: create target distributions for 3D GREIT</li><li><a href="mk_voxel_volume.html" class="code" title="function [imdl, fmdl] = mk_voxel_volume(varargin)">mk_voxel_volume</a>	MK_VOXEL_VOLUME create a voxel model to reconstruct on</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [rmdl, c2f] = do_voxel_volume(fmdl,opt)</a></li><li><a href="#_sub2" class="code">function cache_obj = get_cache_obj(fmdl, opt)</a></li><li><a href="#_sub3" class="code">function opt = parse_opts(fmdl, opt)</a></li><li><a href="#_sub4" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [imdl, fmdl] = mk_voxel_volume(varargin)</a>
+0002 <span class="comment">%MK_VOXEL_VOLUME create a voxel model to reconstruct on</span>
+0003 <span class="comment">% OUT = MK_VOXEL_VOLUME(MDL)</span>
+0004 <span class="comment">% OUT = MK_VOXEL_VOLUME(MDL, OPT)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Inputs:</span>
+0007 <span class="comment">%  MDL   = an EIDORS forward or inverse model structure</span>
+0008 <span class="comment">%  OPT   = an option structure with the following fields and defaults:</span>
+0009 <span class="comment">%     opt.imgsz = [32 32 4]; % X, Y and Z dimensions of the voxel grid</span>
+0010 <span class="comment">%     opt.xvec  = []          % Specific X cut-planes between voxels</span>
+0011 <span class="comment">%                             % A scalar means the number of planes</span>
+0012 <span class="comment">%                             % Takes precedence over other options</span>
+0013 <span class="comment">%     opt.yvec  = []          % Specific Y cut-planes between voxels</span>
+0014 <span class="comment">%                             % A scalar means the number of planes</span>
+0015 <span class="comment">%                             % Takes precedence over other options</span>
+0016 <span class="comment">%     opt.zvec  = []          % Specific Z cut-planes between voxels</span>
+0017 <span class="comment">%                             % A scalar means the number of planes</span>
+0018 <span class="comment">%                             % Takes precedence over other options</span>
+0019 <span class="comment">%     opt.square_pixels = 0;  % adjust imgsz to get square pixels (in XY)</span>
+0020 <span class="comment">%     opt.cube_voxels = 0;    % adjust imgsz to get cube voxels (in XYZ)</span>
+0021 <span class="comment">%     opt.prune_model = true  % removes voxels outside the supplied MDL</span>
+0022 <span class="comment">%                             % This runs mk_grid_c2f. For simple</span>
+0023 <span class="comment">%                             % geometries, such a cylinder, it is much</span>
+0024 <span class="comment">%                             % quicker to set to false and prune manually.</span>
+0025 <span class="comment">%     opt.save_memory         % passed to mk_grid_c2f</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Output depends on the type of model supplied. If MDL is a fwd_model</span>
+0028 <span class="comment">% structure then OUT is a rec_model. If MDL is an inv_model, then OUT is a</span>
+0029 <span class="comment">% modified version of it, with the voxel volume in inv_model.rec_model and</span>
+0030 <span class="comment">% updated inv_model.fwd_model.coarse2fine</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% [OUT FMDL] = MK_VOXEL_VOLUME(MDL, ...) also returns the forward model</span>
+0033 <span class="comment">% structure with the coarse2fine field.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% See also MK_PIXEL_SLICE, MK_GRID_MODEL, MK_GRID_C2F</span>
+0036 
+0037 <span class="comment">% (C) 2015 Bartlomiej Grychtol - all rights reserved by Swisstom AG</span>
+0038 <span class="comment">% License: GPL version 2 or 3</span>
+0039 <span class="comment">% $Id: mk_voxel_volume.m 5749 2018-05-16 18:39:36Z alistair_boyle $</span>
+0040 
+0041 <span class="comment">% &gt;&gt; SWISSTOM CONTRIBUTION &lt;&lt;</span>
+0042 
+0043 imdl = varargin{1};
+0044 <span class="comment">% if input is 'UNIT_TEST', run tests</span>
+0045 <span class="keyword">if</span> ischar(imdl) &amp;&amp; strcmp(imdl,<span class="string">'UNIT_TEST'</span>) 
+0046     <a href="#_sub4" class="code" title="subfunction do_unit_test">do_unit_test</a>; clear imdl 
+0047     <span class="keyword">return</span>; 
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="keyword">if</span> nargin &lt; 2
+0051     opt = struct;
+0052 <span class="keyword">else</span> 
+0053     opt = varargin{2};
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="keyword">switch</span>(imdl.type)
+0057     <span class="keyword">case</span> <span class="string">'inv_model'</span>
+0058         fmdl = imdl.fwd_model;
+0059     <span class="keyword">case</span> <span class="string">'fwd_model'</span>
+0060         fmdl = imdl;
+0061     <span class="keyword">otherwise</span>
+0062         error(<span class="string">'An EIDORS inverse or forward model struct required'</span>);
+0063 <span class="keyword">end</span>
+0064 
+0065 opt = <a href="#_sub3" class="code" title="subfunction opt = parse_opts(fmdl, opt)">parse_opts</a>(fmdl,opt);
+0066 
+0067 copt.fstr = <span class="string">'mk_voxel_volume'</span>;
+0068 copt.cache_obj = <a href="#_sub2" class="code" title="subfunction cache_obj = get_cache_obj(fmdl, opt)">get_cache_obj</a>(fmdl, opt);
+0069 [rmdl, c2f] = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction [rmdl, c2f] = do_voxel_volume(fmdl,opt)">do_voxel_volume</a>,{fmdl, opt},copt);
+0070 
+0071 <span class="keyword">if</span> ~isempty(c2f)
+0072     fmdl.coarse2fine = c2f;
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="keyword">switch</span> imdl.type
+0076    <span class="keyword">case</span> <span class="string">'inv_model'</span>
+0077       imdl.rec_model = rmdl;
+0078       imdl.fwd_model = fmdl;
+0079    <span class="keyword">case</span> <span class="string">'fwd_model'</span>
+0080       imdl = rmdl;
+0081 <span class="keyword">end</span>
+0082 
+0083 
+0084 <span class="comment">%-------------------------------------------------------------------------%</span>
+0085 <span class="comment">% The main function</span>
+0086 <a name="_sub1" href="#_subfunctions" class="code">function [rmdl, c2f] = do_voxel_volume(fmdl,opt)</a>
+0087 
+0088     rmdl = <a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>([],opt.xvec,opt.yvec,opt.zvec);
+0089     
+0090        
+0091     c2f = [];
+0092     <span class="keyword">if</span> ~opt.prune_model, <span class="keyword">return</span>, <span class="keyword">end</span>
+0093     
+0094     <span class="comment">%     fmdl.elems = fmdl.elems( 210714,:);</span>
+0095     [c2f, m]  = <a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>(fmdl, rmdl, opt);
+0096     
+0097     inside = any(c2f,1);
+0098     c2f(:,~inside) = [];
+0099     rm = ~logical(rmdl.coarse2fine*inside');
+0100     rmdl.elems(rm,:) = [];
+0101     rmdl.coarse2fine(rm,:) = [];
+0102     rmdl.coarse2fine(:,~inside) = [];
+0103     
+0104     
+0105     bnd_fcs = ones(1,nnz(inside))*m.vox2face(inside,:) == 1;
+0106     rmdl.boundary = m.faces(bnd_fcs,:);
+0107     rmdl.inside   = inside; <span class="comment">% the inside array is useful in other functions</span>
+0108     x_pts = opt.xvec(1:end-1) + 0.5*diff(opt.xvec);
+0109     y_pts = opt.yvec(1:end-1) + 0.5*diff(opt.yvec);
+0110     z_pts = opt.zvec(1:end-1) + 0.5*diff(opt.zvec);
+0111 
+0112     rmdl.mdl_slice_mapper.x_pts = x_pts;
+0113     rmdl.mdl_slice_mapper.y_pts = y_pts;
+0114     rmdl.mdl_slice_mapper.z_pts = z_pts;
+0115     
+0116     
+0117 <span class="comment">%-------------------------------------------------------------------------%</span>
+0118 <span class="comment">% Assemble a reference object for caching</span>
+0119 <a name="_sub2" href="#_subfunctions" class="code">function cache_obj = get_cache_obj(fmdl, opt)</a>
+0120     tmp = struct;
+0121     flds = {<span class="string">'nodes'</span>,<span class="string">'elems'</span>};
+0122     <span class="keyword">for</span> f = flds;
+0123         tmp.(f{1}) = fmdl.(f{1});
+0124     <span class="keyword">end</span>
+0125     cache_obj = {tmp, opt};
+0126     
+0127 
+0128 <span class="comment">%-------------------------------------------------------------------------%</span>
+0129 <span class="comment">% Parse option struct</span>
+0130  <a name="_sub3" href="#_subfunctions" class="code">function opt = parse_opts(fmdl, opt)</a>
+0131     <span class="keyword">if</span> ~isfield(opt, <span class="string">'imgsz'</span>),     
+0132         opt.imgsz = [32 32 4]; 
+0133     <span class="keyword">end</span>
+0134     <span class="keyword">if</span> ~isfield(opt, <span class="string">'square_pixels'</span>)
+0135         opt.square_pixels = 0;
+0136     <span class="keyword">end</span>
+0137     <span class="keyword">if</span> ~isfield(opt, <span class="string">'cube_voxels'</span>)
+0138         opt.cube_voxels = 0;
+0139     <span class="keyword">end</span>
+0140     <span class="keyword">if</span> ~isfield(opt, <span class="string">'xvec'</span>)
+0141         opt.xvec = [];
+0142     <span class="keyword">end</span>
+0143     <span class="keyword">if</span> ~isfield(opt, <span class="string">'yvec'</span>)
+0144         opt.yvec = [];
+0145     <span class="keyword">end</span>
+0146     <span class="keyword">if</span> ~isfield(opt, <span class="string">'zvec'</span>)
+0147         opt.zvec = [];
+0148     <span class="keyword">end</span>
+0149     <span class="keyword">if</span> ~isfield(opt, <span class="string">'prune_model'</span>)
+0150         opt.prune_model = true;
+0151     <span class="keyword">end</span>
+0152     <span class="keyword">if</span> isempty(opt.xvec) &amp;&amp; isempty(opt.imgsz)
+0153         error(<span class="string">'EIDORS:WrongInput'</span>, <span class="string">'opt.imgsz must not be empty if opt.xvec is empty or absent'</span>);
+0154     <span class="keyword">end</span>
+0155     <span class="keyword">if</span> isempty(opt.yvec) &amp;&amp; numel(opt.imgsz) &lt; 2
+0156         error(<span class="string">'EIDORS:WrongInput'</span>, <span class="string">'opt.imgsz must have at least 2 elements if opt.yvec is empty or absent'</span>);
+0157     <span class="keyword">end</span>
+0158     <span class="keyword">if</span> isempty(opt.zvec) &amp;&amp; numel(opt.imgsz) &lt; 3
+0159         error(<span class="string">'EIDORS:WrongInput'</span>, <span class="string">'opt.imgsz must have 3 elements if opt.zvec is empty or absent'</span>);
+0160     <span class="keyword">end</span>
+0161     
+0162     mingrid = min(fmdl.nodes);
+0163     maxgrid = max(fmdl.nodes);
+0164     mdl_sz = maxgrid - mingrid;
+0165     
+0166     allempty = isempty(opt.xvec) &amp; isempty(opt.yvec) &amp; isempty(opt.zvec);
+0167     <span class="keyword">if</span> opt.cube_voxels &amp;&amp; ~allempty
+0168         warning(<span class="string">'EIDORS:IncompatibleOptions'</span>,<span class="string">'Option cube_voxels is ignored when xvec, yvec or zvec is specifed'</span>);
+0169     <span class="keyword">end</span>
+0170     <span class="keyword">if</span> opt.cube_voxels &amp;&amp; allempty
+0171         side_sz = max(mdl_sz ./ opt.imgsz(1:3));
+0172         n_steps = ceil(mdl_sz / side_sz);
+0173         mdl_ctr = mingrid + mdl_sz/2;
+0174         mingrid = mdl_ctr - n_steps/2 * side_sz;
+0175         maxgrid = mdl_ctr + n_steps/2 * side_sz;
+0176         opt.imgsz = n_steps;
+0177  
+0178     <span class="keyword">elseif</span> opt.square_pixels
+0179         <span class="keyword">if</span> ~isempty(opt.xvec) || ~isempty(opt.yvec)
+0180             warning(<span class="string">'EIDORS:IncompatibleOptions'</span>,<span class="string">'Option square_pixels is ignored when xvec or yvec is specifed'</span>);
+0181         <span class="keyword">else</span>
+0182             mdl_AR = mdl_sz(1)/mdl_sz(2);
+0183             img_AR = opt.imgsz(1)/opt.imgsz(2);
+0184             <span class="keyword">if</span> mdl_AR &lt; img_AR
+0185                 delta = (mdl_sz(2) * img_AR - mdl_sz(1)) /2;
+0186                 mingrid(1) = mingrid(1) - delta;
+0187                 maxgrid(1) = maxgrid(1) + delta;
+0188             <span class="keyword">elseif</span> mdl_AR &gt; img_AR
+0189                 delta = (mdl_sz(1)/img_AR - mdl_sz(2)) / 2;
+0190                 mingrid(2) = mingrid(2) - delta;
+0191                 maxgrid(2) = maxgrid(2) + delta;
+0192             <span class="keyword">end</span>
+0193         <span class="keyword">end</span>
+0194     <span class="keyword">end</span>
+0195     <span class="keyword">if</span> isempty(opt.xvec)
+0196         opt.xvec = linspace(mingrid(1), maxgrid(1), opt.imgsz(1)+1);
+0197     <span class="keyword">end</span>      
+0198     <span class="keyword">if</span> isempty(opt.yvec)
+0199         opt.yvec = linspace(mingrid(2), maxgrid(2), opt.imgsz(2)+1);
+0200     <span class="keyword">end</span>
+0201     <span class="keyword">if</span> isempty(opt.zvec)
+0202         opt.zvec = linspace(mingrid(3), maxgrid(3), opt.imgsz(3)+1);
+0203     <span class="keyword">end</span>
+0204     
+0205     <span class="keyword">if</span> ~isfield(opt, <span class="string">'do_coarse2fine'</span>)
+0206         opt.do_coarse2fine = 1;
+0207     <span class="keyword">end</span>
+0208     <span class="keyword">if</span> ~isfield(opt, <span class="string">'z_depth'</span>)
+0209         opt.z_depth = inf;
+0210     <span class="keyword">end</span>
+0211 
+0212 <span class="comment">%-------------------------------------------------------------------------%</span>
+0213 <span class="comment">% Perfom unit tests</span>
+0214 <a name="_sub4" href="#_subfunctions" class="code">function do_unit_test</a>
+0215 
+0216 fmdl = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>(<span class="string">'adult_male_16el'</span>);
+0217 <span class="comment">% fmdl= ng_mk_cyl_models([2,2,.4],[16,1],[.1,0,.025]);</span>
+0218 opt.square_pixels = 1;
+0219 [rmdl, fmdl] = <a href="mk_voxel_volume.html" class="code" title="function [imdl, fmdl] = mk_voxel_volume(varargin)">mk_voxel_volume</a>(fmdl, opt);
+0220 
+0221 
+0222 subplot(121)
+0223 rimg = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(rmdl,0);
+0224 rimg.elem_data = zeros(size(rmdl.coarse2fine,2),1);
+0225 idx = round(rand(5,1)* length(rimg.elem_data));
+0226 rimg.elem_data(idx) = 1;
+0227 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(rimg);
+0228 
+0229 subplot(122)
+0230 img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,0);
+0231 img.elem_data = fmdl.coarse2fine * rimg.elem_data;
+0232 img.calc_colours.ref_level = 0;
+0233 img.calc_colours.transparency_thresh = 1e-2;
+0234 
+0235 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0236 
+0237 
+0238 
+0239 
+0240</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

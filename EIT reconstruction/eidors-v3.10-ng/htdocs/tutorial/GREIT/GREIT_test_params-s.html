@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>GREIT Test Parameters</h2>
+
+During the GREIT development process, we developed a 
+set of figures of merit to characterize the performance
+of an algorithm.
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT-evaluation/reconstruction_parameters.png">
+<br><i>Figure:</i>
+GREIT test parameters:
+Amplitude (AR),
+Position Error (PE),
+Resolution (RES),
+Shape Deformation (SD),
+Ringing (RNG)
+</center>
+
+EIDORS code to run the GREIT evaluation is shown
+
+<h3> 
+Simulate 3D object
+</h3>
+
+<pre>
+% Simulate obj $Id: GREIT_test_params01.m 2167 2010-04-04 21:39:48Z aadler $
+
+fmdl = ng_mk_cyl_models([2,1,0.08],[16,1],[0.05]); 
+fmdl.stimulation = mk_stim_patterns(16,1,[0,1],[0,1],{},1);
+imgs= mk_image( fmdl, 1);
+
+show_fem(imgs);
+print_convert('GREIT_test_params01a.png','-density 60');
+
+view(0,0)
+xlim([-.4,.4])
+zlim(1+[-.4,.4])
+print_convert('GREIT_test_params01b.png','-density 60');
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/GREIT_test_params01a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/GREIT_test_params01b.png">
+<br><i>Figure:</i>
+Simulation Mesh (right) and close-up of the electrodes (left)
+</center>
+
+<h3> 
+Simulate Sequence of Targets
+</h3>
+
+<pre>
+% Simulate obj $Id: GREIT_test_params02.m 4823 2015-03-29 15:17:16Z bgrychtol-ipa $
+
+% Specify positions to simulate (only x-axis here)
+r =  linspace(0,0.9,100);
+xyzr = [r; zeros(1,100); ones(1,100);
+     0.05*ones(1,100)];
+
+[vh,vi] = simulate_movement(imgs, xyzr);
+
+% Show GREIT images
+opt.noise_figure = 0.5;
+i_gr = mk_GREIT_model(fmdl,0.2,[],opt);
+imgr = inv_solve(i_gr, vh, vi(:,1:5:100));
+imgr.show_slices.img_cols = 5;
+show_slices(imgr);
+
+print_convert('GREIT_test_params02a.png','-density 60');
+
+</pre>
+
+<center>
+<img src="GREIT_test_params02a.png">
+<br><i>Figure:</i>
+Illustration of the object locations in the simulation
+</center>
+
+<h3> 
+Calculate the parameters
+</h3>
+
+Image Reconstruction
+<pre>
+% GREIT params eval $Id: GREIT_test_params03.m 2240 2010-07-04 14:41:32Z aadler $
+
+% Reconstruct GREIT Images
+imdl_gr = mk_common_gridmdl('GREITc1');
+imgc{1} = inv_solve(imdl_gr, vh, vi);
+
+% Reconstruct backprojection Images
+imdl_bp = mk_common_gridmdl('backproj');
+imgc{2} = inv_solve(imdl_bp, vh, vi);
+
+fname_base = 'GREIT_test_params04';
+
+
+</pre>
+
+Calculate performance
+<pre>
+% GREIT params eval $Id: GREIT_test_params04.m 2240 2010-07-04 14:41:32Z aadler $
+
+for i= 1:length(imgc);
+   imgr = imgc{i};
+   imgr.calc_colours.npoints = 32;
+   params = eval_GREIT_fig_merit(imgr, xyzr);
+
+   fname = sprintf('%s%c', fname_base, i+'a'-1);
+
+   plot(r, params(1,:)); axis([0,0.9,0,2.0]);  ylabel('AR');
+   print_convert([fname,'_ar.png'],  '-density 60',0.3);
+
+   plot(r, params(2,:)); axis([0,0.9,-0.15,0.15]);  ylabel('PE');
+   print_convert([fname,'_pe.png'],  '-density 60',0.3);
+
+   plot(r, params(3,:)); axis([0,0.9,0,0.4]);  ylabel('RES');
+   print_convert([fname,'_res.png'],  '-density 60',0.3);
+
+   plot(r, params(4,:)); axis([0,0.9,0,0.3]);  ylabel('SD');
+   print_convert([fname,'_sd.png'],  '-density 60',0.3);
+
+   plot(r, params(5,:)); axis([0,0.9,0,0.6]);  ylabel('RNG');
+   print_convert([fname,'_rng.png'],  '-density 60',0.3);
+end
+
+</pre>
+
+<center>
+<img src="GREIT_test_params04a_ar.png"> <img src="GREIT_test_params04b_ar.png"> <br>
+<img src="GREIT_test_params04a_pe.png"> <img src="GREIT_test_params04b_pe.png"> <br>
+<img src="GREIT_test_params04a_res.png"><img src="GREIT_test_params04b_res.png"><br>
+<img src="GREIT_test_params04a_sd.png"> <img src="GREIT_test_params04b_sd.png"> <br>
+<img src="GREIT_test_params04a_rng.png"><img src="GREIT_test_params04b_rng.png"><br>
+<br><i>Figure:</i>
+Evaluation of GREIT (right), and Sheffield Backprojection (left)
+GREIT parameters AR, PE, RES, SD, and RNG as a function 
+of point radial position
+</center>
+
+<h3>
+Comment
+</h3>
+
+There are several issues with this measurement, that should
+be kept in mind. This is an example of the use of the function, 
+not a specification.
+<ul>
+<LI> The object is just in one <i>x</i> position in the plane. It should
+     be rotated to all <i>x</i>,<i>y</i> positions.
+<LI> The various parameters are defined for a set of test positions for
+     a given distance above and below the electrode plane, yet here we
+     just test on the electrode plane.
+</ul>
+
+<h3> 
+Simulate Sequence of Targets above the plane (&times;25%)
+</h3>
+
+<pre>
+% Simulate obj $Id: GREIT_test_params05.m 2167 2010-04-04 21:39:48Z aadler $
+
+% Simulate positions that are 0.25 above the plane
+r =  linspace(0,0.9,100);
+xyzr = [r;
+        zeros(1,100);
+     1.25*ones(1,100);
+     0.05*ones(1,100)];
+
+[vh,vi] = simulate_movement(imgs, xyzr);
+
+% Show GREIT images
+i_gr = mk_common_gridmdl('GREITc1');
+imgr = inv_solve(i_gr, vh, vi(:,1:5:100));
+imgr.show_slices.img_cols = 5;
+show_slices(imgr);
+
+print_convert('GREIT_test_params05a.png','-density 60');
+
+</pre>
+
+<center>
+<img src="GREIT_test_params05a.png">
+<br><i>Figure:</i>
+Illustration of the object locations in the simulation
+</center>
+
+<h3> 
+Calculate the parameters
+</h3>
+
+<pre>
+% GREIT params eval $Id: GREIT_test_params06.m 2240 2010-07-04 14:41:32Z aadler $
+
+% Reconstruct GREIT Images
+imdl_gr = mk_common_gridmdl('GREITc1');
+imgc{1} = inv_solve(imdl_gr, vh, vi);
+
+% Reconstruct backprojection Images
+imdl_bp = mk_common_gridmdl('backproj');
+imgc{2} = inv_solve(imdl_bp, vh, vi);
+
+fname_base = 'GREIT_test_params06';
+
+</pre>
+<pre>
+% GREIT params eval $Id: GREIT_test_params04.m 2240 2010-07-04 14:41:32Z aadler $
+
+for i= 1:length(imgc);
+   imgr = imgc{i};
+   imgr.calc_colours.npoints = 32;
+   params = eval_GREIT_fig_merit(imgr, xyzr);
+
+   fname = sprintf('%s%c', fname_base, i+'a'-1);
+
+   plot(r, params(1,:)); axis([0,0.9,0,2.0]);  ylabel('AR');
+   print_convert([fname,'_ar.png'],  '-density 60',0.3);
+
+   plot(r, params(2,:)); axis([0,0.9,-0.15,0.15]);  ylabel('PE');
+   print_convert([fname,'_pe.png'],  '-density 60',0.3);
+
+   plot(r, params(3,:)); axis([0,0.9,0,0.4]);  ylabel('RES');
+   print_convert([fname,'_res.png'],  '-density 60',0.3);
+
+   plot(r, params(4,:)); axis([0,0.9,0,0.3]);  ylabel('SD');
+   print_convert([fname,'_sd.png'],  '-density 60',0.3);
+
+   plot(r, params(5,:)); axis([0,0.9,0,0.6]);  ylabel('RNG');
+   print_convert([fname,'_rng.png'],  '-density 60',0.3);
+end
+
+</pre>
+
+<center>
+<img src="GREIT_test_params06a_ar.png"> <img src="GREIT_test_params06b_ar.png"> <br>
+<img src="GREIT_test_params06a_pe.png"> <img src="GREIT_test_params06b_pe.png"> <br>
+<img src="GREIT_test_params06a_res.png"><img src="GREIT_test_params06b_res.png"><br>
+<img src="GREIT_test_params06a_sd.png"> <img src="GREIT_test_params06b_sd.png"> <br>
+<img src="GREIT_test_params06a_rng.png"> <img src="GREIT_test_params06b_rng.png"> <br>
+<br><i>Figure:</i>
+Evaluation for off plane object (25%) of GREIT (left), and Sheffield
+Backprojection (right) GREIT parameters AR, PE, RES, SD, and RNG as a function 
+of point radial position
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

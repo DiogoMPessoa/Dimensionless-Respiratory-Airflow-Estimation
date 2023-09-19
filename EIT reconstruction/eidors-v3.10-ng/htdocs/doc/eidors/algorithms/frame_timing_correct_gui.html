@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of frame_timing_correct_gui</title>
+  <meta name="keywords" content="frame_timing_correct_gui">
+  <meta name="description" content="Corrects serially collected *.get data so that each frame appears">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">algorithms</a> &gt; frame_timing_correct_gui.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/algorithms&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>frame_timing_correct_gui
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Corrects serially collected *.get data so that each frame appears</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function  frame_timing_correct_gui() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">Corrects serially collected *.get data so that each frame appears 
+to come from an instantaneous point in time.
+outputs *_corrected.get &amp; associated *_corrected.prl files
+intended to be a standalone compilable file.
+CITATION_REQUEST:
+  AUTHOR: Rebecca Yerworth and Richard Bayford
+  TITLE: The effect of serial data collection on the accuracy of
+  electrical impedance tomography images
+  JOURNAL: Physiological Measurement
+  VOL: 34
+  NUM: 6
+  YEAR: 2013
+  PAGE: 659-669
+  LINK: http://iopscience.iop.org/0967-3334/34/6/659/pdf/0967-3334_34_6_659.pdf
+  DOI: 10.1088/0967-3334/34/6/659
+  PUBMED:  23719130
+ 
+ ISSUES WITH CODE:
+   - Code works only with *.get files
+%
+try
+   citeme(serial_correction)
+end</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="frame_timing_correct.html" class="code" title="function  [c_data, stats]= frame_timing_correct(raw_data, method, fwd_model)">frame_timing_correct</a>	FRAME_TIMING_CORRECT: Corrects serially collected *.get data so that each</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function  frame_timing_correct_gui()</a>
+0002 <span class="comment">%Corrects serially collected *.get data so that each frame appears</span>
+0003 <span class="comment">%to come from an instantaneous point in time.</span>
+0004 <span class="comment">%outputs *_corrected.get &amp; associated *_corrected.prl files</span>
+0005 <span class="comment">%intended to be a standalone compilable file.</span>
+0006 <span class="comment">%CITATION_REQUEST:</span>
+0007 <span class="comment">%  AUTHOR: Rebecca Yerworth and Richard Bayford</span>
+0008 <span class="comment">%  TITLE: The effect of serial data collection on the accuracy of</span>
+0009 <span class="comment">%  electrical impedance tomography images</span>
+0010 <span class="comment">%  JOURNAL: Physiological Measurement</span>
+0011 <span class="comment">%  VOL: 34</span>
+0012 <span class="comment">%  NUM: 6</span>
+0013 <span class="comment">%  YEAR: 2013</span>
+0014 <span class="comment">%  PAGE: 659-669</span>
+0015 <span class="comment">%  LINK: http://iopscience.iop.org/0967-3334/34/6/659/pdf/0967-3334_34_6_659.pdf</span>
+0016 <span class="comment">%  DOI: 10.1088/0967-3334/34/6/659</span>
+0017 <span class="comment">%  PUBMED:  23719130</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% ISSUES WITH CODE:</span>
+0020 <span class="comment">%   - Code works only with *.get files</span>
+0021 <span class="comment">%%</span>
+0022 <span class="comment">%try</span>
+0023  <span class="comment">%   citeme(serial_correction)</span>
+0024 <span class="comment">%end</span>
+0025 
+0026 <span class="comment">% FIXME</span>
+0027 <span class="comment">%  - try to avoid global variables</span>
+0028 
+0029 method=<span class="string">'fft'</span>; <span class="comment">%to do:give choice of fft or liniear</span>
+0030 <span class="comment">%choose file and load date</span>
+0031 [filenames,path.data, file_type]=uigetfile({<span class="keyword">...</span>
+0032     <span class="comment">%'*.get;*.txt','all EIT data files'; ...</span>
+0033     <span class="string">'*.get'</span>,<span class="string">'Gotenberg and Visis files, *.get'</span>; <span class="keyword">...</span>
+0034     <span class="comment">%'*.txt','*.txt files';...</span>
+0035     <span class="comment">%'*.*',  'All Files (*.*)' ...</span>
+0036     },<span class="string">'Select filename(s):'</span>, <span class="keyword">...</span>
+0037     <span class="string">'MultiSelect'</span>, <span class="string">'on'</span>);
+0038 <span class="keyword">if</span> filenames == 0
+0039         errordlg(<span class="string">'no data selected'</span>)
+0040         <span class="keyword">return</span>
+0041 <span class="keyword">end</span>
+0042 <span class="keyword">if</span> ischar(filenames)    <span class="comment">%if only one file seclected puts as string not cell, so need to convert.</span>
+0043     filenames=cellstr(filenames);
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="comment">%for each file selected....</span>
+0047 <span class="keyword">for</span> i=1:max(size(filenames))
+0048     filename = [path.data,<span class="string">'/'</span>,filenames{i}];
+0049     <span class="keyword">if</span> file_type == 0
+0050         errordlg(<span class="string">'no data selected'</span>)
+0051         <span class="keyword">return</span>
+0052     <span class="keyword">elseif</span> file_type == 1
+0053         [a,b,ext]=fileparts(filename);<span class="comment">%work out filetype</span>
+0054 <span class="comment">% Should use eidors_readdata</span>
+0055         infile=fopen(filename,<span class="string">'r'</span>); <span class="comment">%open file for reading</span>
+0056         <span class="keyword">if</span> infile==-1;
+0057            errordlg([<span class="string">'Cannot find the file: '</span>,filename,<span class="string">'.get'</span>]);
+0058            <span class="keyword">return</span>
+0059         <span class="keyword">end</span>;
+0060         fseek(infile,0,<span class="string">'eof'</span>);
+0061         eframe=ftell(infile)/256/4;<span class="comment">%number of frames in file</span>
+0062         fseek(infile,0,<span class="string">'bof'</span>);
+0063         raw(:,1:eframe,1)=fread(infile,[208,inf],<span class="string">'208*float32'</span>,48*4);<span class="comment">%[read 208 boundary voltages, skip 48 pieces of other info] per frame</span>
+0064                     <span class="comment">%%Loading of addition information.</span>
+0065         fseek(infile,208*4,<span class="string">'bof'</span>);
+0066         data2=fread(infile,[48,inf],<span class="string">'48*float32'</span>,208*4);
+0067         fclose(infile); <span class="comment">%close file</span>
+0068     <span class="keyword">end</span>
+0069     
+0070   [c_data,stats]= <a href="frame_timing_correct.html" class="code" title="function  [c_data, stats]= frame_timing_correct(raw_data, method, fwd_model)">frame_timing_correct</a>(raw, method);
+0071 
+0072 <span class="comment">%output corrected file</span>
+0073    c_data(209:208+48,:)=data2; <span class="comment">%attach V, I &amp; auxillary data to cleaned data.</span>
+0074    outfile=fopen([a b <span class="string">'_corrected'</span> ext],<span class="string">'w'</span>); <span class="comment">%open file for writing  %check filename &amp; add '_corrected'</span>
+0075    fseek(outfile,0,<span class="string">'bof'</span>);
+0076    fwrite(outfile,c_data,<span class="string">'float32'</span>);
+0077    fclose(outfile); <span class="comment">%close file</span>
+0078    <span class="comment">%copy associated .prl file</span>
+0079    infile=fopen([a b <span class="string">'.prl'</span>],<span class="string">'r'</span>); <span class="comment">%open file for reading</span>
+0080    <span class="keyword">if</span> infile==-1;
+0081        warndlg([<span class="string">'Cannot find the file: '</span>,b,<span class="string">'.prl'</span>]);
+0082        fr=13; <span class="comment">% default frame rate</span>
+0083    <span class="keyword">else</span>
+0084        prl=fread(infile);
+0085        fclose(infile);
+0086        outfile=fopen([a b <span class="string">'_corrected.prl'</span>],<span class="string">'w'</span>);
+0087        fwrite(outfile,prl);
+0088        fclose(outfile);
+0089        s=importdata([a b <span class="string">'.prl'</span>],<span class="string">'\t'</span>);
+0090        line=find(strncmp(<span class="string">'Framerate = '</span>,s,12)); <span class="comment">%find line in .prl file which gives frame rate.</span>
+0091        fr=str2num(s{line}(13:strfind(s{line},<span class="string">'per'</span>)-1)); <span class="comment">%framerate</span>
+0092    <span class="keyword">end</span>
+0093    <span class="comment">%statistic/how much did file change?</span>
+0094    temp= stats.change*100;  <span class="comment">% change in percent</span>
+0095    <span class="comment">%[mean(temp(:)) trimmean(temp(:),10) std(temp(:)) prctile(temp(:),[2.5 97.5])]</span>
+0096    h1=msgbox([{strcat(<span class="string">'File saved as '''</span>, b, <span class="string">'_corrected.get'''</span>)};<span class="keyword">...</span>
+0097        {strcat(<span class="string">'Percent change: '</span>, num2str(mean(temp(:)),3) ,<span class="string">'('</span>, num2str(std(temp(:)),3), <span class="string">'), mean(+/-std)'</span>)}],<span class="keyword">...</span>
+0098        <span class="string">'Sucess'</span>);
+0099 <span class="keyword">end</span>
+0100 <span class="comment">%h=msgbox('Corrected data saved as *_corrected.get','Finished');</span>
+0101 <span class="comment">%end</span>
+0102 
+0103 <span class="comment">%function quality</span>
+0104 threshold_p=5; <span class="comment">%acceptable level of recipocity error (guestimate)</span>
+0105 
+0106 imdl.fwd_model.reci=[39 51 63 75 87 99 111 123 135 147 159 171 183 52 64 76 88 100 112 124 136 148 160 172 184 196 65 77 89 101 113 125 137 149 161 173 185 197 1 78 90 102 114 126 138 150 162 174 186 198 2 14 91 103 115 127 139 151 163 175 187 199 3 15 27 104 116 128 140 152 164 176 188 200 4 16 28 40 117 129 141 153 165 177 189 201 5 17 29 41 53 130   142   154   166   178     190   202     6    18    30    42    54    66   143   155   167   179   191   203     7    19    31    43    55    67    79   156   168   180     192   204     8    20    32    44    56    68    80    92   169   181   193   205     9    21    33    45    57    69    81    93   105   182     194   206    10    22    34    46    58    70    82    94   106   118   195   207    11    23    35    47    59    71    83    95   107   119     131   208    12    24    36    48    60    72    84    96   108   120   132   144    13    25    37    49    61    73    85    97   109   121     133   145   157    26    38    50    62    74    86    98   110   122   134   146   158   170]';
+0107 
+0108     reci=(c_data(1:208,:)-c_data(imdl.fwd_model.reci,:,:))./(c_data(1:208,:)+c_data(imdl.fwd_model.reci,:,:))*200; <span class="comment">%use corrected data</span>
+0109 quality.reci_m=median(reci,2);
+0110 quality.reci_std=std(reci,0,2);
+0111 reci_percent=sum(quality.reci_m&gt;threshold_p)/length(imdl.fwd_model.reci)*200;<span class="comment">%percent of electrode combinations with abs reci&gt;threshold_p%</span>
+0112 <span class="keyword">if</span> max(reci_percent)&gt;threshold_p <span class="comment">%threshold may need changing</span>
+0113      i=find(reci_percent&gt;threshold_p);
+0114    <span class="keyword">for</span> j=1:length(i)
+0115        f = questdlg([num2str(round(reci_percent(:,:,i(j)))) <span class="string">'% of electrode combinations have high reciprocity errors. Data may be unreliable.'</span>], [<span class="string">'% electrode combinations with recipocity error &gt;'</span>, num2str(threshold_p), <span class="string">'%'</span>],<span class="string">'ignore'</span>, <span class="string">'display'</span>, <span class="string">'display'</span>);
+0116       <span class="keyword">if</span> strmatch(f,<span class="string">'display'</span>)
+0117           figure
+0118           set(gcf,<span class="string">'position'</span>,[400 250 800 450])
+0119           subplot(2,1,1)
+0120           <span class="comment">%plot(auxiliary.time.data, reci(:,:,i(j)),'.'); xlabel 'time(s)'; ylabel 'recipocity(%)'</span>
+0121           plot([1:size(reci,2)]/fr,reci(:,:,i(j))',<span class="string">'.'</span>); xlabel <span class="string">'time(s)'</span>; ylabel <span class="string">'recipocity(%)'</span>;axis tight
+0122           a=axis;
+0123           axis([a(1) a(2) 0 a(4)])
+0124           title(filenames)
+0125           subplot(2,1,2)
+0126           errorbar(abs(mean(reci(:,:,i(j))')),std(reci(:,:,i(j))'*2),<span class="string">'.'</span>)<span class="comment">%if I only show the positive errors, I might not see the pattern of where they come from</span>
+0127           axis([1 length(imdl.fwd_model.reci) 0 ceil(max(reci(:)))])
+0128           set(gca,<span class="string">'XTick'</span>,6:13:208)
+0129           set(gca,<span class="string">'XTickLabel'</span>,[<span class="string">' 1-2 '</span>;<span class="string">' 2-3 '</span>;<span class="string">' 3-4 '</span>;<span class="string">' 4-5 '</span>;<span class="string">' 5-6 '</span>;<span class="string">' 6-7 '</span>;<span class="string">' 7-8 '</span>;<span class="string">' 8-9 '</span>;<span class="string">' 9-10'</span>;<span class="string">'10-11'</span>;<span class="string">'11-12'</span>;<span class="string">'12-13'</span>;<span class="string">'13-14'</span>;<span class="string">'14-15'</span>;<span class="string">'15-16'</span>;<span class="string">'16-1 '</span>])
+0130           xlabel <span class="string">'drive electrodes'</span>; ylabel <span class="string">'recipocity(%)'</span>
+0131           <span class="comment">%plot(mean(raw')) %should show 16 'u's, if adj 16.</span>
+0132       <span class="keyword">end</span>
+0133    <span class="keyword">end</span>       
+0134 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

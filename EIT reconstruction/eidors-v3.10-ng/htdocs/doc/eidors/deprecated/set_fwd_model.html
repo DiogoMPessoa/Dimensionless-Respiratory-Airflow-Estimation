@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of set_fwd_model</title>
+  <meta name="keywords" content="set_fwd_model">
+  <meta name="description" content="SET_FWD_MODEL: create EIDORS v3 fwd_model from v2 parameters">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; set_fwd_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>set_fwd_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SET_FWD_MODEL: create EIDORS v3 fwd_model from v2 parameters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [fwd_mdl]=set_fwd_model(vtx,simp,srf,elec,zc,gnd_ind,Ib,indH,df,perm_sym); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SET_FWD_MODEL: create EIDORS v3 fwd_model from v2 parameters
+ [fwd_mdl]=set_fwd_model(vtx,simp,srf,elec,zc,gnd_ind,Ib,indH,df,perm_sym);
+
+ Optional parameters
+   srf = specify [] to automatically generate
+   perm_sym = default is '{y}'
+
+ Unknown parameters
+   specify '[]' to be used later
+
+ (C) 2005 Stephen Murphy. Licenced under GPL
+ $Id: set_fwd_model.m 3060 2012-06-06 16:37:38Z aadler $</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="manchester_tomography.html" class="code" title="function manchester_tomography( example_no)">manchester_tomography</a>	Example to show reconstructions from</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [fwd_mdl]=set_fwd_model(vtx,simp,srf,elec,zc,gnd_ind,Ib,indH,df,perm_sym);</a>
+0002 <span class="comment">% SET_FWD_MODEL: create EIDORS v3 fwd_model from v2 parameters</span>
+0003 <span class="comment">% [fwd_mdl]=set_fwd_model(vtx,simp,srf,elec,zc,gnd_ind,Ib,indH,df,perm_sym);</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Optional parameters</span>
+0006 <span class="comment">%   srf = specify [] to automatically generate</span>
+0007 <span class="comment">%   perm_sym = default is '{y}'</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Unknown parameters</span>
+0010 <span class="comment">%   specify '[]' to be used later</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% (C) 2005 Stephen Murphy. Licenced under GPL</span>
+0013 <span class="comment">% $Id: set_fwd_model.m 3060 2012-06-06 16:37:38Z aadler $</span>
+0014 
+0015 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'SET_FWD_MODEL is deprecated as of 06-Jun-2012. '</span>);
+0016 
+0017 <span class="keyword">if</span> nargin&lt;10
+0018    perm_sym= <span class="string">'{y}'</span>;
+0019 <span class="keyword">end</span>
+0020 <span class="keyword">if</span> isempty( srf)
+0021    srf= <a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>( simp );
+0022 <span class="keyword">end</span>
+0023 
+0024 fwd_mdl= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>,<span class="string">'FWD_MDL created by set_fwd_model'</span>);
+0025 fwd_mdl.nodes=vtx;
+0026 fwd_mdl.elems=simp;
+0027 fwd_mdl.boundary=srf;
+0028 fwd_mdl.gnd_node=gnd_ind;
+0029 
+0030 elec_mdl=[];
+0031 <span class="keyword">for</span> loop1=1:size(elec,1);
+0032    elec_mdl(loop1,1).z_contact=zc(loop1);
+0033    elec_mdl(loop1,1).nodes=elec(loop1,:);
+0034 <span class="keyword">end</span>
+0035 
+0036 fwd_mdl.electrode=elec_mdl;
+0037 
+0038 stim_mdl=[];
+0039 <span class="keyword">for</span> loop1=1:size(df,1)
+0040    stim_mdl(loop1,1).stimulation=abs(max(Ib(:,loop1)));
+0041    stim_mdl(loop1,1).stim_pattern=Ib(:,loop1);
+0042    meas=zeros(df(loop1),size(elec,1));
+0043    loop3=1;
+0044    <span class="keyword">for</span> loop2=sum(df(1:loop1))-df(loop1)+1:sum(df(1:loop1))
+0045       meas(loop3,indH(loop2,1))=1;
+0046       meas(loop3,indH(loop2,2))=-1;
+0047       loop3=loop3+1;
+0048    <span class="keyword">end</span>
+0049    stim_mdl(loop1,1).meas_pattern=meas;
+0050 <span class="keyword">end</span>
+0051 
+0052 fwd_mdl.stimulation=stim_mdl;
+0053 fwd_mdl.misc.perm_sym=perm_sym;
+0054 fwd_mdl.solve=<span class="string">'np_fwd_solve'</span>;
+0055 fwd_mdl.jacobian=<span class="string">'np_calc_jacobian'</span>;
+0056 fwd_mdl.system_mat=<span class="string">'np_calc_system_mat'</span>;</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

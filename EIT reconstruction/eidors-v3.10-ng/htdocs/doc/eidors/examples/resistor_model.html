@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of resistor_model</title>
+  <meta name="keywords" content="resistor_model">
+  <meta name="description" content="DEMO to show really simple application of EIDORS framework">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">examples</a> &gt; resistor_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/examples&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>resistor_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>DEMO to show really simple application of EIDORS framework</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function resistor_model; </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DEMO to show really simple application of EIDORS framework
+
+ This code models a resistor (resitance R), with one electrode at each end. 
+
+ Stimulation patterns apply current I1, I2, I3, and measure voltages
+ Forward Model: V= IR    =&gt; [V1;V2;V3] = [I1;I2*I3]*(R+2*Zc)
+ Jacobian:      J= dV/dR =I = [I1; I2; I3]
+ Inverse Model: R= inv(J'*J)*J'*V
+    This corresponds to the least squares solution</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>	CALC_JACOBIAN: calculate jacobian from an inv_model</li><li><a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function data =f_solve( f_mdl, img )</a></li><li><a href="#_sub2" class="code">function J= c_jacobian( f_mdl, img)</a></li><li><a href="#_sub3" class="code">function img= i_solve( i_mdl, data )</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% DEMO to show really simple application of EIDORS framework</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This code models a resistor (resitance R), with one electrode at each end.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Stimulation patterns apply current I1, I2, I3, and measure voltages</span>
+0006 <span class="comment">% Forward Model: V= IR    =&gt; [V1;V2;V3] = [I1;I2*I3]*(R+2*Zc)</span>
+0007 <span class="comment">% Jacobian:      J= dV/dR =I = [I1; I2; I3]</span>
+0008 <span class="comment">% Inverse Model: R= inv(J'*J)*J'*V</span>
+0009 <span class="comment">%    This corresponds to the least squares solution</span>
+0010 
+0011 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0012 <span class="comment">% $Id: resistor_model.m 3630 2012-11-18 18:29:52Z aadler $</span>
+0013 
+0014 <a name="_sub0" href="#_subfunctions" class="code">function resistor_model;</a>
+0015 
+0016 <span class="comment">% Set log level to show all messages</span>
+0017 <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'set_level'</span>,4);
+0018 
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Step 1: create FEM model structure</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Fwd model:</span>
+0023 <span class="comment">%  Two nodes are in space at [1,1,1] and [2,2,2]</span>
+0024 <span class="comment">%  The resistor is connected between them</span>
+0025 
+0026 r_mdl.name = <span class="string">'demo resistor model'</span>;
+0027 r_mdl.nodes= [1,1,1;  2,2,2];
+0028 r_mdl.elems= [1;2];
+0029 r_mdl.solve=      @<a href="#_sub1" class="code" title="subfunction data =f_solve( f_mdl, img )">f_solve</a>;
+0030 r_mdl.jacobian=   @<a href="#_sub2" class="code" title="subfunction J= c_jacobian( f_mdl, img)">c_jacobian</a>;
+0031 
+0032 <span class="comment">%</span>
+0033 <span class="comment">% Step 2: create FEM model electrode definitions</span>
+0034 <span class="comment">%</span>
+0035 
+0036 r_mdl.electrode(1).z_contact= 10; <span class="comment">% ohms</span>
+0037 r_mdl.electrode(1).nodes=     1;
+0038 r_mdl.gnd_node= 2;
+0039 r_mdl.normalize_measurements = 0;
+0040 
+0041 <span class="comment">%</span>
+0042 <span class="comment">% Step 3: create stimulation and measurement patterns</span>
+0043 <span class="comment">% patterns are 0.010,0.020,0.030 Amp</span>
+0044 
+0045 <span class="keyword">for</span> i=1:3
+0046     r_mdl.stimulation(i).stimulation= <span class="string">'Amp'</span>;
+0047     r_mdl.stimulation(i).stim_pattern= ( 0.010*i );
+0048     r_mdl.stimulation(i).meas_pattern= 1; <span class="comment">% measure electrode 1</span>
+0049 <span class="keyword">end</span>
+0050 
+0051 r_mdl= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>, r_mdl);
+0052 
+0053 <span class="comment">%</span>
+0054 <span class="comment">% Step 4: simulate data for medium with R=1 kohms</span>
+0055 <span class="comment">% This medium is called an 'image'</span>
+0056 <span class="comment">%</span>
+0057 
+0058 img_1k = <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'image'</span>, <span class="string">'homogeneous image'</span>, <span class="keyword">...</span>
+0059                      <span class="string">'elem_data'</span>, 1e3, <span class="keyword">...</span>
+0060                      <span class="string">'fwd_model'</span>, r_mdl );
+0061 
+0062 data_1k =<a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>( r_mdl, img_1k );
+0063 
+0064 <span class="comment">%</span>
+0065 <span class="comment">% Step 5: add noise to simulated data</span>
+0066 <span class="comment">%</span>
+0067 
+0068 data_noise= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'data'</span>, <span class="string">'noisy data'</span>, <span class="keyword">...</span>
+0069                        <span class="string">'meas'</span>, data_1k.meas + 1e-3*randn(3,1));
+0070 
+0071 <span class="comment">%</span>
+0072 <span class="comment">% Step 7: create inverse model</span>
+0073 <span class="comment">%</span>
+0074 
+0075 <span class="comment">% create an inv_model structure of name 'demo_inv'</span>
+0076 r_inv.name=  <span class="string">'Resistor Model inverse'</span>;
+0077 r_inv.solve= @<a href="#_sub3" class="code" title="subfunction img= i_solve( i_mdl, data )">i_solve</a>;
+0078 r_inv.reconst_type= <span class="string">'static'</span>;
+0079 r_inv.fwd_model= r_mdl;
+0080 r_inv= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'inv_model'</span>, r_inv);
+0081 
+0082 <span class="comment">%</span>
+0083 <span class="comment">% solve inverse model');</span>
+0084 <span class="comment">%</span>
+0085 
+0086 R= <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>( r_inv, data_1k );
+0087 fprintf(<span class="string">'R calculated with clean data= %5.3f kOhm\n'</span>, R.elem_data / 1000 );
+0088 
+0089 R= <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>( r_inv, data_noise );
+0090 fprintf(<span class="string">'R calculated with noisy data= %5.3f kOhm\n'</span>, R.elem_data / 1000 );
+0091 
+0092 
+0093 <span class="comment">% Forward Model:</span>
+0094 <span class="comment">% For each stimulation there is I1 into Node1</span>
+0095 <span class="comment">%  Node2 is connected to gnd with Zcontact</span>
+0096 <span class="comment">%</span>
+0097 <span class="comment">% each stim has one measurement pattern where</span>
+0098 <span class="comment">%  Vmeas= Meas_pat * Node1</span>
+0099 <span class="comment">%       = Meas_pat * I1 * ( Zcontact*2 + R )</span>
+0100 <span class="comment">%</span>
+0101 <span class="comment">% Thus</span>
+0102 <span class="comment">%  V= IR    =&gt; [V1;V2;V3] = [I1;I2*I3]*(R + 2*Zcontact)</span>
+0103 <a name="_sub1" href="#_subfunctions" class="code">function data =f_solve( f_mdl, img )</a>
+0104   R= img.elem_data;
+0105 
+0106   n_stim= length( f_mdl.stimulation );
+0107   V= zeros(n_stim, 1);
+0108 
+0109   <span class="keyword">for</span> i=1:n_stim
+0110     <span class="keyword">if</span> ~strcmp( f_mdl.stimulation(i).stimulation, <span class="string">'Amp'</span> )
+0111        error(<span class="string">'f_solve expects current in Amp'</span>);
+0112     <span class="keyword">end</span>
+0113 
+0114     I        = f_mdl.stimulation(i).stim_pattern;
+0115     meas_pat = f_mdl.stimulation(i).meas_pattern;
+0116 
+0117     stim_elec= find( I );
+0118     zc       = f_mdl.electrode( stim_elec ).z_contact;
+0119 
+0120     V(i)= meas_pat * I * ( R + 2*zc);
+0121   <span class="keyword">end</span>
+0122 
+0123   data.name=<span class="string">'resistor model data'</span>;
+0124   data.meas= V;
+0125   
+0126 <span class="comment">% Jacobian:      J= dV/dR =I = [I1; I2; I3]</span>
+0127 <a name="_sub2" href="#_subfunctions" class="code">function J= c_jacobian( f_mdl, img)</a>
+0128   n_stim= length( f_mdl.stimulation );
+0129   J= zeros(n_stim, 1);
+0130   <span class="keyword">for</span> i=1:n_stim
+0131     J(i)     = f_mdl.stimulation(i).stim_pattern; <span class="comment">% Amp</span>
+0132   <span class="keyword">end</span>
+0133 
+0134 <span class="comment">% Inverse Model: R= inv(J'*J)*J'*V</span>
+0135 <span class="comment">%    This corresponds to the least squares solution</span>
+0136 <a name="_sub3" href="#_subfunctions" class="code">function img= i_solve( i_mdl, data )</a>
+0137   <span class="comment">% Normally the Jacobian depends on an image. Create a dummy one here</span>
+0138   i_img= <a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(i_mdl,1);
+0139   J = <a href="../../eidors/solvers/calc_jacobian.html" class="code" title="function J = calc_jacobian( fwd_model, img)">calc_jacobian</a>( i_img); 
+0140 
+0141   img.name= <span class="string">'solved by i_solve'</span>;
+0142   img.elem_data= (J'*J)\J'* data(:);
+0143   img.inv_model= i_mdl;
+0144   img.fwd_model= i_mdl.fwd_model;
+0145 
+0146</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

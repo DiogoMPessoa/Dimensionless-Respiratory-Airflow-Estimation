@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>GREIT Reconstruction with IBEX software</h2>
+
+The IBEX software from <a href="http://swisstom.com">Swisstom</a>
+is a freely available software tool designed
+to help analyse lung EIT data. While the software
+is primarily designed to analyse data in 
+Swisstom formats, it is relatively easy to 
+convert images analysed by EIDORS into 
+an IBEX compatible format.
+
+<p>
+This tutorial describes how to reconstruct data
+and create an IBEX compatible file.
+
+<h3> 
+Create Reconstruction Matrix and ROIs
+</h3>
+
+Here we are using the adult human FEM model
+
+<pre>
+fmdl= mk_library_model('adult_male_16el_lungs');
+img = mk_image(fmdl, 1); % background conductivity
+img.elem_data(fmdl.mat_idx{2}) = 0.3001; % lungs
+img.elem_data(fmdl.mat_idx{3}) = 0.3002; % lungs
+ROI = calc_slices(img,[inf,inf,0.5]);
+llung_ROI = ~isnan(ROI) & (ROI==0.3001);
+rlung_ROI = ~isnan(ROI) & (ROI==0.3002);
+thorax_ROI= ~isnan(ROI); % include lungs, too
+
+subplot(131); imagesc(thorax_ROI); axis image
+subplot(132); imagesc(rlung_ROI);  axis image
+subplot(133); imagesc(llung_ROI);  axis image
+print_convert('GREIT_IBEX_01a.png');
+
+
+</pre>
+
+<center>
+<img src="GREIT_IBEX_01a.png">
+<br><i>Figure:</i>
+</center>
+
+Example ROIs needed for analysis
+</center>
+
+Use GREIT Reconstruction
+
+<pre>
+[stim,msel] = mk_stim_patterns(16,1,[0,1],[0,1],{'no_meas_current'},1);
+img.fwd_model.stimulation = stim;
+img.fwd_model = mdl_normalize(img.fwd_model, 1);
+opt.imgsz = [64 64];
+opt.distr = 3;
+opt.Nsim = 500;
+opt.target_size = 0.03;
+opt.target_offset = 0;
+opt.noise_figure = .5; 
+opt.square_pixels = 1;
+imdl=mk_GREIT_model(img, 0.25, [], opt);
+imdl.fwd_model.meas_select = msel;
+
+</pre>
+
+<h3>
+Load and reconstruct Data
+</h3>
+
+Use data from a
+<a href = "http://eidors3d.sourceforge.net/data_contrib/cg-2012-ards-recruitment/cg_data_2012_p1.zip">
+   Patient at CHB</a> (Gender: F, Age: 5.9 years, Weight: 20kg, Condition: Primary ARDS triggered by parainfluenza pneumonia)
+
+
+<pre>
+fname = 'DATA/STUDYNAME/SUBJECT_1/YYYYMMDD/Eit/Viasys/1001_c4.get';
+vv= eidors_readdata(fname);
+img= inv_solve(imdl, mean(vv,2), vv);
+
+imgs= -calc_slices(img); % Negative to air is +
+imgs(isnan(imgs(:)))= 0;
+
+img.calc_colours.ref_level=0;
+img.elem_data = img.elem_data(:,2:4:120);
+img.show_slices.img_cols = 10;
+clf; show_slices(img);
+
+print_convert 'GREIT_IBEX_03a.jpg'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/GREIT_IBEX_03a.jpg">
+<br><i>Figure:</i>
+Example Images of reconstructed data
+</center>
+
+<h3> 
+Create the required variables to use IBEX
+</h3>
+
+<pre>
+data.imageRate = 13;
+
+data.patient.ROI.Inside =thorax_ROI*100; % to scale it up to 100
+data.patient.ROI.RightLung =rlung_ROI*100;
+data.patient.ROI.LeftLung =llung_ROI*100;
+data.patient.ROI.Heart =zeros(size(imgs,1),size(imgs,2));
+
+% put to dummy because they are missing
+data.patient.halfChest = 'NaN';
+data.patient.height = 'NaN';
+data.patient.weight = 'NaN';
+data.patient.gender = 'NaN';
+
+data.measurement.Position.transversal = zeros (1,size(imgs,3));
+data.measurement.Position.longitudinal = zeros (1,size(imgs,3));
+data.measurement.ImageQuality = 100*ones(1,size(imgs,3));
+data.measurement.ElectrodeQuality = zeros(size(imgs,3),32);
+data.measurement.ZeroRef = imgs;
+
+data.injctionPattern= 'NaN';
+data.SensorBelt.NumEl= 'NaN';
+
+data.measurement.CompositValue=squeeze(sum(sum(imgs,2),1));
+
+save('file-for-IBEX.mat','data');
+
+
+</pre>
+
+Now <tt>file-for-IBEX.mat</tt> can be used with IBEX software.
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT/GREIT_IBEX_04-screenshot.jpg">
+<br><i>Figure:</i>
+IBEX software using these data
+</center>
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-03-01 09:38:55 -0500 (Wed, 01 Mar 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

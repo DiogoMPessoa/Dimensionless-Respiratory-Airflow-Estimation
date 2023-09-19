@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mdl_dim</title>
+  <meta name="keywords" content="mdl_dim">
+  <meta name="description" content="MDL_DIM: dimension of model space (are nodes in 2D or 3D space)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mdl_dim.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mdl_dim
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MDL_DIM: dimension of model space (are nodes in 2D or 3D space)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function num = mdl_dim( mdl ); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> MDL_DIM: dimension of model space (are nodes in 2D or 3D space)
+  Note, mdl_dims is not the same as the element dimentions
+ num_dim = mdl_dim( mdl );
+    = 2 if 2D, 3 if 3D
+ If there is a vector of mdls, return the dimension of the first</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>	MDL_DIM: dimension of model space (are nodes in 2D or 3D space)</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/algorithms/eval_GREIT_fig_merit.html" class="code" title="function params = eval_GREIT_fig_merit(imgs, xyzr_pt)">eval_GREIT_fig_merit</a>	EVAL_GREIT_FIG_MERIT: calculate GREIT figures of merit for images</li><li><a href="../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>	calc_slices (img, levels, clim  ) show slices at levels of an</li><li><a href="../../eidors/graphics/matlab/mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>	MDL_SLICE_MAPPER: map pixels to FEM elements or nodes</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/graphics/matlab/show_fem_enhanced.html" class="code" title="function hh = show_fem_enhanced(mdl, options)">show_fem_enhanced</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/meshing/ng_mk_common_model.html" class="code" title="function fmdl = ng_mk_common_model(mdl_type,mdl_shape, elec_pos, elec_shape);">ng_mk_common_model</a>	NG_MK_COMMON_MODEL: utility to create common models</li><li><a href="calc_model_reduction.html" class="code" title="function mr = calc_model_reduction(fmdl)">calc_model_reduction</a>	calc_model_reduction: calculate the fields for a reduced model</li><li><a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>	FIX_MODEL: Add useful fields to a model</li><li><a href="interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>	INTERP_MESH: calculate interpolation points onto mdl elements</li><li><a href="mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>	MDL_DIM: dimension of model space (are nodes in 2D or 3D space)</li><li><a href="mk_c2f_circ_mapping.html" class="code" title="function [mapping failed] = mk_c2f_circ_mapping( mdl, xyzr );">mk_c2f_circ_mapping</a>	MK_C2F_CIRC_MAPPING: create a mapping matrix from circles/spheres to FEM</li><li><a href="../../eidors/solvers/inverse/GREIT_desired_img_sigmoid.html" class="code" title="function PSF = GREIT_desired_img_sigmoid(xyz,radius, opt)">GREIT_desired_img_sigmoid</a>	GREIT_DESIRED_IMG_SIGMOID sigmoid-decay desired image function for GREIT</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function num = mdl_dim( mdl );</a>
+0002 <span class="comment">% MDL_DIM: dimension of model space (are nodes in 2D or 3D space)</span>
+0003 <span class="comment">%  Note, mdl_dims is not the same as the element dimentions</span>
+0004 <span class="comment">% num_dim = mdl_dim( mdl );</span>
+0005 <span class="comment">%    = 2 if 2D, 3 if 3D</span>
+0006 <span class="comment">% If there is a vector of mdls, return the dimension of the first</span>
+0007 
+0008 <span class="comment">% $Id: mdl_dim.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0009 
+0010 <span class="keyword">if</span> ischar(mdl) &amp;&amp; strcmp(mdl,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0011 
+0012 <span class="keyword">if</span> ~isfield(mdl,<span class="string">'type'</span>) &amp;&amp; isfield(mdl,<span class="string">'nodes'</span>) <span class="comment">% Set default for this case</span>
+0013    mdl.type = <span class="string">'fwd_model'</span>;
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="keyword">switch</span> mdl(1).type
+0017   <span class="keyword">case</span> <span class="string">'image'</span>;      fmdl = mdl.fwd_model;
+0018   <span class="keyword">case</span> <span class="string">'inv_model'</span>;  fmdl = mdl.fwd_model;
+0019   <span class="keyword">case</span> <span class="string">'fwd_model'</span>;  fmdl = mdl;
+0020   <span class="keyword">otherwise</span>;
+0021       error(<span class="string">'can''t process model of type %s'</span>, mdl.type );
+0022 <span class="keyword">end</span>
+0023 
+0024 num = size(fmdl.nodes,2);
+0025 
+0026 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0027    mdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,8);
+0028    ne = <a href="mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>( mdl );
+0029    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'test1'</span>, ne, 2);
+0030 
+0031    mdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]);
+0032    ne = <a href="mdl_dim.html" class="code" title="function num = mdl_dim( mdl );">mdl_dim</a>( <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>( mdl ));
+0033    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'test1'</span>, ne, 3);
+0034</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

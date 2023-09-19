@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2>Using EIDORS to image lungs</h2>
+
+<h3> 
+2D EIT for lung imaging
+</h3>
+
+Use mk_common_model to create a thorax shaped
+model with 16 electrodes. Ensure the model
+uses 1) Correct stimulation patterns (adjacent is default),
+2) Normalized difference imaging
+
+<pre>
+% Lung images
+% $Id: tutorial310a.m 3343 2012-07-01 21:28:44Z bgrychtol $
+
+% 2D Model
+imdl= mk_common_model('c2t2',16);
+
+% Make correct stimulation pattern
+[st, els]= mk_stim_patterns(...
+   16, ... % electrodes / ring
+    1, ... % 1 ring of electrodes
+   '{ad}','{ad}', ... % adj stim and measurement
+   { 'no_meas_current', ... %  don't mesure on current electrodes
+     'no_rotate_meas',  ... %  don't rotate meas with stimulation
+     'do_redundant', ...    %  do redundant measurements
+   }, 10 );  % stimulation current (mA)
+imdl.fwd_model.stimulation= st;
+imdl.fwd_model.meas_select= els;
+
+% most EIT systems image best with normalized difference
+imdl.fwd_model = mdl_normalize(imdl.fwd_model, 1);
+imdl.RtR_prior= @prior_gaussian_HPF;
+
+
+subplot(221);
+show_fem(imdl.fwd_model);
+
+axis equal
+print_convert tutorial310a.png;
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial310a.png">
+<br><i> Figure:</i>
+2D FEM of thorax (units in mm). Electrode #1
+(<font color="#00B300"><b>o</b></font>)
+and electrode #2 
+(<font color="#008000"><b>o</b></font>)
+are shown in different colours than the others
+(<font color="#004D00"><b>o</b></font>).
+</center>
+
+Electrodes in the FEM must match those on the
+subject. This example shows two possible 
+repositioning of electrodes
+
+<pre>
+% Lung images
+% $Id: tutorial310b.m 2762 2011-07-14 16:04:40Z aadler $
+
+% If electrodes are counter-clockwise, then do this
+imdl_ccw = imdl;
+imdl_ccw.fwd_model.electrode([1,16:-1:2])=  ...
+   imdl.fwd_model.electrode;
+
+subplot(221);
+show_fem(imdl_ccw.fwd_model);
+
+% If electrodes start on back (dorsal), then do this
+imdl_d = imdl;
+imdl_d.fwd_model.electrode([9:16,1:8])=  ...
+   imdl.fwd_model.electrode;
+
+subplot(222);
+show_fem(imdl_d.fwd_model);
+
+axis equal
+print_convert tutorial310b.png;
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial310b.png">
+<br><i> Figure:</i>
+<i>Left:</i> electrodes placed counter-clockwise starting at 12 O'clock.
+<i>Right:</i> electrodes placed clockwise starting at 6 O'clock (on the
+dorsal side)
+</center>
+
+<pre>
+% Lung images
+% $Id: tutorial310c.m 4839 2015-03-30 07:44:50Z aadler $
+
+load montreal_data_1995
+imdl_d.hyperparameter.value=.2;
+img= inv_solve(imdl_d, zc_resp(:,1), zc_resp);
+
+clf; show_slices(img)
+axis equal
+
+print_convert tutorial310c.png;
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/tutorial310c.png">
+<br><i> Figure:</i>
+Lung image slices (frame rate of 1/7 seconds). Image progression
+is from left to right, top to bottom. One breath is shows. There
+also appears to be a movement of blood dorsally during the cardiac
+cycle.
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

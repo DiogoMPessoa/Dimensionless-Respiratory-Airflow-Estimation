@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of point_in_tet</title>
+  <meta name="keywords" content="point_in_tet">
+  <meta name="description" content="POINT_IN_TET test for points contained in elements">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; point_in_tet.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>point_in_tet
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>POINT_IN_TET test for points contained in elements</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function point2tet = point_in_tet(fmdl,points, epsilon) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">POINT_IN_TET test for points contained in elements</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="tet_to_inequal.html" class="code" title="function [A,b]=tet_to_inequal(v,e)">tet_to_inequal</a>	[A,b]=tet_to_inequal(v)</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>	PROGRESS_MSG Progress messages and timing.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function point2tet = point_in_tet(fmdl,points, epsilon)</a>
+0002 <span class="comment">%POINT_IN_TET test for points contained in elements</span>
+0003 
+0004 <span class="comment">% (C) 2015 Bartlomiej Grychtol</span>
+0005 <span class="comment">% License: GPL version 2 or 3</span>
+0006 <span class="comment">% $Id: point_in_tet.m 5424 2017-04-25 17:45:19Z aadler $</span>
+0007 
+0008    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(<span class="string">'Point_in_tet'</span>);
+0009    [A,b] = <a href="tet_to_inequal.html" class="code" title="function [A,b]=tet_to_inequal(v,e)">tet_to_inequal</a>(fmdl.nodes,fmdl.elems);
+0010    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(.01);
+0011    <span class="comment">% This is split to decrease the memory footprint</span>
+0012    point2tet = (bsxfun(@minus, A(1:4:<span class="keyword">end</span>,:)*points',b(1:4:end)) &lt;= epsilon)';
+0013    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(.21);
+0014    <span class="keyword">for</span> i = 2:4
+0015       point2tet = point2tet &amp; (bsxfun(@minus, A(i:4:<span class="keyword">end</span>,:)*points',b(i:4:end)) &lt;= epsilon)';
+0016       <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(.21 + (i-1)*.23);
+0017    <span class="keyword">end</span>
+0018 
+0019    <span class="comment">% exclude coinciding nodes</span>
+0020    ex= bsxfun(@eq,points(:,1),fmdl.nodes(:,1)') &amp; <span class="keyword">...</span>
+0021        bsxfun(@eq,points(:,2),fmdl.nodes(:,2)') &amp; <span class="keyword">...</span>
+0022        bsxfun(@eq,points(:,3),fmdl.nodes(:,3)');
+0023    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(.94);
+0024    point2tet(any(ex,2),:) = 0;
+0025    point2tet = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(point2tet);
+0026    <a href="../../eidors/tools/progress_msg.html" class="code" title="function progress_msg(varargin)">progress_msg</a>(Inf);
+0027 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

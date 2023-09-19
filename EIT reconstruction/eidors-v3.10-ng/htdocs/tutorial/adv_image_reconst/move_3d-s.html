@@ -1,0 +1,221 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Electrode movement reconstruction for simulated 3D data
+</h2>
+
+Here we create a simple 3D model and change the boundary shape between two measurments.
+
+<pre>
+% Simulate 3D movement $Id: move_3d01.m 4059 2013-05-24 11:43:38Z bgrychtol $
+
+noiselev = .1;
+movement = 2;
+
+% Generate eidors 3D finite element model
+mdl3dim = mk_common_model( 'n3r2', [16 2]);
+mdl3dim.fwd_model.nodes(:,3) = mdl3dim.fwd_model.nodes(:,3)/3;
+
+img = mk_image(mdl3dim);
+vh = fwd_solve( img );
+
+load('datacom.mat','A','B');
+img.elem_data(A) = 1.2; 
+img.elem_data(B) = 0.8;
+node0 = img.fwd_model.nodes;  % Node variable before movement
+node1 = node0;                % Node variable after movement
+z_axis = node1(:,3);
+
+exaggeration = 10;
+movement= 0.01*movement;
+% Do a 3D twist - exaggerated for clearer illustration of distortion
+node1(:,1) = node0(:,1).*(1 + exaggeration*movement*z_axis);
+node1(:,2) = node0(:,2).*(1 + exaggeration*movement*(1-z_axis));
+
+img.fwd_model.nodes = node1;
+show_fem( img );
+xlabel('x'); ylabel('y');
+view(-44,22)
+
+print_convert  move_3d01.png '-density 75'
+
+% Do a 3D twist - we'll actually use this one
+centre = 1- movement/2;
+node1(:,1) = node0(:,1).*(centre + movement*z_axis);
+node1(:,2) = node0(:,2).*(centre + movement*(1-z_axis));
+
+% Solve inhomogeneous forward problem with movements and normal noise.
+img.fwd_model.nodes = node1;
+vi = fwd_solve( img );
+noise = noiselev*std( vh.meas - vi.meas )*randn( size(vi.meas) );
+vi.meas = vi.meas + noise;
+move = node1 - node0;
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/move_3d01.png">
+<br><i> Figure:</i>
+Illustration of the deformation of the 3D model (exaggerated 10x).
+</center>
+
+Next we solve the inverse problem in two ways: first, without correcting for electrode movements, and second, with movement correction.
+
+<pre>
+% Reconstruct 3D movement $Id: move_3d02.m 4839 2015-03-30 07:44:50Z aadler $
+
+img3dim= img;
+
+mdl3dim.RtR_prior = 'prior_laplace';
+mdl3dim.hyperparameter.value = .05;
+
+% Show slices of 3D model with true movement vectors
+subplot(1,3,1);
+img3dim.elem_data = img3dim.elem_data - 1;
+img3dim.calc_colours.backgnd=[.8 .8 .9];
+show_slices_move( img3dim, move );
+
+% Inverse solution of data without movement consideration
+img3dim= inv_solve(mdl3dim, vh, vi);
+img3dim.calc_colours.backgnd=[.8 .8 .9];
+subplot(1,3,2)
+show_slices_move( img3dim );
+
+% This is also available by this code:
+% mdlM = select_imdl(mdl3dim, {'Elec Move GN'});
+
+% Inverse solution of data with movement consideration
+move_vs_conduct = 20;  % Movement penalty (symbol mu in paper)
+
+mdlM = mdl3dim;
+mdlM.fwd_model.jacobian = @jacobian_movement;
+
+mdlM.RtR_prior = @prior_movement;
+
+mdlM.prior_movement.parameters = move_vs_conduct;
+
+% Solve inversglobale problem and show slices
+imgM = inv_solve(mdlM, vh, vi);
+imgM.calc_colours.backgnd=[.8 .8 .9];
+subplot(1,3,3)
+show_slices_move( imgM );
+print_convert  move_3d02.png '-density 100'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/move_3d02.png">
+<br><i> Figure:</i>
+Inverse solutions of the problem above. Each column shows three cross-sectional slices of the model.  Forward problem with true electrode movement (scaled 10x) (left column).  Inverse solution without movement compensation (centre column) and with movement estimation and compensation (scaled 10x) (right column). 
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

@@ -1,0 +1,320 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of writevtkfile</title>
+  <meta name="keywords" content="writevtkfile">
+  <meta name="description" content="Useage: writevtkfile(filename, eidors_image );">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">vtk</a> &gt; writevtkfile.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/vtk&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>writevtkfile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Useage: writevtkfile(filename, eidors_image );</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function writevtkfile(fn,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Useage: writevtkfile(filename, eidors_image );
+      or writevtkfile(filename,model,image)
+      or writevtkfile(fn,vtx,simp,vals);
+
+ Example:  img= compare_3d_algs(1);
+           writevtkfile('fname',img);
+
+ This function writes 3D meshes and associated scalar/vector/tensor fields to a VTK (Visualization Tool Kit)(www.kitware.com) dataset file
+
+
+ 'filename' = name of the vtk file, the &quot;.vtk&quot; extension will be addedd automatically 
+ vtx = matrix of the verticies
+ elem = matrix desribing the simplecies
+ val = matrix holding the field values (scalars/vectros/tensors)
+ 
+ Depending wether the field is piecewise linear or piecewise constant and if it it scalar, vector or tensor, val can assume different valid sizes:
+
+ val should have a number of rows equal to the number of simplecies or to the number of nodes in the mesh (piecewise constant/piecewise linear dataset)
+ val should have a number of columns equal to 1,3 or 9 (scalar field / vector field / tensor field)
+
+ The generated VTK file can then be displayed with MaiaVi (http://mayavi.sourceforge.net/)
+ which has lots of nice features and is generally faster than MATALB 3D graphics
+
+ CAVEAT: VTK supports only symmetrix tensors. It is left to the user to ensure that the data he is exporting 
+ consists of symmetric tensors (as if such a check were performed by writeVTKfile, performance of the filter would suffer)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function writevtkfile_old(filename,vtx,elem,val)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function writevtkfile(fn,varargin)</a>
+0002 <span class="comment">% Useage: writevtkfile(filename, eidors_image );</span>
+0003 <span class="comment">%      or writevtkfile(filename,model,image)</span>
+0004 <span class="comment">%      or writevtkfile(fn,vtx,simp,vals);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Example:  img= compare_3d_algs(1);</span>
+0007 <span class="comment">%           writevtkfile('fname',img);</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% This function writes 3D meshes and associated scalar/vector/tensor fields to a VTK (Visualization Tool Kit)(www.kitware.com) dataset file</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% 'filename' = name of the vtk file, the &quot;.vtk&quot; extension will be addedd automatically</span>
+0013 <span class="comment">% vtx = matrix of the verticies</span>
+0014 <span class="comment">% elem = matrix desribing the simplecies</span>
+0015 <span class="comment">% val = matrix holding the field values (scalars/vectros/tensors)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Depending wether the field is piecewise linear or piecewise constant and if it it scalar, vector or tensor, val can assume different valid sizes:</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% val should have a number of rows equal to the number of simplecies or to the number of nodes in the mesh (piecewise constant/piecewise linear dataset)</span>
+0020 <span class="comment">% val should have a number of columns equal to 1,3 or 9 (scalar field / vector field / tensor field)</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% The generated VTK file can then be displayed with MaiaVi (http://mayavi.sourceforge.net/)</span>
+0023 <span class="comment">% which has lots of nice features and is generally faster than MATALB 3D graphics</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% CAVEAT: VTK supports only symmetrix tensors. It is left to the user to ensure that the data he is exporting</span>
+0026 <span class="comment">% consists of symmetric tensors (as if such a check were performed by writeVTKfile, performance of the filter would suffer)</span>
+0027 
+0028 <span class="keyword">if</span> nargin==2
+0029    img  = varargin{1};
+0030    fmdl = img.fwd_model;
+0031    <a href="#_sub1" class="code" title="subfunction writevtkfile_old(filename,vtx,elem,val)">writevtkfile_old</a>(fn, fmdl.nodes, fmdl.elems, img.elem_data);
+0032 <span class="keyword">elseif</span> nargin ==3
+0033 <span class="comment">%vtx = varargin{1}.nodes;</span>
+0034 <span class="comment">%simp= varargin{1}.elems;</span>
+0035 <span class="comment">%vals= varargin{2}.elem_data;</span>
+0036    fmdl = varargin{1};
+0037    img  = varargin{2};
+0038    <a href="#_sub1" class="code" title="subfunction writevtkfile_old(filename,vtx,elem,val)">writevtkfile_old</a>(fn,fmdl.nodes, fmdl.elems, img.elem_data);
+0039 <span class="keyword">elseif</span> nargin==4
+0040    <a href="#_sub1" class="code" title="subfunction writevtkfile_old(filename,vtx,elem,val)">writevtkfile_old</a>(fn,varargin{1},varargin{2},varargin{3})
+0041 <span class="keyword">else</span>
+0042  error(<span class="string">'Writevtkfile: Wrong number of arguments'</span>);
+0043 <span class="keyword">end</span> 
+0044 
+0045 <a name="_sub1" href="#_subfunctions" class="code">function writevtkfile_old(filename,vtx,elem,val)</a>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% Copyright (c) 2002-2003 Andrea Borsic, SC-AIP s.a.s.</span>
+0048 <span class="comment">% Scientific Computing &amp; Applied Inverse Problems</span>
+0049 <span class="comment">% www.sc-aip.com</span>
+0050 <span class="comment">% Revision 1.2 Original Date 12/08/02</span>
+0051 <span class="comment">% Modified 11/06/03, exports vectors</span>
+0052 <span class="comment">% Modified 31/08/03, exports tensors, fixes some problems regarding number rapresentation</span>
+0053 <span class="comment">% Modified 26/03/03 in order to support both triangular and tetrahedral meshes</span>
+0054 <span class="comment">% 25/06/2005 Changed name, writevtkfile is now overloaded to handle objects as data WRBL</span>
+0055 <span class="comment">% This function writes 3D meshes and associated scalar/vector/tensor fields to a VTK (Visualization Tool Kit)(www.kitware.com) dataset file</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% Use: writevtkfile_old('filename',vtx,elem,val)</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">% 'filename' = name of the vtk file, the &quot;.vtk&quot; extension will be addedd automatically</span>
+0060 <span class="comment">% vtx = matrix of the verticies</span>
+0061 <span class="comment">% elem = matrix desribing the simplecies</span>
+0062 <span class="comment">% val = matrix holding the field values (scalars/vectros/tensors)</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% Depending wether the field is piecewise linear or piecewise constant and if it it scalar, vector or tensor, val can assume different valid sizes:</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">% val should have a number of rows equal to the number of simplecies or to the number of nodes in the mesh (piecewise constant/piecewise linear dataset)</span>
+0067 <span class="comment">% val should have a number of columns equal to 1,3 or 9 (scalar field / vector field / tensor field)</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">% The generated VTK file can then be displayed with MaiaVi (http://mayavi.sourceforge.net/)</span>
+0070 <span class="comment">% which has lots of nice features and is generally faster than MATALB 3D graphics</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">% CAVEAT: VTK supports only symmetrix tensors. It is left to the user to ensure that the data he is exporting</span>
+0073 <span class="comment">% consists of symmetric tensors (as if such a check were performed by writeVTKfile, performance of the filter would suffer)</span>
+0074 
+0075 <span class="comment">% DA FARE: mettere check sul numero di parametri di ingresso (e sul tipo, es controllare che filename sia una stringa)</span>
+0076 
+0077 num_vtx=size(vtx,1);
+0078 num_elem=size(elem,1);
+0079 
+0080 filename=strcat(filename,<span class="string">'.vtk'</span>);
+0081 
+0082 fid=fopen(filename,<span class="string">'wt'</span>);
+0083 <span class="keyword">if</span> fid==-1
+0084     error(<span class="string">'Cannot open vtk file'</span>);
+0085 <span class="keyword">end</span> <span class="comment">% if FID</span>
+0086 
+0087 frewind(fid);
+0088 
+0089 fprintf(fid,<span class="string">'# vtk DataFile Version 3.0\n'</span>);
+0090 fprintf(fid,<span class="string">'%s %s exported from MATLAB\n'</span>,date,filename);
+0091 fprintf(fid,<span class="string">'ASCII\n'</span>);
+0092 
+0093 fprintf(fid,<span class="string">'\n'</span>);
+0094 
+0095 <span class="comment">% Here we write the verticies</span>
+0096 
+0097 fprintf(fid,<span class="string">'DATASET UNSTRUCTURED_GRID\n'</span>);
+0098 fprintf(fid,<span class="string">'POINTS %i double\n'</span>,num_vtx);
+0099 
+0100 <span class="keyword">for</span> i=1:num_vtx
+0101     fprintf(fid,<span class="string">'%d %d %d\n'</span>,vtx(i,1),vtx(i,2),vtx(i,3));
+0102 <span class="keyword">end</span> <span class="comment">% for</span>
+0103 
+0104 fprintf(fid,<span class="string">'\n'</span>);
+0105 
+0106 <span class="comment">% Here we write the simplecies</span>
+0107 
+0108 <span class="keyword">switch</span> size(elem,2)
+0109     
+0110     <span class="keyword">case</span> 3 <span class="comment">% 2D triangular mesh</span>
+0111         
+0112         fprintf(fid,<span class="string">'CELLS %i %i\n'</span>,num_elem,4*num_elem);
+0113         
+0114         <span class="keyword">for</span> i=1:num_elem
+0115             fprintf(fid,<span class="string">'%i %i %i %i \n'</span>,3,elem(i,1)-1,elem(i,2)-1,elem(i,3)-1);
+0116         <span class="keyword">end</span> <span class="comment">% for</span>
+0117         
+0118         fprintf(fid,<span class="string">'\n'</span>);
+0119         
+0120         fprintf(fid,<span class="string">'CELL_TYPES %i\n'</span>,num_elem);
+0121         
+0122         <span class="keyword">for</span> i=1:num_elem
+0123             fprintf(fid,<span class="string">'5\n'</span>);
+0124         <span class="keyword">end</span> <span class="comment">% for</span>
+0125         
+0126     <span class="keyword">case</span> 4 <span class="comment">% 3D tetrahedral mesh</span>
+0127         
+0128         fprintf(fid,<span class="string">'CELLS %i %i\n'</span>,num_elem,5*num_elem); <span class="comment">% per ogni tetraedro 4 dati + 1 che specifica numpint=4 in totale 5 vedi pag 357</span>
+0129         
+0130         <span class="keyword">for</span> i=1:num_elem
+0131             fprintf(fid,<span class="string">'%i %i %i %i %i\n'</span>,4,elem(i,1)-1,elem(i,2)-1,elem(i,3)-1,elem(i,4)-1);
+0132         <span class="keyword">end</span> <span class="comment">% for</span>
+0133         
+0134         fprintf(fid,<span class="string">'\n'</span>);
+0135         
+0136         fprintf(fid,<span class="string">'CELL_TYPES %i\n'</span>,num_elem);
+0137         
+0138         <span class="keyword">for</span> i=1:num_elem
+0139             fprintf(fid,<span class="string">'10\n'</span>);
+0140         <span class="keyword">end</span> <span class="comment">% for</span>
+0141         
+0142     <span class="keyword">otherwise</span>
+0143         
+0144         error(<span class="string">'Simplecies other than triangles and tetrahydra are not currently supported'</span>)
+0145         
+0146 <span class="keyword">end</span>
+0147 
+0148 fprintf(fid,<span class="string">'\n'</span>);
+0149 
+0150 <span class="keyword">switch</span> size(val,1)
+0151     
+0152     <span class="keyword">case</span> num_elem
+0153         
+0154         <span class="keyword">switch</span> size(val,2)
+0155             
+0156             <span class="keyword">case</span> 1 <span class="comment">% scalar field, cell data</span>
+0157                 
+0158                 fprintf(fid,<span class="string">'CELL_DATA %i\n'</span>,num_elem);
+0159                 fprintf(fid,<span class="string">'SCALARS MatlabExportedScalars double\n'</span>);
+0160                 fprintf(fid,<span class="string">'LOOKUP_TABLE default\n'</span>);
+0161                 
+0162                 <span class="keyword">for</span> i=1:num_elem
+0163                     fprintf(fid,<span class="string">'%d\n'</span>,val(i));
+0164                 <span class="keyword">end</span> <span class="comment">% for</span>
+0165                 
+0166             <span class="keyword">case</span> 3 <span class="comment">% vector field, cell data</span>
+0167                 
+0168                 fprintf(fid,<span class="string">'CELL_DATA %i\n'</span>,num_elem);
+0169                 fprintf(fid,<span class="string">'VECTORS MatlabExportedVectors double\n'</span>);
+0170                 <span class="comment">% No LUT for vectors !</span>
+0171                 
+0172                 <span class="keyword">for</span> i=1:num_elem
+0173                     fprintf(fid,<span class="string">'%d %d %d\n'</span>,val(i,1),val(i,2),val(i,3));
+0174                 <span class="keyword">end</span> <span class="comment">% for</span>
+0175                 
+0176             <span class="keyword">case</span> 9 <span class="comment">% tensor field, cell data</span>
+0177                 
+0178                 fprintf(fid,<span class="string">'CELL_DATA %i\n'</span>,num_elem);
+0179                 fprintf(fid,<span class="string">'TENSORS MatlabExportedTensors double\n'</span>);
+0180                 <span class="comment">% No LUT for tensors !</span>
+0181                 
+0182                 <span class="keyword">for</span> i=1:num_elem
+0183                     <span class="keyword">for</span> j=1:3
+0184                         fprintf(fid,<span class="string">'%d %d %d\n'</span>,val(i,(j-1)*3+1),val(i,(j-1)*3+2),val(i,(j-1)*3+3));
+0185                     <span class="keyword">end</span> <span class="comment">% for j</span>
+0186                 <span class="keyword">end</span> <span class="comment">% for</span>
+0187                 
+0188             <span class="keyword">otherwise</span>
+0189                 
+0190                 fprintf(<span class="string">'The number of columns in the val vector should be 1,3 or 9, depending if it reperesents a scalar, a vector field or a tensor field.\n'</span>);
+0191                 fprintf(<span class="string">'A VTK file containing just mesh information was written.\n'</span>);     
+0192                 
+0193         <span class="keyword">end</span> <span class="comment">% switch size(val,2)</span>
+0194         
+0195     <span class="keyword">case</span> num_vtx
+0196         
+0197         <span class="keyword">switch</span> size(val,2)
+0198             
+0199             <span class="keyword">case</span> 1 <span class="comment">% scalar field, point data</span>
+0200                 
+0201                 fprintf(fid,<span class="string">'POINT_DATA %i\n'</span>,num_vtx);
+0202                 fprintf(fid,<span class="string">'SCALARS MatlabExportedScalars double\n'</span>);
+0203                 fprintf(fid,<span class="string">'LOOKUP_TABLE default\n'</span>);
+0204                 
+0205                 <span class="keyword">for</span> i=1:num_vtx
+0206                     fprintf(fid,<span class="string">'%d\n'</span>,val(i));
+0207                 <span class="keyword">end</span> <span class="comment">% for</span>
+0208                 
+0209             <span class="keyword">case</span> 3 <span class="comment">% vector field, point data</span>
+0210                 
+0211                 fprintf(fid,<span class="string">'POINT_DATA %i\n'</span>,num_vtx);
+0212                 fprintf(fid,<span class="string">'VECTORS MatlabExportedVectors double\n'</span>);
+0213                 <span class="comment">% No LUT for vectors !</span>
+0214                 
+0215                 <span class="keyword">for</span> i=1:num_vtx
+0216                     fprintf(fid,<span class="string">'%d %d %d\n'</span>,val(i,1),val(i,2),val(i,3));
+0217                 <span class="keyword">end</span> <span class="comment">% for</span>
+0218                 
+0219             <span class="keyword">case</span> 9 <span class="comment">% tensor field, point data</span>
+0220                 
+0221                 fprintf(fid,<span class="string">'POINT_DATA %i\n'</span>,num_vtx);
+0222                 fprintf(fid,<span class="string">'TENSORS MatlabExportedTensors double\n'</span>);
+0223                 <span class="comment">% No LUT for tensors !</span>
+0224                 
+0225                 <span class="keyword">for</span> i=1:num_vtx
+0226                     <span class="keyword">for</span> j=1:3
+0227                         fprintf(fid,<span class="string">'%d %d %d\n'</span>,val(i,(j-1)*3+1),val(i,(j-1)*3+2),val(i,(j-1)*3+3));
+0228                     <span class="keyword">end</span> <span class="comment">% for j</span>
+0229                 <span class="keyword">end</span> <span class="comment">% for</span>
+0230                 
+0231             <span class="keyword">otherwise</span>
+0232                 
+0233                 fprintf(<span class="string">'The number of columns in the val vector should be 1,3 or 9, depending if it reperesents a scalar, a vector field or a tensor field.\n'</span>);
+0234                 fprintf(<span class="string">'A VTK file containing just mesh information was written.\n'</span>);
+0235                 
+0236         <span class="keyword">end</span> <span class="comment">% switch size(val,2)</span>
+0237         
+0238     <span class="keyword">otherwise</span>
+0239         
+0240         fprintf(<span class="string">'The number of rows of the val vector did not match the number of rows in vtx or in elem.\n'</span>);
+0241         fprintf(<span class="string">'A VTK file containing just mesh information was written.\n'</span>);
+0242         
+0243 <span class="keyword">end</span> <span class="comment">% switch size(val,1)</span>
+0244 
+0245 fclose(fid);
+0246 
+0247 <span class="comment">% Bye Bye</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

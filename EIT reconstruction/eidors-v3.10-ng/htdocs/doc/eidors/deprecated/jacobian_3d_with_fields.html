@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of jacobian_3d_with_fields</title>
+  <meta name="keywords" content="jacobian_3d_with_fields">
+  <meta name="description" content="JACOBIAN_3D_WITH_FIELDS: calculate jacobian_3d, but accept V fields as">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; jacobian_3d_with_fields.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>jacobian_3d_with_fields
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>JACOBIAN_3D_WITH_FIELDS: calculate jacobian_3d, but accept V fields as</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [J] = jacobian_3d_with_fields(V,Ela,D,I,elec,vtx,simp,gnd_ind,mat_ref,zc,v_f,df,tol,sym); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> JACOBIAN_3D_WITH_FIELDS: calculate jacobian_3d, but accept V fields as
+    parameters. Differs from jacobian_3d in that V is not calculated inside.
+
+I        = The currents used
+elec     = the electrodes matrix
+vtx      = The vertices matrix
+simp     = The simplices matrix
+gnd_ind  = The ground index (node)
+mat_ref  = The reference conductivity vector
+zc       = The electrode contact impedance vector
+IntGrad  = The integrals of the gradients
+v_f      = The measurement fields
+df       = Measurements per current pattern as used in v_f
+tol      = Tolerance
+J        = The Jacobian (sensitivity) matrix with respect to conductivity
+
+ (C) 2003-2005 Nick Polydorides and David Stephenson. Licensed under GPL
+ $Id: jacobian_3d_with_fields.m 3060 2012-06-06 16:37:38Z aadler $</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="inv_solve_dual_mesh.html" class="code" title="function img= inv_solve_dual_mesh( inv_model, voltage)">inv_solve_dual_mesh</a>	INV_SOLVE_DUAL_MESH using a coarse and fine mesh</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [J] = jacobian_3d_with_fields(V,Ela,D,I,elec,vtx,simp,gnd_ind,mat_ref,zc,v_f,df,tol,sym);</a>
+0002 <span class="comment">% JACOBIAN_3D_WITH_FIELDS: calculate jacobian_3d, but accept V fields as</span>
+0003 <span class="comment">%    parameters. Differs from jacobian_3d in that V is not calculated inside.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%I        = The currents used</span>
+0006 <span class="comment">%elec     = the electrodes matrix</span>
+0007 <span class="comment">%vtx      = The vertices matrix</span>
+0008 <span class="comment">%simp     = The simplices matrix</span>
+0009 <span class="comment">%gnd_ind  = The ground index (node)</span>
+0010 <span class="comment">%mat_ref  = The reference conductivity vector</span>
+0011 <span class="comment">%zc       = The electrode contact impedance vector</span>
+0012 <span class="comment">%IntGrad  = The integrals of the gradients</span>
+0013 <span class="comment">%v_f      = The measurement fields</span>
+0014 <span class="comment">%df       = Measurements per current pattern as used in v_f</span>
+0015 <span class="comment">%tol      = Tolerance</span>
+0016 <span class="comment">%J        = The Jacobian (sensitivity) matrix with respect to conductivity</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% (C) 2003-2005 Nick Polydorides and David Stephenson. Licensed under GPL</span>
+0019 <span class="comment">% $Id: jacobian_3d_with_fields.m 3060 2012-06-06 16:37:38Z aadler $</span>
+0020 
+0021 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'JACOBIAN_3D_WITH_FIELDS is deprecated as of 06-Jun-2012. CALC_JACOBIAN now does this.'</span>);
+0022 
+0023 [vr,vc] = size(vtx);
+0024 [sr,sc] = size(simp);
+0025 
+0026 el_no = size(elec,1);
+0027 
+0028 <span class="keyword">if</span> sum(df)~= size(v_f,2);
+0029    error(<span class="string">'Mismatched data input'</span>);
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="comment">%Select the part referring to the interior nodes</span>
+0033 V = V(1:vr,:);
+0034 v_f = v_f(1:vr,:);
+0035 
+0036 J = zeros(sum(df),size(simp,1));
+0037 Jrow = zeros(1,size(simp,1));
+0038 cnt = 0;
+0039 
+0040 h = waitbar(0,<span class="string">'Calculating Jacobian Matrix'</span>);
+0041 
+0042 <span class="keyword">for</span> p=1:size(V,2)
+0043 
+0044    waitbar(p/(size(V,2)))
+0045 
+0046    DV =  D*V(:,p); <span class="comment">%Gradient of the current fields</span>
+0047 
+0048    <span class="keyword">for</span> m=1:df(p)
+0049 
+0050 
+0051       Dvf = D*v_f(:,sum(df(1:p-1))+m); <span class="comment">%Gradient of the measurement fields</span>
+0052 
+0053       Jrow_x3 = Dvf .* DV ;
+0054       Jrow_u = Jrow_x3(1:3:end) + Jrow_x3(2:3:end) + Jrow_x3(3:3:end);
+0055 
+0056       Jrow = Jrow_u .* diag(Ela(1:3:<span class="keyword">end</span>,1:3:end));
+0057 
+0058       cnt = cnt+1;
+0059       J(cnt,:) = -Jrow.';
+0060       Jrow = zeros(1,size(simp,1));
+0061 
+0062    <span class="keyword">end</span> <span class="comment">%m</span>
+0063 
+0064 <span class="keyword">end</span> <span class="comment">%p</span>
+0065 
+0066 close(h)</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

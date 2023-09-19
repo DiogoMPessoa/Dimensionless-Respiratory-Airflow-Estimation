@@ -1,0 +1,457 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_library_model</title>
+  <meta name="keywords" content="mk_library_model">
+  <meta name="description" content="MK_LIBRARY_MODEL - FEM models based on library shapes">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_library_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_library_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_LIBRARY_MODEL - FEM models based on library shapes</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MK_LIBRARY_MODEL - FEM models based on library shapes 
+
+ MK_LIBRARY_MODEL(shape,elec_pos,elec_shape,maxsz,nfft) where:
+   shape -  a cell array of strings and
+     shape{1} is the shape_library model used
+          (run shape_libary('list') to get a list
+     shape{2} is the the boundary. If absent, 'boundary' is assumed.
+     shape{3..} are strings specifying additional inclusions (such as
+     lungs)
+   elec_pos - a vector specifying electrode positions. See
+     NG_MK_EXTRUDED_MODEL for details. To use the electrode positions
+     stored in the 'electrode' field in the shape_libary, specify elec_pos
+     as 'original'
+   elec_shape - a vector specifying electrode shapes. See
+     NG_MK_EXTRUDED_MODEL for details.
+   maxsz - maximum FEM size (default: course mesh)
+   nfft  - number of points to create along the boundary (default: 50)
+     If nfft==0, no interpolation takes place.
+   scale - avoids some Netgen issues by scaling the contours before 
+     calling netgen and scaling the resulting model back afterwards
+     (default: 1). Note that electrode and maxh specifications are not
+     scaled.
+
+ QUICK ACCESS TO COMMON MODELS:
+   MK_LIBRARY_MODEL(str) where str is a single string specifying a model.
+   Use MK_LIBRARY_MODEL('list') to obtain a list of available models.
+
+ PATH TO LIBRARY MODELS
+   'LIBRARY_PATH' - get or set library path</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/meshing/netgen/ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>	NG_MAKE_EXTRUDED_MODEL: create extruded models using netgen</li><li><a href="mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>	MDL_NORMALIZE Check or set the normalize_measurements flag on a model.</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="mk_thorax_model_grychtol2016a.html" class="code" title="function img = mk_thorax_model_grychtol2016a(stimpat)">mk_thorax_model_grychtol2016a</a>	Builds the male thorax models from Grychtol, M�ler and Adler (2016)</li><li><a href="shape_library.html" class="code" title="function out = shape_library(action, shape, varargin)">shape_library</a>	SHAPE_LIBRARY Common shapes for models</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/deprecated/calc_noise_params.html" class="code" title="function params = calc_noise_params(imdl, vh, vi )">calc_noise_params</a>	params = GREIT_noise_params(imdl, homg_voltage, sig_voltage)</li><li><a href="../../eidors/eidors_startup.html" class="code" title="function eidors_startup( path_array )">eidors_startup</a>	Script to start EIDORS</li><li><a href="../../eidors/meshing/calc_mesh_quality.html" class="code" title="function [Q mdl] = calc_mesh_quality(mdl, show)">calc_mesh_quality</a>	CALC_MESH_QUALITY Various measures of mesh quality.</li><li><a href="mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="mk_common_gridmdl.html" class="code" title="function inv_mdl= mk_common_gridmdl( str, RM)">mk_common_gridmdl</a>	MK_COMMON_MODEL: make EIT on reconstruction grids (GREIT)</li><li><a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>	MK_PIXEL_SLICE create a pixel model to reconstruct on</li><li><a href="mk_voxel_volume.html" class="code" title="function [imdl, fmdl] = mk_voxel_volume(varargin)">mk_voxel_volume</a>	MK_VOXEL_VOLUME create a voxel model to reconstruct on</li><li><a href="simulate_3d_movement.html" class="code" title="function [vh,vi,xyzr_pt]= simulate_3d_movement( n_sims, fmdl, rad_pr,movefcn )">simulate_3d_movement</a>	SIMULATE_3D_MOVEMENT simulate rotational movement in 3D</li><li><a href="../../eidors/solvers/forward/fem_1st_to_higher_order.html" class="code" title="function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)">fem_1st_to_higher_order</a>	FEM_1ST_TO_HIGH_ORDER:  Modify the FEM for high order FEM called as</li><li><a href="../../eidors/solvers/forward/jacobian_movement.html" class="code" title="function J = jacobian_movement(fwd_model, img)">jacobian_movement</a>	JACOBIAN_MOVEMENT   Computes the Jacobian matrix for conductivity and</li><li><a href="../../eidors/solvers/inverse/calc_lambda_regtools.html" class="code" title="function lambdas = calc_lambda_regtools(imdl, vh, vi, type, doPlot)">calc_lambda_regtools</a>	% CALC_LAMBDA_REGTOOLS: Find optimal hyperparameter by the L-curve (LCC)</li><li><a href="../../eidors/solvers/inverse/calc_noise_figure.html" class="code" title="function [NF,SE] = calc_noise_figure( inv_model, hp, iterations)">calc_noise_figure</a>	CALC_NOISE_FIGURE: calculate the noise amplification (NF) of an algorithm</li><li><a href="../../eidors/solvers/inverse/inv_solve_time_prior.html" class="code" title="function img= inv_solve_time_prior( inv_model, data1, data2)">inv_solve_time_prior</a>	INV_SOLVE_TIME_PRIOR inverse solver to account for time differences</li><li><a href="../../eidors/solvers/inverse/mk_GN_model.html" class="code" title="function imdl = mk_GN_model(img, opt, lambda)">mk_GN_model</a>	MK_GN_MODEL: make EIDORS inverse models using the GREIT approach</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function out = load_stored_model(fname)</a></li><li><a href="#_sub2" class="code">function store_model(fmdl,fname)</a></li><li><a href="#_sub3" class="code">function out = build_if_needed(cmd,str)</a></li><li><a href="#_sub4" class="code">function out = list_predef_model_strings</a></li><li><a href="#_sub5" class="code">function out = predef_model(str)</a></li><li><a href="#_sub6" class="code">function str = make_filename(shape, elec_pos, elec_shape,</a></li><li><a href="#_sub7" class="code">function clean = split_var_strings(strc)</a></li><li><a href="#_sub8" class="code">function out = get_path</a></li><li><a href="#_sub9" class="code">function set_path(val)</a></li><li><a href="#_sub10" class="code">function out = do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)</a>
+0002 <span class="comment">%MK_LIBRARY_MODEL - FEM models based on library shapes</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% MK_LIBRARY_MODEL(shape,elec_pos,elec_shape,maxsz,nfft) where:</span>
+0005 <span class="comment">%   shape -  a cell array of strings and</span>
+0006 <span class="comment">%     shape{1} is the shape_library model used</span>
+0007 <span class="comment">%          (run shape_libary('list') to get a list</span>
+0008 <span class="comment">%     shape{2} is the the boundary. If absent, 'boundary' is assumed.</span>
+0009 <span class="comment">%     shape{3..} are strings specifying additional inclusions (such as</span>
+0010 <span class="comment">%     lungs)</span>
+0011 <span class="comment">%   elec_pos - a vector specifying electrode positions. See</span>
+0012 <span class="comment">%     NG_MK_EXTRUDED_MODEL for details. To use the electrode positions</span>
+0013 <span class="comment">%     stored in the 'electrode' field in the shape_libary, specify elec_pos</span>
+0014 <span class="comment">%     as 'original'</span>
+0015 <span class="comment">%   elec_shape - a vector specifying electrode shapes. See</span>
+0016 <span class="comment">%     NG_MK_EXTRUDED_MODEL for details.</span>
+0017 <span class="comment">%   maxsz - maximum FEM size (default: course mesh)</span>
+0018 <span class="comment">%   nfft  - number of points to create along the boundary (default: 50)</span>
+0019 <span class="comment">%     If nfft==0, no interpolation takes place.</span>
+0020 <span class="comment">%   scale - avoids some Netgen issues by scaling the contours before</span>
+0021 <span class="comment">%     calling netgen and scaling the resulting model back afterwards</span>
+0022 <span class="comment">%     (default: 1). Note that electrode and maxh specifications are not</span>
+0023 <span class="comment">%     scaled.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% QUICK ACCESS TO COMMON MODELS:</span>
+0026 <span class="comment">%   MK_LIBRARY_MODEL(str) where str is a single string specifying a model.</span>
+0027 <span class="comment">%   Use MK_LIBRARY_MODEL('list') to obtain a list of available models.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% PATH TO LIBRARY MODELS</span>
+0030 <span class="comment">%   'LIBRARY_PATH' - get or set library path</span>
+0031 
+0032 <span class="comment">% (C) 2011 Bartlomiej Grychtol. License: GPL version 2 or version 3</span>
+0033 <span class="comment">% $Id: mk_library_model.m 6034 2019-12-30 17:52:08Z aadler $</span>
+0034 
+0035 <span class="comment">% Fill in defaults:</span>
+0036 <span class="keyword">if</span> nargin &lt; 6; scale = 1;          <span class="keyword">end</span>
+0037 <span class="keyword">if</span> nargin &lt; 5; nfft = 50;          <span class="keyword">end</span>
+0038 
+0039 <span class="keyword">if</span> ischar(shape)
+0040     <span class="keyword">switch</span> shape
+0041         <span class="keyword">case</span> <span class="string">'LIBRARY_PATH'</span>
+0042             <span class="keyword">switch</span> nargin
+0043                 <span class="keyword">case</span> 1
+0044                     out = <a href="#_sub8" class="code" title="subfunction out = get_path">get_path</a>;
+0045                 <span class="keyword">case</span> 2
+0046                     <a href="#_sub9" class="code" title="subfunction set_path(val)">set_path</a>(elec_pos);
+0047             <span class="keyword">end</span>
+0048         <span class="keyword">case</span> <span class="string">'list'</span>
+0049             out = <a href="#_sub4" class="code" title="subfunction out = list_predef_model_strings">list_predef_model_strings</a>;
+0050         <span class="keyword">case</span> <span class="string">'UNIT_TEST'</span>
+0051             out = <a href="#_sub10" class="code" title="subfunction out = do_unit_test">do_unit_test</a>; <span class="keyword">return</span>;
+0052         <span class="keyword">otherwise</span>
+0053             out = <a href="#_sub5" class="code" title="subfunction out = predef_model(str)">predef_model</a>(shape);
+0054             out = <a href="mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>(out, 0); <span class="comment">% not normalized by default</span>
+0055     <span class="keyword">end</span>
+0056 <span class="keyword">else</span>
+0057    <span class="keyword">if</span> ~iscell(shape)
+0058       shape = {shape, <span class="string">'boundary'</span>};
+0059    <span class="keyword">elseif</span> numel(shape) == 1
+0060       shape{2} = <span class="string">'boundary'</span>;
+0061    <span class="keyword">end</span>
+0062    fname = <a href="#_sub6" class="code" title="subfunction str = make_filename(shape, elec_pos, elec_shape, ">make_filename</a>(shape,elec_pos,elec_shape,maxsz, nfft, scale);
+0063    out = <a href="#_sub1" class="code" title="subfunction out = load_stored_model(fname)">load_stored_model</a>(fname);
+0064    <span class="keyword">if</span> ~isempty(out)
+0065       <span class="keyword">return</span>
+0066    <span class="keyword">end</span>
+0067    s_shape = <a href="#_sub7" class="code" title="subfunction clean = split_var_strings(strc)">split_var_strings</a>(shape(2:end));
+0068    shapes = <a href="shape_library.html" class="code" title="function out = shape_library(action, shape, varargin)">shape_library</a>(<span class="string">'get'</span>,shape{1},s_shape(1,:));
+0069    <span class="keyword">if</span> ~iscell(shapes), shapes = {shapes}; <span class="keyword">end</span>
+0070    <span class="comment">%apply any indeces specified</span>
+0071    <span class="keyword">for</span> i = 1:numel(shapes)
+0072       eval(sprintf(<span class="string">'shapes{i} = %f*shapes{i}%s;'</span>,scale,s_shape{2,i}));
+0073    <span class="keyword">end</span>
+0074    <span class="keyword">if</span> ischar(elec_pos) &amp;&amp; strcmp(elec_pos,<span class="string">'original'</span>)
+0075       el = <a href="shape_library.html" class="code" title="function out = shape_library(action, shape, varargin)">shape_library</a>(<span class="string">'get'</span>,shape{1},<span class="string">'electrodes'</span>);
+0076       electh= atan2(el(:,2),el(:,1))*180/pi;
+0077       elec_pos = [electh,0.5*ones(size(electh))];
+0078    <span class="keyword">end</span>
+0079    
+0080    <span class="keyword">if</span> nfft &gt; 0
+0081       [fmdl, mat_idx] = <a href="../../eidors/meshing/netgen/ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>({scale,shapes,[4,nfft],maxsz},<span class="keyword">...</span>
+0082          elec_pos,elec_shape);
+0083    <span class="keyword">else</span>
+0084       [fmdl, mat_idx] = <a href="../../eidors/meshing/netgen/ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>({scale,shapes,0,maxsz},<span class="keyword">...</span>
+0085          elec_pos,elec_shape);
+0086    <span class="keyword">end</span>
+0087    fmdl.nodes = fmdl.nodes/scale;
+0088    fmdl.mat_idx = mat_idx;
+0089    <a href="#_sub2" class="code" title="subfunction store_model(fmdl,fname)">store_model</a>(fmdl,fname)
+0090    out = fmdl;
+0091    out = <a href="mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>(out, 0); <span class="comment">% not normalized by default</span>
+0092 <span class="keyword">end</span>
+0093 
+0094 
+0095 
+0096 
+0097 <a name="_sub1" href="#_subfunctions" class="code">function out = load_stored_model(fname)</a>
+0098 out = [];
+0099 fname = [<a href="#_sub8" class="code" title="subfunction out = get_path">get_path</a> <span class="string">'/'</span> fname <span class="string">'.mat'</span>];
+0100 <span class="keyword">if</span> exist(fname,<span class="string">'file'</span>)
+0101    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'MK_LIBRARY_MODEL: Using stored model'</span>);
+0102    <span class="keyword">if</span> exist(<span class="string">'OCTAVE_VERSION'</span>);
+0103       load(file_in_loadpath(fname));
+0104    <span class="keyword">else</span>
+0105       load(fname);
+0106    <span class="keyword">end</span>
+0107    out = fmdl;
+0108 <span class="keyword">end</span>
+0109 
+0110 <a name="_sub2" href="#_subfunctions" class="code">function store_model(fmdl,fname)</a>
+0111    fname = [<a href="#_sub8" class="code" title="subfunction out = get_path">get_path</a> <span class="string">'/'</span> fname <span class="string">'.mat'</span>];
+0112    <span class="keyword">if</span> exist(<span class="string">'OCTAVE_VERSION'</span>);
+0113       savver = <span class="string">'-v7'</span>;
+0114    <span class="keyword">else</span>
+0115       savver = <span class="string">'-v7.3'</span>;  
+0116    <span class="keyword">end</span>
+0117    save(fname,savver,<span class="string">'fmdl'</span>);
+0118 
+0119 <a name="_sub3" href="#_subfunctions" class="code">function out = build_if_needed(cmd,str)</a>
+0120 out = <a href="#_sub1" class="code" title="subfunction out = load_stored_model(fname)">load_stored_model</a>(str);
+0121 <span class="keyword">if</span> isempty(out)
+0122    <span class="keyword">if</span> ~iscell(cmd)
+0123       cmd = {cmd};
+0124    <span class="keyword">end</span> 
+0125    <span class="keyword">for</span> i = 1:length(cmd)
+0126       <span class="keyword">if</span> i ==1
+0127          eval([<span class="string">'out = '</span> cmd{i} <span class="string">';'</span>]);
+0128       <span class="keyword">else</span>
+0129          eval(cmd{i});
+0130       <span class="keyword">end</span>
+0131    <span class="keyword">end</span>
+0132    <a href="#_sub2" class="code" title="subfunction store_model(fmdl,fname)">store_model</a>(out,str);
+0133 <span class="keyword">end</span>
+0134 
+0135 <span class="comment">%%%%%</span>
+0136 <span class="comment">% Lists predefined models (append when adding)</span>
+0137 <a name="_sub4" href="#_subfunctions" class="code">function out = list_predef_model_strings</a>
+0138 out = {
+0139     <span class="string">'adult_male_16el'</span>;
+0140     <span class="string">'adult_male_32el'</span>;
+0141     <span class="string">'adult_male_16el_lungs'</span>;
+0142     <span class="string">'adult_male_32el_lungs'</span>;
+0143     <span class="string">'adult_male_grychtol2016a_1x32'</span>;
+0144     <span class="string">'adult_male_grychtol2016a_2x16'</span>;
+0145     <span class="string">'cylinder_16x1el_coarse'</span>;
+0146     <span class="string">'cylinder_16x1el_fine'</span>;
+0147     <span class="string">'cylinder_16x1el_vfine'</span>;   
+0148     <span class="string">'cylinder_16x2el_coarse'</span>;
+0149     <span class="string">'cylinder_16x2el_fine'</span>;
+0150     <span class="string">'cylinder_16x2el_vfine'</span>;
+0151     <span class="string">'neonate_16el'</span>;
+0152     <span class="string">'neonate_32el'</span>;
+0153     <span class="string">'neonate_16el_lungs'</span>;
+0154     <span class="string">'neonate_32el_lungs'</span>;
+0155     <span class="string">'pig_23kg_16el'</span>;
+0156     <span class="string">'pig_23kg_32el'</span>;
+0157     <span class="string">'pig_23kg_16el_lungs'</span>;
+0158     <span class="string">'pig_23kg_32el_lungs'</span>;
+0159     <span class="string">'lamb_newborn_16el'</span>;
+0160     <span class="string">'lamb_newborn_32el'</span>;
+0161     <span class="string">'lamb_newborn_16el_organs'</span>;
+0162 <span class="comment">%     'lamb_newborn_32el_organs';</span>
+0163     <span class="string">'beagle_16el'</span>;
+0164     <span class="string">'beagle_32el'</span>;
+0165     <span class="string">'beagle_16el_lungs'</span>;
+0166     <span class="string">'beagle_32el_lungs'</span>;
+0167     <span class="string">'beagle_16el_rectelec'</span>;
+0168     <span class="string">'beagle_32el_rectelec'</span>;
+0169     <span class="string">'beagle_16el_lungs_rectelec'</span>;
+0170     <span class="string">'beagle_32el_lungs_rectelec'</span>;
+0171     };
+0172 
+0173 <span class="comment">%%%%%</span>
+0174 <span class="comment">% Use predefined model</span>
+0175 <a name="_sub5" href="#_subfunctions" class="code">function out = predef_model(str)</a>
+0176 <span class="keyword">switch</span> str
+0177     <span class="keyword">case</span> <span class="string">'adult_male_16el'</span>
+0178         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'adult_male'</span>,<span class="string">'boundary'</span>},<span class="keyword">...</span>
+0179             [16 1 0.5],[0.05],0.08);
+0180     <span class="keyword">case</span> <span class="string">'adult_male_32el'</span>
+0181         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'adult_male'</span>,<span class="string">'boundary'</span>},<span class="keyword">...</span>
+0182             [32 1 0.5],[0.05],0.08);
+0183     <span class="keyword">case</span> <span class="string">'adult_male_16el_lungs'</span>
+0184         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'adult_male'</span>,<span class="string">'boundary'</span>,<span class="string">'left_lung'</span>,<span class="string">'right_lung'</span>},<span class="keyword">...</span>
+0185             [16 1 0.5],[0.05],0.08);
+0186     <span class="keyword">case</span> <span class="string">'adult_male_32el_lungs'</span>
+0187         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'adult_male'</span>,<span class="string">'boundary'</span>,<span class="string">'left_lung'</span>,<span class="string">'right_lung'</span>},<span class="keyword">...</span>
+0188             [32 1 0.5],[0.05],0.08);
+0189     <span class="keyword">case</span> <span class="string">'adult_male_grychtol2016a_1x32'</span>
+0190         out = <a href="mk_thorax_model_grychtol2016a.html" class="code" title="function img = mk_thorax_model_grychtol2016a(stimpat)">mk_thorax_model_grychtol2016a</a>(<span class="string">'1x32_ring'</span>);
+0191         out = out.fwd_model;
+0192     <span class="keyword">case</span> <span class="string">'adult_male_grychtol2016a_2x16'</span>
+0193         out = <a href="mk_thorax_model_grychtol2016a.html" class="code" title="function img = mk_thorax_model_grychtol2016a(stimpat)">mk_thorax_model_grychtol2016a</a>(<span class="string">'2x16_planar'</span>);
+0194         out = out.fwd_model;
+0195         
+0196     <span class="keyword">case</span> <span class="string">'cylinder_16x1el_coarse'</span>
+0197        out = <a href="#_sub3" class="code" title="subfunction out = build_if_needed(cmd,str)">build_if_needed</a>(<span class="keyword">...</span>
+0198           <span class="string">'ng_mk_cyl_models([10,15],[16,5],[0.5,0,0.18])'</span>, str);
+0199     <span class="keyword">case</span> <span class="string">'cylinder_16x1el_fine'</span> 
+0200        out = <a href="#_sub3" class="code" title="subfunction out = build_if_needed(cmd,str)">build_if_needed</a>(<span class="keyword">...</span>
+0201           <span class="string">'ng_mk_cyl_models([10,15,1.1],[16,5],[0.5,0,0.15])'</span>,str);
+0202     <span class="keyword">case</span> <span class="string">'cylinder_16x1el_vfine'</span> 
+0203         out = <a href="#_sub3" class="code" title="subfunction out = build_if_needed(cmd,str)">build_if_needed</a>(<span class="keyword">...</span>
+0204            <span class="string">'ng_mk_cyl_models([10,15,0.8],[16,5],[0.5,0,0.08])'</span>,str);
+0205     <span class="keyword">case</span> <span class="string">'cylinder_16x2el_coarse'</span> 
+0206         out = <a href="#_sub3" class="code" title="subfunction out = build_if_needed(cmd,str)">build_if_needed</a>(<span class="keyword">...</span>
+0207            <span class="string">'ng_mk_cyl_models([30,15],[16,10,20],[0.5,0,0.18])'</span>,str);
+0208     <span class="keyword">case</span> <span class="string">'cylinder_16x2el_fine'</span>  
+0209         out = <a href="#_sub3" class="code" title="subfunction out = build_if_needed(cmd,str)">build_if_needed</a>(<span class="keyword">...</span>
+0210            <span class="string">'ng_mk_cyl_models([30,15,1.5],[16,10,20],[0.5,0,0.15])'</span>,str);
+0211     <span class="keyword">case</span> <span class="string">'cylinder_16x2el_vfine'</span> 
+0212         out = <a href="#_sub3" class="code" title="subfunction out = build_if_needed(cmd,str)">build_if_needed</a>(<span class="keyword">...</span>
+0213            <span class="string">'ng_mk_cyl_models([30,15,0.8],[16,10,20],[0.5,0,0.08])'</span>,str);
+0214         
+0215         
+0216     <span class="keyword">case</span> <span class="string">'neonate_16el'</span>
+0217         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'neonate'</span>,<span class="string">'boundary'</span>},[16 1 0.5],[0.1 0 -1 0 60],0.08,49);
+0218     <span class="keyword">case</span> <span class="string">'neonate_32el'</span>
+0219         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'neonate'</span>,<span class="string">'boundary'</span>},[32 1 0.5],[0.06 0 -1 0 60],0.08,49);
+0220     <span class="keyword">case</span> <span class="string">'neonate_16el_lungs'</span>
+0221         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'neonate'</span>,<span class="string">'boundary'</span>,<span class="string">'left_lung'</span>,<span class="string">'right_lung'</span>},[16 1 0.5],[0.1 0 -1 0 60],0.08,49);
+0222     <span class="keyword">case</span> <span class="string">'neonate_32el_lungs'</span>
+0223         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'neonate'</span>,<span class="string">'boundary'</span>,<span class="string">'left_lung'</span>,<span class="string">'right_lung'</span>},[32 1 0.5],[0.06 0 -1 0 60],0.08,49);
+0224         
+0225     <span class="keyword">case</span> <span class="string">'pig_23kg_16el'</span>
+0226         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'pig_23kg'</span>,<span class="string">'boundary'</span>},<span class="keyword">...</span>
+0227             [16 1 0.5],[0.05 0 -1 0 60],0.08);
+0228     <span class="keyword">case</span> <span class="string">'pig_23kg_32el'</span>
+0229         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'pig_23kg'</span>,<span class="string">'boundary'</span>},<span class="keyword">...</span>
+0230             [32 1 0.5],[0.05 0 -1 0 60],0.08);
+0231     <span class="keyword">case</span> <span class="string">'pig_23kg_16el_lungs'</span>
+0232         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'pig_23kg'</span>,<span class="string">'boundary'</span>,<span class="string">'lungs(1:2:end,:)'</span>},<span class="keyword">...</span>
+0233             [16 1 0.5],[0.05 0 -1 0 60],0.08);
+0234     <span class="keyword">case</span> <span class="string">'pig_23kg_32el_lungs'</span>
+0235         out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'pig_23kg'</span>,<span class="string">'boundary'</span>,<span class="string">'lungs(1:2:end,:)'</span>},<span class="keyword">...</span>
+0236             [32 1 0.5],[0.05 0 -1 0 60],0.08);    
+0237 
+0238     <span class="keyword">case</span> <span class="string">'lamb_newborn_16el'</span>
+0239 <span class="comment">%        out = build_if_needed(...</span>
+0240 <span class="comment">%           {['ng_mk_extruded_model({208,208*',...</span>
+0241 <span class="comment">%             'shape_library(''get'',''lamb_newborn'',''boundary'')',...</span>
+0242 <span class="comment">%             ',0,10},[16,1.995,104],[1])'],'out.nodes = out.nodes/204;'}, ...</span>
+0243 <span class="comment">%           str);</span>
+0244          out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'lamb_newborn'</span>,<span class="string">'boundary'</span>},[16,1.995,104],[1],10,0,208);
+0245     <span class="keyword">case</span> <span class="string">'lamb_newborn_32el'</span>
+0246          <span class="comment">% Very sensitive to the .980 offset. This is the only I can find that works.</span>
+0247          out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'lamb_newborn'</span>,<span class="string">'boundary'</span>},[32,1.980,104],[1],15,50,208);
+0248          out.electrode = out.electrode([2:32,1]);
+0249     <span class="keyword">case</span> <span class="string">'lamb_newborn_16el_organs'</span>
+0250        out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'lamb_newborn'</span>,<span class="string">'boundary'</span>,<span class="string">'lungs'</span>,<span class="string">'heart'</span>},[16,1.995,104],[1],10,0,208);
+0251 <span class="comment">%     case 'lamb_newborn_32el_organs'</span>
+0252     <span class="keyword">case</span> <span class="string">'beagle_16el'</span>;
+0253       scale = 49;
+0254       out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'beagle'</span>,<span class="string">'boundary'</span>}, <span class="keyword">...</span>
+0255          [16 1 scale*0.5],[2,0,0.10],10,0,49);
+0256     <span class="keyword">case</span> <span class="string">'beagle_32el'</span>;
+0257       scale = 49;
+0258       out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'beagle'</span>,<span class="string">'boundary'</span>}, <span class="keyword">...</span>
+0259          [32 1 scale*0.5],[2,0,0.10],10,0,49);
+0260     <span class="keyword">case</span> <span class="string">'beagle_16el_rectelec'</span>;
+0261       scale = 49;
+0262       out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'beagle'</span>,<span class="string">'boundary'</span>}, <span class="keyword">...</span>
+0263          [16 1 scale*0.5],8*[0.25,1,0.05],10,0,49);
+0264     <span class="keyword">case</span> <span class="string">'beagle_32el_rectelec'</span>;
+0265       scale = 49;
+0266       out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'beagle'</span>,<span class="string">'boundary'</span>}, <span class="keyword">...</span>
+0267          [16 1 scale*0.5],8*[0.25,1,0.05],10,0,49);
+0268 
+0269     <span class="keyword">case</span> <span class="string">'beagle_16el_lungs'</span>;
+0270       scale = 49;
+0271       out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'beagle'</span>,<span class="string">'boundary'</span>,<span class="string">'left_lung'</span>,<span class="string">'right_lung'</span>}, <span class="keyword">...</span>
+0272          [16 1 scale*0.5],[2,0,0.10],10,0,49);
+0273 
+0274     <span class="keyword">case</span> <span class="string">'beagle_16el_lungs_rectelec'</span>;
+0275       scale = 49;
+0276       out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'beagle'</span>,<span class="string">'boundary'</span>,<span class="string">'left_lung'</span>,<span class="string">'right_lung'</span>}, <span class="keyword">...</span>
+0277          [16 1 scale*0.5],8*[0.25,1,0.05],10,0,49);
+0278 
+0279     <span class="keyword">case</span> <span class="string">'beagle_32el_lungs'</span>;
+0280       scale = 49;
+0281       out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'beagle'</span>,<span class="string">'boundary'</span>,<span class="string">'left_lung'</span>,<span class="string">'right_lung'</span>}, <span class="keyword">...</span>
+0282          [32 1 scale*0.5],[2,0,0.10],10,0,49);
+0283 
+0284     <span class="keyword">case</span> <span class="string">'beagle_32el_lungs_rectelec'</span>;
+0285       scale = 49;
+0286       out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'beagle'</span>,<span class="string">'boundary'</span>,<span class="string">'left_lung'</span>,<span class="string">'right_lung'</span>}, <span class="keyword">...</span>
+0287          [32 1 scale*0.5],8*[0.25,1,0.05],10,0,49);
+0288          
+0289     <span class="keyword">otherwise</span>
+0290         error(<span class="string">'No such model'</span>);
+0291 <span class="keyword">end</span>
+0292 <span class="comment">%give the model a name</span>
+0293 out.name = str;
+0294 
+0295 
+0296 <a name="_sub6" href="#_subfunctions" class="code">function str = make_filename(shape, elec_pos, elec_shape, </a><span class="keyword">...</span>
+0297                              maxsz, nfft, scale);
+0298 <span class="comment">%at this point, shape is a cell array of strings e.g. {'pig_23kg','lungs')</span>
+0299 str = shape{1};
+0300 shape(1) = []; <span class="comment">%remove the first element</span>
+0301 shape = sort(shape); <span class="comment">%sort the others</span>
+0302 <span class="keyword">for</span> i = 1:numel(shape)
+0303     str = [str <span class="string">'_'</span> shape{i}];
+0304 <span class="keyword">end</span>
+0305 str = [str <span class="string">'_EP'</span>];
+0306 <span class="keyword">for</span> i = 1:numel(elec_pos)
+0307     str = [str <span class="string">'_'</span> num2str(elec_pos(i))];
+0308 <span class="keyword">end</span>
+0309 str = [str <span class="string">'_ES'</span>];
+0310 <span class="keyword">if</span> ischar(elec_shape)
+0311     str = [str <span class="string">'_'</span> elec_shape];
+0312 <span class="keyword">else</span>
+0313     <span class="keyword">for</span> i = 1:numel(elec_shape)
+0314         str = [str <span class="string">'_'</span> num2str(elec_shape(i))];
+0315     <span class="keyword">end</span>
+0316 <span class="keyword">end</span>
+0317 <span class="keyword">if</span> ~isempty(maxsz)
+0318     str = [str <span class="string">'_maxsz_'</span> num2str(maxsz)];
+0319 <span class="keyword">end</span>
+0320 <span class="keyword">if</span> ~isempty(nfft)
+0321     str = [str <span class="string">'_nfft_'</span> num2str(nfft)];
+0322 <span class="keyword">end</span>
+0323 <span class="keyword">if</span> ~isempty(scale)
+0324     str = [str <span class="string">'_scale'</span> num2str(scale)];
+0325 <span class="keyword">end</span>
+0326 
+0327 <span class="comment">%remove colons</span>
+0328 str = strrep(str,<span class="string">':'</span>,<span class="string">'-'</span>);
+0329 
+0330 <a name="_sub7" href="#_subfunctions" class="code">function clean = split_var_strings(strc)</a>
+0331 <span class="keyword">for</span> i = 1:numel(strc)
+0332     [clean{1,i} clean{2,i}] = strtok(strc{i},<span class="string">'([{'</span>);
+0333 <span class="keyword">end</span>
+0334 
+0335 
+0336 <a name="_sub8" href="#_subfunctions" class="code">function out = get_path</a>
+0337 <span class="keyword">global</span> eidors_objects
+0338 out = eidors_objects.model_cache;
+0339 
+0340 <a name="_sub9" href="#_subfunctions" class="code">function set_path(val)</a>
+0341 <span class="keyword">global</span> eidors_objects
+0342 eidors_objects.model_cache = val;
+0343 <span class="comment">%if folder doesn't exist, create it</span>
+0344 <span class="keyword">if</span> ~exist(val,<span class="string">'dir'</span>)
+0345     ver= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'interpreter_version'</span>);
+0346     <span class="keyword">if</span> ver.ver&lt;4 || ver.ver&gt;=7
+0347        mkdir(val);
+0348     <span class="keyword">else</span>
+0349  <span class="comment">% matlab 6.x has a stupid mkdir function</span>
+0350        system([<span class="string">'mkdir '</span>,val]); 
+0351     <span class="keyword">end</span>
+0352 <span class="keyword">end</span>
+0353 
+0354 <a name="_sub10" href="#_subfunctions" class="code">function out = do_unit_test</a>
+0355 models = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>(<span class="string">'list'</span>);
+0356 n_models = numel(models);
+0357 sqrt_n_models = ceil(sqrt(n_models));
+0358 <span class="keyword">for</span> i = 1:numel(models)
+0359     <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'\n\n\n DOING  MODEL (%s)\n\n\n'</span>,models{i},0);
+0360     mdl = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>(models{i});
+0361     img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(mdl,1);
+0362     <span class="keyword">try</span>   
+0363         n = numel(mdl.mat_idx); 
+0364     <span class="keyword">catch</span>
+0365         n =1; 
+0366     <span class="keyword">end</span>
+0367     <span class="keyword">if</span> n &gt;1
+0368         <span class="keyword">for</span> j = 2:n
+0369             img.elem_data(mdl.mat_idx{j}) = 0.25;
+0370         <span class="keyword">end</span>
+0371     <span class="keyword">end</span>
+0372     subplot(sqrt_n_models, sqrt_n_models,i);
+0373     <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img,[0,1,0]); axis off;
+0374     title(models{i},<span class="string">'Interpreter'</span>,<span class="string">'none'</span>);
+0375     drawnow
+0376 <span class="keyword">end</span>
+0377 
+0378 
+0379 out = <a href="mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>({<span class="string">'pig_23kg'</span>,<span class="string">'boundary'</span>,<span class="string">'lungs(1:2:end,:)'</span>},[32 1 0.5],[0.05 0 -1 0 60],0.08);
+0380</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

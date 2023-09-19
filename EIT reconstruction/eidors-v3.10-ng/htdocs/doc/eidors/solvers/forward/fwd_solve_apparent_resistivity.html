@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fwd_solve_apparent_resistivity</title>
+  <meta name="keywords" content="fwd_solve_apparent_resistivity">
+  <meta name="description" content="fwd_solve_apparent_resistivity: fwd_solve output as apparent resistivity">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; fwd_solve_apparent_resistivity.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>fwd_solve_apparent_resistivity
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>fwd_solve_apparent_resistivity: fwd_solve output as apparent resistivity</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function data =fwd_solve_apparent_resistivity(fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> fwd_solve_apparent_resistivity: fwd_solve output as apparent resistivity
+  This function is a wrapper to the fwd_solve; however, the output
+  is converted into apparent resistivity units, rather than in
+  voltage units</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="fwd_solve_apparent_resistivity.html" class="code" title="function data =fwd_solve_apparent_resistivity(fwd_model, img)">fwd_solve_apparent_resistivity</a>	fwd_solve_apparent_resistivity: fwd_solve output as apparent resistivity</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>	EIDORS_DEFAULT Default function handler.</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="fwd_solve_apparent_resistivity.html" class="code" title="function data =fwd_solve_apparent_resistivity(fwd_model, img)">fwd_solve_apparent_resistivity</a>	fwd_solve_apparent_resistivity: fwd_solve output as apparent resistivity</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fctr = get_factor(img)</a></li><li><a href="#_sub2" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data =fwd_solve_apparent_resistivity(fwd_model, img)</a>
+0002 <span class="comment">% fwd_solve_apparent_resistivity: fwd_solve output as apparent resistivity</span>
+0003 <span class="comment">%  This function is a wrapper to the fwd_solve; however, the output</span>
+0004 <span class="comment">%  is converted into apparent resistivity units, rather than in</span>
+0005 <span class="comment">%  voltage units</span>
+0006 
+0007 <span class="comment">% $Id: fwd_solve_apparent_resistivity.m 5877 2018-12-21 20:41:28Z aadler $</span>
+0008 
+0009 <span class="comment">% correct input paralemeters if function was called with only img</span>
+0010 
+0011 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub2" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0012 
+0013 <span class="keyword">if</span> nargin == 1
+0014    img= fwd_model;
+0015 <span class="keyword">elseif</span>  strcmp(getfield(warning(<span class="string">'query'</span>,<span class="string">'EIDORS:DeprecatedInterface'</span>),<span class="string">'state'</span>),<span class="string">'on'</span>)
+0016    warning(<span class="string">'EIDORS:DeprecatedInterface'</span>, <span class="keyword">...</span>
+0017       [<span class="string">'Calling FWD_SOLVE_APPARENT_RESISTIVITY with two arguments is deprecated and will cause'</span> <span class="keyword">...</span>
+0018        <span class="string">' an error in a future version. First argument ignored.'</span>]);
+0019 <span class="keyword">end</span>
+0020 fwd_model= img.fwd_model;
+0021 
+0022 solver = @<a href="../../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>;
+0023 <span class="keyword">try</span> <span class="comment">% replace solver if this one exists</span>
+0024    solver = fwd_model.fwd_solve_apparent_resistivity.solve;
+0025 <span class="keyword">end</span>
+0026 
+0027 img.fwd_model.solve = solver;
+0028 
+0029 data = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0030 
+0031 fctr = <a href="#_sub1" class="code" title="subfunction fctr = get_factor(img)">get_factor</a>(img);
+0032 
+0033 data.meas = fctr * data.meas;
+0034 data.name = [<span class="string">'apparent resistivity '</span> data.name];
+0035 data.quantity = <span class="string">'apparent resistivity'</span>;
+0036 data.apparent_resistivity_factor= fctr;
+0037 
+0038 <a name="_sub1" href="#_subfunctions" class="code">function fctr = get_factor(img)</a>
+0039 fctr = NaN;
+0040 <span class="keyword">try</span>
+0041    fctr = img.fwd_model.apparent_resistivity_factor;
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="keyword">if</span> ischar(fctr), fctr = str2func(fcstr); <span class="keyword">end</span>;
+0045 
+0046 <span class="keyword">if</span> isa(fctr, <span class="string">'function_handle'</span>)
+0047    fctr = feval(fctr, img);
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="keyword">if</span> isnan(fctr)
+0051    
+0052    vh = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(<a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(img.fwd_model,1));
+0053    n = length(vh.meas);
+0054    fctr = spdiags(1./vh.meas,0,n,n);
+0055 <span class="keyword">end</span>
+0056 
+0057 
+0058 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test</a>
+0059    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,8)); 
+0060    img.elem_data(:) = 1.0; vrh = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>( img );
+0061    img.elem_data(1) = 1.1; vri = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>( img );
+0062 
+0063    img.fwd_model.solve = @<a href="fwd_solve_apparent_resistivity.html" class="code" title="function data =fwd_solve_apparent_resistivity(fwd_model, img)">fwd_solve_apparent_resistivity</a>;
+0064    img.elem_data(:) = 1.0; vah = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>( img );
+0065    img.elem_data(1) = 1.1; vai = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>( img );
+0066 
+0067    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'homog is ones'</span>, vah.meas, ones(size(vah.meas)), 1e-10);
+0068    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'ratio is same'</span>, vai.meas./vah.meas, vri.meas./vrh.meas, 1e-10);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+
+<h2>
+Reconstructing with electrode errors
+</H2>
+
+The main idea used to reconstruct with electrode errors, is to
+model errors as low SNR, and thus high noise, on measurements
+which use the affected electrodes.
+
+
+
+<h3>
+Sample Data and clean reconstruction
+</H3>
+
+<pre>
+% Sample data + Image $Id: electrode_errors01.m 4839 2015-03-30 07:44:50Z aadler $
+
+% Sample data
+load montreal_data_1995
+vi = double( zc_resp );
+vh = double( zc_resp(:,1) );
+
+% Reconstruct
+imdl = mk_common_model('c2t2',16);
+imdl.hyperparameter.value = .3;
+
+img = inv_solve(imdl, vh, vi);
+subplot(221)
+show_slices(img);
+print_convert electrode_errors01a.png
+close % else matlab remembers image axis
+subplot(221) % to preserve size
+img = inv_solve(imdl, vh, vi(:,20));
+show_fem(img,[0,1,0]);axis off
+print_convert electrode_errors01b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/electrode_errors01a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/electrode_errors01b.png">
+<br><i>Figure:</i>
+Reconstructions of breathing data, illustrating that
+a small amount of electrode error occurs at electrodes
+13 and 5.
+</center>
+
+<h3>
+Eliminating Electrodes
+</H3>
+
+These results are taken from the paper:
+<ul>
+Andy Adler
+<i>
+  Reference Accounting for erroneous electrode data in EIT
+</i>
+ Physiol Meas, 25(1):227-238, 2004. 
+</ul>
+
+<pre>
+% Reject electrodes + Image $Id: electrode_errors02.m 4101 2013-05-28 19:18:55Z bgrychtol $
+
+imdl.meas_icov = meas_icov_rm_elecs( imdl, 13);
+
+img = inv_solve(imdl, vh, vi(:,20));
+show_fem(img,[0,1,0]); axis off
+print_convert electrode_errors02a.png
+
+
+imdl.meas_icov = meas_icov_rm_elecs( imdl, [13,5]);
+img = inv_solve(imdl, vh, vi(:,20));
+show_fem(img,[0,1,0]); 
+print_convert electrode_errors02b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/electrode_errors02a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/electrode_errors02b.png">
+<br><i>Figure:</i>
+Reconstructions removing 
+<i>Left</i>: Electrode 13, and
+<i>Right</i>: Electrodes 5 and 13
+</center>
+
+<h3>
+Detecting and automatically eliminating electrodes
+</H3>
+
+The idea here is to compare the reciprocity match between
+measurements and scale the weighting of those which do not 
+match via reciprocity.
+These results are taken from the paper:
+<ul>
+ AE Hartinger, R Guardo, A Adler, H Gagnon.
+<i>
+Real-time management of faulty electrodes in EIT
+</i>
+ IEEE T BME 2008.
+</ul>
+
+<pre>
+% Reciprocity error + Image $Id: electrode_errors03.m 4101 2013-05-28 19:18:55Z bgrychtol $
+
+imdl.calc_reciproc_error.tau = 3e-4;
+imdl.meas_icov = calc_reciproc_error( imdl, vi );
+
+img = inv_solve(imdl, vh, vi(:,20)); show_fem(img,[0,1,0]);axis off
+print_convert electrode_errors03a.png
+
+imdl.calc_reciproc_error.tau = 3e-2;
+imdl.meas_icov = calc_reciproc_error( imdl, vi );
+
+img = inv_solve(imdl, vh, vi(:,20)); show_fem(img,[0,1,0]);axis off
+print_convert electrode_errors03b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/electrode_errors03a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/electrode_errors03b.png">
+<br><i>Figure:</i>
+Reconstructions removing 
+<i>Left</i>:  Parameter <i>&tau;</i>=0.0003
+<i>Right</i>: Parameter <i>&tau;</i>=0.03
+</center>
+
+
+<h3>
+Electrode Errors with GREIT
+</H3>
+
+Electrode error management with GREIT is 
+essentially the same. The key difference is that
+GREIT requires a noise covariance, not the
+noise inverse covariance.
+<p>
+Create a GREIT model.
+<pre>
+% Reject electrodes + Image $Id: electrode_errors04.m 3688 2012-12-15 07:18:33Z bgrychtol $
+
+fmdl= mk_library_model('adult_male_16el_lungs');
+% fmdl.electrode = fmdl.electrode([9:16,1:8]);
+
+[stim,msel] = mk_stim_patterns(16,1,[0,1],[0,1],{'no_meas_current'},1);
+fmdl.stimulation = stim;
+fmdl = mdl_normalize(fmdl, 1);
+fmdl.meas_select = msel;
+img = mk_image(fmdl, 1);
+img.elem_data([fmdl.mat_idx{2};fmdl.mat_idx{3}]) = 0.3; % lungs
+clear opt; opt.imgsz = [32 32]; opt.square_pixels=1;
+opt.noise_figure = .5;
+imdl=mk_GREIT_model(img, 0.25, [], opt);
+
+</pre>
+
+Basic GREIT reconstruction
+<pre>
+% Basic GREIT reconst $Id: electrode_errors05.m 4101 2013-05-28 19:18:55Z bgrychtol $
+
+imgr= inv_solve(imdl, zc_resp(:,1), zc_resp(:,22));
+imgr.calc_colours.ref_level=0; show_fem(imgr,[0,1]);
+
+axis equal; axis([-1,1.05,-.8,.8]);
+print_convert electrode_errors05a.png
+
+</pre>
+<center><img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/electrode_errors05a.png">
+<br><i>Figure:</i>
+Basic GREIT reconstruction
+</center>
+
+GREIT with single electrode errors
+<pre>
+% GREIT - error $Id: electrode_errors06.m 4101 2013-05-28 19:18:55Z bgrychtol $
+
+imdl = eidors_obj('inv_model','','fwd_model',fmdl);
+imdl.meas_icov_rm_elecs.elec_list = 13;
+imdl.meas_icov_rm_elecs.exponent  = -1;
+imdl.meas_icov_rm_elecs.SNR       = 100;
+opt.noise_covar = meas_icov_rm_elecs(imdl);
+imdl=mk_GREIT_model(img, 0.25, [], opt);
+
+imgr= inv_solve(imdl, zc_resp(:,1), zc_resp(:,22));
+imgr.calc_colours.ref_level=0; show_fem(imgr,[0,1]);
+
+axis equal; axis([-1,1.05,-.8,.8]);
+print_convert electrode_errors06a.png
+
+</pre>
+<center><img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/electrode_errors06a.png">
+<br><i>Figure:</i>
+GREIT with single electrode errors
+</center>
+
+GREIT with reciprocity-based electrode errors
+<pre>
+% Basic GREIT reconst $Id: electrode_errors07.m 4101 2013-05-28 19:18:55Z bgrychtol $
+
+% use -ve tau to get covariance rather than inv covar
+imdl.calc_reciproc_error.tau = -3e-4;
+opt.noise_covar = calc_reciproc_error( imdl, zc_resp );
+
+imdl=mk_GREIT_model(img, 0.25, [], opt);
+
+imgr= inv_solve(imdl, zc_resp(:,1), zc_resp(:,22));
+imgr.calc_colours.ref_level=0; show_fem(imgr,[0,1]);
+
+axis equal; axis([-1,1.05,-.8,.8]);
+
+print_convert electrode_errors07a.png
+
+</pre>
+<center><img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/electrode_errors07a.png">
+<br><i>Figure:</i>
+GREIT with reciprocity-based electrode errors
+</center>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-03-01 08:44:21 -0500 (Wed, 01 Mar 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

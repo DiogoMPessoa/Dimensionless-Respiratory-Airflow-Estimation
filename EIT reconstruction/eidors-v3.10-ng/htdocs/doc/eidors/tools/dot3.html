@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dot3</title>
+  <meta name="keywords" content="dot3">
+  <meta name="description" content="CROSS3  3D cross parallel cross product">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">tools</a> &gt; dot3.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/tools&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>dot3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CROSS3  3D cross parallel cross product</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function d = dot3(a,b) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CROSS3  3D cross parallel cross product
+  D = DOT3(A,B) calculates the dot product between rows of matrices A
+  and B, both of which must be Nx3. D is Nx1 such that 
+    C(i) = dot(A(i,:),B(i,:))
+ but it is calculated faster.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/meshing/calc_mesh_quality.html" class="code" title="function [Q mdl] = calc_mesh_quality(mdl, show)">calc_mesh_quality</a>	CALC_MESH_QUALITY Various measures of mesh quality.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function d = dot3(a,b)</a>
+0002 <span class="comment">%CROSS3  3D cross parallel cross product</span>
+0003 <span class="comment">%  D = DOT3(A,B) calculates the dot product between rows of matrices A</span>
+0004 <span class="comment">%  and B, both of which must be Nx3. D is Nx1 such that</span>
+0005 <span class="comment">%    C(i) = dot(A(i,:),B(i,:))</span>
+0006 <span class="comment">% but it is calculated faster.</span>
+0007 
+0008 <span class="comment">% (C) 2013 Bartlomiej Grychtol. License: GPL version 2 or 3.</span>
+0009 <span class="comment">% $Id: dot3.m 4260 2013-06-24 15:17:15Z aadler $</span>
+0010 
+0011 d = sum(a.*b,2);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

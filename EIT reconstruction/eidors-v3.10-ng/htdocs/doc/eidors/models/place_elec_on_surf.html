@@ -1,0 +1,903 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of place_elec_on_surf</title>
+  <meta name="keywords" content="place_elec_on_surf">
+  <meta name="description" content="PLACE_ELEC_ON_SURF Place electrodes on the surface of a model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; place_elec_on_surf.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>place_elec_on_surf
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">PLACE_ELEC_ON_SURF Place electrodes on the surface of a model
+ mdl = place_elec_on_surf(mdl,elec_pos, elec_spec, ng_opt_file, maxh)
+ INPUT:
+  mdl         = an EIDORS fwd_model struct
+  elec_pos    = an array specigying electrode positions
+  elec_shape  = an array specifying electrode shape (can be different for
+                each electrode)
+  ng_opt_file = an alternative ng.opt file to use (OPTIONAL)
+                specify [] to use dafault
+  maxh        = maximum edge length (if ng_opt_file is specified, maxh 
+                only applies to the volume and not the surface)
+ ELECTRODE POSITIONS:
+  elec_pos = [n_elecs_per_plane,z_planes] 
+     OR
+  elec_pos = [degrees,z] centres of each electrode (N_elecs x 2)
+     OR
+  elec_pos = [x y z] centres of each electrode (N_elecs x 3)
+
+  Note: N_elecs &gt;= 2.
+
+ ELECTRODE SHAPES::
+  elec_shape = [width,height, maxsz]  % Rectangular elecs
+     OR
+  elec_shape = [radius, 0, maxsz ]    % Circular elecs
+
+ NOTE that this function requires both Netgen and Gmsh.
+ It will completely re-mesh your model.
+ The code makes several assumptions about the output of Netgen, which it
+ attempts to control through the ng.opt file, but there will be meshes 
+ for which this appraoch will fail. In this case, you can supply your own 
+ file with options for Netgen (with a filename different than ng.opt), or
+ change your mesh and/or electrode locations. Most common problem is too 
+ big electrode maxh value (must be significantly smaller than the smallest
+ element on which the electrode will fall).
+
+ CITATION_REQUEST:
+ TITLE: FEM Electrode Refinement for Electrical Impedance Tomography 
+ AUTHOR: B Grychtol and A Adler
+ JOURNAL: Engineering in Medicine and Biology Society (EMBC), 2013 Annual 
+ International Conference of the IEEE 
+ YEAR: 2013
+
+ See also <a href="gmsh_stl2tet.html" class="code" title="function mdl = gmsh_stl2tet(stlfile, maxh, extra)">gmsh_stl2tet</a>, ng_write_opt, <a href="merge_meshes.html" class="code" title="function out = merge_meshes(M1,varargin)">merge_meshes</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/meshing/netgen/call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>	CALL_NETGEN: call netgen to create a vol_file from a geo_file</li><li><a href="../../eidors/meshing/netgen/ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>	NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface</li><li><a href="../../eidors/meshing/netgen/ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>	NG_MAKE_EXTRUDED_MODEL: create extruded models using netgen</li><li><a href="../../eidors/meshing/netgen/ng_mk_fwd_model.html" class="code" title="function [fwd_mdl]=ng_mk_fwd_model( ng_vol_filename, centres,name, stim_pattern, z_contact, postprocmesh)">ng_mk_fwd_model</a>	NG_MK_FWD_MODEL: create a fwd_model object from a netgen vol file</li><li><a href="../../eidors/meshing/netgen/ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>	NG_WRITE_OPT Write an ng.opt file in current directory</li><li><a href="../../eidors/meshing/stl/stl_write.html" class="code" title="function stl_write(fv, name)">stl_write</a>	STL_WRITE Create a text STL file from a patch struct</li><li><a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>	FIX_MODEL: Add useful fields to a model</li><li><a href="gmsh_stl2tet.html" class="code" title="function mdl = gmsh_stl2tet(stlfile, maxh, extra)">gmsh_stl2tet</a>	GMSH_STL2TET creates a tetrahedral mesh from an stl file</li><li><a href="merge_meshes.html" class="code" title="function out = merge_meshes(M1,varargin)">merge_meshes</a>	MERGE_MESHES - merges two meshes based on common nodes</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li><li><a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>	POINT_IN_TRIANGLE tests points for membership in triangles</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/tools/citeme.html" class="code" title="function citeme(fname)">citeme</a>	CITEME Display citation requests</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>	EIDORS_DEBUG Global managment of debug flags</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_thorax_model.html" class="code" title="function out = mk_thorax_model(str, elec_pos, elec_shape, maxh)">mk_thorax_model</a>	MK_THORAX_MODEL FEM models of the thorax</li><li><a href="place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function mdl2 = do_place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)</a></li><li><a href="#_sub2" class="code">function debugging = do_debug;</a></li><li><a href="#_sub3" class="code">function write_to_stl(mdl,stlfn)</a></li><li><a href="#_sub4" class="code">function write_ng_opt_file(ng_opt_file, maxh)</a></li><li><a href="#_sub5" class="code">function mdl = prepare_surf_model(mdl)</a></li><li><a href="#_sub6" class="code">function mdl = orient_boundary(mdl)</a></li><li><a href="#_sub7" class="code">function mdl = flatten_electrode(mdl,inner,outer, V)</a></li><li><a href="#_sub8" class="code">function match = find_matching_nodes(mdl, nodes,th)</a></li><li><a href="#_sub9" class="code">function [joint EL1 EL2 V] = add_electrodes(mdl,N,elecs)</a></li><li><a href="#_sub10" class="code">function PN = project_nodes_on_elec(mdl,elecs,nodes)</a></li><li><a href="#_sub11" class="code">function [elecs] = parse_elecs(mdl, elec_pos, elec_shape )</a></li><li><a href="#_sub12" class="code">function [u v s] = get_face_basis(mdl, fc)</a></li><li><a href="#_sub13" class="code">function [fc pos] = find_elec_centre(mdl, el_th,el_z)</a></li><li><a href="#_sub14" class="code">function out = grow_neighbourhood(mdl, varargin)</a></li><li><a href="#_sub15" class="code">function nn =  find_neighbours(fc, bb);</a></li><li><a href="#_sub16" class="code">function [e p] = find_face_under_elec(mdl, elec_pos)</a></li><li><a href="#_sub17" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)</a>
+0002 <span class="comment">%PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</span>
+0003 <span class="comment">% mdl = place_elec_on_surf(mdl,elec_pos, elec_spec, ng_opt_file, maxh)</span>
+0004 <span class="comment">% INPUT:</span>
+0005 <span class="comment">%  mdl         = an EIDORS fwd_model struct</span>
+0006 <span class="comment">%  elec_pos    = an array specigying electrode positions</span>
+0007 <span class="comment">%  elec_shape  = an array specifying electrode shape (can be different for</span>
+0008 <span class="comment">%                each electrode)</span>
+0009 <span class="comment">%  ng_opt_file = an alternative ng.opt file to use (OPTIONAL)</span>
+0010 <span class="comment">%                specify [] to use dafault</span>
+0011 <span class="comment">%  maxh        = maximum edge length (if ng_opt_file is specified, maxh</span>
+0012 <span class="comment">%                only applies to the volume and not the surface)</span>
+0013 <span class="comment">% ELECTRODE POSITIONS:</span>
+0014 <span class="comment">%  elec_pos = [n_elecs_per_plane,z_planes]</span>
+0015 <span class="comment">%     OR</span>
+0016 <span class="comment">%  elec_pos = [degrees,z] centres of each electrode (N_elecs x 2)</span>
+0017 <span class="comment">%     OR</span>
+0018 <span class="comment">%  elec_pos = [x y z] centres of each electrode (N_elecs x 3)</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%  Note: N_elecs &gt;= 2.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% ELECTRODE SHAPES::</span>
+0023 <span class="comment">%  elec_shape = [width,height, maxsz]  % Rectangular elecs</span>
+0024 <span class="comment">%     OR</span>
+0025 <span class="comment">%  elec_shape = [radius, 0, maxsz ]    % Circular elecs</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% NOTE that this function requires both Netgen and Gmsh.</span>
+0028 <span class="comment">% It will completely re-mesh your model.</span>
+0029 <span class="comment">% The code makes several assumptions about the output of Netgen, which it</span>
+0030 <span class="comment">% attempts to control through the ng.opt file, but there will be meshes</span>
+0031 <span class="comment">% for which this appraoch will fail. In this case, you can supply your own</span>
+0032 <span class="comment">% file with options for Netgen (with a filename different than ng.opt), or</span>
+0033 <span class="comment">% change your mesh and/or electrode locations. Most common problem is too</span>
+0034 <span class="comment">% big electrode maxh value (must be significantly smaller than the smallest</span>
+0035 <span class="comment">% element on which the electrode will fall).</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% CITATION_REQUEST:</span>
+0038 <span class="comment">% TITLE: FEM Electrode Refinement for Electrical Impedance Tomography</span>
+0039 <span class="comment">% AUTHOR: B Grychtol and A Adler</span>
+0040 <span class="comment">% JOURNAL: Engineering in Medicine and Biology Society (EMBC), 2013 Annual</span>
+0041 <span class="comment">% International Conference of the IEEE</span>
+0042 <span class="comment">% YEAR: 2013</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% See also gmsh_stl2tet, ng_write_opt, merge_meshes</span>
+0045 
+0046 <span class="comment">% (C) Bartlomiej Grychtol and Andy Adler, 2012-2013. Licence: GPL v2 or v3</span>
+0047 <span class="comment">% $Id: place_elec_on_surf.m 5207 2016-03-06 21:30:16Z bgrychtol $</span>
+0048 
+0049 <a href="../../eidors/tools/citeme.html" class="code" title="function citeme(fname)">citeme</a>(mfilename);
+0050 
+0051 <span class="keyword">if</span> ischar(mdl) &amp;&amp; strcmp(mdl, <span class="string">'UNIT_TEST'</span>) <a href="#_sub17" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>;
+0052 <span class="keyword">if</span> nargin &lt; 4
+0053    ng_opt_file = <span class="string">''</span>;
+0054 <span class="keyword">end</span>
+0055 <span class="keyword">if</span> nargin &lt; 5
+0056    maxh = [];
+0057 <span class="keyword">end</span>
+0058 
+0059 opt.fstr = <span class="string">'place_elec_on_surf'</span>;
+0060 mdl2 = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction mdl2 = do_place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">do_place_elec_on_surf</a>,{mdl,elec_pos, elec_spec,ng_opt_file, maxh},opt);
+0061 
+0062 
+0063 
+0064 <a name="_sub1" href="#_subfunctions" class="code">function mdl2 = do_place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)</a>
+0065 
+0066 
+0067 <span class="comment">% filenames</span>
+0068 <span class="keyword">if</span> do_debug; fnstem = <span class="string">'tmp1'</span>;
+0069 <span class="keyword">else</span>;        fnstem = tempname;
+0070 <span class="keyword">end</span>
+0071 
+0072 stlfn = [fnstem,<span class="string">'.stl'</span>];
+0073 meshfn= [fnstem,<span class="string">'.vol'</span>];
+0074 
+0075 <span class="keyword">if</span> do_debug; fnstem = <span class="string">'tmp2'</span>;
+0076 <span class="keyword">else</span>;        fnstem = tempname;
+0077 <span class="keyword">end</span>
+0078 
+0079 stlfn2 = [fnstem,<span class="string">'.stl'</span>];
+0080 
+0081 <span class="comment">% 1. Get a surface model</span>
+0082 mdl = <a href="#_sub5" class="code" title="subfunction mdl = prepare_surf_model(mdl)">prepare_surf_model</a>(mdl);
+0083 <span class="keyword">if</span> isempty(maxh)
+0084    maxh = max(mdl.edge_len);
+0085 <span class="keyword">end</span>
+0086 
+0087 elecs = <a href="#_sub11" class="code" title="subfunction [elecs] = parse_elecs(mdl, elec_pos, elec_shape )">parse_elecs</a>(mdl,elec_pos,elec_spec);
+0088 <span class="keyword">if</span> isempty(elecs)
+0089    error(<span class="string">'EIDORS:WrongInput'</span>, <span class="string">'Failed to parse electrode positions. Exiting'</span>);
+0090 <span class="keyword">end</span>
+0091 
+0092 
+0093 <span class="comment">% 2. Add extruded electrodes</span>
+0094 <span class="keyword">for</span> i = 1:length(elecs)
+0095    <span class="keyword">try</span>
+0096       N = <a href="#_sub14" class="code" title="subfunction out = grow_neighbourhood(mdl, varargin)">grow_neighbourhood</a>(mdl,elecs(i));
+0097       [mdl E1{i} E2{i} V{i}] = <a href="#_sub9" class="code" title="subfunction [joint EL1 EL2 V] = add_electrodes(mdl,N,elecs)">add_electrodes</a>(mdl,N,elecs(i));
+0098    <span class="keyword">catch</span> e
+0099       <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'Failed to add electrode #%d'</span>,i,1);
+0100       rethrow(e);
+0101    <span class="keyword">end</span>
+0102 <span class="keyword">end</span>
+0103 
+0104 <span class="comment">% 3. Save as STL and mesh with NETGEN</span>
+0105 <a href="#_sub3" class="code" title="subfunction write_to_stl(mdl,stlfn)">write_to_stl</a>(mdl,stlfn);
+0106 <a href="#_sub4" class="code" title="subfunction write_ng_opt_file(ng_opt_file, maxh)">write_ng_opt_file</a>(ng_opt_file, maxh)
+0107 <a href="../../eidors/meshing/netgen/call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>(stlfn,meshfn);
+0108 delete(<span class="string">'ng.opt'</span>); <span class="comment">% clean up</span>
+0109 
+0110 <span class="comment">% 4. Extract surface</span>
+0111 fmdl=<a href="../../eidors/meshing/netgen/ng_mk_fwd_model.html" class="code" title="function [fwd_mdl]=ng_mk_fwd_model( ng_vol_filename, centres,name, stim_pattern, z_contact, postprocmesh)">ng_mk_fwd_model</a>(meshfn,[],[],[],[]);
+0112 mdl = <a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>(fmdl);
+0113 mdl = <a href="#_sub6" class="code" title="subfunction mdl = orient_boundary(mdl)">orient_boundary</a>(mdl);
+0114 mdl.elems = mdl.boundary;
+0115 
+0116 <span class="comment">% 5. One by one, flatten the electrodes</span>
+0117 <span class="keyword">for</span> i = 1:length(elecs)
+0118    <span class="keyword">try</span> 
+0119       mdl = <a href="#_sub7" class="code" title="subfunction mdl = flatten_electrode(mdl,inner,outer, V)">flatten_electrode</a>(mdl,E1{i},E2{i}, V{i});
+0120    <span class="keyword">catch</span> e
+0121       <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'Failed to flatten electrode #%d'</span>,i,1);
+0122       rethrow(e);
+0123    <span class="keyword">end</span>
+0124 <span class="keyword">end</span>
+0125 
+0126 <span class="comment">% 6. Keeping the surface intact, remesh the inside</span>
+0127 <a href="#_sub3" class="code" title="subfunction write_to_stl(mdl,stlfn)">write_to_stl</a>(mdl,stlfn2);
+0128 mdl2 = <a href="gmsh_stl2tet.html" class="code" title="function mdl = gmsh_stl2tet(stlfile, maxh, extra)">gmsh_stl2tet</a>(stlfn2, maxh);
+0129 mdl2.electrode = mdl.electrode;
+0130 
+0131 <span class="comment">% 7. Find all electrode nodes</span>
+0132 <span class="keyword">for</span> i = 1:length(elecs)
+0133    enodes = mdl.nodes(mdl.electrode(i).nodes,:);
+0134    mdl2.electrode(i).nodes = <a href="#_sub8" class="code" title="subfunction match = find_matching_nodes(mdl, nodes,th)">find_matching_nodes</a>(mdl2,enodes,1e-5);
+0135 <span class="keyword">end</span>
+0136 
+0137 <a name="_sub2" href="#_subfunctions" class="code">function debugging = do_debug;</a>
+0138   debugging = <a href="../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>(<span class="string">'query'</span>,<span class="string">'place_elec_on_surf'</span>);
+0139 
+0140 <a name="_sub3" href="#_subfunctions" class="code">function write_to_stl(mdl,stlfn)</a>
+0141 STL.vertices = mdl.nodes;
+0142 STL.faces    = mdl.elems;
+0143 <a href="../../eidors/meshing/stl/stl_write.html" class="code" title="function stl_write(fv, name)">stl_write</a>(STL,stlfn);
+0144 
+0145 <a name="_sub4" href="#_subfunctions" class="code">function write_ng_opt_file(ng_opt_file, maxh)</a>
+0146 <span class="comment">% these options are meant to insure that the electrode sides don't get</span>
+0147 <span class="comment">% modified, but there's no guarantee</span>
+0148 <span class="keyword">if</span> ~isempty(ng_opt_file)
+0149    <a href="../../eidors/meshing/netgen/ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>(ng_opt_file);
+0150 <span class="keyword">else</span>
+0151    opt.meshoptions.fineness = 6; <span class="comment">% some options have no effect without this</span>
+0152    opt.options.curvaturesafety = 0.2;
+0153    <span class="comment">% small yangle preserves the original mesh, large encourages smoother</span>
+0154    <span class="comment">% surface with nicer spreading of refinement</span>
+0155    opt.stloptions.yangle = 30; <span class="comment">% was 10</span>
+0156  <span class="comment">%    opt.stloptions.contyangle = 20;</span>
+0157    opt.stloptions.edgecornerangle = 0;
+0158 <span class="comment">%    opt.stloptions.chartangle = 0;</span>
+0159    opt.stloptions.outerchartangle = 120;
+0160    opt.stloptions.resthchartdistenable = 1;
+0161    opt.stloptions.resthchartdistfac = 2.0; <span class="comment">% encourages slower increase of element size</span>
+0162    <span class="keyword">if</span> ~isempty(maxh)
+0163       opt.options.meshsize = maxh;
+0164    <span class="keyword">end</span>
+0165    opt.meshoptions.laststep = <span class="string">'mv'</span>; <span class="comment">% don't need volume optimization</span>
+0166    opt.options.optsteps2d =  5; <span class="comment">% but we can up surface optimization</span>
+0167    opt.options.badellimit = 120; <span class="comment">% decrease the maximum allowed angle</span>
+0168    <a href="../../eidors/meshing/netgen/ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>(opt);
+0169 <span class="keyword">end</span>
+0170 
+0171 
+0172 <span class="comment">% Extract a nice surface model from the one given</span>
+0173 <a name="_sub5" href="#_subfunctions" class="code">function mdl = prepare_surf_model(mdl)</a>
+0174 <span class="keyword">try</span> mdl = rmfield(mdl,<span class="string">'boundary'</span>);  <span class="keyword">end</span>
+0175 mdl = <a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>(mdl);
+0176 mdl = <a href="#_sub6" class="code" title="subfunction mdl = orient_boundary(mdl)">orient_boundary</a>(mdl);
+0177 mdl.elems = mdl.boundary;
+0178 mdl.faces = mdl.boundary;
+0179 mdl.face_centre = mdl.face_centre(mdl.boundary_face,:);
+0180 mdl.normals = mdl.normals(mdl.boundary_face,:);
+0181 mdl = rmfield(mdl, <span class="string">'inner_normal'</span>);
+0182 mdl = rmfield(mdl, <span class="string">'boundary_face'</span>);
+0183 idx = nchoosek(1:3, 2);
+0184 elem_sorted = sort(mdl.elems,2);
+0185 [mdl.edges ib ia] = unique(reshape(elem_sorted(:,idx),[],2),<span class="string">'rows'</span>);
+0186 D = mdl.nodes(mdl.edges(:,1),:) - mdl.nodes(mdl.edges(:,2),:);
+0187 mdl.edge_len = sqrt(sum(D.^2,2)); 
+0188 
+0189 <a name="_sub6" href="#_subfunctions" class="code">function mdl = orient_boundary(mdl)</a>
+0190 <span class="comment">% consistently orient boundary elements</span>
+0191 flip = mdl.elem2face(logical(mdl.boundary_face(mdl.elem2face).*mdl.inner_normal));
+0192 mdl.faces(flip,:) = mdl.faces(flip,[1 3 2]);
+0193 mdl.normals(flip,:) = -mdl.normals(flip,:);
+0194 mdl.boundary = mdl.faces(mdl.boundary_face,:);
+0195 
+0196 
+0197 <a name="_sub7" href="#_subfunctions" class="code">function mdl = flatten_electrode(mdl,inner,outer, V)</a>
+0198 n1 = <a href="#_sub8" class="code" title="subfunction match = find_matching_nodes(mdl, nodes,th)">find_matching_nodes</a>(mdl,inner, 1e-2);
+0199 n2 = <a href="#_sub8" class="code" title="subfunction match = find_matching_nodes(mdl, nodes,th)">find_matching_nodes</a>(mdl,outer, 1e-5);
+0200 <span class="comment">% remove the side nodes of the electrode</span>
+0201 N1 = false(length(mdl.nodes),1);
+0202 N1(n1) = true;
+0203 N2 = false(length(mdl.nodes),1);
+0204 N2(n2) = true;
+0205 rm = sum(N1(mdl.elems),2)&gt;0 &amp; sum(N2(mdl.elems),2)&gt;0;
+0206 
+0207 f = find(sum(N2(mdl.elems),2)&gt;1 &amp; ~rm,1,<span class="string">'first'</span>);
+0208 B = find(mdl.boundary_face);
+0209 p = mdl.face_centre(B(f),:);
+0210 r = Inf;
+0211 mdl.elems(rm,:) = [];
+0212 mdl.boundary = mdl.elems;
+0213 mdl.boundary_face(B(rm)) = [];
+0214 mdl.face_centre(B(rm),:) = [];
+0215 mdl.normals(B(rm),:)     = [];
+0216 mdl.faces(B(rm),:)       = [];
+0217 f = f - nnz(rm(1:f));
+0218 N = <a href="#_sub14" class="code" title="subfunction out = grow_neighbourhood(mdl, varargin)">grow_neighbourhood</a>(mdl,f,p,r);
+0219 
+0220 <span class="comment">% WARNING: Here we assume the sides of the electrode are one element high!</span>
+0221 
+0222 <span class="comment">%nodes to move</span>
+0223 ntm = unique(mdl.elems(N,:));
+0224 mdl.nodes(ntm,:) = mdl.nodes(ntm,:) - repmat(V,length(ntm),1);
+0225 e_nodes = ntm;
+0226 
+0227 <span class="comment">%remap outer nodes to inner ones</span>
+0228 map = 1:length(mdl.nodes);
+0229 map(n2) = n1;
+0230 mdl.elems = map(mdl.elems);
+0231 mdl.faces = map(mdl.faces);
+0232 e_nodes = map(ntm);
+0233 
+0234 <span class="comment">% remove the outer nodes</span>
+0235 m = true(length(mdl.nodes),1);
+0236 m(n2) = false;
+0237 map = zeros(size(m));
+0238 map(m) = 1:nnz(m);
+0239 
+0240 mdl.nodes(n2,:) = [];
+0241 mdl.elems = map(mdl.elems);
+0242 mdl.faces = map(mdl.faces);
+0243 e_nodes = map(e_nodes);
+0244 
+0245 mdl.boundary = mdl.elems;
+0246 <span class="keyword">if</span> ~isfield(mdl,<span class="string">'electrode'</span>)
+0247    mdl.electrode = struct();
+0248    l = 1;
+0249 <span class="keyword">else</span>
+0250    l = length(mdl.electrode);
+0251    <span class="comment">% because we are changing the number of nodes, we need to correct the</span>
+0252    <span class="comment">% electrodes that are there already</span>
+0253    <span class="keyword">for</span> i = 1:l
+0254       mdl.electrode(i).nodes = map(mdl.electrode(i).nodes);
+0255    <span class="keyword">end</span>
+0256    l = l + 1;
+0257 <span class="keyword">end</span>
+0258 mdl.electrode(l).nodes = double(e_nodes);
+0259 mdl.electrode(l).z_contact = 0.01;
+0260 
+0261 <span class="keyword">if</span> do_debug
+0262    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(mdl);
+0263 <span class="keyword">end</span>
+0264 
+0265 
+0266 <a name="_sub8" href="#_subfunctions" class="code">function match = find_matching_nodes(mdl, nodes,th)</a>
+0267 l0 = length(mdl.nodes);
+0268 match = 0 * (1:length(nodes));
+0269 <span class="keyword">for</span> n = 1:length(nodes)
+0270    D = mdl.nodes - repmat(nodes(n,:),l0,1);
+0271    D = sqrt(sum(D.^2,2));
+0272    [val p] = min(D);
+0273    <span class="keyword">if</span> val &lt; th
+0274       match(n) = p;
+0275    <span class="keyword">end</span>
+0276 <span class="keyword">end</span>
+0277 
+0278 <span class="comment">% Returns a joint surface mesh and the list of nodes on the side of the</span>
+0279 <span class="comment">% electrode</span>
+0280 <a name="_sub9" href="#_subfunctions" class="code">function [joint EL1 EL2 V] = add_electrodes(mdl,N,elecs)</a>
+0281 
+0282 
+0283 fc = <a href="#_sub16" class="code" title="subfunction [e p] = find_face_under_elec(mdl, elec_pos)">find_face_under_elec</a>(mdl,elecs.pos);
+0284 <span class="comment">% N indexes the boundary, need index into faces</span>
+0285 <span class="comment">% fcs = find(mdl.boundary_face);</span>
+0286 <span class="comment">% fcs = fcs(N);</span>
+0287 fcs = N;
+0288 
+0289 jnk.type = <span class="string">'fwd_model'</span>;
+0290 jnk.elems = mdl.boundary(N,:);
+0291 jnk.nodes = mdl.nodes;
+0292 jnk.boundary = jnk.elems;
+0293 img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(jnk,1);
+0294 <span class="keyword">if</span> do_debug
+0295    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(jnk);
+0296    hold on
+0297    plot3(elecs.points(:,1),elecs.points(:,2),elecs.points(:,3),<span class="string">'ro'</span>);
+0298    <span class="comment">% plot3(mdl.nodes(nn(outer),1), mdl.nodes(nn(outer),2), mdl.nodes(nn(outer),3),'bs')</span>
+0299    hold off
+0300 <span class="keyword">end</span>
+0301 
+0302 
+0303 <span class="comment">%nodes used</span>
+0304 [nn,I, J] = unique(mdl.faces(fcs,:));
+0305 outer = true(size(nn));
+0306 <span class="keyword">for</span> i = 1:length(nn)
+0307    <span class="keyword">if</span> sum(J==i) == sum(mdl.boundary(:) == nn(i))
+0308       outer(i) = false;
+0309    <span class="keyword">end</span>
+0310 <span class="keyword">end</span>
+0311 <span class="comment">% we want to keep the ones on the outside</span>
+0312 keep = false(size(mdl.nodes,1),1);
+0313 keep(nn) = outer;
+0314 keep = keep(jnk.elems);
+0315 
+0316 <span class="comment">% this will not catch the situation where the element reaches from boundary</span>
+0317 <span class="comment">% to boundary and the electrode is in the middle (small electrode, big</span>
+0318 <span class="comment">% element). Fortunately, in these cases the edge will be there twice</span>
+0319 edges = reshape(jnk.elems(:,[1 2 2 3 3 1])',2,[])';
+0320 <span class="keyword">if</span> size(keep,2) == 1; keep = shiftdim(keep,1); <span class="keyword">end</span>
+0321 keep = reshape(keep(:,[1 2 2 3 3 1])',2,[])';
+0322 rm = sum(keep,2)&lt;2;
+0323 edges(rm,:) = [];
+0324 
+0325 <span class="comment">% detect and remove double entries</span>
+0326 rm = ismember(edges,edges(:,[2 1]),<span class="string">'rows'</span>);
+0327 edges(rm,:) = [];
+0328 
+0329 <span class="comment">% project all nodes of the faces in N onto the plane of the electrode</span>
+0330 nodes = unique(mdl.faces(fcs,:));
+0331 PN = <a href="#_sub10" class="code" title="subfunction PN = project_nodes_on_elec(mdl,elecs,nodes)">project_nodes_on_elec</a>(mdl,elecs,nodes);
+0332 
+0333 <span class="comment">% electrode coordinate system</span>
+0334 [u v s] = <a href="#_sub12" class="code" title="subfunction [u v s] = get_face_basis(mdl, fc)">get_face_basis</a>(mdl,fc);
+0335 <span class="comment">% u = mdl.normals(fc,:); % unit normal</span>
+0336 <span class="comment">% % vertical vector on the plane of that surface triangle</span>
+0337 <span class="comment">% v = [0 0 1] - dot([0 0 1],u) *u; v = v/norm(v);</span>
+0338 <span class="comment">% s = cross(u,v); s= s/norm(s);</span>
+0339 
+0340 <span class="comment">% mark nodes that are too close to elecs.points for removal</span>
+0341 rm = false(length(PN),1);
+0342 <span class="keyword">for</span> i = 1:length(PN)
+0343    D = repmat(PN(i,:),length(elecs.points),1) - elecs.points;
+0344    D = sqrt(sum(D.^2,2));
+0345    <span class="keyword">if</span> any(D &lt; 2*elecs.maxh)
+0346       rm(i) = true;
+0347    <span class="keyword">end</span>
+0348 <span class="keyword">end</span>
+0349 
+0350 <span class="comment">% we can only delete if it's not part of the boundary</span>
+0351 b = unique(edges(:));
+0352 rm = find(rm);
+0353 rm(ismember(nodes(rm),b)) = [];
+0354 
+0355 <span class="comment">% remove and remap</span>
+0356 PN(rm,:) = [];
+0357 nodes(rm) = [];
+0358 
+0359 points = [PN; elecs.points];
+0360 np = size(points,1);
+0361 x = dot(points,repmat(v,np,1),2);
+0362 y = dot(points,repmat(s,np,1),2);
+0363 
+0364 map(nodes) = 1:length(nodes);
+0365 edges = map(edges); <span class="comment">%</span>
+0366 
+0367 <span class="comment">% constrained Delaunay triangulation in 2D</span>
+0368 f = length(PN) +(1:2);
+0369 C = [];
+0370 <span class="keyword">for</span> i= 0:length(elecs.points)-2
+0371    C = [C; i+f];
+0372 <span class="keyword">end</span>
+0373 D = DelaunayTri([x y],[edges; C]);
+0374 els = D.Triangulation(D.inOutStatus,:);
+0375 
+0376 
+0377 <span class="comment">% project all electrode points on all triangles, using the normal of the central elem</span>
+0378 Ne = mdl.normals(fc,:);
+0379 <span class="keyword">for</span> j = 1:length(elecs.nodes)
+0380    Pe = elecs.nodes(j,:);
+0381    <span class="keyword">for</span> i = 1:length(fcs)
+0382       Nf = mdl.normals(fcs(i),:);
+0383       Cf = mdl.face_centre(fcs(i),:);
+0384       <span class="comment">% the plane is (X - Cf).Nf = 0</span>
+0385       <span class="comment">% the line is X = Pe + tNe (through Pe perpendicular to the main elec</span>
+0386       <span class="comment">% face</span>
+0387       <span class="comment">% We want X that satisfies both.</span>
+0388       <span class="comment">% (Pe +tNe -  Cf).Nf = 0</span>
+0389       <span class="comment">% (Pe - Cf).Nf + tNe.Nf = 0</span>
+0390       <span class="comment">% t = (Cf-Pe).Nf / (Ne.Nf)</span>
+0391       <span class="comment">% X = Pe + Ne * (Cf-Pe).Nf / (Ne.Nf)</span>
+0392       X = Pe + Ne * dot(Cf-Pe,Nf) / dot(Ne,Nf) ;
+0393       <span class="keyword">if</span> <a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>(X, mdl.faces(fcs(i),:), mdl.nodes)
+0394          Proj(j,:) = X;
+0395          FC(j) = fcs(i);
+0396          <span class="keyword">break</span>;
+0397       <span class="keyword">end</span>
+0398    <span class="keyword">end</span>
+0399 <span class="keyword">end</span>
+0400 
+0401 <span class="comment">% this is just output</span>
+0402 EL1 = Proj(1:length(elecs.points),:);
+0403 
+0404 <span class="comment">% remove any nodes inside the electrode</span>
+0405 ln = length(nodes);
+0406 <span class="comment">% IN = inpolygon(x(1:ln),y(1:ln),x(ln+1:end),y(ln+1:end));</span>
+0407 <span class="comment">% nodes(IN) = [];</span>
+0408 
+0409 add = elecs.maxh;
+0410 
+0411 nn = mdl.nodes(nodes,:);<span class="comment">% + add * repmat(IN,1,3) .* repmat(Ne,ln,1);</span>
+0412 le = length(elecs.nodes);
+0413 ne = Proj + add * repmat(Ne,le,1);
+0414 
+0415 <span class="comment">%this is just output</span>
+0416 EL2 = ne(1:length(elecs.points),:);
+0417 V = add*Ne;
+0418 
+0419 <span class="comment">% the nodes of the electrode</span>
+0420 <span class="comment">% IN = [IN; ones(le,1)];</span>
+0421 el_c = D.incenters;
+0422 el_c(~D.inOutStatus,:) = [];
+0423 e_el = inpolygon(el_c(:,1),el_c(:,2),x(ln+1:end),y(ln+1:end));
+0424 els(e_el,:) = []; <span class="comment">% els(e_el,:) + (els(e_el,:)&gt;ln ) .* le;</span>
+0425 
+0426 <span class="comment">% add connecting elements</span>
+0427 E = [];
+0428 le = length(elecs.points);
+0429 f = ln + [ 1 le+1 le+2; le+2 2 1];
+0430 <span class="keyword">for</span> j = 0:(le-2)
+0431    E = [E; j+f];
+0432 <span class="keyword">end</span>
+0433 M = ln + [le+1 le 2*le; le le+1 1];
+0434 E = [E; M];
+0435 
+0436 jnk.nodes = [nn ; Proj(1:le,:);  ne];
+0437 jnk.elems = [ els; E; elecs.elems+ln+le];
+0438 jnk.boundary = jnk.elems;
+0439 <span class="keyword">if</span> do_debug
+0440    <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(jnk);
+0441 <span class="keyword">end</span>
+0442 
+0443 <span class="comment">% remove the patch we're replacing</span>
+0444 big = mdl;
+0445 big.boundary(N,:) = [];
+0446 big.faces(N,:) = [];
+0447 big.normals(N,:) = [];
+0448 big.face_centre(N,:) = [];
+0449 
+0450 big.elems = big.boundary;
+0451 
+0452 joint = <a href="merge_meshes.html" class="code" title="function out = merge_meshes(M1,varargin)">merge_meshes</a>(big,jnk,0.001);
+0453 joint.boundary = joint.elems;
+0454 joint.faces = joint.boundary;
+0455 opt.normals = true;
+0456 opt.face_centre = true;
+0457 joint = <a href="fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>(joint,opt);
+0458 
+0459 <a name="_sub10" href="#_subfunctions" class="code">function PN = project_nodes_on_elec(mdl,elecs,nodes)</a>
+0460 fc = <a href="#_sub16" class="code" title="subfunction [e p] = find_face_under_elec(mdl, elec_pos)">find_face_under_elec</a>(mdl,elecs.pos);
+0461 Ne = mdl.normals(fc,:);
+0462 Pe = elecs.pos;
+0463 <span class="keyword">for</span> i = 1:length(nodes)
+0464    P = mdl.nodes(nodes(i),:);
+0465    PN(i,:) = P + dot(Pe - P, Ne) * Ne;
+0466 <span class="keyword">end</span>
+0467 
+0468 <span class="comment">% OUTPUT:</span>
+0469 <span class="comment">%  elecs(i).pos   = [x,y,z]</span>
+0470 <span class="comment">%  elecs(i).shape = 'C' or 'R'</span>
+0471 <span class="comment">%  elecs(i).dims  = [radius] or [width,height]</span>
+0472 <span class="comment">%  elecs(i).maxh  = '-maxh=#' or '';</span>
+0473 <span class="comment">%  elecs(i).points= list of points around the perimeter</span>
+0474 <span class="comment">% Angles (th) are interpreted with the mean of boundary nodes as origin</span>
+0475 <a name="_sub11" href="#_subfunctions" class="code">function [elecs] = parse_elecs(mdl, elec_pos, elec_shape )</a>
+0476 elecs = [];
+0477 
+0478 <span class="keyword">if</span> size(elec_shape,2) &lt; 3
+0479    elec_shape(:,3) = elec_shape(:,1)/10;
+0480 <span class="keyword">end</span>
+0481 
+0482 have_xyz = 0;
+0483 
+0484 <span class="keyword">if</span> size(elec_pos,1) == 1
+0485    <span class="comment">% Parse elec_pos = [n_elecs_per_plane,(0=equal angles,1=equal dist),z_planes]</span>
+0486    n_elecs= elec_pos(1); <span class="comment">% per plane</span>
+0487    offset = elec_pos(2) - floor(elec_pos(2));
+0488    <span class="keyword">switch</span> floor(elec_pos(2))
+0489       <span class="keyword">case</span> 0
+0490          th = linspace(0,2*pi, n_elecs+1)'; th(end)=[];
+0491          th = th + offset*2*pi;
+0492          ind = th &gt;= 2*pi;
+0493          th(ind) = th(ind) - 2*pi;
+0494       <span class="keyword">case</span> 1
+0495          error(<span class="string">'not implemented yet'</span>);
+0496    <span class="keyword">end</span>
+0497    on_elecs = ones(n_elecs, 1);
+0498    el_th = [];
+0499    el_z  = [];
+0500    <span class="keyword">for</span> i=3:length(elec_pos)
+0501       el_th = [el_th; th];
+0502       el_z  = [el_z ; on_elecs*elec_pos(i)];
+0503    <span class="keyword">end</span>
+0504 <span class="keyword">elseif</span> size(elec_pos,2) == 2
+0505    <span class="comment">% elec_pos = [theta z];</span>
+0506    el_th = elec_pos(:,1)*2*pi/360;
+0507    el_z  = elec_pos(:,2);
+0508 <span class="keyword">elseif</span> size(elec_pos,2) == 3
+0509    <span class="comment">% elec_pos = [x y z];</span>
+0510    have_xyz = 1;
+0511    el_z  = elec_pos(:,3);
+0512 <span class="keyword">end</span>
+0513 
+0514 <span class="keyword">if</span> ~have_xyz
+0515    el_th(el_th&gt;pi) =  el_th(el_th&gt;pi) - 2*pi;
+0516    el_th(el_th&lt;-pi) = el_th(el_th&lt;-pi) + 2*pi;
+0517 <span class="keyword">end</span>
+0518 n_elecs= size(el_z,1);
+0519 
+0520 <span class="keyword">if</span> size(elec_shape,1) == 1
+0521    elec_shape = ones(n_elecs,1) * elec_shape;
+0522 <span class="keyword">end</span>
+0523 
+0524 <span class="keyword">for</span> i = 1:n_elecs
+0525    <span class="keyword">if</span> ~have_xyz
+0526       [fc elecs(i).pos] = <a href="#_sub13" class="code" title="subfunction [fc pos] = find_elec_centre(mdl, el_th,el_z)">find_elec_centre</a>(mdl,el_th(i),el_z(i));
+0527    <span class="keyword">else</span>
+0528       elecs(i).pos = elec_pos(i,:);
+0529    <span class="keyword">end</span>
+0530 <span class="comment">%    elecs(i).face = fc; % this changes too often to store!</span>
+0531    elecs(i).dims = elec_shape(i,1:2);
+0532    elecs(i).dims(elecs(i).dims==0) = [];
+0533    elecs(i).maxh = elec_shape(i,3);
+0534    
+0535    <span class="keyword">if</span> elec_shape(i,2) == 0
+0536       elecs(i).shape = <span class="string">'C'</span>;
+0537       r = elec_shape(i,1);
+0538       n = ceil(2*pi*elec_shape(i,1) / elec_shape(i,3));
+0539       t = linspace(0,2*pi,n+1); t(end) = [];
+0540       x = r*sin(t); y = r*cos(t);
+0541    <span class="keyword">else</span>
+0542       elecs(i).shape = <span class="string">'R'</span>;
+0543       height = elec_shape(i,1); width = elec_shape(i,2); d_org = elec_shape(i,3);
+0544       <span class="comment">% enforce a minimum of 5 nodes per side</span>
+0545       d = min( [ d_org , height/5, width/5]);
+0546       <span class="keyword">if</span> d &lt; d_org
+0547          elecs(i).maxh = d;
+0548          <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'@@@ Decreased maxh of electrode %d from %f to %f'</span>,i,d_org, d,2);
+0549       <span class="keyword">end</span>
+0550       nh = ceil(height/d)+1; nw = ceil(width/d)+1; 
+0551       ph = linspace(-height/2,height/2,nh);
+0552       pw = linspace(-width/2,width/2,nw);
+0553       y = [ph, ph(end)*ones(1,nw-2), fliplr(ph), ph(1)*ones(1,nw-2)];
+0554       x = [pw(1)*ones(1,nh-1), pw, pw(end)*ones(1,nh-2), fliplr(pw(2:end))];
+0555       <span class="comment">%    % we don't want real rectangles, because Netgen will merge coplanar</span>
+0556       <span class="comment">%    % faces, so we create a nice superellipse instead</span>
+0557       n = 2*(nh+nw);
+0558       <span class="comment">%    t = linspace(2*pi,0,n); t(end) = [];</span>
+0559       <span class="comment">%    N = 8;</span>
+0560       <span class="comment">%    x = abs(cos(t)).^(2/N) * width/2  .* sign(cos(t));</span>
+0561       <span class="comment">%    y = abs(sin(t)).^(2/N) * height/2 .* sign(sin(t));</span>
+0562       <span class="comment">% superellipses are also bad, what about a wavy rectange?</span>
+0563 <span class="comment">%       [pp] = fourier_fit([x; y]', min(size(x,2),18) );</span>
+0564 <span class="comment">%       t = linspace(0,1,n+1); t(end) = [];</span>
+0565 <span class="comment">%       xy = fourier_fit(pp,t);</span>
+0566 <span class="comment">%       x = xy(:,1)'; y = xy(:,2)';</span>
+0567       <span class="comment">% wavy rectangles are nice but don't guarantee absence of co-planar</span>
+0568       <span class="comment">% faces</span>
+0569       <span class="comment">% let's try a brute-force approach</span>
+0570       e = tand(0.5)*d;
+0571       x = x + e* [0 power(-1,0:nh-3) zeros(1,nw)  power(-1,0:nh-3) zeros(1,nw-1)];
+0572       y = y + e* [zeros(1,nh) power(-1,0:nw-3) zeros(1,nh) power(-1,0:nw-3)];
+0573    <span class="keyword">end</span>
+0574    fc = <a href="#_sub16" class="code" title="subfunction [e p] = find_face_under_elec(mdl, elec_pos)">find_face_under_elec</a>(mdl,elecs(i).pos);
+0575    [u v s] = <a href="#_sub12" class="code" title="subfunction [u v s] = get_face_basis(mdl, fc)">get_face_basis</a>(mdl, fc);
+0576    
+0577    np = length(x);
+0578 <span class="comment">%    elecs(i).points = flipud(ones(size(x))' * elecs(i).pos + x'*s + y'*v);</span>
+0579 
+0580    <a href="../../eidors/meshing/netgen/ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>(<span class="string">'meshoptions.fineness'</span>,1,<span class="string">'options.meshsize'</span>,1.2*elecs(i).maxh);
+0581    emdl = <a href="../../eidors/meshing/netgen/ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>(flipud([x', y']));
+0582    x = emdl.nodes(:,1); y = emdl.nodes(:,2);
+0583    elecs(i).nodes = ones(size(x)) * elecs(i).pos + x*s + y*v;
+0584    elecs(i).elems = emdl.elems(:,[1 3 2]); <span class="comment">% flip orientation to the outside</span>
+0585    elecs(i).points = elecs(i).nodes(1:np,:); <span class="comment">% this must be the boundary</span>
+0586    <span class="comment">% TODO: write code to check if this is true</span>
+0587    
+0588 <span class="keyword">end</span>
+0589 delete(<span class="string">'ng.opt'</span>);
+0590 
+0591 <a name="_sub12" href="#_subfunctions" class="code">function [u v s] = get_face_basis(mdl, fc)</a>
+0592    u = mdl.normals(fc,:); <span class="comment">% unit normal</span>
+0593    <span class="comment">% vertical vector on the plane of that surface triangle</span>
+0594    v = [0 0 1] - dot([0 0 1],u) *u;
+0595    <span class="keyword">if</span> norm(v) == 0
+0596       <span class="comment">% the element is horizontal</span>
+0597       v = [0 1 0] - dot([0 1 0],u)*u;
+0598    <span class="keyword">end</span>
+0599    v = v/norm(v);
+0600    s = cross(u,v); s= s/norm(s);
+0601 
+0602 <a name="_sub13" href="#_subfunctions" class="code">function [fc pos] = find_elec_centre(mdl, el_th,el_z)</a>
+0603 fc = [];
+0604 pos = [];
+0605 
+0606 Ctr = mean(mdl.nodes(mdl.boundary,:));
+0607 Ctr(3) = el_z;
+0608 
+0609 <span class="comment">%1. Find edges that cross the z plane</span>
+0610 n_above = mdl.nodes(:,3) &gt;= el_z;
+0611 sum_above = sum(n_above(mdl.edges),2) ;
+0612 edg = sum_above == 1;
+0613 
+0614 <span class="comment">%2. Find an edge that crosses el_th</span>
+0615 n = unique(mdl.edges(edg,:));
+0616 nn = mdl.nodes(n,1:2);
+0617 nn = nn - repmat(Ctr(:,1:2),length(nn),1);
+0618 th = cart2pol(nn(:,1),nn(:,2));
+0619 th(:,2) = 1:length(th);
+0620 th = sortrows(th);
+0621 idx = find(th(:,1) &gt; el_th,1,<span class="string">'first'</span>);
+0622 <span class="keyword">if</span> isempty(idx) || idx == 1
+0623    n1 = n(th(1,2));
+0624    n2 = n(th(<span class="keyword">end</span>,2));
+0625    <span class="comment">% edges in edg that contain these nodes (they don't need to be on the</span>
+0626    <span class="comment">% same element)</span>
+0627    ed = edg &amp; sum( (mdl.edges == n1) + (mdl.edges == n2) ,2) &gt; 0;
+0628 <span class="keyword">else</span>
+0629 <span class="comment">%    to_the_left = false(length(mdl.nodes),1);</span>
+0630 <span class="comment">%    to_the_left(n(th(1:idx-1,2))) = true;</span>
+0631 <span class="comment">%    sum_left = sum( to_the_left(mdl.boundary), 2);</span>
+0632 <span class="comment">%    el = els &amp; sum_left &gt; 0 &amp; sum_left &lt; 3;</span>
+0633    n1 = n(th(idx-1,2));
+0634    n2 = n(th(idx,  2));
+0635    ed = edg &amp; sum( (mdl.edges == n1) + (mdl.edges == n2) ,2) &gt; 0;
+0636 <span class="keyword">end</span>
+0637 
+0638 el = false(length(mdl.boundary),1);
+0639 <span class="keyword">for</span> i = find(ed)'
+0640    n1 = mdl.edges(i,1);
+0641    n2 = mdl.edges(i,2);
+0642    el = el | sum( (mdl.boundary == n1) + (mdl.boundary == n2), 2) == 2;
+0643 <span class="keyword">end</span>
+0644 el = find(el);
+0645 <span class="comment">% fcs = find(mdl.boundary_face);</span>
+0646 <span class="comment">% fcs = fcs(el);</span>
+0647 
+0648 [De(1) De(2) De(3)]  = pol2cart(el_th,1, 0); 
+0649 <span class="keyword">for</span> i = 1:length(el)
+0650    Nf = mdl.normals(el(i),:);
+0651    Cf = mdl.face_centre(el(i),:);
+0652    <span class="comment">% the plane is (X - Cf).Nf = 0</span>
+0653    <span class="comment">% the line is X = Ctr + tDe (through Ctr along De</span>
+0654    <span class="comment">% We want X that satisfies both.</span>
+0655    <span class="comment">% (Ctr +tDe -  Cf).Nf = 0</span>
+0656    <span class="comment">% (Ctr - Cf).Nf + tDe.Nf = 0</span>
+0657    <span class="comment">% t =</span>
+0658    <span class="comment">% X = Ctr + De * (Cf-Ctr).Nf / (De.Nf)</span>
+0659    t = dot(Cf-Ctr,Nf) / dot(De,Nf);
+0660    <span class="keyword">if</span> t &lt; 0, <span class="keyword">continue</span>, <span class="keyword">end</span>
+0661    X = Ctr + De * t ;
+0662    <span class="keyword">if</span> <a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>(X, mdl.faces(el(i),:), mdl.nodes)
+0663       pos = X;
+0664       fc = el(i);
+0665       <span class="keyword">break</span>;
+0666    <span class="keyword">end</span>
+0667    
+0668    <span class="comment">% project the line on this element</span>
+0669    <span class="comment">% check if it falls inside</span>
+0670 <span class="keyword">end</span>
+0671 <span class="keyword">if</span> isempty(pos)
+0672    keyboard
+0673 <span class="keyword">end</span>
+0674 
+0675 <a name="_sub14" href="#_subfunctions" class="code">function out = grow_neighbourhood(mdl, varargin)</a>
+0676 use_elec = false;
+0677 <span class="keyword">if</span> length(varargin) == 1
+0678    use_elec = true;
+0679    elecs = varargin{1};
+0680    fc = <a href="#_sub16" class="code" title="subfunction [e p] = find_face_under_elec(mdl, elec_pos)">find_face_under_elec</a>(mdl,elecs.pos);
+0681    p = elecs.pos;
+0682    <span class="keyword">switch</span> elecs.shape
+0683       <span class="keyword">case</span> <span class="string">'R'</span>
+0684          r = sqrt(sum(elecs.dims.^2,2));
+0685       <span class="keyword">case</span> <span class="string">'C'</span>
+0686          r = 2 * elecs.dims(1);
+0687    <span class="keyword">end</span>
+0688 <span class="keyword">else</span>
+0689    fc = varargin{1};
+0690    p = varargin{2};
+0691    r = varargin{3};
+0692 <span class="keyword">end</span>
+0693 
+0694 done = false(length(mdl.boundary),1);
+0695 todo = false(length(mdl.boundary),1);
+0696 todo(fc) = true;
+0697 bb = mdl.boundary;
+0698 vv = mdl.nodes;
+0699 <span class="comment">% distance of each vertex to the line perpendicular to face fc passing</span>
+0700 <span class="comment">% through p</span>
+0701 dv = vv - repmat(p,length(vv),1);
+0702 nl = mdl.normals;
+0703 nl = repmat(nl(fc,:),length(vv),1);
+0704 dd = sqrt(sum( (dv - repmat(dot(dv,nl,2),1,3) .* nl).^2,2));
+0705 dim = size(bb,2);
+0706 first = true; <span class="comment">% at first iteration, add all neighbours</span>
+0707 <span class="keyword">if</span> use_elec
+0708    PN = <a href="#_sub10" class="code" title="subfunction PN = project_nodes_on_elec(mdl,elecs,nodes)">project_nodes_on_elec</a>(mdl,elecs,1:length(mdl.nodes));
+0709    emin = min(elecs.points);
+0710    emax = max(elecs.points);
+0711    rng = emax-emin;
+0712    emin = emin - 0.1*rng;
+0713    emax = emax + 0.1*rng;
+0714    toofar = false(size(mdl.boundary,1),1);
+0715    
+0716    <span class="keyword">for</span> i = 1:3
+0717       nodes = reshape(PN(mdl.boundary,i),[],3);
+0718       toofar =  toofar |  sum(nodes &gt; emax(i),2) == 3 | sum(nodes &lt; emin(i),2) == 3;
+0719    <span class="keyword">end</span>
+0720 <span class="keyword">end</span>
+0721 <span class="keyword">while</span> any(todo)
+0722    id = find(todo,1,<span class="string">'first'</span>);
+0723    done(id) = 1;
+0724    nn = <a href="#_sub15" class="code" title="subfunction nn =  find_neighbours(fc, bb);">find_neighbours</a>(id,bb);
+0725    <span class="keyword">if</span> use_elec
+0726       nn = nn &amp; ~toofar;
+0727    <span class="keyword">elseif</span> first
+0728       <span class="comment">% include all neighbours</span>
+0729       first = false;
+0730    <span class="keyword">else</span>
+0731       <span class="comment">% at least one node must be close enough</span>
+0732       nn = nn &amp; sum(dd(bb) &lt;= r,2) &gt; 0;
+0733    <span class="keyword">end</span>
+0734    todo = todo | nn;
+0735    todo(done) = 0;
+0736 <span class="comment">%    disp(sprintf('id: %d done: %d todo: %d',id, nnz(done),nnz(todo)));</span>
+0737 <span class="comment">%    disp(find(todo)');</span>
+0738 <span class="comment">%    disp(find(done)');</span>
+0739 <span class="keyword">end</span>
+0740 out = find(done);
+0741 
+0742 
+0743 <a name="_sub15" href="#_subfunctions" class="code">function nn =  find_neighbours(fc, bb);</a>
+0744 dim = size(bb,2);
+0745 nn = false(length(bb),1);
+0746 <span class="keyword">for</span> i = 1:dim
+0747    node = bb(fc,i);
+0748    nn = nn | sum(bb == node,2) &gt; 0;
+0749 <span class="keyword">end</span>
+0750 nn(fc) = 0;
+0751 
+0752 <a name="_sub16" href="#_subfunctions" class="code">function [e p] = find_face_under_elec(mdl, elec_pos)</a>
+0753 <span class="keyword">for</span> i = 1:size(elec_pos,1)
+0754    <span class="comment">% 1. Project electrode on all faces</span>
+0755    ee = repmat(elec_pos(i,:),length(mdl.faces),1);
+0756    fc = mdl.face_centre;
+0757    n  = mdl.normals;
+0758    proj1 = ee - repmat(dot(ee-fc, n,2),1,3) .* n;
+0759    in1 = <a href="point_in_triangle.html" class="code" title="function out = point_in_triangle(P,E,V,epsilon, str)">point_in_triangle</a>(proj1,mdl.faces,mdl.nodes, <span class="string">'match'</span>);
+0760    dis1 = sqrt(sum((ee-proj1).^2,2));
+0761    <span class="comment">% 2. Project electrode on all edges</span>
+0762    edg = [mdl.faces(:,1:2);mdl.faces(:,2:3);mdl.faces(:,[3 1])];
+0763    edg = sort(edg,2);
+0764    [edg jnk e2f] = unique(edg,<span class="string">'rows'</span>);
+0765    ee = repmat(elec_pos(i,:),length(edg),1);
+0766    s = mdl.nodes(edg(:,2),:) - mdl.nodes(edg(:,1),:); <span class="comment">%edge direction vector</span>
+0767    t = dot(ee-mdl.nodes(edg(:,1),:),s,2)./dot(s,s,2);
+0768    in2 = t&gt;=0 &amp; t &lt;=1;
+0769    in2 = any(reshape(in2(e2f),[],3),2);
+0770    proj2 = mdl.nodes(edg(:,1),:) + repmat(t,1,3).*s;
+0771    dis = sqrt(sum((ee - proj2).^2,2));
+0772    dis = repmat(dis,2,1);
+0773    dis(t&lt;0 | t &gt; 1) = Inf;
+0774    dis = reshape(dis(e2f),[],3);
+0775    [jnk, pos] = min(dis,[],2);
+0776    idx = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(1:length(pos),pos,1);
+0777    dis = dis';
+0778    dis2 = dis(logical(idx'));
+0779 
+0780    in = in1 | in2;
+0781    <span class="keyword">if</span> nnz(in) == 1
+0782          e(i) = find(in1);  <span class="comment">% this should be an index into mdl.boundary</span>
+0783          p(i,:) = proj1(in1,:);
+0784    <span class="keyword">else</span>
+0785       <span class="comment">% take the element that is closest to ee</span>
+0786       cand = find(in);
+0787       dd(in1(cand)) = dis1(in1);
+0788       dd(in2(cand)) = dis2(in2);
+0789       [jnk pos] = min(dd);
+0790       e(i) = cand(pos);
+0791       p(i,:) = proj1(e(i),:);
+0792    <span class="keyword">end</span>
+0793 
+0794 <span class="keyword">end</span>
+0795 
+0796 
+0797 <a name="_sub17" href="#_subfunctions" class="code">function do_unit_test</a>
+0798 xy= [ -0.89 -0.74 -0.21  0.31  0.79  0.96  0.67  0.05 -0.36 -0.97;
+0799        0.14  0.51  0.35  0.50  0.27 -0.23 -0.86 -0.69 -0.85 -0.46]';
+0800 [fmdl] = <a href="../../eidors/meshing/netgen/ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>({2,xy,[4,80],},[],[]);
+0801 elec_pos = [-0.5, -0.8, 1];
+0802 <span class="comment">% place_elec_on_surf(fmdl, elec_pos, [0.1 0 0.01]);</span>
+0803 <span class="comment">% place_elec_on_surf(fmdl, elec_pos, [0.15 0.1 0.01]);</span>
+0804 mdl = <a href="place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>(fmdl, [16 0 1], [0.15 0.1 0.01]);
+0805 <span class="comment">% place_elec_on_surf(fmdl, [16 0 1], [0.1 0 0.01]);</span>
+0806 subplot(121)
+0807 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(mdl);
+0808 
+0809 mdl = <a href="place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>(fmdl, [16 0 1], [0.15 0.1 0.01],[],0.1);
+0810 <span class="comment">% place_elec_on_surf(fmdl, [16 0 1], [0.1 0 0.01]);</span>
+0811 subplot(122)
+0812 <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(mdl);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

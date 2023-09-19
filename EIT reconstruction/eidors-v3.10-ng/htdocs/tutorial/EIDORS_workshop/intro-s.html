@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Workshop: Introduction to EIDORS
+</h2>
+
+<h2>Instructions</h2>
+<OL>
+<LI> Compile and install a copy of netgen 5.0
+<pre>
+mkdir src
+cd src
+wget http://downloads.sf.net/project/netgen-mesher/netgen-mesher/5.0/netgen-5.0.0.zip
+unzip netgen-5.0.0.zip
+cd netgen-5.0.0
+# ENSURE we have apt-get install tk-dev tcl-dev libtogl-dev
+./configure --prefix=$HOME/local
+make
+make install
+</pre>
+<LI> Download and unzip the latest EIDORS release
+<UL>
+<LI> <a href="http://eidors.org"
+             >eidors3.7RC.zip</a>
+</UL>
+
+<LI> Start Matlab, in a terminal
+<pre>
+export NETGENDIR=$HOME/local/bin
+export PATH=$HOME/local/bin:$PATH
+matlab
+</pre>
+
+<LI> In matlab, do
+<ul>
+<LI>
+ <tt>
+run ~/Desktop/eidors-v3.7RC/eidors/startup.m
+</tt>
+
+<LI> <tt>
+compare_2d_algs(1)
+</tt> <br>(this tests if eidors is working)
+
+<LI> <tt>
+show_fem(ng_mk_cyl_models(3,[0],[]))
+</tt> (this tests if netgen is working)
+</ul>
+
+
+<LI>Get svn version of eidors
+<pre>
+cd 
+svn co svn://svn.code.sf.net/p/eidors3d/code/trunk eidors-svn
+</pre>
+In matlab run the new startup file
+<pre>
+run ~/eidors-svn/eidors/startup.m
+</pre>
+
+
+</OL>
+
+
+<H3>Challenge problem:</H3>
+<ol>
+<li>Create a 3D elliptical cylinder with 16 circular electrodes
+    (see <a href="../netgen/netgen_ellip_models-s.html">here</a>)
+<br><tt>fmdl= <font color=#E0F0FE
+>ng_mk_ellip_models([1,1.2,0.8],[16,0.5],[0.1]);
+</font> show_fem(fmdl); </tt>
+
+<li>Put a ball into the elliptical cylinder
+<br><tt><font color=#E0F0FE
+>   extra={'ball','solid ball = sphere(0.5,0.5,0.5;0.1);'};
+<br>fmdl= ng_mk_ellip_models([1,1.2,0.8],[16,0.5],[0.1],extra);
+</font> show_fem(fmdl); </tt>
+
+<li>Put two balls into the elliptical cylinder
+<br><tt><font color=#E0F0FE
+>   extra={'ball','solid ball = sphere(0.5,0.5,0.5;0.1) or sphere(0.5,-0.5,0.5;0.1);'};
+<br>fmdl= ng_mk_ellip_models([1,1.2,0.8],[16,0.5],[0.1],extra);
+</font> show_fem(fmdl); </tt>
+
+<li>Set the model to use adjacent current patterns
+<br><tt><font color=#E0F0FE
+>   stim = mk_stim_patterns(16,1,[0,1],[0,1],{});
+</font> fmdl.stimulation = stim;</tt>
+
+<li>Simulate homogeneous voltages  (background conductivity = 0.5);
+<br><tt><font color=#E0F0FE
+>   img = mk_image(fmdl, 0.5); vh = fwd_solve(img);
+<br>
+</font> show_fem(img); </tt>
+
+<li>Simulate inhomogeneous voltages  (ball conductivity = 1.0);
+<br><tt><font color=#E0F0FE
+>   img.elem_data(fmdl.mat_idx{2})= 1.0; vi = fwd_solve(img);
+<br>
+</font> show_fem(img); </tt>
+
+<li>Reconstruct the image using GREITv1
+<br><tt><font color=#E0F0FE
+>  imdl= mk_common_gridmdl('GREITc1'); 
+   img= inv_solve(imdl,vh,vi);
+<br>
+</font> show_fem(img); </tt>
+<li>Create a GREIT model for the ellipse
+    (see <a href="../GREIT/mk_GREIT_mat_ellip-s.html">here</a>)
+<br><tt><font color=#E0F0FE
+> opt.noise_figure = 0.5; %other options are defaults
+<br>imdl = mk_GREIT_model(mk_image(fmdl,0.5), 0.25, [], opt);
+<br>img= inv_solve(imdl,vh,vi);
+</font> show_fem(img); </tt>
+<li>Compare images for different stimulation patterns
+    (see <a href="../GREIT/GREIT_test_params-s.html">here</a>)
+</ol>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-03-01 09:38:55 -0500 (Wed, 01 Mar 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

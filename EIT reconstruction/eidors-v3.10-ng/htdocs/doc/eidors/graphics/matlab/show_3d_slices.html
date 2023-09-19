@@ -1,0 +1,329 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of show_3d_slices</title>
+  <meta name="keywords" content="show_3d_slices">
+  <meta name="description" content="show_3d_slices(img, z_cuts, x_cuts, y_cuts, any_cuts)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="#">graphics</a> &gt; <a href="index.html">matlab</a> &gt; show_3d_slices.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/graphics/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>show_3d_slices
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>show_3d_slices(img, z_cuts, x_cuts, y_cuts, any_cuts)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function h = show_3d_slices(img, varargin); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> show_3d_slices(img, z_cuts, x_cuts, y_cuts, any_cuts)
+ Show a 3d view of an object with many slices through it
+  z_cuts = planes in z to do a cut
+  x_cuts = planes in x to do a cut
+  y_cuts = planes in y to do a cut
+  any_cuts = cut planes intercepts as Nx3 matrix (see mdl_slice_mapper)
+ Default show 2 z_cuts and 1 x and 1 y cut
+
+ h = show_3d_slices(...) returns a cell array of handles to the individual
+ slices { z_slices, x_slices, y_slices, any_slices }
+
+ See also: mdl_slices_mesher</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>	[colours,scl_data]= calc_colours(img, set_value, do_colourbar)</li><li><a href="mdl_slice_mesher.html" class="code" title="function [nimg out] = mdl_slice_mesher(fmdl,level,varargin)">mdl_slice_mesher</a>	MDL_SLICE_MESHER A slice of a 3D FEM as a 2D FEM</li><li><a href="scale_for_display.html" class="code" title="function [elem_data,ref_lev,max_scale] = scale_for_display( elem_data, pp)">scale_for_display</a>	[elem_data,ref_lev,max_scale] = scale_for_display( elem_data, pp)</li><li><a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>	show_3d_slices(img, z_cuts, x_cuts, y_cuts, any_cuts)</li><li><a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../../eidors/meshing/mat_idx_to_electrode.html" class="code" title="function [fmdl,rm_elems] = mat_idx_to_electrode(fmdl, mat_idxes)">mat_idx_to_electrode</a>	MAT_IDX_TO_ELECTRODE: create electrodes from mat_idx values</li><li><a href="../../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="../../../eidors/models/data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>	DATA_MAPPER maps img.params data to elem or node data</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/mk_voxel_volume.html" class="code" title="function [imdl, fmdl] = mk_voxel_volume(varargin)">mk_voxel_volume</a>	MK_VOXEL_VOLUME create a voxel model to reconstruct on</li><li><a href="../../../eidors/models/num_elecs.html" class="code" title="function num = num_elecs( mdl );">num_elecs</a>	NUM_ELECS: number of electrodes attached to model</li><li><a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>	NUM_ELEMS: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>	NUM_NODES: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/solvers/get_img_data.html" class="code" title="function [img_data, n_images]= get_img_data(img)">get_img_data</a>	GET_IMG_DATA: get parameter data from eidors image object</li><li><a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="mdl_slice_mapper.html" class="code" title="function map = mdl_slice_mapper( fmdl, maptype );">mdl_slice_mapper</a>	MDL_SLICE_MAPPER: map pixels to FEM elements or nodes</li><li><a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>	show_3d_slices(img, z_cuts, x_cuts, y_cuts, any_cuts)</li><li><a href="../../../eidors/solvers/inverse/GREIT_desired_img_sigmoid.html" class="code" title="function PSF = GREIT_desired_img_sigmoid(xyz,radius, opt)">GREIT_desired_img_sigmoid</a>	GREIT_DESIRED_IMG_SIGMOID sigmoid-decay desired image function for GREIT</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function h = show_slice(img, level)</a></li><li><a href="#_sub2" class="code">function img = fake_3d_model( img );</a></li><li><a href="#_sub3" class="code">function [x_cuts, y_cuts, z_cuts, any_cuts] =  get_cuts(img, varargin)</a></li><li><a href="#_sub4" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h = show_3d_slices(img, varargin);</a>
+0002 <span class="comment">% show_3d_slices(img, z_cuts, x_cuts, y_cuts, any_cuts)</span>
+0003 <span class="comment">% Show a 3d view of an object with many slices through it</span>
+0004 <span class="comment">%  z_cuts = planes in z to do a cut</span>
+0005 <span class="comment">%  x_cuts = planes in x to do a cut</span>
+0006 <span class="comment">%  y_cuts = planes in y to do a cut</span>
+0007 <span class="comment">%  any_cuts = cut planes intercepts as Nx3 matrix (see mdl_slice_mapper)</span>
+0008 <span class="comment">% Default show 2 z_cuts and 1 x and 1 y cut</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% h = show_3d_slices(...) returns a cell array of handles to the individual</span>
+0011 <span class="comment">% slices { z_slices, x_slices, y_slices, any_slices }</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% See also: mdl_slices_mesher</span>
+0014 
+0015 <span class="comment">% (C) 2007-2012 Andy Adler &amp; Bartlomiej Grychtol.</span>
+0016 <span class="comment">% License: GPL version 2 or version 3</span>
+0017 <span class="comment">% $Id: show_3d_slices.m 5990 2019-06-27 12:41:33Z aadler $</span>
+0018 
+0019 <span class="comment">% BUGS: for 2D images, large electrodes are not correctly shown (AA, jun 2019)</span>
+0020 
+0021 <span class="keyword">if</span> ischar(img) &amp;&amp; strcmp(img,<span class="string">'UNIT_TEST'</span>); <a href="#_sub4" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0022 
+0023 ok= 0;
+0024 <span class="keyword">try</span>; <span class="keyword">if</span> strcmp(img.type, <span class="string">'image'</span>);
+0025    ok = 1;
+0026 <span class="keyword">end</span>; <span class="keyword">end</span>
+0027 <span class="keyword">if</span> ~ok; 
+0028    error(<span class="string">'EIDORS: show_3d_slices requires image as first parameter'</span>);
+0029 <span class="keyword">end</span>
+0030 <span class="keyword">if</span> size(img.fwd_model.elems,2) == 3; <span class="comment">%show_3d_slices requires volume model</span>
+0031    img = <a href="#_sub2" class="code" title="subfunction img = fake_3d_model( img );">fake_3d_model</a>( img );
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">%multi-parametrization</span>
+0035 img = <a href="../../../eidors/models/data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>(img);
+0036 
+0037 qfi = warning(<span class="string">'query'</span>,<span class="string">'EIDORS:FirstImageOnly'</span>);
+0038 <span class="comment">% Get data and to c2f mapping if required</span>
+0039 elem_data = <a href="../../../eidors/solvers/get_img_data.html" class="code" title="function [img_data, n_images]= get_img_data(img)">get_img_data</a>(img);
+0040 <span class="comment">% check size</span>
+0041 <span class="keyword">if</span> size(elem_data,2) &gt; 1
+0042    q = warning(<span class="string">'query'</span>,<span class="string">'backtrace'</span>);
+0043    warning(<span class="string">'backtrace'</span>,<span class="string">'off'</span>);
+0044    warning(<span class="string">'EIDORS:FirstImageOnly'</span>,<span class="string">'show_3d_slices only shows first image'</span>);
+0045    warning(<span class="string">'backtrace'</span>,q.state);
+0046    warning(<span class="string">'off'</span>,<span class="string">'EIDORS:FirstImageOnly'</span>);
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="comment">% need to make sure boundary is just the outside</span>
+0050 img.fwd_model.boundary = <a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(img.fwd_model);
+0051 
+0052 
+0053 [jnk,ref_lev,max_scale] = <a href="scale_for_display.html" class="code" title="function [elem_data,ref_lev,max_scale] = scale_for_display( elem_data, pp)">scale_for_display</a>( elem_data);
+0054 <span class="keyword">try</span> 
+0055     img.calc_colours.ref_level; 
+0056 <span class="keyword">catch</span>
+0057     img.calc_colours.ref_level = ref_lev;
+0058 <span class="keyword">end</span>
+0059 <span class="keyword">try</span>
+0060     img.calc_colours.clim;
+0061 <span class="keyword">catch</span>
+0062     img.calc_colours.clim = max_scale;
+0063 <span class="keyword">end</span>
+0064 <span class="keyword">try</span> 
+0065     np = img.calc_colours.npoints;
+0066 <span class="keyword">catch</span>
+0067     np = <a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>(<span class="string">'npoints'</span>);
+0068 <span class="keyword">end</span>
+0069 <span class="comment">%  show_fem(img.fwd_model);</span>
+0070 [x_cuts, y_cuts, z_cuts, any_cuts] = <a href="#_sub3" class="code" title="subfunction [x_cuts, y_cuts, z_cuts, any_cuts] =  get_cuts(img, varargin)">get_cuts</a>(img,varargin{:});
+0071 
+0072 hz = []; hy = []; hx = []; ha = [];
+0073 <span class="keyword">for</span> i= 1:length(z_cuts)
+0074     hz(i) = <a href="#_sub1" class="code" title="subfunction h = show_slice(img, level)">show_slice</a>(img,[inf inf z_cuts(i)]);
+0075     hold on
+0076 <span class="keyword">end</span>
+0077 
+0078 <span class="keyword">for</span> i= 1:length(x_cuts)
+0079     hx(i) = <a href="#_sub1" class="code" title="subfunction h = show_slice(img, level)">show_slice</a>(img,[x_cuts(i) inf inf]);
+0080     hold on
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="keyword">for</span> i= 1:length(y_cuts)
+0084     hy(i) = <a href="#_sub1" class="code" title="subfunction h = show_slice(img, level)">show_slice</a>(img,[inf y_cuts(i) inf]);
+0085     hold on
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="keyword">for</span> i= 1:size(any_cuts,1)
+0089     ha(i) = <a href="#_sub1" class="code" title="subfunction h = show_slice(img, level)">show_slice</a>(img,any_cuts(i,:));
+0090     hold on
+0091 <span class="keyword">end</span>
+0092 hold off
+0093 
+0094 <span class="keyword">if</span> nargout &gt; 0
+0095    h = {hz,hx,hy,ha};
+0096 <span class="keyword">end</span>
+0097 
+0098 warning(qfi.state,<span class="string">'EIDORS:FirstImageOnly'</span>);
+0099 
+0100 <a name="_sub1" href="#_subfunctions" class="code">function h = show_slice(img, level)</a>
+0101     slc = <a href="mdl_slice_mesher.html" class="code" title="function [nimg out] = mdl_slice_mesher(fmdl,level,varargin)">mdl_slice_mesher</a>(img,level);
+0102     <span class="keyword">try</span> slc.calc_colours = img.calc_colours; <span class="keyword">end</span>
+0103     h = <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(slc);
+0104 
+0105 <span class="comment">% create an extruded 3D model of height</span>
+0106 <a name="_sub2" href="#_subfunctions" class="code">function img = fake_3d_model( img );</a>
+0107   fmdl = img.fwd_model;
+0108   fnodes = fmdl.nodes;
+0109   felems = fmdl.elems;
+0110   maxd = max( max(fnodes) - min(fnodes) );
+0111   upd = 0.1*maxd; <span class="comment">% up and down from zero</span>
+0112   Nn = <a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(fmdl);
+0113   Ne = <a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(fmdl);
+0114   fmdn = fmdl;
+0115   fmdn.nodes =[[fnodes,-upd+0*fnodes(:,1)];
+0116                [fnodes,+upd+0*fnodes(:,1)]];
+0117   <span class="keyword">for</span> i=1:<a href="../../../eidors/models/num_elecs.html" class="code" title="function num = num_elecs( mdl );">num_elecs</a>(fmdl)
+0118      eni = fmdn.electrode(i).nodes;
+0119      fmdn.electrode(i).nodes = [eni(:);eni(:)+Nn]';
+0120      <span class="keyword">if</span> isempty(eni) &amp;&amp; isfield(fmdn.electrode(i),<span class="string">'faces'</span>)
+0121         eni = unique(fmdn.electrode(i).faces);
+0122         fmdn.electrode(i).nodes = [eni(:);eni(:)+Nn]';
+0123      <span class="keyword">end</span>
+0124   <span class="keyword">end</span>
+0125   <span class="keyword">if</span> isfield(fmdn.electrode,<span class="string">'faces'</span>); <span class="comment">% Horrible we need to code it like this</span>
+0126      fmdn.electrode = rmfield(fmdn.electrode,<span class="string">'faces'</span>);
+0127   <span class="keyword">end</span>
+0128   <span class="comment">% Doesn't need to be a conformal model, don't worry about adjacency</span>
+0129   fmdn.elems =[[felems(:,[1,2,3]), felems(:,[1    ])+Nn];
+0130                [felems(:,[  2,3]), felems(:,[1,2  ])+Nn];
+0131                [felems(:,[    3]), felems(:,[1,2,3])+Nn]];
+0132   ed= img.elem_data;
+0133   <span class="keyword">if</span> isfield(fmdl,<span class="string">'coarse2fine'</span>);
+0134      c2f = fmdl.coarse2fine;
+0135      fmdn.coarse2fine = [c2f;c2f;c2f]; 
+0136      img.fwd_model = fmdn;
+0137   <span class="keyword">else</span>
+0138      img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdn,[ed;ed;ed]);
+0139   <span class="keyword">end</span>
+0140 
+0141     
+0142 <a name="_sub3" href="#_subfunctions" class="code">function [x_cuts, y_cuts, z_cuts, any_cuts] =  get_cuts(img, varargin)</a>
+0143    mdl_max= max(img.fwd_model.nodes);
+0144    mdl_min= min(img.fwd_model.nodes);
+0145    any_cuts = [];
+0146    <span class="keyword">if</span> nargin==1;
+0147       <span class="comment">% Default show 2 z_cuts and 1 x and 1 y cut</span>
+0148        x_cuts= linspace(mdl_min(1), mdl_max(1), 3); x_cuts([1,3])=[];
+0149        y_cuts= linspace(mdl_min(2), mdl_max(2), 3); y_cuts([1,3])=[];
+0150        z_cuts= linspace(mdl_min(3), mdl_max(3), 4); z_cuts([1,4])=[];
+0151    <span class="keyword">elseif</span> nargin==2;
+0152        z_cuts= varargin{1};
+0153        x_cuts= [];
+0154        y_cuts= [];
+0155    <span class="keyword">elseif</span> nargin==3;
+0156        z_cuts= varargin{1};
+0157        x_cuts= varargin{2};
+0158        y_cuts= [];
+0159    <span class="keyword">elseif</span> nargin==4;
+0160        z_cuts= varargin{1};
+0161        x_cuts= varargin{2};
+0162        y_cuts= varargin{3};
+0163    <span class="keyword">elseif</span> nargin==5;
+0164        z_cuts= varargin{1};
+0165        x_cuts= varargin{2};
+0166        y_cuts= varargin{3};
+0167        any_cuts= varargin{4};
+0168    <span class="keyword">else</span> 
+0169        error(<span class="string">'too many inputs'</span>);
+0170    <span class="keyword">end</span>
+0171    
+0172 
+0173 
+0174 <a name="_sub4" href="#_subfunctions" class="code">function do_unit_test</a>
+0175    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'n3r2'</span>,[16,2]);
+0176    img = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl,1); vh= <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0177    load datacom.mat A B;
+0178    img.elem_data(A) = 1.2;
+0179    img.elem_data(B) = 0.8;
+0180    vi = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0181    imgr = <a href="../../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0182    imgr.calc_colours.npoints =64;
+0183    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img);
+0184    <a href="calc_colours.html" class="code" title="function [colours,scl_data]= calc_colours(img, set_value, do_colourbar)">calc_colours</a>(<span class="string">'transparency_thresh'</span>, 0.25);
+0185    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(imgr,[1.5,2],[],[]);
+0186 
+0187    subplot(4,4,1);  <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(imgr,[1,2],0,0.5);
+0188    subplot(4,4,2);  <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img ,[1,2],0,0.5);
+0189    cuts = [inf, -2.5, 1.5; inf, 10, 1.5];
+0190    subplot(4,4,3);  <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img ,[],[],[],cuts );
+0191    
+0192    imgr.calc_colours.transparency_thresh = -1;
+0193    img.calc_colours.transparency_thresh = -1;
+0194    subplot(4,4,4);  <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(imgr,[1,2],0.3,0.7);
+0195    subplot(4,4,5);  
+0196    <a href="show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img.fwd_model);
+0197    hold on
+0198    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img ,[1,2],0.3,0.7);
+0199    axis off
+0200 
+0201    subplot(4,4,6);  
+0202    img.elem_data = img.elem_data*[0,1];
+0203    img.get_img_data.frame_select = 2;
+0204    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img ,[1],[],[]);
+0205    
+0206    view(10,18);
+0207 
+0208 
+0209    subplot(4,4,7);
+0210    imgs = img;        ed = img.elem_data(:,1);
+0211    imgs.elem_data= [1;1.2;0.8]*[1];
+0212    imgs.fwd_model.coarse2fine = [ed == img.elem_data(1),
+0213                                  ed == img.elem_data(2),
+0214                                  ed == img.elem_data(3)];
+0215    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img,[1,2],0,0.7);
+0216   
+0217    subplot(4,4,8);
+0218    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img,[1],[],[],[1,1,1]);
+0219 
+0220 
+0221    subplot(4,4,9);  
+0222    vopt.imgsz = [10,10,10];
+0223    <span class="comment">% Build a model that has a c2f. This one isn't very good,</span>
+0224    <span class="comment">% because of transpose, but that's OK for the test</span>
+0225    [img.fwd_model,tmp] = <a href="../../../eidors/models/mk_voxel_volume.html" class="code" title="function [imdl, fmdl] = mk_voxel_volume(varargin)">mk_voxel_volume</a>(imdl.fwd_model,vopt);
+0226    img.fwd_model.coarse2fine = (tmp.coarse2fine * <span class="keyword">...</span>
+0227                       img.fwd_model.coarse2fine')';
+0228    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img,[1,2],0,0.5);
+0229 
+0230    subplot(4,4,10);
+0231    fmdl = getfield(<a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2C2'</span>,4),<span class="string">'fwd_model'</span>);
+0232    fmdl.mat_idx{1} = 1:4;
+0233    fmdl = <a href="../../../eidors/meshing/mat_idx_to_electrode.html" class="code" title="function [fmdl,rm_elems] = mat_idx_to_electrode(fmdl, mat_idxes)">mat_idx_to_electrode</a>(fmdl,{1});
+0234    img= <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1);
+0235    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img,[0])
+0236    
+0237    subplot(4,4,11);
+0238    img.fwd_model.electrode(1).faces=[28,29;29,30;30,31];
+0239    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img,[0])
+0240 
+0241    subplot(4,4,12)
+0242 <span class="comment">% Without C2f</span>
+0243    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c0'</span>,8); img= <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl);
+0244    img.elem_data([10,12]) = 1.1;
+0245    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img,[0],[0.2],[0]);
+0246 
+0247 
+0248    subplot(4,4,13)
+0249 <span class="comment">% With C2f</span>
+0250    ed = img.elem_data;
+0251    img.fwd_model.coarse2fine = [ed==1, ed&gt; 1];
+0252    img.elem_data= [1;1.1];
+0253    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(img,[0],[0.2],[0]);
+0254 
+0255    subplot(4,4,14)
+0256 <span class="comment">% With internal electrode</span>
+0257    extra={<span class="string">'ball'</span>,<span class="string">'solid ball = sphere(0.5,0.5,1;0.1);'</span>};
+0258    fmdl= <a href="../../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>(2,[4,1],[0.2],extra); 
+0259    fmdl.mat_idx_to_electrode.nodes_electrode = true;
+0260    fmdl= <a href="../../../eidors/meshing/mat_idx_to_electrode.html" class="code" title="function [fmdl,rm_elems] = mat_idx_to_electrode(fmdl, mat_idxes)">mat_idx_to_electrode</a>(fmdl,{2});
+0261    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(<a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1),[1.0],[0.5],[0.5]);
+0262     
+0263    subplot(4,4,15)
+0264 <span class="comment">% With internal electrode</span>
+0265    extra={<span class="string">'ball'</span>,<span class="string">'solid ball = sphere(0.5,0.5,1;0.1);'</span>};
+0266    fmdl= <a href="../../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>(2,[4,1],[0.2],extra); 
+0267    fmdl.mat_idx_to_electrode.nodes_electrode = false;
+0268    fmdl= <a href="../../../eidors/meshing/mat_idx_to_electrode.html" class="code" title="function [fmdl,rm_elems] = mat_idx_to_electrode(fmdl, mat_idxes)">mat_idx_to_electrode</a>(fmdl,{2});
+0269    <a href="show_3d_slices.html" class="code" title="function h = show_3d_slices(img, varargin);">show_3d_slices</a>(<a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1),[1.0],[0.5],[0.5]);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

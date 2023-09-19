@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Dual Models &minus; Coarse model partially covers fine model
+</h2>
+
+In many cases, the inverse model only covers part of the
+space. It is necessary to cover the entire space with
+the fine model to provide an accurate forward solution,
+but it is not possible to accurately calculate parameters
+for the low sensitivity parts of the space.
+
+<h3>Coarse and Fine models</h3>
+
+Create a fine model of a tank with 7 electrodes just near
+one side. The coarse model will only represent the 
+conductivity near this region.
+<pre>
+% Dual Partial $Id: dual_partial2d01.m 3504 2012-07-05 11:53:21Z aadler $
+
+imdl= mk_common_model('d2c2',64);
+fmdl= imdl.fwd_model;
+% Only keep 11 electrodes on top
+fmdl.electrode = fmdl.electrode([60:64,1:6]);
+% New stimulation pattern with 11 electrodes
+fmdl.stimulation = mk_stim_patterns(11,1,'{ad}','{ad}',{},1);
+% Remove meas_select - it was created for 64 electrodes
+fmdl = rmfield(fmdl,'meas_select'); 
+subplot(121)
+show_fem(fmdl); axis square
+
+% Crop model
+[cmdl,c2f_idx]= crop_model(fmdl, inline('(y-0.25)-abs(x)<0','x','y','z'));
+subplot(122)
+show_fem(cmdl);
+axis(1.05*[-1 1 -1 1]); axis square;
+
+print_convert dual_partial2d01a.png;
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/dual_partial2d01a.png">
+<br><i> Figure:</i>
+Fine (<i>left</i>) and dual (<i>right</i>) models
+</center>
+
+
+<h3>Simulated data</h3>
+
+Data are simulated of a point rotating on a fine mesh
+(inverse crime in this case)
+
+<pre>
+% Simulate object moving $Id: dual_partial2d02.m 2782 2011-07-14 21:14:12Z aadler $
+
+% simulation model
+imdl= mk_common_model('d2c2',64);
+smdl= imdl.fwd_model;
+% Only keep 11 electrodes on top 
+smdl.electrode = smdl.electrode([60:64,1:6]);
+smdl.stimulation = mk_stim_patterns(11,1,'{ad}','{ad}',{},1);
+
+[vh,vi,xyr]= simulate_2d_movement(32, smdl, [0.75,0.05] );
+% Only 12 to 2 O'clock
+idx= 5:10;
+vi= vi(:,idx); xyr= xyr(:,idx);
+
+clf;subplot(121)
+show_fem(smdl); axis square
+
+% Show target positions
+   theta= linspace(0,2*pi,50); xr= cos(theta); yr= sin(theta);
+   hold on;
+   for i=1:size(xyr,2)
+       hh= plot(xyr(3,i)*xr+ xyr(1,i),xyr(3,i)*yr+ xyr(2,i));
+       set(hh,'LineWidth',3,'Color',[0,0,0]);
+   end
+   hold off;
+
+print_convert dual_partial2d02a.png;
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/dual_model/dual_partial2d02a.png">
+<br><i> Figure:</i>
+Simulation data
+</center>
+
+<h3>Reconstruction models</h3>
+
+Create fine mesh (<tt>fmdl_mdl</tt>)
+   and dual mesh (<tt>dmdl_mdl</tt>) reconstruction models.
+<pre>
+% Dual Partial $Id: dual_partial2d03.m 4839 2015-03-30 07:44:50Z aadler $
+
+% base model
+imdl.RtR_prior = @prior_noser;
+imdl.hyperparameter.value = .2;
+
+% Reconstruction model - only fine reconstruction
+frec_mdl= imdl;
+frec_mdl.fwd_model= fmdl; % fine model
+
+% Reconstruction model - dual model
+drec_mdl = imdl;
+drec_mdl.fwd_model= fmdl; % fine model
+% coarse to fine mapping
+nf_els= size(fmdl.elems,1); nc_els= size(cmdl.elems,1);
+drec_mdl.fwd_model.coarse2fine= sparse(c2f_idx, 1:nc_els, 1, nf_els, nc_els);
+
+</pre>
+
+<h3>Reconstructed images (projected to fine mesh)</h3>
+
+<pre>
+% Dual Partial $Id: dual_partial2d04.m 2749 2011-07-14 13:32:13Z aadler $
+
+clf; levels= [inf,inf,0,1,1];
+
+% reconstruct fine model
+imgf= inv_solve(frec_mdl, vh, vi);
+
+show_slices(imgf,levels);
+print_convert dual_partial2d04a.png;
+
+% reconstruct dual model
+imgd= inv_solve(drec_mdl, vh, vi);
+
+show_slices(imgd,levels);
+print_convert dual_partial2d04b.png;
+
+
+</pre>
+
+<center>
+<img src="dual_partial2d04a.png">
+<br>
+<img src="dual_partial2d04b.png">
+<br><i> Figure:</i>
+Fine (<i>top</i>) and dual (<i>bottom</i>) reconstructed images
+</center>
+
+<h3>Reconstructed images (projected to coarse mesh)</h3>
+
+<pre>
+% Dual Partial $Id: dual_partial2d05.m 2749 2011-07-14 13:32:13Z aadler $
+
+clf; levels= [inf,inf,0,1,1];
+
+% reconstruct fine model params onto coarse model
+imgf= inv_solve(frec_mdl, vh, vi);
+imgf.fwd_model= cmdl;
+imgf.elem_data= imgf.elem_data(c2f_idx,:);
+
+show_slices(imgf,levels);
+print_convert dual_partial2d05a.png;
+
+% reconstruct dual model on coarse mesh
+imgd= inv_solve(drec_mdl, vh, vi);
+imgd.fwd_model= cmdl;
+
+show_slices(imgd,levels);
+print_convert dual_partial2d05b.png;
+
+
+</pre>
+
+<center>
+<img src="dual_partial2d05a.png">
+<br>
+<img src="dual_partial2d05b.png">
+<br><i> Figure:</i>
+Fine (<i>top</i>) and dual (<i>bottom</i>) reconstructed images
+</center>
+
+
+
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

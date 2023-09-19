@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of eidors_saveimg</title>
+  <meta name="keywords" content="eidors_saveimg">
+  <meta name="description" content="EIDORS saveimg - save reconstructed image files in formats">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">interface</a> &gt; eidors_saveimg.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/interface&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>eidors_saveimg
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>EIDORS saveimg - save reconstructed image files in formats</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function eidors_saveimg( img, fname, format, pp ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> EIDORS saveimg - save reconstructed image files in formats
+    of various EIT equipment manufacturers
+ eidors_saveimg( img, fname, format, params )
+
+ Currently the list of supported file formats is:
+    - MCEIT (Goettingen / Viasys) &quot;igt&quot; file format 
+        format = &quot;IGT&quot;
+    - SenTec / iBex - the &quot;mat&quot; format for SenTec's ibeX software
+        format = &quot;ZRI.MAT&quot;
+
+ Usage
+ eidors_saveimg( img,fname,format )
+     img   = eidors image structure
+     fname = file name
+
+ For the &quot;zri.mat&quot; format, use (minumum)
+  p.imageRate = FR;
+  p.patient.ROI.Inside = thorax_ROI*100;
+  eidors_saveimg( img, 'filename.zri.mat','zri.mat', p)
+
+  If format is unspecified, we attempt to autodetect.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>	calc_slices (img, levels, clim  ) show slices at levels of an</li><li><a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="eidors_saveimg.html" class="code" title="function eidors_saveimg( img, fname, format, pp )">eidors_saveimg</a>	EIDORS saveimg - save reconstructed image files in formats</li><li><a href="img2igt.html" class="code" title="function igt = img2igt(img)">img2igt</a>	IMG2IGT returns an IGT-compatible image matrix from any EIDORS</li><li><a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="eidors_saveimg.html" class="code" title="function eidors_saveimg( img, fname, format, pp )">eidors_saveimg</a>	EIDORS saveimg - save reconstructed image files in formats</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fmt = detect_format( fname )</a></li><li><a href="#_sub2" class="code">function fid = open_file( fname );</a></li><li><a href="#_sub3" class="code">function mceit_saveimg( img, fname );</a></li><li><a href="#_sub4" class="code">function zriDmat_saveimg( img, fname,pp);</a></li><li><a href="#_sub5" class="code">function po = fill_in_params_zriDmat(pi, imgs);</a></li><li><a href="#_sub6" class="code">function po = replacefields(po, pi, d )</a></li><li><a href="#_sub7" class="code">function native_saveimg( img, fname )</a></li><li><a href="#_sub8" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function eidors_saveimg( img, fname, format, pp )</a>
+0002 <span class="comment">% EIDORS saveimg - save reconstructed image files in formats</span>
+0003 <span class="comment">%    of various EIT equipment manufacturers</span>
+0004 <span class="comment">% eidors_saveimg( img, fname, format, params )</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Currently the list of supported file formats is:</span>
+0007 <span class="comment">%    - MCEIT (Goettingen / Viasys) &quot;igt&quot; file format</span>
+0008 <span class="comment">%        format = &quot;IGT&quot;</span>
+0009 <span class="comment">%    - SenTec / iBex - the &quot;mat&quot; format for SenTec's ibeX software</span>
+0010 <span class="comment">%        format = &quot;ZRI.MAT&quot;</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Usage</span>
+0013 <span class="comment">% eidors_saveimg( img,fname,format )</span>
+0014 <span class="comment">%     img   = eidors image structure</span>
+0015 <span class="comment">%     fname = file name</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% For the &quot;zri.mat&quot; format, use (minumum)</span>
+0018 <span class="comment">%  p.imageRate = FR;</span>
+0019 <span class="comment">%  p.patient.ROI.Inside = thorax_ROI*100;</span>
+0020 <span class="comment">%  eidors_saveimg( img, 'filename.zri.mat','zri.mat', p)</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%  If format is unspecified, we attempt to autodetect.</span>
+0023 
+0024 <span class="comment">% (C) 2009 by Bartlomiej Grychtol. Licensed under GPL v2 or v3</span>
+0025 <span class="comment">% $Id: eidors_saveimg.m 6015 2019-07-02 06:53:14Z aadler $</span>
+0026 
+0027 <span class="keyword">if</span> ischar(img) &amp;&amp; strcmp(img,<span class="string">'UNIT_TEST'</span>); <a href="#_sub8" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0028 
+0029 <span class="keyword">switch</span> nargin
+0030     <span class="keyword">case</span> 2
+0031         fmt = <a href="#_sub1" class="code" title="subfunction fmt = detect_format( fname )">detect_format</a>(fname);
+0032         <span class="keyword">if</span> isempty( fmt )
+0033             error(<span class="string">'file format unspecified, can`t autodetect'</span>);
+0034         <span class="keyword">end</span>
+0035     <span class="keyword">case</span> {3,4}
+0036         fmt1 = <a href="#_sub1" class="code" title="subfunction fmt = detect_format( fname )">detect_format</a>(fname);
+0037         fmt = lower(format);
+0038         <span class="keyword">if</span> isempty(fmt1);
+0039             fname = [fname <span class="string">'.'</span> fmt];
+0040         <span class="keyword">else</span>
+0041             <span class="keyword">if</span> ~strcmp(fmt1, fmt)
+0042                 warning([<span class="string">'The extension specified ('</span>,fmt1, <span class="keyword">...</span>
+0043                  <span class="string">') in file name ('</span>,fname, <span class="keyword">...</span>
+0044                  <span class="string">') doesn''t match the file format:'</span>,fmt]);
+0045             <span class="keyword">end</span>
+0046         <span class="keyword">end</span>
+0047     <span class="keyword">otherwise</span>
+0048        error(<span class="string">'Usage: eidors_saveimg( img , fname, format,pp )'</span>);       
+0049 <span class="keyword">end</span>
+0050 
+0051 
+0052 <span class="keyword">switch</span> fmt
+0053     <span class="keyword">case</span> <span class="string">'igt'</span>
+0054         <a href="#_sub3" class="code" title="subfunction mceit_saveimg( img, fname );">mceit_saveimg</a>( img, fname );
+0055     <span class="keyword">case</span> <span class="string">'e3d'</span> <span class="comment">% Will be deprecated</span>
+0056         <a href="#_sub7" class="code" title="subfunction native_saveimg( img, fname )">native_saveimg</a>( img, fname);
+0057     <span class="keyword">case</span> <span class="string">'zri.mat'</span> <span class="comment">% Will be deprecated</span>
+0058         <a href="#_sub4" class="code" title="subfunction zriDmat_saveimg( img, fname,pp);">zriDmat_saveimg</a>( img, fname,pp);
+0059     <span class="keyword">otherwise</span>
+0060         error(<span class="string">'eidors_readdata: file &quot;%s&quot; format unknown'</span>, fmt);
+0061 <span class="keyword">end</span>
+0062 
+0063 
+0064 
+0065 
+0066 <span class="comment">%%</span>
+0067 <a name="_sub1" href="#_subfunctions" class="code">function fmt = detect_format( fname ) </a>
+0068 
+0069 dotpos = find(fname == <span class="string">'.'</span>);
+0070 <span class="keyword">if</span> isempty( dotpos )
+0071     fmt = [];
+0072 <span class="keyword">else</span>
+0073     dotpos= dotpos(1);
+0074     format= fname( dotpos+1:end );
+0075     fmt= lower(format);
+0076 <span class="keyword">end</span>
+0077 
+0078 
+0079 
+0080 <span class="comment">%%</span>
+0081 <a name="_sub2" href="#_subfunctions" class="code">function fid = open_file( fname );</a>
+0082 
+0083 <span class="keyword">if</span> exist(fname,<span class="string">'file'</span>)
+0084     disp(<span class="string">'File already exists.'</span>);
+0085     reply = input(<span class="string">'Overwrite? Y/N [Y]: '</span>, <span class="string">'s'</span>);
+0086     <span class="keyword">if</span> isempty(reply), reply = <span class="string">'Y'</span>; <span class="keyword">end</span>
+0087     reply = lower(reply);
+0088     
+0089     <span class="keyword">if</span> ~strcmp(reply,<span class="string">'y'</span>);
+0090         fid = -1;
+0091         <span class="keyword">return</span>;
+0092     <span class="keyword">end</span>
+0093 <span class="keyword">end</span>
+0094 fid = fopen( fname ,<span class="string">'w'</span>);
+0095 
+0096 
+0097 
+0098 
+0099 
+0100 
+0101 <span class="comment">%%</span>
+0102 <a name="_sub3" href="#_subfunctions" class="code">function mceit_saveimg( img, fname );</a>
+0103 <span class="comment">% mceit_readimg - saves IGT files.</span>
+0104 
+0105 fid = <a href="#_sub2" class="code" title="subfunction fid = open_file( fname );">open_file</a>( fname );
+0106 <span class="keyword">if</span> fid &lt; 0
+0107     error(<span class="string">'Cannot open file.'</span>);
+0108 <span class="keyword">end</span>
+0109 
+0110 n = size(img.elem_data,1);
+0111 <span class="keyword">if</span> n == 912
+0112    <span class="comment">%already the right format</span>
+0113    fwrite(fid,img.elem_data',<span class="string">'4*float'</span>);
+0114 <span class="keyword">else</span>
+0115    data = <a href="img2igt.html" class="code" title="function igt = img2igt(img)">img2igt</a>(img);
+0116    fwrite(fid, data , <span class="string">'4*float'</span>);
+0117 <span class="keyword">end</span>
+0118 
+0119 fclose(fid);
+0120 
+0121 <a name="_sub4" href="#_subfunctions" class="code">function zriDmat_saveimg( img, fname,pp);</a>
+0122    imgs = <a href="../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>(img);
+0123    imgs(isnan(imgs))= 0;
+0124    data = <a href="#_sub5" class="code" title="subfunction po = fill_in_params_zriDmat(pi, imgs);">fill_in_params_zriDmat</a>(pp, imgs);
+0125    <span class="keyword">if</span> exist(<span class="string">'OCTAVE_VERSION'</span>)==5
+0126    <span class="comment">% FIXME ... currently (4.4.1) octave gives errors for -V7</span>
+0127       save(fname, <span class="string">'data'</span>,<span class="string">'-V6'</span>);
+0128    <span class="keyword">else</span>
+0129       save(fname, <span class="string">'data'</span>);
+0130    <span class="keyword">end</span>
+0131 
+0132 <a name="_sub5" href="#_subfunctions" class="code">function po = fill_in_params_zriDmat(pi, imgs);</a>
+0133    sz_imgs = size(imgs);
+0134    po.patient.ROI.RightLung =zeros(sz_imgs([1,2]));
+0135    po.patient.ROI.LeftLung = zeros(sz_imgs([1,2]));
+0136    po.patient.ROI.Heart =    zeros(sz_imgs([1,2]));
+0137 
+0138    <span class="comment">% put to dummy because they are missing</span>
+0139    po.patient.halfChest = <span class="string">'NaN'</span>;
+0140    po.patient.height = <span class="string">'NaN'</span>;
+0141    po.patient.weight = <span class="string">'NaN'</span>;
+0142    po.patient.gender = <span class="string">'NaN'</span>;
+0143 
+0144    po.measurement.Position.transversal = zeros(1, sz_imgs(3));
+0145    po.measurement.Position.longitudinal= zeros(1, sz_imgs(3));
+0146    po.measurement.ImageQuality =      100*ones(1,sz_imgs(3));
+0147    po.measurement.ElectrodeQuality =     zeros(sz_imgs(3),32);
+0148    po.measurement.ZeroRef = imgs;
+0149 
+0150    po.injctionPattern= <span class="string">'NaN'</span>;
+0151    po.SensorBelt.NumEl= <span class="string">'NaN'</span>;
+0152 
+0153    po.measurement.CompositValue=squeeze(sum(sum(imgs,2),1));
+0154 
+0155    po = <a href="#_sub6" class="code" title="subfunction po = replacefields(po, pi, d )">replacefields</a>(po, pi, 1 );
+0156 
+0157 <a name="_sub6" href="#_subfunctions" class="code">function po = replacefields(po, pi, d )</a>
+0158 <span class="comment">% fprintf('%d:',d);</span>
+0159   <span class="keyword">if</span> ~isstruct(pi)
+0160     po = pi;
+0161 <span class="comment">%   disp('=');</span>
+0162     <span class="keyword">return</span>
+0163   <span class="keyword">end</span>
+0164   <span class="keyword">for</span> ff= fieldnames(pi)'; fn= ff{1};
+0165 <span class="comment">%   disp(fn);</span>
+0166     <span class="keyword">if</span> isfield(po,fn);
+0167        po.(fn) = <a href="#_sub6" class="code" title="subfunction po = replacefields(po, pi, d )">replacefields</a>(po.(fn), pi.(fn), d+1 );
+0168     <span class="keyword">else</span> 
+0169        po.(fn) = pi.(fn);
+0170     <span class="keyword">end</span>
+0171   <span class="keyword">end</span>
+0172 
+0173 <span class="comment">% The 'native' image format is deprecated - May 2019 - aa</span>
+0174 <a name="_sub7" href="#_subfunctions" class="code">function native_saveimg( img, fname )</a>
+0175    <span class="comment">% native_saveimg - saves E3D file.</span>
+0176    <span class="comment">% E3D file is a zipped matlab v6 compatible .mat file called &quot;e3d.temp&quot;</span>
+0177    <span class="comment">% containing one eidors image struct variable named &quot;img&quot;.</span>
+0178 
+0179    <span class="comment">% save temporary mat file</span>
+0180    <span class="keyword">if</span> ~exist(<span class="string">'OCTAVE_VERSION'</span>) &amp;&amp; str2double(version(<span class="string">'-release'</span>)) &lt; 14
+0181        save(<span class="string">'e3d.temp'</span>, <span class="string">'img'</span>);
+0182    <span class="keyword">else</span>
+0183        save(<span class="string">'e3d.temp'</span>, <span class="string">'img'</span>, <span class="string">'-v6'</span>);
+0184    <span class="keyword">end</span>
+0185    zip(<span class="string">'temp.zip'</span>,<span class="string">'e3d.temp'</span>);
+0186    movefile(<span class="string">'temp.zip'</span>,fname);
+0187    delete e3d.temp 
+0188 
+0189 <a name="_sub8" href="#_subfunctions" class="code">function do_unit_test</a>
+0190    load montreal_data_1995;
+0191    imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'c2t3'</span>,16);
+0192    imdl.hyperparameter.value = 0.1;
+0193    imgr = <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl,zc_resp(:,1),zc_resp);
+0194    imgr.calc_colours.npoints = 64;
+0195    p.imageRate = 4.7;
+0196    p.patient.ROI.Inside = 100*ones(64);
+0197    <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgr);
+0198    <a href="eidors_saveimg.html" class="code" title="function eidors_saveimg( img, fname, format, pp )">eidors_saveimg</a>(imgr,<span class="string">'mtldata.zri.mat'</span>,<span class="string">'zri.mat'</span>,p);
+0199 
+0200    load <span class="string">'mtldata.zri.mat'</span>
+0201    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'zri.mat'</span>,eidors_var_id(data.patient), <span class="keyword">...</span>
+0202          <span class="string">'id_D6A2DB33EB61F4756BFE55BB696BBC2412D9BB3F'</span>);
+0203    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'zri.mat'</span>,eidors_var_id(data.SensorBelt), <span class="keyword">...</span>
+0204          <span class="string">'id_E57BF6A94F6263AAA469AD2B3A70631FD0FCE2A6'</span>);
+0205 <span class="keyword">if</span> 0 <span class="comment">%% Remove test ... varies too much between versions</span>
+0206    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'zri.mat'</span>,eidors_var_id(data), <span class="keyword">...</span>
+0207          <span class="string">'id_A4D719762BF416C86AF2C27A3A9B4A2758CCAB6D'</span>);
+0208 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

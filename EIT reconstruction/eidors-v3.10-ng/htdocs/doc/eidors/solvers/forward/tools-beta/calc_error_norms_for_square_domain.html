@@ -1,0 +1,384 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calc_error_norms_for_square_domain</title>
+  <meta name="keywords" content="calc_error_norms_for_square_domain">
+  <meta name="description" content="Get forward model of the img and the conductivity per element">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">eidors</a> &gt; <a href="../../index.html">solvers</a> &gt; <a href="../index.html">forward</a> &gt; <a href="index.html">tools-beta</a> &gt; calc_error_norms_for_square_domain.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward/tools-beta&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>calc_error_norms_for_square_domain
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Get forward model of the img and the conductivity per element</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [L2_tot_error,H1semi_tot_error,H1_tot_error,I_err,U_errS,U_errM,U_errSM,timing_solver,DOF]=error_2D_squ_CEM(img,eletype,plot_on) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">Get forward model of the img and the conductivity per element</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>	[V] = LEFT_DIVIDE(E,I,tol,pp,V);</li><li><a href="../../../../eidors/graphics/matlab/print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a>	PRINT_CONVERT: print figures with anti-aliasing and trim them</li><li><a href="../../../../eidors/solvers/forward/element_d_shape_function.html" class="code" title="function dshape = element_d_shape_function(type,x,y,z)">element_d_shape_function</a>	DELEMSHAPEFUNC</li><li><a href="../../../../eidors/solvers/forward/element_shape_function.html" class="code" title="function shape = element_shape_function(type,x,y,z)">element_shape_function</a>	ELEMENT_SHAPE_FUNCTION  - Evaluation of shape functions</li><li><a href="../../../../eidors/solvers/forward/fem_1st_to_higher_order.html" class="code" title="function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)">fem_1st_to_higher_order</a>	FEM_1ST_TO_HIGH_ORDER:  Modify the FEM for high order FEM called as</li><li><a href="../../../../eidors/solvers/forward/gauss_points.html" class="code" title="function [w,x,y,z]=gauss_points(dim,order)">gauss_points</a>	GAUSS_POINTS</li><li><a href="../../../../eidors/solvers/forward/system_mat_higher_order.html" class="code" title="function [s_mat]=system_mat_higher_order(fwd_model,img)">system_mat_higher_order</a>	Assemble the total stiffness matrix : s_mat.E=At;</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [L2_tot_error,H1semi_tot_error,H1_tot_error,I_err,U_errS,U_errM,U_errSM,timing_solver,DOF]=error_2D_squ_CEM(img,eletype,plot_on)</a>
+0002 
+0003 <span class="comment">%Get forward model of the img and the conductivity per element</span>
+0004 img.fwd_model.approx_type=eletype;
+0005 mdl=img.fwd_model;
+0006 
+0007 <span class="comment">%Copy these images for the forward solution</span>
+0008 img2=img; mdl2=mdl;
+0009 
+0010 
+0011 <span class="comment">%Modify forward model to ensure elements are reordered and get the new</span>
+0012 <span class="comment">%nodes and elements</span>
+0013 <span class="keyword">if</span> ~isfield(mdl,<span class="string">'approx_type'</span>)    || <span class="keyword">...</span>
+0014    strcmp(mdl.approx_type,<span class="string">'tri3'</span>) || <span class="keyword">...</span>
+0015    strcmp(mdl.approx_type,<span class="string">'tet4'</span>)   
+0016 <span class="keyword">else</span>
+0017 mdl.approx_type=eletype; [bound,elem,nodes]=<a href="../../../../eidors/solvers/forward/fem_1st_to_higher_order.html" class="code" title="function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)">fem_1st_to_higher_order</a>(mdl); 
+0018 mdl.boundary=bound; mdl.elems=elem; mdl.nodes=nodes;
+0019 img.fwd_model=mdl;
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="comment">%Calculate number of nodes and elecs</span>
+0023 nnodesF=length(mdl.nodes(:,1)); nelecsF=length(mdl.electrode);
+0024 DOF = nnodesF + nelecsF;
+0025 tic;
+0026 <span class="comment">%Calculate stiffness matrix</span>
+0027 A_mat = <a href="../../../../eidors/solvers/forward/system_mat_higher_order.html" class="code" title="function [s_mat]=system_mat_higher_order(fwd_model,img)">system_mat_higher_order</a>(img);
+0028 At=A_mat.E;
+0029 ATL = At(1:nnodesF,1:nnodesF);
+0030 ATR = At(1:nnodesF,nnodesF+1:nnodesF+nelecsF);
+0031 ABL = At(nnodesF+1:nnodesF+nelecsF,1:nnodesF);
+0032 ABR = At(nnodesF+1:nnodesF+nelecsF,nnodesF+1:nnodesF+nelecsF);
+0033 
+0034 <span class="comment">%Form a newmatirx</span>
+0035 AtN=zeros(nnodesF+nelecsF,nnodesF+nelecsF);     
+0036 AtN(1:nnodesF,1:nnodesF) = ATL;
+0037 AtN(1:nnodesF,nnodesF+1:nnodesF+nelecsF) = 0;
+0038 AtN(nnodesF+1:nnodesF+nelecsF,1:nnodesF)=ABL;
+0039 AtN(nnodesF+1:nnodesF+nelecsF,nnodesF+1:nnodesF+nelecsF)=-eye(nelecsF);         
+0040 
+0041 <span class="comment">%Form a RHS vector</span>
+0042 <span class="comment">%We do +1 on E1 and -1 on E2</span>
+0043 Uvec=[1;-1]; 
+0044 RHSvec(1:nnodesF,1) = -ATR*Uvec;
+0045 RHSvec(nnodesF+1:nnodesF+nelecsF)=-ABR*Uvec;
+0046 
+0047 <span class="comment">%Inverse</span>
+0048 uI = AtN \ RHSvec;
+0049 volt_nodes=uI(1:nnodesF);
+0050 timing_solver=toc;
+0051 
+0052 <span class="comment">%Find elemental stiffness matrix on the REFINED MODEL</span>
+0053 [~,elemstiff]=mc_calc_stiffness2(mdl,img);
+0054 
+0055 
+0056 <span class="comment">%ANALYTIC Solution</span>
+0057 
+0058 <span class="comment">%Okay find the element matrix</span>
+0059 elemstruc=mdl.elems; nodestruc=mdl.nodes;
+0060 
+0061 <span class="comment">%Find elemental stiffness matrix</span>
+0062 [~,elemstiff]=mc_calc_stiffness2(mdl,img);
+0063 
+0064 <span class="comment">%Find no. of elements, and initialize vector of H1 errors</span>
+0065 nelems=size(elemstruc,1); H1_error=zeros(nelems,1);
+0066 
+0067 <span class="comment">%Analytic solution by Fourier decomposition - Two electrodes only</span>
+0068 <span class="comment">%We have infinite system of matrices U=SA</span>
+0069 <span class="comment">%U is integral of potential, S is integral of cos products and A are coeffs</span>
+0070 
+0071 <span class="comment">%Impedance, COM and half width of each electrode</span>
+0072 z_c1=mdl.electrode(1).z_contact; x1=3*pi/10; w1=pi/10;
+0073 z_c2=mdl.electrode(2).z_contact; x2=7*pi/10; w2=pi/10; 
+0074 <span class="comment">%We need ratio of Ul/zl</span>
+0075 uz1=Uvec(1)/z_c1; uz2=Uvec(2)/z_c2;
+0076 
+0077 <span class="comment">%Number of terms to truncate the analytic and interior terms</span>
+0078 n_trunc=1000; n_int_trunc=225;
+0079 
+0080 <span class="comment">%</span>
+0081 Sc=zeros(n_trunc+1,n_trunc+1);
+0082 Uc=zeros(n_trunc+1,1); Ac=zeros(n_trunc+1,1); 
+0083 
+0084 <span class="comment">%We first compute the sl(integer) term sl(</span>
+0085 sln1=zeros(6*n_trunc+1); sln2=zeros(6*n_trunc+1); 
+0086 sln1(3*n_trunc+1)=2*w1; sln2(3*n_trunc+1)=2*w2;
+0087 <span class="keyword">for</span> i=1:3*n_trunc
+0088    sln1(3*n_trunc+1+i) = ( sin(i*(x1+w1))  - sin(i*(x1-w1))  )/i; 
+0089    sln1(3*n_trunc+1-i) = sln1(3*n_trunc+1+i);
+0090    sln2(3*n_trunc+1+i) = ( sin(i*(x2+w2))  - sin(i*(x2-w2))  )/i; 
+0091    sln2(3*n_trunc+1-i) = sln2(3*n_trunc+1+i);   
+0092 <span class="keyword">end</span>
+0093 
+0094 <span class="comment">%Assemble matrices and then invert</span>
+0095 <span class="keyword">for</span> i=1:n_trunc+1
+0096    <span class="comment">%First workout the t coefficnet</span>
+0097    Uc(i) = uz1*sln1(3*n_trunc+i) + uz2*sln2(3*n_trunc+i) ;   
+0098    <span class="keyword">for</span> j=1:n_trunc+1       
+0099         Sc(i,j) = 0.5*(1/z_c1)*(sln1(j-i+3*n_trunc+1)+sln1(j+i-2+3*n_trunc+1))<span class="keyword">...</span>
+0100                 + 0.5*(1/z_c2)*(sln2(j-i+3*n_trunc+1)+sln2(j+i-2+3*n_trunc+1));
+0101         <span class="keyword">if</span>(i==j) <span class="comment">%Diagonal term?</span>
+0102             Sc(i,j) = Sc(i,j) + tanh((i-1)*pi)*(i-1)*pi/2;
+0103         <span class="keyword">end</span>        
+0104    <span class="keyword">end</span>
+0105 <span class="keyword">end</span>
+0106 
+0107 <span class="comment">%Solve and rescle</span>
+0108 Ac=Sc\Uc;
+0109 
+0110 <span class="comment">%Loop over the nodes and find the boundary</span>
+0111 volt_analytic=zeros(length(img.fwd_model.nodes(:,1)),1);
+0112 <span class="keyword">for</span> in=1:length(img.fwd_model.nodes(:,1));
+0113    xin=img.fwd_model.nodes(in,1);
+0114    yin=img.fwd_model.nodes(in,2);
+0115    volt_analytic(in)=Ac(1); <span class="comment">%constant</span>
+0116    <span class="keyword">if</span>(yin==0)
+0117        <span class="keyword">for</span> k=1:n_trunc
+0118            volt_analytic(in) = volt_analytic(in) + <span class="keyword">...</span>
+0119                (Ac(k+1))*cos(k*xin);
+0120        <span class="keyword">end</span>
+0121    <span class="keyword">else</span>
+0122        <span class="keyword">for</span> k=1:n_int_trunc
+0123            volt_analytic(in) = volt_analytic(in) + <span class="keyword">...</span>
+0124                (Ac(k+1))*cos(k*xin)*cosh(k*(pi-yin))/cosh(k*pi);
+0125        <span class="keyword">end</span>
+0126    <span class="keyword">end</span>
+0127 <span class="keyword">end</span>
+0128 
+0129 <span class="comment">%Determine the currents</span>
+0130 <span class="comment">%Current 1 and 2 constant part</span>
+0131 I_analytic(1) = 2*w1/z_c1*(Uvec(1) - Ac(1)); 
+0132 I_analytic(2) = 2*w2/z_c2*(Uvec(2) - Ac(1));
+0133 <span class="keyword">for</span> kkk=1:n_trunc
+0134    I_analytic(1) = I_analytic(1) - Ac(kkk+1)/(kkk*z_c1)*( sin(kkk*(x1+w1)) - sin(kkk*(x1-w1)) );
+0135    I_analytic(2) = I_analytic(2) - Ac(kkk+1)/(kkk*z_c2)*( sin(kkk*(x2+w2)) - sin(kkk*(x2-w2)) );   
+0136 <span class="keyword">end</span>
+0137 I_FEM(1) = uI(nnodesF+1);
+0138 I_FEM(2) = uI(nnodesF+2);
+0139 
+0140 <span class="comment">%Calculate the 2-norm error</span>
+0141 I_err = norm(I_FEM-I_analytic,2);
+0142 
+0143 <span class="comment">%Now solve with curremts</span>
+0144 <span class="comment">%Ok now lets's solve with the analytic currents</span>
+0145 IRHS = zeros(nnodesF+nelecsF,1);
+0146 IRHS(nnodesF+1)=I_analytic(1);
+0147 IRHS(nnodesF+2)=I_analytic(2);
+0148 
+0149 <span class="comment">%Create index vector and eliminate ground node equation from index</span>
+0150 groundnode=mdl.gnd_node; idx=1:size(At,1); idx(groundnode)=[];
+0151 
+0152 <span class="comment">%Ok now create empty potentials</span>
+0153 uU = zeros(nnodesF+nelecsF,1);
+0154 uU(idx) = <a href="../../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>(At(idx,idx),IRHS(idx,:));
+0155 <span class="comment">%Subtract zero of potential - x=pi/2 i.e. from symmetry applied potential</span>
+0156 uU = uU-0.5*(uU(13)+uU(19));
+0157 
+0158 <span class="comment">%Now the potential on stim electrodes</span>
+0159 Uvec_FEM(1) = uU(nnodesF+1);
+0160 Uvec_FEM(2) = uU(nnodesF+2);
+0161 
+0162 <span class="comment">%Error just on stim electrodes</span>
+0163 U_errS=norm(Uvec-Uvec_FEM',2);
+0164 
+0165 <span class="comment">%Error just on meas (point) electrodes</span>
+0166 bound_nodes_not_elecs=img.fwd_model.bound_nodes_not_elecs;
+0167 UvecM=volt_analytic(bound_nodes_not_elecs);
+0168 UvecM_FEM=uU(bound_nodes_not_elecs);
+0169 U_errM = norm(UvecM-UvecM_FEM);
+0170 
+0171 <span class="comment">%Error on stim and meas(point) electrodes</span>
+0172 UvecSM=[Uvec',UvecM'];
+0173 UvecSM_FEM=[Uvec_FEM,UvecM_FEM'];
+0174 U_errSM=norm(UvecSM-UvecSM_FEM);
+0175 
+0176 <span class="comment">%Plot the solution</span>
+0177 <span class="keyword">if</span>(plot_on==1 &amp;&amp; (z_c1==0.00001 || z_c2==1000) &amp;&amp; strcmp(mdl.approx_type,<span class="string">'tri10'</span>))
+0178 figure; plot3(img.fwd_model.nodes(:,1),img.fwd_model.nodes(:,2),volt_nodes,<span class="string">'r*'</span>)
+0179 hold on; plot3(img.fwd_model.nodes(:,1),img.fwd_model.nodes(:,2),volt_analytic,<span class="string">'b*'</span>);
+0180 title(<span class="string">'Nodal analytic and FEM solutions to CEM'</span>);
+0181 legend(<span class="string">'FEM solution'</span>,<span class="string">'Analytic solution'</span>);
+0182 xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'y'</span>); zlabel(<span class="string">'u(x,y)'</span>)
+0183 
+0184 <span class="keyword">if</span>(z_c1==0.00001)
+0185     <a href="../../../../eidors/graphics/matlab/print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a> error_rates_contact_impedance02a.png;
+0186 <span class="keyword">elseif</span>(z_c1==1000)
+0187     <a href="../../../../eidors/graphics/matlab/print_convert.html" class="code" title="function print_convert(filename, varargin)">print_convert</a> error_rates_contact_impedance02b.png;
+0188 <span class="keyword">end</span>
+0189 <span class="keyword">end</span>
+0190 
+0191 <span class="comment">%Get the elements we want</span>
+0192 v=1:nelems;
+0193 
+0194 <span class="comment">%Get the basis and gradients at the knot points</span>
+0195 eletype=mdl.approx_type; 
+0196 <span class="keyword">if</span>(strcmp(eletype,<span class="string">'tri3'</span>))
+0197     dim=2; order1=0; order2=2;
+0198 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tri6'</span>))    
+0199     dim=2; order1=2; order2=4;
+0200 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tri10'</span>))
+0201     dim=2; order1=4; order2=7;
+0202 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tet4'</span>))
+0203     dim=3; order1=0; order2=2;
+0204 <span class="keyword">elseif</span>(strcmp(eletype,<span class="string">'tet10'</span>))
+0205     dim=3; order1=2; order2=4;
+0206 <span class="keyword">else</span>  
+0207     error(<span class="string">'Element type not recognised for integration rules'</span>);
+0208 <span class="keyword">end</span>
+0209 <span class="comment">%Find shape function gradient at knot points</span>
+0210 [weight1,xcoord1,ycoord1,zcoord1]=<a href="../../../../eidors/solvers/forward/gauss_points.html" class="code" title="function [w,x,y,z]=gauss_points(dim,order)">gauss_points</a>(dim,order1);
+0211 <span class="keyword">for</span> kk=1:size(weight1,2)
+0212     dphi_sol(:,:,kk) = <a href="../../../../eidors/solvers/forward/element_d_shape_function.html" class="code" title="function dshape = element_d_shape_function(type,x,y,z)">element_d_shape_function</a>(eletype,xcoord1(kk),ycoord1(kk),zcoord1(kk));
+0213 <span class="keyword">end</span>
+0214 <span class="comment">%Find shape functions at knot points (these are higher order ones now)</span>
+0215 [weight2,xcoord2,ycoord2,zcoord2]=<a href="../../../../eidors/solvers/forward/gauss_points.html" class="code" title="function [w,x,y,z]=gauss_points(dim,order)">gauss_points</a>(dim,order2);
+0216 <span class="keyword">for</span> kk=1:size(weight2,2)
+0217     phi_sol(:,kk) = <a href="../../../../eidors/solvers/forward/element_shape_function.html" class="code" title="function shape = element_shape_function(type,x,y,z)">element_shape_function</a>(eletype,xcoord2(kk),ycoord2(kk),zcoord2(kk));
+0218 <span class="keyword">end</span>
+0219 <span class="comment">%Initialsie the erros</span>
+0220 H1semi_error=zeros(nelems,1);
+0221 L2_error=zeros(nelems,1);
+0222 
+0223 <span class="comment">%Loop through elems and calculate the error</span>
+0224 <span class="keyword">for</span> j=1:length(v)  
+0225     <span class="comment">%Get the element</span>
+0226     i=v(j);    
+0227     <span class="comment">%Get the node numbers</span>
+0228     eleminodelist=elemstruc(i,:);
+0229     
+0230     <span class="comment">%List by row of coordinate on the element</span>
+0231     thise = nodestruc(eleminodelist,:);
+0232     
+0233     <span class="comment">%Find the Jacobian of the mapping in 2D and 3D</span>
+0234     jacobianelem = [thise(2,1)-thise(1,1),thise(2,2)-thise(1,2); <span class="keyword">...</span>
+0235             thise(3,1)-thise(1,1),thise(3,2)-thise(1,2)];  
+0236     
+0237     <span class="comment">%Find the magnitude of the Jacobian of the mapping</span>
+0238     <span class="comment">% magjacelem=det(jacobianelem);</span>
+0239     magjacelem=abs(det(jacobianelem));
+0240     
+0241     <span class="comment">%L2 error of solution</span>
+0242     <span class="comment">%Loop over the weights and evaluate the sensitivty contribution</span>
+0243     <span class="keyword">for</span> ii=1:size(weight2,2)
+0244         <span class="comment">%Find the isoparametric map basis functions at the local point</span>
+0245         map=<a href="../../../../eidors/solvers/forward/element_shape_function.html" class="code" title="function shape = element_shape_function(type,x,y,z)">element_shape_function</a>(<span class="string">'tri3'</span>,xcoord2(ii),ycoord2(ii),zcoord2(ii));
+0246         
+0247         <span class="comment">%Map our local coordinate to global coordinates using map</span>
+0248         cart(1)=thise(1,1)*map(1)+thise(2,1)*map(2)+thise(3,1)*map(3);
+0249         cart(2)=thise(1,2)*map(1)+thise(2,2)*map(2)+thise(3,2)*map(3);      
+0250         
+0251         <span class="comment">%Find the analytic solution at this point</span>
+0252         analytic_sol = Ac(1);        
+0253         <span class="keyword">if</span>(cart(2)==0)
+0254            <span class="keyword">for</span> k=1:n_trunc
+0255            analytic_sol = analytic_sol + (Ac(k+1))*cos(k*cart(1));
+0256            <span class="keyword">end</span>
+0257         <span class="keyword">else</span>
+0258            <span class="keyword">for</span> k=1:n_int_trunc
+0259            analytic_sol = analytic_sol + <span class="keyword">...</span>
+0260                (Ac(k+1))*cos(k*cart(1))*cosh(k*(pi-cart(2)))/cosh(k*pi);
+0261            <span class="keyword">end</span>
+0262         <span class="keyword">end</span>
+0263         
+0264         <span class="comment">%Find the fem solution</span>
+0265         elemi_volt_nodes=volt_nodes(eleminodelist)'; <span class="comment">%Vector</span>
+0266         fem_sol=elemi_volt_nodes*phi_sol(:,ii);
+0267         
+0268         <span class="comment">%Difference in solution square</span>
+0269         diff_sol=(fem_sol-analytic_sol)^2;
+0270                                 
+0271         <span class="comment">%Compute the difference and multiply by weight</span>
+0272         diff_sol=diff_sol*weight2(ii);
+0273         
+0274         <span class="comment">%Add the contribution to the elemental sensitivity</span>
+0275         L2_error(i)=L2_error(i)+diff_sol;        
+0276     <span class="keyword">end</span>
+0277     
+0278     
+0279     <span class="comment">%H1 error of solution</span>
+0280     <span class="comment">%Loop over the weights and evaluate the sensitivty contribution</span>
+0281     <span class="keyword">for</span> ii=1:size(weight1,2)
+0282         <span class="comment">%Find the isoparametric map basis functions at the local point</span>
+0283         map=<a href="../../../../eidors/solvers/forward/element_shape_function.html" class="code" title="function shape = element_shape_function(type,x,y,z)">element_shape_function</a>(<span class="string">'tri3'</span>,xcoord1(ii),ycoord1(ii),zcoord1(ii));
+0284         
+0285         <span class="comment">%Map our local coordinate to global coordinates using map</span>
+0286         cart(1)=thise(1,1)*map(1)+thise(2,1)*map(2)+thise(3,1)*map(3);
+0287         cart(2)=thise(1,2)*map(1)+thise(2,2)*map(2)+thise(3,2)*map(3);      
+0288                       
+0289         <span class="comment">%Find the analytic solution at this point</span>
+0290         analytic_sol(1) = 0; analytic_sol(2)=0;        
+0291         <span class="keyword">if</span>(cart(2)==0)
+0292            <span class="keyword">for</span> k=1:n_trunc
+0293            analytic_sol(1) = analytic_sol(1) - <span class="keyword">...</span>
+0294                k*(Ac(k+1))*sin(k*cart(1));
+0295            analytic_sol(2) = analytic_sol(2) - <span class="keyword">...</span>
+0296                k*(Ac(k+1))*cos(k*cart(1))*tanh(k*pi);           
+0297            <span class="keyword">end</span>
+0298         <span class="keyword">else</span>
+0299            <span class="keyword">for</span> k=1:n_int_trunc
+0300            analytic_sol(1) = analytic_sol(1) - <span class="keyword">...</span>
+0301                k*(Ac(k+1))*sin(k*cart(1))*cosh(k*(pi-cart(2)))/cosh(k*pi);
+0302            analytic_sol(2) = analytic_sol(2) - <span class="keyword">...</span>
+0303                k*(Ac(k+1))*cos(k*cart(1))*sinh(k*(pi-cart(2)))/cosh(k*pi);  
+0304            <span class="keyword">end</span>
+0305         <span class="keyword">end</span>        
+0306         
+0307         
+0308         <span class="comment">%Find the fem solution gradient</span>
+0309         elemi_volt_nodes=volt_nodes(eleminodelist)'; <span class="comment">%Vector of local sols</span>
+0310         fem_sol=elemi_volt_nodes*(jacobianelem\dphi_sol(:,:,ii))'; <span class="comment">%Gradient</span>
+0311         
+0312         <span class="comment">%Difference in solution square</span>
+0313         diff_sol=(fem_sol-analytic_sol)*(fem_sol-analytic_sol)';
+0314                                 
+0315         <span class="comment">%Compute the difference and multiply by weight</span>
+0316         diff_sol=diff_sol*weight1(ii);
+0317         
+0318         <span class="comment">%Add the contribution to the elemental sensitivity</span>
+0319         H1semi_error(i)=H1semi_error(i)+diff_sol;        
+0320     <span class="keyword">end</span>    
+0321     
+0322     <span class="comment">%We have the sensitivity on reference and multiply by Jacobian</span>
+0323     H1semi_error(i)=H1semi_error(i)*magjacelem;   
+0324     L2_error(i)=L2_error(i)*magjacelem; 
+0325             
+0326     <span class="comment">%Total error is the sum</span>
+0327     H1_error(i)=H1semi_error(i)+L2_error(i);
+0328 <span class="keyword">end</span>
+0329 
+0330 
+0331 <span class="comment">%Now find the total H1_error and square root to get norm</span>
+0332 H1_tot_error=sum(H1_error); H1_tot_error=sqrt(H1_tot_error);
+0333 H1semi_tot_error=sum(H1semi_error); H1semi_tot_error=sqrt(H1semi_tot_error);
+0334 L2_tot_error=sum(L2_error); L2_tot_error=sqrt(L2_tot_error);
+0335 
+0336 
+0337 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

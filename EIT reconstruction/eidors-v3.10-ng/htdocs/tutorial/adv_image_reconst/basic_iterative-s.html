@@ -1,0 +1,267 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Iterative Gauss Newton reconstruction in 3D
+</h2>
+
+Here we create a simple 3D shape and iteratively
+reconstruct the image.
+
+<pre>
+% Create simulation data $Id: basic_iterative01.m 5524 2017-06-07 20:17:16Z aadler $
+
+% 3D Model
+imdl_3d= mk_common_model('n3r2',[16,2]);
+show_fem(imdl_3d.fwd_model);
+
+sim_img= mk_image( imdl_3d.fwd_model, 1);
+
+% set homogeneous conductivity and simulate
+homg_data=fwd_solve( sim_img );
+
+% set inhomogeneous conductivity and simulate
+sim_img.elem_data([390,391,393,396,402,478,479,480,484,486, ...
+                   664,665,666,667,668,670,671,672,676,677, ...
+                   678,755,760,761])= 10;
+sim_img.elem_data([318,319,321,324,330,439,440,441,445,447, ...
+                   592,593,594,595,596,598,599,600,604,605, ...
+                   606,716,721,722])= 0.1;
+inh_data=fwd_solve( sim_img );
+
+
+slice_posn = [inf,inf,2.2,1,1; ...
+              inf,inf,1.5,1,2;
+              inf,inf,0.8,1,3];
+show_slices(sim_img,slice_posn);
+
+print -r75 -dpng basic_iterative01a.png
+
+</pre>
+
+<center>
+<img src="basic_iterative01a.png">
+<br><i> Figure:</i>
+Three slices of a simple 3D shape to image
+(from top to bottom, at z=2.2, z=1.5, z=0.8)
+</center>
+
+<h3> 
+Reconstruction with different iterations
+</h3>
+
+We use the 3D Gauss-Newton reconstruction
+algorithms written by Nick Polydorides
+
+<pre>
+% Reconstruct images $Id: basic_iterative02.m 5524 2017-06-07 20:17:16Z aadler $
+
+% Set reconstruction inv_solve_gn
+imdl_3d.solve= @inv_solve_gn;
+imdl_3d.RtR_prior= @prior_laplace;
+imdl_3d.hyperparameter.value= .01;
+imdl_3d.inv_solve_gn.return_working_variables = 1;
+iter_res = @(img) [size(img.inv_solve_gn.r,1)-1, img.inv_solve_gn.r(end,1)];
+
+
+% Number of iterations and tolerance (defaults)
+imdl_3d.inv_solve_gn.max_iterations = 1;
+
+%Add 30dB SNR noise to data
+noise_level= std(inh_data.meas - homg_data.meas)/10^(30/20);
+noise_level=0;
+inh_data.meas = inh_data.meas + noise_level* ...
+                randn(size(inh_data.meas));
+
+% Reconstruct Images: 1 Iteration
+subplot(131)
+imdl_3d.inv_solve_gn.max_iterations = 1;
+rec_img= inv_solve(imdl_3d, homg_data, inh_data);
+show_slices(rec_img,slice_posn);
+title(sprintf('iter=%d resid=%5.3f',iter_res(rec_img)));
+
+
+% Reconstruct Images: 2 Iterations
+subplot(132)
+imdl_3d.inv_solve_gn.max_iterations = 2;
+rec_img= inv_solve(imdl_3d, homg_data, inh_data);
+show_slices(rec_img,slice_posn);
+title(sprintf('iter=%d resid=%5.3f',iter_res(rec_img)));
+
+% Reconstruct Images: 5 Iterations -- but stops at 4 (not improving)
+subplot(133)
+imdl_3d.inv_solve_gn.max_iterations = 5;
+rec_img= inv_solve(imdl_3d, homg_data, inh_data);
+show_slices(rec_img,slice_posn);
+title(sprintf('iter=%d resid=%5.3f',iter_res(rec_img)));
+
+
+print -r75 -dpng basic_iterative02a.png
+
+</pre>
+
+<center>
+<img src="basic_iterative02a.png">
+<br><i> Figure:</i>
+Images from GN reconstructions. From left to right:
+1 iteration, 2 iterations, 4 iterations. Little
+difference is seen in this case, mostly because
+this is a difference imaging problem with small 
+contrasts.
+</center>
+
+<h3> 
+Residuals
+</h3>
+To show the residuals, we can use
+<pre>
+% Plot residuals $Id: basic_iterative03.m 5558 2017-06-18 17:21:58Z aadler $
+subplot(211);
+r = rec_img.inv_solve_gn.r;
+k = size(r,1)-1;
+
+x = 1:(k+1); % k+1 => look at the solve after last iteration
+y = r(x, :);
+y = y ./ repmat(max(y,[],1),size(y,1),1) * 100;
+plot(x-1, y, 'o-', 'linewidth', 2, 'MarkerSize', 10);
+title('residuals');
+axis tight;
+ylabel('residual (% of max)');
+xlabel('iteration');
+set(gca, 'xtick', x);
+set(gca, 'xlim', [0 max(x)-1]);
+legend('residual','meas. misfit','prior misfit');
+legend('Location', 'East');
+print_convert basic_iterative03a.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/adv_image_reconst/basic_iterative03a.png">
+<br><i> Figure:</i>
+Residals and misfit curves vs iteration
+</center>
+In order to view the decreasing norm of the
+difference
+ (<i>V</i><sub>sim</sub> &minus;
+  <i>V</i><sub>meas</sub>), one can do the 
+following (using <tt>img.inv_solve_gn.return_working_variables = 1;</tt>)
+<pre>
+&gt;&gt;rec_img.inv_solve_gn.r(:,1)
+ans =
+    0.0365
+    0.0090
+    0.0043
+    0.0028
+    0.0028
+</pre>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-06-07 16:30:02 -0400 (Wed, 07 Jun 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

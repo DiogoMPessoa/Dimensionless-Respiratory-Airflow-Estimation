@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of call_gmsh</title>
+  <meta name="keywords" content="call_gmsh">
+  <meta name="description" content="call_gmsh: call Gmsh to create a vol_file from a geo_file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">gmsh</a> &gt; call_gmsh.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/gmsh&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>call_gmsh
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>call_gmsh: call Gmsh to create a vol_file from a geo_file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function status= call_gmsh(geo_file, dim,extra) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> call_gmsh: call Gmsh to create a vol_file from a geo_file
+ status= call_gmsh(geo_file, dim, extra)
+  staus = 0 -&gt; success , negative -&gt; failure
+
+ geo_file = geometry file (input)
+ dim      = model dimenstion (default: 2)
+ extra    = additional string options for gmsh (see gmsh manual at
+            http://geuz.org/gmsh/doc/texinfo/gmsh.html#Command_002dline-options</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/interface/system_cmd.html" class="code" title="function [status,result] = system_cmd( cmd )">system_cmd</a>	SYSTEM_CMD: issue system commands, and try to compensate for</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="create_circle_mesh_gmsh.html" class="code" title="function mdl = create_circle_mesh_gmsh(basename, center, rad, elem_size )">create_circle_mesh_gmsh</a>	Create a 2D Circular FEM using GMSH</li><li><a href="../../../eidors/models/gmsh_stl2tet.html" class="code" title="function mdl = gmsh_stl2tet(stlfile, maxh, extra)">gmsh_stl2tet</a>	GMSH_STL2TET creates a tetrahedral mesh from an stl file</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function status= call_gmsh(geo_file, dim,extra)</a>
+0002 <span class="comment">% call_gmsh: call Gmsh to create a vol_file from a geo_file</span>
+0003 <span class="comment">% status= call_gmsh(geo_file, dim, extra)</span>
+0004 <span class="comment">%  staus = 0 -&gt; success , negative -&gt; failure</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% geo_file = geometry file (input)</span>
+0007 <span class="comment">% dim      = model dimenstion (default: 2)</span>
+0008 <span class="comment">% extra    = additional string options for gmsh (see gmsh manual at</span>
+0009 <span class="comment">%            http://geuz.org/gmsh/doc/texinfo/gmsh.html#Command_002dline-options</span>
+0010 
+0011 <span class="comment">% (C) 2009-2012 Bartosz Sawicki and Bartlomiej Grychtol</span>
+0012 <span class="comment">% License: GPL  version 2</span>
+0013 <span class="comment">% $Id: call_gmsh.m 4162 2013-06-10 20:22:20Z bgrychtol $</span>
+0014 
+0015 <span class="comment">% default to 2-D model</span>
+0016 <span class="keyword">if</span> nargin&lt;2
+0017     dim = 2;
+0018 <span class="keyword">end</span>
+0019 <span class="keyword">if</span> nargin&lt;3
+0020    extra = [];
+0021 <span class="keyword">end</span>
+0022 
+0023 cache_path = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(<span class="string">'cache_path'</span>);
+0024 
+0025 <span class="keyword">if</span>  exist(<span class="string">'OCTAVE_VERSION'</span>) <span class="comment">% FIXME</span>
+0026    islinux =1;
+0027 <span class="keyword">elseif</span> ~strncmp(computer,<span class="string">'PC'</span>,2) <span class="comment">% Don't know if we have isunix</span>
+0028    islinux =1;
+0029 <span class="keyword">else</span>
+0030    islinux =0;
+0031 <span class="keyword">end</span>
+0032 
+0033 <span class="comment">% Gmsh executable filename</span>
+0034 <span class="keyword">if</span>  islinux
+0035    gmsh_name = <span class="string">'gmsh'</span>;
+0036 <span class="keyword">else</span>
+0037    gmsh_name = [cache_path,<span class="string">'/gmsh'</span>];
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">while</span>( 1 )
+0041     ldpath=<span class="string">''</span>;
+0042     <span class="keyword">if</span>  ~exist(<span class="string">'OCTAVE_VERSION'</span>) &amp;&amp; ~isempty(strfind(system_dependent(<span class="string">'getos'</span>),<span class="string">'Linux'</span>))
+0043         islinux =1;
+0044     <span class="keyword">else</span>
+0045         islinux =0;
+0046     <span class="keyword">end</span>
+0047     
+0048     status= <a href="../../../eidors/interface/system_cmd.html" class="code" title="function [status,result] = system_cmd( cmd )">system_cmd</a>(sprintf( <span class="string">'%s &quot;%s&quot; -%d -v 2 %s'</span>,  gmsh_name, geo_file, dim, extra));
+0049     
+0050     <span class="keyword">if</span> status==0; <span class="keyword">break</span>; <span class="keyword">end</span>
+0051     
+0052     <span class="keyword">if</span> islinux
+0053         disp([<span class="string">'It seems you are running Linux and Gmsh has not worked. '</span> <span class="keyword">...</span>
+0054             <span class="string">'Check that it is installed and on the path. \n'</span> <span class="keyword">...</span>
+0055             <span class="string">'Perhaps LD_LIBRARY_PATH needs to be set?'</span> ]);
+0056         <span class="keyword">break</span>;
+0057     <span class="keyword">else</span>
+0058         fprintf([ <span class="keyword">...</span>
+0059             <span class="string">'Gmsh call failed. Is Gmsh installed and on the search path?\n'</span> <span class="keyword">...</span>
+0060             <span class="string">'You are running under windows, I can attempt to create\n'</span> <span class="keyword">...</span>
+0061             <span class="string">'a batch file to access gmsh.\n'</span> <span class="keyword">...</span>
+0062             <span class="string">'Please enter the directory in which to find gmsh.\n'</span> <span class="keyword">...</span>
+0063             <span class="string">'If you dont have a copy, download it from'</span> <span class="keyword">...</span>
+0064             <span class="string">'http://www.geuz.org/gmsh/\n\n'</span> ]);
+0065         
+0066         gmsh_path = input(<span class="string">'gmsh_path? [or i=ignore, e=error] '</span>,<span class="string">'s'</span>);
+0067         <span class="keyword">if</span> strcmp(gmsh_name,<span class="string">'i'</span>); <span class="keyword">break</span>;<span class="keyword">end</span>
+0068         <span class="keyword">if</span> strcmp(gmsh_name,<span class="string">'e'</span>); error(<span class="string">'user requested'</span>),<span class="keyword">end</span>;
+0069         <span class="keyword">if</span> exist( sprintf(<span class="string">'%s/gmsh.exe'</span>,gmsh_path) , <span class="string">'file'</span> ) || <span class="keyword">...</span>
+0070                 exist( sprintf(<span class="string">'%s/bin/gmsh.exe'</span>,gmsh_path) , <span class="string">'file'</span> )
+0071             disp(<span class="string">'Found gmsh'</span>);
+0072             gmsh_exe = gmsh_path;
+0073             <span class="keyword">if</span> exist( sprintf(<span class="string">'%s/bin/gmsh.exe'</span>,gmsh_path) , <span class="string">'file'</span> )
+0074                 gmsh_exe = [gmsh_path <span class="string">'/bin'</span>];
+0075             <span class="keyword">end</span>
+0076             
+0077             
+0078             fid= fopen([cache_path, <span class="string">'/gmsh.bat'</span>],<span class="string">'w'</span>);
+0079             fprintf(fid,<span class="string">'&quot;%s/gmsh.exe&quot; %%*\n'</span>, gmsh_exe);
+0080             fclose(fid);
+0081         <span class="keyword">end</span>
+0082     <span class="keyword">end</span>
+0083 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

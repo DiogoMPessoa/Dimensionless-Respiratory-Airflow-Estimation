@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of eidors_readimg</title>
+  <meta name="keywords" content="eidors_readimg">
+  <meta name="description" content="EIDORS readimg - read reconstructed image files from">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">interface</a> &gt; eidors_readimg.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/interface&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>eidors_readimg
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>EIDORS readimg - read reconstructed image files from</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function img = eidors_readimg( fname, format ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> EIDORS readimg - read reconstructed image files from
+       various EIT equipment manufacturers
+  img = eidors_readimg( fname, format )
+
+ Currently the list of supported file formats is:
+    - MCEIT (Goettingen / Viasys) &quot;igt&quot; file format 
+        format = &quot;IGT&quot; or &quot;MCEIT&quot;
+    - DIXTAL (Goettingen / Viasys) &quot;img&quot; file format 
+        format = &quot;DIXTAL-IMG&quot;
+    - NATIVE &quot;e3d&quot; file format
+        format = &quot;e3d&quot; or &quot;NATIVE&quot;
+
+ Usage
+ img = eidors_readimg( fname, format )
+     img   = eidors image structure
+     img.elem_data = reconstructed image matrix NumPixels x NumFrames
+     fname = file name
+
+  If format is unspecified, we attempt to autodetect.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="igt2img.html" class="code" title="function img = igt2img(igt)">igt2img</a>	IGT2IMG constructs an EIDORS IMG struct from an IGT frames-by-912 matrix.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function img = mceit_readimg( fname )</a></li><li><a href="#_sub2" class="code">function img = native_readimg( fname )</a></li><li><a href="#_sub3" class="code">function [dixtalImages]=read_dixtal_img(file_name,skipHeader,Fs);</a></li><li><a href="#_sub4" class="code">function [dixtalDatas,images]=ExtractDixtalDatas(images);</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function img = eidors_readimg( fname, format )</a>
+0002 <span class="comment">% EIDORS readimg - read reconstructed image files from</span>
+0003 <span class="comment">%       various EIT equipment manufacturers</span>
+0004 <span class="comment">%  img = eidors_readimg( fname, format )</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Currently the list of supported file formats is:</span>
+0007 <span class="comment">%    - MCEIT (Goettingen / Viasys) &quot;igt&quot; file format</span>
+0008 <span class="comment">%        format = &quot;IGT&quot; or &quot;MCEIT&quot;</span>
+0009 <span class="comment">%    - DIXTAL (Goettingen / Viasys) &quot;img&quot; file format</span>
+0010 <span class="comment">%        format = &quot;DIXTAL-IMG&quot;</span>
+0011 <span class="comment">%    - NATIVE &quot;e3d&quot; file format</span>
+0012 <span class="comment">%        format = &quot;e3d&quot; or &quot;NATIVE&quot;</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Usage</span>
+0015 <span class="comment">% img = eidors_readimg( fname, format )</span>
+0016 <span class="comment">%     img   = eidors image structure</span>
+0017 <span class="comment">%     img.elem_data = reconstructed image matrix NumPixels x NumFrames</span>
+0018 <span class="comment">%     fname = file name</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%  If format is unspecified, we attempt to autodetect.</span>
+0021 
+0022 <span class="comment">% (C) 2009 by Bartlomiej Grychtol. Licensed under GPL v2 or v3</span>
+0023 <span class="comment">% $Id: eidors_readimg.m 4151 2013-06-07 13:41:16Z aadler $</span>
+0024 
+0025 <span class="keyword">if</span> ~exist(fname,<span class="string">'file'</span>)
+0026    error([fname,<span class="string">' does not exist'</span>]);
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="keyword">if</span> nargin &lt; 2
+0030 <span class="comment">% unspecified file format, autodetect</span>
+0031    dotpos = find(fname == <span class="string">'.'</span>);
+0032    <span class="keyword">if</span> isempty( dotpos ) 
+0033       error(<span class="string">'file format unspecified, can`t autodetect'</span>);
+0034    <span class="keyword">else</span>
+0035       dotpos= dotpos(end);
+0036       format= fname( dotpos+1:end );
+0037    <span class="keyword">end</span>
+0038 <span class="keyword">end</span>
+0039 fmt= lower(format);
+0040 
+0041 <span class="keyword">switch</span> fmt
+0042     <span class="keyword">case</span> {<span class="string">'igt'</span>,<span class="string">'mceit'</span>}
+0043         img = <a href="#_sub1" class="code" title="subfunction img = mceit_readimg( fname )">mceit_readimg</a>( fname );
+0044     <span class="keyword">case</span> {<span class="string">'dixtal-img'</span>}
+0045         img = <a href="#_sub3" class="code" title="subfunction [dixtalImages]=read_dixtal_img(file_name,skipHeader,Fs);">read_dixtal_img</a>( fname, 1, [] ); <span class="comment">% Guess that FS=50</span>
+0046     <span class="keyword">case</span> {<span class="string">'e3d'</span>,<span class="string">'native'</span>}
+0047         img = <a href="#_sub2" class="code" title="subfunction img = native_readimg( fname )">native_readimg</a>( fname );
+0048     <span class="keyword">otherwise</span>
+0049         error(<span class="string">'eidors_readdata: file &quot;%s&quot; format unknown'</span>, fmt);
+0050 <span class="keyword">end</span>
+0051 
+0052 
+0053 
+0054 
+0055 <span class="comment">%%</span>
+0056 <a name="_sub1" href="#_subfunctions" class="code">function img = mceit_readimg( fname )</a>
+0057 <span class="comment">% mceit_readimg - reads in IGT files.</span>
+0058 
+0059 fid = fopen(fname,<span class="string">'r'</span>);
+0060 igt = fread(fid, inf,<span class="string">'4*float'</span>);
+0061 fclose(fid);
+0062 
+0063 igt = reshape(igt, [], 912);
+0064 
+0065 img = <a href="igt2img.html" class="code" title="function img = igt2img(igt)">igt2img</a>(igt);
+0066 
+0067 img.name = [<span class="string">'Read from '</span> fname];
+0068 
+0069 
+0070 <span class="comment">%%</span>
+0071 <a name="_sub2" href="#_subfunctions" class="code">function img = native_readimg( fname )</a>
+0072 <span class="comment">% native_readimg - reads in native E3D files.</span>
+0073 <span class="comment">% E3D file is a zipped matlab v6 compatible .mat file called &quot;e3d.temp&quot;</span>
+0074 <span class="comment">% containing one eidors image struct variable named &quot;img&quot;.</span>
+0075 
+0076 
+0077 <span class="keyword">if</span> 1 <span class="comment">% COMPATIBILITY WITH Matlab 6.5 and Octave we can't use output files</span>
+0078    unzip(fname);
+0079    tempfile = <span class="string">'e3d.temp'</span>;
+0080 <span class="keyword">else</span>
+0081    files = unzip(fname);
+0082    <span class="keyword">if</span> numel(files) &gt; 1
+0083        error([<span class="string">'File %s is not a proper E3D file. '</span><span class="keyword">...</span>
+0084            <span class="string">'The archive contains more than one file'</span>],fname);
+0085    <span class="keyword">end</span>
+0086    tempfile = files{1};
+0087 <span class="keyword">end</span>
+0088 
+0089 S = load(tempfile,<span class="string">'-mat'</span>);
+0090 delete(tempfile);
+0091 <span class="keyword">if</span> numel(fieldnames(S)) &gt; 1
+0092      warning([<span class="string">'File %s is not a proper E3D file. '</span><span class="keyword">...</span>
+0093         <span class="string">'The mat file contains more than one variable. Strugling on.'</span>],fname);
+0094 <span class="keyword">end</span>
+0095 
+0096 <span class="keyword">if</span> isfield(S,<span class="string">'img'</span>)
+0097     img = S.img;
+0098 <span class="keyword">else</span>
+0099     error([<span class="string">'File %s is not a proper E3D file. '</span><span class="keyword">...</span>
+0100         <span class="string">'The mat file does not contain an &quot;img&quot; variable.'</span>],fname);
+0101 <span class="keyword">end</span>
+0102 
+0103 
+0104 
+0105 <a name="_sub3" href="#_subfunctions" class="code">function [dixtalImages]=read_dixtal_img(file_name,skipHeader,Fs);</a>
+0106 <span class="comment">% [dixtalImages]=OpenDixtalImages(file_name,skipHeader,Fs)</span>
+0107 <span class="comment">%</span>
+0108 <span class="comment">% Read the Dixtal images at file_name</span>
+0109 <span class="comment">% input:</span>
+0110 <span class="comment">%       - file_name:  Name and place of the dixtal file</span>
+0111 <span class="comment">%       - skipHeader: skip Dixtal header</span>
+0112 <span class="comment">%       - Fs:         sampling frequency (50 if empty)</span>
+0113 <span class="comment">%</span>
+0114 <span class="comment">% output:</span>
+0115 <span class="comment">%       - dixtalImages: structure with the following fields:</span>
+0116 <span class="comment">%           Fs:      sampling frequency</span>
+0117 <span class="comment">%           datas:   analogue channel 2</span>
+0118 <span class="comment">%           images:  Dixtal images</span>
+0119 
+0120 <span class="keyword">if</span>(isempty(Fs)==0)
+0121     dixtalImages.Fs = Fs;
+0122 <span class="keyword">else</span>
+0123     dixtalImages.Fs = 50;
+0124 <span class="keyword">end</span>
+0125 
+0126 fid=fopen(file_name,<span class="string">'r'</span>,<span class="string">'ieee-be'</span>);
+0127 [fname, mode, mformat] = fopen(fid);
+0128 
+0129 <span class="comment">%if skip header is selceted, skip the header</span>
+0130 <span class="keyword">if</span> (skipHeader == 1)
+0131     <span class="keyword">for</span> i=1:42
+0132         tline = fgetl(fid);
+0133     <span class="keyword">end</span>
+0134 <span class="keyword">end</span>
+0135 a=fread(fid,<span class="string">'*float32'</span>,<span class="string">'ieee-be'</span>);
+0136 fclose(fid);
+0137 
+0138 <span class="comment">% Reshape the Images</span>
+0139 offset = 1*32+4;
+0140 imageL = 32*32 + offset;
+0141 long = floor(length(a)/(imageL));
+0142 images = reshape(a(1:long*imageL),imageL,long);
+0143 <span class="comment">% extracts data chanels</span>
+0144 [dixtalImages.datas,dixtalImages.images] = <a href="#_sub4" class="code" title="subfunction [dixtalDatas,images]=ExtractDixtalDatas(images);">ExtractDixtalDatas</a>(images);
+0145 
+0146 <a name="_sub4" href="#_subfunctions" class="code">function [dixtalDatas,images]=ExtractDixtalDatas(images);</a>
+0147 <span class="comment">% [dixtalAnalogs,images]=ExtractDixtalDatas(fname)</span>
+0148 <span class="comment">% Extract the analog recording and the ECG from the reconstructed images of</span>
+0149 <span class="comment">%       - dixtalDatas structure with the following fields:</span>
+0150 <span class="comment">%           analog1: analogue channel 1</span>
+0151 <span class="comment">%           analog2: analogue channel 2</span>
+0152 <span class="comment">%           tbc_ecg: ECG correctness TO BE CONFIRMED</span>
+0153 <span class="comment">%           tbc_timeStamp: Timestamp correctness TO BE CONFIRMED</span>
+0154 <span class="comment">%           tbc_sync1: synchronization signal correctness TO BE CONFIRMED</span>
+0155 <span class="comment">%           tbc_sync2: synchronization signal correctness TO BE CONFIRMED</span>
+0156 <span class="comment">% !All fields starting with tbc_ are first guess signal is saved to not loos</span>
+0157 <span class="comment">% the data but shall be investigated!</span>
+0158 <span class="comment">%       - images: EIT images without the Dixtal data</span>
+0159 
+0160 
+0161 <span class="comment">% read the datas</span>
+0162 datas=[];
+0163 imageL = size(images,2);
+0164 <span class="keyword">for</span> i=1:36
+0165     datas(i,:) = images(32*32+i:imageL:<span class="keyword">end</span>,:);
+0166 <span class="keyword">end</span>
+0167 <span class="comment">%remove the datas form the image</span>
+0168 images = images(1:32*32,:);
+0169 
+0170 dixtalDatas.analog1 = reshape(datas(8:12,:),1,5*size(datas,2));
+0171 dixtalDatas.analog2 = reshape(datas(14:18,:),1,5*size(datas,2));
+0172 dixtalDatas.tbc_ecg = reshape(datas(20:24,:),1,5*size(datas,2));
+0173 dixtalDatas.tbc_sync1 = datas(1,:);
+0174 dixtalDatas.tbc_sync2 = datas(25,:);
+0175 dixtalDatas.tbc_timeStamp = datas(2,:);
+0176</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

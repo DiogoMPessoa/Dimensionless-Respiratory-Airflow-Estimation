@@ -1,0 +1,304 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of convert_img_units</title>
+  <meta name="keywords" content="convert_img_units">
+  <meta name="description" content="CONVERT_IMG_UNITS change image data units">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; convert_img_units.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>convert_img_units
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CONVERT_IMG_UNITS change image data units</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function y = convert_img_units(img,arg1,arg2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CONVERT_IMG_UNITS change image data units 
+  img = convert_img_units(img,new_unit) converts img.elem_data or img.node_data
+  expressed in img.current_params into different units for the same 
+  physical property
+ 
+ Examples: 
+  img = mk_image(mdl, 2, 'resisitivity');
+  img = convert_img_units(img, 'conductivity');
+
+  img = mk_image(mdl, 1);
+  img.current_params = 'log_resistivity';
+  img = convert_img_units(img, 'conductivity');</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="convert_img_units.html" class="code" title="function y = convert_img_units(img,arg1,arg2)">convert_img_units</a>	CONVERT_IMG_UNITS change image data units</li><li><a href="data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>	DATA_MAPPER maps img.params data to elem or node data</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/deprecated/convert_units.html" class="code" title="function y = convert_units(varargin)">convert_units</a>	CONVERT_IMG_UNITS change image data units</li><li><a href="convert_img_units.html" class="code" title="function y = convert_img_units(img,arg1,arg2)">convert_img_units</a>	CONVERT_IMG_UNITS change image data units</li><li><a href="../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>	FWD_SOLVE_1ST_ORDER: data= fwd_solve_1st_order( img)</li><li><a href="../../eidors/solvers/forward/fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>	FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</li><li><a href="../../eidors/solvers/forward/fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>	FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>	JACOBIAN_ADJOINT: J= jacobian_adjoint( img )</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint_2p5d_1st_order.html" class="code" title="function J= jacobian_adjoint_2p5d_1st_order( fwd_model, img)">jacobian_adjoint_2p5d_1st_order</a>	JACOBIAN_ADJOINT_2P5D: J= jacobian_adjoint_2p5d_1st_order( img )</li><li><a href="../../eidors/solvers/forward/jacobian_movement_2p5d_1st_order.html" class="code" title="function J = jacobian_movement_2p5d_1st_order( fwd_model, img)">jacobian_movement_2p5d_1st_order</a>	JACOBIAN_MOVEMENT_2P5D: J = jacobian_movement_2p5d_1st_order( img )</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function x = map_data(x, cur_unit, new_unit)</a></li><li><a href="#_sub2" class="code">function x = fix_and_test(x)</a></li><li><a href="#_sub3" class="code">function err_if_inf_or_nan(x, str)</a></li><li><a href="#_sub4" class="code">function x = conductivity2resistivity(x)</a></li><li><a href="#_sub5" class="code">function x = resistivity2conductivity(x)</a></li><li><a href="#_sub6" class="code">function erstr = errorstr(cur_unit, new_unit)</a></li><li><a href="#_sub7" class="code">function x = reverse(str, x);</a></li><li><a href="#_sub8" class="code">function x = apply(str, x)</a></li><li><a href="#_sub9" class="code">function [x, do_nodes] = get_data(img)</a></li><li><a href="#_sub10" class="code">function pass = do_unit_test</a></li><li><a href="#_sub11" class="code">function pass = test_map_data(data, in, out, expected, pass)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function y = convert_img_units(img,arg1,arg2)</a>
+0002 <span class="comment">%CONVERT_IMG_UNITS change image data units</span>
+0003 <span class="comment">%  img = convert_img_units(img,new_unit) converts img.elem_data or img.node_data</span>
+0004 <span class="comment">%  expressed in img.current_params into different units for the same</span>
+0005 <span class="comment">%  physical property</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Examples:</span>
+0008 <span class="comment">%  img = mk_image(mdl, 2, 'resisitivity');</span>
+0009 <span class="comment">%  img = convert_img_units(img, 'conductivity');</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%  img = mk_image(mdl, 1);</span>
+0012 <span class="comment">%  img.current_params = 'log_resistivity';</span>
+0013 <span class="comment">%  img = convert_img_units(img, 'conductivity');</span>
+0014 
+0015 <span class="comment">% (C) 2012-2014 Alistair Boyle and Bartlomiej Grychtol</span>
+0016 <span class="comment">% License: GPL version 2 or 3</span>
+0017 <span class="comment">% $Id: convert_img_units.m 5874 2018-12-21 13:08:54Z aadler $</span>
+0018 
+0019 <span class="keyword">if</span> ischar(img) &amp;&amp; strcmp(img,<span class="string">'UNIT_TEST'</span>); y = <a href="#_sub10" class="code" title="subfunction pass = do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0020 
+0021 <span class="keyword">if</span> nargin &lt; 2
+0022   error(<span class="string">'EIDORS:ConvertUnits:Input'</span>, <span class="keyword">...</span>
+0023       <span class="string">'Not enough input arguments.'</span>);
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">% convert_img_units(x, in, out);</span>
+0027 <span class="keyword">if</span> isnumeric(img)
+0028   <span class="comment">% require 3 arguments</span>
+0029   <span class="keyword">if</span> nargin &lt; 3
+0030     error(<span class="string">'EIDORS:ConvertUnits:Input'</span>, <span class="keyword">...</span>
+0031       <span class="string">'Two units are required to convert numeric values.'</span>);
+0032   <span class="keyword">else</span>
+0033     x = img;
+0034     cur_unit = arg1;
+0035     new_unit = arg2;
+0036     y = <a href="#_sub1" class="code" title="subfunction x = map_data(x, cur_unit, new_unit)">map_data</a>(x, cur_unit, new_unit);
+0037     <span class="keyword">return</span>
+0038   <span class="keyword">end</span>
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="comment">% convert_img_units(img, out);</span>
+0042 <span class="keyword">if</span> any(isfield(img,{<span class="string">'elem_data'</span>,<span class="string">'node_data'</span>}))
+0043   <span class="keyword">if</span> nargin == 3
+0044     cur_unit = arg1;
+0045     new_unit = arg2;
+0046   <span class="keyword">else</span>
+0047     <span class="keyword">try</span>
+0048       cur_unit = img.current_params;
+0049       new_unit = arg1;
+0050     <span class="keyword">catch</span>
+0051       error([<span class="string">'Don''t know what to convert. '</span><span class="keyword">...</span>
+0052               <span class="string">'Need either 3 arguments or img.current_params.'</span>]);
+0053     <span class="keyword">end</span>
+0054   <span class="keyword">end</span>
+0055 <span class="keyword">else</span>
+0056   <span class="keyword">if</span> nargin ==3
+0057     cur_unit = arg1;
+0058     img.data_mapper = cur_unit;
+0059     new_unit = arg2;
+0060   <span class="keyword">else</span>
+0061     new_unit = arg1;
+0062   <span class="keyword">end</span>
+0063   img = <a href="data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>(img);
+0064   cur_unit = img.current_params;
+0065   
+0066   <span class="comment">% what to do about old parametrization??</span>
+0067 <span class="comment">%   img = rmfield(img, 'cur_unit');</span>
+0068 <span class="keyword">end</span>
+0069 
+0070 
+0071 [x do_nodes] = <a href="#_sub9" class="code" title="subfunction [x, do_nodes] = get_data(img)">get_data</a>(img);
+0072 
+0073 y = <a href="#_sub1" class="code" title="subfunction x = map_data(x, cur_unit, new_unit)">map_data</a>(x, cur_unit, new_unit);
+0074 
+0075 
+0076 <span class="keyword">if</span> do_nodes
+0077   img.node_data = y;
+0078 <span class="keyword">else</span>
+0079   img.elem_data = y;
+0080 <span class="keyword">end</span>
+0081 img.current_params = new_unit;
+0082 y = img;
+0083 
+0084 <span class="keyword">end</span>
+0085 
+0086 <a name="_sub1" href="#_subfunctions" class="code">function x = map_data(x, cur_unit, new_unit)</a>
+0087 
+0088 <span class="keyword">if</span> isempty(cur_unit) || isempty(new_unit)
+0089   error(<span class="string">'Unit string must not be empty.'</span>);
+0090 <span class="keyword">end</span>
+0091 
+0092 <span class="keyword">if</span> strcmp(cur_unit, new_unit)
+0093     <span class="keyword">return</span> <span class="comment">%nothing to do</span>
+0094 <span class="keyword">end</span>
+0095 
+0096 <span class="keyword">try</span>
+0097    f = str2func(sprintf(<span class="string">'%s2%s'</span>,cur_unit,new_unit));
+0098    x = feval(f,x);
+0099    x = <a href="#_sub2" class="code" title="subfunction x = fix_and_test(x)">fix_and_test</a>(x);
+0100 <span class="keyword">catch</span> err
+0101   <span class="keyword">if</span> isempty(err.identifier) <span class="comment">% Octave error off str2func</span>
+0102      <span class="keyword">if</span> strcmp(err.message(end-(30:-1:0)), <span class="keyword">...</span>
+0103             <span class="string">'no function and no method found'</span>)
+0104         err.identifier=<span class="string">'MATLAB:UndefinedFunction'</span>;
+0105      <span class="keyword">end</span>
+0106   <span class="keyword">end</span>
+0107    
+0108   <span class="keyword">if</span> strcmp(err.identifier,<span class="string">'MATLAB:UndefinedFunction'</span>)
+0109     cur_pre = regexp(cur_unit,<span class="string">'^(.*?)_'</span>,<span class="string">'match'</span>);
+0110     <span class="keyword">if</span> ~isempty(cur_pre) &amp;&amp; ismember(cur_pre{1}, {<span class="string">'log_'</span>, <span class="string">'log10_'</span>});
+0111       l = length(cur_pre{1});
+0112       x = <a href="#_sub7" class="code" title="subfunction x = reverse(str, x);">reverse</a>(cur_pre{1}, x);
+0113       x = <a href="#_sub1" class="code" title="subfunction x = map_data(x, cur_unit, new_unit)">map_data</a>(x, cur_unit(l+1:end), new_unit);
+0114       x = <a href="#_sub2" class="code" title="subfunction x = fix_and_test(x)">fix_and_test</a>(x);
+0115       <span class="keyword">return</span>
+0116     <span class="keyword">end</span>
+0117     new_pre = regexp(new_unit,<span class="string">'^(.*?)_'</span>,<span class="string">'match'</span>);
+0118     <span class="keyword">if</span> ~isempty(new_pre) &amp;&amp; ismember(new_pre{1}, {<span class="string">'log_'</span>, <span class="string">'log10_'</span>, <span class="string">'abs_'</span>});
+0119       l = length(new_pre{1});
+0120       x = <a href="#_sub1" class="code" title="subfunction x = map_data(x, cur_unit, new_unit)">map_data</a>(x, cur_unit, new_unit(l+1:end));
+0121       x = <a href="#_sub8" class="code" title="subfunction x = apply(str, x)">apply</a>(new_pre{1}, x);
+0122       x = <a href="#_sub2" class="code" title="subfunction x = fix_and_test(x)">fix_and_test</a>(x);
+0123       <span class="keyword">return</span>
+0124     <span class="keyword">end</span>
+0125     
+0126     <span class="comment">%no direct function for conversion, see if we can help</span>
+0127     error(<span class="string">'EIDORS:ConversionNotSupported'</span>, <a href="#_sub6" class="code" title="subfunction erstr = errorstr(cur_unit, new_unit)">errorstr</a>(cur_unit, new_unit));
+0128   <span class="keyword">else</span>
+0129     rethrow(err);
+0130   <span class="keyword">end</span>
+0131 <span class="keyword">end</span>
+0132 
+0133 <span class="keyword">end</span>
+0134 
+0135 <a name="_sub2" href="#_subfunctions" class="code">function x = fix_and_test(x)</a>
+0136   x(x == +inf) = +realmax;
+0137   x(x == -inf) = -realmax;
+0138   <a href="#_sub3" class="code" title="subfunction err_if_inf_or_nan(x, str)">err_if_inf_or_nan</a>(x, <span class="string">'map_data-post'</span>);
+0139 <span class="keyword">end</span>
+0140 
+0141 <a name="_sub3" href="#_subfunctions" class="code">function err_if_inf_or_nan(x, str)</a>
+0142   <span class="keyword">if</span> any(isnan(x) | isinf(x))
+0143       error(sprintf(<span class="string">'bad %s (%d NaN, %d Inf of %d)'</span>, <span class="keyword">...</span>
+0144                     str, <span class="keyword">...</span>
+0145                     length(find(isnan(x))), <span class="keyword">...</span>
+0146                     length(find(isinf(x))), <span class="keyword">...</span>
+0147                     length(x)));
+0148   <span class="keyword">end</span>
+0149 
+0150 <span class="keyword">end</span>
+0151 
+0152 <a name="_sub4" href="#_subfunctions" class="code">function x = conductivity2resistivity(x)</a>
+0153   x = 1./x;
+0154 <span class="keyword">end</span>
+0155 
+0156 <a name="_sub5" href="#_subfunctions" class="code">function x = resistivity2conductivity(x)</a>
+0157   x = 1./x;
+0158 <span class="keyword">end</span>
+0159 
+0160 <a name="_sub6" href="#_subfunctions" class="code">function erstr = errorstr(cur_unit, new_unit)</a>
+0161   erstr = sprintf( [<span class="string">'Unit conversion from %s to %s is not supported.\n'</span><span class="keyword">...</span>
+0162              <span class="string">'Please write a function %s2%s.'</span>], cur_unit, new_unit, cur_unit, new_unit);
+0163 <span class="keyword">end</span>
+0164 
+0165 <a name="_sub7" href="#_subfunctions" class="code">function x = reverse(str, x);</a>
+0166   <span class="keyword">switch</span> str
+0167     <span class="keyword">case</span> <span class="string">'log10_'</span>
+0168       <span class="keyword">if</span> any(x &gt;= log10(realmax)-eps) warning(<span class="string">'loss of precision -&gt; inf'</span>); <span class="keyword">end</span>
+0169       x = 10.^x;
+0170     <span class="keyword">case</span> <span class="string">'log_'</span>
+0171       <span class="keyword">if</span> any(x &gt;= log(realmax)-eps) warning(<span class="string">'loss of precision -&gt; inf'</span>); <span class="keyword">end</span>
+0172       x = exp(x);
+0173     <span class="keyword">otherwise</span>
+0174       error(<span class="string">'Cannot reverse %s'</span>, str);
+0175   <span class="keyword">end</span>
+0176 <span class="keyword">end</span>
+0177 
+0178 
+0179 <a name="_sub8" href="#_subfunctions" class="code">function x = apply(str, x)</a>
+0180   <span class="keyword">switch</span> str
+0181     <span class="keyword">case</span> <span class="string">'log10_'</span>
+0182       <span class="keyword">if</span> any(x &lt;= 0 + eps) warning(<span class="string">'loss of precision -&gt; -inf'</span>); <span class="keyword">end</span>
+0183       x = log10(x);
+0184     <span class="keyword">case</span> <span class="string">'log_'</span>
+0185       <span class="keyword">if</span> any(x &lt;= 0 + eps) warning(<span class="string">'loss of precision -&gt; -inf'</span>); <span class="keyword">end</span>
+0186       x = log(x);
+0187     <span class="keyword">case</span> <span class="string">'abs_'</span>
+0188       x = abs(x);
+0189     <span class="keyword">otherwise</span>
+0190       error(<span class="string">'Cannot apply %s'</span>, str);
+0191   <span class="keyword">end</span>
+0192 <span class="keyword">end</span>
+0193   
+0194 <a name="_sub9" href="#_subfunctions" class="code">function [x, do_nodes] = get_data(img)</a>
+0195   do_nodes = 0;
+0196   <span class="keyword">try</span>
+0197     x = img.elem_data;
+0198   <span class="keyword">catch</span>
+0199     <span class="keyword">try</span>
+0200       x = img.node_data;
+0201       do_nodes = 1;
+0202     <span class="keyword">catch</span>
+0203       error(<span class="string">'No elem_data or node_data found'</span>);
+0204     <span class="keyword">end</span>
+0205   <span class="keyword">end</span>
+0206 <span class="keyword">end</span>
+0207 
+0208 <span class="comment">% test functions</span>
+0209 <a name="_sub10" href="#_subfunctions" class="code">function pass = do_unit_test</a>
+0210   pass = 1;
+0211   d = 1;
+0212   <span class="keyword">while</span> (d ~= 1) &amp;&amp; (d ~= 0)
+0213     d = rand(1);
+0214   <span class="keyword">end</span>
+0215   disp(<span class="string">'TEST: convert_img_units()'</span>);
+0216   elem_types = {<span class="string">'conductivity'</span>, <span class="string">'log_conductivity'</span>, <span class="string">'log10_conductivity'</span>, <span class="keyword">...</span>
+0217     <span class="string">'resistivity'</span>,  <span class="string">'log_resistivity'</span>,  <span class="string">'log10_resistivity'</span>};
+0218   expected = [d         log(d)         log10(d)      1./d      log(1./d)      log10(1./d); <span class="keyword">...</span>
+0219     exp(d)    d              log10(exp(d)) 1./exp(d) log(1./exp(d)) log10(1./exp(d)); <span class="keyword">...</span>
+0220     10.^d     log(10.^d )    d             1./10.^d  log(1./10.^d ) log10(1./10.^d ); <span class="keyword">...</span>
+0221     1./d      log(1./d  )    log10(1./d)   d         log(d)         log10(d); <span class="keyword">...</span>
+0222     1./exp(d) log(1./exp(d)) log10(1./exp(d)) exp(d) d              log10(exp(d)); <span class="keyword">...</span>
+0223     1./10.^d  log(1./10.^d)  log10(1./10.^d)  10.^d  log(10.^d)     d ];
+0224   <span class="keyword">for</span> i = 1:length(elem_types)
+0225     <span class="keyword">for</span> j = 1:length(elem_types)
+0226       pass = <a href="#_sub11" class="code" title="subfunction pass = test_map_data(data, in, out, expected, pass)">test_map_data</a>(d, elem_types{i}, elem_types{j}, expected(i,j), pass);
+0227     <span class="keyword">end</span>
+0228   <span class="keyword">end</span>
+0229 
+0230   <span class="keyword">if</span> pass
+0231     disp(<span class="string">'TEST: overall PASS'</span>);
+0232   <span class="keyword">else</span>
+0233     disp(<span class="string">'TEST: overall FAIL'</span>);
+0234   <span class="keyword">end</span>
+0235 <span class="keyword">end</span>
+0236 
+0237 
+0238 <a name="_sub11" href="#_subfunctions" class="code">function pass = test_map_data(data, in, out, expected, pass)</a>
+0239   fprintf(<span class="string">'TEST: convert_img_units(%s -&gt; %s)\n'</span>, in, out);
+0240   <span class="keyword">if</span> <a href="convert_img_units.html" class="code" title="function y = convert_img_units(img,arg1,arg2)">convert_img_units</a>(data, in, out) ~= expected
+0241      pass = 0;
+0242      fprintf(<span class="string">'TEST: FAIL convert_img_units(%s -&gt; %s)\n'</span>, in, out);
+0243   <span class="keyword">end</span>
+0244 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

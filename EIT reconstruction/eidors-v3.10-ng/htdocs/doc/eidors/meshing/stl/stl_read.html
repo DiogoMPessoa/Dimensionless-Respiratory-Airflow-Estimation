@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stl_read</title>
+  <meta name="keywords" content="stl_read">
+  <meta name="description" content="STL_READ  Read in an stl file and output an EIDORS model struct">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">stl</a> &gt; stl_read.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/stl&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>stl_read
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>STL_READ  Read in an stl file and output an EIDORS model struct</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mdl = stl_read(fname) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">STL_READ  Read in an stl file and output an EIDORS model struct
+ This function is a wrapper for the Matlab Central contribution by 
+ Adam H. Aitkenhead called READ_stl from &quot;Mesh voxelization&quot;
+ http://www.mathworks.de/matlabcentral/fileexchange/27390-mesh-voxelisation
+
+ See also <a href="stl_write.html" class="code" title="function stl_write(fv, name)">stl_write</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/external/Mesh_voxelisation/READ_stl.html" class="code" title="function [coordVERTICES,varargout] = READ_stl(stlFILENAME,varargin)">READ_stl</a>	READ_stlascii  Read mesh data in the form of an <*.stl> file</li><li><a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../../eidors/meshing/netgen/ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>	NG_MAKE_EXTRUDED_MODEL: create extruded models using netgen</li><li><a href="stl_read.html" class="code" title="function mdl = stl_read(fname)">stl_read</a>	STL_READ  Read in an stl file and output an EIDORS model struct</li><li><a href="stl_write.html" class="code" title="function stl_write(fv, name)">stl_write</a>	STL_WRITE Create a text STL file from a patch struct</li><li><a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="stl_read.html" class="code" title="function mdl = stl_read(fname)">stl_read</a>	STL_READ  Read in an stl file and output an EIDORS model struct</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mdl = stl_read(fname)</a>
+0002 <span class="comment">%STL_READ  Read in an stl file and output an EIDORS model struct</span>
+0003 <span class="comment">% This function is a wrapper for the Matlab Central contribution by</span>
+0004 <span class="comment">% Adam H. Aitkenhead called READ_stl from &quot;Mesh voxelization&quot;</span>
+0005 <span class="comment">% http://www.mathworks.de/matlabcentral/fileexchange/27390-mesh-voxelisation</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also stl_write</span>
+0008 
+0009 <span class="comment">% Copyright 2013 Bartłomiej Grychtol</span>
+0010 <span class="comment">% License: GPL version 2 or 3</span>
+0011 <span class="comment">% $Id: stl_read.m 5112 2015-06-14 13:00:41Z aadler $</span>
+0012 
+0013 <span class="keyword">if</span> ischar(fname) &amp;&amp; strcmp(fname, <span class="string">'UNIT_TEST'</span>), <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>, <span class="keyword">end</span>
+0014 
+0015 [V] = <a href="../../../eidors/external/Mesh_voxelisation/READ_stl.html" class="code" title="function [coordVERTICES,varargout] = READ_stl(stlFILENAME,varargin)">READ_stl</a>(fname);
+0016 N = reshape(shiftdim(V,1),3,[])';
+0017 [nodes m n] = unique(N,<span class="string">'rows'</span>);
+0018 mdl.nodes = nodes;
+0019 mdl.elems = reshape(n',3,[])';
+0020 mdl.type  = <span class="string">'fwd_model'</span>; <span class="comment">% sort of</span>
+0021 mdl.boundary = mdl.elems;
+0022 
+0023 
+0024 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0025    a = [
+0026    -0.8981   -0.7492   -0.2146    0.3162    0.7935    0.9615    0.6751    0.0565   -0.3635   -0.9745
+0027     0.1404    0.5146    0.3504    0.5069    0.2702   -0.2339   -0.8677   -0.6997   -0.8563   -0.4668 ]';
+0028 fmdl = <a href="../../../eidors/meshing/netgen/ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>({2,{a,0.5*a,0.2*a},1},[],[]);
+0029 
+0030 fv.faces    = <a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(fmdl);
+0031 fv.vertices = fmdl.nodes;
+0032 <a href="stl_write.html" class="code" title="function stl_write(fv, name)">stl_write</a>(fv, <span class="string">'test.stl'</span>);
+0033 mdl = <a href="stl_read.html" class="code" title="function mdl = stl_read(fname)">stl_read</a>(<span class="string">'test.stl'</span>);
+0034 <a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(mdl)
+0035 delete(<span class="string">'test.stl'</span>);
+0036 
+0037</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

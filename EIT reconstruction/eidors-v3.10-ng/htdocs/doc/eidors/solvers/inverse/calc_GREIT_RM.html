@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calc_GREIT_RM</title>
+  <meta name="keywords" content="calc_GREIT_RM">
+  <meta name="description" content="CALCULATE GREIT reconstruction matrix">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; calc_GREIT_RM.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>calc_GREIT_RM
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>CALCULATE GREIT reconstruction matrix</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [RM, PJt, M] = calc_GREIT_RM(vh,vi, xyc, radius, weight, options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> CALCULATE GREIT reconstruction matrix
+   RM= calc_GREIT_RM(vh,vi, xyc, radius, weight, normalize)
+ 
+ Input:
+   vh     = homogeneous (reference) training measurements 
+   vi     = inhomogeneous training measurements 
+   xyc    = x,y position of targets 2xN
+   radius = requested resolution matrix
+      if scalar - apply resolution to all images:  recommend 0.25 for 16 elecs
+   weight = weighting matrix
+      if scalar   = weighting of noise vs signal
+      if 32^2 x N = weighting of each image output
+   options.normalize = 
+            0 -&gt; regular difference EIT
+            1 -&gt; normalized difference EIT
+   options.meshsz = [xmin xmax ymin ymax] size of mesh
+      defaults to [-1 1 -1 1]
+   options.imgsz  = [xsz ysz] size of the reconstructed image in pixels
+   options.noise_covar [optional]
+      covariance matrix of data noise
+   options.desired_solution_fn
+      specify a function to calculate the desired image. 
+      It must have the signature:
+      D = my_function( xyc, radius, options);
+      uses eidors_defualt('get','GREIT_desired_img') if not specified
+ 
+
+ (C) 2009 Andy Adler. Licenced under GPL v2 or v3
+ $Id: calc_GREIT_RM.m 5662 2017-12-03 12:58:59Z bgrychtol $</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>	[V] = LEFT_DIVIDE(E,I,tol,pp,V);</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>	EIDORS_DEFAULT Default function handler.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [RM, M] = calc_RM(PJt, Y, noiselev, opt)</a></li><li><a href="#_sub2" class="code">function PJt = calc_PJt(Y,D)</a></li><li><a href="#_sub3" class="code">function opt = parse_options(opt)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [RM, PJt, M] = calc_GREIT_RM(vh,vi, xyc, radius, weight, options)</a>
+0002 <span class="comment">% CALCULATE GREIT reconstruction matrix</span>
+0003 <span class="comment">%   RM= calc_GREIT_RM(vh,vi, xyc, radius, weight, normalize)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Input:</span>
+0006 <span class="comment">%   vh     = homogeneous (reference) training measurements</span>
+0007 <span class="comment">%   vi     = inhomogeneous training measurements</span>
+0008 <span class="comment">%   xyc    = x,y position of targets 2xN</span>
+0009 <span class="comment">%   radius = requested resolution matrix</span>
+0010 <span class="comment">%      if scalar - apply resolution to all images:  recommend 0.25 for 16 elecs</span>
+0011 <span class="comment">%   weight = weighting matrix</span>
+0012 <span class="comment">%      if scalar   = weighting of noise vs signal</span>
+0013 <span class="comment">%      if 32^2 x N = weighting of each image output</span>
+0014 <span class="comment">%   options.normalize =</span>
+0015 <span class="comment">%            0 -&gt; regular difference EIT</span>
+0016 <span class="comment">%            1 -&gt; normalized difference EIT</span>
+0017 <span class="comment">%   options.meshsz = [xmin xmax ymin ymax] size of mesh</span>
+0018 <span class="comment">%      defaults to [-1 1 -1 1]</span>
+0019 <span class="comment">%   options.imgsz  = [xsz ysz] size of the reconstructed image in pixels</span>
+0020 <span class="comment">%   options.noise_covar [optional]</span>
+0021 <span class="comment">%      covariance matrix of data noise</span>
+0022 <span class="comment">%   options.desired_solution_fn</span>
+0023 <span class="comment">%      specify a function to calculate the desired image.</span>
+0024 <span class="comment">%      It must have the signature:</span>
+0025 <span class="comment">%      D = my_function( xyc, radius, options);</span>
+0026 <span class="comment">%      uses eidors_defualt('get','GREIT_desired_img') if not specified</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% (C) 2009 Andy Adler. Licenced under GPL v2 or v3</span>
+0030 <span class="comment">% $Id: calc_GREIT_RM.m 5662 2017-12-03 12:58:59Z bgrychtol $</span>
+0031 
+0032    <span class="keyword">if</span> ~isstruct(options)
+0033        options.normalize = options;
+0034    <span class="keyword">end</span>
+0035    opt = <a href="#_sub3" class="code" title="subfunction opt = parse_options(opt)">parse_options</a>(options);
+0036 
+0037    <span class="keyword">if</span> opt.normalize
+0038       Y = vi./(vh*ones(1,size(vi,2))) - 1; 
+0039    <span class="keyword">else</span>
+0040       Y = vi - (vh*ones(1,size(vi,2)));
+0041    <span class="keyword">end</span>
+0042    <span class="keyword">try</span> 
+0043        f = opt.desired_solution_fn;
+0044    <span class="keyword">catch</span>
+0045        f = <a href="../../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>(<span class="string">'get'</span>,<span class="string">'GREIT_desired_img'</span>);
+0046    <span class="keyword">end</span>
+0047 
+0048    D = feval(f, xyc, radius, opt);
+0049    
+0050    <span class="comment">% PJt is expensive and doesn't change when optimising NF</span>
+0051    copt.cache_obj = {vi,vh,xyc,radius,opt};
+0052    copt.fstr = <span class="string">'calc_GREIT_RM_PJt'</span>;
+0053    PJt = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub2" class="code" title="subfunction PJt = calc_PJt(Y,D)">calc_PJt</a>,{Y,D},copt);
+0054    
+0055    <span class="keyword">if</span> size(weight)==[1,1] <span class="comment">% Can't use isscalar for compatibility with M6.5</span>
+0056        [RM, M] = <a href="#_sub1" class="code" title="subfunction [RM, M] = calc_RM(PJt, Y, noiselev, opt)">calc_RM</a>(PJt, Y, weight, opt);
+0057    <span class="keyword">else</span>
+0058        error(<span class="string">'not coded yet'</span>);
+0059    <span class="keyword">end</span>
+0060 
+0061 <a name="_sub1" href="#_subfunctions" class="code">function [RM, M] = calc_RM(PJt, Y, noiselev, opt)</a>
+0062 
+0063    noiselev = noiselev * mean(abs(Y(:)));
+0064    <span class="comment">% Desired soln for noise is 0</span>
+0065    N_meas = size(Y,1);
+0066 
+0067    <span class="comment">% This implements RM = D*Y'/(J*Sx*J + Sn);</span>
+0068    Sn = speye(N_meas) .* opt.noise_covar; <span class="comment">% Noise covariance</span>
+0069 <span class="comment">%    PJt= D*Y';</span>
+0070    M  = (Y*Y' + noiselev^2*Sn);
+0071    RM =  <a href="../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>(M',PJt')';    <span class="comment">%PJt/M;</span>
+0072    <span class="comment">% This implements RM = D*Y'/(Y*Y');</span>
+0073    <span class="keyword">if</span> 0
+0074       Y = [Y, noiselev*eye(N_meas)];
+0075       D = [D,          zeros(size(D,1),N_meas)];
+0076 
+0077       RMold = D*Y'/(Y*Y');
+0078       <span class="keyword">if</span> norm(RM-RMold,<span class="string">'fro'</span>)/norm(RM,<span class="string">'fro'</span>) &gt; 1e-10; warning(<span class="string">'not OK'</span>); <span class="keyword">end</span>
+0079    <span class="keyword">end</span>
+0080 
+0081 <a name="_sub2" href="#_subfunctions" class="code">function PJt = calc_PJt(Y,D)</a>
+0082       PJt = D*Y';
+0083       
+0084 
+0085 <a name="_sub3" href="#_subfunctions" class="code">function opt = parse_options(opt)</a>
+0086        <span class="keyword">if</span> ~isfield(opt, <span class="string">'normalize'</span>), opt.normalize = 1; <span class="keyword">end</span>
+0087        <span class="keyword">if</span> ~isfield(opt, <span class="string">'meshsz'</span>),    opt.meshsz = [-1 1 -1 1]; <span class="keyword">end</span>
+0088        <span class="keyword">if</span> ~isfield(opt, <span class="string">'imgsz'</span>),     opt.imgsz = [32 32]; <span class="keyword">end</span>
+0089        <span class="keyword">if</span> ~isfield(opt, <span class="string">'noise_covar'</span>),
+0090                      opt.noise_covar = 1;
+0091        <span class="keyword">end</span>
+0092 <span class="comment">%   options.data_covariance [optional]</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

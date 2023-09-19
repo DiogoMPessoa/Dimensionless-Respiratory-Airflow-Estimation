@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of find_electrode_bdy</title>
+  <meta name="keywords" content="find_electrode_bdy">
+  <meta name="description" content="FIND_ELECTRODE_BDY: find the boundary index area for electrode">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; find_electrode_bdy.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>find_electrode_bdy
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>FIND_ELECTRODE_BDY: find the boundary index area for electrode</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, elec_nodes) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FIND_ELECTRODE_BDY: find the boundary index area for electrode
+ Input:
+   bdy =&gt; boundary (from fwd_model.boundary) bdy simplices x nodes index 
+   vtx =&gt; node pts (from fwd_model.nodes)
+   elec_nodes =&gt; index of nodes in the electrode
+ Output:
+   bdy_idx  =&gt; vector of boundary simplices in this electrode
+   bdy_area =&gt; boundary area of each simplex in bdy_idx
+  if the nodes in the electrode are points, then
+   bdy_area is the area corresponding to these point electrodes
+
+ if [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, [])
+   calculate bdy_idx=[] and bdy_area for all on bdy</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="fem_1st_to_higher_order.html" class="code" title="function [boundary,elems,nodes]=fem_1st_to_higher_order(fwd_model)">fem_1st_to_higher_order</a>	FEM_1ST_TO_HIGH_ORDER:  Modify the FEM for high order FEM called as</li><li><a href="fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>	FWD_MODEL_PARAMETERS: data= fwd_solve_1st_order( fwd_model, image)</li><li><a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>	SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="system_mat_higher_order.html" class="code" title="function [s_mat]=system_mat_higher_order(fwd_model,img)">system_mat_higher_order</a>	Assemble the total stiffness matrix : s_mat.E=At;</li><li><a href="update_system_mat_fields.html" class="code" title="function FC1 = update_system_mat_fields( fwd_model0, fwd_model1 )">update_system_mat_fields</a>	SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [ffb,unused] = find_bdy_idx( bdy, elec_nodes);</a></li><li><a href="#_sub2" class="code">function area= tria_area( bdy_pts );</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, elec_nodes)</a>
+0002 <span class="comment">% FIND_ELECTRODE_BDY: find the boundary index area for electrode</span>
+0003 <span class="comment">% Input:</span>
+0004 <span class="comment">%   bdy =&gt; boundary (from fwd_model.boundary) bdy simplices x nodes index</span>
+0005 <span class="comment">%   vtx =&gt; node pts (from fwd_model.nodes)</span>
+0006 <span class="comment">%   elec_nodes =&gt; index of nodes in the electrode</span>
+0007 <span class="comment">% Output:</span>
+0008 <span class="comment">%   bdy_idx  =&gt; vector of boundary simplices in this electrode</span>
+0009 <span class="comment">%   bdy_area =&gt; boundary area of each simplex in bdy_idx</span>
+0010 <span class="comment">%  if the nodes in the electrode are points, then</span>
+0011 <span class="comment">%   bdy_area is the area corresponding to these point electrodes</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% if [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, [])</span>
+0014 <span class="comment">%   calculate bdy_idx=[] and bdy_area for all on bdy</span>
+0015 
+0016 <span class="comment">% (C) 2008 Andy Adler. License: GPL version 2 or version 3</span>
+0017 <span class="comment">% $Id: find_electrode_bdy.m 5960 2019-06-05 02:24:24Z aadler $</span>
+0018 
+0019 <span class="comment">% special processing if elec_nodes==[]</span>
+0020 <span class="keyword">if</span> isempty(elec_nodes);
+0021    bdy_idx = [];
+0022    l_bdy= size(bdy,1);
+0023    bdy_area = zeros(l_bdy,1);
+0024    <span class="keyword">for</span> i=1:l_bdy
+0025       bdy_area(i) = <a href="#_sub2" class="code" title="subfunction area= tria_area( bdy_pts );">tria_area</a>( vtx(bdy(i,:),:) );
+0026    <span class="keyword">end</span>
+0027    <span class="keyword">return</span>;  
+0028 <span class="keyword">end</span>
+0029 
+0030 [bdy_idx, point] = <a href="#_sub1" class="code" title="subfunction [ffb,unused] = find_bdy_idx( bdy, elec_nodes);">find_bdy_idx</a>( bdy, elec_nodes);
+0031 <span class="keyword">if</span> nargout==1; <span class="keyword">return</span>;<span class="keyword">end</span>
+0032 
+0033 l_bdy_idx= length(bdy_idx);
+0034 l_point= length(point);
+0035 
+0036 <span class="keyword">if</span> l_bdy_idx &gt; 0 &amp;&amp; l_point ==0
+0037    bdy_area= zeros(1, l_bdy_idx);
+0038 
+0039    <span class="keyword">for</span> i=1:l_bdy_idx
+0040       bdy_nodes   = bdy(bdy_idx(i),:);
+0041       bdy_area(i) = <a href="#_sub2" class="code" title="subfunction area= tria_area( bdy_pts );">tria_area</a>( vtx(bdy_nodes,:) );
+0042    <span class="keyword">end</span>
+0043 <span class="keyword">elseif</span> l_bdy_idx == 0 &amp;&amp; l_point &gt;0
+0044    dims = size(bdy,2); 
+0045    l_point= length(point);
+0046    bdy_area = zeros(l_point,1);
+0047    <span class="keyword">for</span> i=1:l_point
+0048      ff= find( any(bdy== point(i),2) );
+0049      this_area= 0;
+0050      <span class="keyword">for</span> ffp=ff(:)'
+0051         xyz= vtx( bdy(ffp,:),:);
+0052         this_area= this_area + <a href="#_sub2" class="code" title="subfunction area= tria_area( bdy_pts );">tria_area</a>( xyz );
+0053      <span class="keyword">end</span>
+0054      bdy_area(i)= bdy_area(i) + this_area/dims;
+0055    <span class="keyword">end</span>
+0056 <span class="keyword">else</span>
+0057 keyboard
+0058    error([<span class="string">'Can''t model this electrode. '</span> <span class="keyword">...</span>
+0059           <span class="string">'It has %d CEM and %d point nodes (e.g. nodes %d, %d)'</span>], <span class="keyword">...</span>
+0060             l_bdy_idx, l_point, bdy_idx(1), point(1) )
+0061 <span class="keyword">end</span>
+0062    
+0063 
+0064 
+0065 <span class="comment">% Find which boundary nodes are part of a</span>
+0066 <span class="comment">% complete simplex. These nodes can be made</span>
+0067 <span class="comment">% into complete electrode model elements</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">% Any nodes left will be treated as point electrodes</span>
+0070 <a name="_sub1" href="#_subfunctions" class="code">function [ffb,unused] = find_bdy_idx( bdy, elec_nodes);</a>
+0071    bdy_els = zeros(size(bdy,1),1);
+0072    elec_nodes = unique(elec_nodes);
+0073    <span class="keyword">for</span> nd= elec_nodes(:)'
+0074       bdy_els = bdy_els + any(bdy==nd,2);
+0075    <span class="keyword">end</span>
+0076    ffb = find(bdy_els == size(bdy,2));
+0077 
+0078 <span class="comment">%  find if all nodes are used</span>
+0079    used_nodes= reshape( bdy(ffb,:), 1,[]);
+0080    unused=     setdiff( elec_nodes, used_nodes);
+0081    
+0082 
+0083 <span class="comment">% bdy points is [x1,y1,z1;x2,y2,z2; etc]</span>
+0084 <a name="_sub2" href="#_subfunctions" class="code">function area= tria_area( bdy_pts ); </a>
+0085    vectors= diff(bdy_pts); 
+0086    <span class="keyword">if</span> size(vectors,1)==2
+0087       vectors= cross(vectors(1,:),vectors(2,:));
+0088    <span class="keyword">end</span>
+0089    d= size(bdy_pts,1);
+0090    area= sqrt( sum(vectors.^2) )/( d-1 );
+0091</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

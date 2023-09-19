@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sigmatome2_filter</title>
+  <meta name="keywords" content="sigmatome2_filter">
+  <meta name="description" content="SIGMATOME2_FILTER:  Hardware filter and stim_patterns for Sigmatome II device">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">interface</a> &gt; sigmatome2_filter.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/interface&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>sigmatome2_filter
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SIGMATOME2_FILTER:  Hardware filter and stim_patterns for Sigmatome II device</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Filter, stim_pattern]= sigmatome2_filter(test); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SIGMATOME2_FILTER:  Hardware filter and stim_patterns for Sigmatome II device
+
+ Usage:
+  [Filter, stim_pat]= sigmatome2_filter;
+    Filter   is a 416x208 Hardware filter
+    stim_pat is a EIDORS stim_pattern structure
+
+ Example:
+   imdl= mk_common_model('c2t2',16);
+   [Filter,stim_pat] = sigmatome2_filter;
+   imdl.fwd_model.stimulation = stim_pat;
+   imdl.fwd_model.jacobian = @jacobian_filtered;
+   imdl.fwd_model.jacobian_filtered.jacobian = @jacobian_adjoint;
+   imdl.fwd_model.jacobian_filtered.filter   = Filter;
+   imdl.meas_icov = speye( size(Filter,1) );
+   imdl.fwd_model = rmfield(imdl.fwd_model, 'meas_select');
+
+   img= mk_image(imdl);
+   vh= fwd_solve(img);  vh = Filter * vh.meas;
+   img.elem_data(50)=1.1;
+   vi= fwd_solve(img);  vi = Filter * vi.meas;
+
+   imdl.hyperparameter.value = 0.03;
+   imgr= inv_solve(imdl, vh, vi);
+   show_slices(imgr);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>	calc_slices (img, levels, clim  ) show slices at levels of an</li><li><a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>	out_img = show_slices (img, levels ) show slices at levels of an</li><li><a href="sigmatome2_filter.html" class="code" title="function [Filter, stim_pattern]= sigmatome2_filter(test);">sigmatome2_filter</a>	SIGMATOME2_FILTER:  Hardware filter and stim_patterns for Sigmatome II device</li><li><a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../eidors/models/stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>	STIM_MEAS_LIST: mk stimulation pattern from list of electrodes</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>	JACOBIAN_ADJOINT: J= jacobian_adjoint( img )</li><li><a href="../../eidors/solvers/forward/jacobian_filtered.html" class="code" title="function J= jacobian_filtered( fwd_model, img)">jacobian_filtered</a>	JACOBIAN_FILTERED: J= jacobian_filtered( fwd_model, img)</li><li><a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="sigmatome2_filter.html" class="code" title="function [Filter, stim_pattern]= sigmatome2_filter(test);">sigmatome2_filter</a>	SIGMATOME2_FILTER:  Hardware filter and stim_patterns for Sigmatome II device</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function filter = calc_sigmatome2_filter</a></li><li><a href="#_sub2" class="code">function [Configs Mesptr Curptr Index] = ComputeAllConfigs(InitConfig, N);</a></li><li><a href="#_sub3" class="code">function VarOut = IncrementVarModuloN(VarIn, N);</a></li><li><a href="#_sub4" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Filter, stim_pattern]= sigmatome2_filter(test);</a>
+0002 <span class="comment">% SIGMATOME2_FILTER:  Hardware filter and stim_patterns for Sigmatome II device</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">%  [Filter, stim_pat]= sigmatome2_filter;</span>
+0006 <span class="comment">%    Filter   is a 416x208 Hardware filter</span>
+0007 <span class="comment">%    stim_pat is a EIDORS stim_pattern structure</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Example:</span>
+0010 <span class="comment">%   imdl= mk_common_model('c2t2',16);</span>
+0011 <span class="comment">%   [Filter,stim_pat] = sigmatome2_filter;</span>
+0012 <span class="comment">%   imdl.fwd_model.stimulation = stim_pat;</span>
+0013 <span class="comment">%   imdl.fwd_model.jacobian = @jacobian_filtered;</span>
+0014 <span class="comment">%   imdl.fwd_model.jacobian_filtered.jacobian = @jacobian_adjoint;</span>
+0015 <span class="comment">%   imdl.fwd_model.jacobian_filtered.filter   = Filter;</span>
+0016 <span class="comment">%   imdl.meas_icov = speye( size(Filter,1) );</span>
+0017 <span class="comment">%   imdl.fwd_model = rmfield(imdl.fwd_model, 'meas_select');</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   img= mk_image(imdl);</span>
+0020 <span class="comment">%   vh= fwd_solve(img);  vh = Filter * vh.meas;</span>
+0021 <span class="comment">%   img.elem_data(50)=1.1;</span>
+0022 <span class="comment">%   vi= fwd_solve(img);  vi = Filter * vi.meas;</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   imdl.hyperparameter.value = 0.03;</span>
+0025 <span class="comment">%   imgr= inv_solve(imdl, vh, vi);</span>
+0026 <span class="comment">%   show_slices(imgr);</span>
+0027 
+0028 <span class="comment">% (C) 2015 Andy Adler. License: GPL version 2 or version 3</span>
+0029 <span class="comment">%   Based on information from Robert Guardo and Herve Gagnon</span>
+0030 <span class="comment">% $Id: sigmatome2_filter.m 4978 2015-05-11 02:59:29Z aadler $</span>
+0031 
+0032 <span class="keyword">if</span> nargin&gt;=1 &amp;&amp; strcmp(test,<span class="string">'UNIT_TEST'</span>); <a href="#_sub4" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0033 
+0034 Filter   = <a href="#_sub1" class="code" title="subfunction filter = calc_sigmatome2_filter">calc_sigmatome2_filter</a>;
+0035 protocol = <a href="#_sub2" class="code" title="subfunction [Configs Mesptr Curptr Index] = ComputeAllConfigs(InitConfig, N);">ComputeAllConfigs</a>([0 1 2 3], 16) + 1;
+0036 stim_pattern = <a href="../../eidors/models/stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>( protocol );
+0037 
+0038 
+0039 <span class="comment">% Generate the filter function of the sigmatome system</span>
+0040 <a name="_sub1" href="#_subfunctions" class="code">function filter = calc_sigmatome2_filter</a>
+0041    Filter3= [0,         0.002992185737274, 0.002885352918496,-0.001992209356618, <span class="keyword">...</span>
+0042      0.000247868161165, 0.001320969614758,-0.002994506380400, 0.000217287704644, <span class="keyword">...</span>
+0043      0.000820760030266,-0.002388560206626, 0.005467093174149,-0.000465034175608, <span class="keyword">...</span>
+0044     -0.014049400948852, 0.011968526958771, 0.017269336581277,-0.033327865383464, <span class="keyword">...</span>
+0045     -0.000687996077078, 0.065884070897957,-0.055509942269519,-0.084217637095161, <span class="keyword">...</span>
+0046      0.414790173689917, 0.947607669916644, 0.723749489957398, 0.088544295521622, <span class="keyword">...</span>
+0047     -0.118281839343952, 0.032044694797133, 0.043642225555493,-0.035476390241121, <span class="keyword">...</span>
+0048     -0.007655680300629, 0.022891001199580,-0.005076656322158,-0.007794874431280, <span class="keyword">...</span>
+0049      0.006724761261718,-0.000064773581282,-0.002313251865051, 0.001234620138549, <span class="keyword">...</span>
+0050     -0.002848224928827,-0.000772726894395, 0.002559973165365,-0.001297698809235, <span class="keyword">...</span>
+0051      0.000569993353282, 0.002828133181959, 0.000426156082041];
+0052    filter = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(416,208);
+0053    filter(1:length(Filter3),3) = Filter3';
+0054    <span class="keyword">for</span> i=1:208; 
+0055       filter(:,i) = circshift(filter(:,3),+2*(i-3));
+0056    <span class="keyword">end</span>
+0057 
+0058 <a name="_sub2" href="#_subfunctions" class="code">function [Configs Mesptr Curptr Index] = ComputeAllConfigs(InitConfig, N);</a>
+0059 <span class="comment">%</span>
+0060 <span class="comment">%ComputeAllConfigs: Cette fonction calcule toutes les configurations</span>
+0061 <span class="comment">%                  [Source, Puit, Suiveur, Inverseur] a partir de la</span>
+0062 <span class="comment">%                  configuration ititiale et du nombre d'electrodes.</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">%SYNTAXE:  Configs = ComputeAllConfigs(InitConfig, NbreElectrodes);</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">%INPUT:    InitConfig(1 x 4):  Configuration initiale de mesure exprimee dans</span>
+0067 <span class="comment">%                              le format suivant : [Source, Puit, Suiveur,</span>
+0068 <span class="comment">%                              Inverseur]. Les electrodes sont numerotees de</span>
+0069 <span class="comment">%                              0 a (NbreElectrodes-1).</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">%          N:                  Nombre d'electrodes.</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">%OUTPUT:   Configs(m x 4):     Configurations d'electrodes : [Source, Puit,</span>
+0074 <span class="comment">%                              Suiveur, Inverseur] pour les &quot;m&quot; mesures prises</span>
+0075 <span class="comment">%                              par le scanhead.</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">%          Mesptr(2 x N):      Chaque colonne correspond aux positions</span>
+0078 <span class="comment">%                              d'electrodes qui forment une des &quot;N&quot; paires</span>
+0079 <span class="comment">%                              d'electrodes utilises pour effectuer les mesures</span>
+0080 <span class="comment">%                              de tension.</span>
+0081 <span class="comment">%</span>
+0082 <span class="comment">%          Curptr(2 x N):      Chaque colonne correspond aux numeros des noeuds</span>
+0083 <span class="comment">%                              qui forment une des &quot;N&quot; paires d'electrodes</span>
+0084 <span class="comment">%                              utilises pour injecter les courants.</span>
+0085 <span class="comment">%</span>
+0086 <span class="comment">%          Index(m x 2):       Pour les &quot;m&quot; mesures prises par le scanhead,</span>
+0087 <span class="comment">%                              doublet indiquant le numero de la paire</span>
+0088 <span class="comment">%                              d'electrodes qui sert a applique le courant et</span>
+0089 <span class="comment">%                              le numero de la paire qui sert a effectuer la</span>
+0090 <span class="comment">%                              mesure.</span>
+0091 
+0092 <span class="comment">% Copyright (c) 2009 Hervé Gagnon, Ecole Polytechnique de Montréal.</span>
+0093 
+0094    <span class="comment">% Validation du parametre InitConfig</span>
+0095    <span class="keyword">if</span> (size(InitConfig,1) ~= 1 || size(InitConfig,2) ~= 4)
+0096        error(<span class="string">'Le parametre &quot;InitConfig&quot; doit etre de dimension (1 x 4)!'</span>);
+0097    <span class="keyword">end</span>
+0098 
+0099    <span class="comment">% Validation du parametre NbreElectrodes</span>
+0100    <span class="keyword">if</span> (length(N) ~= 1)
+0101        error(<span class="string">'Le parametre &quot;NbreElectrodes&quot; doit etre un scalaire!'</span>);
+0102    <span class="keyword">end</span>
+0103 
+0104    SrcePosInit = InitConfig(1);
+0105    SinkPosInit = InitConfig(2);
+0106    FollPosInit = InitConfig(3);
+0107    InvtPosInit = InitConfig(4);
+0108 
+0109    GapCourant = abs(SrcePosInit - SinkPosInit);
+0110    GapTension = abs(FollPosInit - InvtPosInit);
+0111 
+0112    <span class="keyword">if</span> ((GapCourant == N/2) &amp;&amp; (GapTension == N/2))
+0113        m = N*(N - 2);
+0114    <span class="keyword">elseif</span>((GapCourant == GapTension) || (GapCourant + GapTension == N))
+0115        m = N*(N - 3);
+0116    <span class="keyword">else</span>
+0117        m = N*(N - 4);
+0118    <span class="keyword">end</span>
+0119       
+0120    SrcePos = SrcePosInit;
+0121    SinkPos = SinkPosInit;
+0122    FollPos = FollPosInit;
+0123    InvtPos = InvtPosInit;
+0124 
+0125    Configs = zeros(m, 4);
+0126 
+0127    <span class="keyword">for</span> i = 1:m
+0128        Configs(i,:) = [SrcePos SinkPos FollPos InvtPos];
+0129        
+0130        SrcePos = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(SrcePos, N);
+0131        SinkPos = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(SinkPos, N);
+0132        FollPos = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(FollPos, N);
+0133        InvtPos = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(InvtPos, N);
+0134        
+0135        <span class="keyword">if</span> ((SrcePos == SrcePosInit) &amp;&amp; (SinkPos == SinkPosInit))
+0136           FollPos = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(FollPos, N);
+0137           InvtPos = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(InvtPos, N);
+0138           <span class="keyword">while</span> (FollPos == SrcePos || FollPos == SinkPos || InvtPos == SrcePos || InvtPos == SinkPos)
+0139               FollPos = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(FollPos, N);
+0140               InvtPos = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(InvtPos, N);
+0141           <span class="keyword">end</span>
+0142        <span class="keyword">end</span>
+0143    <span class="keyword">end</span>
+0144 
+0145    <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0146    Curptr = zeros(2,N);
+0147    Mesptr = zeros(2,N);
+0148 
+0149    Curptr(:,1) = [SrcePosInit; SinkPosInit];
+0150    Mesptr(:,1) = [FollPosInit; InvtPosInit];
+0151 
+0152    <span class="keyword">for</span> i = 2:N
+0153        Curptr(1,i) = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(Curptr(1,i-1), N);
+0154        Curptr(2,i) = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(Curptr(2,i-1), N);
+0155        Mesptr(1,i) = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(Mesptr(1,i-1), N);
+0156        Mesptr(2,i) = <a href="#_sub3" class="code" title="subfunction VarOut = IncrementVarModuloN(VarIn, N);">IncrementVarModuloN</a>(Mesptr(2,i-1), N);
+0157    <span class="keyword">end</span>
+0158 
+0159    Index = zeros(m, 2);
+0160    <span class="keyword">for</span> i = 1:m
+0161        Index(i,1) = find((Configs(i,1) == Curptr(1,:)) &amp; (Configs(i,2) == Curptr(2,:)));
+0162        Index(i,2) = find((Configs(i,3) == Mesptr(1,:)) &amp; (Configs(i,4) == Mesptr(2,:)));
+0163    <span class="keyword">end</span>
+0164 
+0165 <a name="_sub3" href="#_subfunctions" class="code">function VarOut = IncrementVarModuloN(VarIn, N);</a>
+0166    VarOut = VarIn + 1;
+0167    <span class="keyword">if</span> (VarOut == N)
+0168        VarOut = 0;
+0169    <span class="keyword">end</span>
+0170 
+0171 <a name="_sub4" href="#_subfunctions" class="code">function do_unit_test</a>
+0172    imdl= <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'c2t2'</span>,16);
+0173    [Filter,stim_pat] = <a href="sigmatome2_filter.html" class="code" title="function [Filter, stim_pattern]= sigmatome2_filter(test);">sigmatome2_filter</a>;
+0174    imdl.fwd_model.stimulation = stim_pat;
+0175    imdl.fwd_model.jacobian = @<a href="../../eidors/solvers/forward/jacobian_filtered.html" class="code" title="function J= jacobian_filtered( fwd_model, img)">jacobian_filtered</a>;
+0176    imdl.fwd_model.jacobian_filtered.jacobian = @<a href="../../eidors/solvers/forward/jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>;
+0177    imdl.fwd_model.jacobian_filtered.filter   = Filter;
+0178    imdl.meas_icov = speye( size(Filter,1) );
+0179    imdl.fwd_model = rmfield(imdl.fwd_model, <span class="string">'meas_select'</span>);
+0180 
+0181    img= <a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl);
+0182    vh= <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);  vh = Filter * vh.meas;
+0183    img.elem_data(50)=1.1;
+0184    vi= <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);  vi = Filter * vi.meas;
+0185 
+0186    imdl.hyperparameter.value = 0.03;
+0187    imgr= <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);
+0188    <a href="../../eidors/graphics/matlab/show_slices.html" class="code" title="function out_img= show_slices( img, levels )">show_slices</a>(imgr);
+0189 
+0190    imgr = <a href="../../eidors/graphics/matlab/calc_slices.html" class="code" title="function rimg = calc_slices( img, levels );">calc_slices</a>(imgr);
+0191    max_imgr = max(imgr(:));
+0192    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Max'</span>, max_imgr, 6.683411990674756e-04, 1e-8);
+0193    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Loc'</span>, find(imgr&gt;0.99*max_imgr),  <span class="keyword">...</span>
+0194       [1755; 1756; 1818; 1819; 1820; 1882; 1883; 1946; 1947]);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

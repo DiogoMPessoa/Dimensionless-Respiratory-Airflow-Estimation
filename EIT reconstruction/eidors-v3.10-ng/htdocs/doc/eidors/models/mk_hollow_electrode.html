@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_hollow_electrode</title>
+  <meta name="keywords" content="mk_hollow_electrode">
+  <meta name="description" content="MK_HOLLOW_ELECTRODE: remove nodes with indicated electrdoes">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_hollow_electrode.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_hollow_electrode
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_HOLLOW_ELECTRODE: remove nodes with indicated electrdoes</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function fmdl = mk_hollow_electrode(fmdl, elec_idx) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> MK_HOLLOW_ELECTRODE: remove nodes with indicated electrdoes
+ fmdl_out = mk_hollow_electrode(fmdl, elec_idx)
+   fmdl:     input model
+   elec_idx: electrodes for which we remove internal nodes
+             if not provided, remove for all electrodes
+   fmdl_out: output model
+
+ This function is useful for internal electrodes created by
+   meshing software in which we don't want to calculate current
+   flow within the electrode
+
+ Limitations: currently works for 2D fems only</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="../../eidors/meshing/netgen/mdl2d_from3d.html" class="code" title="function mdl2 = mdl2d_from3d(mdl3);">mdl2d_from3d</a>	mdl2d_from3d: Create 2D mdl from z=0 plane of 3d model</li><li><a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="../../eidors/meshing/netgen/ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>	NG_MK_GEN_MODELS: create generic models using netgen</li><li><a href="../../eidors/meshing/order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>	ORDER_LOOP Order a list of points on a loop</li><li><a href="elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>	ELEM_SELECT: select element fractions inside a function</li><li><a href="mk_hollow_electrode.html" class="code" title="function fmdl = mk_hollow_electrode(fmdl, elec_idx)">mk_hollow_electrode</a>	MK_HOLLOW_ELECTRODE: remove nodes with indicated electrdoes</li><li><a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_hollow_electrode.html" class="code" title="function fmdl = mk_hollow_electrode(fmdl, elec_idx)">mk_hollow_electrode</a>	MK_HOLLOW_ELECTRODE: remove nodes with indicated electrdoes</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li><li><a href="#_sub2" class="code">function fmdl = unit_test_model1</a></li><li><a href="#_sub3" class="code">function fmdl = unit_test_model2</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function fmdl = mk_hollow_electrode(fmdl, elec_idx)</a>
+0002 <span class="comment">% MK_HOLLOW_ELECTRODE: remove nodes with indicated electrdoes</span>
+0003 <span class="comment">% fmdl_out = mk_hollow_electrode(fmdl, elec_idx)</span>
+0004 <span class="comment">%   fmdl:     input model</span>
+0005 <span class="comment">%   elec_idx: electrodes for which we remove internal nodes</span>
+0006 <span class="comment">%             if not provided, remove for all electrodes</span>
+0007 <span class="comment">%   fmdl_out: output model</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% This function is useful for internal electrodes created by</span>
+0010 <span class="comment">%   meshing software in which we don't want to calculate current</span>
+0011 <span class="comment">%   flow within the electrode</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Limitations: currently works for 2D fems only</span>
+0014 
+0015 <span class="comment">% (C) 2017 Andy Adler and Bartek Grychtol. License: GPL v2 or v3. $Id: mk_hollow_electrode.m 5424 2017-04-25 17:45:19Z aadler $</span>
+0016 
+0017 <span class="keyword">if</span> ischar(fmdl) &amp;&amp; strcmp(fmdl,<span class="string">'UNIT_TEST'</span>); <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0018 
+0019 <span class="keyword">if</span> nargin==1; elec_idx = 1:length(fmdl.electrode); <span class="keyword">end</span>
+0020 elec_idx = elec_idx(:)'; <span class="comment">% Row vector to index for loop</span>
+0021 
+0022 elidx=[];
+0023 <span class="keyword">for</span> i = elec_idx
+0024    elidx = [elidx, fmdl.electrode(i).nodes];
+0025 <span class="keyword">end</span>
+0026 
+0027 ELNODES = zeros(size(fmdl.nodes,1),1);
+0028 ELNODES(elidx) = 1;
+0029 <span class="comment">% find all electrode elems</span>
+0030 ELELEM = sum(ELNODES(fmdl.elems),2)==3;
+0031 <span class="comment">% remove internal electrode elements</span>
+0032 fmdl.elems = fmdl.elems(~ELELEM,:);
+0033 <span class="comment">% used nodes</span>
+0034 unodes = unique(fmdl.elems);
+0035 <span class="comment">% remove internal electrode nodes</span>
+0036 <span class="keyword">for</span> i = elec_idx
+0037    idx = ismember(fmdl.electrode(i).nodes,unodes);
+0038    fmdl.electrode(i).nodes = fmdl.electrode(i).nodes(idx);
+0039 <span class="keyword">end</span>
+0040 
+0041 nodemap = zeros(size(fmdl.nodes,1),1);
+0042 nodemap(unodes) = 1:numel(unodes);
+0043 <span class="comment">% remove unused nodes</span>
+0044 fmdl.nodes = fmdl.nodes(unodes,:);
+0045 <span class="comment">%remap elems</span>
+0046 fmdl.elems = nodemap(fmdl.elems);
+0047 <span class="comment">%remap elecs</span>
+0048 <span class="keyword">for</span> i = 1:length(fmdl.electrode)
+0049    idx = ismember(fmdl.electrode(i).nodes,unodes);
+0050    nidx =  nodemap( fmdl.electrode(i).nodes(idx) );
+0051    <span class="keyword">if</span> any(i==elec_idx);
+0052       npts = fmdl.nodes(nidx,:);
+0053       [npts_o, nnidx] = <a href="../../eidors/meshing/order_loop.html" class="code" title="function [p n] = order_loop(pp,clk)">order_loop</a>(npts);
+0054       fmdl.electrode(i).nodes = nidx(nnidx);
+0055    <span class="keyword">else</span> <span class="comment">% if not in specified index, don't reorder loop</span>
+0056       fmdl.electrode(i).nodes = nidx;
+0057    <span class="keyword">end</span>
+0058 <span class="keyword">end</span>
+0059 
+0060 
+0061 fmdl.boundary = <a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(fmdl);
+0062 
+0063 [~,idx] = min(sum(fmdl.nodes.^2,2));
+0064 fmdl.gnd_node = idx(1);
+0065 
+0066 
+0067 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0068     fmdl = <a href="#_sub2" class="code" title="subfunction fmdl = unit_test_model1">unit_test_model1</a>;
+0069     subplot(221); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl); axis([-.1,.3,0.4,0.8])
+0070     title <span class="string">'original model - filled electrodes'</span>;
+0071     fmdl1= <a href="mk_hollow_electrode.html" class="code" title="function fmdl = mk_hollow_electrode(fmdl, elec_idx)">mk_hollow_electrode</a>(fmdl,[1,2,5]);
+0072     
+0073     subplot(222); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl1); axis([-.1,.3,0.4,0.8])
+0074     title <span class="string">'original model - hollow electrode #1'</span>;
+0075 
+0076     fmdl2= <a href="mk_hollow_electrode.html" class="code" title="function fmdl = mk_hollow_electrode(fmdl, elec_idx)">mk_hollow_electrode</a>(fmdl);
+0077     subplot(223); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl2); axis([-.1,.3,0.4,0.8])
+0078     title <span class="string">'original model - all hollow electrode'</span>;
+0079 
+0080     fmdl = <a href="#_sub3" class="code" title="subfunction fmdl = unit_test_model2">unit_test_model2</a>;
+0081     fmdl4= <a href="mk_hollow_electrode.html" class="code" title="function fmdl = mk_hollow_electrode(fmdl, elec_idx)">mk_hollow_electrode</a>(fmdl, length(fmdl.electrode));
+0082     subplot(224); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(fmdl4); axis([-1,1,-1,1])
+0083     title <span class="string">'original model - one electrode'</span>;
+0084     
+0085 
+0086 <a name="_sub2" href="#_subfunctions" class="code">function fmdl = unit_test_model1</a>
+0087    R=0.65; Nel = 16;
+0088    shape_str = [ <span class="keyword">...</span>
+0089    <span class="string">'solid incyl  = cylinder (0,0,0; 0,0,1; 0.125) -maxh=0.015;\n'</span>, <span class="keyword">...</span>
+0090    <span class="string">'solid farcyl = cylinder (0,0,0; 0,0,1;0.75) -maxh=0.55;\n'</span> <span class="keyword">...</span>
+0091    <span class="string">'solid pl1    =  plane(0,0,-0.09;0,0,-1);\n'</span> <span class="keyword">...</span>
+0092    <span class="string">'solid top    =  plane(0,0,0; 0,0,1) -maxh=0.13;\n'</span> <span class="keyword">...</span>
+0093    <span class="string">'solid mainobj= pl1 and top and farcyl and not incyl;\n'</span>];
+0094    elec_pos = zeros(Nel,6);
+0095    Theta = 0:360/Nel:360-360/Nel;
+0096    <span class="keyword">for</span> i = 1:Nel
+0097           elec_pos(i,1) = R*sind(Theta(i));
+0098           elec_pos(i,2) = R*cosd(Theta(i));
+0099           elec_pos(i,6) = 1;
+0100           elec_obj(i) = {<span class="string">'top'</span>};
+0101    <span class="keyword">end</span>
+0102    elec_shape=[0.025];
+0103    fmdl = <a href="../../eidors/meshing/netgen/ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>(shape_str, elec_pos, elec_shape, elec_obj);
+0104    fmdl = <a href="../../eidors/meshing/netgen/mdl2d_from3d.html" class="code" title="function mdl2 = mdl2d_from3d(mdl3);">mdl2d_from3d</a>(fmdl);
+0105 
+0106 <a name="_sub3" href="#_subfunctions" class="code">function fmdl = unit_test_model2</a>
+0107    extra={<span class="string">'ball'</span>, <span class="keyword">...</span>
+0108          [<span class="string">'solid cyls= cylinder(0.2,0.2,0;0.2,0.2,1;0.2) -maxh=0.05;'</span> <span class="keyword">...</span>
+0109           <span class="string">'solid ball= cyls and orthobrick(-1,-1,0;1,1,0.5);'</span>]};
+0110    fmdl= <a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>(0,[6],[0.1,0,0.05],extra); 
+0111    eln   = find(<a href="elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>(fmdl, <span class="string">'(x-0.2).^2+(y-0.2).^2&lt;0.2^2'</span>));
+0112    eln   = unique(fmdl.elems(eln,:));
+0113    fmdl.electrode(end+1) = struct(<span class="string">'nodes'</span>, eln(:)', <span class="string">'z_contact'</span>, .01);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

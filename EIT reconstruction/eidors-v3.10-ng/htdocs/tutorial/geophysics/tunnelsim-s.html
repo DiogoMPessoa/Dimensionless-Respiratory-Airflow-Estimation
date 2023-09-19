@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+
+<h2> 
+Simulating Geophysical measurements around a borehole
+</h2>
+
+
+<h3>
+Create 3D FEM model of the gallery
+</h3>
+<pre>
+% Create 3D model of a tunnel $Id: tunnelsim01.m 2356 2010-11-08 08:41:42Z aadler $ 
+
+N_elec = 16;
+shape_str = ['solid incyl  = cylinder (0,0,0; 1,0,0; 1) -maxh=1.0; \n', ...
+             'solid farcyl = cylinder (0,0,0; 1,0,0; 5) -maxh=5.0; \n' ...
+             'solid pl1    =  plane(-5,0,0;-1,0,0);\n' ...
+             'solid pl2    =  plane(5,0,0; 1,0,0);\n' ...
+             'solid mainobj= pl1 and pl2 and farcyl and not incyl;\n'];
+th= linspace(0,2*pi,N_elec+1)'; th(end)=[];
+cth= cos(th); sth=sin(th); zth= zeros(size(th));
+ elec_pos = [zth, cth, sth, zth cth, sth];
+ elec_shape=[0.01];
+ elec_obj = 'incyl';
+ fmdl = ng_mk_gen_models(shape_str, elec_pos, elec_shape, elec_obj);
+subplot(221); show_fem( fmdl );
+
+view(90,0); print_convert tunnelsim01a.png
+view( 0,0); print_convert tunnelsim01b.png
+
+crop_model([],  inline('x>=0.5','x','y','z'))
+crop_model([],  inline('x<=-0.5','x','y','z'))
+crop_model([],  inline('(y.^2+z.^2)>=1.3^2','x','y','z'))
+view(-90,50); axis tight; print_convert tunnelsim01c.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/geophysics/tunnelsim01a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/geophysics/tunnelsim01b.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/geophysics/tunnelsim01c.png">
+<br><i> Figure:</i>
+3D FEM of gallery from two viewing angles, and a cropped model showing the electrodes
+</center>
+
+<h3>
+Place a simulated contrast
+</h3>
+<pre>
+% Create 3D model of a tunnel $Id: tunnelsim02.m 3273 2012-06-30 18:00:35Z aadler $ 
+
+% Simulation protocol. 
+stim = mk_stim_patterns(N_elec, 1, [0,4], [0,4], {'no_meas_current'},1);
+fmdl.stimulation = stim;
+cond_mdl = .1; % in S/m units
+img = mk_image( fmdl, cond_mdl); 
+vs_h = fwd_solve( img);
+
+img.elem_data = cond_mdl*(1 + mk_c2f_circ_mapping(fmdl, [0.25;1.4;0;0.2]) );
+vs_i = fwd_solve( img);
+
+show_fem(img); ylim(2*[-1,1]); zlim(2*[-1,1]);
+
+view(90,0 ); print_convert tunnelsim02a.png
+view( 0,90); print_convert tunnelsim02b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/geophysics/tunnelsim02a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/geophysics/tunnelsim02b.png">
+<br><i> Figure:</i>
+3D FEM of gallery and contrast from two viewing angles.
+</center>
+
+<h3>
+Reconstruct images (using full 3D reconstruction)
+</h3>
+
+Using the full 3D model, this is an extremely slow
+reconstruction process; it is also not really 
+recommended since the model size is much too small
+near the electrodes.
+<pre>
+% Create 3D model of a tunnel $Id: tunnelsim03.m 2359 2010-11-08 09:28:12Z aadler $ 
+
+% Reconstruct entire image (slow)
+imdl = mk_common_model('d2c2',N_elec);
+imdl.fwd_model = fmdl;
+imdl.jacobian_bkgnd.value = cond_mdl;
+
+imgr = inv_solve( imdl, vs_h, vs_i );
+
+imgr.calc_colours.npoints= 128;
+slices = [0.0,inf,inf,1,1;
+          0.5,inf,inf,2,1; 
+          1.0,inf,inf,3,1]; 
+subplot(211); show_slices(imgr,slices);
+print_convert tunnelsim03a.png
+
+</pre>
+
+<center>
+<img src="tunnelsim03a.png">
+<br><i> Figure:</i>
+Slices Reconstructed at <i>x</i>=0.0, 
+                        <i>x</i>=0.5,  and
+                        <i>x</i>=1.0. 
+</center>
+
+<h3>
+Reconstruct images (on a 2D simple slice)
+</h3>
+
+Here we use a slice from a filled 2D circular model.
+This means that the smoothing prior will be allowed to
+"fill" through the centre, resulting in image content
+where we don't expect it to be.
+<pre>
+% Create 3D model of a tunnel $Id: tunnelsim04.m 4839 2015-03-30 07:44:50Z aadler $ 
+
+% Reconstruct to a slice via coarse2fine
+% Use a simple circular model without hole.
+% Note that this will give the wrong electrode posns
+imdl = mk_common_model('d2c2',N_elec);
+imdl.rec_model = imdl.fwd_model;
+imdl.rec_model.nodes = imdl.rec_model.nodes*5; % Enlarge
+imdl.fwd_model = fmdl;
+imdl.jacobian_bkgnd.value = cond_mdl;
+
+% Do coarse2fine mapping. Rotate mdl to z dirn
+f1mdl = fmdl; f1mdl.nodes = f1mdl.nodes(:,[2,3,1]);
+f1mdl.mk_coarse_fine_mapping.z_depth = 1;
+c2f= mk_coarse_fine_mapping( f1mdl, imdl.rec_model);
+imdl.fwd_model.coarse2fine = c2f;
+
+imdl.hyperparameter.value = 0.3;
+
+imgr = inv_solve( imdl, vs_h, vs_i );
+
+imgr.calc_colours.npoints= 128; subplot(221);
+show_slices(imgr); print_convert tunnelsim04a.png
+show_fem(imgr);    print_convert tunnelsim04b.png
+
+</pre>
+
+<center>
+<img src="tunnelsim04a.png"> <img src="tunnelsim04b.png">
+<br><i> Figure:</i>
+Slices 2D slices shown in two configurations
+</center>
+
+<h3>
+Reconstruct images (on a 2D conforming geometry)
+</h3>
+
+Here we use a slice created to conform to the
+specified geometry.
+<pre>
+% Create 2D model of a tunnel $Id: tunnelsim05.m 2361 2010-11-08 10:50:48Z aadler $ 
+
+extra={'ball', 'solid ball = sphere(0,0,0;1) -maxh=0.25;'};
+cmdl= ng_mk_cyl_models([0,15,3],[0],[0.1,0,0.05],extra);
+
+show_fem(cmdl);                      print_convert tunnelsim05a.png
+show_fem(cmdl); axis(2*[-1,1,-1,1]); print_convert tunnelsim05b.png
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/geophysics/tunnelsim05a.png"> <img src="tunnelsim05b.png">
+<br><i> Figure:</i>
+2D FEM model for reconstruction and zoom
+</center>
+
+<pre>
+% Create 3D model of a tunnel $Id: tunnelsim06.m 4839 2015-03-30 07:44:50Z aadler $ 
+
+imdl = select_imdl( fmdl, {'Basic GN dif'});
+imdl.rec_model = cmdl;
+imdl.jacobian_bkgnd.value = cond_mdl;
+
+% Do coarse2fine mapping. Rotate mdl to z dirn
+f1mdl = fmdl; f1mdl.nodes = f1mdl.nodes(:,[2,3,1]);
+f1mdl.mk_coarse_fine_mapping.z_depth = 1;
+c2f= mk_coarse_fine_mapping( f1mdl, cmdl);
+imdl.fwd_model.coarse2fine = c2f;
+
+imdl.hyperparameter.value = 0.3;
+
+imgr = inv_solve( imdl, vs_h, vs_i );
+
+imgr.calc_colours.npoints= 128; subplot(221);
+show_slices(imgr); print_convert tunnelsim06a.png
+show_fem(imgr);    print_convert tunnelsim06b.png
+show_fem(imgr);    axis(3*[-1,1,-1,1]); print_convert tunnelsim06c.png
+
+</pre>
+
+<center>
+<img src="tunnelsim06a.png"> <img src="tunnelsim06b.png"> <img src="tunnelsim06c.png">
+<br><i> Figure:</i>
+Reconstructed images
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

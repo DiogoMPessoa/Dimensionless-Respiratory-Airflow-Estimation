@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<H2>FEM Models Prepackaged with EIDORS</H2>
+
+EIDORS provides a number of prepackaged FEM models
+that can be used to easily set up common tasks.
+The main  function to make these available is
+<tt>mk_common_models</tt>.
+
+<H2>2D FEM Models</H2>
+
+
+Using <tt>mk_common_models</tt>, the basic function
+is a string such as 'c2d0c', where
+<ul>
+   <table border="1">
+   <tr><th>c<td>Vertex density (a=low, j=high)
+   <tr><th>2<td>Two dimentional
+   <tr><th>d<td>Use the "distmesh" generator
+   <tr><th>0<td>Electrode refinement level is 0 (no refinement)
+   <tr><th>c<td>Circular model
+   </table>
+</ul>
+Use <tt>help mk_common_models</tt> for more details
+
+<pre>
+% Distmesh models $Id: common_models01.m 2161 2010-04-04 20:33:46Z aadler $
+imdl=mk_common_model('c2d0c',14);
+show_fem(imdl.fwd_model,[0,1]);
+
+print_convert('common_models01a.png','-density 60');
+
+imdl=mk_common_model('d2d3c',9);
+show_fem(imdl.fwd_model,[0,1]);
+
+print_convert('common_models01b.png','-density 60');
+
+</pre>
+
+<blockquote>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/common_models01a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/common_models01b.png">
+<br><i> Figure:</i>
+Model c2d0c (left) and d2d3c (right)
+</blockquote>
+
+<pre>
+% Distmesh models $Id: common_models02.m 2161 2010-04-04 20:33:46Z aadler $
+% Distmesh models with fixed electode nodes
+imdl=mk_common_model('c2d0d',14);
+show_fem(imdl.fwd_model,[0,1]);
+
+print_convert('common_models02a.png','-density 60');
+
+imdl=mk_common_model('d2d3d',9);
+show_fem(imdl.fwd_model,[0,1]);
+
+print_convert('common_models02b.png','-density 60');
+
+</pre>
+
+<blockquote>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/common_models02a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/common_models02b.png">
+<br><i> Figure:</i>
+Model c2d0d (left) and d2d3d (right)
+</blockquote>
+
+<pre>
+% Distmesh models $Id: common_models03.m 2161 2010-04-04 20:33:46Z aadler $
+imdl=mk_common_model('c2C1',16);
+show_fem(imdl.fwd_model,[0,1]);
+
+print_convert('common_models03a.png','-density 60');
+
+imdl=mk_common_model('d2t3',16);
+show_fem(imdl.fwd_model,[0,1]);
+
+print_convert('common_models03b.png','-density 60');
+
+</pre>
+
+Come rough 2D models of thorax shapes are available
+as <tt><i>x</i>2t<i>x</i></tt> and 
+as <tt><i>x</i>2T<i>x</i></tt> and 
+models
+<blockquote>
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/common_models03a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/EIDORS_basics/common_models03b.png">
+<br><i> Figure:</i>
+Model c2C1 (left) and d2t3 (right). 
+Note that complete electrodes are indicated by
+green lines and point electrods by green circles
+</blockquote>
+
+<pre>
+% Distmesh models $Id: common_models04.m 3886 2013-04-18 10:05:56Z aadler $
+models = {'a2c2', 'a2d0c', 'a2d1c', 'a2d2c', 'a2d4c',  ...
+          'b2c2', 'b2d0c', 'b2d1c', 'b2d2c', 'b2d4c',  ...
+          'c2c2', 'c2d0c', 'c2d1c', 'c2d2c', 'c2d4c',  ...
+          'd2c2', 'd2d0c', 'd2d1c', 'd2d2c', 'd2d4c',  ...
+          'e2c2', 'e2d0c', 'e2d1c', 'e2d2c', 'e2d4c',  ...
+          'f2c2', 'f2d0c', 'f2d1c', 'f2d2c', 'f2d4c',  ...
+          'g2c2', 'g2d0c', 'g2d1c', 'g2d2c', 'g2d4c',  ...
+          'h2c2', 'h2d0c', 'h2d1c', 'h2d2c', 'h2d4c',  ...
+          'i2c2', 'i2d0c', 'i2d1c', 'i2d2c', 'i2d4c',  ...
+          'j2c2', 'j2d0c', 'j2d1c', 'j2d2c', 'j2d4c'};
+
+for i= 1:length(models);
+   imdl=mk_common_model(models{i},8);
+   clf; show_fem(imdl.fwd_model);
+   axis image
+   axis([0,1.05,-0.15,0.15]);
+   print_convert(sprintf('common_models04_%s.png',models{i}), '-density 50');
+end
+
+</pre>
+
+<table>
+<TR> <TD><img src="common_models04_a2c2.png"><br><b>model=a2c2</b> <TD><img src="common_models04_a2d0c.png"><br><b>model=a2d0c</b> <TD><img src="common_models04_a2d1c.png"><br><b>model=a2d1c</b> <TD><img src="common_models04_a2d2c.png"><br><b>model=a2d2c</b> <TD><img src="common_models04_a2d4c.png"><br><b>model=a2d4c</b>
+<TR> <TD><img src="common_models04_b2c2.png"><br><b>model=b2c2</b> <TD><img src="common_models04_b2d0c.png"><br><b>model=b2d0c</b> <TD><img src="common_models04_b2d1c.png"><br><b>model=b2d1c</b> <TD><img src="common_models04_b2d2c.png"><br><b>model=b2d2c</b> <TD><img src="common_models04_b2d4c.png"><br><b>model=b2d4c</b>
+<TR> <TD><img src="common_models04_c2c2.png"><br><b>model=c2c2</b> <TD><img src="common_models04_c2d0c.png"><br><b>model=c2d0c</b> <TD><img src="common_models04_c2d1c.png"><br><b>model=c2d1c</b> <TD><img src="common_models04_c2d2c.png"><br><b>model=c2d2c</b> <TD><img src="common_models04_c2d4c.png"><br><b>model=c2d4c</b>
+<TR> <TD><img src="common_models04_d2c2.png"><br><b>model=d2c2</b> <TD><img src="common_models04_d2d0c.png"><br><b>model=d2d0c</b> <TD><img src="common_models04_d2d1c.png"><br><b>model=d2d1c</b> <TD><img src="common_models04_d2d2c.png"><br><b>model=d2d2c</b> <TD><img src="common_models04_d2d4c.png"><br><b>model=d2d4c</b>
+<TR> <TD><img src="common_models04_e2c2.png"><br><b>model=e2c2</b> <TD><img src="common_models04_e2d0c.png"><br><b>model=e2d0c</b> <TD><img src="common_models04_e2d1c.png"><br><b>model=e2d1c</b> <TD><img src="common_models04_e2d2c.png"><br><b>model=e2d2c</b> <TD><img src="common_models04_e2d4c.png"><br><b>model=e2d4c</b>
+<TR> <TD><img src="common_models04_f2c2.png"><br><b>model=f2c2</b> <TD><img src="common_models04_f2d0c.png"><br><b>model=f2d0c</b> <TD><img src="common_models04_f2d1c.png"><br><b>model=f2d1c</b> <TD><img src="common_models04_f2d2c.png"><br><b>model=f2d2c</b> <TD><img src="common_models04_f2d4c.png"><br><b>model=f2d4c</b>
+<TR> <TD><img src="common_models04_g2c2.png"><br><b>model=g2c2</b> <TD><img src="common_models04_g2d0c.png"><br><b>model=g2d0c</b> <TD><img src="common_models04_g2d1c.png"><br><b>model=g2d1c</b> <TD><img src="common_models04_g2d2c.png"><br><b>model=g2d2c</b> <TD><img src="common_models04_g2d4c.png"><br><b>model=g2d4c</b>
+<TR> <TD><img src="common_models04_h2c2.png"><br><b>model=h2c2</b> <TD><img src="common_models04_h2d0c.png"><br><b>model=h2d0c</b> <TD><img src="common_models04_h2d1c.png"><br><b>model=h2d1c</b> <TD><img src="common_models04_h2d2c.png"><br><b>model=h2d2c</b> <TD><img src="common_models04_h2d4c.png"><br><b>model=h2d4c</b>
+<TR> <TD><img src="common_models04_i2c2.png"><br><b>model=i2c2</b> <TD><img src="common_models04_i2d0c.png"><br><b>model=i2d0c</b> <TD><img src="common_models04_i2d1c.png"><br><b>model=i2d1c</b> <TD><img src="common_models04_i2d2c.png"><br><b>model=i2d2c</b> <TD><img src="common_models04_i2d4c.png"><br><b>model=i2d4c</b>
+<TR> <TD><img src="common_models04_j2c2.png"><br><b>model=j2c2</b> <TD><img src="common_models04_j2d0c.png"><br><b>model=j2d0c</b> <TD><img src="common_models04_j2d1c.png"><br><b>model=j2d1c</b> <TD><img src="common_models04_j2d2c.png"><br><b>model=j2d2c</b> <TD><img src="common_models04_j2d4c.png"><br><b>model=j2d4c</b>
+</table>
+<br><i> Figure:</i>
+Overview of models available from mk_common_model
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mdl2d_from3d</title>
+  <meta name="keywords" content="mdl2d_from3d">
+  <meta name="description" content="mdl2d_from3d: Create 2D mdl from z=0 plane of 3d model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">netgen</a> &gt; mdl2d_from3d.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/netgen&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>mdl2d_from3d
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>mdl2d_from3d: Create 2D mdl from z=0 plane of 3d model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mdl2 = mdl2d_from3d(mdl3); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> mdl2d_from3d: Create 2D mdl from z=0 plane of 3d model</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="ng_mk_ellip_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_ellip_models(ellip_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_ellip_models</a>	NG_MAKE_ELLIP_MODELS: create elliptical models using netgen</li><li><a href="ng_mk_extruded_model.html" class="code" title="function [fmdl,mat_idx] = ng_mk_extruded_model(shape, elec_pos, elec_shape,extra_ng_code)">ng_mk_extruded_model</a>	NG_MAKE_EXTRUDED_MODEL: create extruded models using netgen</li><li><a href="ng_mk_gen_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_gen_models(shape_str, elec_pos,  elec_shape, elec_obj, extra_ng_code);">ng_mk_gen_models</a>	NG_MK_GEN_MODELS: create generic models using netgen</li><li><a href="../../../eidors/meshing/ng_mk_common_model.html" class="code" title="function fmdl = ng_mk_common_model(mdl_type,mdl_shape, elec_pos, elec_shape);">ng_mk_common_model</a>	NG_MK_COMMON_MODEL: utility to create common models</li><li><a href="../../../eidors/models/mk_hollow_electrode.html" class="code" title="function fmdl = mk_hollow_electrode(fmdl, elec_idx)">mk_hollow_electrode</a>	MK_HOLLOW_ELECTRODE: remove nodes with indicated electrdoes</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mdl2 = mdl2d_from3d(mdl3);</a>
+0002 <span class="comment">% mdl2d_from3d: Create 2D mdl from z=0 plane of 3d model</span>
+0003 
+0004 <span class="comment">% (C) Andy Adler, Alistair Boyle 2013. Licenced under GPL v2 or v3</span>
+0005 <span class="comment">% $Id: mdl2d_from3d.m 5908 2019-02-12 07:23:19Z aadler $</span>
+0006    <span class="comment">% set name</span>
+0007    mdl2 = <a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>,sprintf(<span class="string">'%s 2D'</span>,mdl3.name));
+0008 
+0009    <span class="comment">% set nodes</span>
+0010    [bdy,idx] = <a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(mdl3.elems);
+0011    vtx = mdl3.nodes;
+0012    z_vtx = reshape(vtx(bdy,3), size(bdy) );
+0013    lay0  = find( all(z_vtx==0,2) );
+0014    bdy0  = bdy( lay0, :);
+0015    
+0016    vtx0  = unique(bdy0(:));
+0017    mdl2.nodes = vtx(vtx0,1:2);
+0018    <span class="keyword">if</span> isempty(mdl2.nodes)
+0019       error(<span class="string">'mdl2d_from3d: Something went wrong; mdl2 has no nodes'</span>);
+0020    <span class="keyword">end</span>
+0021 
+0022    <span class="comment">% set elems</span>
+0023    nmap  = zeros(size(vtx,1),1); nmap(vtx0) = 1:length(vtx0);
+0024    bdy0  = reshape(nmap(bdy0), size(bdy0) ); <span class="comment">% renumber to new scheme</span>
+0025    mdl2.elems = bdy0;
+0026 
+0027    <span class="comment">% set boundary</span>
+0028    mdl2.boundary = <a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>( mdl2.elems);
+0029 
+0030    <span class="comment">% set gnd_node</span>
+0031    mdl2.gnd_node = nmap(mdl3.gnd_node);
+0032    <span class="keyword">if</span> mdl2.gnd_node == 0 <span class="comment">% we've just killed it</span>
+0033       ctr = mean(mdl2.nodes);
+0034       d = bsxfun(@minus, mdl2.nodes, ctr).^2;
+0035       [jnk, mdl2.gnd_node] = min(d);
+0036       mdl2.gnd_node = mdl2.gnd_node(1);
+0037    <span class="keyword">end</span>
+0038 
+0039    <span class="comment">% set material indices</span>
+0040    <span class="comment">% TODO: vectorize code</span>
+0041    <span class="keyword">if</span> isfield(mdl3,<span class="string">'mat_idx'</span>);
+0042    mdl2.mat_idx = {};
+0043    idx0  = idx( lay0, :);
+0044    <span class="keyword">for</span> i=1:size(mdl3.mat_idx,2)
+0045      mdl2.mat_idx{i} = [];
+0046      ii = 1;
+0047      <span class="keyword">for</span> j=1:size(mdl3.mat_idx{i},1)
+0048          idx_tmp = find( idx0==mdl3.mat_idx{i}(j) );
+0049          <span class="keyword">if</span> not(isempty(idx_tmp))
+0050            mdl2.mat_idx{i}(ii,1) = idx_tmp(1,1);
+0051            ii = ii + 1;
+0052          <span class="keyword">end</span>
+0053      <span class="keyword">end</span>
+0054    <span class="keyword">end</span>
+0055    <span class="keyword">end</span> <span class="comment">%isfield</span>
+0056 
+0057    
+0058    <span class="comment">% set electrode</span>
+0059    <span class="keyword">if</span> isfield(mdl3,<span class="string">'electrode'</span>)
+0060      mdl2.electrode = mdl3.electrode;
+0061      <span class="keyword">for</span> i=1:length(mdl2.electrode);
+0062         enodes = nmap( mdl2.electrode(i).nodes );
+0063         enodes(enodes==0) = []; <span class="comment">% Remove 3D layers</span>
+0064         mdl2.electrode(i).nodes = enodes(:)';
+0065      <span class="keyword">end</span>
+0066    <span class="keyword">end</span>
+0067 
+0068    <span class="comment">% copy other fields</span>
+0069    <span class="keyword">if</span> isfield(mdl3,<span class="string">'stimulation'</span>); mdl2.stimulation= mdl3.stimulation; <span class="keyword">end</span>
+0070    <span class="keyword">try</span>   
+0071        mdl2.solve      = mdl3.solve;
+0072    <span class="keyword">catch</span>
+0073        mdl2.solve      = <span class="string">'eidors_default'</span>;<span class="keyword">end</span>
+0074    <span class="keyword">try</span>   
+0075        mdl2.jacobian   = mdl3.jacobian;
+0076    <span class="keyword">catch</span>
+0077        mdl2.jacobian   = <span class="string">'eidors_default'</span>;<span class="keyword">end</span>
+0078    <span class="keyword">try</span>   
+0079        mdl2.system_mat = mdl3.system_mat;  
+0080    <span class="keyword">catch</span>
+0081        mdl2.system_mat = <span class="string">'eidors_default'</span>; <span class="keyword">end</span>;
+0082    <span class="keyword">try</span>   
+0083        mdl2.normalize_measurements = mdl3.normalize_measurements;  
+0084    <span class="keyword">catch</span>
+0085        mdl2.normalize_measurements = 0; <span class="keyword">end</span>;
+0086 
+0087    <span class="comment">% update cache</span>
+0088    mdl2 = <a href="../../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>,mdl2);
+0089</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

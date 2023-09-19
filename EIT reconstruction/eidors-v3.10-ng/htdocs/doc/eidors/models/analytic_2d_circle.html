@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of analytic_2d_circle</title>
+  <meta name="keywords" content="analytic_2d_circle">
+  <meta name="description" content="V = analytic_2d_circle(J, [s_h, s_i, b, a, angl])">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; analytic_2d_circle.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>analytic_2d_circle
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>V = analytic_2d_circle(J, [s_h, s_i, b, a, angl])</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function V = analytic_2d_circle(I, params) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> V = analytic_2d_circle(J, [s_h, s_i, b, a, angl])
+ Voltage around a 2D circle with properties
+   conductivities: tank(s_h), inclusion(s_i)
+   tank radius = 1
+   inclusion: radius(a), distance(b) at angle(angl)
+
+ J = current density at a regular sample of nodes on the boundary
+    because analytic_2d_circle works on current density, it needs
+    to be scaled with the number of sample points, to get I
+
+ Based on eqn 21 in Seagar and Bates (1985).
+
+ (C) Andy Adler 2009. License: GPL V2 or V3
+ $Id: analytic_2d_circle.m 4898 2015-05-06 14:26:36Z aadler $
+
+ USAGE EXAMPLE: compare FEM to analytic model
+
+  imdl= mk_common_model('c2c0',16);
+ img = calc_jacobian_bkgnd(imdl);
+ img.fwd_solve.get_all_meas = 1;
+ img.elem_data(1:256)= 0.1;
+ vi= fwd_solve(img);
+ 
+ [jnk,maxl] = min(vi.volt(:,1));
+ vi= vi.volt(maxl:end,1);
+ lv= length(vi);
+ 
+ vol = get_elem_volume(img.fwd_model);
+ vt= sum(vol); va= sum(vol(img.elem_data ~=1));
+ rad = sqrt(va/vt);
+ 
+ I =  zeros(lv,1); I(1+[0,lv/16]) = [-25,25]*lv/16;
+ vsi= analytic_2d_circle(I, [1, 0.1, 0.0, rad, 0]);
+ 
+ plot([vi,vsi]);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="analytic_2d_circle.html" class="code" title="function V = analytic_2d_circle(I, params)">analytic_2d_circle</a>	V = analytic_2d_circle(J, [s_h, s_i, b, a, angl])</li><li><a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>	GET_ELEM_VOLUME: VOL = get_elem_volume(fwd_model, map_node )</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="analytic_2d_circle.html" class="code" title="function V = analytic_2d_circle(I, params)">analytic_2d_circle</a>	V = analytic_2d_circle(J, [s_h, s_i, b, a, angl])</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [SM,ll2] = solve_matrix(ll, params)</a></li><li><a href="#_sub2" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function V = analytic_2d_circle(I, params)</a>
+0002 <span class="comment">% V = analytic_2d_circle(J, [s_h, s_i, b, a, angl])</span>
+0003 <span class="comment">% Voltage around a 2D circle with properties</span>
+0004 <span class="comment">%   conductivities: tank(s_h), inclusion(s_i)</span>
+0005 <span class="comment">%   tank radius = 1</span>
+0006 <span class="comment">%   inclusion: radius(a), distance(b) at angle(angl)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% J = current density at a regular sample of nodes on the boundary</span>
+0009 <span class="comment">%    because analytic_2d_circle works on current density, it needs</span>
+0010 <span class="comment">%    to be scaled with the number of sample points, to get I</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Based on eqn 21 in Seagar and Bates (1985).</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% (C) Andy Adler 2009. License: GPL V2 or V3</span>
+0015 <span class="comment">% $Id: analytic_2d_circle.m 4898 2015-05-06 14:26:36Z aadler $</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% USAGE EXAMPLE: compare FEM to analytic model</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%  imdl= mk_common_model('c2c0',16);</span>
+0020 <span class="comment">% img = calc_jacobian_bkgnd(imdl);</span>
+0021 <span class="comment">% img.fwd_solve.get_all_meas = 1;</span>
+0022 <span class="comment">% img.elem_data(1:256)= 0.1;</span>
+0023 <span class="comment">% vi= fwd_solve(img);</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% [jnk,maxl] = min(vi.volt(:,1));</span>
+0026 <span class="comment">% vi= vi.volt(maxl:end,1);</span>
+0027 <span class="comment">% lv= length(vi);</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% vol = get_elem_volume(img.fwd_model);</span>
+0030 <span class="comment">% vt= sum(vol); va= sum(vol(img.elem_data ~=1));</span>
+0031 <span class="comment">% rad = sqrt(va/vt);</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% I =  zeros(lv,1); I(1+[0,lv/16]) = [-25,25]*lv/16;</span>
+0034 <span class="comment">% vsi= analytic_2d_circle(I, [1, 0.1, 0.0, rad, 0]);</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% plot([vi,vsi]);</span>
+0037 
+0038 <span class="comment">% TODO:</span>
+0039 <span class="comment">% (aa May 2015) Works well for 16 electrodes, but not for 8,32</span>
+0040 
+0041 <span class="keyword">if</span> ischar(I) &amp;&amp; strcmp(I, <span class="string">'UNIT_TEST'</span>), <a href="#_sub2" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">if</span> ~all(abs(sum(I,1)) &lt;1e-12); error(<span class="string">'net I must be 0'</span>); <span class="keyword">end</span>
+0044 [ll,nv] = size(I);
+0045 
+0046 IF= fft(I); IF(1)= []; <span class="comment">% Don't include zero term</span>
+0047 [SM,ll2] = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction [SM,ll2] = solve_matrix(ll, params)">solve_matrix</a>,{ll, params},<span class="string">'analytic_2d_circle'</span>);
+0048 VF2= SM*IF(ll2);
+0049 VF= zeros(size(I));
+0050 VF(1+[ll2, ll-ll2],:)= [VF2;conj(VF2)];
+0051 V = ifft(VF);
+0052 
+0053 <span class="keyword">if</span> norm(imag(V))&gt;1e-9; error(<span class="string">'Unexpected Imaginary output - probably a bug'</span>); <span class="keyword">end</span>
+0054 V= real(V);
+0055 
+0056 
+0057 <a name="_sub1" href="#_subfunctions" class="code">function [SM,ll2] = solve_matrix(ll, params)</a>
+0058   ll1= ll-1; <span class="comment">% IGNORE DC</span>
+0059   ll2 = 1:ceil(ll1/2);
+0060  
+0061    s_h = params(1);
+0062    s_i = params(2);
+0063    b   = params(3);
+0064    a   = params(4);
+0065    alp = params(5);
+0066 
+0067    mll2= max(ll2);
+0068    K = ll2(:);
+0069    D = spdiags(K,0,mll2,mll2);
+0070    iD = spdiags(1./K,0,mll2,mll2); <span class="comment">% inv D</span>
+0071 
+0072    <span class="keyword">if</span> s_h == s_i 
+0073       SM= 1/s_h * iD;
+0074       <span class="keyword">return</span>
+0075    <span class="keyword">end</span>
+0076 
+0077    mu = (s_h - s_i) / (s_h + s_i);
+0078 
+0079    <span class="keyword">if</span> b==0
+0080       mua2k = mu*a.^(2*K);
+0081       K = K.*(1 - mua2k)./(1 + mua2k);
+0082       iD = spdiags(1./K,0,mll2,mll2); <span class="comment">% inv(D)</span>
+0083 
+0084       SM= 1/s_h * iD;
+0085       <span class="keyword">return</span>
+0086    <span class="keyword">end</span>
+0087 
+0088 
+0089 
+0090    T = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(mll2,mll2);
+0091    <span class="keyword">for</span> m=ll2; <span class="keyword">for</span> n=ll2
+0092      sm= 0;
+0093      <span class="keyword">for</span> p=1:min(m,n)
+0094 <span class="comment">%      sm=sm+ nchoosek(m-1,p-1)*nchoosek(n,p)*ab2^p;</span>
+0095        <span class="comment">% stop calculating nchoosek when too small, because</span>
+0096        dsm = nchoosek(m-1,p-1)*nchoosek(n,p)*a^(2*p)*b^(m+n-2*p);
+0097 <span class="comment">%       disp([m,n,p,log10(dsm)])</span>
+0098        <span class="keyword">if</span> dsm &lt; 1e-11; <span class="keyword">break</span>; <span class="keyword">end</span>  
+0099        sm=sm + dsm;
+0100      <span class="keyword">end</span>
+0101 <span class="comment">%    T(i,j) = mu*(sm/m)* b^(m+n) * exp(1j*(m-n)*alp);</span>
+0102      T(m,n) = mu*(sm/m)* exp(1j*(m-n)*alp);
+0103    <span class="keyword">end</span>; <span class="keyword">end</span>
+0104 
+0105    I= speye(mll2);
+0106    SM = (I-T*D)\(I+T*D)*iD;
+0107    
+0108 <a name="_sub2" href="#_subfunctions" class="code">function do_unit_test</a>
+0109 
+0110     N_elec = 16;
+0111     imdl= <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'d2c0'</span>,N_elec);
+0112     img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl);
+0113     img.fwd_solve.get_all_meas = 1;
+0114     img.elem_data(1:256)= 0.1;
+0115     vi= <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0116 
+0117     [jnk,maxl] = min(vi.volt(:,1));
+0118     vi= vi.volt(maxl:<span class="keyword">end</span>,1);
+0119     lv= length(vi);
+0120 
+0121     vol = <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(img.fwd_model);
+0122     vt= sum(vol); va= sum(vol(img.elem_data ~=1));
+0123     rad = sqrt(va/vt);
+0124 
+0125     I =  zeros(lv,1); I(1+[0,lv/N_elec]) = [-25,25]*lv/N_elec;
+0126     vsi= <a href="analytic_2d_circle.html" class="code" title="function V = analytic_2d_circle(I, params)">analytic_2d_circle</a>(I, [1, 0.1, 0.0, rad, 0]);
+0127 
+0128     plot([vi,vsi]);
+0129     <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'16 elec compare'</span>, vi, vsi, 1);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2 >PEEP trial after lung injury (pig)</h2>
+
+<h3> 
+Methods and Data
+</h3>
+
+Use mk_common_model to create a thorax shaped
+model with 16 electrodes. Ensure the model
+uses 1) Correct stimulation patterns (adjacent is default),
+2) Normalized difference imaging
+
+<h3> 
+Methods and Data
+</h3>
+Five pigs before (e.g. 1-control.raw) and after induction of unilateral lung
+injury 
+(e.g. 1-injury.raw). Oleic acid was administered through the distal opening of a
+pulmonary artery catheter placed in a branch of the left pulmonary artery.
+<p>
+Data were published in: <br>
+I. Frerichs,
+G. Hahn,
+T. Schr&ouml;der,
+G. Hellige
+<a href="http://www.springerlink.com/content/yt01jjp4d8tj3e65/"
+   >Electrical impedance tomography in
+    monitoring experimental lung injury </a>
+  <i>Intensive Care Med.</i> 24:829-836, 1998.
+
+<h3> 
+Results
+</h3>
+The key results are shown in Fig.3 from the paper
+<br>
+<center>
+<a href="http://www.springerlink.com/content/yt01jjp4d8tj3e65"
+   ><img src="../../data_contrib/if-experimental-lung-injury/if-experimental-lung-injury-fig3.png" alt="figure 3"></a>
+<br>
+Figure 3 (from Frerichs <i>et al</i>, 1998):
+Thoracic functional EIT images before (Control) and after
+the development of artificially induced left lung injury (Lung
+injury) reflecting the distribution of ventilation in the five animals
+studied. (The lungs are typically located in the central and ventral
+parts of the thorax due to the well developed backbone musculature
+in pigs.) The schematic cross-section of the pig thorax in the
+left upper corner shows the spatial orientation of the images.
+Each image is scaled to the individual maximum impedance variation.
+The scale shows that higher local impedance variation (i.e.
+higher fluctuation of regional lung volume) is represented in light
+tones
+</center>
+
+<h3> 
+EIDORS Analysis
+</h3>
+
+<ol>
+<li><b> Download </b> the
+    <a href = "http://eidors3d.sourceforge.net/data_contrib/if-experimental-lung-injury/if-experimental-lung-injury.zip"
+   >data</a> and save it to your working directory.
+
+<li><b> Create a FEM model of the pig</b>
+<pre>
+% Create Model $Id: if_lung_injury01.m 3341 2012-07-01 21:26:50Z bgrychtol $
+
+imdl= mk_common_model('c2c2',16);
+% Reverse electrodes to give 'clinical' view (looking toward patient head)
+imdl.fwd_model.electrode =  ...
+   imdl.fwd_model.electrode([9:-1:1,16:-1:10]);
+% Use normalized difference imaging
+imdl.fwd_model = mdl_normalize(imdl.fwd_model, 1);
+
+subplot(211);
+show_fem(imdl.fwd_model, [0,1,0]);
+axis equal; axis off
+
+hh=text(-1.15,0,'Right');
+set(hh,'Rotation',90,'HorizontalAlignment','Center');
+hh=text(0,+1.15,'Ventral');
+set(hh,'HorizontalAlignment','Center');
+
+print_convert if_lung_injury01.png 
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/lung_EIT/if_lung_injury01.png">
+<br><i> Figure:</i>
+2D FEM of pig thorax
+</center>
+
+<li><b> Analyse and show data</b>
+<pre>
+subplot(221);
+for loop1= 1:5;
+       
+  for loop2 = 1:2;
+     if loop2 ==1; fn = sprintf('%d-control.RAW',loop1);
+     else          fn = sprintf('%d-injury.RAW',loop1);
+     end
+
+     prname= sprintf('if_lung_injury02-%d%d.png', loop1,loop2);
+
+     dd= eidors_readdata(fn);
+
+     img=inv_solve(imdl,mean(dd,2),dd);
+     [jnk,fmin] = min(mean(img.elem_data,1)); % find end-inspi
+     [jnk,fmax] = max(mean(img.elem_data,1)); % find end-expi
+
+     img=inv_solve(imdl,dd(:,fmax), dd(:,fmin));
+     show_slices(img);
+
+     print_convert(prname,'-density 50');
+   end
+end
+
+</pre>
+
+<center>
+<table border=0>
+<tr>
+   <th>
+   <th> Pig #1
+   <th> Pig #2
+   <th> Pig #3
+   <th> Pig #4
+   <th> Pig #5
+<tr>
+   <th>Control
+   <td><img src="if_lung_injury02-11.png">
+   <td><img src="if_lung_injury02-21.png">
+   <td><img src="if_lung_injury02-31.png">
+   <td><img src="if_lung_injury02-41.png">
+   <td><img src="if_lung_injury02-51.png">
+<tr>
+   <th>Left<br> Lung<br> Injury
+   <td><img src="if_lung_injury02-12.png">
+   <td><img src="if_lung_injury02-22.png">
+   <td><img src="if_lung_injury02-32.png">
+   <td><img src="if_lung_injury02-42.png">
+   <td><img src="if_lung_injury02-52.png">
+</table>
+
+<br><i> Figure:</i>
+Images of Tidal Ventilation in Pigs
+</center>
+
+
+</ol>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

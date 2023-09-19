@@ -1,0 +1,398 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../../index-s.html"
+>Main</a><br>
+<a href="../../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../../download-s.html"
+   >Download</a><br>
+<a href="../../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../../faq-s.html">FAQ</a><br>
+<a href="../../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+Modelling EIT in a pig shaped thorax model
+</h2>
+
+This example shows how EIDORS can by use 
+<a href="http://sourceforge.net/projects/netgen-mesher/">
+Netgen</a> to model the body shape of a pig and then
+use it to build a reconstruction algorithm and see
+the current flow in the body.
+<b>For this exmample, you need at least Netgen version 4.9.13.</b>
+
+
+<p>
+Here are some examples of the varity of models which
+can be generated using the function: <tt>ng_mk_extruded_model</tt>.
+<p>
+
+<H3>
+Load thorax shape and identify contours
+</H3>
+This image is from a CT of a piglet with EIT electrodes,
+courtesy of Marc Bodenstein, Universit&auml;t Mainz.
+Hand registered contours are available in 
+<a href="CT2.mat">this file [CT2.mat]</a>.
+<pre>
+subplot(221);
+
+load CT2.mat
+img = imread('pig-thorax.jpg');
+colormap(gray(256));
+imagesc(-67+[1:371],25+[1:371],img);
+
+hold on;
+plot(372-trunk(:,1),trunk(:,2),'m*-');
+plot(372-lung(:,1),lung(:,2),'r*-');
+hh=plot(372-elec_pos(:,1),elec_pos(:,2), 'b.'); set(hh,'MarkerSize',20);
+hold off
+
+axis off; axis equal
+print_convert pig_body01.jpg
+
+% Shrink the model  for the next step
+trunk = trunk*.01;
+lung  = lung*.01; lung = flipud(lung(1:3:end,:)); % need counterclockwise shapes
+elec_pos = elec_pos*.01;
+
+</pre>
+<center>
+<a href="pig-thorax.jpg"><img width="256" src="pig-thorax.jpg"></a> <img src="pig_body01.jpg">
+</center>
+
+
+<H3>
+Use Netgen to build a FEM model of the pig thorax
+</H3>
+<pre>
+% Calculate electrode angles
+pp= fourier_fit(trunk); sp = linspace(0,1,51);sp(end)=[]; centroid = mean(fourier_fit(pp, sp));
+elec_pos = elec_pos - ones(size(elec_pos,1),1) * centroid;
+electh= atan2(elec_pos(:,2),elec_pos(:,1))*180/pi; % electh=electh(1:3);
+
+fmdl = ng_mk_extruded_model({2,{trunk, lung} ,[4,50],.1},[electh,1+0*electh],[0.1]);
+[stim,meas_sel] = mk_stim_patterns(16,1,[0,1],[0,1],{'no_meas_current'}, 1);
+fmdl.stimulation = stim;
+
+fmdl.nodes = fmdl.nodes*diag([-1,-1,1]); % Flip x,y axis to match medical direction
+img=mk_image(fmdl,1);
+img.elem_data(fmdl.mat_idx{2})= 0.3;
+
+clf; show_fem(img); view(0,70);
+print_convert pig_body02.jpg
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/pig_body02.jpg">
+</center>
+
+<H3>
+Simulate Voltage Distribution
+</H3>
+<pre>
+img_v = img;
+% Stimulate between elecs 16 and 5 to get more interesting pattern
+img_v.fwd_model.stimulation(1).stim_pattern = sparse([16;5],1,[1,-1],16,1);
+img_v.fwd_solve.get_all_meas = 1;
+vh = fwd_solve(img_v);
+
+img_v = rmfield(img, 'elem_data');
+img_v.node_data = vh.volt(:,1);
+img_v.calc_colours.npoints = 128;
+img_v.calc_colours.clim = 1.2;
+
+subplot(221);
+show_slices(img_v,[inf,inf,0.8]); axis off; axis equal
+print_convert pig_body03a.jpg
+show_slices(img_v,[inf,inf,1.0]); axis off; axis equal
+print_convert pig_body03b.jpg
+show_slices(img_v,[inf,inf,1.2]); axis off; axis equal
+print_convert pig_body03c.jpg
+
+</pre>
+<center>
+<img src="pig_body03a.jpg"> <img src="pig_body03b.jpg"> <img src="pig_body03c.jpg">
+<br>
+<i>Left to Right</i> Voltage distribution in slices at
+ <i>z</i>= 0.8, <i>z</i>= 1.0, <i>z</i>= 1.2.
+</center>
+
+<H3>
+Current distribution
+</H3>
+<pre>
+img_v = img;
+img_v.fwd_model.mdl_slice_mapper.npx = 64;
+img_v.fwd_model.mdl_slice_mapper.npy = 64;
+img_v.fwd_model.mdl_slice_mapper.level = [inf,inf,0.8];
+show_current(img_v, vh.volt(:,1));
+
+axis equal; axis tight; print_convert pig_body04a.jpg
+
+img_v.fwd_model.mdl_slice_mapper.level = [inf,inf,1.0];
+show_current(img_v, vh.volt(:,1));
+
+axis equal; axis tight; print_convert pig_body04b.jpg
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/pig_body04a.jpg"> <img src="pig_body04b.jpg">
+<br>
+<i>Left to Right</i> Current distribution in slices at
+ <i>z</i>= 0.8, <i>z</i>= 1.0.
+Current looks larger at <i>z</i>= 0.8, because each slice
+is individually normalized to the maximum
+</center>
+
+<H3>
+Current distribution and streamlines
+</H3>
+<pre>
+img_v.fwd_model.mdl_slice_mapper.npx = 1000;
+img_v.fwd_model.mdl_slice_mapper.npy = 1000;
+img_v.fwd_model.mdl_slice_mapper.level = [inf,inf,1.0];
+
+% Calculate at high resolution
+ q = show_current(img_v, vh.volt(:,1));
+
+% Lower resolution to visualize
+img_v.fwd_model.mdl_slice_mapper.npx = 64;
+img_v.fwd_model.mdl_slice_mapper.npy = 64;
+show_current(img_v, vh.volt(:,1));
+
+
+sx =-centroid(1) - linspace(-1,1,15)';
+sy =-centroid(2) + linspace(-1,1,15)';
+hh=streamline(q.xp,q.yp, q.xc, q.yc,sx,sy);
+hh=streamline(q.xp,q.yp,-q.xc,-q.yc,sx,sy);
+
+axis equal; axis tight;  print_convert pig_body05a.jpg
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/pig_body05a.jpg">
+<br>
+Stream lines through <i>z</i>= 1.0.
+</center>
+
+<H3>
+Streamlines and the original image
+</H3>
+<pre>
+img = imread('pig-thorax.jpg');
+colormap(gray(256));
+imagesc(.01*([1:371]-438),.01*(-24-[1:371]),img);
+set(gca,'YDir','normal');
+
+hh=streamline(q.xp,q.yp, q.xc, q.yc,sx,sy); set(hh,'Linewidth',2);
+hh=streamline(q.xp,q.yp,-q.xc,-q.yc,sx,sy); set(hh,'Linewidth',2);
+
+axis equal; axis tight; axis off; print_convert pig_body06a.jpg
+
+</pre>
+<center>
+<img src="pig_body06a.jpg">
+<br>
+Stream lines through <i>z</i>= 1.0.
+</center>
+
+<H3>
+2D FEM model for image reconstruction
+</H3>
+<pre>
+fmdlr = ng_mk_extruded_model({0,trunk,[4,50],.1},[0,0],[0.1]);
+fmdlr.nodes = fmdlr.nodes*diag([-1,-1]);
+
+show_fem(fmdlr); view(0,90);
+print_convert pig_body07.jpg
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/pig_body07.jpg">
+</center>
+
+<H3>
+Simulated conductivity change and simulated voltages (with noise)
+</H3>
+<pre>
+img = mk_image( fmdl, 1 );
+img.elem_data( fmdl.mat_idx{2} ) = 0.3;
+vh= fwd_solve(img);
+
+% Put a ball in the object center
+targ= mk_c2f_circ_mapping(fmdl, [-2.2;-1.2;1;0.3]);
+img.elem_data = img.elem_data + targ*.5;
+
+show_fem(img); view(0,90);
+print_convert pig_body08a.jpg
+
+
+vi = fwd_solve(img);
+vi = add_noise( 3, vi, vh );
+plot([vh.meas,  20*(vi.meas - vh.meas)]);
+axis tight;
+legend('meas ref','20x diff meas','Location','SouthWest');
+
+print_convert pig_body08b.jpg
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/pig_body08a.jpg"> <img src="pig_body08b.jpg">
+<br>
+<i>Left</i>  Simulated conductivity change region
+<i>Right</i> Simulated voltage signals
+</center>
+
+<H3>
+Reconstructions with simple and conforming models
+</H3>
+Simple 2D circular model reconstruction
+<pre>
+imdl = mk_common_model('c2c2',16);
+imdl.fwd_model.electrode = imdl.fwd_model.electrode([1,16:-1:2]);
+imdl.fwd_model = mdl_normalize(imdl.fwd_model, 1);
+imr= inv_solve(imdl, vh, vi);
+clf
+show_fem(imr); axis tight; axis off; axis equal
+
+print_convert pig_body09a.jpg
+
+
+</pre>
+Conforming model: 2D reconstructon with 3D forward model
+<pre>
+cmdl.mk_coarse_fine_mapping.f2c_offset = [0,0,1];
+cmdl.mk_coarse_fine_mapping.f2c_project = speye(3); % Scaling not required
+cmdl.mk_coarse_fine_mapping.z_depth = 0.2;
+c2f= mk_coarse_fine_mapping( fmdl, fmdlr);
+
+
+imdl.name = 'CT pig 3D model';
+imdl.fwd_model = fmdl;
+imdl.rec_model = fmdlr;
+imdl.fwd_model.coarse2fine = c2f;
+imdl.jacobian_bkgnd.value = ones(size(fmdl.elems,1),1);
+imdl.jacobian_bkgnd.value( fmdl.mat_idx{2} ) = 0.3;
+
+imdl.fwd_model = mdl_normalize(imdl.fwd_model, 1);
+imdl.hyperparameter.value = .03;
+% Model background conductivity as lung
+imr= inv_solve(imdl, vh, vi);
+
+show_fem(imr); axis off ; axis tight
+
+print_convert pig_body10a.jpg
+
+</pre>
+
+<center>
+<img height=256 src = "http://eidors3d.sourceforge.net/tutorial/netgen/extrusion/pig_body09a.jpg"> <img height=256 src="pig_body10a.jpg">
+<br>
+<i>Left</i>  Simple 2D circular model reconstruction
+<i>Right</i> 2D reconstructon with conforming 3D forward model
+</center>
+
+
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:21:02 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

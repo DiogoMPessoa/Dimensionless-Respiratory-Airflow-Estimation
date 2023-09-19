@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<H2>Strange Effect: Conformal deformations of boundary shape</H2>
+
+If the medium boundary shape is deformed via a conformal
+deformation (in 2D) then the same current pattern
+results in the same voltage distribution as before
+the deformation
+
+<H3>
+   Create a simple model and deform it
+</H3>
+
+<pre>
+% Linear model $Id: conformal1_01.m 3631 2012-11-18 18:34:04Z aadler $
+xl=-3; xr= 3; yb=-15; yt= 15;
+[x,y] = meshgrid( linspace(xl,xr,7), linspace(yb,yt,31) );
+vtx= [y(:),x(:)];
+
+elec_nodes{1}= [y(1,:);x(1,:)]';
+elec_nodes{2}= [y(end,:);x(end,:)]';
+
+z_contact= 0.01;
+fmdl= mk_fmdl_from_nodes( vtx, elec_nodes, z_contact, 'sq_m1');
+fmdl.stimulation(1).stimulation='Amp';
+fmdl.stimulation(1).stim_pattern=[1;-1];
+fmdl.stimulation(1).meas_pattern=[1,-1];
+
+% Add non-conductive target
+ctr = interp_mesh( fmdl,0); xctr= ctr(:,1); yctr= ctr(:,2);
+img = mk_image( fmdl,  ones(length(xctr),1) );
+img.elem_data( yctr>-3 & yctr<2 & xctr>8   & xctr<10 ) = 0.01;
+img.elem_data( yctr> 0 & yctr<2 & xctr>-10 & xctr<10 ) = 0.01;
+
+
+subplot(221)
+show_fem(img); axis image
+
+print_convert conformal1_01a.png '-density 125'
+
+
+
+% Confromal deformation
+z= fmdl.nodes(:,1) + 1i*fmdl.nodes(:,2);
+z= exp((z-(20+80i))/100).*(z+20i).*(z-10i);
+img2 = img; img2.fwd_model.nodes = [real(z), imag(z)];
+
+show_fem(img2); axis image
+
+print_convert conformal1_01b.png '-density 125'
+
+</pre>
+
+<center>
+<img src="conformal1_01a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/conformal1_01b.png">
+<br><i> Figure:</i>
+Rectangular model (Right) and the same
+model with a conformal deformation
+z<sub>new</sub>= e<sup>.01(z-20-80i )</sup>(z+20i)(z-10i)
+(left)
+</center>
+
+<H3>
+   Solve the fwd problem on the flat and deformed model
+</H3>
+
+<pre>
+% Voltage distribution $Id: conformal1_02.m 3215 2012-06-29 20:48:41Z aadler $
+
+img.fwd_solve.get_all_meas = 1;
+vv = fwd_solve(img);
+
+imgv = rmfield(img,'elem_data');
+imgv.node_data = vv.volt;
+
+show_fem( imgv ); axis image
+
+print_convert conformal1_02a.png '-density 125'
+
+img2.fwd_solve.get_all_meas = 1;
+vv = fwd_solve(img2);
+
+imgv = rmfield(img2,'elem_data');
+imgv.node_data = vv.volt;
+
+show_fem( imgv ); axis image
+print_convert conformal1_02b.png '-density 125'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/conformal1_02a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/conformal1_02b.png">
+<br><i> Figure:</i>
+Voltage distribution in model (Right) and the same
+model with a conformal deformation
+z<sub>new</sub>= e<sup>.01(z-20-80i )</sup>(z+20i)(z-10i)
+(left)
+</center>
+
+<pre>
+% Voltage distribution $Id: conformal1_03.m 3634 2012-11-18 22:19:43Z aadler $
+
+nodes = img.fwd_model.nodes; mn = min(nodes); mx= max(nodes);
+img.fwd_model.mdl_slice_mapper.x_pts = linspace(mn(1),mx(1),50);
+img.fwd_model.mdl_slice_mapper.y_pts = linspace(mn(2),mx(2),15);
+img.calc_colours.clim = 5;
+
+hh=show_fem(img); axis image;
+set(hh,'EdgeColor',[0.5,0.5,0.5]);
+hold on;
+show_current( img); 
+hold off;
+
+print_convert conformal1_03a.png '-density 150'
+
+nodes = img2.fwd_model.nodes; mn = min(nodes); mx= max(nodes);
+img2.fwd_model.mdl_slice_mapper.x_pts = linspace(mn(1),mx(1),50);
+img2.fwd_model.mdl_slice_mapper.y_pts = linspace(mn(2),mx(2),50);
+img2.calc_colours.clim = 5;
+
+hh= show_fem(img2); axis image;
+set(hh,'EdgeColor',[0.5,0.5,0.5]);
+hold on;
+show_current( img2); 
+hold off;
+
+print_convert conformal1_03b.png '-density 125'
+
+</pre>
+
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/conformal1_03a.png">
+<img src = "http://eidors3d.sourceforge.net/tutorial/strange_effects/conformal1_03b.png">
+<br><i> Figure:</i>
+Current distribution in model (Right) and the same
+model with a conformal deformation
+z<sub>new</sub>= e<sup>.01(z-20-80i )</sup>(z+20i)(z-10i)
+(left)
+</center>
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->

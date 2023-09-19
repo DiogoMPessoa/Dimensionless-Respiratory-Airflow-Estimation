@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of uniquetol</title>
+  <meta name="keywords" content="uniquetol">
+  <meta name="description" content="C = uniquetol(A,TOL):  unique values in A using tolerance TOL.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">overloads</a> &gt; uniquetol.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/overloads&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>uniquetol
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>C = uniquetol(A,TOL):  unique values in A using tolerance TOL.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function out = uniquetol(in, tol, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> C = uniquetol(A,TOL):  unique values in A using tolerance TOL.
+ For recent versions (&gt;=2015a) call built in function. Otherwise
+ find a alternate solve, using either different matlab builtin
+ functions, or the uniquetol provided by code (C) Siyi Deng 2010.
+
+ Only provides the functions of 
+   C = uniquetol(A,tol,'ByRows',true,'DataScale',1);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="uniquetol.html" class="code" title="function out = uniquetol(in, tol, varargin)">uniquetol</a>	C = uniquetol(A,TOL):  unique values in A using tolerance TOL.</li><li><a href="../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>	EIDORS_DEBUG Global managment of debug flags</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/models/convhulln_clean.html" class="code" title="function [K,V] = convhulln_clean(pts,p);">convhulln_clean</a>	CONVHULLN_CLEAN: run convhulln and catch errors</li><li><a href="../../eidors/models/mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="../../eidors/models/mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a>	MK_TET_C2F - calculate a coarse2fine mapping for two tet-based models.</li><li><a href="../../eidors/models/mk_tri_c2f.html" class="code" title="function c2f = mk_tri_c2f(fmdl,rmdl,opt)">mk_tri_c2f</a>	MK_TRI_C2F - calculate a coarse2fine mapping for triangle-based models.</li><li><a href="uniquetol.html" class="code" title="function out = uniquetol(in, tol, varargin)">uniquetol</a>	C = uniquetol(A,TOL):  unique values in A using tolerance TOL.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function out = eidors_uniquetol(in, tol)</a></li><li><a href="#_sub2" class="code">function [z,ii,jj] = uniquetol_repl(x,tol,varargin)</a></li><li><a href="#_sub3" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function out = uniquetol(in, tol, varargin)</a>
+0002 <span class="comment">% C = uniquetol(A,TOL):  unique values in A using tolerance TOL.</span>
+0003 <span class="comment">% For recent versions (&gt;=2015a) call built in function. Otherwise</span>
+0004 <span class="comment">% find a alternate solve, using either different matlab builtin</span>
+0005 <span class="comment">% functions, or the uniquetol provided by code (C) Siyi Deng 2010.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Only provides the functions of</span>
+0008 <span class="comment">%   C = uniquetol(A,tol,'ByRows',true,'DataScale',1);</span>
+0009 
+0010 <span class="comment">% (C) Andy Adler 2015 Licenced under GPL v2 or v3</span>
+0011 <span class="comment">% $Id: uniquetol.m 6040 2019-12-31 02:52:00Z aadler $</span>
+0012 
+0013 <span class="keyword">if</span> ischar(in) &amp;&amp; strcmp(in,<span class="string">'UNIT_TEST'</span>); <a href="#_sub3" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0014 
+0015 DEBUG = <a href="../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>(<span class="string">'query'</span>,<span class="string">'eidors:uniquetol'</span>);
+0016 
+0017 <span class="keyword">if</span> DEBUG==1 || exist(<span class="string">'uniquetol'</span>,<span class="string">'builtin'</span>)
+0018    <span class="keyword">if</span> DEBUG;   disp(<span class="string">'using builtin uniquetol'</span>); <span class="keyword">end</span>
+0019    out = builtin(<span class="string">'uniquetol'</span>,in, tol, varargin{:});
+0020    <span class="keyword">return</span>;
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="comment">% Now we provide a backup, but only if byrows and Datascale</span>
+0024 <span class="keyword">if</span> length(varargin)&lt;4
+0025    error(<span class="string">'ByRows and DataScale must be provided'</span>)
+0026 <span class="keyword">end</span>
+0027 <span class="keyword">for</span> i=1:2:length(varargin);
+0028    <span class="keyword">switch</span> varargin{i}
+0029      <span class="keyword">case</span> <span class="string">'ByRows'</span>
+0030        <span class="keyword">if</span> ~varargin{i+1};   error(<span class="string">'Only support the ByRows option'</span>); <span class="keyword">end</span>
+0031      <span class="keyword">case</span> <span class="string">'DataScale'</span>
+0032        <span class="keyword">if</span> varargin{i+1}~=1; error(<span class="string">'DataScale must by 1'</span>); <span class="keyword">end</span>
+0033      <span class="keyword">otherwise</span> 
+0034        error(<span class="string">'Option %s not supported'</span>,varargin{i});
+0035    <span class="keyword">end</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 out = <a href="#_sub1" class="code" title="subfunction out = eidors_uniquetol(in, tol)">eidors_uniquetol</a>(in, tol);
+0039 
+0040 
+0041 <span class="comment">%Fom code by</span>
+0042 <span class="comment">% Siyi Deng; 03-19-2010; 05-15-2010; 10-29-2010;</span>
+0043 
+0044 <span class="comment">% Licence:</span>
+0045 <span class="comment">% Copyright (c) 2010, Siyi Deng</span>
+0046 <span class="comment">% All rights reserved.</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% Redistribution and use in source and binary forms, with or without</span>
+0049 <span class="comment">% modification, are permitted provided that the following conditions are</span>
+0050 <span class="comment">% met:</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">%     * Redistributions of source code must retain the above copyright</span>
+0053 <span class="comment">%       notice, this list of conditions and the following disclaimer.</span>
+0054 <span class="comment">%     * Redistributions in binary form must reproduce the above copyright</span>
+0055 <span class="comment">%       notice, this list of conditions and the following disclaimer in</span>
+0056 <span class="comment">%       the documentation and/or other materials provided with the distribution</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;</span>
+0059 <span class="comment">% AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</span>
+0060 <span class="comment">% IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</span>
+0061 <span class="comment">% ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE</span>
+0062 <span class="comment">% LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</span>
+0063 <span class="comment">% CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</span>
+0064 <span class="comment">% SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</span>
+0065 <span class="comment">% INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</span>
+0066 <span class="comment">% CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</span>
+0067 <span class="comment">% ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE</span>
+0068 <span class="comment">% POSSIBILITY OF SUCH DAMAGE.</span>
+0069 <a name="_sub1" href="#_subfunctions" class="code">function out = eidors_uniquetol(in, tol)</a>
+0070 <span class="comment">% first run unique</span>
+0071 out = unique(in,<span class="string">'rows'</span>);
+0072 
+0073 <span class="comment">% all pairwise combinations</span>
+0074 nRows = size(out,1);
+0075 <span class="keyword">if</span> nRows &lt;= 1
+0076    <span class="keyword">return</span>
+0077 <span class="keyword">end</span>
+0078 idx = nchoosek(1:nRows,2);
+0079 
+0080 <span class="comment">% compare each column individually</span>
+0081 d = out(idx(:,1),:) - out(idx(:,2),:);
+0082 d = abs(d) &lt;= tol;
+0083 
+0084 same = all(d,2);
+0085 
+0086 legacy = false; <span class="keyword">try</span> unique([],<span class="string">'legacy'</span>); <span class="keyword">catch</span>, legacy = true; <span class="keyword">end</span>
+0087    
+0088 <span class="comment">% replace each equal row with the first match</span>
+0089 <span class="keyword">if</span> legacy
+0090    [~,ii] = unique(idx(same,2),<span class="string">'first'</span>);
+0091 <span class="keyword">else</span>
+0092    [~,ii] = unique(idx(same,2));
+0093 <span class="keyword">end</span>
+0094 jj = find(same);
+0095 ii = jj(ii);
+0096 
+0097 out(idx(ii,2),:) = out(idx(ii,1),:);
+0098 
+0099 <span class="comment">% run unique to eliminate the now exactly matching rows</span>
+0100 out = unique(out,<span class="string">'rows'</span>);
+0101       
+0102 
+0103 
+0104 
+0105 
+0106 <a name="_sub2" href="#_subfunctions" class="code">function [z,ii,jj] = uniquetol_repl(x,tol,varargin)</a>
+0107 <span class="comment">%UNIQUETOL Unique element within a tolerance.</span>
+0108 <span class="comment">%   [Y,I,J] = UNIQUETOL(X,TOL) is very similar to UNIQUE, but allows an</span>
+0109 <span class="comment">%   additional tolerance input, TOL. TOL can be taken as the total absolute</span>
+0110 <span class="comment">%   difference between similar elements. TOL must be a none negative</span>
+0111 <span class="comment">%   scalar. If not provided, TOL is assumed to be 0, which makes UNIQUETOL</span>
+0112 <span class="comment">%   identical to UNIQUE.</span>
+0113 <span class="comment">%</span>
+0114 <span class="comment">%   UNIQUETOL(...,'ROWS')</span>
+0115 <span class="comment">%   UNIQUETOL(...,'FIRST')</span>
+0116 <span class="comment">%   UNIQUETOL(...,'LAST')</span>
+0117 <span class="comment">%   These expressions are identical to the UNIQUE counterparts.</span>
+0118 <span class="comment">%</span>
+0119 <span class="comment">%   See also UNIQUE.</span>
+0120 
+0121 
+0122 <span class="keyword">if</span> size(x,1) == 1, x = x(:); <span class="keyword">end</span>
+0123 <span class="keyword">if</span> nargin &lt; 2 || isempty(tol) || tol == 0
+0124     [z,ii,jj] = unique(x,varargin{:});
+0125     <span class="keyword">return</span>;
+0126 <span class="keyword">end</span>
+0127 [y,ii,jj] = unique(x,varargin{:});
+0128 <span class="keyword">if</span> size(x,2) &gt; 1
+0129     [~,ord] = sort(sum(x.^2,1),2,<span class="string">'descend'</span>);
+0130     [y,io] = sortrows(y,ord);
+0131     [~,jo] = sort(io);
+0132     ii = ii(io);
+0133     jj = jo(jj);
+0134 <span class="keyword">end</span>
+0135 d = sum(abs(diff(y,1,1)),2);
+0136 
+0137 isTol = [true;d &gt; tol];
+0138 z = y(isTol,:);
+0139 bin = cumsum(isTol); <span class="comment">% [n,bin] = histc(y,z);</span>
+0140 jj = bin(jj);
+0141 ii = ii(isTol);
+0142 
+0143 <span class="comment">% UNIQUETOL;</span>
+0144    
+0145 <a name="_sub3" href="#_subfunctions" class="code">function do_unit_test</a>
+0146    testvec{1} = [1 2; 1.06 2; 1.1 2; 1.1 2.03];
+0147    testvec{2} = [ <span class="keyword">...</span>
+0148    -0.488223373148967243473350663407, <span class="keyword">...</span>
+0149    -0.488223373148967243473350663407, <span class="keyword">...</span>
+0150    -0.488223373148967243473350663407, <span class="keyword">...</span>
+0151    -0.488223373148967243473350663407, <span class="keyword">...</span>
+0152    -0.488223373148967243473350663407, <span class="keyword">...</span>
+0153    -0.488223373148967243473350663407;
+0154    -0.999999999999999666933092612453, <span class="keyword">...</span>
+0155    -0.999999999999999888977697537484, <span class="keyword">...</span>
+0156    -0.999999999999999888977697537484, <span class="keyword">...</span>
+0157    -0.999999999999999888977697537484, <span class="keyword">...</span>
+0158    -0.999999999999999888977697537484, <span class="keyword">...</span>
+0159    -0.905678339894304240687006313237;
+0160    -0.232963663178817920185181833403, <span class="keyword">...</span>
+0161    -0.232963663178818003451908680290, <span class="keyword">...</span>
+0162    -0.116481831589409029481529955774, <span class="keyword">...</span>
+0163    -0.232963663178818086718635527177, <span class="keyword">...</span>
+0164    -0.116481831589409043359317763588, <span class="keyword">...</span>
+0165    -0.156131398552380479261003642932]';
+0166    testvec{3} = testvec{2}';
+0167 
+0168 
+0169    <span class="keyword">for</span> i=1:length(testvec)
+0170      <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'TEST%d============'</span>,i,1);
+0171      x = testvec{i};
+0172       <span class="keyword">for</span> tol = logspace(-4,1,6);
+0173          uu = <a href="uniquetol.html" class="code" title="function out = uniquetol(in, tol, varargin)">uniquetol</a>(x,tol,<span class="string">'ByRows'</span>,true,<span class="string">'DataScale'</span>,1);
+0174          ur = <a href="#_sub2" class="code" title="subfunction [z,ii,jj] = uniquetol_repl(x,tol,varargin)">uniquetol_repl</a>(x,tol,<span class="string">'rows'</span>,<span class="string">'first'</span>);
+0175          ue = <a href="#_sub1" class="code" title="subfunction out = eidors_uniquetol(in, tol)">eidors_uniquetol</a>(x,tol);
+0176          fprintf(<span class="string">'Testing for tol=%f\n'</span>,tol);
+0177          <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'uu=ur (not used)'</span>,uu,ur);
+0178          <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'um=ue           '</span>,uu,ue);
+0179       <span class="keyword">end</span>
+0180    <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

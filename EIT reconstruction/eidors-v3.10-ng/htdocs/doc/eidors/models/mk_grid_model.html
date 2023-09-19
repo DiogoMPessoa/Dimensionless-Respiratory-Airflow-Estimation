@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_grid_model</title>
+  <meta name="keywords" content="mk_grid_model">
+  <meta name="description" content="MK_GRID_MODEL: Create reconstruction model on pixelated grid">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_grid_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_grid_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_GRID_MODEL: Create reconstruction model on pixelated grid</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> MK_GRID_MODEL: Create reconstruction model on pixelated grid 
+  [cmdl,coarse2fine]= mk_grid_model(fmdl, xvec, yvec, zvec);
+
+ Outputs:
+  cmdl - eidors reconstruction model (coarse model)
+  coarse2fine - c2f mapping to put onto fmdl (specify [] to not use)
+
+ Inputs:
+  fmdl - fine model (forward model) to create coarse2fine mapping
+  xvec - x edges
+  yvec - y edges
+  zvec - z edges (optional - to create 3D model)
+
+ if fmdl == [], then just create the grid model without c2f
+
+ See also <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">MK_COARSE_FINE_MAPPING</a>, <a href="mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">MK_PIXEL_SLICE</a>
+
+ Example: for constructing an inverse model
+  grid{1}= linspace(-2,2,20);     % x grid
+  grid{2}= linspace(-0.5,+0.5,5); % y grid
+  grid{3}= linspace(-2, 0,20);    % z grid
+  imdl = select_imdl( fmdl, {'Basic GN dif'});
+  [imdl.rec_model,imdl.fwd_model.coarse2fine]= mk_grid_model(fmdl,grid{:});
+
+ ISSUES:
+  Ensure that grids are defined from smallest to largest</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>	EIDORS_OBJ: maintains EIDORS internals</li><li><a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>	INTERP_MESH: calculate interpolation points onto mdl elements</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>	NUM_NODES: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>	EIDORS_DEFAULT Default function handler.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/deprecated/np_fwd_solve.html" class="code" title="function data= np_fwd_solve( fwd_model, img)">np_fwd_solve</a>	NP_FWD_SOLVE: data= np_fwd_solve( fwd_model, img)</li><li><a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>	MK_ANALYTIC_C2F: create a mapping matrix from coarse to fine FEM</li><li><a href="mk_common_gridmdl.html" class="code" title="function inv_mdl= mk_common_gridmdl( str, RM)">mk_common_gridmdl</a>	MK_COMMON_MODEL: make EIT on reconstruction grids (GREIT)</li><li><a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>	MK_GRID_C2F - calculate a coarse2fine mapping for grid coarse models.</li><li><a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="mk_pixel_slice.html" class="code" title="function [imdl fmdl] = mk_pixel_slice(imdl,level,opt)">mk_pixel_slice</a>	MK_PIXEL_SLICE create a pixel model to reconstruct on</li><li><a href="mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a>	MK_TET_C2F - calculate a coarse2fine mapping for two tet-based models.</li><li><a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li><li><a href="mk_voxel_volume.html" class="code" title="function [imdl, fmdl] = mk_voxel_volume(varargin)">mk_voxel_volume</a>	MK_VOXEL_VOLUME create a voxel model to reconstruct on</li><li><a href="../../eidors/solvers/calc_RtR_prior.html" class="code" title="function RtR_prior = calc_RtR_prior( inv_model )">calc_RtR_prior</a>	RtR = calc_RtR_prior( inv_model )</li><li><a href="../../eidors/solvers/forward/fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>	FWD_SOLVE_1ST_ORDER: data= fwd_solve_1st_order( img)</li><li><a href="../../eidors/solvers/forward/jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>	JACOBIAN_ADJOINT: J= jacobian_adjoint( img )</li><li><a href="../../eidors/solvers/forward/jacobian_movement.html" class="code" title="function J = jacobian_movement(fwd_model, img)">jacobian_movement</a>	JACOBIAN_MOVEMENT   Computes the Jacobian matrix for conductivity and</li><li><a href="../../eidors/solvers/forward/system_mat_1st_order.html" class="code" title="function s_mat= system_mat_1st_order( fwd_model, img)">system_mat_1st_order</a>	SYSTEM_MAT_1ST_ORDER: SS= system_mat_1st_order( fwd_model, img)</li><li><a href="../../eidors/solvers/inverse/GREIT_desired_img_sigmoid.html" class="code" title="function PSF = GREIT_desired_img_sigmoid(xyz,radius, opt)">GREIT_desired_img_sigmoid</a>	GREIT_DESIRED_IMG_SIGMOID sigmoid-decay desired image function for GREIT</li><li><a href="../../eidors/tests/test_2d_resistor.html" class="code" title="function test_2d_resistor(opt)">test_2d_resistor</a>	Create 2D model of a cylindrical resistor</li><li><a href="../../eidors/tests/test_3d_resistor.html" class="code" title="">test_3d_resistor</a>	Create 3D model of a Rectangular resistor</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function c2f= calc_c2f_2d( fmdl, xvec, yvec);</a></li><li><a href="#_sub2" class="code">function c2f= calc_c2f_3d( fmdl, xvec, yvec, zvec);</a></li><li><a href="#_sub3" class="code">function cmdl= mk_2d_grid(xvec, yvec);</a></li><li><a href="#_sub4" class="code">function cmdl= mk_3d_grid(xvec, yvec, zvec);</a></li><li><a href="#_sub5" class="code">function mdl = set_pixel_pos(mdl, xvec, yvec)</a></li><li><a href="#_sub6" class="code">function in_d_pts = calc_in_d_pts( d_pts, dvec);</a></li><li><a href="#_sub7" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);</a>
+0002 <span class="comment">% MK_GRID_MODEL: Create reconstruction model on pixelated grid</span>
+0003 <span class="comment">%  [cmdl,coarse2fine]= mk_grid_model(fmdl, xvec, yvec, zvec);</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Outputs:</span>
+0006 <span class="comment">%  cmdl - eidors reconstruction model (coarse model)</span>
+0007 <span class="comment">%  coarse2fine - c2f mapping to put onto fmdl (specify [] to not use)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Inputs:</span>
+0010 <span class="comment">%  fmdl - fine model (forward model) to create coarse2fine mapping</span>
+0011 <span class="comment">%  xvec - x edges</span>
+0012 <span class="comment">%  yvec - y edges</span>
+0013 <span class="comment">%  zvec - z edges (optional - to create 3D model)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% if fmdl == [], then just create the grid model without c2f</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% See also MK_COARSE_FINE_MAPPING, MK_PIXEL_SLICE</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Example: for constructing an inverse model</span>
+0020 <span class="comment">%  grid{1}= linspace(-2,2,20);     % x grid</span>
+0021 <span class="comment">%  grid{2}= linspace(-0.5,+0.5,5); % y grid</span>
+0022 <span class="comment">%  grid{3}= linspace(-2, 0,20);    % z grid</span>
+0023 <span class="comment">%  imdl = select_imdl( fmdl, {'Basic GN dif'});</span>
+0024 <span class="comment">%  [imdl.rec_model,imdl.fwd_model.coarse2fine]= mk_grid_model(fmdl,grid{:});</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% ISSUES:</span>
+0027 <span class="comment">%  Ensure that grids are defined from smallest to largest</span>
+0028 
+0029 <span class="comment">% (C) 2008 Andy Adler. License: GPL version 2 or version 3</span>
+0030 <span class="comment">% $Id: mk_grid_model.m 5902 2019-02-04 10:18:28Z aadler $</span>
+0031 
+0032 <span class="keyword">if</span> ischar(fmdl) &amp;&amp; strcmp(fmdl,<span class="string">'UNIT_TEST'</span>); <a href="#_sub7" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0033 
+0034 
+0035 <span class="keyword">if</span> nargin == 3
+0036    cmdl = <a href="#_sub3" class="code" title="subfunction cmdl= mk_2d_grid(xvec, yvec);">mk_2d_grid</a>(xvec,yvec);
+0037 <span class="keyword">elseif</span> nargin ==4
+0038    cmdl = <a href="#_sub4" class="code" title="subfunction cmdl= mk_3d_grid(xvec, yvec, zvec);">mk_3d_grid</a>(xvec,yvec,zvec);
+0039 <span class="keyword">else</span>
+0040    error(<span class="string">'check nargin'</span>);
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">% this had too many side effects</span>
+0044 cmdl = <a href="#_sub5" class="code" title="subfunction mdl = set_pixel_pos(mdl, xvec, yvec)">set_pixel_pos</a>(cmdl,xvec,yvec);<span class="comment">% same for 2d and 3d</span>
+0045 
+0046 <span class="comment">% put in the centre (or near it)</span>
+0047 ctr = ones(<a href="num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(cmdl),1)*mean(cmdl.nodes);
+0048 dctr= sum( (cmdl.nodes - ctr).^2, 2);
+0049 [jnk, c_idx] = min(dctr);
+0050 cmdl.gnd_node = c_idx(1);
+0051 
+0052 <span class="keyword">if</span> ~isempty( fmdl)
+0053     <span class="keyword">if</span> size(fmdl.nodes,2) == 2
+0054         assert(nargin==3);
+0055         c2f= <a href="#_sub1" class="code" title="subfunction c2f= calc_c2f_2d( fmdl, xvec, yvec);">calc_c2f_2d</a>( fmdl, xvec, yvec);
+0056         
+0057     <span class="keyword">else</span>
+0058         <span class="keyword">if</span> nargin == 3
+0059             <span class="comment">% here we could incorporate z_depth</span>
+0060             zvec = [ min(fmdl.nodes(:,3)) - 1; max(fmdl.nodes(:,3))+1 ];
+0061             tmp = <a href="#_sub4" class="code" title="subfunction cmdl= mk_3d_grid(xvec, yvec, zvec);">mk_3d_grid</a>(xvec,yvec,zvec);
+0062         <span class="keyword">elseif</span> nargin == 4
+0063             tmp = cmdl;
+0064         <span class="keyword">end</span>
+0065         c2f = <a href="mk_grid_c2f.html" class="code" title="function [c2f, m] = mk_grid_c2f(fmdl, rmdl, opt)">mk_grid_c2f</a>(fmdl,tmp);
+0066     <span class="keyword">end</span>
+0067 <span class="keyword">end</span>
+0068 
+0069 cmdl.normalize_measurements = 0;<span class="comment">% @eidors_default;</span>
+0070 cmdl.solve =      @<a href="../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>;
+0071 cmdl.system_mat = @<a href="../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>;
+0072 cmdl.jacobian   = @<a href="../../eidors/tools/eidors_default.html" class="code" title="function varargout = eidors_default(varargin)">eidors_default</a>;
+0073 
+0074 
+0075 <a name="_sub1" href="#_subfunctions" class="code">function c2f= calc_c2f_2d( fmdl, xvec, yvec);</a>
+0076    nef= size( fmdl.elems,1);
+0077    c2f= <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(nef,0);
+0078    mdl_pts = <a href="interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>( fmdl, 3);
+0079    x_pts = squeeze(mdl_pts(:,1,:));
+0080    y_pts = squeeze(mdl_pts(:,2,:));
+0081    <span class="keyword">for</span> yi= 1:length(yvec)-1
+0082          in_y_pts = y_pts &gt;= yvec(yi) &amp; y_pts &lt; yvec(yi+1);
+0083       <span class="keyword">for</span> xi= 1:length(xvec)-1
+0084           in_x_pts =  x_pts &gt;= xvec(xi) &amp; x_pts &lt; xvec(xi+1);
+0085           in_pts = mean( in_y_pts &amp; in_x_pts , 2);
+0086           c2f = [c2f,<a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(in_pts)];
+0087       <span class="keyword">end</span>
+0088    <span class="keyword">end</span>
+0089 
+0090 <a name="_sub2" href="#_subfunctions" class="code">function c2f= calc_c2f_3d( fmdl, xvec, yvec, zvec);</a>
+0091 <span class="comment">%  c2f= mk_coarse_fine_mapping( fmdl, cmdl);</span>
+0092    nef= size( fmdl.elems,1);
+0093 <span class="comment">%  c2f= sparse(nef,0);</span>
+0094    c2fiidx= [];
+0095    c2fjidx= [];
+0096    c2fdata= [];
+0097    jidx= 0;
+0098    mdl_pts = <a href="interp_mesh.html" class="code" title="function mdl_pts = interp_mesh( mdl, n_interp)">interp_mesh</a>( fmdl, 3);
+0099    x_pts = squeeze(mdl_pts(:,1,:));
+0100    y_pts = squeeze(mdl_pts(:,2,:));
+0101    z_pts = squeeze(mdl_pts(:,3,:));
+0102    
+0103    in_x_pts = <a href="#_sub6" class="code" title="subfunction in_d_pts = calc_in_d_pts( d_pts, dvec);">calc_in_d_pts</a>( x_pts, xvec);
+0104    in_y_pts = <a href="#_sub6" class="code" title="subfunction in_d_pts = calc_in_d_pts( d_pts, dvec);">calc_in_d_pts</a>( y_pts, yvec);
+0105    in_z_pts = <a href="#_sub6" class="code" title="subfunction in_d_pts = calc_in_d_pts( d_pts, dvec);">calc_in_d_pts</a>( z_pts, zvec);
+0106 
+0107    <span class="keyword">for</span> zi= 1:length(zvec)-1
+0108       <span class="keyword">for</span> yi= 1:length(yvec)-1
+0109              in_yz_pts = in_y_pts{yi} &amp; in_z_pts{zi};
+0110          <span class="keyword">for</span> xi= 1:length(xvec)-1
+0111              in_pts = mean( in_x_pts{xi} &amp; in_yz_pts, 2);
+0112              <span class="comment">% c2f = [c2f,sparse(in_pts)];</span>
+0113              [ii,jj,vv] = find(in_pts);
+0114              c2fiidx= [c2fiidx;ii];
+0115              c2fjidx= [c2fjidx;jj+jidx]; jidx=jidx+1;
+0116              c2fdata= [c2fdata;vv];
+0117          <span class="keyword">end</span>
+0118       <span class="keyword">end</span>
+0119    <span class="keyword">end</span>
+0120    c2f= <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(c2fiidx,c2fjidx,c2fdata, length(in_pts), jidx);
+0121 
+0122 <a name="_sub3" href="#_subfunctions" class="code">function cmdl= mk_2d_grid(xvec, yvec);</a>
+0123    xlen = length(xvec);
+0124    ylen = length(yvec);
+0125    cmdl= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>, <span class="keyword">...</span>
+0126             sprintf(<span class="string">'Grid model %d x %d'</span>, xlen, ylen) );
+0127 
+0128    [x,y]= ndgrid( xvec, yvec);
+0129    cmdl.nodes= [x(:),y(:)];
+0130    k= 1:xlen-1;
+0131    elem_frac = [ k;k+1;k+xlen; <span class="keyword">...</span>
+0132                  k+1;k+xlen;k+xlen+1];
+0133    elem_frac= reshape(elem_frac, 3,[])';
+0134    cmdl.elems=  [];
+0135    <span class="keyword">for</span> j=0:ylen-2
+0136       cmdl.elems=  [cmdl.elems; elem_frac + xlen*j];
+0137    <span class="keyword">end</span>
+0138 
+0139    cmdl.boundary = <a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>( cmdl.elems);
+0140 
+0141 <span class="comment">% assign one single parameter to each square element</span>
+0142    e= size(cmdl.elems,1);
+0143    params= ceil(( 1:e )/2);
+0144    cmdl.coarse2fine = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(1:e,params,1,e,max(params));
+0145 
+0146 
+0147 <a name="_sub4" href="#_subfunctions" class="code">function cmdl= mk_3d_grid(xvec, yvec, zvec);</a>
+0148    xlen = length(xvec);
+0149    ylen = length(yvec);
+0150    zlen = length(zvec);
+0151    cmdl= <a href="../../eidors/eidors_obj.html" class="code" title="function [obj_id, extra_out] = eidors_obj(type,name, varargin )">eidors_obj</a>(<span class="string">'fwd_model'</span>, <span class="keyword">...</span>
+0152             sprintf(<span class="string">'Grid model %d x %d x %d'</span>, xlen, ylen, zlen) );
+0153 
+0154    [x,y,z]= ndgrid( xvec, yvec, zvec);
+0155    cmdl.nodes= [x(:),y(:),z(:)];
+0156    k= 1:xlen-1;
+0157    ac = xlen; up = xlen*ylen; <span class="comment">% accross vs up</span>
+0158    elem_frac = [ k;     k+1 ;  k+ac;   k+up;  <span class="keyword">...</span>
+0159                  k+1;   k+ac;  k+up;   k+up+1; <span class="keyword">...</span>
+0160                  k+ac;  k+up;  k+up+1; k+up+ac; <span class="keyword">...</span>
+0161                  k+1;   k+ac;  k+ac+1; k+up+1; <span class="keyword">...</span>
+0162                  k+ac;  k+ac+1;k+up+1; k+up+ac; <span class="keyword">...</span>
+0163                  k+ac+1;k+up+1;k+up+ac;k+up+ac+1];
+0164    elem_frac= reshape(elem_frac, 4,[])';
+0165 
+0166    row_frac =  [];
+0167    <span class="keyword">for</span> j=0:ylen-2
+0168       row_frac=  [row_frac; elem_frac + ac*j];
+0169    <span class="keyword">end</span>
+0170 
+0171    cmdl.elems=  [];
+0172    <span class="keyword">for</span> k=0:zlen-2
+0173       cmdl.elems=  [cmdl.elems; row_frac + up*k];
+0174    <span class="keyword">end</span>
+0175 
+0176    cmdl.boundary = <a href="../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>( cmdl.elems);
+0177 
+0178 <span class="comment">% assign one single parameter to each square element</span>
+0179    e= size(cmdl.elems,1);
+0180    params= ceil(( 1:e )/6);
+0181    cmdl.coarse2fine = <a href="../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(1:e,params,1,e,max(params));
+0182 
+0183 <a name="_sub5" href="#_subfunctions" class="code">function mdl = set_pixel_pos(mdl, xvec, yvec)</a>
+0184    x = xvec(1:end-1) + 0.5*diff(xvec);
+0185    y = yvec(1:end-1) + 0.5*diff(yvec);
+0186    y = y(end:-1:1); <span class="comment">%get the medical orientation right</span>
+0187    mdl.mdl_slice_mapper.x_pts = x;
+0188    mdl.mdl_slice_mapper.y_pts = y;
+0189    
+0190    
+0191 <a name="_sub6" href="#_subfunctions" class="code">function in_d_pts = calc_in_d_pts( d_pts, dvec);</a>
+0192    l1dvec= length(dvec)-1;
+0193    in_d_pts = cell(l1dvec,1);
+0194    <span class="keyword">for</span> i= 1:l1dvec
+0195       in_d_pts{i} = d_pts &gt;= dvec(i) &amp; d_pts &lt; dvec(i+1);
+0196    <span class="keyword">end</span>
+0197 
+0198 <a name="_sub7" href="#_subfunctions" class="code">function do_unit_test</a>
+0199 imdl = <a href="mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'b2c2'</span>,16); imdl.hyperparameter.value = 1e-3;
+0200 img = <a href="mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl,1);     vh= <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0201 img.elem_data([51,23])=1.1; vi= <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0202 subplot(221); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img);
+0203 subplot(222); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(<a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi));
+0204 
+0205 grid = linspace(-1,1,33);
+0206 [imdl.rec_model, imdl.fwd_model.coarse2fine] = <span class="keyword">...</span>
+0207      <a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>( imdl.fwd_model, grid, grid );
+0208 subplot(223); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(<a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi));
+0209 hold on; hh=<a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img); set(hh,<span class="string">'FaceAlpha'</span>,0,<span class="string">'EdgeColor'</span>,[0,0,1]); hold off;
+0210 
+0211 outside = find(sum(imdl.fwd_model.coarse2fine,1) &lt; eps);
+0212 imdl.fwd_model.coarse2fine(:,outside) = [];
+0213 imdl.rec_model.coarse2fine(:,outside) = [];
+0214 rec_out = [2*outside-1,2*outside];
+0215 imdl.rec_model.coarse2fine(rec_out,:) = [];
+0216 imdl.rec_model.elems(rec_out,:) = [];
+0217 subplot(224); <a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(<a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi));
+0218 hold on; hh=<a href="../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(img); set(hh,<span class="string">'FaceAlpha'</span>,0,<span class="string">'EdgeColor'</span>,[0,0,1]); hold off;</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

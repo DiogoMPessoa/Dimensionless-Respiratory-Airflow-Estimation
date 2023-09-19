@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of valid_data</title>
+  <meta name="keywords" content="valid_data">
+  <meta name="description" content="[pass, err_str] = valid_data(data)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; valid_data.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>valid_data
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[pass, err_str] = valid_data(data)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function pass = valid_data(data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [pass, err_str] = valid_data(data)
+
+ Confirms that a valid measurement data structure exists or
+ explain why an structure is not valid.
+
+ If called without an output argument (argout=0), will
+ error out if invalid. Otherwise the function is silent,
+ returning an explaination of failures in err_str.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function pass = valid_data(data)</a>
+0002 <span class="comment">% [pass, err_str] = valid_data(data)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Confirms that a valid measurement data structure exists or</span>
+0005 <span class="comment">% explain why an structure is not valid.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% If called without an output argument (argout=0), will</span>
+0008 <span class="comment">% error out if invalid. Otherwise the function is silent,</span>
+0009 <span class="comment">% returning an explaination of failures in err_str.</span>
+0010 
+0011 <span class="comment">% (C) 2015 Alistair Boyle. License: GPL version 2 or version 3</span>
+0012 <span class="comment">% $Id: valid_data.m 4986 2015-05-11 20:09:28Z aadler $</span>
+0013 
+0014 pass = 1;
+0015 err_str = <span class="string">''</span>;
+0016 
+0017 <span class="comment">% it *can* be just straight up numbers</span>
+0018 <span class="keyword">if</span> isnumeric(data)
+0019    <span class="keyword">return</span>;
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="comment">% it's a struct with fields</span>
+0023 <span class="keyword">if</span> ~isstruct(data)
+0024    pass = 0;
+0025    err_str = [err_str <span class="string">'- not a struct or numeric data\n'</span>];
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="comment">% required fields</span>
+0029 <span class="comment">%      field       type</span>
+0030 f = {<span class="string">'name'</span>,      <span class="string">'char'</span>, <span class="keyword">...</span>
+0031      <span class="string">'meas'</span>,      <span class="string">'numeric'</span>, <span class="keyword">...</span>
+0032      <span class="string">'time'</span>,      <span class="string">'numeric'</span>, <span class="keyword">...</span><span class="comment"> % OPTIONAL?</span>
+0033      <span class="string">'type'</span>,      <span class="string">'char'</span>};
+0034 <span class="keyword">for</span> i=1:length(f)/2
+0035    x=2*(i-1)+1;
+0036    y=x+1;
+0037    <span class="keyword">if</span> ~isfield(data, f{x})
+0038       pass = 0;
+0039       err_str = [err_str <span class="string">'- missing required field: '</span> f{x} <span class="string">'\n'</span>];
+0040    <span class="keyword">elseif</span> ~isa(data.(f{x}), f{y})
+0041       pass = 0;
+0042       err_str = [err_str <span class="string">'- required field '</span> f{x} <span class="string">' is not a '</span> f{y}'\n'];
+0043    <span class="keyword">end</span>
+0044 <span class="keyword">end</span>
+0045 <span class="comment">% check for correct 'type'</span>
+0046 <span class="keyword">if</span> ~strcmp(data.type, <span class="string">'data'</span>)
+0047    pass = 0;
+0048    err_str = [err_str <span class="string">'- field &quot;type&quot; must be &quot;data&quot;\n'</span>];
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="comment">% optional fields</span>
+0052 <span class="comment">%      field       type</span>
+0053 f = {};
+0054 <span class="keyword">for</span> i=1:length(f)/2
+0055    x=2*(i-1)+1;
+0056    y=x+1;
+0057    <span class="keyword">if</span> isfield(data, f{x}) &amp;&amp; ~isa(data.(f{x}), f{y})
+0058       pass = 0;
+0059       err_str = [err_str <span class="string">'- optional field '</span> f{x} <span class="string">' is not a '</span> f{y}'\n'];
+0060    <span class="keyword">end</span>
+0061 <span class="keyword">end</span>
+0062 
+0063 <span class="comment">% illegal fields</span>
+0064 <span class="comment">%      field</span>
+0065 f = {<span class="string">'maes'</span>};
+0066 <span class="keyword">for</span> i=1:length(f)
+0067    x=i;
+0068    <span class="keyword">if</span> isfield(data, f{x})
+0069       pass = 0;
+0070       err_str = [err_str <span class="string">'- illegal field &quot;'</span> f{x} <span class="string">'&quot; found\n'</span>];
+0071    <span class="keyword">end</span>
+0072 <span class="keyword">end</span>
+0073 
+0074 <span class="comment">% result</span>
+0075 <span class="keyword">if</span> ~pass
+0076    err_str = err_str(1:end-2); <span class="comment">% drop last \n</span>
+0077 <span class="keyword">end</span>
+0078 <span class="keyword">if</span> ( nargout == 0 ) &amp;&amp; ~pass
+0079    error(sprintf([<span class="string">'Reasons:\n'</span> err_str]));
+0080 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

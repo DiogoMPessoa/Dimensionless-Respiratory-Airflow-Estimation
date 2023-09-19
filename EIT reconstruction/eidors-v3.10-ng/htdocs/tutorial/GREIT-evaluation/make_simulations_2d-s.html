@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="../../eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="../../index-s.html"
+>Main</a><br>
+<a href="../../docs-s.html"
+   >Documentation</a><br>
+<a href="../../tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="../../tutorial/image_reconst-s.html"
+      >&minus; Image Reconst</a><br>
+<a href="../../tutorial/data_structures-s.html"
+      >&minus; Data Structures</a><br>
+<a href="../../tutorial/application_examples-s.html"
+      >&minus; Applications</a><br>
+<a href="../../tutorial/netgen-s.html"
+      >&minus; FEM Modelling</a><br>
+<a href="../../tutorial/GREIT-s.html"
+      >&minus; GREIT</a><br>
+<a href="../../tutorial/old-tutorials-s.html"
+      >&minus; Old tutorials</a><br>
+<a href="../../tutorial/workshop/workshop-s.html"
+      >&minus; <i>Workshop</i></a><br>
+
+<a href="../../download-s.html"
+   >Download</a><br>
+<a href="../../data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="../../GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="../../doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="../../news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="../../faq-s.html">FAQ</a><br>
+<a href="../../programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+
+<h2> 
+GREIT evaluation: Make simulation data (2D)
+</h2>
+
+In order to test the performance of GREIT, we create a set
+of simulation data. Here we look at the performance for
+an object moving radially toward the side from the centre
+of the medium.
+
+<H3>Prepare simulation data: create phantom model in 2D</H3>
+
+Prepare Model
+<pre>
+% create model $Id: simulate_2d_test01.m 3828 2013-04-13 14:20:17Z bgrychtol $
+
+% Model parameters
+n_elec= 16;
+n_nodes= 2000;
+
+% Create electrodes
+refine_level=4; %electrode refinement level
+elec_width= .1;
+z_contact = 0.01;
+% elect positions
+th=linspace(0,2*pi,n_elec(1)+1)';th(end)=[];
+elec_posn= [sin(th),cos(th)];
+[elec_nodes, refine_nodes] = dm_mk_elec_nodes( elec_posn, elec_width, refine_level);
+
+% Define circular medium
+fd=inline('sum(p.^2,2)-1','p');
+bbox = [-1,-1;1,1];
+smdl = dm_mk_fwd_model( fd, [], n_nodes, bbox, elec_nodes, refine_nodes, z_contact);
+smdl = mdl_normalize(smdl,0); 
+
+</pre>
+
+Calculate Homogeneous simulations
+<pre>
+% simulate homogeneous $Id: simulate_2d_test02.m 3273 2012-06-30 18:00:35Z aadler $
+
+% stimulation pattern: adjacent
+stim_pat= mk_stim_patterns(n_elec,1,'{ad}','{ad}',{},1);
+
+smdl.stimulation= stim_pat;
+himg= mk_image(smdl,1);
+
+vh= fwd_solve(himg); vh= vh.meas;
+
+</pre>
+
+
+<H3>Prepare simulation data: create phantom model in 2D</H3>
+
+The positions of the simulated objects may be seen here:
+<pre>
+% moving target $Id: simulate_2d_test03.m 3828 2013-04-13 14:20:17Z bgrychtol $
+
+% Create a moving object within the model
+trg_rad= 0.05; trs= trg_rad*sin(th); trc= trg_rad*cos(th);
+radius= 0.9;
+n_sims= 2 ;
+contrast= 0.1;
+
+vi=[];
+for i= 1:n_sims; 
+   f_frac = (i-1)/(n_sims-1);
+   cv= 2*pi*f_frac * 73;
+   trg_ctr= f_frac*radius*[cos(cv),sin(cv)];
+
+   trg_refine_nodes= [refine_nodes; [ trs+trg_ctr(1), trc+trg_ctr(2) ]];
+
+   tmdl= dm_mk_fwd_model( fd, [], n_nodes, bbox, elec_nodes, trg_refine_nodes, z_contact);
+   tmdl.stimulation = stim_pat;
+   tmdl = mdl_normalize(tmdl,0);
+
+   % find elements in size target
+   mdl_pts = interp_mesh( tmdl );
+   ctr_pts = mdl_pts - ones(size(mdl_pts,1),1)*trg_ctr;
+   in_trg  =(sum(ctr_pts.^2,2) < trg_rad^2);
+
+   % Create target image object
+   timg= mk_image(tmdl, 1 + in_trg*contrast);
+   vi_t= fwd_solve(timg);
+   vi = [vi, vi_t.meas];
+   if     i==1;    show_fem(timg); print -dpng -r60 simulate_2d_test03a.png
+   elseif i==150;  show_fem(timg); print -dpng -r60 simulate_2d_test03b.png
+   end
+end
+
+</pre>
+<center>
+<img src = "http://eidors3d.sourceforge.net/tutorial/GREIT-evaluation/simulate_2d_test03a.png">
+<br>
+Figure: Position and size of conductive targets in medium
+</center>
+
+
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</BODY></HTML>
+<!--
+      -->
+

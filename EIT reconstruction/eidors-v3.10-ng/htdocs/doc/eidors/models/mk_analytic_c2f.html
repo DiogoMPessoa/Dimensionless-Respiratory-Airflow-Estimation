@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mk_analytic_c2f</title>
+  <meta name="keywords" content="mk_analytic_c2f">
+  <meta name="description" content="MK_ANALYTIC_C2F: create a mapping matrix from coarse to fine FEM">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">models</a> &gt; mk_analytic_c2f.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>mk_analytic_c2f
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MK_ANALYTIC_C2F: create a mapping matrix from coarse to fine FEM</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> MK_ANALYTIC_C2F: create a mapping matrix from coarse to fine FEM
+ [c2f,out]= mk_analytic_c2f( f_mdl, c_mdl, opt );
+  
+ Parameters:
+    c_mdl is coarse fwd_model
+    f_mdl is fine fwd_model
+    opt   is option structure
+
+ C2F_ij is the fraction of f_mdl element i which is
+   contained in c_mdl element j. This is used to map
+   from data on the reconstruction model (c_mdl) to
+   the forward model f_mdl as 
+      elem_data_fine = Mapping*elem_data_coase
+
+ OUT_i is the fraction of f_mdl element i which is not
+   contained in any c_mdl element.
+
+ OPTIONS:
+ if the geometry of the fine and coarse models are not
+  aligned, then they can be translated and mapped using
+    coarse_xyz = (M* (fine_xyz - T)')'
+  where
+    T= c_mdl.mk_analytic_c2f.f2c_offset (1xN_dims)
+    M= c_mdl.mk_analytic_c2f.f2c_project (N_dimsxN_dims)
+  by default T= [0,0,0] and M=eye(3)
+
+ if c_mdl is 2D and f_mdl is 3D, then parameter
+     c_mdl.mk_analytic_c2f.z_depth
+     indicates the +/- z_depth which elements in 2D are
+     considered to be extruded in 3D (default inf)
+
+ See also <a href="mk_c2f_circ_mapping.html" class="code" title="function [mapping failed] = mk_c2f_circ_mapping( mdl, xyzr );">MK_C2F_CIRC_MAPPING</a>, <a href="mk_approx_c2f.html" class="code" title="function [mapping, outside] = mk_approx_c2f( f_mdl, c_mdl );">MK_APPROX_C2F</a>, <a href="mk_coarse_fine_mapping.html" class="code" title="function [mapping, outside] = mk_coarse_fine_mapping(varargin)">MK_COARSE_FINE_MAPPING</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>	NG_MAKE_CYL_MODELS: create cylindrical models using netgen</li><li><a href="elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>	ELEM_DIM: dimension of elements in space (are elements in 2D or 3D space)</li><li><a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>	GET_ELEM_VOLUME: VOL = get_elem_volume(fwd_model, map_node )</li><li><a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>	MK_ANALYTIC_C2F: create a mapping matrix from coarse to fine FEM</li><li><a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>	MK_CIRC_TANK: make a cylindrical tank FEM geometry in 2D or 3D</li><li><a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a>	MK_TET_C2F - calculate a coarse2fine mapping for two tet-based models.</li><li><a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>	MK_TRI2TET_C2F - coarse2fine mapping between tri-based and tet-based models</li><li><a href="mk_tri_c2f.html" class="code" title="function c2f = mk_tri_c2f(fmdl,rmdl,opt)">mk_tri_c2f</a>	MK_TRI_C2F - calculate a coarse2fine mapping for triangle-based models.</li><li><a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>	MK_ANALYTIC_C2F: create a mapping matrix from coarse to fine FEM</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [mapping, outside] = mapping_calc(f_mdl, c_mdl, opt)</a></li><li><a href="#_sub2" class="code">function c_obj = cache_obj(c_mdl, f_mdl, opt)</a></li><li><a href="#_sub3" class="code">function f_mdl= offset_and_project( f_mdl, opt)</a></li><li><a href="#_sub4" class="code">function opt = assign_defaults( c_mdl, f_mdl, org )</a></li><li><a href="#_sub5" class="code">function do_unit_test</a></li><li><a href="#_sub6" class="code">function test_2d3d_handling</a></li><li><a href="#_sub7" class="code">function do_original_2d_tests</a></li><li><a href="#_sub8" class="code">function preload</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)</a>
+0002 <span class="comment">% MK_ANALYTIC_C2F: create a mapping matrix from coarse to fine FEM</span>
+0003 <span class="comment">% [c2f,out]= mk_analytic_c2f( f_mdl, c_mdl, opt );</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Parameters:</span>
+0006 <span class="comment">%    c_mdl is coarse fwd_model</span>
+0007 <span class="comment">%    f_mdl is fine fwd_model</span>
+0008 <span class="comment">%    opt   is option structure</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% C2F_ij is the fraction of f_mdl element i which is</span>
+0011 <span class="comment">%   contained in c_mdl element j. This is used to map</span>
+0012 <span class="comment">%   from data on the reconstruction model (c_mdl) to</span>
+0013 <span class="comment">%   the forward model f_mdl as</span>
+0014 <span class="comment">%      elem_data_fine = Mapping*elem_data_coase</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% OUT_i is the fraction of f_mdl element i which is not</span>
+0017 <span class="comment">%   contained in any c_mdl element.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% OPTIONS:</span>
+0020 <span class="comment">% if the geometry of the fine and coarse models are not</span>
+0021 <span class="comment">%  aligned, then they can be translated and mapped using</span>
+0022 <span class="comment">%    coarse_xyz = (M* (fine_xyz - T)')'</span>
+0023 <span class="comment">%  where</span>
+0024 <span class="comment">%    T= c_mdl.mk_analytic_c2f.f2c_offset (1xN_dims)</span>
+0025 <span class="comment">%    M= c_mdl.mk_analytic_c2f.f2c_project (N_dimsxN_dims)</span>
+0026 <span class="comment">%  by default T= [0,0,0] and M=eye(3)</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% if c_mdl is 2D and f_mdl is 3D, then parameter</span>
+0029 <span class="comment">%     c_mdl.mk_analytic_c2f.z_depth</span>
+0030 <span class="comment">%     indicates the +/- z_depth which elements in 2D are</span>
+0031 <span class="comment">%     considered to be extruded in 3D (default inf)</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% See also MK_C2F_CIRC_MAPPING, MK_APPROX_C2F, MK_COARSE_FINE_MAPPING</span>
+0034 
+0035 <span class="comment">% (C) 2007-2015 Andy Adler and Bartlomiej Grychtol.</span>
+0036 <span class="comment">% License: GPL version 2 or version 3</span>
+0037 <span class="comment">% $Id: mk_analytic_c2f.m 5884 2018-12-22 14:16:36Z aadler $</span>
+0038 
+0039 <span class="keyword">if</span> ischar(f_mdl) &amp;&amp; strcmp(f_mdl, <span class="string">'UNIT_TEST'</span>); <a href="#_sub5" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0040 
+0041 <span class="keyword">if</span> ischar(f_mdl) &amp;&amp; strcmp(f_mdl, <span class="string">'LOAD'</span>); <a href="#_sub8" class="code" title="subfunction preload">preload</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">if</span> nargin== 2, opt = struct; <span class="keyword">end</span>
+0044 
+0045 opt = <a href="#_sub4" class="code" title="subfunction opt = assign_defaults( c_mdl, f_mdl, org )">assign_defaults</a>( c_mdl, f_mdl, opt );
+0046 
+0047 copt.cache_obj = <a href="#_sub2" class="code" title="subfunction c_obj = cache_obj(c_mdl, f_mdl, opt)">cache_obj</a>(c_mdl, f_mdl, opt);
+0048 copt.fstr = <span class="string">'mk_analytic_c2f'</span>;
+0049 
+0050 [mapping, outside] = <a href="../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub1" class="code" title="subfunction [mapping, outside] = mapping_calc(f_mdl, c_mdl, opt)">mapping_calc</a>,{f_mdl,c_mdl,opt},copt);
+0051 
+0052 
+0053 
+0054 <a name="_sub1" href="#_subfunctions" class="code">function [mapping, outside] = mapping_calc(f_mdl, c_mdl, opt)</a>
+0055     
+0056    f_mdl= <a href="#_sub3" class="code" title="subfunction f_mdl= offset_and_project( f_mdl, opt)">offset_and_project</a>( f_mdl, opt);
+0057  
+0058    f_dim = <a href="elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>(f_mdl);
+0059    c_dim = <a href="elem_dim.html" class="code" title="function num = elem_dim( mdl );">elem_dim</a>(c_mdl);
+0060    d_num = f_dim * 10 + c_dim;
+0061    
+0062    <span class="keyword">switch</span> d_num
+0063       <span class="keyword">case</span> 33
+0064          mapping = <a href="mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a>(f_mdl,c_mdl, opt);
+0065       <span class="keyword">case</span> 22
+0066          mapping = <a href="mk_tri_c2f.html" class="code" title="function c2f = mk_tri_c2f(fmdl,rmdl,opt)">mk_tri_c2f</a>(f_mdl,c_mdl, opt);
+0067       <span class="keyword">case</span> 32
+0068          mapping = <a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>(f_mdl, c_mdl, opt);
+0069       <span class="keyword">case</span> 23
+0070          mapping = <a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a>(c_mdl, f_mdl, opt);
+0071          mapping = bsxfun(@times,   mapping , <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(c_mdl));
+0072          <span class="keyword">if</span> isinf(opt.z_depth)
+0073             height = max(c_mdl.nodes(:,3)) - min(c_mdl.nodes(:,3));
+0074          <span class="keyword">else</span>
+0075             height = opt.z_depth;
+0076          <span class="keyword">end</span>
+0077          mapping = mapping * height;
+0078          mapping = bsxfun(@rdivide, mapping', <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(f_mdl)); 
+0079       <span class="keyword">otherwise</span>
+0080          error(<span class="string">'EIDORS:WrongDim'</span>,[<span class="string">'Unsupported combination of dimensions: '</span> <span class="keyword">...</span>
+0081             <span class="string">'c_mdl=%d, f_mdl=%d'</span>],c_dim,f_dim);
+0082    <span class="keyword">end</span>
+0083 
+0084    
+0085    <span class="keyword">if</span> isfield(c_mdl,<span class="string">'coarse2fine'</span>)
+0086       mapping = mapping*c_mdl.coarse2fine;
+0087    <span class="keyword">end</span>
+0088    
+0089    <span class="keyword">if</span> nargout&gt;1;
+0090       outside = 1 - sum(mapping,2);
+0091    <span class="keyword">end</span>
+0092 
+0093 
+0094 <span class="comment">% Mapping depends only on nodes and elems - remove the other stuff</span>
+0095 <a name="_sub2" href="#_subfunctions" class="code">function c_obj = cache_obj(c_mdl, f_mdl, opt)</a>
+0096    c_obj = {c_mdl.nodes, c_mdl.elems,  <span class="keyword">...</span>
+0097             f_mdl.nodes, f_mdl.elems, opt};
+0098 
+0099 <span class="comment">% Offset and project f_mdl as required</span>
+0100 <a name="_sub3" href="#_subfunctions" class="code">function f_mdl= offset_and_project( f_mdl, opt)</a>
+0101     [fn,fd]= size(f_mdl.nodes);
+0102     T= opt.f2c_offset;
+0103     M= opt.f2c_project;
+0104     
+0105     f_mdl.nodes= (M*( f_mdl.nodes - ones(fn,1)*T )')';
+0106 
+0107 <a name="_sub4" href="#_subfunctions" class="code">function opt = assign_defaults( c_mdl, f_mdl, org )</a>
+0108    opt = struct;
+0109    <span class="keyword">try</span> opt = c_mdl.mk_analytic_c2f; <span class="keyword">end</span>
+0110    fn = fieldnames(org);
+0111    <span class="keyword">for</span> f = 1:numel(fn)
+0112       opt.(fn{f}) = org.(fn{f}); <span class="comment">% explicit options override those on the model</span>
+0113    <span class="keyword">end</span>
+0114    [fn,fd]= size(f_mdl.nodes);
+0115    <span class="keyword">try</span>    opt.f2c_offset; <span class="comment">% test exist</span>
+0116    <span class="keyword">catch</span>  opt.f2c_offset= zeros(1,fd);
+0117    <span class="keyword">end</span>
+0118    <span class="keyword">try</span>    opt.f2c_project;
+0119    <span class="keyword">catch</span>  opt.f2c_project= speye(fd);
+0120    <span class="keyword">end</span>
+0121    <span class="keyword">try</span>    opt.z_depth;
+0122    <span class="keyword">catch</span>  opt.z_depth= inf;
+0123    <span class="keyword">end</span>
+0124 
+0125      
+0126     
+0127 <a name="_sub5" href="#_subfunctions" class="code">function do_unit_test</a>
+0128    ll = <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>, 1);
+0129    <a href="#_sub7" class="code" title="subfunction do_original_2d_tests">do_original_2d_tests</a>
+0130    <a href="#_sub6" class="code" title="subfunction test_2d3d_handling">test_2d3d_handling</a>
+0131    <a href="mk_tri_c2f.html" class="code" title="function c2f = mk_tri_c2f(fmdl,rmdl,opt)">mk_tri_c2f</a> UNIT_TEST
+0132    <a href="mk_tet_c2f.html" class="code" title="function [c2f] = mk_tet_c2f(fmdl, rmdl, opt)">mk_tet_c2f</a> UNIT_TEST
+0133    <a href="mk_tri2tet_c2f.html" class="code" title="function c2f = mk_tri2tet_c2f(fmdl,rmdl, opt)">mk_tri2tet_c2f</a> UNIT_TEST
+0134    <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,ll);
+0135    
+0136 <a name="_sub6" href="#_subfunctions" class="code">function test_2d3d_handling</a>
+0137    tet = <a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>([],[0 1],[0 1],[0 1]);
+0138    tet = rmfield(tet,<span class="string">'coarse2fine'</span>);
+0139    tri = <a href="mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>([],[0 1],[0 1]);
+0140    tri = rmfield(tri,<span class="string">'coarse2fine'</span>);
+0141    
+0142    c2f_a = <a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>(tri,tet);
+0143    c2f_a = bsxfun(@times, c2f_a, <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(tri));
+0144    c2f_b = <a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>(tet,tri);
+0145    c2f_b = bsxfun(@times, c2f_b, <a href="get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(tet));
+0146    
+0147    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2d3d:01'</span>,sum(c2f_a(:)), 1,eps);
+0148    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2d3d:02'</span>,sum(c2f_b(:)), 1,eps);
+0149    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2d3d:03'</span>,c2f_a,c2f_b',eps)
+0150    
+0151 
+0152    
+0153 <a name="_sub7" href="#_subfunctions" class="code">function do_original_2d_tests</a>
+0154    fmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(2,[],2); fmdl.nodes = fmdl.nodes*2;
+0155    cmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(2,[],2); cmdl.nodes = cmdl.nodes*2;
+0156    c2f = <a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>( fmdl, cmdl);
+0157    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t1'</span>,c2f,eye(16),eps)
+0158 
+0159    fmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(3,[],2);
+0160    fmdl.nodes = fmdl.nodes*3;
+0161    c2f = <a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>( fmdl, cmdl);
+0162    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t2'</span>,c2f,[eye(16);zeros(20,16)],eps)
+0163 
+0164    fmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(2,[],2); fmdl.nodes = fmdl.nodes*2;
+0165    cmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(1,[],2); cmdl.nodes = cmdl.nodes*1;
+0166    c2f = <a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>( fmdl, cmdl);
+0167    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t3'</span>,c2f,[eye(4);zeros(12,4)],eps)
+0168 
+0169    cmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(1,[],2); cmdl.nodes = cmdl.nodes*0.8;
+0170    c2f = <a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>( fmdl, cmdl);
+0171    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t4'</span>,c2f,[eye(4)*.64;zeros(12,4)], eps)
+0172 
+0173 
+0174    fmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(10,[],2);
+0175    cmdl = <a href="mk_circ_tank.html" class="code" title="function param= mk_circ_tank(rings, levels, elec_spec );">mk_circ_tank</a>(8,[],2);
+0176    c2f = <a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>( fmdl, cmdl);
+0177    <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'t6'</span>,sum(c2f(1:324,:)'),ones(1,324),1e-14);
+0178 
+0179    cmdl.nodes = cmdl.nodes*0.95;
+0180    <span class="comment">% show_fem(fmdl); hold on ; show_fem(cmdl); hold off</span>
+0181    c2f = <a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>( fmdl, cmdl);
+0182 
+0183 <span class="comment">% preload into cache before tests</span>
+0184 <a name="_sub8" href="#_subfunctions" class="code">function preload</a>
+0185 
+0186    <span class="comment">% Create forward, fine tank model</span>
+0187    electrodes_per_plane = 16;
+0188    number_of_planes = 2;
+0189    tank_radius = 0.2;
+0190    tank_height = 0.5;
+0191    fine_mdl = <a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>([tank_height,tank_radius],<span class="keyword">...</span>
+0192        [electrodes_per_plane,0.15,0.35],[0.01]);
+0193     
+0194    <span class="comment">% Create coarse model for inverse problem</span>
+0195    coarse_mdl_maxh = 0.07; <span class="comment">% maximum element size</span>
+0196    coarse_mdl = <a href="../../eidors/meshing/netgen/ng_mk_cyl_models.html" class="code" title="function [fmdl,mat_idx] = ng_mk_cyl_models(cyl_shape, elec_pos,elec_shape, extra_ng_code);">ng_mk_cyl_models</a>([tank_height,tank_radius,coarse_mdl_maxh],[0],[]);
+0197 
+0198    disp(<span class="string">'Calculating coarse2fine mapping ...'</span>);
+0199    inv3d.fwd_model.coarse2fine = <span class="keyword">...</span>
+0200           <a href="mk_analytic_c2f.html" class="code" title="function [mapping, outside] = mk_analytic_c2f( f_mdl, c_mdl, opt)">mk_analytic_c2f</a>( fine_mdl, coarse_mdl);
+0201    disp(<span class="string">'   ... done'</span>);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

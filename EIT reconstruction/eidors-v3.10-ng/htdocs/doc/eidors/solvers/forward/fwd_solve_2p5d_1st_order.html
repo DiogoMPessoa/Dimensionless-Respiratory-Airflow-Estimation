@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fwd_solve_2p5d_1st_order</title>
+  <meta name="keywords" content="fwd_solve_2p5d_1st_order">
+  <meta name="description" content="FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; fwd_solve_2p5d_1st_order.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>fwd_solve_2p5d_1st_order
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function data =fwd_solve_2p5d_1st_order(fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)
+ Fwd solver for Andy Adler's EIT code
+ Input:
+    img       = image struct
+ Output:
+    data = measurements struct
+ Options: (to return internal FEM information)
+    img.fwd_solve.get_all_meas = 1 (data.volt = all FEM nodes, but not CEM)
+    img.fwd_solve.get_all_nodes= 1 (data.volt = all nodes, including CEM)
+
+    img.fwd_solve_2p5d_1st_order.k = [ a .. b ]
+        solve, integrating over the range k = a .. b      (default: [0 Inf])
+        - provide a single k to get a point solution
+        - solve over a reduced range a=0, b=3 for a faster solution
+    img.fwd_solve_2p5d_1st_order.method = 'name'
+        perform numerical integration using the selected method (default: 'quadv')
+        'trapz' - trapezoidal integration across the listed points k
+        'quadv' - adaptive quadrature (vectorized), from a to b
+        'integral' - adaptive quadrature (matlab2012+), from a to b</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>	[V] = LEFT_DIVIDE(E,I,tol,pp,V);</li><li><a href="../../../eidors/models/convert_img_units.html" class="code" title="function y = convert_img_units(img,arg1,arg2)">convert_img_units</a>	CONVERT_IMG_UNITS change image data units</li><li><a href="../../../eidors/models/data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>	DATA_MAPPER maps img.params data to elem or node data</li><li><a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>	STIM_PATTERN_GEOPHYS: Create Geophysical Stimulation Patterns</li><li><a href="../../../eidors/models/supported_params.html" class="code" title="function list = supported_params">supported_params</a>	</li><li><a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>	FWD_MODEL_PARAMETERS: data= fwd_solve_1st_order( fwd_model, image)</li><li><a href="fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>	FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</li><li><a href="fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>	FWD_SOLVE_HALFSPACE: data = fwd_solve_halfspace(img)</li><li><a href="system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>	SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>	imdl = mk_geophysics_model(str, ne, [option])</li><li><a href="fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>	FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function v = potential_k(S, pp, gnd)</a></li><li><a href="#_sub2" class="code">function v2meas = get_v2meas(n_elec,n_stim,stim)</a></li><li><a href="#_sub3" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data =fwd_solve_2p5d_1st_order(fwd_model, img)</a>
+0002 <span class="comment">% FWD_SOLVE_2P5D_1ST_ORDER: data= fwd_solve_2p5d_1st_order( img)</span>
+0003 <span class="comment">% Fwd solver for Andy Adler's EIT code</span>
+0004 <span class="comment">% Input:</span>
+0005 <span class="comment">%    img       = image struct</span>
+0006 <span class="comment">% Output:</span>
+0007 <span class="comment">%    data = measurements struct</span>
+0008 <span class="comment">% Options: (to return internal FEM information)</span>
+0009 <span class="comment">%    img.fwd_solve.get_all_meas = 1 (data.volt = all FEM nodes, but not CEM)</span>
+0010 <span class="comment">%    img.fwd_solve.get_all_nodes= 1 (data.volt = all nodes, including CEM)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    img.fwd_solve_2p5d_1st_order.k = [ a .. b ]</span>
+0013 <span class="comment">%        solve, integrating over the range k = a .. b      (default: [0 Inf])</span>
+0014 <span class="comment">%        - provide a single k to get a point solution</span>
+0015 <span class="comment">%        - solve over a reduced range a=0, b=3 for a faster solution</span>
+0016 <span class="comment">%    img.fwd_solve_2p5d_1st_order.method = 'name'</span>
+0017 <span class="comment">%        perform numerical integration using the selected method (default: 'quadv')</span>
+0018 <span class="comment">%        'trapz' - trapezoidal integration across the listed points k</span>
+0019 <span class="comment">%        'quadv' - adaptive quadrature (vectorized), from a to b</span>
+0020 <span class="comment">%        'integral' - adaptive quadrature (matlab2012+), from a to b</span>
+0021 
+0022 <span class="comment">% (C) 2016 A Boyle</span>
+0023 <span class="comment">% License: GPL version 2 or version 3</span>
+0024 
+0025 <span class="comment">% correct input paralemeters if function was called with only img</span>
+0026 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub3" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0027 
+0028 <span class="keyword">if</span> nargin == 1
+0029    img= fwd_model;
+0030 <span class="keyword">end</span>
+0031 fwd_model= img.fwd_model;
+0032 
+0033 img = <a href="../../../eidors/models/data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>(img);
+0034 <span class="keyword">if</span> ~ismember(img.current_params, <a href="../../../eidors/models/supported_params.html" class="code" title="function list = supported_params">supported_params</a>)
+0035     error(<span class="string">'EIDORS:PhysicsNotSupported'</span>, <span class="string">'%s does not support %s'</span>, <span class="keyword">...</span>
+0036     <span class="string">'FWD_SOLVE_2P5D_1ST_ORDER'</span>,img.current_params);
+0037 <span class="keyword">end</span>
+0038 <span class="comment">% all calcs use conductivity</span>
+0039 img = <a href="../../../eidors/models/convert_img_units.html" class="code" title="function y = convert_img_units(img,arg1,arg2)">convert_img_units</a>(img, <span class="string">'conductivity'</span>);
+0040 
+0041 pp= <a href="fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>( fwd_model, <span class="string">'skip_VOLUME'</span> );
+0042 
+0043 k = [0 Inf]; <span class="keyword">try</span> k = img.fwd_model.fwd_solve_2p5d_1st_order.k; <span class="keyword">end</span> <span class="comment">% default to 8 full waves: k pi h / 2 z = 8 * 2 pi</span>
+0044 method = <span class="string">'quadv'</span>; <span class="keyword">try</span> method = img.fwd_model.fwd_solve_2p5d_1st_order.method; <span class="keyword">end</span> <span class="comment">% default to 8 full waves: k pi h / 2 z = 8 * 2 pi</span>
+0045 
+0046 img.fwd_model.system_mat = @<a href="system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>;
+0047 gnd = fwd_model.gnd_node;
+0048 img.fwd_model.system_mat_2p5d_1st_order.k = 0;
+0049 img.fwd_model.system_mat_2p5d_1st_order.factory = 1;
+0050 Sf = <a href="system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>( img ); <span class="comment">% returns a function Sf(k) that builds a system matrix for 'k'</span>
+0051 <span class="keyword">if</span> length(k) == 1 <span class="comment">% singleton k</span>
+0052    v=2*<a href="#_sub1" class="code" title="subfunction v = potential_k(S, pp, gnd)">potential_k</a>(Sf(k), pp, gnd); <span class="comment">% integral of a delta function</span>
+0053 <span class="keyword">else</span>
+0054    <span class="keyword">switch</span> method
+0055       <span class="keyword">case</span> <span class="string">'trapz'</span>
+0056          <span class="comment">% less accurate: trapz</span>
+0057          n = 0;
+0058          tol = 1e-8;
+0059          k(isinf(k)) = 1/sqrt(tol);
+0060          vf = zeros(pp.n_elec*pp.n_stim,length(k)); <span class="comment">% voltages under electrodes elec x stim, frequency domain</span>
+0061          <span class="keyword">for</span> ki = k
+0062             n = n + 1;
+0063             vf(:,n) = <a href="#_sub1" class="code" title="subfunction v = potential_k(S, pp, gnd)">potential_k</a>(Sf(ki), pp, gnd);
+0064          <span class="keyword">end</span>
+0065          v=2/pi*trapz(k,vf,2);
+0066       <span class="keyword">case</span> <span class="string">'quadv'</span>
+0067          <span class="comment">% more accurate: adaptive gaussian quadrature</span>
+0068          tol = 1e-8;
+0069          kend = min(1/sqrt(tol), max(k)); <span class="comment">% don't go too far... k=Inf is a singular matrix, stop adjacent to numeric singularity</span>
+0070          <span class="comment">% quadv is scheduled to be removed from matlab eventually... but it is</span>
+0071          <span class="comment">% WAY faster than integral with any tolerance configuration I could identify</span>
+0072          v=2/pi*quadv(@(kk) <a href="#_sub1" class="code" title="subfunction v = potential_k(S, pp, gnd)">potential_k</a>(Sf(kk), pp, gnd), k(1), kend);
+0073       <span class="keyword">case</span> <span class="string">'integral'</span>
+0074          tol = 1e-8;
+0075          kend = min(1/sqrt(tol), max(k)); <span class="comment">% don't go too far... k=Inf is a singular matrix, stop adjacent to numeric singularity</span>
+0076          <span class="comment">% the integral solution is about 10x slower (5.47 seconds vs. 0.60 seconds for UNIT_TEST)</span>
+0077          <span class="comment">% ... I played with AbsTol and RelTol but wasn't able to affect the outcome</span>
+0078          v=2/pi*integral(@(kk) <a href="#_sub1" class="code" title="subfunction v = potential_k(S, pp, gnd)">potential_k</a>(Sf(kk), pp, gnd), k(1), kend, <span class="string">'ArrayVAlued'</span>, true);
+0079       <span class="keyword">otherwise</span>
+0080          error([<span class="string">'unrecognized method: '</span> method]);
+0081    <span class="keyword">end</span>
+0082 <span class="keyword">end</span>
+0083 <span class="comment">% up to now, we've been dealing with voltages at the electrodes,</span>
+0084 <span class="comment">% now we transform to dipole measurements v=(m+ - m-)</span>
+0085 v2meas = <a href="#_sub2" class="code" title="subfunction v2meas = get_v2meas(n_elec,n_stim,stim)">get_v2meas</a>(pp.n_elec, pp.n_stim, img.fwd_model.stimulation);
+0086 data.meas = v2meas' * v;
+0087 data.time= NaN; <span class="comment">% unknown</span>
+0088 data.name= <span class="string">'solved by fwd_solve_2p5d_1st_order'</span>;
+0089 <span class="keyword">try</span>; <span class="keyword">if</span> img.fwd_solve.get_all_meas == 1
+0090    data.volt = v(1:pp.n_node,:); <span class="comment">% but not on CEM nodes</span>
+0091 <span class="keyword">end</span>; <span class="keyword">end</span>
+0092 <span class="keyword">try</span>; <span class="keyword">if</span> img.fwd_solve.get_all_nodes== 1
+0093    data.volt = v;                <span class="comment">% all, including CEM nodes</span>
+0094 <span class="keyword">end</span>; <span class="keyword">end</span>
+0095 
+0096 <span class="comment">% v0: a zero initialized array n x m for n nodes and m stimulus</span>
+0097 <a name="_sub1" href="#_subfunctions" class="code">function v = potential_k(S, pp, gnd)</a>
+0098    vf_nodes = zeros(pp.n_node, pp.n_stim); <span class="comment">% voltages at all nodes x number of stim, frequency domain</span>
+0099    idx = 1:size(S,1); <span class="comment">% pp.n_node + #CEM elec</span>
+0100    idx( gnd ) = [];
+0101    idx2 = find(any(pp.N2E));
+0102    vf_nodes(idx,:) = <a href="../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>( S(idx,idx), 1/2*pp.QQ(idx,:));
+0103    vf_elecs = pp.N2E(:,idx2) * vf_nodes(idx2,:); <span class="comment">% electrode voltages, frequency domain</span>
+0104    v = vf_elecs(:); 
+0105 
+0106 <a name="_sub2" href="#_subfunctions" class="code">function v2meas = get_v2meas(n_elec,n_stim,stim)</a>
+0107     v2meas = <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(n_elec*n_stim,0);
+0108     <span class="keyword">for</span> i=1:n_stim
+0109         meas_pat= stim(i).meas_pattern;
+0110         n_meas  = size(meas_pat,1);
+0111         v2meas((i-1)*n_elec + 1: i*n_elec,end+(1:n_meas)) = meas_pat';
+0112     <span class="keyword">end</span>
+0113 
+0114 <a name="_sub3" href="#_subfunctions" class="code">function do_unit_test</a>
+0115    ne = 16;
+0116    isOctave= exist(<span class="string">'OCTAVE_VERSION'</span>);
+0117    <span class="comment">% 2D</span>
+0118    imdl2 = <a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h2a'</span>, ne);
+0119    imdl2.fwd_model.stimulation = <a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>(ne, <span class="string">'Wenner'</span>);
+0120    img2 = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl2.fwd_model, 1);
+0121    <span class="comment">% we get a 2D solution for klim=0; z = 1/2; h = 1;</span>
+0122    img2.fwd_model.fwd_solve_2p5d_1st_order.k = [0 logspace(-2,0,12) 3]; <span class="comment">% default</span>
+0123    tic
+0124    img2.fwd_model.nodes(1,:) = img2.fwd_model.nodes(1,:) + rand(1,2)*1e-8; <span class="comment">% defeat cache</span>
+0125    v2 = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img2);
+0126    fprintf(<span class="string">'fwd_solve 2D t= %f s\n'</span>, toc);
+0127    <span class="comment">% 2.5D</span>
+0128    tic
+0129    img2.fwd_model.fwd_solve_2p5d_1st_order.method = <span class="string">'trapz'</span>;
+0130    img2.fwd_model.nodes(1,:) = img2.fwd_model.nodes(1,:) + rand(1,2)*1e-8; <span class="comment">% defeat cache</span>
+0131    v2p5t = <a href="fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>(img2);
+0132    fprintf(<span class="string">'fwd_solve_2p5d_1st_order 2D t= %f s (%d k''s, trapz)\n'</span>, toc, length(img2.fwd_model.fwd_solve_2p5d_1st_order.k));
+0133    tic
+0134    img2.fwd_model.fwd_solve_2p5d_1st_order.method = <span class="string">'quadv'</span>;
+0135    img2.fwd_model.nodes(1,:) = img2.fwd_model.nodes(1,:) + rand(1,2)*1e-8; <span class="comment">% defeat cache</span>
+0136    v2p5q = <a href="fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>(img2);
+0137    fprintf(<span class="string">'fwd_solve_2p5d_1st_order 2D t= %f s (%d k''s, quadv)\n'</span>, toc, length(img2.fwd_model.fwd_solve_2p5d_1st_order.k));
+0138    <span class="keyword">if</span> isOctave
+0139       fprintf(<span class="string">'fwd_solve_2p5d_1st_order 2D t= --- s (-- k''s, integral) SKIPPED [not supported in Octave]\n'</span>);
+0140    <span class="keyword">else</span>
+0141       tic
+0142       img2.fwd_model.fwd_solve_2p5d_1st_order.method = <span class="string">'integral'</span>;
+0143       img2.fwd_model.nodes(1,:) = img2.fwd_model.nodes(1,:) + rand(1,2)*1e-8; <span class="comment">% defeat cache</span>
+0144       v2p5i = <a href="fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>(img2);
+0145       fprintf(<span class="string">'fwd_solve_2p5d_1st_order 2D t= %f s (%d k''s, integral)\n'</span>, toc, length(img2.fwd_model.fwd_solve_2p5d_1st_order.k));
+0146    <span class="keyword">end</span>
+0147    tic
+0148    img2.fwd_model.fwd_solve_2p5d_1st_order.k = 0;
+0149    img2.fwd_model.nodes(1,:) = img2.fwd_model.nodes(1,:) + rand(1,2)*1e-8; <span class="comment">% defeat cache</span>
+0150    v2p5k0 = <a href="fwd_solve_2p5d_1st_order.html" class="code" title="function data =fwd_solve_2p5d_1st_order(fwd_model, img)">fwd_solve_2p5d_1st_order</a>(img2);
+0151    fprintf(<span class="string">'fwd_solve_2p5d_1st_order 2D t= %f s (%d k''s)\n'</span>, toc, length(img2.fwd_model.fwd_solve_2p5d_1st_order.k));
+0152    <span class="comment">% 3D</span>
+0153    imdl3 = <a href="../../../eidors/models/mk_geophysics_model.html" class="code" title="function imdl = mk_geophysics_model(str, ne, opt);">mk_geophysics_model</a>(<span class="string">'h3a'</span>, ne);
+0154    imdl3.fwd_model.stimulation = <a href="../../../eidors/models/stim_pattern_geophys.html" class="code" title="function [stim,S]= stim_pattern_geophys( n_elec, pat_type,  options )">stim_pattern_geophys</a>(ne, <span class="string">'Wenner'</span>);
+0155    img3 = <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(imdl3.fwd_model, 1);
+0156    tic
+0157    img3.fwd_model.nodes(1,:) = img3.fwd_model.nodes(1,:) + rand(1,3)*1e-8; <span class="comment">% defeat cache</span>
+0158    v3 = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img3);
+0159    fprintf(<span class="string">'fwd_solve 3D t= %f s\n'</span>, toc);
+0160    <span class="comment">% analytic half-space (dipole)</span>
+0161    tic
+0162    img2.fwd_model.nodes(1,:) = img2.fwd_model.nodes(1,:) + rand(1,2)*1e-8; <span class="comment">% defeat cache</span>
+0163    vh = <a href="fwd_solve_halfspace.html" class="code" title="function data = fwd_solve_halfspace(fwd_model, img)">fwd_solve_halfspace</a>(img2);
+0164    fprintf(<span class="string">'fwd_solve_halfspace 3D t= %f s\n'</span>, toc);
+0165    scale=1e3; uvh=unique(round(vh.meas*scale)/scale);
+0166    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'h2a 2p5d values TEST'</span>, uvh, <span class="keyword">...</span>
+0167    [ 0.0060; 0.0080; 0.0110; 0.0160; 0.0320 ], 1/scale);
+0168    tol = norm(vh.meas)*0.025; <span class="comment">% 2.5% error tolerance</span>
+0169    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2D   (h2a)                    vs analytic TEST'</span>, norm(vh.meas - v2.meas),     0, -tol);
+0170    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2.5D (h2a + 2.5D, k=0)        vs 2D       TEST'</span>, norm(v2.meas - v2p5k0.meas), 0, tol);
+0171    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2.5D (h2a + 2.5D trapz,2*tol) vs analytic TEST'</span>, norm(vh.meas - v2p5t.meas),   0, 2*tol);
+0172    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2.5D (h2a + 2.5D quadv**)     vs analytic TEST'</span>, norm(vh.meas - v2p5q.meas),   0, tol);
+0173    <span class="keyword">if</span> ~isOctave
+0174       <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2.5D (h2a + 2.5D integral)    vs analytic TEST'</span>, norm(vh.meas - v2p5i.meas),   0, tol);
+0175    <span class="keyword">end</span>
+0176    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3D   (h3b)                    vs analytic TEST'</span>, norm(vh.meas - v3.meas),     0, 2*tol);
+0177 pause(2);
+0178 clf; h=plot([vh.meas, v2p5q.meas, v3.meas, v2.meas],<span class="string">':'</span>);
+0179      legend(<span class="string">'analytic'</span>, <span class="string">'FEM 2.5D'</span>, <span class="string">'FEM 3D'</span>, <span class="string">'FEM 2D'</span>, <span class="string">'Location'</span>,<span class="string">'Best'</span>);
+0180      set(gca,<span class="string">'box'</span>,<span class="string">'off'</span>);
+0181      set(h,<span class="string">'LineWidth'</span>,2);
+0182      set(h(1),<span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="string">'MarkerSize'</span>,7);
+0183      set(h(2),<span class="string">'Marker'</span>,<span class="string">'square'</span>,<span class="string">'MarkerSize'</span>,7);
+0184      set(h(3),<span class="string">'Marker'</span>,<span class="string">'diamond'</span>,<span class="string">'MarkerSize'</span>,3);
+0185      set(h(4),<span class="string">'Marker'</span>,<span class="string">'+'</span>);
+0186 pause(2);
+0187 clf; h=plot([vh.meas, v2p5q.meas, v3.meas],<span class="string">':'</span>);
+0188      legend(<span class="string">'analytic'</span>, <span class="string">'FEM 2.5D'</span>, <span class="string">'FEM 3D'</span>,<span class="string">'Location'</span>,<span class="string">'Best'</span>);
+0189      set(gca,<span class="string">'box'</span>,<span class="string">'off'</span>);
+0190      set(h,<span class="string">'LineWidth'</span>,2);
+0191      set(h(1),<span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="string">'MarkerSize'</span>,7);
+0192      set(h(2),<span class="string">'Marker'</span>,<span class="string">'square'</span>,<span class="string">'MarkerSize'</span>,7);
+0193      set(h(3),<span class="string">'Marker'</span>,<span class="string">'diamond'</span>,<span class="string">'MarkerSize'</span>,3);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

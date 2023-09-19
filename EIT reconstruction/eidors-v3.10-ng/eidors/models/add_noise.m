@@ -1,0 +1,67 @@
+function vv = add_noise( SNR, v1, v2, options)
+% ADD_NOISE: Add a given SNR to EIDORS data
+% v1_w_noise = add_noise( SNR, v1, v2, options)
+%
+% Usage:
+%  v1= add_noise( SNR, v1 )           - add noise to v1 where signal = v1
+%  v1= add_noise( SNR, v1, v2)        - add noise to v1 where signal = v1 - v2
+%  v1= add_noise( SNR, v1, v2,'norm') - add noise to v1 where signal = (v1-v2)/v2
+%
+% SNR is defined in terms of power SNR =  || signal || / || noise ||
+%
+% In many cases, the same noise is desired for each sample. It is easiest to reset
+% the pseudorandom number seeds, using
+%  rnd('default'); v1 = add_noise ...
+
+% (C) 2010 Andy Adler. License: GPL v2 or v3. $Id: add_noise.m 5429 2017-04-26 00:50:33Z aadler $
+
+if ischar(SNR) && strcmp(SNR,'UNIT_TEST'); do_unit_test; return; end
+
+if nargin>=2; try; v1 = v1.meas; end; end
+if nargin>=3; try; v2 = v2.meas; end;
+   if any(size(v1)~=size(v2)); v2 = v2*ones(1,size(v1,2)); end
+end
+
+   
+if nargin == 2;
+   signal = v1;
+elseif nargin==3;
+   signal = v1 - v2;
+elseif strcmp( options, 'norm' )
+   signal = (v1 - v2) ./ v2;
+else
+   error('add_noise: input arguments not understood');
+end
+   
+noise = randn(size(signal));
+
+% SNR = norm(signal)/norm(noise)
+% so  scale norm(noise) by norm(signal)/SNR
+
+noise = noise *norm(signal) / norm(noise) / SNR;
+
+vv = eidors_obj('data','from add_noise');
+vv.meas = v1 + noise;
+
+function do_unit_test
+    v1 = 2.0*ones(10,1);
+    v2 = 2.1*ones(10,1);
+    
+    v0 = add_noise( 2, v1);
+    SNR_test(2, v0.meas - v1, v1);
+
+    v0 = add_noise(.1, v1, v2);
+    SNR_test(.1, v0.meas - v1, v1 - v2);
+
+    v0 = add_noise(.9, v1, v2, 'norm' );
+    SNR_test(.9, v0.meas - v1 , (v1 - v2)./v2);
+
+    randn('state',0); % rng('default');
+    v0 = add_noise( 2, v1);
+    randn('state',0); % rng('default');
+    v1 = add_noise( 2, v1);
+    unit_test_cmp('RNG reset', v0, v1);
+
+function SNR_test(SNRspec, noi, sig)
+    SNR = norm(sig)/norm(noi);
+    unit_test_cmp('SNR_test', SNR, SNRspec, 1e-13);

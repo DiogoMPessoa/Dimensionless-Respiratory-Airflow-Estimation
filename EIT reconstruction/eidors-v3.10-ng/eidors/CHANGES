@@ -1,0 +1,94 @@
+2016-03-06: models from GREIT3d paper (mk_thorax_model_grychtol2016a)
+2016-03-06: generate image with lung & heart contrast (mk_lung_image)
+2016-03-05: wrapper around AT's meshes and place_elec_on_surf (mk_thorax_model)
+2016-03-05: function to get data from data_contrib (get_contrib_data)
+2015-11-21: speed up GREIT_desired_img_sigmoid
+2015-06-20: ability to choose analytic or approximate c2f
+2015-06-14: new cache implementation
+2015-05-23: change cache priority: measure time
+2015-05-22: change to analytic c2f calculation
+2015-05-12: ======================= RELEASE 3.8 ==========================
+2015-05-11: analytic c2f for triangle models (mk_tri_c2f)
+2015-04-24: analytic c2f for tet models (mk_tet_c2f)
+2015-03-30: add Swisstom's LQ4 fie format support (thanks to Beat Mueller)
+2015-03-29: new background colour for 3.8
+2015-03-29: make caching consistent, add cache to inv_solve and fwd_solve
+2015-03-29: make EIDORS more verbose: default log_level = 3
+2015-03-29: new ng_mk_common_models as common interface to newer netgen code
+2015-03-26: change default GREIT desired image function to 
+            GREIT_desired_img_sigmoid. This can handle 3D rec_models
+2015-03-24: add progress_msg
+2015-03-24: speed up linear_reorder
+2015-03-09: analytic c2f for grid models (mk_grid_c2f)
+2015-02-18: point_in_triangle test
+2015-02-18: utility to derive non-equalities defining a tetrahedron
+2014-11-24: allow specifying J, R, RtR, JiRtrRJt and system_mat directly
+2014-05-03: add per-m-file control to eidors_msg
+2013-08-15: inv_solve calculates the error
+2013-08-15: mk_pixel_slice calculates mat_idx
+2013-08-08: add lamb_newborn to shape_library and mk_library_model
+2013-06-20: scale solution to fit data in inv_solve_diff_GN_one_step
+2013-06-20: inv_solve reports solution error by default
+2013-06-12: calculate mesh quality (calc_mesh_quality)
+2013-06-11: dramatic speedup of show_fem for 3D meshes
+2013-06-07: various improvements to place_elec_on_surf
+2013-06-06: global managment of debug flags (eidors_debug)
+2013-06-03: allow specifying command line options for gmsh
+2013-05-29: ======================= RELEASE 3.7.1 ========================
+2013-05-26: add anti-aliasing to print_convert
+2013-05-18: refactor mk_GREIT_model to use mk_pixel_slice
+2013-05-16: new print_convert that doesn't use external tools (imagemagick)
+2013-05-16: improve gmsh interface 
+2013-05-16: allow spaces in path to netgen
+2013-05-05: fix compatibility with older Matlab and Windows
+2013-04-25: citeme tool to request citations for specific functions
+2013-04-22: ======================== RELEASE 3.7 =========================
+2013-04-22: fminsearch for Octave
+2013-04-22: Use a single ng.bat file once and for all
+2013-04-18: readers for LQ2 file format
+2013-04.17: Quick GREIT models: mk_common_gridmdl('GREIT','mdl_library_string')
+2013-04-17: Desired image function for mk_GREIT_model: opt.desired_image_fn
+2013-04-17: Cache debug output: eidors_cache debug_on/debug_off
+2013-04-16: Auto-compile required mex file on startup on Linux
+2013-04-16: SVN revision number on startup in dev versions
+2013-04-16: Shorthand caching interface: eidors_cache(@fn, params)
+2013-04-16: 2D interface to Netgen: ng_mk_2d_model
+2013-04-13: Added apparent_resisitivity fwd_solver and jacobian
+2013-03-20: Node_data support for mk_image
+2013-03-20: Physics support: conductivity, resisitivity and logs:q
+2013-02-18: Electrode placement on arbitrary meshes: place_elec_on_surf
+2013-02-18: merge non-overlapping (surface) meshes: merge_meshes
+2013-02-18: Expand support for gmsh: gmsh_stl2tet
+2013-01-23: Quick building of pixel rec_models: mk_pixel_slice
+2013-01-23: Draw a single colourbar for mulitple sub-plots: common_colourbar
+2013-01-23: Outside parameter for c2f mapping
+2013-01-15: New options in meas_icov_rm_elecs to keep or discard default estimate
+2013-01-15: Spdiag utility
+2012-12-15: Interface to ng.opt
+2012-11-20: Revised interface of all jacobian, system mat and fwd_solve functions
+            to only accept one input param
+2012-11-19: New geophysics tutorials
+2012-11-19: pseudosection and geophys stim patterns
+2012-11-19: Anisotropy support in fwd_solve and jacobian
+2012-10-17: Add support for electrodes in mdl_slice_mesher
+2012-10-17: Refactor mk_GREIT_model to use mdl_slice mesher for better rmdl
+2012-10-17: Add order_loop under meshing
+2012-08-02: Fixed a bug in mk_GREIT_model for opt.square_pixels = 1
+2012-07-13: Toggle cache status on specific functions
+2012-07-07: ======================== RELEASE 3.6 =========================
+2012-07-03: GN absolute solvers (i)  Constrained optimization on conductivity
+                                (ii) Prior conductivity at each iteration
+2012-07-03: Higher order FEM solvers (on voltage) for forward problem and Jacobian
+2012-07-03: Bugs fixed for electrode movement for CEM
+2012-07-02: significantly improved 3D visualization
+2012-07-02: 4D solver +  tutorials 
+2012-07-01: Analytic tetrahedron intersection for accurate c2f calcs
+2012-06-30: added calc_colours.component parameter for real or imag images
+2012-06-30: added electrode support in gmsh code 
+2012-06-30: added geophysics simulation for surface electrode array
+2012-06-30: eidors_msg will print the calling function automatically
+2012-06-30: eidors_cache can clean up named parts of the cache
+2012-06-30: Function defaults
+	    Models now use 'eidors_default' instead of a particular solver.
+	    Defaults are set in eidors_startup.
+2012-06-30: Started changelog

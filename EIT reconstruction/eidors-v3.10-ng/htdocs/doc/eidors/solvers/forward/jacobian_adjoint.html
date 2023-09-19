@@ -1,0 +1,318 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of jacobian_adjoint</title>
+  <meta name="keywords" content="jacobian_adjoint">
+  <meta name="description" content="JACOBIAN_ADJOINT: J= jacobian_adjoint( img )">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; jacobian_adjoint.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>jacobian_adjoint
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>JACOBIAN_ADJOINT: J= jacobian_adjoint( img )</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function J= jacobian_adjoint( fwd_model, img) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> JACOBIAN_ADJOINT: J= jacobian_adjoint( img ) 
+ Calculate Jacobian Matrix for current stimulation EIT
+ J         = Jacobian matrix
+ img.fwd_model = forward model
+ img.elem_data = background for jacobian calculations
+
+ fwd_model.normalize_measurements if param exists, calculate
+                                  a Jacobian for normalized
+                                  difference measurements</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>	[V] = LEFT_DIVIDE(E,I,tol,pp,V);</li><li><a href="../../../eidors/models/convert_img_units.html" class="code" title="function y = convert_img_units(img,arg1,arg2)">convert_img_units</a>	CONVERT_IMG_UNITS change image data units</li><li><a href="../../../eidors/models/data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>	DATA_MAPPER maps img.params data to elem or node data</li><li><a href="../../../eidors/models/mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>	MK_GRID_MODEL: Create reconstruction model on pixelated grid</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>	NUM_ELEMS: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/models/stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>	STIM_MEAS_LIST: mk stimulation pattern from list of electrodes</li><li><a href="../../../eidors/models/supported_params.html" class="code" title="function list = supported_params">supported_params</a>	</li><li><a href="../../../eidors/solvers/calc_system_mat.html" class="code" title="function system_mat = calc_system_mat( fwd_model, img)">calc_system_mat</a>	CALC_SYSTEM_MAT: calculate FEM system matrix from fwd_model and image</li><li><a href="fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>	FWD_MODEL_PARAMETERS: data= fwd_solve_1st_order( fwd_model, image)</li><li><a href="fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>	FWD_SOLVE_1ST_ORDER: data= fwd_solve_1st_order( img)</li><li><a href="jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>	JACOBIAN_ADJOINT: J= jacobian_adjoint( img )</li><li><a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>	SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/tests/test_2d_resistor.html" class="code" title="function test_2d_resistor(opt)">test_2d_resistor</a>	Create 2D model of a cylindrical resistor</li><li><a href="../../../eidors/tests/test_3d_resistor.html" class="code" title="">test_3d_resistor</a>	Create 3D model of a Rectangular resistor</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/deprecated/aa_calc_jacobian.html" class="code" title="function J= aa_calc_jacobian( varargin );">aa_calc_jacobian</a>	AA_CALC_JACOBIAN: J= aa_calc_jacobian( fwd_model, img)</li><li><a href="../../../eidors/examples/demo_3d_simdata.html" class="code" title="">demo_3d_simdata</a>	How to make simulation data using EIDORS3D</li><li><a href="../../../eidors/interface/sigmatome2_filter.html" class="code" title="function [Filter, stim_pattern]= sigmatome2_filter(test);">sigmatome2_filter</a>	SIGMATOME2_FILTER:  Hardware filter and stim_patterns for Sigmatome II device</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>	JACOBIAN_ADJOINT: J= jacobian_adjoint( img )</li><li><a href="jacobian_movement.html" class="code" title="function J = jacobian_movement(fwd_model, img)">jacobian_movement</a>	JACOBIAN_MOVEMENT   Computes the Jacobian matrix for conductivity and</li><li><a href="jacobian_perturb.html" class="code" title="function J= jacobian_perturb( fwd_model, img)">jacobian_perturb</a>	JACOBIAN_PERTURB: J= jacobian_perturb( fwd_model, img)</li><li><a href="../../../eidors/solvers/inverse/inv_solve_core.html" class="code" title="function img= inv_solve_core( inv_model, data0, data1);">inv_solve_core</a>	INV_SOLVE_CORE Solver using a generic iterative algorithm</li><li><a href="../../../eidors/tests/perturb_jacobian_test.html" class="code" title="">perturb_jacobian_test</a>	Perturbation Jacobians</li><li><a href="../../../eidors/tests/test_2d_resistor.html" class="code" title="function test_2d_resistor(opt)">test_2d_resistor</a>	Create 2D model of a cylindrical resistor</li><li><a href="../../../eidors/tests/test_3d_resistor.html" class="code" title="">test_3d_resistor</a>	Create 3D model of a Rectangular resistor</li><li><a href="../../../eidors/tests/test_c2f_jacobian.html" class="code" title="function test_c2f_jacobian">test_c2f_jacobian</a>	Test calc of jacobian given coarse to fine mapping</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function DE = jacobian_calc(pp, zi2E, FC, sv, c2f)</a></li><li><a href="#_sub2" class="code">function J = apply_chain_rule(J, img, org_params)</a></li><li><a href="#_sub3" class="code">function elem_data = check_elem_data(img)</a></li><li><a href="#_sub4" class="code">function str = supported_params</a></li><li><a href="#_sub5" class="code">function do_unit_test</a></li><li><a href="#_sub6" class="code">function [R,img] = test_2d_resistor(current,measure)</a></li><li><a href="#_sub7" class="code">function [R,img] = test_3d_resistor(current,measure);;</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function J= jacobian_adjoint( fwd_model, img)</a>
+0002 <span class="comment">% JACOBIAN_ADJOINT: J= jacobian_adjoint( img )</span>
+0003 <span class="comment">% Calculate Jacobian Matrix for current stimulation EIT</span>
+0004 <span class="comment">% J         = Jacobian matrix</span>
+0005 <span class="comment">% img.fwd_model = forward model</span>
+0006 <span class="comment">% img.elem_data = background for jacobian calculations</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% fwd_model.normalize_measurements if param exists, calculate</span>
+0009 <span class="comment">%                                  a Jacobian for normalized</span>
+0010 <span class="comment">%                                  difference measurements</span>
+0011 
+0012 
+0013 <span class="comment">% (C) 2005 Andy Adler. License: GPL version 2 or version 3</span>
+0014 <span class="comment">% $Id: jacobian_adjoint.m 5608 2017-06-23 15:01:09Z htregidgo $</span>
+0015 
+0016 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub5" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0017 
+0018 <span class="keyword">if</span> nargin == 1
+0019    img= fwd_model;
+0020 <span class="keyword">elseif</span>  strcmp(getfield(warning(<span class="string">'query'</span>,<span class="string">'EIDORS:DeprecatedInterface'</span>),<span class="string">'state'</span>),<span class="string">'on'</span>)
+0021    warning(<span class="string">'EIDORS:DeprecatedInterface'</span>, <span class="keyword">...</span>
+0022       [<span class="string">'Calling JACOBIAN_ADJOINT with two arguments is deprecated and will cause'</span> <span class="keyword">...</span>
+0023        <span class="string">' an error in a future version. First argument ignored.'</span>]);
+0024 <span class="keyword">end</span>
+0025 
+0026 img = <a href="../../../eidors/models/data_mapper.html" class="code" title="function img = data_mapper(img, reverse)">data_mapper</a>(img);
+0027 <span class="keyword">if</span> ~ismember(img.current_params, <a href="../../../eidors/models/supported_params.html" class="code" title="function list = supported_params">supported_params</a>)
+0028     error(<span class="string">'EIDORS:PhysicsNotSupported'</span>, <span class="string">'%s does not support %s'</span>, <span class="keyword">...</span>
+0029     <span class="string">'JACOBIAN_ADJOINT'</span>,img.current_params);
+0030 <span class="keyword">end</span>
+0031 
+0032 org_params = img.current_params;
+0033 <span class="comment">% all calcs use conductivity</span>
+0034 img = <a href="../../../eidors/models/convert_img_units.html" class="code" title="function y = convert_img_units(img,arg1,arg2)">convert_img_units</a>(img, <span class="string">'conductivity'</span>);
+0035 
+0036 img.elem_data = <a href="#_sub3" class="code" title="subfunction elem_data = check_elem_data(img)">check_elem_data</a>(img);
+0037 
+0038 fwd_model= img.fwd_model;
+0039 
+0040 pp= <a href="fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>( fwd_model, <span class="string">'skip_VOLUME'</span> );
+0041 s_mat= <a href="../../../eidors/solvers/calc_system_mat.html" class="code" title="function system_mat = calc_system_mat( fwd_model, img)">calc_system_mat</a>( img );
+0042 
+0043 d= pp.n_dims+1;
+0044 e= pp.n_elem;
+0045 n= pp.n_node;
+0046 
+0047 idx= 1:size(s_mat.E,1);
+0048 idx( fwd_model.gnd_node ) = [];
+0049 
+0050 <span class="comment">% changed behaviour to only factorise system matrix once. only if system</span>
+0051 <span class="comment">% matrix is symmetric.</span>
+0052 <span class="keyword">if</span> isequal((s_mat.E(idx,idx)).',s_mat.E(idx,idx))
+0053     Einvtemp=<a href="../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>(s_mat.E(idx,idx) , [pp.QQ( idx,: ),(-pp.N2E(:,idx)).']);
+0054     
+0055     sv= zeros(n, pp.n_stim );
+0056     <span class="comment">% sv( idx,:) = left_divide(s_mat.E(idx,idx) , pp.QQ( idx,: ));</span>
+0057     sv( idx,:) = Einvtemp(:,1:pp.n_stim);
+0058     
+0059     zi2E= zeros(pp.n_elec, n);
+0060     <span class="comment">% the minus below used to be missing</span>
+0061     <span class="comment">% zi2E(:, idx)= -pp.N2E(:,idx)/ s_mat.E(idx,idx) ;</span>
+0062     zi2E(:, idx)= (Einvtemp(:,pp.n_stim+1:end)).';
+0063 <span class="keyword">else</span>
+0064     sv= zeros(n, pp.n_stim );
+0065     sv( idx,:) = <a href="../../../eidors/algorithms/left_divide.html" class="code" title="function [V] = left_divide(E,I,tol,~,V)">left_divide</a>(s_mat.E(idx,idx) , pp.QQ( idx,: ));
+0066     
+0067     zi2E= zeros(pp.n_elec, n);
+0068     <span class="comment">% the minus below used to be missing</span>
+0069     zi2E(:, idx)= -pp.N2E(:,idx)/ s_mat.E(idx,idx) ;
+0070 <span class="keyword">end</span>
+0071 
+0072 FC= <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>( fwd_model );
+0073 
+0074 <span class="keyword">if</span> isfield(fwd_model,<span class="string">'coarse2fine'</span>) &amp;&amp; strcmp(org_params, <span class="string">'conductivity'</span>);
+0075    DE = <a href="#_sub1" class="code" title="subfunction DE = jacobian_calc(pp, zi2E, FC, sv, c2f)">jacobian_calc</a>(pp, zi2E, FC, sv, fwd_model.coarse2fine);
+0076    nparam= size(fwd_model.coarse2fine,2);
+0077 <span class="keyword">else</span>
+0078    DE = <a href="#_sub1" class="code" title="subfunction DE = jacobian_calc(pp, zi2E, FC, sv, c2f)">jacobian_calc</a>(pp, zi2E, FC, sv);
+0079    nparam= e;
+0080 <span class="keyword">end</span>
+0081 
+0082 J = zeros( pp.n_meas, nparam );
+0083 idx=0;
+0084 <span class="keyword">for</span> j= 1:pp.n_stim
+0085    meas_pat= fwd_model.stimulation(j).meas_pattern;
+0086    n_meas  = size(meas_pat,1);
+0087    DEj = reshape( DE(:,j,:), pp.n_elec, nparam );
+0088    J( idx+(1:n_meas),: ) = meas_pat*DEj;
+0089    idx= idx+ n_meas;
+0090 <span class="keyword">end</span>
+0091 
+0092 <span class="keyword">if</span> ~strcmp(org_params,<span class="string">'conductivity'</span>)
+0093     J = <a href="#_sub2" class="code" title="subfunction J = apply_chain_rule(J, img, org_params)">apply_chain_rule</a>(J, img, org_params);
+0094     <span class="keyword">if</span> isfield(fwd_model, <span class="string">'coarse2fine'</span>) &amp;&amp; <span class="keyword">...</span>
+0095           size(img.elem_data,1)==size(fwd_model.coarse2fine,1)
+0096             J=J*fwd_model.coarse2fine;
+0097             nparam = size(fwd_model.coarse2fine,2);
+0098     <span class="keyword">end</span>
+0099 <span class="keyword">end</span>
+0100 
+0101 <span class="comment">%restore img to original condition</span>
+0102 <span class="keyword">if</span> ~strcmp(org_params,<span class="string">'conductivity'</span>) || isfield(img, org_params)
+0103     img = rmfield(img,<span class="string">'elem_data'</span>);
+0104     img.current_params = [];
+0105 <span class="keyword">end</span>
+0106 
+0107 <span class="comment">% calculate normalized Jacobian</span>
+0108 <span class="keyword">if</span> pp.normalize
+0109    data= <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>( img );
+0110    J= J ./ (data.meas(:)*ones(1,nparam));
+0111    
+0112 <span class="keyword">end</span>
+0113 
+0114 <span class="comment">% This was a correction for the missing minus above</span>
+0115 <span class="comment">% J= -J;</span>
+0116 
+0117 <span class="comment">% DE_{i,j,k} is dV_i,j / dS_k</span>
+0118 <span class="comment">%  where V_i is change in voltage on electrode i for</span>
+0119 <span class="comment">%        stimulation pattern j</span>
+0120 <span class="comment">%        S_k is change in conductivity on element k</span>
+0121 <a name="_sub1" href="#_subfunctions" class="code">function DE = jacobian_calc(pp, zi2E, FC, sv, c2f)</a>
+0122 d= pp.n_dims+1;
+0123 dfact= factorial(d);
+0124 
+0125 do_c2f = ( nargin==5 );
+0126 zi2E_FCt = zi2E * FC';
+0127 
+0128 FC_sv   = FC * sv;
+0129 
+0130 <span class="keyword">if</span> ~do_c2f
+0131    DE= zeros(pp.n_elec, pp.n_stim, pp.n_elem);
+0132    <span class="keyword">for</span> k= 1:pp.n_elem
+0133        idx= (d-1)*(k-1)+1 : (d-1)*k;
+0134        dq= zi2E_FCt(:,idx) * FC_sv(idx,:);
+0135        DE(:,:,k)= dq;
+0136    <span class="keyword">end</span>
+0137 <span class="keyword">else</span>
+0138    DE= zeros(pp.n_elec, pp.n_stim, size(c2f,2) );
+0139    <span class="keyword">if</span> 0 <span class="comment">% Code is slower</span>
+0140       de= pp.n_elem * (d-1);
+0141       <span class="keyword">for</span> k= 1:size(c2f,2);
+0142           chg_col = kron( c2f(:,k), ones(d-1,1));
+0143           dDD_dEj = spdiags(chg_col,0, de, de);
+0144           dq= zi2E_FCt * dDD_dEj * FC_sv;
+0145           DE(:,:,k)= dq;
+0146       <span class="keyword">end</span>
+0147    <span class="keyword">else</span>
+0148       de= pp.n_elem * (d-1);
+0149       <span class="keyword">for</span> k= 1:size(c2f,2);
+0150           ff = find( c2f(:,k) );
+0151           lff= length(ff)*(d-1);
+0152           ff1= ones(d-1,1) * ff(:)';
+0153           ffd= (d-1)*ff1 + (-(d-2):0)'*ones(1,length(ff));
+0154           dDD_dEj = spdiags(c2f(ff1,k), 0, lff, lff);
+0155           dq= zi2E_FCt(:,ffd) * dDD_dEj * FC_sv(ffd,:);
+0156           DE(:,:,k)= dq;
+0157       <span class="keyword">end</span>
+0158    <span class="keyword">end</span>
+0159 <span class="keyword">end</span>
+0160 
+0161 <a name="_sub2" href="#_subfunctions" class="code">function J = apply_chain_rule(J, img, org_params)</a>
+0162 
+0163 <span class="keyword">switch</span>(org_params)
+0164     <span class="keyword">case</span> <span class="string">'resistivity'</span>
+0165         dCond_dPhys = -img.elem_data.^2;
+0166     <span class="keyword">case</span> <span class="string">'log_resistivity'</span>
+0167         dCond_dPhys = -img.elem_data;
+0168     <span class="keyword">case</span> <span class="string">'log_conductivity'</span>
+0169         dCond_dPhys = img.elem_data;
+0170     <span class="keyword">otherwise</span>
+0171         error(<span class="string">'not implemented yet'</span>)
+0172 <span class="keyword">end</span>
+0173 
+0174 J = J.*repmat(dCond_dPhys ,1,size(J,1))';
+0175 
+0176 <a name="_sub3" href="#_subfunctions" class="code">function elem_data = check_elem_data(img)</a>
+0177    elem_data = img.elem_data; 
+0178    sz_elem_data = size(elem_data);
+0179    <span class="keyword">if</span> sz_elem_data(2) ~= 1;
+0180       error(<span class="string">'jacobian_adjoin: can only solve one image (sz_elem_data=%)'</span>, <span class="keyword">...</span>
+0181             sz_elem_data);
+0182    <span class="keyword">end</span>
+0183 
+0184    <span class="keyword">if</span> isfield(img.fwd_model, <span class="string">'coarse2fine'</span>);
+0185      c2f = img.fwd_model.coarse2fine;
+0186      sz_c2f = size(c2f);
+0187      <span class="keyword">switch</span> sz_elem_data(1)
+0188        <span class="keyword">case</span> sz_c2f(1); <span class="comment">% Ok</span>
+0189        <span class="keyword">case</span> sz_c2f(2); elem_data = c2f * elem_data;
+0190        <span class="keyword">otherwise</span>; error([<span class="string">'jacobian_adjoint: provided elem_data '</span> <span class="keyword">...</span>
+0191             <span class="string">' (sz=%d) does not match c2f (sz=%d %d)'</span>], sz_elem_data(1), sz_c2f);
+0192      <span class="keyword">end</span>
+0193    <span class="keyword">else</span>
+0194      <span class="keyword">if</span> sz_elem_data(1) ~= <a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(img.fwd_model)
+0195        error([<span class="string">'jacobian_adjoint: provided elem_data (sz=%d) does '</span> <span class="keyword">...</span>
+0196           <span class="string">' not match fwd_model (sz=%d)'</span>], sz_elem_data(1), <a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(sz_c2f));
+0197      <span class="keyword">end</span>
+0198    <span class="keyword">end</span>
+0199 
+0200 
+0201 
+0202 <a name="_sub4" href="#_subfunctions" class="code">function str = supported_params</a>
+0203     str = {<span class="string">'conductivity'</span>
+0204            <span class="string">'resistivity'</span>
+0205            <span class="string">'log_conductivity'</span>
+0206            <span class="string">'log_resistivity'</span>};
+0207       
+0208 
+0209 <a name="_sub5" href="#_subfunctions" class="code">function do_unit_test</a>
+0210    current = 4; measure=1;
+0211    [R,img] = <a href="../../../eidors/tests/test_2d_resistor.html" class="code" title="function test_2d_resistor(opt)">test_2d_resistor</a>(current,measure);
+0212    img.fwd_solve.get_all_nodes = 1;
+0213    vs = <a href="fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>( img);
+0214    va= measure*current*sum(R); <span class="comment">% analytic</span>
+0215    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2D resistor test'</span>, va, vs.meas, 1e-12);
+0216 
+0217    J = <a href="jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>(img);
+0218    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2D resistor Jacobian'</span>, size(J), <span class="keyword">...</span>
+0219       [length(img.fwd_model.stimulation), size(img.fwd_model.coarse2fine,2)]);
+0220    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'2D resistor Jacobian'</span>, std(J),0, 1e-12);
+0221 <span class="comment">%  unit_test_cmp('2D R voltages', vs.volt(1:3:10)-vs.volt(1), ...</span>
+0222 
+0223    [R,img] = <a href="../../../eidors/tests/test_3d_resistor.html" class="code" title="">test_3d_resistor</a>(current,measure);
+0224    img.fwd_solve.get_all_nodes = 1;
+0225    vs = <a href="fwd_solve_1st_order.html" class="code" title="function data =fwd_solve_1st_order(fwd_model, img)">fwd_solve_1st_order</a>( img);
+0226    va= current*sum(R);
+0227    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3D resistor test'</span>, va, vs.meas, 1e-10);
+0228    J = <a href="jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>(img);
+0229    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3D resistor Jacobian'</span>, size(J), <span class="keyword">...</span>
+0230       [length(img.fwd_model.stimulation), size(img.fwd_model.coarse2fine,2)]);
+0231    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'3D resistor Jacobian'</span>, std(J),0, 1e-12);
+0232 
+0233 <a name="_sub6" href="#_subfunctions" class="code">function [R,img] = test_2d_resistor(current,measure)</a>
+0234    conduc=  .4 + 2*pi*j*10; <span class="comment">% conductivity in Ohm-meters</span>
+0235    z_contact= .1; wid = 3; len = 12; 
+0236 
+0237    fmdl=<a href="../../../eidors/models/mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>([],linspace(0,wid,3), linspace(0,len,4));
+0238    fmdl.electrode(1).nodes = find(fmdl.nodes(:,2) ==   0);
+0239    fmdl.electrode(2).nodes = find(fmdl.nodes(:,2) == len);
+0240    [fmdl.electrode(:).z_contact] = deal(z_contact);
+0241    fmdl.stimulation = <a href="../../../eidors/models/stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,2,1,2],2,current,measure);
+0242    img= <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,conduc);
+0243 
+0244    Block_R = len / wid / conduc;
+0245    Contact_R = z_contact/wid;
+0246    R = [Block_R, 2*Contact_R];
+0247 
+0248 <a name="_sub7" href="#_subfunctions" class="code">function [R,img] = test_3d_resistor(current,measure);;</a>
+0249    conduc=  .4 + 2*pi*j*10; <span class="comment">% conductivity in Ohm-meters</span>
+0250    z_contact= .1; wid = 2; len = 5; hig=3; 
+0251 
+0252    fmdl=<a href="../../../eidors/models/mk_grid_model.html" class="code" title="function [cmdl, c2f]= mk_grid_model(fmdl, xvec, yvec, zvec);">mk_grid_model</a>([],0:wid, 0:hig, 0:len);
+0253    fmdl.electrode(1).nodes = find(fmdl.nodes(:,3) ==   0);
+0254    fmdl.electrode(2).nodes = find(fmdl.nodes(:,3) == len);
+0255    [fmdl.electrode(:).z_contact] = deal(z_contact);
+0256    fmdl.stimulation = <a href="../../../eidors/models/stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,2,1,2],2,current,measure);
+0257    img= <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,conduc);
+0258 
+0259    Block_R =  len / wid / hig / conduc;
+0260    Contact_R = z_contact/(wid*hig);
+0261    R = [Block_R, 2*Contact_R];</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

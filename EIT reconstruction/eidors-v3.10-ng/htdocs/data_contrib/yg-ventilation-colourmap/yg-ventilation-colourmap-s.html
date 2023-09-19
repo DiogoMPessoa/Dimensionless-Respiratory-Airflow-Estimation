@@ -1,0 +1,69 @@
+<html>
+<!-- Style file for all the nav-sidebars
+     $Id: header.html 1535 2008-07-26 15:36:27Z aadler $ -->
+<head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+</head>
+
+<body>
+
+<H2>Contributed EIT Data:</H2>
+   <table>
+   <tr><th valign="top"> Authors:
+       <td> Yvo G&auml;rber and Draegerwerk AG &amp; Co. KGaA
+       <hr>
+   <tr><th valign="top"> Date:
+       <td> 8 Jul 2009
+       <hr>
+   <tr><th valign="top"> Brief Description:
+       <td> 
+This is the colourmap developed by Draegerwerk AG &amp; Co. KGaA
+for display of EIT ventilation images.
+       <hr>
+   <tr><th valign="top"> License:
+       <td> This colour mapping information is in the <i>Public Domain</i>
+       <hr>
+   <tr><th valign="top"> Data:
+       <td>
+Colour map (with columns of Red/Green/Blue values), is available
+<a href="./cmap_lungeit.mat">here (Matlab v7 format)</a>.
+In EIDORS, this colourmap may be accessed by setting:
+<pre>
+calc_colours('cmap_type','draeger');
+</pre>
+
+This matrix may be recreated as follows:
+<pre>
+p1= 2/3*linspace(1,0,26)'*[1,0,1];
+p2= zeros(9,3);
+p3= linspace(0,1,4)'*[0,0,1];
+p4= linspace(0,1,26)'*[1,1,0]; p4(:,3)= 1; p4(1,:)= [];
+cMap = [p1;p2;p3;p4];
+</pre>
+
+       <hr>
+   </table>
+Description:<br>
+<img src = "http://eidors3d.sourceforge.net/data_contrib/yg-ventilation-colourmap/cmap_lungeit.png">
+<hr>
+
+<small>
+    Last Modified: $Date: 2017-02-28 13:12:08 -0500 (Tue, 28 Feb 2017) $ by $Author: aadler $
+</small>
+</body></html>

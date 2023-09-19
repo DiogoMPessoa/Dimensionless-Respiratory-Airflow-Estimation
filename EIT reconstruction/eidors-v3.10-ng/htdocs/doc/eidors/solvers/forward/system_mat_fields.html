@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of system_mat_fields</title>
+  <meta name="keywords" content="system_mat_fields">
+  <meta name="description" content="SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">forward</a> &gt; system_mat_fields.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/forward&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>system_mat_fields
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function FC= system_mat_fields( fwd_model ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat
+ FC= system_mat_fields( fwd_model )
+ input: 
+   fwd_model = forward model
+ output:
+   FC:        s_mat= C' * S * conduct * C = FC' * conduct * FC;
+
+ system_mat_fields detects whether an electrode is a CEM by checking
+  1) whether it has more than 1 node, and 2) if it's on the boundary
+ If you want an internal CEM that's not on the boundary, then it
+ has to be specified by using
+    fmdl.system_mat_fields.CEM_boundary = [extra boundary ]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../../eidors/models/num_elecs.html" class="code" title="function num = num_elecs( mdl );">num_elecs</a>	NUM_ELECS: number of electrodes attached to model</li><li><a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>	NUM_ELEMS: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>	NUM_NODES: number of elemnts in a (fwd or inv model or image)</li><li><a href="../../../eidors/models/stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>	STIM_MEAS_LIST: mk stimulation pattern from list of electrodes</li><li><a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>	SPARSE Create sparse matrix (EIDORS overload).</li><li><a href="find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="find_electrode_bdy.html" class="code" title="function [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, elec_nodes)">find_electrode_bdy</a>	FIND_ELECTRODE_BDY: find the boundary index area for electrode</li><li><a href="fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>	FWD_MODEL_PARAMETERS: data= fwd_solve_1st_order( fwd_model, image)</li><li><a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>	SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li><li><a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/deprecated/aa_calc_system_mat.html" class="code" title="function s_mat= aa_calc_system_mat( fwd_model, img)">aa_calc_system_mat</a>	AA_CALC_SYSTEM_MAT: SS= aa_calc_system_mat( fwd_model, img)</li><li><a href="../../../eidors/deprecated/aa_system_mat_fields.html" class="code" title="function FC= aa_system_mat_fields( fwd_model )">aa_system_mat_fields</a>	AA_SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="../../../eidors/models/calc_model_reduction.html" class="code" title="function mr = calc_model_reduction(fmdl)">calc_model_reduction</a>	calc_model_reduction: calculate the fields for a reduced model</li><li><a href="jacobian_adjoint.html" class="code" title="function J= jacobian_adjoint( fwd_model, img)">jacobian_adjoint</a>	JACOBIAN_ADJOINT: J= jacobian_adjoint( img )</li><li><a href="jacobian_adjoint_2p5d_1st_order.html" class="code" title="function J= jacobian_adjoint_2p5d_1st_order( fwd_model, img)">jacobian_adjoint_2p5d_1st_order</a>	JACOBIAN_ADJOINT_2P5D: J= jacobian_adjoint_2p5d_1st_order( img )</li><li><a href="system_mat_1st_order.html" class="code" title="function s_mat= system_mat_1st_order( fwd_model, img)">system_mat_1st_order</a>	SYSTEM_MAT_1ST_ORDER: SS= system_mat_1st_order( fwd_model, img)</li><li><a href="system_mat_2p5d_1st_order.html" class="code" title="function s_mat= system_mat_2p5d_1st_order( fwd_model, img)">system_mat_2p5d_1st_order</a>	SYSTEM_MAT_2P5D_1ST_ORDER: 2.5D system matrix</li><li><a href="system_mat_2p5d_fields.html" class="code" title="function FT= system_mat_2p5d_fields( fwd_model )">system_mat_2p5d_fields</a>	SYSTEM_MAT_2P5D_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>	SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</li><li><a href="update_system_mat_fields.html" class="code" title="function FC1 = update_system_mat_fields( fwd_model0, fwd_model1 )">update_system_mat_fields</a>	SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function cache_obj = mk_cache_obj(fwd_model)</a></li><li><a href="#_sub2" class="code">function FC= calc_system_mat_fields( fwd_model )</a></li><li><a href="#_sub3" class="code">function [FFdata,FFiidx,FFjidx, CCdata,CCiidx,CCjidx] =</a></li><li><a href="#_sub4" class="code">function do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function FC= system_mat_fields( fwd_model )</a>
+0002 <span class="comment">% SYSTEM_MAT_FIELDS: fields (elem to nodes) fraction of system mat</span>
+0003 <span class="comment">% FC= system_mat_fields( fwd_model )</span>
+0004 <span class="comment">% input:</span>
+0005 <span class="comment">%   fwd_model = forward model</span>
+0006 <span class="comment">% output:</span>
+0007 <span class="comment">%   FC:        s_mat= C' * S * conduct * C = FC' * conduct * FC;</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% system_mat_fields detects whether an electrode is a CEM by checking</span>
+0010 <span class="comment">%  1) whether it has more than 1 node, and 2) if it's on the boundary</span>
+0011 <span class="comment">% If you want an internal CEM that's not on the boundary, then it</span>
+0012 <span class="comment">% has to be specified by using</span>
+0013 <span class="comment">%    fmdl.system_mat_fields.CEM_boundary = [extra boundary ]</span>
+0014 
+0015 <span class="comment">% (C) 2008-2018 Andy Adler. License: GPL version 2 or version 3</span>
+0016 <span class="comment">% $Id: system_mat_fields.m 5959 2019-06-05 02:08:59Z aadler $</span>
+0017 
+0018 <span class="keyword">if</span> ischar(fwd_model) &amp;&amp; strcmp(fwd_model,<span class="string">'UNIT_TEST'</span>); <a href="#_sub4" class="code" title="subfunction do_unit_test">do_unit_test</a>; <span class="keyword">return</span>; <span class="keyword">end</span>
+0019 
+0020 copt.cache_obj = <a href="#_sub1" class="code" title="subfunction cache_obj = mk_cache_obj(fwd_model)">mk_cache_obj</a>(fwd_model);
+0021 copt.fstr = <span class="string">'system_mat_fields'</span>;
+0022 copt.log_level = 4;
+0023 FC= <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub2" class="code" title="subfunction FC= calc_system_mat_fields( fwd_model )">calc_system_mat_fields</a>,{fwd_model},copt );
+0024 
+0025 
+0026 <span class="comment">% only cache stuff which is really relevant here</span>
+0027 <a name="_sub1" href="#_subfunctions" class="code">function cache_obj = mk_cache_obj(fwd_model)</a>
+0028    cache_obj.elems       = fwd_model.elems;
+0029    cache_obj.nodes       = fwd_model.nodes;
+0030    <span class="keyword">try</span>
+0031    cache_obj.electrode   = fwd_model.electrode; <span class="comment">% if we have it</span>
+0032    <span class="keyword">end</span>
+0033    cache_obj.type        = <span class="string">'fwd_model'</span>;
+0034    cache_obj.name        = <span class="string">''</span>; <span class="comment">% it has to have one</span>
+0035 
+0036 <a name="_sub2" href="#_subfunctions" class="code">function FC= calc_system_mat_fields( fwd_model )</a>
+0037    p= <a href="fwd_model_parameters.html" class="code" title="function param = fwd_model_parameters( fwd_model, opt )">fwd_model_parameters</a>( fwd_model, <span class="string">'skip_VOLUME'</span> );
+0038    d0= p.n_dims+0;
+0039    d1= p.n_dims+1;
+0040    e= p.n_elem;
+0041    n= p.n_node;
+0042 
+0043    FFjidx= floor([0:d0*e-1]'/d0)*d1*ones(1,d1) + ones(d0*e,1)*(1:d1);
+0044    FFiidx= [1:d0*e]'*ones(1,d1);
+0045    FFdata= zeros(d0*e,d1);
+0046    dfact = (d0-1)*d0;
+0047    <span class="keyword">for</span> j=1:e
+0048      a=  inv([ ones(d1,1), p.NODE( :, p.ELEM(:,j) )' ]);
+0049      idx= d0*(j-1)+1 : d0*j;
+0050      FFdata(idx,1:d1)= a(2:d1,:)/ sqrt(dfact*abs(det(a)));
+0051    <span class="keyword">end</span> <span class="comment">%for j=1:ELEMs</span>
+0052 
+0053 <span class="keyword">if</span> 0 <span class="comment">% Not complete electrode model</span>
+0054    FF= <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>(FFiidx,FFjidx,FFdata);
+0055    CC= <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>((1:d1*e),p.ELEM(:),ones(d1*e,1), d1*e, n);
+0056 <span class="keyword">else</span>
+0057    [F2data,F2iidx,F2jidx, C2data,C2iidx,C2jidx] = <span class="keyword">...</span>
+0058              compl_elec_mdl(fwd_model,p);
+0059    FF= <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>([FFiidx(:); F2iidx(:)],<span class="keyword">...</span>
+0060               [FFjidx(:); F2jidx(:)],<span class="keyword">...</span>
+0061               [FFdata(:); F2data(:)]);
+0062    
+0063    CC= <a href="../../../eidors/overloads/sparse.html" class="code" title="function S = sparse(varargin)">sparse</a>([(1:d1*e)';    C2iidx(:)], <span class="keyword">...</span>
+0064               [p.ELEM(:);   C2jidx(:)], <span class="keyword">...</span>
+0065               [ones(d1*e,1); C2data(:)]);
+0066 <span class="keyword">end</span>
+0067 
+0068 FC= FF*CC;
+0069 
+0070 <span class="comment">% Add parts for complete electrode model</span>
+0071 <a name="_sub3" href="#_subfunctions" class="code">function [FFdata,FFiidx,FFjidx, CCdata,CCiidx,CCjidx] = </a><span class="keyword">...</span>
+0072              compl_elec_mdl(fwd_model,pp)
+0073    d0= pp.n_dims;
+0074    FFdata= zeros(0,d0);
+0075    FFd_block= sqrtm( ( ones(d0) + eye(d0) )/6/(d0-1) ); <span class="comment">% 6 in 2D, 12 in 3D</span>
+0076    FFiidx= zeros(0,d0);
+0077    FFjidx= zeros(0,d0);
+0078    FFi_block= ones(d0,1)*(1:d0);
+0079    CCdata= zeros(0,d0);
+0080    CCiidx= zeros(0,d0);
+0081    CCjidx= zeros(0,d0);
+0082   
+0083    sidx= d0*pp.n_elem;
+0084    cidx= (d0+1)*pp.n_elem;
+0085    i_cem = 0; <span class="comment">% Index into electrodes that are CEM (but not pt)</span>
+0086    cem_boundary = pp.boundary;
+0087    <span class="keyword">if</span> isfield(fwd_model,<span class="string">'system_mat_fields'</span>)
+0088       cem_boundary = [cem_boundary;fwd_model.system_mat_fields.CEM_boundary];
+0089    <span class="keyword">end</span>
+0090    <span class="keyword">for</span> i= 1:pp.n_elec
+0091       eleci = fwd_model.electrode(i);
+0092       <span class="comment">% contact impedance zc is in [Ohm.m] for 2D or [Ohm.m^2] for 3D</span>
+0093       zc=  eleci.z_contact;
+0094       <span class="keyword">if</span> isfield(eleci,<span class="string">'faces'</span>)  &amp;&amp; ~isempty(eleci.faces)
+0095          <span class="keyword">if</span> ~isempty(eleci.nodes)
+0096             <a href="../../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'Warning: electrode %d has both faces and nodes'</span>,i);
+0097          <span class="keyword">end</span>
+0098          bdy_nds= eleci.faces;
+0099          [~, bdy_area] = <a href="find_electrode_bdy.html" class="code" title="function [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, elec_nodes)">find_electrode_bdy</a>( <span class="keyword">...</span>
+0100              bdy_nds, fwd_model.nodes,[]);
+0101       <span class="keyword">else</span>
+0102          [bdy_idx, bdy_area] = <a href="find_electrode_bdy.html" class="code" title="function [bdy_idx, bdy_area] = find_electrode_bdy( bdy, vtx, elec_nodes)">find_electrode_bdy</a>( <span class="keyword">...</span>
+0103              cem_boundary, fwd_model.nodes, eleci.nodes );
+0104              <span class="comment">% bdy_area is in [m] for 2D or [m^2] for 3D</span>
+0105 
+0106          <span class="comment">% For pt elec model, bdy_idx = [], so this doesn't run</span>
+0107          <span class="keyword">if</span> isempty(bdy_idx); <span class="keyword">continue</span>; <span class="keyword">end</span> <span class="comment">% no action for pt elecs</span>
+0108 
+0109          bdy_nds= cem_boundary(bdy_idx,:);
+0110       <span class="keyword">end</span>
+0111       i_cem = i_cem + 1;
+0112          <span class="comment">% 3D: [m^2]/[Ohm.m^2] = [S]</span>
+0113          <span class="comment">% 2D: [m]  /[Ohm.m]   = [S]</span>
+0114       <span class="keyword">for</span> j= 1:size(bdy_nds,1);
+0115          FFdata= [FFdata; FFd_block * sqrt(bdy_area(j)/zc)];
+0116          FFiidx= [FFiidx; FFi_block' + sidx];
+0117          FFjidx= [FFjidx; FFi_block  + cidx];
+0118 
+0119          CCiidx= [CCiidx; FFi_block(1:2,:) + cidx];
+0120          CCjidx= [CCjidx; bdy_nds(j,:) ; (pp.n_node+i_cem)*ones(1,d0)];
+0121          CCdata= [CCdata; [1;-1]*ones(1,d0)];
+0122          sidx = sidx + d0;
+0123          cidx = cidx + d0;
+0124       <span class="keyword">end</span>
+0125       
+0126    <span class="keyword">end</span>
+0127 
+0128 <a name="_sub4" href="#_subfunctions" class="code">function do_unit_test</a>
+0129    imdl=  <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,16);
+0130    FC = <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>( imdl.fwd_model);
+0131    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat1'</span>, size(FC), [128,41]);
+0132    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat2'</span>, FC(1:2,:), [[0,-1,1,0;-2,1,1,0], zeros(2,37)]/2, 1e-14);
+0133 
+0134    <span class="comment">% THis is a 45 degree rotation of the previous</span>
+0135    imdl=  <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c0'</span>,16);
+0136    FC2= <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>( imdl.fwd_model);
+0137    M = sqrt(.5)*[1,-1;1,1];
+0138    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat3'</span>, M*FC2(1:2,:), [[0,-1,1,0;-2,1,1,0], zeros(2,37)]/2, 1e-14);
+0139 
+0140    <span class="comment">% Check we can handle partial CEM/pt electrodes</span>
+0141    imdl = <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'b2s'</span>,4); fmdl = imdl.fwd_model;
+0142    fmdl.electrode([2,4])= []; <span class="comment">% remove to simplify</span>
+0143    fmdl.stimulation = <a href="../../../eidors/models/stim_meas_list.html" class="code" title="function [stim, meas_sel]= stim_meas_list( sp_mp , Nelec, current, gain);">stim_meas_list</a>([1,2,1,2]);
+0144 
+0145    FF = <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>(fmdl);
+0146    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat_b2s_1a'</span>, size(FF), [256,81]);
+0147    vh = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>( <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1) ); 
+0148    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat_b2s_1b'</span>, vh.meas, 2.182865407049302, 1e-12);
+0149 
+0150    fmdl.electrode(2).nodes = [4:6];
+0151    FF = <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>(fmdl);
+0152    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat_b2s_2a'</span>, size(FF), [260,82]);
+0153    vh = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>( <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1) ); 
+0154    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat_b2s_2b'</span>, vh.meas, 1.807627806615849, 1e-12);
+0155 
+0156    fmdl.electrode(1).nodes = [76:78];
+0157    FF = <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>(fmdl);
+0158    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat_b2s_3a'</span>, size(FF), [264,83]);
+0159    vh = <a href="../../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>( <a href="../../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1) ); 
+0160    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat_b2s_3b'</span>, vh.meas, 1.432226638247073, 1e-12);
+0161 
+0162    imdl=  <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2C2'</span>,4); fmdl=imdl.fwd_model;
+0163    fmdl.nodes(1,:) = [];
+0164    fmdl.gnd_node = 2;
+0165    fmdl.elems(1:4,:) = [];
+0166    fmdl.elems = fmdl.elems - 1;
+0167    fmdl.boundary = <a href="find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(fmdl);
+0168    FC = <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>( fmdl);
+0169    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-bdyCEM-1'</span>, size(FC),[128,44]);
+0170    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-bdyCEM-2'</span>, FC(121:<span class="keyword">end</span>,41:end), <span class="keyword">...</span>
+0171              -13.967473716321374*kron(eye(4),[1;1]),1e-12)
+0172 
+0173 <span class="comment">% Add a CEM via a boundary</span>
+0174    fmdl.electrode(5) = struct(<span class="string">'nodes'</span>,1:4,<span class="string">'z_contact'</span>,.01);
+0175    FC = <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>( fmdl);
+0176    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-ctrCEM-1'</span>, size(FC),[136,45]);
+0177    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-ctrCEM-2'</span>, FC(121:128,41:44), <span class="keyword">...</span>
+0178              -13.967473716321374*kron(eye(4),[1;1]),1e-12)
+0179    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-ctrCEM-2'</span>, FC(129:<span class="keyword">end</span>,end), <span class="keyword">...</span>
+0180              -4.204482076268572,1e-12)
+0181 
+0182 <span class="comment">% Add a CEM via a boundary</span>
+0183    Nelec = 4;
+0184    fmdl= getfield( <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2C2'</span>,Nelec), <span class="string">'fwd_model'</span>);
+0185 
+0186    FC = <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>( fmdl );
+0187    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-b2cCEM-0'</span>, Nelec, <a href="../../../eidors/models/num_elecs.html" class="code" title="function num = num_elecs( mdl );">num_elecs</a>(fmdl));
+0188    fmdl.electrode(3).nodes = []; <span class="comment">% no longer a node elec</span>
+0189    fmdl.electrode(3).faces = [1,2;2,3;3,1];
+0190    FC = <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>( fmdl);
+0191 spy(FC)
+0192 <span class="comment">%for i=129:148; disp([i,find(FC(i,:))]); end</span>
+0193 <span class="comment">%full(FC(129:end,1:3))</span>
+0194 
+0195 
+0196    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-b2cCEM-1'</span>, size(FC), <span class="keyword">...</span>
+0197        [<a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(fmdl)*(size(fmdl.elems,2)-1) + 3*2 + 2*3, <span class="keyword">...</span>
+0198         <a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(fmdl)+<a href="../../../eidors/models/num_elecs.html" class="code" title="function num = num_elecs( mdl );">num_elecs</a>(fmdl)]);
+0199 
+0200    fmdl= getfield( <a href="../../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2C2'</span>,Nelec), <span class="string">'fwd_model'</span>);
+0201    fmdl.electrode(5) = struct(<span class="string">'nodes'</span>,1:3,<span class="string">'z_contact'</span>,.01);
+0202    fmdl.system_mat_fields.CEM_boundary = [1,2;2,3;3,1];
+0203    FC = <a href="system_mat_fields.html" class="code" title="function FC= system_mat_fields( fwd_model )">system_mat_fields</a>( fmdl );
+0204 
+0205    d1=<a href="../../../eidors/models/num_elems.html" class="code" title="function num = num_elems( mdl );">num_elems</a>(fmdl)*(size(fmdl.elems,2)-1) + <span class="keyword">...</span>
+0206         4*2 + 2*3;
+0207    d2= <a href="../../../eidors/models/num_nodes.html" class="code" title="function num = num_nodes( mdl );">num_nodes</a>(fmdl)+<a href="../../../eidors/models/num_elecs.html" class="code" title="function num = num_elecs( mdl );">num_elecs</a>(fmdl);
+0208    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-b2cCEM-1'</span>, size(FC),[d1,d2]);
+0209 disp([size(FC),d1,d2])
+0210    <span class="comment">% Check this!!!! why are internal nodes doubled!!</span>
+0211    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-b2cCEM-3'</span>, FC(129:136,42:45), <span class="keyword">...</span>
+0212              -13.967473716321374*kron(eye(4),[1;1]),1e-12)
+0213    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-ctrCEM-4'</span>, FC([137:138,141:142],end), <span class="keyword">...</span>
+0214              -3.535533905932737, 1e-12);
+0215    <a href="../../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'sys_mat-ctrCEM-5'</span>, FC([139:140],end), <span class="keyword">...</span>
+0216              -4.204482076268572, 1e-12);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

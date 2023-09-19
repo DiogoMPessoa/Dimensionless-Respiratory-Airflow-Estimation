@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of prior_gaussian_likelihood</title>
+  <meta name="keywords" content="prior_gaussian_likelihood">
+  <meta name="description" content="Parameters for image">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">solvers</a> &gt; <a href="index.html">inverse</a> &gt; prior_gaussian_likelihood.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/solvers/inverse&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>prior_gaussian_likelihood
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Parameters for image</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function likelihood= prior_gaussian_likelihood( inv_model, x, y, J ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Parameters for image
+   inv_model.gaussian_prior_likelihood.img_mean -&gt; image mean
+   inv_model.gaussian_prior_likelihood.R_prior -&gt; L*L' = inv(image covariance)
+   inv_model.gaussian_prior_likelihood.img_exp -&gt; ( default = 2)
+ Parameters for data
+   inv_model.gaussian_prior_likelihood.Noise -&gt; L*L' = inv(Noise covariance)
+   inv_model.gaussian_prior_likelihood.data_exp -&gt; ( default = 2)
+
+ Function to be used with inv_solve_mcmc</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/deprecated/gaussian_prior_likelyhood.html" class="code" title="function likelihood= gaussian_prior_likelyhood( varargin )">gaussian_prior_likelyhood</a>	Parameters for image</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function likelihood= prior_gaussian_likelihood( inv_model, x, y, J )</a>
+0002 <span class="comment">% Parameters for image</span>
+0003 <span class="comment">%   inv_model.gaussian_prior_likelihood.img_mean -&gt; image mean</span>
+0004 <span class="comment">%   inv_model.gaussian_prior_likelihood.R_prior -&gt; L*L' = inv(image covariance)</span>
+0005 <span class="comment">%   inv_model.gaussian_prior_likelihood.img_exp -&gt; ( default = 2)</span>
+0006 <span class="comment">% Parameters for data</span>
+0007 <span class="comment">%   inv_model.gaussian_prior_likelihood.Noise -&gt; L*L' = inv(Noise covariance)</span>
+0008 <span class="comment">%   inv_model.gaussian_prior_likelihood.data_exp -&gt; ( default = 2)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Function to be used with inv_solve_mcmc</span>
+0011 
+0012 <span class="comment">% (C) 2007 Nick Polydorides. License: GPL version 2 or version 3</span>
+0013 <span class="comment">% $Id: prior_gaussian_likelihood.m 3122 2012-06-08 15:49:01Z bgrychtol $</span>
+0014 
+0015 x_m  = inv_model.gaussian_prior_likelihood.img_mean;
+0016 L_x  = inv_model.gaussian_prior_likelihood.R_prior;
+0017 p_x  = inv_model.gaussian_prior_likelihood.img_exp;
+0018 L_n  = inv_model.gaussian_prior_likelihood.Noise;
+0019 p_n  = inv_model.gaussian_prior_likelihood.data_exp;
+0020 
+0021 img_residual=  x - x_m;
+0022 data_residual= y - J*x;
+0023 
+0024 likelihood= exp(- norm(L_n * data_residual, p_n) <span class="keyword">...</span>
+0025                 - norm(L_x * img_residual,  p_x));</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

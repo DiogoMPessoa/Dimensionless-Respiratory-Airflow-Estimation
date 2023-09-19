@@ -1,0 +1,1940 @@
+
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+   <head>
+<title>EIDORS</title>
+   <style type="text/css">
+        body, td, th {
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+        font-size:80%;
+        }
+        pre, tt {
+        font-family:lucida console, FixedSys, Courier, Terminal, monospaced;
+        font-size:100%;
+        }
+        pre {
+        background-color: #E0F0FE;
+        border-style: groove;
+        border-color: black;
+        border-width: 2px;
+        }
+   </style>
+
+</head>
+
+<body link="#800000"
+      marginwidth=5 marginheight=5 topmargin=5 leftmargin=5 
+      vlink="#400000" >
+<table border="0" cellspacing="0" cellpadding="0">
+<tr height="80"><td valign="middle">
+<a href="http://www.eidors.org">
+<img alt="Eidors-logo" src="./eidors-logo.jpg"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</td><td>
+<h2>
+    EIDORS:
+    <small><i>Electrical Impedance Tomography and
+    Diffuse Optical Tomography Reconstruction Software</i></small>
+</h2>
+</td></tr></table>
+<table border="0"> <tr>
+<td valign="top" width="100">
+<a href="http://eidors3d.sf.net/" >EIDORS</a>
+(<a href="http://www.sce.carleton.ca/faculty/adler/eidors/index.shtml"
+    >mirror</a>)<br>
+<a href="./index-s.html"
+>Main</a><br>
+<a href="./docs-s.html"
+   >Documentation</a><br>
+<a href="./tutorial/tutorial-s.html"
+   >Tutorials</a><br>
+
+<a href="./download-s.html"
+   >Download</a><br>
+<a href="./data_contrib-s.html"
+   >Contrib Data</a><br>
+<a href="./GREIT/index-s.html"
+   >GREIT</a><br>
+<a href="./doc/index-s.html"
+   >Browse Docs</a><br>
+<a href="https://sourceforge.net/p/eidors3d/code/HEAD/tree/trunk/"
+   >Browse SVN</a><br>
+<hr>
+<a href="./news-s.html">News</a><br>
+<a href="https://lists.sourceforge.net/lists/listinfo/eidors3d-help"
+   >Mailing list</a><br>
+(<a href="https://sourceforge.net/mailarchive/forum.php?forum_name=eidors3d-help"
+   >archive</a>)<br>
+<a href="./faq-s.html">FAQ</a><br>
+<a href="./programming/programming-s.html">Developer</a><br>
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<!-- EIDORS Navigation sidebar
+     $Id: nav-sidebar.shtml 5602 2017-06-22 03:07:14Z aadler $
+  -->
+<p>&nbsp;
+<p>
+<small>Hosted by</small><br>
+<a  href="http://sourceforge.net/projects/eidors3d">
+   <img src="http://sourceforge.net/sflogo.php?group_id=100454&type=4"
+         border="0" alt="SourceForge.net Logo"  />
+</a>
+</td><td>&nbsp;</td><td valign="top">
+
+
+
+<h2>News</h2>
+This page is a list of updates, discussions, and 
+ideas for enhancements to the
+EIDORS package.
+<ul>
+
+<p><li> <b>
+ 31 December 2019
+   </b><br>
+<b>EIDORS Version 3.10 release</b>
+<p>Blobby the walrus is proud to announce the
+release of EIDORS version 3.10,
+available at <a href="http://www.eidors.org">www.eidors.org</a>,
+and DOI:<a href="http://dx.doi.org/10.5281/zenodo.3247168">10.5281/zenodo.3247168</a>.
+This is primarily a bug fixing release but it includes
+<ul>
+  <LI> New electrode models to better support internal electrodes
+  <li> Temporal filtering
+  <li> Improved octave support
+  <li> Datafile utilities and improved fileformat support
+  <LI> Breath-analysis tools
+</ul>
+
+<p><li> <b>
+  30 June 2019
+   </b><br>
+<b>EIDORS Workshop at <a href="http://www.eit2019.co.uk">EIT 2019</a></b>
+<p>Time: 14h00&minus;15h00, Sainsbury Wellcome Centre, London
+
+Code from workshop:
+<table border=1><tr><td><PRE>
+   imdl = mk_common_model('b2c2',16);
+   fmdl = imdl.fwd_model;
+   img = mk_image(fmdl,1);
+subplot(322);
+   img.fwd_model.stimulation = stim_meas_list( ...
+      [1,2,3,4],16);
+   img.fwd_solve.get_all_meas = true;
+   vh = fwd_solve(img);
+
+   imgv = rmfield(img,'elem_data');
+   imgv.node_data = vh.volt;
+   show_fem(imgv,[0,1]);
+      
+   [stim,msel] = mk_stim_patterns( ...
+        16,1,[0,1],[0,1],{'no_meas_current'},1);
+   img.fwd_model.stimulation = stim;
+   img.fwd_model.meas_select = msel;
+   vh = fwd_solve(img);
+   img.elem_data(40) = 1.5;
+   vi = fwd_solve(img);
+subplot(321); show_fem(img,[0,1,1]);
+  
+subplot(323);
+   plot([vh.meas,vi.meas]);
+
+   imdl = select_imdl(img.fwd_model, {'Basic GN dif'}); 
+subplot(324);
+   imdl.hyperparameter.value = 1e-3;
+   imgr = inv_solve(imdl, vh, vi);
+   show_fem(imgr);
+
+    
+load montreal_data_1995.mat
+vv = zc_demo3;
+   imdl.hyperparameter.value = 3e-2;
+   imgr = inv_solve(imdl, vv(:,1), vv(:,3:50));
+subplot(325);
+imgr.show_slices.img_cols = 5;
+show_slices(imgr);
+
+J = calc_jacobian( img);
+Jdvol = J(4,:)'./get_elem_volume(img);
+img.elem_data = Jdvol
+subplot(326); show_fem(img);
+return
+
+clf;
+for i=1:208
+Jdvol = J(i,:)'./get_elem_volume(img);
+img.elem_data = Jdvol
+show_fem(img);
+pause
+end
+</PRE>
+</table>
+
+<p><li> <b>
+  10 June 2018
+   </b><br>
+<b>EIDORS Workshop at <a href="http://www.eit2018.org">EIT 2018</a></b>
+<p>Time: 14h00&minus;17h00, Sanderson Building, Kings Buildings campus, University of Edinburgh.
+<p><b>Synopsis:</b>
+ The EIDORS workshop is for beginners and more advanced users of the EIDORS.org
+      software. We will begin by helping everyone to install and use the software; we
+      will then have a short presentation on the software and review its use for
+      forward modelling and inverse solutions. Next we will present some example cases
+      or solve application examples from workshop attendees.
+
+Workshop tutorial:
+<table border=1><tr><td>
+
+<u>Instructions for Windows users</u>
+<OL>
+<LI> Create a directory <tt>C:\path\to\tutorial</tt>
+<LI> Download these files and unzip into the directory
+<UL>
+<LI> <a href="https://sourceforge.net/projects/eidors3d/files/eidors-v3/eidors-v3.9.1/eidors-v3.9.1-ng.zip"
+             >eidors3.9.1-ng.zip</a>
+</UL>
+<LI> Start Matlab
+<LI> In matlab, do
+<ul>
+<LI> <tt>
+cd H:/tutorial/eidors35rc1
+cd C:\path\to\tutorial\eidors-v3.9.1-ng\eidors
+</tt>
+<LI> <tt>
+startup
+</tt>
+<LI> <tt>
+compare_2d_algs(1)
+</tt> %(this tests if eidors is working)
+<LI> <tt>
+show_fem(ng_mk_cyl_models(3,[0],[]))
+</tt> %(this tests if netgen is working)
+
+</ul>
+
+</OL>
+
+
+<u>Try a few 
+ <a href="./tutorial/tutorial-s.html">
+EIDORS tutorials</a></u>
+to see how eidors works.
+I recommend:
+<ol>
+<li>
+<a href="./tutorial/EIDORS_basics/tutorial010-s.html"
+     >EIDORS Basics</a>
+<li>
+<a href="./tutorial/EIDORS_basics/rpi_data-s.html"
+     >Absolute and difference solvers</a>
+<li>
+<a href="./tutorial/lung_EIT/if_peep_trial-s.html"
+     >Lung injury images</a>
+<li>
+<a href="./tutorial/netgen/netgen_cyl_models-s.html"
+     >Netgen FEM models</a>
+<li>
+<a href="./tutorial/GREIT/adult_ex-s.html"
+     >GREIT</a>
+</ol>
+
+Challenge problem:
+<ol>
+<li>Create a 3D elliptical cylinder with 16 circular electrodes
+    (see <a href="./tutorial/netgen/netgen_ellip_models-s.html">here</a>)
+<br><tt>fmdl= <font color=#E0F0FE
+>ng_mk_ellip_models([1,1.2,0.8],[16,0.5],[0.1]);
+</font> show_fem(fmdl); </tt>
+
+<li>Put a ball into the elliptical cylinder
+<br><tt><font color=#E0F0FE
+>   extra={'ball','solid ball = sphere(0.5,0.3,0.5;0.1);'};
+<br>fmdl= ng_mk_ellip_models([1,1.2,0.8],[16,0.5],[0.1],extra);
+</font> show_fem(fmdl); </tt>
+
+<li>Put two balls into the elliptical cylinder
+<br><tt><font color=#E0F0FE
+>   extra={'ball','solid ball = sphere(0.5,0.3,0.5;0.1) or sphere(-0.5,0.3,0.5;0.1);'};
+<br>fmdl= ng_mk_ellip_models([1,1.2,0.8],[16,0.5],[0.1],extra);
+</font> show_fem(fmdl); </tt>
+
+<li>Set the model to use adjacent current patterns
+<br><tt><font color=#E0F0FE
+>   stim = mk_stim_patterns(16,1,[0,1],[0,1],{});
+</font> fmdl.stimulation = stim;</tt>
+
+<li>Simulate homogeneous voltages  (background conductivity = 0.5);
+<br><tt><font color=#E0F0FE
+>   img = mk_image(fmdl, 0.5); vh = fwd_solve(img);
+<br>
+</font> show_fem(img); </tt>
+
+<li>Simulate inhomogeneous voltages  (ball conductivity = 1.0);
+<br><tt><font color=#E0F0FE
+>   img.elem_data(fmdl.mat_idx{2})= 1.0; vi = fwd_solve(img);
+<br>
+</font> show_fem(img); </tt>
+
+<li>Show slices through voltage pattern
+<br><tt><font color=#E0F0FE
+> img.fwd_solve.get_all_meas = 1;  vi = fwd_solve(img);
+imgh = rmfield(img,'elem_data'); imgh.node_data = vi.volt(:,1);
+<br>
+</font> 
+show_slices(imgh,[[inf,inf,0.3];[inf,inf,0.35]]);
+ </tt>
+<LI>Show a Gauss-Newton (GN) inverse in 3D
+<br><tt><font color=#E0F0FE>
+imdl = select_imdl(fmdl, {'Basic GN dif'});
+imdl.hyperparameter.value = 1e-5;
+img= inv_solve(imdl,vh,vi);
+<br>
+</font> 
+ show_3d_slices(img); 
+
+<LI>Show a Gauss-Newton (GN) inverse in 2D using a coarse-to-fine map
+<br><tt><font color=#E0F0FE>
+fmdl2d = ng_mk_ellip_models([0,1.2,0.8,.1],[],[]);
+fmdl.coarse2fine = mk_coarse_fine_mapping(fmdl,fmdl2d);
+imdl = select_imdl(fmdl, {'Basic GN dif'});
+imdl.rec_model = fmdl2d;
+imdl.hyperparameter.value = 1e-4;
+img= inv_solve(imdl,vh,vi);
+<br>
+</font> 
+ show_slices(img); 
+ </tt>
+
+
+
+<li>Create a GREIT model for the ellipse
+    (see <a href="./tutorial/GREIT/mk_GREIT_mat_ellip-s.html">here</a>)
+<br><tt><font color=#E0F0FE
+> opt.noise_figure = 0.5; 
+fmdl.normalize_measurements = 0;
+imgh = mk_image(mdl_normalize(fmdl,1),1.0);;
+imdl = mk_GREIT_model(imgh, 0.25, [], opt);
+img= inv_solve(imdl,vh,vi);
+</font> show_fem(img); </tt>
+</ol>
+</table>
+
+
+
+<p><li> <b>
+  1 June 2018
+   </b><br>
+<b>EIDORS Version 3.9.1 release</b>
+<p>Blobby the walrus is proud to announce the
+release of EIDORS version 3.9.1,
+available at <a href="http://www.eidors.org">www.eidors.org</a>,
+and DOI:<a href="http://dx.doi.org/10.5281/zenodo.1257670">10.5281/zenodo.1257670</a>.
+This is primarily a bug fixing release but it includes
+<ul>
+  <LI> Improved Support for GREIT in 3D
+  <LI> Improved Geophysical models
+  <LI> Improved absolute solvers
+  <LI> Models with internal electrodes
+  <LI> New tutorials
+  <LI> Improved solvers
+</ul>
+
+<p><li> <b>
+  21 June 2017
+   </b><br>
+<b>EIDORS Version 3.9 release</b>
+<p>Blobby the walrus is proud to announce the
+release of EIDORS version 3.9,
+available at <a href="http://www.eidors.org">www.eidors.org</a>,
+and DOI:<a href="http://dx.doi.org/10.5281/zenodo.583266">10.5281/zenodo.583266</a>
+Some of the many new features are:
+<ul>
+<LI> Faster forward solve times for real conductivity distributions
+
+<LI> Improved support for GREIT reconstructions in 3D
+
+<LI> New hyperparameter selection approaches
+
+<LI> Interface to Hansen's "Regularization Toolbox"
+
+<LI> Gmsh-based human 3D model interface
+
+<LI> Correction of artefacts caused by low frame rates
+
+<LI> Improved support for mixed point and CEM electrode models
+<LI> Support for 2&frac12;D solvers (including a rank-1 2&frac12;D movement Jacobian)
+
+<LI> Forward solve supporting model reduction (i.e. efficient
+       precalculation of out-of-field regions)
+
+<LI> Improved testing framework esp. for core solver algs
+
+
+<LI> Improved support for geophysical FEM models
+
+<LI> Improved support for Octave
+
+<LI> Updated ability to load recent device file formats including
+       auxiliary data (Dr&auml;ger and Swisstom formats)
+
+<LI> Expanded shape library
+</ul>
+While proud of the great things EIDORS can now do, Blobby is sad
+to note that the Mathworks is making Matlab worse faster than
+he can make EIDORS better. While in the past it was possible
+to support a decade of Matlab versions, we can now only support
+2015&minus;2017. In the limit, as the quality of Matlab tends to
+zero, and it does not appear easy to make an infinite-quality
+EIDORS to compensate.
+
+<p><li> <b>
+  21 June 2017
+   </b><br>
+<a href="tutorial/workshop/code_21june2017.m"
+>Code</a> developed at the workshop.
+<br>
+<b>EIDORS Workshop at <a href="http://www.eit2017.org">EIT 2017</a></b>
+<p>Time 13h00&minus;17h00, Location: 210 MacLean Engineering Science Center, Darmouth 
+<p><b>Synopsis:</b>
+ The EIDORS workshop is for beginners and more advanced users of the EIDORS.org
+      software. We will begin by helping everyone to install and use the software; we
+      will then have a short presentation on the software and review its use for
+      forward modelling and inverse solutions. Next we will present some example cases
+      or solve application examples from workshop attendees.
+
+<p><li> <b>
+  1 June 2015
+   </b><br>
+<b>EIDORS Workshop at <a href="http://www.eit2015.org">EIT 2015</a></b>
+<p>For those attending the EIDORS workshop, meet at Microcity building MCB1-283
+<p>
+Bring a laptop computer with the following software installed
+<ol>
+<li> Matlab (version &ge;7.6, 2008a),
+<li> <a href="http://sourceforge.net/projects/netgen-mesher/files/netgen-mesher/5.0/">Netgen Mesher (version 5.0 or &ge;5.2, not 5.1)</a> 
+<li> <a href="http://www.tortoisesvn.org">Tortoise SVN</a>
+</ol>
+Code <a href="tutorial/workshop/code_2june2015.m"
+>developed at the workshop</a>
+
+<p><li> <b>
+  12 May 2015
+   </b><br>
+<b>EIDORS Version 3.8 release</b>
+<p>Blobby the walrus is proud to announce the
+release of EIDORS version 3.8,
+available at <a href="http://www.eidors.org">www.eidors.org</a>,
+and DOI:<a href="http://dx.doi.org/10.5281/zenodo.17559">10.5281/zenodo.17559</a>
+Some of the many new features are:
+<ul>
+<LI> improved (more stable) absolute solvers
+<LI> 3D imaging using GREIT
+<LI> Parameterization and arbitrary units
+<LI> Speed optimizations
+<LI> analytic geometry for dual meshes (coarse to fine)
+<LI> improved netgen interface (more stable and flexible)
+<li> improved support for Dr&auml;ger and Swisstom file formats
+<LI> improved graphics
+</ul>
+Based on our test results, it appears that EIDORS
+is not using modern software engineering techniques.
+Unlike Windows 8, Android 5, Skype, and Matlab 8,
+which use (BS)&sup2; methodologies (Big, Slow, Bad,
+and Sloppy) to make each version more annoying
+and less useful than the previous, EIDORS 3.8 is
+"Not Worse&#8482;" than any previous version.
+</ol>
+
+<p><li> <b>
+  22 April 2014
+   </b><br>
+<b>EIDORS Workshop at <a href="http://www.eit2014.org">EIT 2014</a></b>
+<p>
+For those at the EIDORS workshop, meet at 
+8:30 at the lobby of the Glenhouse hotel.
+<p>
+Bring a laptop computer with the following software installed
+<ol>
+<li> Matlab (version &ge;7.0),
+<li> <a href="http://sourceforge.net/projects/netgen-mesher/files/netgen-mesher/5.0/">Netgen Mesher</a> 
+<li> <a href="http://www.tortoisesvn.org">Tortoise SVN</a>
+</ol>
+
+
+<p><li> <b>
+   29 May 2013
+</b><br>
+<b>EIDORS Version 3.7.1 release</b>
+<p>Blobby the walrus is happy to announce the 
+release of EIDORS version 3.7.1. The software is
+available at <a href="http://www.eidors.org">www.eidors.org</a>. 
+This is a minor release, primarily fixing some small (but annoying)
+incompatibilities between different Matlab versions and operating systems.
+New features include:
+<ul>
+ <li> Better handling of netgen and gmsh executables (Windows) &minus; paths need only ever by provided once and can contain spaces.
+ <li> Completely re-written <a href"./doc/eidors/graphics/matlab/print_convert.html">
+	print_convert</a> function to produce beautiful cropped images with anti-aliasing without using ImageMagick
+ <li> Citation requests when specific functions are called for the first time (
+	<a href="./doc/eidors/tools/citeme.html">citeme</a>). We hope this will encourage contributions.
+ <li> A tutorial on 
+	<a href="./tutorial/data_structures/customize-s.html">Customizing EIDORS</a>
+</ul>
+All <a href="./tutorial/tutorial-s.html">tutorials</a> have been updated to use the new features.
+The entire suite has been tested with the newest Matlab 2013a.
+
+<p><li> <b>
+   22 April 2013
+</b><br>
+<b>EIDORS Version 3.7 release</b>
+<p>Blobby the walrus is ecstatic to announce the 
+release of EIDORS version 3.7. The software is
+available at <a href="www.eidors.org">www.eidors.org</a>. 
+This release includes:
+<ul>
+ <li> Infrastructure to support new physics on FEMs
+ <li> Physics support: conductivity, resistivity and logs
+ <li> Anisotropy support in forward solvers and Jacobian
+ <li> FEM models with arbitrary electrode refinement: 
+	<a href="./doc/eidors/models/place_elec_on_surf.html">place_elec_on_surf</a>
+ <li> Pseudosection Display(
+	<a href="./doc/eidors/graphics/matlab/show_pseudosection.html">show_pseudosection</a>) 
+	and Geophysics stimulation patterns (
+	<a href="./doc/eidors/models/stim_pattern_geophys.html">stim_pattern_geophys</a>), see
+	<a href="./tutorial/geophysics/stimPattern_pseudoSection-s.html">tutorial</a>
+ <li> Geophysics solvers and tutorials
+ <li> Re-worked interface to 
+	<a href="./doc/eidors/solvers/inverse/inv_solve_abs_GN.html">inv_solve_abs_GN</a>
+	exposing advanced features and options
+ <li> Support for fast 2D FEM generation with netgen:
+	<a href="./doc/eidors/meshing/netgen/ng_mk_2d_model.html">ng_mk_2d_model</a>
+ <li> Merging of FEM meshes: 
+	<a href="./doc/eidors/models/merge_meshes.html">merge_meshes</a>
+ <li> Apparent resistivity 
+	<a href="./doc/eidors/solvers/forward/fwd_solve_apparent_resistivity.html">forward solver</a> 
+	and <a href="./doc/eidors/solvers/forward/jacobian_apparent_resistivity.html">jacobian</a>
+ <li> Support for new EIT data formats: 
+	<a href="./doc/eidors/interface/eidors_readdata.html">eidors_readdata</a>
+ <li> GREIT models from a model shape library: 
+	<a href="./doc/eidors/models/mk_GREIT_model.html">mk_GREIT_model</a>
+ <li> Debug features for the eidors cache: 
+	<a href="./doc/eidors/tools/eidors_cache.html">eidors_cache</a>
+ <li> Better support for node data in
+	<a href="./doc/eidors/models/mk_image.html">mk_image</a>
+</ul>
+<a href="./tutorial/tutorial-s.html">Tutorials</a> have been updated to use the new features.
+
+
+<p><li> <b>
+   20 April 2013
+</b><br>
+<b>EIDORS Workshop</b>
+<br>
+For those at the EIDORS workshop, meet at 
+8:00 at the lobby of the Hotel am Pappenberg.
+If you miss us, we are at the 
+<a href="http://maps.google.com/maps?q=51.55602,9.94815&z=16"
+   >Institut f&uuml;r Informatik (exactly at the Google maps pin)</a>.
+<p>
+The workshop was a great success. We answered all outstanding
+questions and fixed the last bug ever ;-). 
+To prove our success, we provide the following documents:
+<ul>
+<li><a href="doc/EIDORS-workshop.zip">Code developed</a>
+<li><a href = "/home/adler/eidors-release/htdocs/doc/eidors-workshop.pdf">Whiteboard docs</a>
+</ul>
+
+
+<p><li> <b>
+   18 April 2013
+</b><br>
+<b>Release Candidate for EIDORS 3.7</b>
+<br>
+We have a release candidate for eidors 3.7. 
+Please <a href="./download-s.html">download</a> and test it.
+
+<p><li> <b>
+   4 April 2013
+</b><br>
+<b>Plans: EIDORS workshop 20&minus;21 April 2013</b>
+<br>
+The following topics have been requested for the workshop in G&ouml;ttingen
+<ul>
+<LI>
+ constrained inverse problem for difference measurement
+
+<LI>
+ choosing appropriate regularization and computing hyperparameter value based on L-curve
+
+<LI>
+absolute solvers 
+
+<LI>
+an overview of all the available functions and data structures in EIDORS.
+</ul>
+
+<p><li> <b>
+   28 February 2013
+</b><br>
+<b>Announcing: EIDORS workshop 20&minus;21 April 2013</b>
+<br>
+<table border=1><tr><td>
+<b>EIDORS Masterclass + tutorial session</b>
+<p>
+
+For those interested in learning more about
+<a href="http://www.eidors.org">EIDORS</a>, we will be offering an
+EIDORS masterclass during the weekend before the opening of the
+<a href="http://www.icebi-conference.org/">ICEBI/EIT</a>
+conference.
+<p>
+
+Activities:
+<ul>
+
+<li>
+      Tutorials on EIDORS software
+<li>
+      Help implementing and debugging EIDORS-based EIT analysis
+<li>
+      You can request specific topics of interest on the registration form (see below), which we will try to accommodate.
+</ul>
+
+Logistics:
+<ul>
+<li>
+    Date: 20-21 April 2013
+<br>&nbsp;&minus; 20 April: EIDORS Tutorial Session
+<br>&nbsp;&minus; 21 April: EIDORS Masterclass
+<li>
+    Time: 8h30 - 16h30
+<li>
+    Location: University of G&ouml;ttingen, <a href=
+   "http://www.uni-goettingen.de/en/164816.html"
+    >Institute of Computer Science</a>, Rooms -1.110 and -1.111
+<li>
+    Meeting point: 8h00, Main entrance to the <a href=
+     "http://www.med.uni-goettingen.de/en/content/service/2985.html"
+     >University Medical Center</a>
+<li>
+    Cost: The workshop is free to attend thanks to our sponsors
+<li>
+    Accommodation: None provided, but one conveniently located
+       hotel is <a href=
+   "http://www.med.uni-goettingen.de/en/content/service/2985.html"
+       >Am Papenberg</a>
+<li>
+    Registration is mandatory (<a href=
+"https://docs.google.com/forms/d/1WFKpQifnly0UGHIquDc8lHBHhPu9PlGPx-SKTLYfFzU/viewform">
+   REGISTER HERE</a>)
+</ul>
+
+Important dates:
+
+<ul>
+<li>
+    Register by: 1 April (<a href=
+"https://docs.google.com/forms/d/1WFKpQifnly0UGHIquDc8lHBHhPu9PlGPx-SKTLYfFzU/viewform">
+   REGISTER HERE</a>)
+<li>
+    Suggest topics: 1 April
+<li>
+    Final program: 15 April
+</ul>
+
+Organizers:
+
+<ul>
+<li>
+    Andy Adler, Carleton University
+<li>
+   Bart&#0322;omiej Grychtol, German Cancer Research Center
+<li>
+    G&uuml;nter Hahn, University of G&ouml;ttingen
+<li>
+    Bill Lionheart, University of Manchester
+</ul>
+
+Sponsors:
+
+<ul>
+<li>
+    University of G&ouml;ttingen
+<li>
+    Swisstom AG
+</ul>
+
+</table>
+
+
+<p><li> <b>
+   17&minus;20 November 2012:
+</b><br>
+<b>EIDORS code-a-thon<a name="workshop2013"></a></b>
+<br>
+Several EIDORS developers got together in Manchester, UK to
+work on adding new features and squashing old bugs. 
+Priorities for the workshop were:
+1) Geophysics
+2) GREIT: target distributions and other defaults, electrode errors
+3) Bill's c2f mapper
+4) Electrode interface for netgen 2d models
+5) place_elec_on_surf
+6) move normalize_measurements from fwd_model to inv_model gracefully. Take care of calc_difference_data
+
+<p><li> <b>
+   18 November 2012:
+</b><br>
+<b>EIDORS and "New Physics"</b>
+<br>
+We've decided on an infrastructure to allow "new physics" to be encoded
+onto a forward model. This will remain (mostly) backwards compatible, but
+will permit us to better support new problem formulations and multimodality
+physics. Examples of physics and their encoding are:
+<table border="1" cellspacing="0" cellpadding="3" >
+<tr><th>Property<th>Encoding
+<tr>
+   <td>Generic image<br> information
+   <td> <tt>img.elem_data</tt>
+   <br> or
+   <br> <tt>img.node_data</tt> (no change)
+   <br> These fields will by default be interpreted as conductivity
+          (by forward solvers)
+<tr>
+   <td>Conductivity
+   <td> <tt>img.conductivity.elem_data</tt>
+   <br> or
+   <br> <tt>img.conductivity.node_data</tt> (no change)
+<tr>
+   <td>Log conductivity
+   <td> <tt>img.log_conductivity.elem_data</tt>
+<tr>
+   <td>Movement
+   <td> <tt>img.conductivity.elem_data</tt> and
+   <br> <tt>img.movement.electrode_data</tt> or
+   <br> <tt>img.movement.node_data</tt> or
+<tr>
+   <td>Anisotropic<br> Conductivity
+   <td> <tt>img.elem_data(elem#,img#,:,:)</tt>
+   <br> so each element has an individual tensor
+   <br> Functions to create anisotropic
+        images from eigenfunctions will be provided
+</table>
+
+
+
+<p><li> <b>
+    7 July 2012:
+</b><br>
+<b>EIDORS Version 3.6 release</b>
+<p>Blobby the walrus is proud to release EIDORS version 3.6,
+available at <a href="www.eidors.org">www.eidors.org</a>. 
+This release includes:
+<ul>
+  <li> improvements to advanced solvers (electrode movement 
+reconstructions in 3D, 4D reconstruction)
+  <li> better support for complex conductivity
+  <li> experimental support for higher order FEM
+  <li> improved 3D visualization
+  <li> expanded support for meshing software and 
+  <li> several bug fixes and code speedups. 
+</ul>
+Additionally, in order to make EIDORS easier to use and 
+maintain, function names have been standardized to reflect their purpose.
+Several older functions have been deprecated (you may see several warnings when running 
+older code). 
+<br>
+All  <a href="./tutorial/tutorial-s.html">
+Tutorials</a> have been revised and new ones are available. 
+<br> The default
+solvers are now set at startup and centrally managed through the 
+<a href="./doc/eidors/tools/eidors_default.html">eidors_default</a> function.
+<br>
+Because of the many renamed functions, it will be increasingly difficult for the developers to answer questions pertaining to older versions of EIDORS, so we request all users to update.
+</p>
+
+<p><li> <b>
+   29 June &minus; 3 July, 2012:
+</b><br>
+<b>EIDORS code-fest</b>
+<p>Several EIDORS developers will be getting together in Manchester
+to develop and release EIDORS 3.6. Planned features are:
+<ul>
+  <li>Tutorials:
+  <ul>
+     <li>Restructure Tutorials:
+        <s>Fix warnings in tutorials</s>
+        <s>Replace old approaches in tutorials (eidors_obj, add_noise)</s>
+     <li>New Tutorials: 
+        <s>Movement solver tutorial</s>
+        <s>Add recent contributions</s>
+  </ul>
+  <li>Solvers:
+       <s> Absolute solvers</s>
+
+  <li>FEM Modelling:
+        <s>Add Gmsh code</s>
+  <li>Architecture:
+        <s>flag for desktop available. Fix eidors_msg</s>
+        <s>add unit_tests to solvers</s>
+  <li>Tests
+        <s>Test for octave</s>
+  <li>Graphics
+        <s>Fix eidors colourbar</s>
+</ul>
+
+
+<p><li> <b>
+   8 June 2012:
+</b><br>
+<b>File renaming and file organization</b>
+<p>All files named after their authors are now deprecated (ie. aa_*, np_*)
+etc. We now have a consistent directory structure and naming convention for
+solvers, etc. Directories are now:
+<ul>
+<li><tt>algorithms</tt>: treatment of data
+<li><tt>arch</tt>: architecture specific
+<li><tt>compatibility</tt>: include in path to support much older code
+<li><tt>deprecated</tt>: files to support older code
+<li><tt>examples</tt>: example code (in addition to tutorials)
+<li><tt>external</tt>: imported code from external sources
+<li><tt>graphics</tt>: graphics code
+<li><tt>interface</tt>: read and write external data
+<li><tt>meshing</tt>: interface to Netgen and other meshing
+<li><tt>models</tt>: create FEM models
+<li><tt>sample_data</tt>: included samples of data
+<li><tt>solvers</tt>: forward and inverse solvers
+   <ul>
+   <li><tt>solvers/forward</tt>: 
+   <li><tt>solvers/inverse</tt>: 
+   </ul>
+<li><tt>tests</tt>: test code (eventually all into unit tests)
+<li><tt>tools</tt>: utility functions (cache, unit testing)
+</ul>
+
+
+<p><li><b>
+    14 July 2011:
+</b><br>
+<b>EIDORS Version 3.5 release</b>
+<p>Blobby the walrus is proud to release EIDORS version 3.5,
+available at <a href="www.eidors.org">www.eidors.org</a>. 
+This release includes new and enhanced reconstruction 
+algorithms, expanded support for meshing software and
+EIT file formats as well as the usual bug fixes and 
+code speedups. Functions can now be browsed online in a new 
+interactive 
+<a href="http://www.sce.carleton.ca/~grychtol/trunk/htdocs/doc/index.html">
+documentation browser
+</a>
+.
+All  <a href="./tutorial/tutorial-s.html">
+Tutorials</a> have been updated and new ones are 
+available.
+</p>
+New features since v3.4 include:
+<UL>
+<BR>
+<li> improved GREIT algorithm support - especially for
+       arbitrary extruded shapes and lungs regions (<a href="./tutorial/GREIT-s.html">tutorials</a>)
+<li> algorithms for TV and Data 1-norm 
+(<a href="./doc/eidors/algorithms/a_borsic/pdipm_diff.html">pdipm_diff</a>,
+<a href="./doc/eidors/algorithms/a_borsic/pdipm_abs.html">pdipm_abs</a>)
+<li> updated capabilities in netgen interface (<a href="./tutorial/netgen/extrusion/netgen_ext_models-s.html">tutorial</a>)
+<li> equidistant electrode placement on arbitrary contours
+<li> algorithms to detect and compensate for electrode errors 
+(<a href="./tutorial/adv_image_reconst/electrode_errors-s.html">tutorial</a> 
+and functions:
+<a href="./doc/eidors/algorithms/a_adler/meas_icov_rm_elecs.html">meas_icov_rm_elecs</a>,
+<a href="./doc/eidors/algorithms/a_adler/calc_reciproc_error.html">calc_reciproc_error</a>,
+<a href="./doc/eidors/models/a_adler/meas_icov_rm_elecs.html">reciprocity_idx</a>)
+<li> functions and 
+<a href=./tutorial/tutorial.shtml#geophysics>tutorials</a>
+for geophysical eit
+<li> expanded distmesh and gmsh  support
+<li> support for three new EIT system data formats
+<li> faster forward solvers 
+(<a href="./doc/eidors/algorithms/n_polydorides/forward_solver.html">forward_solver</a>)
+</ul>
+Additional enhancements:         
+<ul>
+<li> graphics enhancements
+<li> nodal resconstructions and display
+<li> image filtering options
+<li> improved octave support
+<li> increased memory efficiency
+<li> quick acces functions for common shapes 
+(<a href="./doc/eidors/models/b_grychtol/shape_library.html">shape_library</a>)
+and models
+(<a href="./doc/eidors/models/b_grychtol/mk_library_model.html">mk_library_model</a>),
+see <a href="./tutorial/netgen/mk_library_model-s.html">tutorial</a>
+<li> programming utility functions
+<li> additional solvers 
+(<a href="./doc/eidors/algorithms/b_grychtol/inv_solve_TSVD.html">inv_solve_TSVD</a>)
+<li> bug fixes and unit tests
+<li> improved support for dual model and FEM interpolation (
+<a href="./doc/eidors/algorithms/a_adler/mk_c2f_circ_mapping.html">mk_c2f_circ_mapping</a>,
+<a href="./doc/eidors/algorithms/a_adler/elem_select.html">elem_select</a>)
+<li> shape smoothing and interpolation functions (
+<a href="./doc/eidors/meshing/netgen/fourier_fit.html">fourier_fit</a>,
+<a href="./doc/eidors/meshing/netgen/piece_poly_fit.html">piece_poly_fit</a>)
+<li> clean up unused and deprecated functions
+<li> calculate geometrical FEM properties 
+(<a href="./doc/eidors/algorithms/b_grychtol/fix_model.html">fix_model</a>,
+ <a href="./doc/eidors/algorithms/m_crabb/linear_reorder.html">linear_reorder</a>)
+<li> caching to HDD of library FEM models
+<li> caching improvements (64 bit support)
+</UL>
+<p><li><b>
+    4 May 2011:
+</b><br>
+EIDORS Tutorial @ EIT 2011 Conf
+<BR>
+<tt>www.sce.carleton.ca/~adler/eidors-tut/</tt>
+
+<table border=1><tr><td>
+<table><tr>
+<td valign=top>
+
+<OL>
+<LI> Create a directory <tt>H:\tutorial</tt>
+<LI> Download these files and unzip into the directory
+<UL>
+<LI> <a href="http://www.sce.carleton.ca/~adler/eidors-tut/eidors3.5rc1.zip"
+             >eidors3.5rc1.zip</a>
+<LI> <a href="http://www.sce.carleton.ca/~adler/eidors-tut/ngs44_rel.zip"
+             >ngs44_rel.zip</a>
+</UL>
+<LI> Start Matlab
+<LI> In matlab, do
+<ul>
+<LI> <tt>
+cd H:/tutorial/eidors35rc1
+</tt>
+<LI> <tt>
+startup
+</tt>
+<LI> <tt>
+compare_2d_algs(1)
+</tt> <br>(this tests if eidors is working)
+<LI> <tt>
+show_fem(ng_mk_cyl_models(3,[0],[]))
+</tt> (this tests if netgen is working)
+<br>
+You will need to add the path <tt>H:/tutorial/ngs44</tt>
+
+</ul>
+
+</OL>
+
+<td valign=top>
+Go to the EIDORS tutorials
+ <a href="./tutorial/tutorial-s.html"
+                          >tutorial/tutorial.shtml</a>
+<p>
+
+Try a few tutorials to see how eidors works.
+I recommend:
+<ol>
+<li>
+<a href="./tutorial/EIDORS_basics/tutorial010-s.html"
+     >EIDORS Basics</a>
+<li>
+<a href="./tutorial/EIDORS_basics/rpi_data-s.html"
+     >Absolute and difference solvers</a>
+<li>
+<a href="./tutorial/lung_EIT/if_peep_trial-s.html"
+     >Lung injury images</a>
+<li>
+<a href="./tutorial/netgen/netgen_cyl_models-s.html"
+     >Netgen FEM models</a>
+<li>
+<a href="./tutorial/GREIT/adult_ex-s.html"
+     >GREIT</a>
+</ol>
+</table>
+
+Challenge problem:
+<ol>
+<li>Create a 3D elliptical cylinder with 16 circular electrodes
+    (see <a href="./tutorial/netgen/netgen_ellip_models-s.html">here</a>)
+<br><tt>fmdl= <font color=#E0F0FE
+>ng_mk_ellip_models([1,1.2,0.8],[16,0.5],[0.1]);
+</font> show_fem(fmdl); </tt>
+
+<li>Put a ball into the elliptical cylinder
+<br><tt><font color=#E0F0FE
+>   extra={'ball','solid ball = sphere(0.5,0.5,0.5;0.1);'};
+<br>fmdl= ng_mk_ellip_models([1,1.2,0.8],[16,0.5],[0.1],extra);
+</font> show_fem(fmdl); </tt>
+
+<li>Put two balls into the elliptical cylinder
+<br><tt><font color=#E0F0FE
+>   extra={'ball','solid ball = sphere(0.5,0.5,0.5;0.1) or sphere(0.5,-0.5,0.5;0.1);'};
+<br>fmdl= ng_mk_ellip_models([1,1.2,0.8],[16,0.5],[0.1],extra);
+</font> show_fem(fmdl); </tt>
+
+<li>Set the model to use adjacent current patterns
+<br><tt><font color=#E0F0FE
+>   stim = mk_stim_patterns(16,1,[0,1],[0,1],{});
+</font> fmdl.stimulation = stim;</tt>
+
+<li>Simulate homogeneous voltages  (background conductivity = 0.5);
+<br><tt><font color=#E0F0FE
+>   img = mk_image(fmdl, 0.5); vh = fwd_solve(img);
+<br>
+</font> show_fem(img); </tt>
+
+<li>Simulate inhomogeneous voltages  (ball conductivity = 1.0);
+<br><tt><font color=#E0F0FE
+>   img.elem_data(fmdl.mat_idx{2})= 1.0; vi = fwd_solve(img);
+<br>
+</font> show_fem(img); </tt>
+
+<li>Reconstruct the image using GREITv1
+<br><tt><font color=#E0F0FE
+>  imdl= mk_common_gridmdl('GREITc1'); 
+   img= inv_solve(imdl,vh,vi);
+<br>
+</font> show_fem(img); </tt>
+<li>Create a GREIT model for the ellipse
+    (see <a href="./tutorial/GREIT/mk_GREIT_mat_ellip-s.html">here</a>)
+<br><tt><font color=#E0F0FE
+> opt.noise_figure = 0.5; opt.distr = 3; %other options are defaults
+<br>fmdl.normalize_measurements = 0;
+<br>imdl = mk_GREIT_model(mk_image(fmdl,0.5), 0.25, [], opt);
+<br>img= inv_solve(imdl,vh,vi);
+</font> show_fem(img); </tt>
+<li>Compare images for different stimulation patterns
+    (see <a href="./tutorial/GREIT/GREIT_test_params-s.html">here</a>)
+</ol>
+</table>
+
+
+<p><li><b>
+    7 July 2010:
+</b><br>
+Blobby the walrus is proud to release EIDORS version 3.4,
+available at www.eidors.org. This version incorporates
+bug fixes, automated tests and code speedups.
+New features since v3.3 include:
+a) new algorithms (PDIPM, GREIT, absolute solvers),
+b) improved interfaces to FEM generation (distmesh, netgen)
+c) improved repository with in vivo and phantom data,
+d) improved graphics and tutorials.
+
+<p><li><b>
+    20 Jun 2010:
+</b><br>
+<a href = "http://eidors3d.sourceforge.net/news_pics/10-06-20-EIDORS-N900-1.jpg"
+     ><img width="100" SRC="news_pics/10-06-20-EIDORS-N900-1.jpg"
+></a>
+<a href = "http://eidors3d.sourceforge.net/news_pics/10-06-20-EIDORS-N900-2.jpg"
+     ><img width="100" SRC="news_pics/10-06-20-EIDORS-N900-2.jpg"
+></a>
+<a href = "http://eidors3d.sourceforge.net/news_pics/10-06-20-EIDORS-N900-3.jpg"
+     ><img width="100" SRC="news_pics/10-06-20-EIDORS-N900-3.jpg"
+></a>
+You can now take EIDORS with you! Andrea Borsic and 
+Andy Adler got EIDORS to run on the Nokia N900 mobile phone by
+installing Octave, Gnuplot, texinfo, and EIDORS to the phone. It is OK
+for 2D solvers (576 element inverse solutions in about 25 sec), but would
+be a little too slow for 3D problems.
+
+
+<p><li><b>
+    28 Mar 2010:
+</b><br>
+Added lots of new tutorials. Including for
+nodal solvers, current patterns visualization, absolute solvers.
+
+<p><li><b>
+    23 Mar 2010:
+</b><br>
+Added a new test infrastructure. Now each function (for which
+it has been implemented) has a 'UNIT_TEST' input. For example
+<tt>show_fem('UNIT_TEST');</tt>
+
+<p><li><b>
+    20 Feb 2010:
+</b><br>
+Added data for
+<a href="./data_contrib/jn_chest_phantom/jn_chest_phantom-s.html"
+>Calibrated chest shaped targets</a> in 2D circular tank with ACT 3 EIT system.
+Thanks to Jon Newell at Rensselaer Polytechnique Institute 
+
+<p><li><b>
+    15 July 2009:
+</b><br>
+The EIT-ventilation colourmap from 
+Draegerwerk AG &amp; Co. KGaA has been 
+contributed to EIDORS for free 
+commercial and non-commercial use.
+
+<p><li><b>
+    25&minus;26 June 2009:
+</b><br>
+Preliminary work to integrate the 
+<a href="http://web4.cs.ucl.ac.uk/research/vis/toast/">TOAST</a>
+software with EIDORS. Work by Andy Adler, 
+Martin Schweiger, Bill Lionheart and Simon Arridge
+to get a preliminary version of EIDORS and
+TOAST forward solvers working together.
+
+<p><li><b>
+    20&minus;24 June 2009:
+</b><br>
+EIDORS codefest in Whaley Bridge (UK). Bill Lionheart,
+Andy Adler, Andrea Borsic and Bartek Grychol got together
+to work on many different issues from conformal mapping and
+Total variation regularization integrating new data formats.
+
+<p><li><b>
+    23 July 2008:
+</b><br>
+Blobby the EIDORS walrus is releasing version 3.3
+(www.eidors.org).  This version incorporates many changes,
+bug fixes and code speedups. Since v3.3RC1, we have added
+the Sheffield MKI backprojection algorithm (thanks to
+David Barber and Brian Brown), added tutorials and made
+several small bug fixes.  New features since v3.3 include:
+a) interfaces to FEM generation (distmesh, netgen) and
+dual model solvers, b) new algorithms (total variation,
+electrode movement solver, temporal solvers), c) a data
+repository with in vivo and simulated data and models,
+d) faster algorithms with better caching, and e) improved
+graphics and extensive tutorials.
+
+<p><li><b>
+    16 June 2008:
+</b><br>
+EIDORS tutorial as part of the
+<a href="http://engineering.dartmouth.edu/eit2008/"
+    >EIT Conference 2008</a>
+
+<p><li><b>
+    13 June 2008:
+</b><br>
+Blobby the walrus has decided to release the first
+release candidate of EIDORS v3.3 (EIDORS-v3.3RC1)
+on Friday, the 13th.
+<p>
+This version incorporates many changes, bug fixes and code
+speedups since v3.2 (Aug, 2007). New features include:
+a) interfaces to FEM generation (distmesh, netgen) and
+dual model solvers, b) new algorithms (total varia- tion,
+electrode movement solver, temporal solvers), c) a data
+repository with in vivo and simulated data and models,
+d) faster algorithms with better caching, and e) improved
+graphics and extensive tutorials.
+
+<p><li><b>
+    4 Mar 2008:
+</b><br>
+New code to generally handle reconstructions with coarse
+and fine inverse models. This will take care of: 1) reconstructions
+on nodes rather than elements, 2) reconstructions to a 
+raster output (such as GREIT), and 3) 2&frac12;D reconstructions.
+
+
+<p><li><b>
+    22 Feb 2008:
+</b><br>
+Andy Adler, Bill Lionheart, Andrea Borsic met with Nick Polydorides at MIT for the week. We made progress on a number of fronts including reintegrating Nick's 2D version of his code and validating it against Andy's. We made a start in incorporating MCMC methods in EIDORS and worked on boundary shape. Validation of 3D codes against each other showed a bug that had crept in to the forward solver in algroithms/n_polydorides which caused an error of relative size 1e-5 under some circumstances. We also had the great pleasure of meeting Gilbert Strang who introduced us to <a href="http://www-math.mit.edu/~persson/mesh/">distmesh</a>, which we are now planning to include in EIDORS.
+
+
+<p><li><b>
+    24 Sep 2007:
+</b><br>
+Tutorials to
+<a href="./tutorial/netgen/build_double_plane-s.html"
+ >create netgen FEM models</a>
+ and 
+<a href="./tutorial/netgen/moving_ball-s.html"
+ >simulation of moving</a>
+objects in fine and coarse netgen meshes. 
+
+
+
+<p><li><b>
+    30 Aug 2007:
+</b><br>
+Blobby the walrus would like to announce version 3.2 of EIDORS.
+<p>
+EIDORS Version 3.2 is a significant improvement on the previous
+versions. The number and quality of tutorials has been increased.
+Bugs that have been reported have been (mostly) fixed, and the
+software carefully tested.
+Like always, EIDORS aims to facilitate using, testing, and
+development of reconstruction algorithms and models for EIT
+and other soft field tomography technologies.
+<p>
+New features include
+<br>&minus; New algorithms (Temporal reconstruction, Electrode movement)
+<br>&minus; Repository for contributed data
+<br>&minus; Faster algorithms (better CGLS, Jacobian code)
+<br>&minus; Extensive tutorial: http://eidors3d.sourceforge.net/tutorial/
+<br>&minus; Improved links to netgen to generate finite element models
+<p>
+EIDORS version 3.2 is available for download here:
+<a href="http://prdownloads.sf.net/eidors3d/eidors-v3.2.zip"
+        >http://prdownloads.sf.net/eidors3d/eidors-v3.2.zip</a>.
+As always, users are encouraged to report and bugs to the
+EIDORS maintainers.
+
+<p><li><b>
+    24 Aug 2007:
+</b><br>
+Andy Adler
+<p>
+EIDORS v3.2 development.
+EIDORS has progressed significantly from the 3.1 release, and
+yet there has not been a new release. The only thing stopping us
+is a few bug fixes and a few remaining features. The following
+list is the fixes/features added preparing for 3.2.
+<br>&minus;Caching added to the m_3d_fields function in
+           Nick Polydorides' code.
+<br>&minus;EIDORS is released under GPL 2 and 3. (ie It may be 
+           copied under the GPL 2 or GPL 3 terms)
+<br>&minus;Data repository formed for groups wishing
+           to conribute data
+<br>&minus;Moved and renamed files
+<br>&minus;Fixed almost all the bugs in the bug list (with a
+           few bugs posponed to v3.3)
+<br>&minus;New electrode movement code
+<br>&minus;Rewrote time solver
+<br>&minus;Lots more tutorials
+<br>&minus;Fixed caching bugs and added new priority scheme
+           for cache
+
+<p><li><b>
+    27 Aug 2006:
+</b><br>
+Andy Adler &amp; Bill Lionheart
+<p>
+EIDORS Tutorial.
+About 40 of us got together at Kyung Hee University, Korea to
+review the capabilities of the latest version of EIDORS. Later
+we got to play with the EIT systems developed by Eung-Je Woo
+and his students at the Impedance Imaging Research Center.
+
+<p><li><b>
+    22 Aug 2006:
+</b><br>
+Andy Adler &amp; Bill Lionheart
+<p>
+Blobby the walrus would like to announce version 3.1 of EIDORS.
+<p>
+EIDORS version 3.1 contains a considerable number of new features to facilitate
+using, testing, and development of reconstruction algorithms and models for EIT
+and other soft field tomography technologies.
+<p>
+New features include
+<br>&minus; New algorithms (Total Variation, Kalman filtering)
+<br>&minus; Improved Matlab graphics
+<br>&minus; Faster algorithms (better CGLS, Jacobian code)
+<br>&minus; Extensive tutorial: http://eidors3d.sourceforge.net/tutorial/
+<br>&minus; Many more usage examples.
+<br>&minus; Improved links to netgen to generate finite element models
+<br>&minus; Bug fixes
+<p>
+EIDORS version 3.1 is available for download here:
+<a href="http://prdownloads.sf.net/eidors3d/eidors-v3.1.zip"
+        >http://prdownloads.sf.net/eidors3d/eidors-v3.1.zip</a>.
+As always, users are encouraged to report and bugs to the
+EIDORS maintainers.
+
+
+
+<p><li><b>
+    17 Aug 2006:
+</b><br>
+Andy Adler
+<p>
+An online tutorial has been written. You can access it 
+<a href="./tutorial/tutorial-s.html">here</a>
+
+<p><li><b>
+    28 July 2006:
+</b><br>
+Andy Adler &amp; Bill Lionheart
+<p>
+There will be an EIDORS tutorial on 27 August in 
+Seoul, Korea as part of the 7th EIT conference.
+The tutorial will be at Kyung Hee University (bus
+transportation provided from COEX conference centre)
+
+<p><li><b>
+    28 June 2006:
+</b><br>
+Andy Adler
+<p>
+Modified EIDORS web pages for changes to SourceForge.net's
+cvs servers.
+
+<p><li><b>
+    23 Jan 2006:
+</b>
+EIDORS V3.1RC1 Released
+<br>
+Andy Adler
+<p>
+Blobby the walrus would like to announce
+the release of <tt>EIDORS-3.1RC1</tt>. This is the
+first release candidate for EIDORS 3.1. Users are
+encouraged to report and bugs to the EIDORS maintainers.
+<p>
+EIDORS version 3.1 contains a considerable number of
+new features to facilitate writing of reconstruction
+algorithms and models for EIT and other soft field
+tomography technologies. New features include
+<br>&minus; New algorithms (Total Variation, Kalman filtering)
+<br>&minus; Faster algorithms (better CGLS, Jacobian code)
+<br>&minus; Many more usage examples.
+<br>&minus; Improved links to netgen to generate models
+<p>
+As always, if your favourite feature is absent, or your
+least favourite bug is present, please make your comments
+to the authors
+
+<p><li><b>
+    29 Nov&minus;9 Dec 2005: 
+</b>
+Workshop on EIDORS software, Manchester, UK
+<br>
+Andy Adler &amp; Bill Lionheart
+<p>
+The following software has been implemented
+<ul>
+    <li> New (faster) Jacobian Calculator by Manuch Soleimani
+    <li> Total Variation based image reconstruction 
+           from code by Andrea Borsic
+    <li> Modification (and generalization) of EIDORS methods
+           to allow more generic regularization, and data
+           for Kalman filtering
+    <li> Kalman filtering for difference EIT
+    <li> Improved software to integrate Netgen with EIDORS
+    <li> Detailed FEM model of ball moving in a vortex in
+         a tank. (<a href="examples/ball-model-s.html"
+             >See animated image</a>)
+    <li> New inverse algorithms
+          <br>&minus;Truncated iteration (Morozov criterion)
+          <br>&minus;CGLS (with efficient sparse matrix handling)
+          <br>&minus;Coarse / Dense mesh solver
+                  (thank to David Stephenson)
+</ul>
+<p>
+
+<p><li><b>
+   31 Oct 2005: 
+</b>
+EIDORS V3.0 Released.
+<br>
+Andy Adler
+<p>
+
+<p><li><b>
+   30 Oct 2005: 
+</b>
+Modifications to allow EIDORS to be used with 
+<a href="http://www.octave.org">octave</a>. Some bugs
+remain with octave optimization functions, and with sparse
+solver code; however, it is expected that these issues
+will be dealt with soon.
+<br>
+Andy Adler
+<p>
+
+<p><li><b>
+   24 Oct 2005: 
+</b>
+Sample phantom data for cylindrical tank with 2D and
+3D stimulations patterns contributed.
+<tt>examples/phantom_16elec_*</tt>
+<br>
+Camille Gomez
+<p>
+
+<p><li><b>
+   19 Oct 2005: 
+</b>
+The EIDORS project authors, as well as their pet Walrus,
+would like to announce release
+of <tt>EIDORS-3.0RC1</tt>. This is the
+first release candidate for EIDORS 3.0. Users are
+encouraged to report and bugs to the EIDORS maintainers.
+<p>
+EIDORS version 3.0 contains a considerable number of
+new features to facilitate writing of reconstruction
+algorithms and models for EIT and other soft field
+tomography technologies. Features include
+<br>&minus; Multiple algorithm support. 
+<br>&minus; "Pluggable" code base to facilitate user modifications
+<br>&minus; Automatic caching to improve performance
+<br>&minus; Many more usage examples.
+<br>&minus; Sample data and mesh generators
+<br>&minus; Integrated test code
+<br>&minus; Improved 3D graphics 
+<p>
+The EIDORS authors hope to provide a software infrastructure
+that will assist technology development and practical 
+applications of these technologies. To quote the authors
+of perl, "We aim to make easy things easy and hard things possible".
+
+<p>
+Andy Adler 
+<p>
+
+<p><li><b>
+   18 Oct 2005: 
+</b>
+Algorithms and code to illustrate 
+<a href="paper-cheating/cheating-with-eidors.html">
+Cheating with EIDORS</a>.
+The goal is to illustrate potential pitfalls of this
+kind of numeric software, and to encourage people
+to avoid them.
+<br>
+Andy Adler 
+<p>
+
+<p><li><b>
+   14 Sept 2005: 
+</b>
+Algorithms from EIDORS2D from 
+<a href="http://venda.uku.fi/~mvauhkon/">Marko Vauhkonen</a>
+have been included in the <tt>algorithms/mv_2001</tt> 
+directory.
+<br>
+Andy Adler 
+<p>
+
+<p><li><b>
+    2 Sept 2005: 
+</b>
+3D data from tank measurements contributed by
+<a href="http://www.ee.uct.ac.za/people/ajw.php"
+ >Andrew Wilkinson</a> and
+<a href="http://www.chemeng.uct.ac.za/people/ewr.php"
+ >Bill Randall</a> at U. Cape Town using their
+high speed Electrical Resistance Tomography equipment.
+<p>
+
+<p><li><b>
+    6 June 2005: 
+</b>
+Paper on EIDORS for VI EIT Conference (London, UK)
+<br>
+Andy Adler, Bill Lionheart
+<p>
+Our paper on EIDORS is
+<a href="paper-EIT2005/adler-lionheart-EIT2005.html"
+>available here</a>
+<p>
+
+<p><li><b>
+    23 Feb 2005: 
+</b>
+Caching interface for EIDORS
+<br>
+Andy Adler
+<p>
+After thinking about how to implement caching for a while, I've
+finally implemented one approach. The idea is that each object
+must be 'hashed' to get an ID. If we calculate the image for data
+we've already seen, then we must be able to detect that fact.
+<p>
+Some issues are:
+<br>&minus; We can't simply keep a pointer to previous variables.
+     For example, the Jacobian is used many times. Each time
+     it normally calculated for a homogeneous background, but
+     the actual variable representing the background is different.
+<br>&minus; Cross-platform cross version support. We need to support
+     (Unix + Windows) &times; (Matlab v6 + v7 + octave). Windows
+     makes it difficult to 'shell' out to a helper program. The various
+     software packages make Mex type functions a compatibility issue.
+<br>&minus; Matlab Mex file limitations make it difficult to get pointers
+     to the raw data storage for variables.
+<p>
+<b>Design:</b>
+The following design was chosen. In the eidors object constructor
+<tt>eidors_obj.m</tt>, and obj_id is calculated for each variable
+by saving it to disk, and then running the file through the
+SHA1 hash, and deleting the file.
+The mex file <tt>matrix_id.cpp</tt> is used to calculate
+the SHA1. Because the Matlab V6 file format puts a comment header with
+the save time in the first 125 bytes, it is necessary to begin the
+hash after that point.
+<p>
+<b>Questions:</b>
+<br>&minus; Should the saved files be deleted? If not, it may be a nice
+way to improve overall performance. If files are kept, we need to user
+selected <tt>EIDORS_TMPDIR</tt> in which to put the files.
+
+<br>&minus; Not all cached data is useful. For example each measured
+data set will end up in the cache as currently implemented. 
+One advantage of the current implementation, however, is 
+the way that it can 'remember' if it has seen previous data without
+actually storing that data. This would allow user selection of
+which variables to cache.
+
+
+
+<p><li><b>
+    23 Nov. 2004: 
+</b>
+Bill Lionheart
+<br>
+Umer Zeeshan Ijaz &lt;um&#101;r@ch&#101;ju.ac.kr&gt; from Korea has kindly contributed some
+code to help us find our electrodes in a netgen mesh.
+<br>
+I have uploaded the code to the cvs on sf.net
+http://eidors3d.sourceforge.net/
+<br>
+You should be able to see it on the browse cvs link (sometimes there is a
+delay) in the subdirectory meshing/netgen/ElectrodeInfo
+<br>
+Several others have been working on the same problem and your contributions
+to automated electrode numbering are very welcome.
+
+<p><li><b>
+    26 July 2004: 
+</b>
+Design of a caching interface for EIDORS
+<br>
+Andy Adler
+<p>
+
+<p>
+Here are some references of other efforts that use a 
+caching architecture for Matlab projects:
+<ul>
+    <li> 
+Kevin P. Murphy,
+Fast manipulation of multi-dimensional arrays in Matlab
+    <a href="http://www.ai.mit.edu/~murphyk/Papers/fastmult.pdf" 
+                   >www.ai.mit.edu/~murphyk/Papers/fastmult.pdf</a>
+    <li> 
+Of hash functions and rand by Xelax
+    <a href="http://mathforum.org/epigone/comp.soft-sys.matlab/flomglumskem"
+                   >mathforum.org/epigone/comp.soft-sys.matlab/flomglumskem</a>
+</ul>
+
+
+
+<p><li><b>
+    13 July 2004: 
+</b>
+EIDORS Developers strategic meeting.
+<br>
+UMIST:
+Bill Lionheart (chair)  (WL),
+Nick Polydorides        (NP),
+David Stephenson        (DS),
+John Davidson           (JD),
+Sharon Mohanna          (SM),
+
+UCL:
+Lior Horesh             (LH),
+Richard Bayford         (AB),
+
+U.OTTAWA:
+Andy Adler              (AA),
+Yednek Asfaw            (YA),
+Brad Graham             (BG),
+<p>
+<b>Minutes:</b>
+<ol>
+<li> Everyone introduced themselves
+
+<li> It was agreed by all that the code circulated for this meeting that was not
+yet released would be treated as confidential, as the authors needed a chance
+to publish papers on their work first. When ready the authors can contribute
+it to the eidors3d source tree on sourceforge.net either themselves or via
+one one of those registered as developers.
+
+<li> Current work in EIT and with EIDORS software was discussed.
+
+<li> Standard file formats.<br>
+(AA) As we develop project we have a chance to set a standard.
+<br>
+
+(RB) Kevin Boon suggested standard data format in Ankara. Confidential medical
+data, patient owns it.
+Community has to be seen to respect medical data (eg name prognosis.). Phantom
+data not an issue. Cant just send a data file. Issue about type of system.
+Collection protocol, dynamic range, data scaling. Electrode placement within
+error. In real data another level, may need to preprocess to data.
+Do we want EIDORS to be a teaching tool or a more advanced tool.
+Reverse is to say what syntax EIDORS needs.
+<br>
+
+(RB) Image format. SPN, statistical parametric modelling. What is output
+format.  VTK?
+30 Images different freq. Need for comparison of data.
+<br>
+
+
+(AA) Symantic difficulty, cond on vertices, elements, mapping to cut planes.
+So what is image? Rasterizing.
+<br>
+
+
+(NP) Test set for others to compare. Dist with EIDORS.
+<br>
+
+
+(RB) OT, see Martin Schweiger's web site at UCL.
+There is lots of error checking in TOAST. This can be an issue when trying to
+adapt the code to a different application.
+<br>
+
+
+(AA) Defining a new standard would raise political issues. On the other hand,
+simply saying that "this is what you need to work with EIDORS" is easier.
+<br>
+
+
+<i>Action</i>: AA -- consult  OT people (HD). Check with RB for head, JLD for Process
+Tomography.
+<br>
+
+Models meshes -- standard file formats. Can we use standard ones? Iges, EDS,
+Universal File Format,
+SLT (parametric surface).
+
+Mesh quality factors.
+<br>
+
+<li>  (AA) API and plugable algorithms.
+<br>
+
+Want to easily plug in new idea and compare with named reference algorithms.
+API written so this is easy but also safe.
+<br>
+
+(RB) Grid algorithms, multiple self contained program, moduarity.
+<br>
+
+<li>   CVS version on source forge.
+<br>
+Octave compatible using if statements to bypass matlab graphics.
+Matlab OO. Not well written. Use structures instead
+
+<br>&minus;<i>
+data </i> - measurements, units, time, comment,
+              electrode positions, current pattern
+
+<br>&minus;<i>
+fwd_model</i> - FEM, electrode posn. and models,
+        excitation / meas. patterns, electrode models
+
+<br>&minus;<i>
+inv_model</i> - hyperparameters, pointers to code
+
+<br>&minus;<i>
+image</i> - image data, pointers to fwd_model, inv_model
+
+
+<br>    Basic Methods:
+<br>&minus;
+fwd_solve, inv_solve, jacobian, etc.
+<br>&minus;
+methods call alg. specific
+<br>&minus;
+'centralized' caching to avoid repeat calcs
+
+Demo_real modified on CVS tree to do this.
+<br>
+
+Discussion on packing un packing
+<br>
+AA explained the "copy on write" issue in matlab. If you assign one big array
+to another it does not make a copy until you assign to the old one. Care is
+needed to avoid meemory bloat.
+<br>
+
+DS and LH wondered whether this structure is appropriate for computationally
+intensive problems.
+<br>
+
+<i>Action</i> LH and DS to look at AA's structures and see how it would suit their problems.
+
+<br>
+
+(WL) Are we prepared to make big changes now, such as changes to variable
+names.
+Yes, as long as we carry the main users with us. Proposed major changes will
+be discussed on eidors-3d listserv.
+
+<br>
+
+
+<li> Research Issues
+(RB) Cross continent funding? Grid computing -- no real applications?
+"e-science community"
+<br>
+
+Action: AA to check on Canadian position.
+RB To check on Grid stuff. Large computing, para'l computing.
+<br>
+
+(AA) Testabilty big deal in software eng. Not much work on numerical
+algorithms. Inverse problems and medical imaging.
+<br>
+(RB) Design for testability
+<br>
+(BG) Has MS in CS , code inspection at RMC s/w for nuclear inspection.
+<br>
+(WL) Testing of of IP software, so that one transparently avoids any cheating,
+whether or not intended, seems to be an interesting issue.
+<br>
+(RB) VLSI, scalability testing. TOAST experience suggests problem we might
+encounter when code grows. Do we need built in test methods in EIDORS as it
+grows?
+<br>
+
+
+ (AA) This is a great multidisciplinary collaboration. We need good testing
+now.
+<br>
+ Repositary for standard data and  Meshes, as well as standard algorithms.
+<br>
+
+
+<li> (RB) Suggested giving EIDORS a higher profile on eit.org.uk to encourage
+contributions. (WL) Suggested that we consolodate changes with the main
+groups actively developing EIDORS first.
+<br>
+
+<li> AOB: The meeting thanked the AG coordinators, the video conferencing went
+well apart from a loss of audio.
+<br>
+
+<li> It was agreed to schedule a meeting in about two months with London and
+Dartmouth both joining us over AG as well.
+ Action: HD, RB, AA, WL to check availability of their AG nodes.
+<br>
+</ol>
+
+<br><li><b>
+    4 July 2004: 
+</b><br>
+A. Adler
+<p>
+
+EIDORS code now works with <a href="http://www.octave.org">Octave</a>
+as well as Matlab. Note that this is only for the numerical code;
+graphics are not supported. Also, since octave does not support
+some of the Cholesky and CG solvers, the solutions may be numerically
+less stable.
+<br>
+
+<br><li><b>
+    24 June 2004: Idea
+</b><br>
+A. Adler
+<p>
+
+EIDORS needs a logo. Should we have a blurry blob?
+On the other hand, it also has to look 3D? And, it also has to look OK
+when compressed really small.
+<p>
+If you have some thing you'd like to contribute, 
+<a href="mailto:bill.lionheart@umist.ac.uk">Bill Lionheart</a>
+<p>
+
+<br><li><b>
+    23 June 2004: Discussion
+</b><br> W.R.B. Lionheart, A. Adler
+<p>
+In order to further EIDORS development, we developed the
+following desirata for EIDORS software.
+<ul>
+    <li> <b>
+        API design
+    </b><br>
+    EIDORS needs a clean, well-encapsulated and easy to understand
+    API. We do not feel that an object oriented API is particularly
+    useful because:
+    1) the Matlab OO design is somewhat of a "hack"
+    2) such an OO interface would make portability to other 
+       languages less easy
+
+    <p>
+    <li> <b>
+        Language portability
+    </b><br>
+    EIDORS is primarily aimed at MATLAB. We would like to EIDORS
+    to support Octave and Scilab, as far as possible. Currently,
+    Octave and Scilab have the features needed by EIDORS (sparse
+    matrices, 3D matrix support, etc.)
+    <p>
+    In the core, it should be possible to have portability. However,
+    Matlab graphics features are not supported in these languages.
+    Our idea is therefore to separate the graphics functions
+    from the core code. Graphics code would therefore be permitted
+    to be language specific.
+    <p>
+    Another desirable feature would be to support approaches
+    to enhance execution speed: ie. C functions, multiprocessor
+    support, etc. This is dealt with under <i>plug-in algorithms</i>
+
+    <p>
+    <li> <b>
+        Platform portability
+    </b><br>
+    EIDORS is intended to work on all platforms with support 
+    Matlab/Scilab/Octave. This means Unix/Windows/Mac OSX.
+    In order to do this, we have the following rules:
+    <br>&minus; No spaces in file names
+    <br>&minus; The path separator is '/'
+    <br>&minus; File names are lower case letters and 
+              numbers with optional underscores
+
+    <p>
+    <li> <b>
+        Plugin algorithms
+    </b><br>
+    Many users will want to use EIDORS infrastructure to test their
+    own ideas. EIDORS should support <i>plugging in</i> such new
+    algorithms or techniques. 
+    <p>
+    It is not obvious to us at this point exactly what features
+    need to be added. Thus is is likely that some refactoring
+    of the code will be required as we learn more about users needs.
+    Please contact the authors with suggestions.
+
+    <p>
+    <li> <b>
+        Reference algorithms
+    </b><br>
+    One of the main goals of EIDORS is to allow people to compare
+    their <i>new fangled algorithms</i> to those implemented by others.
+    Unfortunately, the typical approach in this field has been to 
+    compare the <i>new fangled</i> to badly implement versions 
+    of others.
+    Ideally, EIDORS will make it easy to do the comparison 
+    correctly, <i>if desired</i>.
+    <p>
+    EIDORS should therefore offer:
+    1) use of the <i>latest  and greatest</i>
+        algorithms,
+        and
+    2) use of specific algorithms corresponding to
+        specific papers
+
+    <p>
+    <li> <b>
+        Simple and transparent code-base
+    </b><br>
+    EIDORS code is primarily aimed at numerical researchers.
+    This means EIDORS should be:
+    <br>&minus; simple. Code should be sufficiently small for 
+        an interested person to learn quite quickly
+    <br>&minus; command line based. Code should expose it's capabilities
+        and internal structure for inclusion into other algorithms.
+        Graphic interface contributions will be accepted, but will
+        be placed outside of the core.
+    <br>&minus; modifiable. Many users will want to modify EIDORS
+        to try their own ideas. This should be reasonably easy
+        to do.
+    <br>&minus; 
+
+    <p>
+    <li> <b>
+    Encourage contributions
+    </b><br>
+    We want to find ways to encourage people to contibute:
+    <ul>
+       <li> Bug fixes
+       <li> Sample data and meshes
+       <li> Demo code and help files
+       <li> new reconstruction algorithms
+       <br>
+       also inproved forward solver (with higher order elements,
+        BEM-FEM, etc.)
+       modifications to algorithms (e.g. anisotropic conductivity)
+       <li> and meta-algorithms
+       (e.g. erroneous electrode detection techniques)
+       <li> visualization
+       (e.g. code to export to graphics packages such as mayavi)
+    </ul>
+
+    <p>
+    <li> <b>
+    Define subdirectories cleanly
+    </b><br>
+    In order to separate algorithms and details.
+
+    <p>
+    <li> <b>
+        File format
+    </b><br>
+    It would be nice to define a EIT data file format that
+    would facilitate interchange of data. We would be interested
+    in receiving any suggestions about what such a data format
+    would include.
+    <p>
+    Things to include in the data file are
+    <br>&minus; Time and date of each data measurement
+    <br>&minus; Electrode locations / shape &amp; size / contact impedance
+    <br>&minus; Current &amp; measurement patterns
+    <br>&minus; The data itself
+    <br>&minus; Sampling intervals
+    <br>&minus; Description
+    <p>
+    It would be convenient to put data into a structure.
+
+
+
+
+    <p>
+    <li> <b>
+        Licence
+    </b><br>
+    The licence for EIDORS is the <a href="http://www.gnu.org/licenses/gpl.html"
+        >GPL</a>. Therefore, there are no problems with the following
+    uses of EIDORS:
+    <ul>
+        <li> Selling EIT equipment with EIDORS on board, as 
+             long as the source code is available.
+        <li> Using EIDORS with proprietary software like Matlab
+    </ul>
+    The following uses of EIDORS are barred by the GPL
+    <ul>
+        <li> Compiling EIDORS or a derived work and selling
+             a system wihout access to both EIDORS and the
+             software it is linked to.
+        <li> Rewriting EIDORS in a different language and
+             distributing it not under the GPL (eg. without source code)
+    </ul>
+    We are currently thinking about the scenario in which an EIT
+    vendor provides EIDORS (including source) along with a proprietary
+    add-on, such as a GUI. Email us if you have opinions on this
+    issue.
+
+
+    <!--
+    <p>
+    <li> <b>
+    </b><br>
+    -->
+</ul>
+<br>
+<!--
+<br><li><b>
+</b><br>
+-->
+
+</ul>
+</td></tr></table>
+<p>
+<small>
+    Last Modified: $Date: 2019-12-31 15:45:45 -0500 (Tue, 31 Dec 2019) $ by $Author: aadler $
+</small>
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calc_noise_params</title>
+  <meta name="keywords" content="calc_noise_params">
+  <meta name="description" content="params = GREIT_noise_params(imdl, homg_voltage, sig_voltage)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">deprecated</a> &gt; calc_noise_params.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/deprecated&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>calc_noise_params
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>params = GREIT_noise_params(imdl, homg_voltage, sig_voltage)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function params = calc_noise_params(imdl, vh, vi ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> params = GREIT_noise_params(imdl, homg_voltage, sig_voltage)
+  params(1,:) = Noise Figure = SNR(image) / SNR(data)
+
+  see also: eval_GREIT_fig_merit or using test_performance</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="calc_noise_params.html" class="code" title="function params = calc_noise_params(imdl, vh, vi )">calc_noise_params</a>	params = GREIT_noise_params(imdl, homg_voltage, sig_voltage)</li><li><a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>	EIDORS_MSG eidors progress and status messages</li><li><a href="../../eidors/models/elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>	ELEM_SELECT: select element fractions inside a function</li><li><a href="../../eidors/models/get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>	GET_ELEM_VOLUME: VOL = get_elem_volume(fwd_model, map_node )</li><li><a href="../../eidors/models/mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>	MDL_NORMALIZE Check or set the normalize_measurements flag on a model.</li><li><a href="../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>	MK_GREIT_MODEL: make EIDORS inverse models using the GREIT approach</li><li><a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>	MK_COMMON_MODEL: make common EIT models</li><li><a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>	MK_IMAGE: create eidors image object</li><li><a href="../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>	MK_LIBRARY_MODEL - FEM models based on library shapes</li><li><a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>	MK_STIM_PATTERNS: create an EIDORS stimulation pattern structure</li><li><a href="../../eidors/solvers/calc_difference_data.html" class="code" title="function dva = calc_difference_data( data1, data2, fwd_model)">calc_difference_data</a>	CALC_DIFFERENCE_DATA: calculate difference data between</li><li><a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>	FWD_SOLVE: calculate data from a fwd_model object and an image</li><li><a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>	INV_SOLVE: calculate imag from an inv_model and data</li><li><a href="../../eidors/solvers/inverse/calc_noise_figure.html" class="code" title="function [NF,SE] = calc_noise_figure( inv_model, hp, iterations)">calc_noise_figure</a>	CALC_NOISE_FIGURE: calculate the noise amplification (NF) of an algorithm</li><li><a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>	UNIT_TEST_CMP: compare matrices in eidors output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="calc_noise_params.html" class="code" title="function params = calc_noise_params(imdl, vh, vi )">calc_noise_params</a>	params = GREIT_noise_params(imdl, homg_voltage, sig_voltage)</li><li><a href="../../eidors/solvers/inverse/calc_noise_figure.html" class="code" title="function [NF,SE] = calc_noise_figure( inv_model, hp, iterations)">calc_noise_figure</a>	CALC_NOISE_FIGURE: calculate the noise amplification (NF) of an algorithm</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function do_unit_test</a></li><li><a href="#_sub2" class="code">function test1</a></li><li><a href="#_sub3" class="code">function test2(imdl)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function params = calc_noise_params(imdl, vh, vi )</a>
+0002 <span class="comment">% params = GREIT_noise_params(imdl, homg_voltage, sig_voltage)</span>
+0003 <span class="comment">%  params(1,:) = Noise Figure = SNR(image) / SNR(data)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%  see also: eval_GREIT_fig_merit or using test_performance</span>
+0006 
+0007 <span class="comment">% (C) 2008 Andy Adler. Licensed under GPL v2 or v3</span>
+0008 <span class="comment">% $Id: calc_noise_params.m 6036 2019-12-30 19:17:42Z aadler $</span>
+0009 
+0010 <span class="comment">% NOTE THAT WE ASSUME A LINEAR ALGORITHM FOR THIS MEASURE</span>
+0011 
+0012 warning(<span class="string">'EIDORS:deprecated'</span>,<span class="string">'CALC_NOISE_PARAMS is deprecated as of 02-Jul-2012. Use CALC_NOISE_FIGURE instead.'</span>);
+0013 
+0014 <span class="keyword">if</span> ischar(imdl) &amp;&amp; strcmp(imdl,<span class="string">'UNIT_TEST'</span>), <a href="#_sub1" class="code" title="subfunction do_unit_test">do_unit_test</a>, <span class="keyword">return</span>, <span class="keyword">end</span>
+0015 
+0016 <span class="keyword">if</span> 0 <span class="comment">% old code with random noise</span>
+0017      <span class="comment">% Keep this to validate while we test it</span>
+0018    Nnoise = 1000;
+0019    noise = 0.01*std(vh)*randn(size(vh,1),Nnoise);
+0020    vhn= vh*ones(1,Nnoise) + noise;
+0021 <span class="keyword">else</span> <span class="comment">% use independent noise model on each channel</span>
+0022    noise = 0.01*std(vh)*speye(size(vh,1));
+0023    vhn= vh*ones(1,size(vh,1)) + noise;
+0024 <span class="keyword">end</span>
+0025 
+0026 signal_y = <a href="../../eidors/solvers/calc_difference_data.html" class="code" title="function dva = calc_difference_data( data1, data2, fwd_model)">calc_difference_data</a>( vh, vi,  imdl.fwd_model);
+0027 noise_y  = <a href="../../eidors/solvers/calc_difference_data.html" class="code" title="function dva = calc_difference_data( data1, data2, fwd_model)">calc_difference_data</a>( vh, vhn, imdl.fwd_model);
+0028 
+0029 signal_x = <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vi);  signal_x = signal_x.elem_data;
+0030 noise_x  = <a href="../../eidors/solvers/inv_solve.html" class="code" title="function img = inv_solve( inv_model, data1, data2)">inv_solve</a>(imdl, vh, vhn); noise_x  = noise_x.elem_data;
+0031 
+0032 <span class="keyword">try</span> 
+0033     VOL = <a href="../../eidors/models/get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(imdl.rec_model);
+0034 <span class="keyword">catch</span>
+0035     VOL = <a href="../../eidors/models/get_elem_volume.html" class="code" title="function VOL = get_elem_volume( fwd_model, map_node )">get_elem_volume</a>(imdl.fwd_model);
+0036 <span class="keyword">end</span>
+0037 VOL = spdiags(VOL,0, length(VOL), length(VOL));
+0038 
+0039 signal_x = VOL*signal_x;
+0040 noise_x = VOL*noise_x;
+0041 
+0042 signal_x = mean(abs(signal_x),1);
+0043 noise_x  = mean(std(noise_x));
+0044 snr_x = signal_x / noise_x;
+0045 
+0046 signal_y = mean(abs(signal_y),1);
+0047 noise_y  = mean(std(noise_y)); 
+0048 snr_y = signal_y / noise_y;
+0049 
+0050 params= [snr_y(:)./snr_x(:)]';
+0051 
+0052 <span class="comment">% NOTES on the calculations: AA - Feb 20, 2012</span>
+0053 <span class="comment">% SNR = mean(abs(x)); VAR =</span>
+0054 <span class="comment">% ym= E[y]</span>
+0055 <span class="comment">% Sy= E[(y-ym)*(y-ym)'] = E[y*y'] - ym*ym'</span>
+0056 <span class="comment">% ny = sqrt(trace(Sy))</span>
+0057 <span class="comment">% xm= E[x]  = E[R*y] = R*E[y] = R*ym</span>
+0058 <span class="comment">% Sx= E[(x-xm)*(x-xm)'] = E[x*x'] - xm*xm'</span>
+0059 <span class="comment">%   = E[R*ym*ym'*R'] = R*E[ym*ym']*R' = R*Sy*R'</span>
+0060 <span class="comment">% nx = sqrt(trace(Sx))</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% signal = mean(abs(x));</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% In this case, these are exactly the same:</span>
+0065 <span class="comment">%    noise_x  = mean(std(noise_x));</span>
+0066 <span class="comment">%    noise_x  = sqrt(mean(noise_x.^2,2));</span>
+0067 
+0068 <a name="_sub1" href="#_subfunctions" class="code">function do_unit_test</a>
+0069 ll = <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,1);
+0070 imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2t2'</span>,16); <a href="#_sub3" class="code" title="subfunction test2(imdl)">test2</a>(imdl);
+0071 imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'d2t2'</span>,16); <a href="#_sub3" class="code" title="subfunction test2(imdl)">test2</a>(imdl);
+0072 imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'a2c2'</span>,16); <a href="#_sub3" class="code" title="subfunction test2(imdl)">test2</a>(imdl);
+0073 imdl = <a href="../../eidors/models/mk_common_model.html" class="code" title="function inv_mdl= mk_common_model( str, n_elec, varargin )">mk_common_model</a>(<span class="string">'d2c2'</span>,16); <a href="#_sub3" class="code" title="subfunction test2(imdl)">test2</a>(imdl);
+0074 <a href="#_sub2" class="code" title="subfunction test1">test1</a>; <span class="comment">% can we deal with c2f ?</span>
+0075 ll = <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(<span class="string">'log_level'</span>,ll);
+0076 
+0077 <a name="_sub2" href="#_subfunctions" class="code">function test1</a>
+0078 <span class="comment">% big model with c2f and supposedly an NF of 0.5</span>
+0079 fmdl = <a href="../../eidors/models/mk_library_model.html" class="code" title="function out = mk_library_model(shape,elec_pos,elec_shape,maxsz,nfft,scale)">mk_library_model</a>(<span class="string">'pig_23kg_16el'</span>);
+0080 [fmdl.stimulation fmdl.meas_select] = <a href="../../eidors/models/mk_stim_patterns.html" class="code" title="function [stim, meas_sel]= mk_stim_patterns(n_elec, n_rings, inj, meas, options, amplitude)">mk_stim_patterns</a>(16,1,<span class="string">'{ad}'</span>,<span class="string">'{ad}'</span>);
+0081 fmdl = <a href="../../eidors/models/mdl_normalize.html" class="code" title="function out = mdl_normalize(mdl, val)">mdl_normalize</a>(fmdl, 1);  <span class="comment">% Use normalized difference imaging</span>
+0082 opt.noise_figure = 0.5; opt.imgsz = [64 64];
+0083 imdl = <a href="../../eidors/models/mk_GREIT_model.html" class="code" title="function [imdl, weight]= mk_GREIT_model( fmdl, radius, weight, options )">mk_GREIT_model</a>(fmdl, 0.25, [], opt);
+0084 <span class="comment">% homogeneous measurement</span>
+0085 img = <a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1);
+0086 vh = <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0087 <span class="comment">% inhomogeneous measurement</span>
+0088 select_fcn = inline(<span class="string">'(x-0).^2+(y-0).^2+(z-0.5).^2&lt;0.1^2'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>);
+0089 mfrac = <a href="../../eidors/models/elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>(fmdl, select_fcn);
+0090 img.elem_data = img.elem_data + mfrac*0.1;
+0091 vi = <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0092 
+0093 nf1 = <a href="calc_noise_params.html" class="code" title="function params = calc_noise_params(imdl, vh, vi )">calc_noise_params</a>(imdl, vh.meas, vi.meas);
+0094 
+0095 <span class="comment">% We use different measurements so naturally we don't get 0.5 here</span>
+0096 imdl.hyperparameter.tgt_data.meas_t1 = vh.meas;
+0097 imdl.hyperparameter.tgt_data.meas_t2 = vi.meas;
+0098 <span class="keyword">try</span>
+0099     <span class="comment">% calc_noise_figure doens't support dual models</span>
+0100     nf2 = <a href="../../eidors/solvers/inverse/calc_noise_figure.html" class="code" title="function [NF,SE] = calc_noise_figure( inv_model, hp, iterations)">calc_noise_figure</a>(imdl);
+0101 <span class="keyword">catch</span>
+0102     nf2 = 0;
+0103 <span class="keyword">end</span>
+0104 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Noise fig implementations'</span>,nf1, nf2, 1e-2);
+0105 
+0106 <a name="_sub3" href="#_subfunctions" class="code">function test2(imdl)</a>
+0107 fmdl = imdl.fwd_model;
+0108 <span class="comment">% homogeneous measurement</span>
+0109 img = <a href="../../eidors/models/mk_image.html" class="code" title="function img= mk_image(mdl, elem_data, params, name)">mk_image</a>(fmdl,1);
+0110 vh = <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0111 <span class="comment">% inhomogeneous measurement</span>
+0112 select_fcn = inline(<span class="string">'(x-0).^2+(y-0).^2.^2&lt;15^2'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>);
+0113 mfrac = <a href="../../eidors/models/elem_select.html" class="code" title="function memb_frac = elem_select( fmdl, select_fcn )">elem_select</a>(fmdl, select_fcn);
+0114 img.elem_data = img.elem_data + mfrac*0.1;
+0115 vi = <a href="../../eidors/solvers/fwd_solve.html" class="code" title="function data = fwd_solve(fwd_model, img)">fwd_solve</a>(img);
+0116 
+0117 nf1 = <a href="calc_noise_params.html" class="code" title="function params = calc_noise_params(imdl, vh, vi )">calc_noise_params</a>(imdl, vh.meas, vi.meas);
+0118 <a href="../../eidors/eidors_msg.html" class="code" title="function log_level= eidors_msg( message, varargin )">eidors_msg</a>(nf1,0);
+0119 
+0120 imdl.hyperparameter.tgt_data.meas_t1 = vh.meas;
+0121 imdl.hyperparameter.tgt_data.meas_t2 = vi.meas;
+0122 <span class="comment">% calc_noise_figure doens't support dual models</span>
+0123 nf2 = <a href="../../eidors/solvers/inverse/calc_noise_figure.html" class="code" title="function [NF,SE] = calc_noise_figure( inv_model, hp, iterations)">calc_noise_figure</a>(imdl,[],1000);
+0124 <a href="../../eidors/tools/unit_test_cmp.html" class="code" title="function unit_test_cmp(txt,a,b,tol)">unit_test_cmp</a>(<span class="string">'Noise fig implementations'</span>,nf1, nf2, 1e-2);</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

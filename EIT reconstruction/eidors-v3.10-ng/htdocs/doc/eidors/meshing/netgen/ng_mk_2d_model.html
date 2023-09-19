@@ -1,0 +1,564 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ng_mk_2d_model</title>
+  <meta name="keywords" content="ng_mk_2d_model">
+  <meta name="description" content="NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">eidors</a> &gt; <a href="../index.html">meshing</a> &gt; <a href="index.html">netgen</a> &gt; ng_mk_2d_model.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/meshing/netgen&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>ng_mk_2d_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mdl = ng_mk_2d_model(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface
+ mdl = ng_mk_2d_model(shape)
+ mdl = ng_mk_2d_model(shape, elec_pos)
+ mdl = ng_mk_2d_model(shape, elec_pos, elec_shape)
+
+ SHAPE can be:
+  - xy (Nx2)             : a counter- clockwise list of points in 2D 
+                           defining the outer contour
+  - {xy, xy1, xy2, ...}  : allows specifying additional counter-clockwise 
+                           loops  xy1, xy2, etc, which represent holes in  
+                           the bigger contour xy contour
+  - {..., maxsz}         : specifies maximum element size of the mesh.
+                           If absent, mesh paremeters are controlled by
+                           the ng.opt file in the current directory.
+
+ WARNING: Specifying maxsz overwrites the ng.opt in the current directory.
+
+ ELEC_POS (optional) defines electrodes:
+  - ep (Nx2)              : a list of points in 2D (will be projected on
+                            closest edge of the first contour specified in
+                            SHAPE
+  - ep (1x1) = N          : the number of equidistant electrodes to create
+                            with first electrode on the first point in XY
+                            and counter-clockwise ordering. Specify a
+                            negative number for clockwise ordering.
+  - ep (1x2) = [N offset] : specify offset of the first electrode with
+                            respect to the first point of XY
+                            (clockwise if negative, counter-clockwise
+                            otherwise)
+  - {ep1, ep2, ...}       : allows specifying electrodes on the internal 
+                            contours specified in SHAPE. Use an empty 
+                            array [] if a contour has no electrodes
+
+ ELEC_SHAPE (optional) defines the electrode shape
+  - es (1x2) = [wd rfnum] : WD defines width of the electrode (default: 0 
+                            i.e. point electrode
+                            RFNUM controls amount of local refinement
+                            around the electrode.
+  - es (NEx2)             : specifies the above for each electrode
+                            individually
+ 
+ NOTE: smaller MAXSZ generally requires a lower RFNUM than a coarser mesh
+ would.
+
+ Examples:
+
+ xy = [0 0;  1 0; 1 1; 0 1];
+ mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy});
+ mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [0.5 1; 0.5 0; 0 0.5]);
+ mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [5, 0.25]);
+ mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [-5, 0.25]);
+ mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [5, -0.25]);
+ mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, {[5, -0.25], [4 0.1]});
+ mdl = ng_mk_2d_model({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [4 0.1]});
+ mdl = ng_mk_2d_model({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [4 0.1], [4]});
+ mdl = ng_mk_2d_model({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [], [4]});
+ mdl = ng_mk_2d_model({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [], [4]},[0 30]);
+ mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [5, 0.25],[0.2,10;0 20; 0 30; 0 20; 0 10]);
+ mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [5, 0],[0.2,10;0 20; 0 20; 0 20; 0 20]);
+ mdl = ng_mk_2d_model({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [], [4]},...
+     [0.2,10;0 20; 0 20; 0 20; 0 20; 0 20; 0 20; 0.2 20; 0 20]);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>	SHOW_FEM: show the EIDORS3D finite element model</li><li><a href="call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>	CALL_NETGEN: call netgen to create a vol_file from a geo_file</li><li><a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>	NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface</li><li><a href="ng_mk_fwd_model.html" class="code" title="function [fwd_mdl]=ng_mk_fwd_model( ng_vol_filename, centres,name, stim_pattern, z_contact, postprocmesh)">ng_mk_fwd_model</a>	NG_MK_FWD_MODEL: create a fwd_model object from a netgen vol file</li><li><a href="ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>	NG_WRITE_OPT Write an ng.opt file in current directory</li><li><a href="../../../eidors/models/fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>	FIX_MODEL: Add useful fields to a model</li><li><a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>	[srf, idx] = find_boundary(simp);</li><li><a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>	EIDORS_CACHE Control eidors caching</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>	NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface</li><li><a href="../../../eidors/meshing/ng_mk_common_model.html" class="code" title="function fmdl = ng_mk_common_model(mdl_type,mdl_shape, elec_pos, elec_shape);">ng_mk_common_model</a>	NG_MK_COMMON_MODEL: utility to create common models</li><li><a href="../../../eidors/models/place_elec_on_surf.html" class="code" title="function mdl2 = place_elec_on_surf(mdl,elec_pos, elec_spec,ng_opt_file, maxh)">place_elec_on_surf</a>	PLACE_ELEC_ON_SURF Place electrodes on the surface of a model</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [shape, elec_pos, elec_shape] = process_input(shape, elec_pos, elec_shape)</a></li><li><a href="#_sub2" class="code">function mdl = ng_mk_2d_model_do(shape, elec_pos, elec_shape)</a></li><li><a href="#_sub3" class="code">function [shape,i_wrote_ng_opt] = process_maxsz(shape)</a></li><li><a href="#_sub4" class="code">function mdl = find_electrodes(mdl, elec_pts, e_idx)</a></li><li><a href="#_sub5" class="code">function nds = fill_in_elec_nodes(mdl,enodes)</a></li><li><a href="#_sub6" class="code">function [newpoints eidx elec_pos e_ref] = integrate_elecs(points, elec_pos, elec_shape)</a></li><li><a href="#_sub7" class="code">function elec_pos = equidistant_elec_pos(points, n_elecs, start)</a></li><li><a href="#_sub8" class="code">function write_in2d_file(fname,points, seg, e_idx, e_ref)</a></li><li><a href="#_sub9" class="code">function mdl = do_unit_test</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mdl = ng_mk_2d_model(varargin)</a>
+0002 <span class="comment">%NG_MG_2D_MODELS create a 2D mesh with Netgen via the in2d interface</span>
+0003 <span class="comment">% mdl = ng_mk_2d_model(shape)</span>
+0004 <span class="comment">% mdl = ng_mk_2d_model(shape, elec_pos)</span>
+0005 <span class="comment">% mdl = ng_mk_2d_model(shape, elec_pos, elec_shape)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% SHAPE can be:</span>
+0008 <span class="comment">%  - xy (Nx2)             : a counter- clockwise list of points in 2D</span>
+0009 <span class="comment">%                           defining the outer contour</span>
+0010 <span class="comment">%  - {xy, xy1, xy2, ...}  : allows specifying additional counter-clockwise</span>
+0011 <span class="comment">%                           loops  xy1, xy2, etc, which represent holes in</span>
+0012 <span class="comment">%                           the bigger contour xy contour</span>
+0013 <span class="comment">%  - {..., maxsz}         : specifies maximum element size of the mesh.</span>
+0014 <span class="comment">%                           If absent, mesh paremeters are controlled by</span>
+0015 <span class="comment">%                           the ng.opt file in the current directory.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% WARNING: Specifying maxsz overwrites the ng.opt in the current directory.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% ELEC_POS (optional) defines electrodes:</span>
+0020 <span class="comment">%  - ep (Nx2)              : a list of points in 2D (will be projected on</span>
+0021 <span class="comment">%                            closest edge of the first contour specified in</span>
+0022 <span class="comment">%                            SHAPE</span>
+0023 <span class="comment">%  - ep (1x1) = N          : the number of equidistant electrodes to create</span>
+0024 <span class="comment">%                            with first electrode on the first point in XY</span>
+0025 <span class="comment">%                            and counter-clockwise ordering. Specify a</span>
+0026 <span class="comment">%                            negative number for clockwise ordering.</span>
+0027 <span class="comment">%  - ep (1x2) = [N offset] : specify offset of the first electrode with</span>
+0028 <span class="comment">%                            respect to the first point of XY</span>
+0029 <span class="comment">%                            (clockwise if negative, counter-clockwise</span>
+0030 <span class="comment">%                            otherwise)</span>
+0031 <span class="comment">%  - {ep1, ep2, ...}       : allows specifying electrodes on the internal</span>
+0032 <span class="comment">%                            contours specified in SHAPE. Use an empty</span>
+0033 <span class="comment">%                            array [] if a contour has no electrodes</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% ELEC_SHAPE (optional) defines the electrode shape</span>
+0036 <span class="comment">%  - es (1x2) = [wd rfnum] : WD defines width of the electrode (default: 0</span>
+0037 <span class="comment">%                            i.e. point electrode</span>
+0038 <span class="comment">%                            RFNUM controls amount of local refinement</span>
+0039 <span class="comment">%                            around the electrode.</span>
+0040 <span class="comment">%  - es (NEx2)             : specifies the above for each electrode</span>
+0041 <span class="comment">%                            individually</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">% NOTE: smaller MAXSZ generally requires a lower RFNUM than a coarser mesh</span>
+0044 <span class="comment">% would.</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% Examples:</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% xy = [0 0;  1 0; 1 1; 0 1];</span>
+0049 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy});</span>
+0050 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [0.5 1; 0.5 0; 0 0.5]);</span>
+0051 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [5, 0.25]);</span>
+0052 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [-5, 0.25]);</span>
+0053 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [5, -0.25]);</span>
+0054 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, {[5, -0.25], [4 0.1]});</span>
+0055 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [4 0.1]});</span>
+0056 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [4 0.1], [4]});</span>
+0057 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [], [4]});</span>
+0058 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [], [4]},[0 30]);</span>
+0059 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [5, 0.25],[0.2,10;0 20; 0 30; 0 20; 0 10]);</span>
+0060 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.25 + 0.5*xy, 0.1}, [5, 0],[0.2,10;0 20; 0 20; 0 20; 0 20]);</span>
+0061 <span class="comment">% mdl = ng_mk_2d_model({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [], [4]},...</span>
+0062 <span class="comment">%     [0.2,10;0 20; 0 20; 0 20; 0 20; 0 20; 0 20; 0.2 20; 0 20]);</span>
+0063 
+0064 
+0065 <span class="comment">% (C) 2012-2013 Bartlomiej Grychtol, (C) 2013 Alistair Boyle, License: GPL version 2 or version 3</span>
+0066 <span class="comment">% $Id: ng_mk_2d_model.m 5560 2017-06-18 18:19:20Z bgrychtol $</span>
+0067 
+0068 
+0069 <span class="keyword">if</span> ischar(varargin{1}) &amp;&amp; strcmp(varargin{1}, <span class="string">'UNIT_TEST'</span>), mdl = <a href="#_sub9" class="code" title="subfunction mdl = do_unit_test">do_unit_test</a>; <span class="keyword">return</span>, <span class="keyword">end</span> 
+0070 
+0071 [shape, elec_pos, elec_shape] = <a href="#_sub1" class="code" title="subfunction [shape, elec_pos, elec_shape] = process_input(shape, elec_pos, elec_shape)">process_input</a>(varargin{:});
+0072 
+0073 mdl = <a href="../../../eidors/tools/eidors_cache.html" class="code" title="function varargout=eidors_cache( command, varargin )">eidors_cache</a>(@<a href="#_sub2" class="code" title="subfunction mdl = ng_mk_2d_model_do(shape, elec_pos, elec_shape)">ng_mk_2d_model_do</a>,{shape, elec_pos, elec_shape},<span class="string">'ng_mk_2d_model'</span>);
+0074 
+0075 
+0076 
+0077 <a name="_sub1" href="#_subfunctions" class="code">function [shape, elec_pos, elec_shape] = process_input(shape, elec_pos, elec_shape)</a>
+0078 
+0079 <span class="keyword">if</span> ~iscell(shape)
+0080    shape = {shape};
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="keyword">if</span> nargin &lt; 2
+0084     elec_pos = [];
+0085 <span class="keyword">end</span>
+0086 <span class="keyword">if</span> ~iscell(elec_pos)
+0087     elec_pos = {elec_pos};
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="keyword">if</span> nargin &lt; 3
+0091     elec_shape = [0 10]; <span class="comment">% point electrode</span>
+0092 <span class="keyword">end</span>
+0093 <span class="keyword">if</span> size(elec_shape,2) == 1
+0094    warning(<span class="string">'Refinement factor not specified, using 10'</span>);
+0095    elec_shape(:,2) = 10;
+0096 <span class="keyword">end</span>
+0097 <span class="keyword">if</span> ~iscell(elec_shape)
+0098     elec_shape = {elec_shape};
+0099 <span class="keyword">end</span>
+0100 <span class="keyword">if</span> numel(elec_shape) == 1 &amp;&amp; numel(elec_pos) &gt; 1
+0101     elec_shape(2:numel(elec_pos)) = elec_shape(1);
+0102 <span class="keyword">end</span>
+0103 
+0104 
+0105 <a name="_sub2" href="#_subfunctions" class="code">function mdl = ng_mk_2d_model_do(shape, elec_pos, elec_shape)</a>
+0106 
+0107 [shape,i_wrote_ng_opt] = <a href="#_sub3" class="code" title="subfunction [shape,i_wrote_ng_opt] = process_maxsz(shape)">process_maxsz</a>(shape);
+0108 
+0109 points = [];
+0110 eidx = [];
+0111 eref = [];
+0112 <span class="keyword">for</span> i = 1:length(shape)
+0113    lp = length(points);
+0114    ls = length(shape{i});
+0115    <span class="keyword">if</span> i &lt;= numel(elec_pos) &amp;&amp; ~isempty(elec_pos{i})
+0116        [pp e_idx elec_pos{i} e_ref] = <a href="#_sub6" class="code" title="subfunction [newpoints eidx elec_pos e_ref] = integrate_elecs(points, elec_pos, elec_shape)">integrate_elecs</a>(shape{i},elec_pos{i},elec_shape{i});
+0117        ls = length(pp);
+0118        points  = [points; pp];
+0119    <span class="keyword">else</span>
+0120        e_idx = zeros(1,length(shape{i}));
+0121        e_ref = [];
+0122        points = [points; shape{i}];
+0123    <span class="keyword">end</span>
+0124    <span class="keyword">if</span> ~isempty(eidx)
+0125        eidx = [eidx max(double(eidx))*(e_idx&gt;0)+e_idx];
+0126    <span class="keyword">else</span> 
+0127        eidx = e_idx;
+0128    <span class="keyword">end</span>
+0129    eref = [eref; e_ref];
+0130    seg{i} = repmat([0 1],ls,1) + lp + repmat((1:ls)',1,2);
+0131    seg{i}(<span class="keyword">end</span>,2) = lp + 1;
+0132 <span class="keyword">end</span>
+0133 
+0134 fnamebase = tempname;
+0135 fnamein2d = [fnamebase, <span class="string">'.in2d'</span>];
+0136 fnamevol =  [fnamebase, <span class="string">'.vol'</span>];
+0137 
+0138 <a href="#_sub8" class="code" title="subfunction write_in2d_file(fname,points, seg, e_idx, e_ref)">write_in2d_file</a>(fnamein2d, points, seg, eidx, eref);
+0139 
+0140 <a href="call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>( fnamein2d, fnamevol);
+0141 <span class="keyword">if</span> i_wrote_ng_opt; delete(<span class="string">'ng.opt'</span>); <span class="keyword">end</span>
+0142 
+0143 mdl = <a href="ng_mk_fwd_model.html" class="code" title="function [fwd_mdl]=ng_mk_fwd_model( ng_vol_filename, centres,name, stim_pattern, z_contact, postprocmesh)">ng_mk_fwd_model</a>( fnamevol, [], <span class="string">'ng'</span>, []);
+0144 
+0145 delete(fnamein2d); 
+0146 delete(fnamevol); 
+0147 
+0148 mdl.nodes(:,3) = [];
+0149 <span class="keyword">if</span> ~all(cellfun(@isempty,elec_pos))
+0150     mdl = <a href="#_sub4" class="code" title="subfunction mdl = find_electrodes(mdl, elec_pts, e_idx)">find_electrodes</a>(mdl, points(find(eidx),:), nonzeros(eidx));
+0151 <span class="keyword">end</span>
+0152 mdl.boundary = <a href="../../../eidors/solvers/forward/find_boundary.html" class="code" title="function [srf, idx] = find_boundary(simp);">find_boundary</a>(mdl);
+0153 <span class="keyword">if</span> isfield(mdl, <span class="string">'electrode'</span>)
+0154     <span class="keyword">for</span> i = 1:length(mdl.electrode)
+0155         mdl.electrode(i).z_contact = 0.01;
+0156     <span class="keyword">end</span>
+0157 <span class="keyword">end</span>
+0158 
+0159 <a name="_sub3" href="#_subfunctions" class="code">function [shape,i_wrote_ng_opt] = process_maxsz(shape)</a>
+0160 maxsz = [];
+0161 <span class="keyword">if</span> numel(shape{end})==1
+0162     maxsz = shape{end};
+0163     shape(end)=[];
+0164 <span class="keyword">end</span>
+0165 <span class="keyword">if</span> ~isempty(maxsz)
+0166     <a href="ng_write_opt.html" class="code" title="function opt = ng_write_opt(varargin)">ng_write_opt</a>(<span class="string">'meshoptions.fineness'</span>,6,<span class="string">'options.meshsize'</span>,maxsz);
+0167     i_wrote_ng_opt = true;
+0168 <span class="keyword">else</span>
+0169     i_wrote_ng_opt = false;
+0170 <span class="keyword">end</span>
+0171 
+0172 <a name="_sub4" href="#_subfunctions" class="code">function mdl = find_electrodes(mdl, elec_pts, e_idx)</a>
+0173 
+0174 opt.boundary_face = 1;
+0175 mdl = <a href="../../../eidors/models/fix_model.html" class="code" title="function [mdl] = fix_model(mdl,opt)">fix_model</a>(mdl, opt); <span class="comment">% in case there are multi-point electrodes</span>
+0176 
+0177 nel = max(e_idx);
+0178 npts = size(elec_pts,1);
+0179 nn  = length(mdl.nodes);
+0180 e = elec_pts';
+0181 d = repmat(e(:)',nn,1) - repmat(mdl.nodes,1,npts);
+0182 d = sqrt(d(:,1:2:end).^2 + d(:,2:2:end).^2);
+0183 <span class="keyword">for</span> j = 1:nel
+0184     epts = find(e_idx==j);
+0185     <span class="keyword">for</span> k = 1:length(epts)
+0186         [val mdl.electrode(j).nodes(k)] = min(d(:,epts(k)));
+0187     <span class="keyword">end</span>
+0188     <span class="keyword">if</span> numel(mdl.electrode(j).nodes) &gt; 1
+0189         mdl.electrode(j).nodes = <a href="#_sub5" class="code" title="subfunction nds = fill_in_elec_nodes(mdl,enodes)">fill_in_elec_nodes</a>(mdl, mdl.electrode(j).nodes);
+0190     <span class="keyword">end</span>
+0191 <span class="keyword">end</span>
+0192 
+0193 <a name="_sub5" href="#_subfunctions" class="code">function nds = fill_in_elec_nodes(mdl,enodes)</a>
+0194 fcs = mdl.faces(mdl.boundary_face,:);
+0195 <span class="comment">% fcs are ordered such that all(fcs(:,1) &lt; fcs(:,2))</span>
+0196 <span class="comment">% we assume that enodes are also sorted</span>
+0197 nds(1) = enodes(1);
+0198 <span class="keyword">for</span> i = 1:length(enodes)-1
+0199     startnode  = enodes(i);
+0200     targetnode = enodes(i+1);
+0201     nextnode   = startnode;
+0202     <span class="keyword">while</span> nextnode ~= targetnode
+0203         <span class="comment">% find the two faces the startnode is on</span>
+0204         <span class="comment">% consider which of the two nodes at their other ends is closer to</span>
+0205         <span class="comment">% targetnode</span>
+0206         idx = find(fcs(:,1) == nextnode);
+0207         <span class="keyword">switch</span> numel(idx)
+0208             <span class="keyword">case</span> 2
+0209                 c1 = fcs(idx(1),2);
+0210                 c2 = fcs(idx(2),2);
+0211             <span class="keyword">case</span> 1
+0212                 c1 = fcs(idx(1),2);
+0213                 idx(2) = find(fcs(:,2) == nextnode);
+0214                 c2 = fcs(idx(2),1);
+0215             <span class="keyword">case</span> 0
+0216                 idx = find(fcs(:,2) == nextnode);
+0217                 c1 = fcs(idx(1),1);
+0218                 c2 = fcs(idx(2),1);
+0219             <span class="keyword">otherwise</span>
+0220                 error(<span class="string">'huh?'</span>);
+0221         <span class="keyword">end</span>
+0222         d1 = sqrt(sum((mdl.nodes(c1,:) - mdl.nodes(targetnode,:)).^2,2));
+0223         d2 = sqrt(sum((mdl.nodes(c2,:) - mdl.nodes(targetnode,:)).^2,2));
+0224         <span class="keyword">if</span> d1 &lt; d2
+0225             nextnode = c1;
+0226         <span class="keyword">else</span>
+0227             nextnode = c2;
+0228         <span class="keyword">end</span>
+0229         nds(end+1) = nextnode;
+0230     <span class="keyword">end</span>
+0231 <span class="keyword">end</span>
+0232     
+0233 
+0234     
+0235 
+0236 
+0237 
+0238 <a name="_sub6" href="#_subfunctions" class="code">function [newpoints eidx elec_pos e_ref] = integrate_elecs(points, elec_pos, elec_shape)</a>
+0239 
+0240 
+0241 n_elecs = size(elec_pos,1);
+0242 <span class="keyword">if</span> n_elecs == 1
+0243     <span class="comment">% the number of electrodes was specified, positions need to be found</span>
+0244     n_elecs = elec_pos(1);
+0245     start = 0;
+0246     <span class="keyword">try</span> start = elec_pos(2); <span class="keyword">end</span>
+0247     elec_pos = <a href="#_sub7" class="code" title="subfunction elec_pos = equidistant_elec_pos(points, n_elecs, start)">equidistant_elec_pos</a>(points, n_elecs, start);
+0248     n_elecs = size(elec_pos,1);
+0249 <span class="keyword">end</span>
+0250 
+0251 <span class="keyword">if</span> size(elec_shape,1) == 1;
+0252     elec_shape = repmat(elec_shape,n_elecs,1);
+0253 <span class="keyword">end</span>
+0254 
+0255 newpoints = points;
+0256 eidx = zeros(1, length(points));
+0257 eref = zeros(1, length(points));
+0258 
+0259 <span class="keyword">for</span> i = 1:n_elecs
+0260     A = newpoints;
+0261     B = circshift(newpoints,-1);
+0262     AB = B-A;    L = sqrt(sum((AB).^2,2));
+0263 
+0264     <span class="comment">% 1. find the closest edge</span>
+0265     <span class="comment">% 2. add between the endpoints</span>
+0266     E = elec_pos(i,:);
+0267     AE = repmat(E,size(A,1),1) - A;
+0268     r = sum(AE .* AB,2)./L.^2;
+0269     P = A + r*[1 1].*AB; <span class="comment">% E projected on each edge</span>
+0270     D = sqrt(sum((repmat(E, size(A,1),1)-P).^2,2));
+0271     D(r&gt;1) = Inf; D(r&lt;0) = Inf;
+0272     [jnk e] = min(D); <span class="comment">% index of closest edge</span>
+0273     
+0274     <span class="keyword">if</span> elec_shape(i,1) == 0 <span class="comment">% point electrode</span>
+0275         <span class="keyword">if</span> r(e) == 0
+0276             eidx(e) = i;
+0277             eref(e) = elec_shape(i,2);
+0278         <span class="keyword">elseif</span> r(e) == 1
+0279             <span class="keyword">if</span> e==length(A);
+0280                 eidx(1) = i;
+0281                 eref(1) = elec_shape(i,2);
+0282             <span class="keyword">else</span>
+0283                 eidx(e+1) = i;
+0284                 eref(e+1) = elec_shape(i,2);
+0285             <span class="keyword">end</span>
+0286         <span class="keyword">else</span>
+0287             newpoints = [newpoints(1:e,:); P(e,:); newpoints(e+1:<span class="keyword">end</span>,:)];
+0288             eidx      = [eidx(1:e) i eidx(e+1:end)];
+0289             eref      = [eref(1:e) elec_shape(i,2) eref(e+1:end)];
+0290         <span class="keyword">end</span>
+0291     <span class="keyword">else</span> <span class="comment">% multi-point electrode</span>
+0292         <span class="comment">% e is the first node of the edge the centre lies on</span>
+0293         
+0294         <span class="comment">% 1. Need the perimeter coordinate of the centre</span>
+0295         p = sqrt(sum((circshift(newpoints,-1) - newpoints).^2,2));
+0296         vec = [0; cumsum(p)];
+0297         L = vec(end); <span class="comment">% total length</span>
+0298         ctr = vec(e) + r(e)*(vec(e+1) - vec(e));
+0299         e_fr = linspace(ctr-elec_shape(i,1)/2 , ctr+elec_shape(i,1)/2,2);
+0300         e_fr = rem(e_fr, L); <span class="comment">% wrap around</span>
+0301         e_fr(e_fr&lt;0) = L + e_fr(e_fr&lt;0); <span class="comment">% wrap around</span>
+0302         <span class="keyword">for</span> j = 1:numel(e_fr)
+0303             k = find(vec &lt;= e_fr(j), 1, <span class="string">'last'</span>);
+0304             <span class="keyword">if</span> k == length(vec)
+0305                 <span class="comment">% handle the case where electrode falls on the last point</span>
+0306                 eidx(1) = i;
+0307                 eref(1) = elec_shape(i,2);
+0308             <span class="keyword">else</span>
+0309                 r = (e_fr(j) - vec(k)) / (vec(k+1) - vec(k));
+0310                 <span class="keyword">if</span> r == 0
+0311                     eidx(k) = i;
+0312                     eref(k) = elec_shape(i,2);
+0313                 <span class="keyword">end</span>
+0314                 jnkpts = newpoints; jnkpts(end+1,:) = jnkpts(1,:);
+0315                 p = newpoints(k,:) + r * (jnkpts(k+1,:) - newpoints(k,:));
+0316                 <span class="keyword">if</span> k &lt; length(eidx)
+0317                     newpoints = [newpoints(1:k,:); p; newpoints(k+1:<span class="keyword">end</span>,:)];
+0318                     eidx = [eidx(1:k) i eidx(k+1:end)];
+0319                     eref = [eref(1:k) elec_shape(i,2) eref(k+1:end)];
+0320                 <span class="keyword">else</span>
+0321                     eidx = [eidx i ];
+0322                     eref = [eref elec_shape(i,2)];
+0323                     newpoints = [newpoints; p];
+0324                 <span class="keyword">end</span>
+0325                 vec = [vec(1:k); e_fr(j); vec(k+1:end)];
+0326             <span class="keyword">end</span>
+0327         <span class="keyword">end</span>
+0328         
+0329     <span class="keyword">end</span>
+0330         
+0331 <span class="keyword">end</span>
+0332 e_ref = nonzeros(eref);
+0333 
+0334 
+0335 <a name="_sub7" href="#_subfunctions" class="code">function elec_pos = equidistant_elec_pos(points, n_elecs, start)</a>
+0336 <span class="comment">% 1. Calculate the perimeter</span>
+0337 p = sqrt(sum((circshift(points,-1) - points).^2,2));
+0338 vec = [0; cumsum(p)];
+0339 L = vec(end); <span class="comment">% total length</span>
+0340 
+0341 <span class="keyword">if</span> n_elecs &gt; 0
+0342     e_fr = linspace(start, L+start, n_elecs+1); e_fr(end) = [];
+0343 <span class="keyword">else</span>
+0344     e_fr = linspace(L+start, start, -n_elecs+1); e_fr(end) = [];
+0345     n_elecs = -n_elecs;
+0346 <span class="keyword">end</span>
+0347 e_fr = rem(e_fr, L); <span class="comment">% wrap around</span>
+0348 e_fr(e_fr&lt;0) = L + e_fr(e_fr&lt;0); <span class="comment">% wrap around</span>
+0349 elec_pos = NaN(n_elecs,2);
+0350 points(end+1,:) = points(1,:);
+0351 <span class="keyword">for</span> i = 1:n_elecs
+0352     j = find(vec &lt;= e_fr(i), 1, <span class="string">'last'</span>);
+0353     <span class="keyword">if</span> j == length(vec)
+0354         <span class="comment">% handle the case where electrode falls on the last point</span>
+0355         elec_pos(i,:) = points(1);
+0356     <span class="keyword">else</span>
+0357         r = (e_fr(i) - vec(j)) / (vec(j+1) - vec(j));
+0358         elec_pos(i,:) = points(j,:) + r * (points(j+1,:) - points(j,:));
+0359     <span class="keyword">end</span>
+0360 <span class="keyword">end</span>
+0361 
+0362 
+0363 
+0364 <a name="_sub8" href="#_subfunctions" class="code">function write_in2d_file(fname,points, seg, e_idx, e_ref)</a>
+0365 
+0366 <span class="keyword">if</span> length(e_idx) &lt; length(points);
+0367     e_idx(length(points)) = 0;
+0368 <span class="keyword">end</span>
+0369 
+0370 refine = ones(length(points),1);
+0371 <span class="keyword">if</span> any(e_idx)
+0372     refine(logical(e_idx)) = e_ref;  <span class="comment">% refinement factor (somehow)</span>
+0373 <span class="keyword">end</span>
+0374 fid = fopen(fname,<span class="string">'w'</span>);
+0375 fprintf(fid, <span class="string">'%s\n'</span>,<span class="string">'splinecurves2dv2'</span>);
+0376 fprintf(fid, <span class="string">'%d\n'</span>,6); <span class="comment">% global grading factor, 6 should force use of ng.opt</span>
+0377 fprintf(fid, <span class="string">'%s\n'</span>,<span class="string">'points'</span>);
+0378 <span class="keyword">for</span> i = 1:length(points)
+0379    fprintf(fid, <span class="string">'%d   %f   %f   %f\n'</span>,i,points(i,:), refine(i));
+0380 <span class="keyword">end</span>
+0381 fprintf(fid,<span class="string">'%s\n'</span>,<span class="string">'segments'</span>);
+0382 <span class="comment">% here we assume the first loop is the boundary, all the others are holes</span>
+0383 domains = [ 1 0];
+0384 <span class="keyword">for</span> i = 1:length(seg)
+0385    <span class="keyword">if</span> i &gt; 1
+0386       domains = [0 1];
+0387    <span class="keyword">end</span>
+0388    <span class="keyword">for</span> j = 1:length(seg{i})
+0389       fprintf(fid,<span class="string">'%d   %d   %d   %d   %d -bc=%d\n'</span>,domains, 2, seg{i}(j,:),i);
+0390    <span class="keyword">end</span>
+0391 <span class="keyword">end</span>
+0392 fclose(fid);
+0393 
+0394 <a name="_sub9" href="#_subfunctions" class="code">function mdl = do_unit_test</a>
+0395 xy = [0 0;  1 0; 1 1; 0 1];
+0396 <span class="keyword">for</span> i = 16:20
+0397     <span class="keyword">switch</span> i
+0398         <span class="keyword">case</span> 1
+0399             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.25 + 0.5*xy});
+0400         <span class="keyword">case</span> 2
+0401             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.25 + 0.5*xy, 0.1}, [0.5 1; 0.5 0; 0 0.5]);
+0402         <span class="keyword">case</span> 3
+0403             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.25 + 0.5*xy, 0.1}, [5, 0.3]);
+0404         <span class="keyword">case</span> 4
+0405             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.25 + 0.5*xy, 0.1}, [5, 0.25]);
+0406         <span class="keyword">case</span> 5
+0407             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.25 + 0.5*xy, 0.1}, [-5, 0.25]);
+0408         <span class="keyword">case</span> 6 
+0409             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.25 + 0.5*xy, 0.1}, [5, -0.25]);
+0410         <span class="keyword">case</span> 6
+0411             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.25 + 0.5*xy, 0.1}, {[5, -0.25], [4 0.1]});
+0412         <span class="keyword">case</span> 7
+0413             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.1 + 0.25*xy, 0.1}, {[5, -0.25], [4 0.1]});
+0414         <span class="keyword">case</span> 8
+0415             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [4 0.1]});
+0416         <span class="keyword">case</span> 9
+0417             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [4 0.1], [4]});
+0418         <span class="keyword">case</span> 10
+0419             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [], [4]});
+0420         <span class="keyword">case</span> 11 
+0421             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [], [4]},[0 30]);
+0422         <span class="keyword">case</span> 12
+0423             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.25 + 0.5*xy, 0.1}, [5, 0.25],[0.2,10;0 20; 0 30; 0 20; 0 10]);
+0424         <span class="keyword">case</span> 13
+0425             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.25 + 0.5*xy, 0.1}, [5, 0],[0.2,10;0 20; 0 20; 0 20; 0 20]);
+0426         <span class="keyword">case</span> 14
+0427             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.1}, {[5, -0.25], [], [4]},<span class="keyword">...</span>
+0428                 [0.2,10;0 20; 0 20; 0 20; 0 20; 0 20; 0 20; 0.2 20; 0 20]);
+0429         <span class="keyword">case</span> 15
+0430             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy, 0.1 + 0.25*xy, 0.4 + 0.5*xy, 0.05}, {[5, -0.25], [], [4]},<span class="keyword">...</span>
+0431                 [0.2,10;0 20; 0 20; 0 20; 0 20; 0 20; 0 20; 0.2 20; 0 20]);
+0432         <span class="keyword">case</span> 16
+0433             xy= [ -0.89 -0.74 -0.21  0.31  0.79  0.96  0.67  0.05 -0.36 -0.97;
+0434                    0.14  0.51  0.35  0.50  0.27 -0.23 -0.86 -0.69 -0.85 -0.46]';
+0435             xy = flipud(xy);
+0436             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>(xy,9,[0.05 10]);
+0437         <span class="keyword">case</span> 17
+0438             xy= [ -0.89 -0.74 -0.21  0.31  0.79  0.96  0.67  0.05 -0.36 -0.97;
+0439                    0.14  0.51  0.35  0.50  0.27 -0.23 -0.86 -0.69 -0.85 -0.46]';
+0440             xy = flipud(xy);
+0441             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>(xy,9,[0.05 200]);        
+0442         <span class="keyword">case</span> 18
+0443             xy= [ -0.89 -0.74 -0.21  0.31  0.79  0.96  0.67  0.05 -0.36 -0.97;
+0444                    0.14  0.51  0.35  0.50  0.27 -0.23 -0.86 -0.69 -0.85 -0.46]';
+0445                 xy = flipud(xy);
+0446             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy 0.1},9,[0.05 10]);
+0447         <span class="keyword">case</span> 19
+0448             xy= [ -0.89 -0.74 -0.21  0.31  0.79  0.96  0.67  0.05 -0.36 -0.97;
+0449                    0.14  0.51  0.35  0.50  0.27 -0.23 -0.86 -0.69 -0.85 -0.46]';
+0450                 xy = flipud(xy);
+0451             mdl = <a href="ng_mk_2d_model.html" class="code" title="function mdl = ng_mk_2d_model(varargin)">ng_mk_2d_model</a>({xy 0.1},9,0.05);
+0452     <span class="keyword">end</span>
+0453     <a href="../../../eidors/graphics/matlab/show_fem.html" class="code" title="function hh=show_fem( mdl, options)">show_fem</a>(mdl,[0 1 0]);
+0454     drawnow
+0455 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

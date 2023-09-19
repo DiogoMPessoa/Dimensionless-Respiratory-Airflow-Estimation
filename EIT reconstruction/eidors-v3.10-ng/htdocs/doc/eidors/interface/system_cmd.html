@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of system_cmd</title>
+  <meta name="keywords" content="system_cmd">
+  <meta name="description" content="SYSTEM_CMD: issue system commands, and try to compensate for">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">eidors</a> &gt; <a href="index.html">interface</a> &gt; system_cmd.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for eidors/interface&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>system_cmd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>SYSTEM_CMD: issue system commands, and try to compensate for</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [status,result] = system_cmd( cmd ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SYSTEM_CMD: issue system commands, and try to compensate for
+    strange differences between systems.
+
+ status = system_cmd( cmd );</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>	EIDORS_DEBUG Global managment of debug flags</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../eidors/graphics/matlab/animate_reconstructions.html" class="code" title="function fname_out= animate_reconstructions(fname, imgs);">animate_reconstructions</a>	animate_reconstructions(fname, imgs);</li><li><a href="../../eidors/meshing/gmsh/call_gmsh.html" class="code" title="function status= call_gmsh(geo_file, dim,extra)">call_gmsh</a>	call_gmsh: call Gmsh to create a vol_file from a geo_file</li><li><a href="../../eidors/meshing/netgen/call_netgen.html" class="code" title="function status= call_netgen(geo_file, vol_file, msz_file, finelevel)">call_netgen</a>	CALL_NETGEN: call netgen to create a vol_file from a geo_file</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [status,result] = system_cmd( cmd )</a>
+0002 <span class="comment">% SYSTEM_CMD: issue system commands, and try to compensate for</span>
+0003 <span class="comment">%    strange differences between systems.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% status = system_cmd( cmd );</span>
+0006 
+0007 <span class="comment">% (C) 2012 Andy Adler, License GPL v2 or v3</span>
+0008 <span class="comment">% $Id: system_cmd.m 4170 2013-06-11 18:49:27Z bgrychtol $</span>
+0009 
+0010 <span class="keyword">if</span> ~exist(<span class="string">'OCTAVE_VERSION'</span>)
+0011    <span class="keyword">if</span> strfind(system_dependent(<span class="string">'getos'</span>),<span class="string">'Linux'</span>)
+0012      <span class="comment">%Version 7 under linux sets the LD_LIBRARY_PATH and that breaks netgen</span>
+0013      ldpath =<span class="string">'LD_LIBRARY_PATH=;'</span>;
+0014      <span class="comment">% Problems are a) some newer matlab versions dont' need it,</span>
+0015      <span class="comment">%   b) what if people are working in tcsh?</span>
+0016 
+0017      cmd = [<span class="string">'sh -c ''LD_LIBRARY_PATH=&quot;&quot;; '</span>,cmd,<span class="string">' '' '</span>];
+0018    <span class="keyword">end</span>
+0019 <span class="keyword">end</span>
+0020 <span class="keyword">if</span> <a href="../../eidors/tools/eidors_debug.html" class="code" title="function out = eidors_debug(command, fstr)">eidors_debug</a>(<span class="string">'query'</span>,<span class="string">'system_cmd'</span>)
+0021    disp(cmd);
+0022 <span class="keyword">end</span>
+0023 [status,result] = system(cmd,<span class="string">'-echo'</span>);
+0024</pre></div>
+<hr><address>Generated on Tue 31-Dec-2019 17:38:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
