@@ -2,11 +2,11 @@
 
 This repository contains the models developed in the article "Ensemble Deep Learning Model for Dimensionless Respiratory Airflow Estimation Using Respiratory Sound". The code can be used to run the trained models (with the different sets of files considered).
 
-In our study, we proposed a novel calculation of dimensionless respiratory airflow curves from respiratory sound recordings. As the name suggests, the dimensionless respiratory airflow is a measure similar to regular airflow; however, it does no provides any information regarding the absolute volume of air being inhaled or exhaled at any given time. Therefore, the dimensionless airflow curve allows the assessment of a subject inspiration and expiration patterns with relative flow rates. In our study, the dimensionless respiratory airflow was obtained from global Electrical Impedance Tomography waveform. For more details please refer to the associated article.
+In our study, we proposed a novel calculation of dimensionless respiratory airflow curves from respiratory sound recordings. As the name suggests, the dimensionless respiratory airflow is a measure similar to regular airflow; however, it does not provide any information regarding the absolute volume of air being inhaled or exhaled at any given time. Therefore, the dimensionless airflow curve allows the assessment of a subject inspiration and expiration patterns with relative flow rates. In our study, the dimensionless respiratory airflow was obtained from the global Electrical Impedance Tomography waveform. For more details please refer to the associated article.
 
-Below, are present the two type of acquisitions considered in this study
+Below, are present the two types of acquisitions considered in this study
 
-![image](../Images/files.jpg)
+<img src="Images/files.jpg" width="450">
 
 (a) TbDb acquisition: tidal breathing followed by deep breathing (green - tidal breathing; red - deep breathing); (b) TbCS acquisition: tidal breathing followed by forced cough and speech (green - tidal breathing; yellow - cough; purple - speech)
 
